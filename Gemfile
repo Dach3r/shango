@@ -28,3 +28,7 @@ end
 group :development do
   gem "web-console"
 end
+
+gem "view_component", "~> 4.19"
+
+gem "lucide-rails", "~> 0.7.4"
