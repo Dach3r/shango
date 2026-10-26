@@ -1,4 +1,4 @@
-<nav aria-label="<%= t("components.request_tree.label") %>" data-controller="tree" data-tree-toggle-value="<%= @folder_toggle %>" data-action="dragover->tree#dragOver drop->tree#drop" class="flex h-full flex-col">
+<nav aria-label="<%= t("components.request_tree.label") %>" data-controller="tree" data-tree-toggle-value="<%= @folder_toggle %>" data-tree-open-value="<%= @request_open %>" data-action="dragover->tree#dragOver drop->tree#drop" class="flex h-full flex-col">
   <div class="flex h-10 shrink-0 items-center justify-between gap-2 border-b border-line px-4">
     <h2 class="flex items-center gap-2 text-sm font-semibold text-ink">
       <%= lucide_icon "library", class: "size-4 text-muted" %>

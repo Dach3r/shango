@@ -8,16 +8,17 @@ RSpec.describe "Memberships" do
     it "renders the settings form" do
       get edit_membership_path
 
-      expect(response.body).to include(I18n.t("projects.memberships.edit.folder_toggle"))
+      expect(response.body).to include(I18n.t("projects.memberships.edit.request_open.label"))
     end
   end
 
   describe "PATCH /membership" do
     it "saves the folder toggle", :aggregate_failures do
-      patch membership_path, params: { membership: { folder_toggle: "click" } }
+      patch membership_path, params: { membership: { folder_toggle: "click", request_open: "double_click" } }
 
       expect(response).to redirect_to(edit_membership_path)
       expect(membership.reload).to be_folder_toggle_click
+      expect(membership).to be_request_open_double_click
     end
 
     it "re-renders when invalid", :aggregate_failures do

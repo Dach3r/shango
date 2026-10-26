@@ -61,9 +61,13 @@ en:
     memberships:
       edit:
         title: Settings
-        folder_toggle: Collections and folders
-        folder_toggle_hint: How they expand and collapse in the API Client sidebar. This only applies to you in this project.
-        folder_toggles:
+        folder_toggle:
+          label: Collections and folders
+          hint: How they expand and collapse in the API Client sidebar. This only applies to you in this project.
+        request_open:
+          label: Requests
+          hint: How they open from the API Client sidebar. With double click, rename them from the request itself.
+        modes:
           click: Single click
           double_click: Double click
       update:

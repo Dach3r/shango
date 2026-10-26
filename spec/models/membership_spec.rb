@@ -9,6 +9,12 @@ RSpec.describe Membership do
 
   it { is_expected.to define_enum_for(:folder_toggle).with_values(click: "click", double_click: "double_click").with_prefix.backed_by_column_of_type(:string) }
 
+  it { is_expected.to define_enum_for(:request_open).with_values(click: "click", double_click: "double_click").with_prefix.backed_by_column_of_type(:string) }
+
+  it "opens requests on single click by default" do
+    expect(membership).to be_request_open_click
+  end
+
   it "toggles folders on double click by default" do
     expect(membership).to be_folder_toggle_double_click
   end

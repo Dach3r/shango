@@ -61,9 +61,13 @@ es:
     memberships:
       edit:
         title: Configuración
-        folder_toggle: Colecciones y carpetas
-        folder_toggle_hint: Cómo se expanden y contraen en la barra lateral del API Client. Solo aplica para ti en este proyecto.
-        folder_toggles:
+        folder_toggle:
+          label: Colecciones y carpetas
+          hint: Cómo se expanden y contraen en la barra lateral del API Client. Solo aplica para ti en este proyecto.
+        request_open:
+          label: Solicitudes
+          hint: Cómo se abren desde la barra lateral del API Client. Con doble clic, renómbralas desde la propia solicitud.
+        modes:
           click: Un clic
           double_click: Doble clic
       update:

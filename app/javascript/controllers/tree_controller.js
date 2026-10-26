@@ -4,13 +4,39 @@ const STORAGE_KEY = "api-client:tree:closed";
 
 export default class extends Controller {
   static targets = ["branch"];
-  static values = { toggle: { type: String, default: "double_click" } };
+  static values = {
+    toggle: { type: String, default: "double_click" },
+    open: { type: String, default: "click" },
+  };
 
   connect() {
+    this.requestClick = (event) => this.guardRequest(event, false);
+    this.requestDoubleClick = (event) => this.guardRequest(event, true);
+    // Capture phase: runs before the row's own click handling (delayed navigation, rename).
+    this.element.addEventListener("click", this.requestClick, true);
+    this.element.addEventListener("dblclick", this.requestDoubleClick, true);
+
     const closed = this.closed();
     this.branchTargets.forEach((branch) => {
       if (closed.includes(branch.dataset.id)) branch.open = false;
     });
+  }
+
+  disconnect() {
+    this.element.removeEventListener("click", this.requestClick, true);
+    this.element.removeEventListener("dblclick", this.requestDoubleClick, true);
+  }
+
+  // With double click opening, a request link only navigates on a double click (names do not rename then).
+  guardRequest(event, double) {
+    if (this.openValue !== "double_click") return;
+
+    const link = event.target.closest("[data-drag-kind='request'] a");
+    if (!link) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if (double) window.Turbo.visit(link.href);
   }
 
   toggled(event) {

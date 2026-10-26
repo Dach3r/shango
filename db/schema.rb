@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_163512) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_171048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -117,10 +117,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_163512) do
     t.datetime "updated_at", null: false
     t.uuid "current_environment_id"
     t.string "folder_toggle", default: "double_click", null: false
+    t.string "request_open", default: "click", null: false
     t.index ["current_environment_id"], name: "index_memberships_on_current_environment_id"
     t.index ["project_id"], name: "index_memberships_on_project_id"
     t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true, where: "(revoked_at IS NULL)"
     t.check_constraint "folder_toggle::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_folder_toggle_check"
+    t.check_constraint "request_open::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_request_open_check"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -14,7 +14,7 @@ module Projects
     private
 
     def membership_params
-      params.expect(membership: [:folder_toggle])
+      params.expect(membership: %i[folder_toggle request_open])
     end
   end
 end
