@@ -2,8 +2,8 @@
   <details open data-tree-target="branch" data-id="<%= @folder.id %>" data-action="toggle->tree#toggled" class="group/branch">
     <summary draggable="true" data-drag-kind="folder" data-drag-id="<%= @folder.id %>" data-collection-id="<%= @folder.collection_id %>" data-folder-id="<%= @folder.id %>" data-drop-mode="into"
              data-position-url="<%= workbench_folder_position_path(@folder) %>" data-action="dragstart->tree#dragStart dragend->tree#dragEnd click->tree#summaryClick dblclick->tree#summaryDoubleClick"
-             class="flex cursor-pointer list-none items-center gap-2 rounded-lg py-1.5 pr-9 pl-2 text-sm text-body transition hover:bg-field hover:text-ink data-[drop-active=into]:bg-accent/15 [&::-webkit-details-marker]:hidden">
-      <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition group-open/branch:rotate-90" %>
+             class="flex cursor-pointer list-none items-center gap-2 rounded-lg py-1.5 pr-9 pl-2 text-sm text-body transition hover:bg-field hover:text-ink data-[drop-active=into]:bg-accent/15 focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
+      <%= lucide_icon "chevron-right", data: { tree_arrow: true }, class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
       <%= lucide_icon "folder", class: "size-4 shrink-0 text-muted" %>
       <span data-controller="inline-rename" data-inline-rename-url-value="<%= workbench_folder_path(@folder) %>" data-inline-rename-param-value="folder" data-action="dblclick->inline-rename#edit" class="min-w-0 flex-1 truncate"><%= @folder.name %></span>
     </summary>

@@ -53,16 +53,23 @@ export default class extends Controller {
   }
 
   // With double click toggling, a plain click on a branch row must not open or close it.
+  // The chevron always toggles on a single click.
   summaryClick(event) {
+    if (this.onArrow(event)) return;
+
     if (this.toggleValue === "double_click") event.preventDefault();
   }
 
   // Names rename on double click (inline-rename stops the event), so this only sees the rest of the row.
   summaryDoubleClick(event) {
-    if (this.toggleValue !== "double_click") return;
+    if (this.toggleValue !== "double_click" || this.onArrow(event)) return;
 
     const branch = event.currentTarget.closest("details");
     branch.open = !branch.open;
+  }
+
+  onArrow(event) {
+    return Boolean(event.target.closest("[data-tree-arrow]"));
   }
 
   dragStart(event) {
