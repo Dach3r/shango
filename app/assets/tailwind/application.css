@@ -459,26 +459,21 @@ dialog.modal[open]::backdrop {
   from { opacity: 0; }
 }
 
-/* Submit buttons show a spinner in place of their content while their form is being sent. */
+/* A submitting button swaps its leading icon (or adds one) for a spinner; the label stays. */
 button[data-loading] {
-  position: relative;
-  color: transparent;
-  pointer-events: none;
+  cursor: progress;
 }
 
-button[data-loading] > * {
-  visibility: hidden;
+button[data-loading] > svg:first-child {
+  display: none;
 }
 
-button[data-loading]::after {
+button[data-loading]::before {
   content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1em;
-  height: 1em;
-  margin: -0.5em 0 0 -0.5em;
-  border: 2px solid var(--loading-color);
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: 9999px;
   animation: button-spin 0.7s linear infinite;

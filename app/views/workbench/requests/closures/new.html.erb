@@ -10,7 +10,7 @@
         <%= lucide_icon "folder-down", class: "size-4" %><%= t(".save") %>
       <% end %>
       <div class="flex w-full gap-2">
-        <button type="button" data-action="dialog#close" class="<%= button_classes(:secondary, "flex-1") %>"><%= t(".cancel") %></button>
+        <button type="button" data-action="dialog#close" class="<%= button_classes(:secondary, "flex-1") %>"><%= lucide_icon "x", class: "size-4 shrink-0" %><%= t(".cancel") %></button>
         <%= button_to workbench_request_path(@api_request), method: :delete, class: button_classes(:danger, "w-full"), form_class: "flex-1", data: { turbo_frame: "_top" } do %>
           <%= lucide_icon "trash-2", class: "size-4" %><%= t(".discard") %>
         <% end %>

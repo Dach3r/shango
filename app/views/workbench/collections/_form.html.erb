@@ -1,6 +1,6 @@
 <% collection = local_assigns.fetch(:collection) { @collection } %>
 <% draft = local_assigns.fetch(:draft) { @draft } %>
-<%= render Modal::Component.new(icon: "library", title: collection.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "collection_form", submit: t("workbench.shared.save")) do %>
+<%= render Modal::Component.new(icon: "library", title: collection.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "collection_form", submit: t("workbench.shared.save"), submit_icon: "save") do %>
   <%= form_with model: collection, scope: :collection, url: (collection.persisted? ? workbench_collection_path(collection) : workbench_collections_path),
                 id: "collection_form", data: { turbo_frame: "_top" }, class: "space-y-5" do |form| %>
     <%= render "workbench/shared/errors", record: collection %>

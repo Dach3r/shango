@@ -1,4 +1,4 @@
-<%= render Modal::Component.new(icon: "folder", title: @folder.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "folder_form", submit: t("workbench.shared.save")) do %>
+<%= render Modal::Component.new(icon: "folder", title: @folder.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "folder_form", submit: t("workbench.shared.save"), submit_icon: "save") do %>
   <%= form_with model: @folder, scope: :folder, url: (@folder.persisted? ? workbench_folder_path(@folder) : workbench_collection_folders_path(@collection)),
                 id: "folder_form", data: variable_autocomplete_data.merge(turbo_frame: "_top"), class: "space-y-5" do |form| %>
     <%= render "workbench/shared/errors", record: @folder %>

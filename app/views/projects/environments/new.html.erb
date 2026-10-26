@@ -36,8 +36,8 @@
     </div>
 
     <div class="sticky -bottom-4 -mx-4 -mb-4 mt-6 flex justify-end gap-2 border-t border-line bg-card px-4 py-3">
-      <%= link_to t("workbench.shared.cancel"), environments_path, class: button_classes(:ghost) %>
-      <%= form.submit t("projects.environments.new.submit"), class: button_classes(:primary) %>
+      <%= link_to environments_path, class: button_classes(:ghost) do %><%= lucide_icon "x", class: "size-4 shrink-0" %><%= t("workbench.shared.cancel") %><% end %>
+      <%= form.button type: :submit, class: button_classes(:primary) do %><%= lucide_icon "plus", class: "size-4 shrink-0" %><%= t("projects.environments.new.submit") %><% end %>
     </div>
   <% end %>
 <% end %>

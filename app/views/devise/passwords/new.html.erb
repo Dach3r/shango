@@ -6,7 +6,7 @@
 
   <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, placeholder: t(".email_placeholder"), autofocus: true, autocomplete: "email", required: true) %>
 
-  <%= render Button::Component.new(form: f, label: t(".submit")) %>
+  <%= render Button::Component.new(form: f, icon: "mail", label: t(".submit")) %>
 <% end %>
 
 <div class="my-6 flex items-center gap-4 text-xs font-medium uppercase tracking-widest text-muted">
@@ -15,4 +15,4 @@
   <span class="h-px flex-1 bg-line"></span>
 </div>
 
-<%= render Button::Component.new(label: t(".sign_in"), href: new_session_path(resource_name), variant: :secondary) %>
+<%= render Button::Component.new(icon: "log-in", label: t(".sign_in"), href: new_session_path(resource_name), variant: :secondary) %>

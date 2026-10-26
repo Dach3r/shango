@@ -62,8 +62,10 @@
         </div>
 
         <div class="md:justify-self-end">
-          <%= button_to t("devise.registrations.edit.cancel_account"), registration_path(resource_name), method: :delete, data: { turbo_confirm: t("devise.registrations.edit.confirm") },
-                        class: button_classes(:danger) %>
+          <%= button_to registration_path(resource_name), method: :delete, data: { turbo_confirm: t("devise.registrations.edit.confirm") },
+                        class: button_classes(:danger) do %>
+            <%= lucide_icon "user-x", class: "size-4 shrink-0" %><%= t("devise.registrations.edit.cancel_account") %>
+          <% end %>
         </div>
       </div>
     </div>

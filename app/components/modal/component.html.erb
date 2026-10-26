@@ -28,9 +28,9 @@
         <%= footer %>
       <% else %>
         <% if @cancel %>
-          <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= t("components.modal.cancel") %></button>
+          <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= lucide_icon "x", class: "size-4 shrink-0" %><%= t("components.modal.cancel") %></button>
         <% end %>
-        <%= tag.button @submit, type: "submit", form: @form, class: button_classes(:primary) %>
+        <%= tag.button type: "submit", form: @form, class: button_classes(:primary) do %><%= lucide_icon @submit_icon, class: "size-4 shrink-0" %><%= @submit %><% end %>
       <% end %>
     </footer>
   <% end %>

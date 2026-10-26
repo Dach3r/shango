@@ -3,8 +3,8 @@
 <% else %>
 <%= render Modal::Component.new(icon: "folder-input", title: t(".title"), description: t(".description")) do |modal| %>
   <% modal.with_footer do %>
-    <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= t(".keep_draft") %></button>
-    <%= tag.button t(".submit"), type: "submit", form: "placement_form", class: button_classes(:primary) %>
+    <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= lucide_icon "arrow-left", class: "size-4 shrink-0" %><%= t(".keep_draft") %></button>
+    <%= tag.button type: "submit", form: "placement_form", class: button_classes(:primary) do %><%= lucide_icon "folder-down", class: "size-4 shrink-0" %><%= t(".submit") %><% end %>
   <% end %>
   <%= form_with url: workbench_request_placement_path(@api_request), method: :patch, id: "placement_form", data: { turbo_frame: "_top" }, class: "space-y-4" do %>
     <div>

@@ -45,13 +45,13 @@
                 </p>
                 <div class="flex flex-wrap gap-2">
                   <div data-conditional-fields-target="field" data-show-when='{"grant_type": ["client_credentials", "password"]}'>
-                    <%= button_tag t("workbench.oauth2.get_token"), type: "submit", form: dom_id_for("token"), class: button_classes(:secondary) %>
+                    <%= button_tag type: "submit", form: dom_id_for("token"), class: button_classes(:secondary) do %><%= lucide_icon "key-round", class: "size-4 shrink-0" %><%= t("workbench.oauth2.get_token") %><% end %>
                   </div>
                   <div data-conditional-fields-target="field" data-show-when='{"grant_type": ["authorization_code"]}'>
-                    <%= button_tag t("workbench.oauth2.authorize"), type: "submit", form: dom_id_for("authorization"), class: button_classes(:secondary) %>
+                    <%= button_tag type: "submit", form: dom_id_for("authorization"), class: button_classes(:secondary) do %><%= lucide_icon "shield-check", class: "size-4 shrink-0" %><%= t("workbench.oauth2.authorize") %><% end %>
                   </div>
                   <% if config["access_token"].present? %>
-                    <%= button_tag t("workbench.oauth2.clear_token"), type: "submit", form: dom_id_for("clear"), class: button_classes(:ghost) %>
+                    <%= button_tag type: "submit", form: dom_id_for("clear"), class: button_classes(:ghost) do %><%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("workbench.oauth2.clear_token") %><% end %>
                   <% end %>
                 </div>
                 <p class="text-xs text-muted" data-conditional-fields-target="field" data-show-when='{"grant_type": ["authorization_code"]}'>

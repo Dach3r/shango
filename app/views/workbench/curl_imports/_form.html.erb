@@ -1,4 +1,4 @@
-<%= render Modal::Component.new(icon: "terminal", title: t(".title"), size: :lg, form: "curl_import_form", submit: t(".submit")) do %>
+<%= render Modal::Component.new(icon: "terminal", title: t(".title"), size: :lg, form: "curl_import_form", submit: t(".submit"), submit_icon: "download") do %>
   <%= form_with url: workbench_collection_curl_import_path(@collection), method: :post, id: "curl_import_form", data: { turbo_frame: "_top" }, class: "space-y-4" do %>
     <% if @error.present? %>
       <div role="alert" class="rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= @error %></div>
