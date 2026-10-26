@@ -420,6 +420,20 @@ input:-webkit-autofill:focus {
   display: none;
 }
 
+/* Single-line fallback matches the mounted editor line (0.8125rem at 1.6) so the bar does not resize on mount. */
+.code-editor-single-line:not([data-ready]) textarea {
+  height: 1.3rem;
+  overflow: hidden;
+  resize: none;
+  white-space: pre;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  outline: none;
+}
+
 .code-editor-readonly:not([data-ready]) textarea {
   display: none;
 }
