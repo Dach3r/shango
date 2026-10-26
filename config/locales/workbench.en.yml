@@ -179,6 +179,8 @@ en:
       url_placeholder: "https://api.example.com/path or {{base_url}}/path"
       send: Send
       send_hint: Send (Ctrl/Cmd + Enter)
+      cancel: Cancel
+      cancel_hint: Cancel the request
       save: Save
       copy_curl: Copy cURL
       more_actions: More actions

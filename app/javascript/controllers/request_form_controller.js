@@ -14,6 +14,7 @@ export default class extends Controller {
     if (this.running) return;
 
     this.running = true;
+    this.abortController = new AbortController();
     this.setBusy(true);
     const body = new FormData(this.formTarget);
     body.delete("_method");
@@ -28,6 +29,7 @@ export default class extends Controller {
             ?.content,
         },
         credentials: "same-origin",
+        signal: this.abortController.signal,
       });
       const text = await response.text();
       if (response.headers.get("Content-Type")?.includes("turbo-stream")) {
@@ -35,11 +37,21 @@ export default class extends Controller {
       } else {
         this.showFailure();
       }
-    } catch (_) {
-      this.showFailure();
+    } catch (error) {
+      if (error.name !== "AbortError") this.showFailure();
     } finally {
       this.running = false;
+      this.abortController = null;
       this.setBusy(false);
+    }
+  }
+
+  toggle(event) {
+    if (this.running) {
+      event.preventDefault();
+      this.abortController.abort();
+    } else {
+      this.run(event);
     }
   }
 
@@ -82,7 +94,6 @@ export default class extends Controller {
   setBusy(busy) {
     if (!this.hasSendTarget) return;
 
-    this.sendTarget.disabled = busy;
     this.sendTarget.dataset.busy = String(busy);
   }
 

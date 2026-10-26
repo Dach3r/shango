@@ -29,12 +29,18 @@
                                              input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>
       </div>
     </div>
-    <button type="button" data-request-form-target="send" data-action="request-form#run" title="<%= t("workbench.requests.send_hint") %>"
-            class="<%= button_classes(:primary, "group @xl:min-w-24 data-[busy=true]:opacity-70") %>">
-      <%= lucide_icon "send", class: "size-4 group-data-[busy=true]:hidden" %>
-      <%= lucide_icon "loader-circle", class: "hidden size-4 animate-spin group-data-[busy=true]:block" %>
-      <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
-      <span class="sr-only @xl:hidden"><%= t("workbench.requests.send") %></span>
+    <button type="button" data-request-form-target="send" data-action="request-form#toggle" title="<%= t("workbench.requests.send_hint") %>"
+            class="<%= button_classes(:primary, "group @xl:min-w-24") %>">
+      <span class="contents group-data-[busy=true]:hidden">
+        <%= lucide_icon "send", class: "size-4" %>
+        <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
+        <span class="sr-only @xl:hidden"><%= t("workbench.requests.send") %></span>
+      </span>
+      <span class="hidden items-center gap-2 group-data-[busy=true]:flex" title="<%= t("workbench.requests.cancel_hint") %>">
+        <%= lucide_icon "square", class: "size-4" %>
+        <span class="hidden @xl:inline"><%= t("workbench.requests.cancel") %></span>
+        <span class="sr-only @xl:hidden"><%= t("workbench.requests.cancel") %></span>
+      </span>
     </button>
   </div>
 

@@ -179,6 +179,8 @@ es:
       url_placeholder: "https://api.ejemplo.com/ruta o {{base_url}}/ruta"
       send: Enviar
       send_hint: Enviar (Ctrl/Cmd + Enter)
+      cancel: Cancelar
+      cancel_hint: Cancelar la solicitud
       save: Guardar
       copy_curl: Copiar cURL
       more_actions: Más acciones
