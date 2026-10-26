@@ -37,7 +37,7 @@ export default class extends Controller {
     return (
       field.matches?.(FIELDS) &&
       !SKIPPED_TYPES.includes(field.type) &&
-      !field.closest("[data-controller~='code-editor']")
+      !field.closest("[data-controller~='code-editor'], [data-controller~='select']")
     );
   }
 
