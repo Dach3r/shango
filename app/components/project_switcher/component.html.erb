@@ -1,10 +1,10 @@
 <div class="relative shrink-0" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
   <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
           title="<%= @current_project.name %>"
-          class="flex h-full w-14 cursor-pointer items-center justify-center gap-3 border-r border-line bg-field text-left transition sm:w-60 sm:justify-start sm:px-3 hover:bg-field-focus focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
-    <span class="flex size-8 shrink-0 items-center justify-center bg-solid text-on-solid"><%= lucide_icon @current_project.icon, class: "size-4" %></span>
-    <span class="hidden min-w-0 flex-1 truncate text-sm font-medium text-ink sm:block"><%= @current_project.name %></span>
-    <%= lucide_icon "chevrons-up-down", class: "hidden size-4 shrink-0 text-muted sm:block" %>
+          class="flex h-full max-w-60 cursor-pointer items-center gap-2.5 px-3 text-left transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+    <span class="flex size-7 shrink-0 items-center justify-center bg-solid text-on-solid"><%= lucide_icon @current_project.icon, class: "size-3.5" %></span>
+    <span class="hidden min-w-0 flex-1 truncate text-sm font-semibold text-ink sm:block"><%= @current_project.name %></span>
+    <%= lucide_icon "chevrons-up-down", class: "hidden size-3.5 shrink-0 text-muted sm:block" %>
   </button>
 
   <div data-dropdown-target="menu" hidden class="absolute left-0 top-full z-30 w-60 border border-t-0 border-line bg-card p-0">

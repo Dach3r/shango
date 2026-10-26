@@ -30,7 +30,14 @@ RSpec.describe NavItem::Component, type: :component do
   it "lines up in a bar and hides the label on small screens", :aggregate_failures do
     render_inline(described_class.new(label: "Home", icon: "home", href: "/", active: true, orientation: :horizontal))
 
-    expect(page).to have_css("a.border-r.shadow-\\[inset_0_-2px_0_var\\(--accent\\)\\]")
+    expect(page).to have_css("a.shadow-\\[inset_0_-2px_0_var\\(--accent\\)\\]")
     expect(page).to have_css("span.max-lg\\:sr-only", text: "Home")
+  end
+
+  it "lists upcoming entries in a menu with a soon badge", :aggregate_failures do
+    render_inline(described_class.new(label: "Logs", icon: "scroll-text", orientation: :menu))
+
+    expect(page).to have_css("span[aria-disabled=true].w-full", text: "Logs")
+    expect(page).to have_css("span", text: I18n.t("components.nav_item.soon"))
   end
 end

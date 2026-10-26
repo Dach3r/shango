@@ -1,18 +1,29 @@
 <header class="sticky top-0 z-30 flex h-12 shrink-0 items-stretch border-b border-line bg-card">
   <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
-  <nav aria-label="<%= t("components.topbar.label") %>" class="flex min-w-0 flex-1 items-stretch overflow-x-auto">
-    <ul class="flex">
+  <span class="my-3 w-px shrink-0 bg-line" aria-hidden="true"></span>
+
+  <nav aria-label="<%= t("components.topbar.label") %>" class="flex min-w-0 flex-1 items-stretch overflow-x-auto px-1">
+    <ul class="flex items-stretch">
       <% live_items.each do |item| %>
         <li class="flex"><%= render NavItem::Component.new(**item, orientation: :horizontal) %></li>
       <% end %>
     </ul>
 
-    <ul class="flex">
-      <% soon_items.each do |item| %>
-        <li class="flex"><%= render NavItem::Component.new(**item, orientation: :horizontal) %></li>
-      <% end %>
-    </ul>
+    <div class="relative flex" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+      <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
+              class="flex h-full cursor-pointer items-center gap-2 px-3 text-sm font-medium text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+        <%= lucide_icon "layout-grid", class: "size-4 shrink-0" %>
+        <span class="max-lg:sr-only"><%= t("components.topbar.more") %></span>
+        <%= lucide_icon "chevron-down", class: "size-3.5 shrink-0" %>
+      </button>
+
+      <ul data-dropdown-target="menu" hidden class="absolute left-0 top-full z-30 w-60 border border-t-0 border-line bg-card">
+        <% soon_items.each do |item| %>
+          <li class="flex"><%= render NavItem::Component.new(**item, orientation: :menu) %></li>
+        <% end %>
+      </ul>
+    </div>
   </nav>
 
   <%= render UserMenu::Component.new(user: @user) %>

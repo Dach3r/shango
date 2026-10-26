@@ -12,7 +12,7 @@ RSpec.describe Topbar::Component, type: :component do
     render_topbar
 
     expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"))
-    expect(page).to have_css("span[aria-disabled=true]", text: I18n.t("components.topbar.monitoring"))
+    expect(page).to have_css("span[aria-disabled=true]", text: I18n.t("components.topbar.monitoring"), visible: :all)
   end
 
   it "highlights a feature on any of its controllers" do
@@ -27,11 +27,12 @@ RSpec.describe Topbar::Component, type: :component do
     expect(page).to have_no_css("a[aria-current=page]")
   end
 
-  it "separates live tools from upcoming ones", :aggregate_failures do
+  it "tucks upcoming tools into the more menu", :aggregate_failures do
     render_topbar
 
     expect(page).to have_css("ul:first-of-type a", text: I18n.t("components.topbar.api_client"))
-    expect(page).to have_css("ul:last-of-type span[aria-disabled=true]", text: I18n.t("components.topbar.logs"))
+    expect(page).to have_css("button", text: I18n.t("components.topbar.more"))
+    expect(page).to have_css("ul[hidden] span[aria-disabled=true]", text: I18n.t("components.topbar.logs"), visible: :all)
   end
 
   it "renders the user menu at the end of the bar" do

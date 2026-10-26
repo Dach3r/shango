@@ -7,5 +7,8 @@
   <span class="<%= classes %>" title="<%= @label %> · <%= t("components.nav_item.soon") %>" aria-disabled="true">
     <%= lucide_icon @icon, class: "size-4 shrink-0" %>
     <span class="<%= label_classes %>"><%= @label %></span>
+    <% if @orientation[:badge] %>
+      <span class="border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase text-faint"><%= t("components.nav_item.soon") %></span>
+    <% end %>
   </span>
 <% end %>

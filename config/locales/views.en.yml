@@ -39,6 +39,7 @@ en:
         members: Members
     topbar:
       label: Project navigation
+      more: More tools
       api_client: API Client
       documentation: Documentation
       monitoring: Monitoring
