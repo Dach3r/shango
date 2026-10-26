@@ -82,6 +82,10 @@ en:
         request_open:
           label: Requests
           hint: How they open from the API Client sidebar. With double click, rename them from the request itself.
+        collapse_nested_folders:
+          label: Collapse nested folders
+          hint: Closing a collection or folder also closes the folders inside it.
+          toggle: Collapse nested folders too
         modes:
           click: Single click
           double_click: Double click

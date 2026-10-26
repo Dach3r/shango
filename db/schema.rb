@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_181347) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -120,6 +120,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_181347) do
     t.string "request_open", default: "click", null: false
     t.string "color_scheme", default: "system", null: false
     t.string "theme", default: "default", null: false
+    t.boolean "collapse_nested_folders", default: true, null: false
     t.index ["current_environment_id"], name: "index_memberships_on_current_environment_id"
     t.index ["project_id"], name: "index_memberships_on_project_id"
     t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true, where: "(revoked_at IS NULL)"

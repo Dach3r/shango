@@ -28,6 +28,10 @@ RSpec.describe Membership do
     expect(membership).to be_folder_toggle_double_click
   end
 
+  it "collapses nested folders by default" do
+    expect(membership.collapse_nested_folders).to be(true)
+  end
+
   describe "uniqueness" do
     it "rejects a second active membership for the same user and project", :aggregate_failures do
       duplicate = build(:membership, user: membership.user, project: membership.project)

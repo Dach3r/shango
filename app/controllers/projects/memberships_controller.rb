@@ -14,7 +14,7 @@ module Projects
     private
 
     def membership_params
-      params.expect(membership: %i[folder_toggle request_open])
+      params.expect(membership: %i[folder_toggle request_open collapse_nested_folders])
     end
   end
 end

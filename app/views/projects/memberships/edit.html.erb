@@ -23,6 +23,14 @@
           </div>
         </fieldset>
       <% end %>
+
+      <div class="grid gap-4 p-5 md:grid-cols-[1fr_17rem] md:items-center md:gap-8">
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-ink"><%= t("projects.memberships.edit.collapse_nested_folders.label") %></p>
+          <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("projects.memberships.edit.collapse_nested_folders.hint") %></p>
+        </div>
+        <%= render Checkbox::Component.new(form:, attribute: :collapse_nested_folders, label: t("projects.memberships.edit.collapse_nested_folders.toggle")) %>
+      </div>
     </div>
 
     <%= render "settings/save_button" %>

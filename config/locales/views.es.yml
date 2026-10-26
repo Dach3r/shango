@@ -82,6 +82,10 @@ es:
         request_open:
           label: Solicitudes
           hint: Cómo se abren desde la barra lateral del API Client. Con doble clic, renómbralas desde la propia solicitud.
+        collapse_nested_folders:
+          label: Contraer carpetas internas
+          hint: Al contraer una colección o carpeta, también se contraen las carpetas que tiene dentro.
+          toggle: Contraer también las carpetas internas
         modes:
           click: Un clic
           double_click: Doble clic

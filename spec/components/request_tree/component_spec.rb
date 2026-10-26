@@ -38,4 +38,10 @@ RSpec.describe RequestTree::Component, type: :component do
 
     expect(page).to have_css("nav[data-tree-toggle-value=click][data-tree-open-value=double_click]")
   end
+
+  it "exposes the collapse nested preference to the tree controller" do
+    render_inline(described_class.new(branches: [], folder_toggle: "click", request_open: "click", collapse_nested: false))
+
+    expect(page).to have_css("nav[data-tree-collapse-nested-value=false]")
+  end
 end

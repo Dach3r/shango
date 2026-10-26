@@ -22,6 +22,12 @@ RSpec.describe "Memberships" do
       expect(membership).to be_request_open_double_click
     end
 
+    it "saves the collapse nested folders preference" do
+      patch membership_path, params: { membership: { collapse_nested_folders: "0" } }
+
+      expect(membership.reload.collapse_nested_folders).to be(false)
+    end
+
     it "re-renders when invalid", :aggregate_failures do
       allow_any_instance_of(Membership).to receive(:update).and_return(false) # rubocop:disable RSpec/AnyInstance
 

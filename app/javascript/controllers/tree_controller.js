@@ -7,6 +7,7 @@ export default class extends Controller {
   static values = {
     toggle: { type: String, default: "double_click" },
     open: { type: String, default: "click" },
+    collapseNested: { type: Boolean, default: true },
   };
 
   connect() {
@@ -47,7 +48,7 @@ export default class extends Controller {
     const branch = event.currentTarget;
     const restoring = this.restored.delete(branch);
     // Closing a branch closes the ones nested inside it (not when restoring saved state on connect).
-    if (!branch.open && !restoring)
+    if (!branch.open && !restoring && this.collapseNestedValue)
       branch
         .querySelectorAll("details[open]")
         .forEach((nested) => (nested.open = false));
