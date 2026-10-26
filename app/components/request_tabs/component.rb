@@ -16,6 +16,6 @@ class RequestTabs::Component < ApplicationComponent
   end
 
   def classes(api_request)
-    class_names(TAB, "bg-field font-medium text-ink" => current?(api_request), "text-muted" => !current?(api_request))
+    class_names(TAB, "bg-field font-medium text-ink shadow-[inset_0_-2px_0_var(--color-solid)]" => current?(api_request), "text-muted" => !current?(api_request))
   end
 end
