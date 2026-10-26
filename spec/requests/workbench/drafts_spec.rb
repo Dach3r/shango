@@ -49,10 +49,11 @@ RSpec.describe "Workbench drafts" do
       expect(response.body).to include("folder:#{folder.id}")
     end
 
-    it "explains when there are no collections" do
+    it "asks for a collection first when there are none", :aggregate_failures do
       get new_workbench_request_placement_path(draft)
 
-      expect(response.body).to include(I18n.t("workbench.requests.placements.form.no_collections"))
+      expect(response.body).to include("collection_form")
+      expect(response.body).to include(%(name="draft_id" id="draft_id" value="#{draft.id}"))
     end
 
     it "is not available for saved requests" do

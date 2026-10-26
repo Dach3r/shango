@@ -7,8 +7,9 @@ module Workbench
     end
 
     def create
+      @draft = draft_to_place
       result = ApiClient::Collections::Create.call(project: current_project, attributes: collection_attributes)
-      return redirect_to(workbench_root_path, notice: t(".created"), status: :see_other) if result.success?
+      return redirect_to(after_create_path(result.record), notice: t(".created"), status: :see_other) if result.success?
 
       @collection = result.record
       render_form_errors
@@ -33,6 +34,20 @@ module Workbench
 
     def set_collection
       @collection = current_project.collections.find(params[:id])
+    end
+
+    def draft_to_place
+      return if params[:draft_id].blank?
+
+      current_project.api_requests.drafts.visible_to(current_user).find(params[:draft_id])
+    end
+
+    # A draft that triggered the creation lands in the new collection right away.
+    def after_create_path(collection)
+      return workbench_root_path unless @draft
+
+      ApiClient::Requests::Place.call(api_request: @draft, collection:)
+      workbench_request_path(@draft)
     end
 
     def collection_attributes

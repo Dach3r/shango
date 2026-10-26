@@ -1,16 +1,16 @@
+<% if workspace_tree.empty? %>
+  <%= render "workbench/collections/form", collection: current_project.collections.new, draft: @api_request %>
+<% else %>
 <%= render Modal::Component.new(icon: "folder-input", title: t(".title"), description: t(".description")) do |modal| %>
   <% modal.with_footer do %>
     <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= t(".keep_draft") %></button>
     <%= tag.button t(".submit"), type: "submit", form: "placement_form", class: button_classes(:primary) %>
   <% end %>
   <%= form_with url: workbench_request_placement_path(@api_request), method: :patch, id: "placement_form", data: { turbo_frame: "_top" }, class: "space-y-4" do %>
-    <% if workspace_tree.empty? %>
-      <p class="rounded-xl border border-line bg-field px-4 py-3 text-sm text-muted"><%= t(".no_collections") %></p>
-    <% else %>
-      <div>
-        <label for="destination" class="<%= label_classes %>"><%= t(".destination") %></label>
-        <%= render Select::Component.new(name: "destination", id: "destination", options: destination_options(workspace_tree), searchable: true) %>
-      </div>
-    <% end %>
+    <div>
+      <label for="destination" class="<%= label_classes %>"><%= t(".destination") %></label>
+      <%= render Select::Component.new(name: "destination", id: "destination", options: destination_options(workspace_tree), searchable: true) %>
+    </div>
   <% end %>
+<% end %>
 <% end %>

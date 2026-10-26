@@ -152,7 +152,6 @@ es:
           destination: Guardar en
           keep_draft: Mantener como borrador
           submit: Guardar aquí
-          no_collections: "Crea una colección primero para guardar solicitudes en ella. Mientras tanto la solicitud sigue como borrador."
       create:
         created: Solicitud creada.
       update:
@@ -325,6 +324,7 @@ es:
         raw: Crudo
         preview: Vista previa
       copy: Copiar
+      save: Guardar respuesta
       copied: Copiado
       truncated: "Solo se muestran los primeros %{limit}."
       unresolved: "Variables sin definir: %{names}. Se enviaron tal como se escribieron."

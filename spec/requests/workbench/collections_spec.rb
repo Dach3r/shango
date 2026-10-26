@@ -17,6 +17,22 @@ RSpec.describe "Workbench collections" do
       expect(response).to redirect_to(workbench_root_path)
     end
 
+    it "saves the originating draft into the new collection", :aggregate_failures do
+      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      post workbench_collections_path, params: { collection: { name: "Payments" }, draft_id: draft.id }
+
+      expect(response).to redirect_to(workbench_request_path(draft))
+      expect(draft.reload.collection.name).to eq("Payments")
+    end
+
+    it "keeps the draft in the form when invalid", :aggregate_failures do
+      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      post workbench_collections_path, params: { collection: { name: "" }, draft_id: draft.id }, headers: turbo_headers
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(%(name="draft_id" id="draft_id" value="#{draft.id}"))
+    end
+
     it "re-renders the modal when invalid", :aggregate_failures do
       post workbench_collections_path, params: { collection: { name: "" } }, headers: turbo_headers
 

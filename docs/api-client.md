@@ -7,7 +7,7 @@
 **Included**
 
 - Collections with nested folders and requests; drag and drop to move requests and folders.
-- Open requests as tabs: every request the user opens (from the sidebar or a new draft) stays as a per-user tab above the editor, with a *+* to start a new draft. Opening the workbench with tabs open lands on the last tab; the empty state shows only when none is open. Closing a saved request's tab just closes the tab; closing a draft's tab asks to save or discard it, unless the draft was never edited, which is discarded straight away. Draft requests are per-user requests without a collection; they can be edited and sent, *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft. The shortcut *Option/Alt+W* closes the active tab like its *x* button (`request_tabs#closeCurrent`). Browsers reserve *Cmd/Ctrl+W*, so it is not used.
+- Open requests as tabs: every request the user opens (from the sidebar or a new draft) stays as a per-user tab above the editor, with a *+* to start a new draft. Opening the workbench with tabs open lands on the last tab; the empty state shows only when none is open. Closing a saved request's tab just closes the tab; closing a draft's tab asks to save or discard it, unless the draft was never edited, which is discarded straight away. Draft requests are per-user requests without a collection; they can be edited and sent, *Save* asks which collection or folder to move them into (when the project has no collection yet it opens the new-collection dialog instead, and the draft is saved into the collection it creates), and closing that dialog keeps the draft. The shortcut *Option/Alt+W* closes the active tab like its *x* button (`request_tabs#closeCurrent`). Browsers reserve *Cmd/Ctrl+W*, so it is not used.
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
@@ -31,7 +31,7 @@ All tables use UUID primary keys. `Project` is the tenancy boundary: every recor
 | `Folder` | Self-referencing (`parent_id`) inside a collection; `auth_type` defaults to `inherit`. |
 | `ApiRequest` | The glossary's *Request*. `collection_id` is nullable: a request with no collection is a draft owned by `user_id` (a CHECK requires an owner and no folder); placing it clears `user_id`. `ApiRequest.visible_to(user)` hides other users' drafts, and controllers look requests up through it. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
 | `RequestTab` | A request the user has open as a tab (`user_id`, `api_request_id`, unique pair, cascade on delete). Tabs are ordered by creation; opening a request (`Tabs::Open`, called by `requests#show` and `CreateDraft`) is idempotent, `Tabs::Close` only removes the tab. |
-| `RequestExecution` | History entry: resolved URL, status, timing, headers, body (≤ 5 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
+| `RequestExecution` | History entry (only when the user saves the response): resolved URL, status, timing, headers, body (≤ 5 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
 
 Monitoring and documentation will reference `ApiRequest`; they must not copy its fields (see architecture §4).
 
@@ -51,7 +51,8 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   drafts_controller.rb               # POST = new blank draft
   requests/placements_controller.rb  # modal to save a draft into a collection/folder
   requests/tabs_controller.rb        # DELETE = close a request's tab
-  requests/executions_controller.rb  # POST = run, GET = history item
+  requests/executions_controller.rb  # POST = run (unsaved), GET = history item
+  requests/executions/saves_controller.rb  # POST = save a run's response to history
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb
   oauth2/{tokens,authorizations,callbacks}_controller.rb
@@ -80,7 +81,7 @@ Hovering a `{{variable}}` in any editor opens a card with its value as an input:
 
 1. `RequestBuilder` resolves `{{variables}}` from the selected environment (plus `{{$timestamp}}`, `{{$isoTimestamp}}`, `{{$guid}}`, `{{$randomInt}}`), builds URL, headers and body, resolves the effective auth and applies it. Undefined variables in the URL abort the run with a clear message; elsewhere they are sent as typed and reported in the response.
 2. `Executor` sends the request with Faraday (`Net::HTTP`). Redirects are followed by the executor itself, so each hop goes through the SSRF policy; credential headers are dropped when a redirect leaves the origin. A Digest `401` challenge is answered once.
-3. `Requests::Run` stores a `RequestExecution` with secrets masked and prunes history.
+3. `Requests::Run` builds a `RequestExecution` with secrets masked but does not write it to the database: it is stashed in `Rails.cache` (30 minutes) under its pre-generated id. The response panel shows a *Save response* button (not for failed requests) that POSTs to `executions/:execution_id/saves`; `Executions::Save` persists the cached execution (same request and user only), drops it from the cache and prunes history to the last 50. An expired response answers `410 Gone`.
 
 `Requests::Run` first saves any pending edits of the editor form, so *Send* also saves. The response is streamed back as a Turbo Stream into the response panel.
 

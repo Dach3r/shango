@@ -152,7 +152,6 @@ en:
           destination: Save to
           keep_draft: Keep as draft
           submit: Save here
-          no_collections: "Create a collection first to save requests into it. Until then the request stays as a draft."
       create:
         created: Request created.
       update:
@@ -325,6 +324,7 @@ en:
         raw: Raw
         preview: Preview
       copy: Copy
+      save: Save response
       copied: Copied
       truncated: "Only the first %{limit} are shown."
       unresolved: "Undefined variables: %{names}. They were sent as typed."
