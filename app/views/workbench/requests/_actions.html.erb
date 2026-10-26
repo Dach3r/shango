@@ -1,11 +1,11 @@
 <%# Request actions. Rendered in the tab bar; the request-form controller wraps the whole workspace section. %>
-  <button type="button" data-action="request-form#copyCurl" data-copied-label="<%= t("workbench.requests.copied") %>" class="<%= button_classes(:ghost) %>">
-    <%= lucide_icon "terminal", class: "size-4" %><span data-label><%= t("workbench.requests.copy_curl") %></span>
+  <button type="button" data-action="request-form#copyCurl" data-copied-label="<%= t("workbench.requests.copied") %>" class="<%= button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs") %>">
+    <%= lucide_icon "terminal", class: "size-3.5" %><span data-label><%= t("workbench.requests.copy_curl") %></span>
   </button>
-  <%= button_to workbench_request_duplication_path(api_request), method: :post, class: button_classes(:ghost), form_class: "contents" do %>
-    <%= lucide_icon "copy", class: "size-4" %><%= t("workbench.requests.duplicate") %>
+  <%= button_to workbench_request_duplication_path(api_request), method: :post, class: button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs"), form_class: "contents" do %>
+    <%= lucide_icon "copy", class: "size-3.5" %><%= t("workbench.requests.duplicate") %>
   <% end %>
-  <%= button_to workbench_request_path(api_request), method: :delete, class: button_classes(:ghost, "hover:!text-danger"), form_class: "contents",
+  <%= button_to workbench_request_path(api_request), method: :delete, class: button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs hover:!text-danger"), form_class: "contents",
                 form: { data: { turbo_confirm: t("workbench.requests.confirm_delete", name: api_request.name) } } do %>
-    <%= lucide_icon "trash-2", class: "size-4" %><%= t("workbench.requests.delete") %>
+    <%= lucide_icon "trash-2", class: "size-3.5" %><%= t("workbench.requests.delete") %>
   <% end %>
