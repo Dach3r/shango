@@ -44,22 +44,19 @@
       <p class="px-2 py-6 text-center text-sm text-muted"><%= t("components.request_tree.history_empty") %></p>
     <% end %>
     <% @history_groups.each do |group| %>
-      <details open class="group/history">
-        <summary class="flex cursor-pointer list-none items-center gap-2 px-2 py-1.5 text-sm text-ink transition hover:bg-field focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 [&::-webkit-details-marker]:hidden">
+      <details open class="group/branch">
+        <summary class="flex cursor-pointer list-none items-center gap-2 py-1.5 pr-2 pl-2 text-sm font-medium text-ink transition hover:bg-field focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
           <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
+          <%= lucide_icon group.collection ? "folder-open" : "file-pen-line", class: "size-4 shrink-0 text-accent" %>
           <span class="min-w-0 flex-1 truncate"><%= group.collection ? group.collection.name : t("components.request_tree.drafts") %></span>
-          <span class="shrink-0 text-xs text-muted"><%= group.executions.size %></span>
         </summary>
-        <ul>
+        <ul class="ml-3 space-y-0.5 border-l border-line pl-1.5">
           <% group.executions.each do |execution| %>
             <li>
-              <%= link_to helpers.workbench_request_path(execution.api_request), class: "flex items-center gap-2 px-2 py-1.5 pl-7 transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+              <%= link_to helpers.workbench_request_path(execution.api_request), title: execution.url, aria: { current: (execution.api_request_id == @current_request_id ? "page" : nil) },
+                          class: class_names("flex items-center gap-2 py-1.5 pr-2 pl-2 text-sm transition hover:bg-field focus:outline-none focus-visible:outline-none", "bg-field font-medium text-ink": execution.api_request_id == @current_request_id, "text-body": execution.api_request_id != @current_request_id) do %>
                 <span class="w-9 shrink-0"><%= render MethodBadge::Component.new(method: execution.http_method, short: true) %></span>
-                <span class="min-w-0 flex-1">
-                  <span class="block truncate text-sm text-ink"><%= execution.api_request.name %></span>
-                  <span class="block truncate font-mono text-xs text-muted"><%= execution.url %></span>
-                </span>
-                <span class="shrink-0 text-xs text-muted"><%= l(execution.created_at, format: :short) %></span>
+                <span class="min-w-0 flex-1 truncate"><%= execution.api_request.name %></span>
               <% end %>
             </li>
           <% end %>
