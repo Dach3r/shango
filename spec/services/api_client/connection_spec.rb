@@ -22,6 +22,15 @@ RSpec.describe ApiClient::Connection do
       expect(connection.builder.handlers.map(&:klass)).to include(Faraday::Multipart::Middleware)
     end
 
+    it "times the DNS lookup" do
+      timing = ApiClient::Timing.new
+      allow(timing).to receive(:measure).with(:dns).and_call_original
+
+      described_class.build(url: "https://a.test", timeout: 5, timing:)
+
+      expect(timing).to have_received(:measure).with(:dns)
+    end
+
     it "pins the resolved address" do
       allow(ApiClient::SsrfPolicy).to receive(:check!).and_return("93.184.216.34")
       stub_request(:get, "https://a.test/").to_return(status: 200)

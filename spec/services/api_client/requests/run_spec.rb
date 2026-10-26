@@ -24,6 +24,12 @@ RSpec.describe ApiClient::Requests::Run do
     )
   end
 
+  it "stores the response timings" do
+    stub_request(:get, "https://api.example.com/items").to_return(status: 200, body: "ok")
+
+    expect(result.record.timings.keys).to include("ttfb", "download")
+  end
+
   it "masks secrets in everything stored", :aggregate_failures do
     create(:variable, :secret, environment:, key: "token", value: "supersecret")
     api_request.update!(headers: [{ "key" => "X-Token", "value" => "{{token}}" }, { "key" => "Authorization", "value" => "Bearer abc" }])

@@ -5,11 +5,11 @@ module ApiClient
 
     class InvalidUrl < StandardError; end
 
-    def self.build(url:, timeout:, verify_ssl: true, multipart: false)
+    def self.build(url:, timeout:, verify_ssl: true, multipart: false, timing: Timing.new)
       uri = URI.parse(url.to_s)
       raise InvalidUrl, "Only http and https URLs are supported" unless uri.is_a?(URI::HTTP) && uri.host.present?
 
-      pinned_address = SsrfPolicy.check!(uri.host)
+      pinned_address = timing.measure(:dns) { SsrfPolicy.check!(uri.host) }
 
       Faraday.new do |faraday|
         faraday.request :multipart if multipart
@@ -18,6 +18,7 @@ module ApiClient
         faraday.ssl.verify = verify_ssl
         faraday.adapter :net_http do |http|
           http.ipaddr = pinned_address if pinned_address
+          timing.probe(http)
         end
       end
     rescue URI::InvalidURIError => error

@@ -43,7 +43,7 @@ module ApiClient
           size_bytes: reply.size_bytes, request_headers: masker.request_headers(reply.sent_headers), request_body: masker.string(built.body.preview),
           response_headers: masker.response_headers(reply.headers), response_body: body, content_type: reply.content_type, body_truncated: reply.truncated,
           body_omitted: omitted, redirects: reply.redirects.map { |hop| hop.transform_values { |value| value.is_a?(String) ? masker.string(value) : value } },
-          unresolved_variables: built.unresolved, error_kind: reply.error_kind, error_message: masker.string(reply.error_message)
+          unresolved_variables: built.unresolved, timings: reply.timings, error_kind: reply.error_kind, error_message: masker.string(reply.error_message)
         )
       end
 

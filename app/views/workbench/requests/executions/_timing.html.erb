@@ -1,0 +1,35 @@
+<%# Duration chip item. With a timing breakdown it opens a waterfall popover; older executions only show the figure. %>
+<% item = "flex items-center gap-1.5 px-2.5 py-1 tabular-nums" %>
+<% rows = timing_rows(execution) %>
+<% if execution.error? || rows.empty? %>
+  <span class="<%= item %>" title="<%= t("workbench.executions.time") %>">
+    <%= lucide_icon "timer", class: "size-3.5 text-faint" %><%= format_duration(execution.duration_ms) %>
+  </span>
+<% else %>
+  <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+    <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" title="<%= t("workbench.executions.timing.show") %>"
+            class="<%= item %> cursor-pointer rounded-l-md transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+      <%= lucide_icon "timer", class: "size-3.5 text-faint" %><%= format_duration(execution.duration_ms) %>
+      <%= lucide_icon "chevron-down", class: "size-3 text-faint" %>
+    </button>
+
+    <div data-dropdown-target="menu" hidden class="absolute left-0 top-full z-30 mt-2 w-[26rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-line bg-card p-4 shadow-dropdown">
+      <div class="mb-3 flex items-center gap-2 text-sm">
+        <%= lucide_icon "timer", class: "size-4 text-muted" %>
+        <h3 class="font-semibold text-ink"><%= t("workbench.executions.timing.title") %></h3>
+        <span class="ml-auto font-semibold tabular-nums text-ink"><%= format_duration(execution.duration_ms) %></span>
+      </div>
+      <ul class="space-y-1">
+        <% rows.each do |row| %>
+          <li class="grid grid-cols-[6.5rem_1fr_4.5rem] items-center gap-3 text-xs">
+            <span class="truncate text-muted"><%= t("workbench.executions.timing.phases.#{row[:phase]}") %></span>
+            <span class="relative h-4 border-l border-line" aria-hidden="true">
+              <span class="<%= class_names("absolute inset-y-0.5 rounded-sm", row[:tone]) %>" style="left: <%= number_with_precision(row[:left], precision: 2) %>%; width: <%= number_with_precision(row[:width], precision: 2) %>%"></span>
+            </span>
+            <span class="text-right font-medium tabular-nums text-ink"><%= format_timing(row[:milliseconds]) %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

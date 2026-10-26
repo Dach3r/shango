@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_175208) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_181347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -161,6 +161,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_175208) do
     t.string "error_kind"
     t.text "error_message"
     t.datetime "created_at", null: false
+    t.jsonb "timings", default: {}, null: false
     t.index ["api_request_id", "created_at"], name: "index_request_executions_on_api_request_id_and_created_at"
     t.index ["api_request_id"], name: "index_request_executions_on_api_request_id"
     t.index ["environment_id"], name: "index_request_executions_on_environment_id"

@@ -16,6 +16,14 @@ RSpec.describe "Workbench request executions" do
       expect(response.body).to include("response_panel", I18n.t("workbench.executions.save"))
     end
 
+    it "offers the timing breakdown", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, body: "ok")
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).to include(I18n.t("workbench.executions.timing.title"), I18n.t("workbench.executions.timing.phases.ttfb"))
+    end
+
     it "offers no save for failed requests", :aggregate_failures do
       stub_request(:get, url).to_raise(Errno::ECONNREFUSED)
 

@@ -1,4 +1,8 @@
 module ApiClientHelper
+  TIMING_TONES = {
+    "dns" => "bg-amber-400", "tcp" => "bg-sky-500", "tls" => "bg-indigo-500", "ttfb" => "bg-rose-500", "download" => "bg-emerald-500", "process" => "bg-zinc-500"
+  }.freeze
+  MIN_TIMING_WIDTH = 1.0
   BODY_LANGUAGES = { /json/ => "json", /xml/ => "xml", /html/ => "html", /javascript/ => "javascript" }.freeze
 
   # Select options for saving a draft: every collection and folder as "collection:<id>" / "folder:<id>".
@@ -13,6 +17,31 @@ module ApiClientHelper
     return "-" if milliseconds.nil?
 
     milliseconds < 1000 ? "#{milliseconds} ms" : format("%.2f s", milliseconds / 1000.0)
+  end
+
+  # Millisecond figure for the timing breakdown: more precision for small values, seconds past 1000 ms.
+  def format_timing(milliseconds)
+    return format("%.2f s", milliseconds / 1000.0) if milliseconds >= 1000
+
+    milliseconds >= 100 ? "#{milliseconds.round} ms" : format("%.2f ms", milliseconds)
+  end
+
+  # Waterfall rows for an execution's timings: phase, duration and the bar's left offset / width as percentages of the total.
+  def timing_rows(execution)
+    timings = execution.timings
+    total = timings.values.sum
+    return [] unless total.positive?
+
+    offset = 0.0
+    TIMING_TONES.filter_map do |phase, tone|
+      milliseconds = timings[phase]
+      next if milliseconds.nil? || (phase == "tls" && milliseconds.zero?)
+
+      width = [milliseconds / total * 100, MIN_TIMING_WIDTH].max
+      left = [offset / total * 100, 100 - width].min
+      offset += milliseconds
+      { phase:, tone:, milliseconds:, left:, width: }
+    end
   end
 
   def format_size(bytes)

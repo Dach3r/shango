@@ -17,17 +17,15 @@
   <div class="flex h-full min-h-0 flex-col" data-controller="tabs" data-tabs-active-value="body" data-tabs-key-value="response">
     <div class="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-line px-4 py-3 text-xs text-muted">
       <%= render StatusBadge::Component.new(execution:) %>
-      <div class="flex items-center divide-x divide-line rounded-md border border-line bg-field/40 [&>*]:px-2.5 [&>*]:py-1">
-        <span class="flex items-center gap-1.5 tabular-nums" title="<%= t("workbench.executions.time") %>">
-          <%= lucide_icon "timer", class: "size-3.5 text-faint" %><%= format_duration(execution.duration_ms) %>
-        </span>
+      <div class="flex items-center divide-x divide-line rounded-md border border-line bg-field/40">
+        <%= render "workbench/requests/executions/timing", execution: %>
         <% unless execution.error? %>
-          <span class="flex items-center gap-1.5 tabular-nums" title="<%= t("workbench.executions.size") %>">
+          <span class="flex items-center gap-1.5 px-2.5 py-1 tabular-nums" title="<%= t("workbench.executions.size") %>">
             <%= lucide_icon "hard-drive", class: "size-3.5 text-faint" %><%= format_size(execution.size_bytes) %>
           </span>
         <% end %>
         <% if execution.redirects.any? %>
-          <span class="flex items-center gap-1.5">
+          <span class="flex items-center gap-1.5 px-2.5 py-1">
             <%= lucide_icon "corner-up-right", class: "size-3.5 text-faint" %><%= t("workbench.executions.redirects", count: execution.redirects.size) %>
           </span>
         <% end %>

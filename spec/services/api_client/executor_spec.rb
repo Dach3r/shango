@@ -25,6 +25,13 @@ RSpec.describe ApiClient::Executor do
       expect(reply.sent_headers).to eq([["Accept", "*/*"]])
     end
 
+    it "reports the time spent in each phase", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, body: "hello")
+
+      expect(reply.timings.keys).to eq(%w[dns tcp tls ttfb download process])
+      expect(reply.timings.values).to all(be >= 0)
+    end
+
     it "uses the server reason phrase when present" do
       stub_request(:get, url).to_return(status: [200, "Fine"])
 

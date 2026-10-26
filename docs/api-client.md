@@ -31,7 +31,7 @@ All tables use UUID primary keys. `Project` is the tenancy boundary: every recor
 | `Folder` | Self-referencing (`parent_id`) inside a collection; `auth_type` defaults to `inherit`. |
 | `ApiRequest` | The glossary's *Request*. `collection_id` is nullable: a request with no collection is a draft owned by `user_id` (a CHECK requires an owner and no folder); placing it clears `user_id`. `ApiRequest.visible_to(user)` hides other users' drafts, and controllers look requests up through it. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
 | `RequestTab` | A request the user has open as a tab (`user_id`, `api_request_id`, unique pair, cascade on delete). Tabs are ordered by creation; opening a request (`Tabs::Open`, called by `requests#show` and `CreateDraft`) is idempotent, `Tabs::Close` only removes the tab. |
-| `RequestExecution` | History entry (only when the user saves the response): resolved URL, status, timing, headers, body (≤ 5 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
+| `RequestExecution` | History entry (only when the user saves the response): resolved URL, status, duration, per-phase `timings` (ms, jsonb), headers, body (≤ 5 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
 
 Monitoring and documentation will reference `ApiRequest`; they must not copy its fields (see architecture §4).
 
@@ -66,7 +66,7 @@ app/services/api_client/
   auth/                              # strategy registry (see §5)
   oauth2/                            # token client + services
   curl/{parser,exporter}.rb
-  request_builder.rb executor.rb connection.rb ssrf_policy.rb variable_resolver.rb masker.rb
+  request_builder.rb executor.rb connection.rb timing.rb ssrf_policy.rb variable_resolver.rb masker.rb
 app/services/projects/environments/  # Create, Update, Destroy, Select, UpdateVariable
 app/services/result.rb
 ```
@@ -80,7 +80,7 @@ UI: ViewComponents under `app/components/<name>/component.rb` (`RequestTree`, `K
 Hovering a `{{variable}}` in any editor opens a card with its value as an input: edits save to the selected environment through `PATCH /environments/:environment_id/variables/:id` (debounced, on change and when the card closes) and every editor on the page refreshes its highlighting. Secrets arrive masked, so their input starts empty and a blank save keeps the stored value. Hovering an undefined variable shows an empty input too: typing a value creates the variable in the selected environment (`POST /environments/:environment_id/variables`, reusing and re-enabling a disabled variable with the same key) and every editor picks it up. Without a selected environment it stays read-only, and so do dynamic variables.
 
 1. `RequestBuilder` resolves `{{variables}}` from the selected environment (plus `{{$timestamp}}`, `{{$isoTimestamp}}`, `{{$guid}}`, `{{$randomInt}}`), builds URL, headers and body, resolves the effective auth and applies it. Undefined variables in the URL abort the run with a clear message; elsewhere they are sent as typed and reported in the response.
-2. `Executor` sends the request with Faraday (`Net::HTTP`). Redirects are followed by the executor itself, so each hop goes through the SSRF policy; credential headers are dropped when a redirect leaves the origin. A Digest `401` challenge is answered once.
+2. `Executor` sends the request with Faraday (`Net::HTTP`). Redirects are followed by the executor itself, so each hop goes through the SSRF policy; credential headers are dropped when a redirect leaves the origin. A Digest `401` challenge is answered once. `Timing` measures the call: DNS (the SSRF resolution in `Connection.build`), TCP and TLS (hooks on the `Net::HTTP` connection), waiting for the first byte (TTFB) and download, summed across redirect hops; `process` is the rest of the total. They are stored in `RequestExecution#timings` and the duration chip in the response panel opens a waterfall popover with them (not shown for failed requests or executions without timings).
 3. `Requests::Run` builds a `RequestExecution` with secrets masked but does not write it to the database: it is stashed in `Rails.cache` (30 minutes) under its pre-generated id. The response panel shows a *Save response* button (not for failed requests) that POSTs to `executions/:execution_id/saves`; `Executions::Save` persists the cached execution (same request and user only), drops it from the cache and prunes history to the last 50. An expired response answers `410 Gone`.
 
 `Requests::Run` first saves any pending edits of the editor form, so *Send* also saves. The response is streamed back as a Turbo Stream into the response panel.

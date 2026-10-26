@@ -311,6 +311,16 @@ en:
         headers: Headers
         request: Request
         history: History
+      timing:
+        show: Show timing breakdown
+        title: Response time
+        phases:
+          dns: DNS lookup
+          tcp: TCP handshake
+          tls: TLS handshake
+          ttfb: Waiting (TTFB)
+          download: Download
+          process: Processing
       time: Time
       size: Size
       redirects:
