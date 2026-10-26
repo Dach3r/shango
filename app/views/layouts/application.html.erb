@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>" data-theme="<%= current_theme %>" data-palette="<%= current_palette %>" data-zoom="<%= current_zoom %>">
+<html lang="<%= I18n.locale %>" data-theme="<%= current_theme %>" data-palette="<%= content_for(:palette).presence || current_palette %>" data-zoom="<%= current_zoom %>">
 <head>
   <title><%= content_for(:title) || ApplicationHelper::CONFIG[:name] %></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
