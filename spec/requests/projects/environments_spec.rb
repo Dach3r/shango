@@ -36,7 +36,7 @@ RSpec.describe "Environments" do
     it "re-renders when invalid", :aggregate_failures do
       post environments_path, params: { environment: { name: "" } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe "Environments" do
     it "re-renders when invalid", :aggregate_failures do
       patch environment_path(environment), params: { environment: { name: "" } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

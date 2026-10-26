@@ -28,7 +28,7 @@ RSpec.describe "Workbench folders" do
     it "re-renders the modal when invalid" do
       post workbench_collection_folders_path(collection), params: { folder: { name: "" } }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe "Workbench folders" do
     it "re-renders the modal when invalid" do
       patch workbench_folder_path(folder), params: { folder: { name: "" } }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe "Workbench folders" do
     it "rejects moving a folder into itself" do
       patch workbench_folder_position_path(folder), params: { parent_id: folder.id }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "does not find folders of other projects" do

@@ -34,6 +34,6 @@ RSpec.describe "Workbench request positions" do
     allow_any_instance_of(ApiRequest).to receive(:save).and_return(false) # rubocop:disable RSpec/AnyInstance
     patch workbench_request_position_path(api_request), params: { collection_id: collection.id }
 
-    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response).to have_http_status(:unprocessable_content)
   end
 end

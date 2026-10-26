@@ -24,7 +24,7 @@ RSpec.describe "Workbench request curl exports" do
     api_request.update!(url: "ftp://example.com")
     get workbench_request_curl_export_path(api_request)
 
-    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response).to have_http_status(:unprocessable_content)
     expect(response.parsed_body["error"]).to be_present
   end
 end

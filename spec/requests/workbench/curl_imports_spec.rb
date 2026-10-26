@@ -28,13 +28,13 @@ RSpec.describe "Workbench curl imports" do
     it "shows the parser error for an invalid command", :aggregate_failures do
       post workbench_collection_curl_import_path(collection), params: { command: "" }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "shows validation errors of the built request" do
       post workbench_collection_curl_import_path(collection), params: { command: "curl https://api.example.com", folder_id: foreign_folder.id }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 end

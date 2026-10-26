@@ -20,7 +20,7 @@ RSpec.describe "Workbench collections" do
     it "re-renders the modal when invalid", :aggregate_failures do
       post workbench_collections_path, params: { collection: { name: "" } }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("turbo-stream")
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe "Workbench collections" do
     it "re-renders the modal when invalid" do
       patch workbench_collection_path(collection), params: { collection: { name: "" } }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

@@ -24,7 +24,7 @@ RSpec.describe "Authentication" do
       cookies[:locale] = "es"
       post user_session_path, params: { user: { email: "nobody@example.com", password: "wrong" } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include('lang="es"')
     end
 
@@ -50,7 +50,7 @@ RSpec.describe "Authentication" do
     it "re-renders on invalid data" do
       post user_registration_path, params: { user: user_params.merge(first_name: "") }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

@@ -54,13 +54,13 @@ RSpec.describe "Workbench requests" do
     it "re-renders the modal when invalid" do
       post workbench_collection_requests_path(collection), params: { api_request: { name: "" } }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "works without any api_request params" do
       post workbench_collection_requests_path(collection), headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -104,7 +104,7 @@ RSpec.describe "Workbench requests" do
       create(:request_execution, api_request:, project:)
       patch workbench_request_path(api_request), params: { api_request: { name: "" } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

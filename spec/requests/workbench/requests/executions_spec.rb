@@ -37,7 +37,7 @@ RSpec.describe "Workbench request executions" do
     it "reports invalid edits", :aggregate_failures do
       post workbench_request_executions_path(api_request), params: { api_request: { name: "" } }, headers: turbo_headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(RequestExecution.count).to eq(0)
     end
 

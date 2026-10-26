@@ -4,9 +4,10 @@ SimpleCov.start "rails" do
   enable_coverage :branch
   coverage_dir ENV.fetch("COVERAGE_DIR", "coverage")
   minimum_coverage line: 100, branch: 100 unless ENV["PARTIAL_RUN"]
-  add_filter %r{\A/(spec|config|db|bin|vendor)/}
-  add_group "Components", "app/components"
-  add_group "Services", "app/services"
+  track_files "app/**/*.rb"
+  skip %r{\A/(spec|config|db|bin|vendor)/}
+  group "Components", "app/components"
+  group "Services", "app/services"
 end
 
 RSpec.configure do |config|

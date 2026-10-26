@@ -26,7 +26,7 @@ RSpec.describe "Projects" do
 
     it "re-renders when invalid", :aggregate_failures do
       expect { post projects_path, params: { project: { name: "", icon: "rocket" } } }.not_to change(Project, :count)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
