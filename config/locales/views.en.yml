@@ -123,6 +123,12 @@ en:
         preferences:
           heading: Preferences
           description: Theme and language for your account.
+          theme:
+            label: Theme
+            hint: Choose how Shango looks, or follow your system.
+          locale:
+            label: Language
+            hint: The language of the interface.
         security:
           heading: Security
           description: Change your password or cancel your account.

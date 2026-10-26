@@ -2,15 +2,17 @@
 
 <%= render layout: "settings/shell", locals: { title: t(".title"), heading: t(".#{@tab}.heading"), description: t(".#{@tab}.description") } do %>
   <% if @tab == "preferences" %>
-    <div class="divide-y divide-line rounded-2xl border border-line bg-card">
-      <div class="flex min-h-14 items-center justify-between gap-4 px-4 py-3">
-        <span class="text-sm font-medium text-ink"><%= t("components.theme_switcher.label") %></span>
-        <%= render ThemeSwitcher::Component.new %>
-      </div>
-      <div class="flex min-h-14 items-center justify-between gap-4 px-4 py-3">
-        <span class="text-sm font-medium text-ink"><%= t("components.locale_switcher.label") %></span>
-        <%= render LocaleSwitcher::Component.new %>
-      </div>
+    <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+      <% { theme: ThemeSwitcher::Component, locale: LocaleSwitcher::Component }.each do |setting, switcher| %>
+        <div class="grid gap-4 p-5 md:grid-cols-[1fr_17rem] md:items-center md:gap-8">
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-ink"><%= t(".preferences.#{setting}.label") %></p>
+            <p class="mt-1 text-xs leading-relaxed text-muted"><%= t(".preferences.#{setting}.hint") %></p>
+          </div>
+
+          <div class="md:justify-self-end"><%= render switcher.new %></div>
+        </div>
+      <% end %>
     </div>
   <% else %>
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name, tab: @tab), html: { method: :put, class: "space-y-5" }) do |f| %>
