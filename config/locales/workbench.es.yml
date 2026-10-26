@@ -51,6 +51,13 @@ es:
       label: Solicitudes abiertas
       close: "Cerrar %{name}"
       new_draft: Nueva solicitud en borrador
+      actions: "Acciones de la pestaña"
+      new_request: "Nueva solicitud"
+      duplicate: "Duplicar pestaña"
+      close_tab: "Cerrar pestaña"
+      close_left: "Cerrar pestañas a la izquierda"
+      close_right: "Cerrar pestañas a la derecha"
+      close_all: "Cerrar todas las pestañas"
     request_tree:
       label: Colecciones
       title: Colecciones

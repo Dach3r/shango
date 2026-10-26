@@ -56,4 +56,17 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_css("form[action='/workbench/requests/#{draft.id}'] input[name=_method][value=delete]", visible: :all)
     expect(page).to have_no_link(href: "/workbench/requests/#{draft.id}/closure/new")
   end
+
+  it "renders a context menu per tab with the close options disabled at the edges", :aggregate_failures do
+    first = create(:api_request, project:, name: "First")
+    last = create(:api_request, project:, name: "Last")
+
+    render_inline(described_class.new(requests: [first, last], current_request_id: last.id))
+
+    menus = page.all("[data-request-tab]", visible: :all)
+    expect(menus.first).to have_css("form[action^='/workbench/tabs?'] button[disabled]", visible: :all, count: 1)
+    expect(menus.last).to have_css("form[action*='side=right'] button[disabled]", visible: :all)
+    expect(menus.first).to have_css("form[action*='side=all'][action*='current=#{last.id}']", visible: :all)
+    expect(menus.first).to have_css("form[action='/workbench/requests/#{first.id}/duplication']", visible: :all)
+  end
 end

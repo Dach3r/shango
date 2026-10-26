@@ -21,4 +21,11 @@ export default class extends Controller {
     event.preventDefault();
     close.click();
   }
+
+  closeTab(event) {
+    event.currentTarget
+      .closest("[data-request-tab]")
+      .querySelector("[data-request-tab-close]")
+      .click();
+  }
 }

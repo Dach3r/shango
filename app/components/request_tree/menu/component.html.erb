@@ -1,5 +1,5 @@
 <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
-  <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" aria-label="<%= @label %>"
+  <button type="button" data-dropdown-target="trigger" <%= "hidden" unless @trigger %> data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" aria-label="<%= @label %>"
           class="flex size-7 cursor-pointer items-center justify-center rounded-lg text-faint opacity-100 transition hover:bg-field hover:text-ink focus-visible:outline-none">
     <%= lucide_icon "ellipsis", class: "size-4" %>
   </button>

@@ -51,6 +51,13 @@ en:
       label: Open requests
       close: "Close %{name}"
       new_draft: New draft request
+      actions: "Tab actions"
+      new_request: "New request"
+      duplicate: "Duplicate tab"
+      close_tab: "Close tab"
+      close_left: "Close tabs to the left"
+      close_right: "Close tabs to the right"
+      close_all: "Close all tabs"
     request_tree:
       label: Collections
       title: Collections

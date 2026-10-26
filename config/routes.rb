@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resource :import, only: %i[new create]
 
     resources :drafts, only: :create
+    resource :tabs, only: :destroy
 
     resources :folders, only: %i[edit update destroy] do
       resource :position, only: :update, module: :folders
