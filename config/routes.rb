@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   scope module: :projects do
     resources :environments, except: :show
     resource :current_environment, only: :update
-    resource :membership, only: %i[edit update]
+    resource :membership, only: %i[edit update], path_names: { edit: "settings" }
   end
 
   namespace :workbench do
