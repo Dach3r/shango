@@ -3,21 +3,17 @@
     <div class="pointer-events-none absolute inset-0 [view-transition-name:devise-dots] bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]"></div>
     <div class="pointer-events-none absolute top-1/2 left-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--glow) blur-3xl"></div>
 
+    <%= render Logo::Component.new(href: unauthenticated_root_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
+
     <div class="absolute right-5 bottom-5 z-10 flex items-center gap-2">
       <%= render ThemeSwitcher::Component.new %>
       <%= render LocaleSwitcher::Component.new %>
     </div>
 
     <div class="relative w-full max-w-xl [view-transition-name:devise-card] rounded-[28px] border border-line bg-card p-8 sm:p-10">
-      <div class="mb-8">
-        <%= link_to unauthenticated_root_path, class: "mb-5 inline-flex items-center gap-2.5" do %>
-          <%= render Bolt::Component.new(class: "h-7 w-auto fill-accent") %>
-          <span class="text-2xl font-bold tracking-tight text-ink"><%= ApplicationHelper::CONFIG[:name] %></span>
-        <% end %>
-        <% if content_for?(:heading) %>
-          <h1 class="text-3xl leading-tight font-bold tracking-tight text-ink sm:text-4xl"><%= yield :heading %></h1>
-        <% end %>
-      </div>
+      <% if content_for?(:heading) %>
+        <h1 class="mb-8 text-3xl leading-tight font-bold tracking-tight text-ink sm:text-4xl"><%= yield :heading %></h1>
+      <% end %>
 
       <% if notice.present? %>
         <p role="status" class="mb-6 rounded-xl bg-solid/10 px-4 py-3 text-center text-sm text-accent ring-1 ring-accent/30"><%= notice %></p>

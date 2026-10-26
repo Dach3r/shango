@@ -24,9 +24,9 @@ en:
         title: Sign in
         heading_html: Power your<br>workspace back up.
         email: Email
-        email_placeholder: you@email.com
+        email_placeholder: you@example.com
         password: Password
-        password_placeholder: Your password
+        password_placeholder: Enter your password
         remember_me: Remember me
         forgot_password: Forgot your password?
         submit: Sign in
@@ -38,13 +38,13 @@ en:
         title: Create account
         heading: Create your account
         first_name: First name
-        first_name_placeholder: Your first name
+        first_name_placeholder: e.g. Ada
         last_name: Last name
-        last_name_placeholder: Your last name
+        last_name_placeholder: e.g. Lovelace
         email: Email
-        email_placeholder: you@email.com
+        email_placeholder: you@example.com
         password: Password
-        password_placeholder: Minimum %{length} characters
+        password_placeholder: At least %{length} characters
         submit: Create account
         or: Or
         sign_in: Sign in
@@ -54,7 +54,9 @@ en:
         email: Email
         awaiting_confirmation: "Awaiting confirmation for: %{email}"
         new_password: New password
-        password_placeholder: Minimum %{length} characters
+        email_placeholder: you@example.com
+        password_placeholder: Leave blank to keep your current password
+        confirm_password_placeholder: Repeat your new password
         confirm_password: Confirm password
         submit: Update
         cancel_heading: Cancel my account
@@ -66,7 +68,7 @@ en:
         title: Reset password
         heading: Forgot your password?
         email: Email
-        email_placeholder: you@email.com
+        email_placeholder: you@example.com
         submit: Send instructions
         sign_in: Sign in
         or: Or
@@ -74,7 +76,7 @@ en:
         title: Change password
         heading: Change your password
         password: New password
-        password_placeholder: Minimum %{length} characters
+        password_placeholder: Create a new password (at least %{length} characters)
         password_confirmation: Confirm password
         password_confirmation_placeholder: Repeat your new password
         submit: Change password
@@ -85,13 +87,14 @@ en:
         title: Resend confirmation
         heading: Resend confirmation
         email: Email
+        email_placeholder: you@example.com
         submit: Resend instructions
     unlocks:
       new:
         title: Resend unlock
         heading: Resend unlock
         email: Email
-        email_placeholder: you@email.com
+        email_placeholder: you@example.com
         submit: Resend instructions
     shared:
       links:

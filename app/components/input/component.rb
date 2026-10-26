@@ -1,6 +1,6 @@
 class Input::Component < ApplicationComponent
   LABEL = "mb-1.5 block text-sm font-medium text-body"
-  FIELD = "block w-full rounded-xl border border-line bg-field #{CONTROL_SIZE} px-4 text-base text-ink transition placeholder:text-muted focus:border-accent focus:bg-field-focus focus:ring-4 focus:ring-accent/25 focus:outline-none aria-invalid:border-danger aria-invalid:ring-4 aria-invalid:ring-danger/25 aria-invalid:focus:border-danger"
+  FIELD = "block w-full rounded-xl border border-line bg-field #{CONTROL_SIZE} px-4 text-base text-ink transition placeholder:text-muted/60 focus:border-solid focus:bg-field-focus focus:ring-4 focus:ring-solid/45 focus:outline-none aria-invalid:border-danger aria-invalid:ring-4 aria-invalid:ring-danger/25 aria-invalid:focus:border-danger"
   TOGGLE = "text-muted hover:text-ink"
   ICON = "text-muted"
   DEFAULT_ICONS = {email: "mail", password: "lock"}.freeze

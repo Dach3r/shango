@@ -4,7 +4,7 @@
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: "space-y-5" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, autofocus: true, autocomplete: "email", required: true,
+  <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, placeholder: t(".email_placeholder"), autofocus: true, autocomplete: "email", required: true,
                                   value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)) %>
 
   <%= render Button::Component.new(form: f, label: t(".submit")) %>

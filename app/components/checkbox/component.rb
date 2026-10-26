@@ -1,5 +1,5 @@
 class Checkbox::Component < ApplicationComponent
-  BOX = "peer size-5 cursor-pointer appearance-none rounded-md border border-line bg-field transition hover:border-accent/60 checked:border-solid checked:bg-solid focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/25"
+  BOX = "peer size-5 cursor-pointer appearance-none rounded-md border border-line bg-field transition hover:border-accent/60 checked:border-solid checked:bg-solid focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-solid/30"
   LABEL = "flex cursor-pointer items-center gap-2.5 text-body"
   ICON = "pointer-events-none absolute inset-0 m-auto size-3.5 stroke-[3] text-on-solid opacity-0 transition peer-checked:opacity-100"
 

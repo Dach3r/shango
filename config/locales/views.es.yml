@@ -24,9 +24,9 @@ es:
         title: Iniciar sesión
         heading_html: Vuelve a<br>encender tu workspace.
         email: Correo electrónico
-        email_placeholder: tu@correo.com
+        email_placeholder: tu@ejemplo.com
         password: Contraseña
-        password_placeholder: Tu contraseña
+        password_placeholder: Ingresa tu contraseña
         remember_me: Recordarme
         forgot_password: ¿Olvidaste tu contraseña?
         submit: Iniciar sesión
@@ -38,13 +38,13 @@ es:
         title: Crear cuenta
         heading: Crea tu cuenta
         first_name: Nombre
-        first_name_placeholder: Tu nombre
+        first_name_placeholder: "Ej: Ada"
         last_name: Apellido
-        last_name_placeholder: Tu apellido
+        last_name_placeholder: "Ej: Lovelace"
         email: Correo electrónico
-        email_placeholder: tu@correo.com
+        email_placeholder: tu@ejemplo.com
         password: Contraseña
-        password_placeholder: Mínimo %{length} caracteres
+        password_placeholder: Al menos %{length} caracteres
         submit: Crear cuenta
         or: O
         sign_in: Iniciar sesión
@@ -54,7 +54,9 @@ es:
         email: Correo electrónico
         awaiting_confirmation: "Esperando confirmación de: %{email}"
         new_password: Nueva contraseña
-        password_placeholder: Mínimo %{length} caracteres
+        email_placeholder: tu@ejemplo.com
+        password_placeholder: Déjala en blanco para mantener la actual
+        confirm_password_placeholder: Repite tu nueva contraseña
         confirm_password: Confirmar contraseña
         submit: Actualizar
         cancel_heading: Cancelar mi cuenta
@@ -66,7 +68,7 @@ es:
         title: Recuperar contraseña
         heading: ¿Olvidaste tu contraseña?
         email: Correo electrónico
-        email_placeholder: tu@correo.com
+        email_placeholder: tu@ejemplo.com
         submit: Enviar instrucciones
         sign_in: Iniciar sesión
         or: O
@@ -74,7 +76,7 @@ es:
         title: Cambiar contraseña
         heading: Cambia tu contraseña
         password: Nueva contraseña
-        password_placeholder: Mínimo %{length} caracteres
+        password_placeholder: Crea una nueva contraseña (al menos %{length} caracteres)
         password_confirmation: Confirmar contraseña
         password_confirmation_placeholder: Repite tu nueva contraseña
         submit: Cambiar contraseña
@@ -85,13 +87,14 @@ es:
         title: Reenviar confirmación
         heading: Reenviar confirmación
         email: Correo electrónico
+        email_placeholder: tu@ejemplo.com
         submit: Reenviar instrucciones
     unlocks:
       new:
         title: Reenviar desbloqueo
         heading: Reenviar desbloqueo
         email: Correo electrónico
-        email_placeholder: tu@correo.com
+        email_placeholder: tu@ejemplo.com
         submit: Reenviar instrucciones
     shared:
       links:

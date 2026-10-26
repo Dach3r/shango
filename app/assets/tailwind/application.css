@@ -13,15 +13,18 @@
 }
 
 @theme {
-  --color-brand-50: #f1f8f2;
-  --color-brand-400: #7bc08a;
-  --color-brand-500: #62ad72;
-  --color-brand-600: #4f9560;
-  --color-brand-700: #3f7a4e;
-  --color-night-950: #070d09;
-  --color-night-900: #0f1913;
-  --color-night-700: #2a4033;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #eef3ff;
+  --color-brand-300: #8fb0ff;
+  --color-brand-400: #4a74ff;
+  --color-brand-500: #1f4fff;
+  --color-brand-600: #0f35c4;
+  --color-brand-700: #0a2a9e;
+  --color-night-1000: #030814;
+  --color-night-950: #071530;
+  --color-night-900: #0a1f44;
+  --color-night-700: #16316a;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 @theme inline {
@@ -43,63 +46,63 @@
 
 :root {
   color-scheme: light;
-  --page: #eaf2ec;
+  --page: #f4f7fc;
   --card: #ffffff;
-  --line: #c9d9ce;
-  --field: #f2f6f3;
+  --line: #d3dbe9;
+  --field: #f6f8fc;
   --field-focus: #ffffff;
-  --ink: #0b140f;
-  --body: #2c3a32;
-  --muted: #55665b;
-  --accent: var(--color-brand-700);
-  --accent-hover: #2f6a3f;
-  --solid: var(--color-brand-600);
-  --solid-hover: var(--color-brand-700);
+  --ink: var(--color-night-900);
+  --body: #2a3a58;
+  --muted: #5b6b86;
+  --accent: var(--color-brand-500);
+  --accent-hover: var(--color-brand-600);
+  --solid: var(--color-brand-500);
+  --solid-hover: var(--color-brand-600);
   --on-solid: #ffffff;
   --danger: #c81e1e;
-  --dots: color-mix(in oklab, var(--color-brand-600) 40%, transparent);
-  --glow: color-mix(in oklab, var(--color-brand-500) 28%, transparent);
+  --dots: #c9d3e6;
+  --glow: color-mix(in oklab, var(--color-brand-500) 14%, transparent);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: var(--color-night-950);
-  --card: var(--color-night-900);
-  --line: var(--color-night-700);
-  --field: var(--color-night-950);
-  --field-focus: var(--color-night-950);
+  --page: var(--color-night-1000);
+  --card: #09122b;
+  --line: #1a2850;
+  --field: #050b1d;
+  --field-focus: #050b1d;
   --ink: #ffffff;
-  --body: #d4d4d4;
-  --muted: #a3a3a3;
-  --accent: var(--color-brand-400);
-  --accent-hover: var(--color-brand-50);
-  --solid: var(--color-brand-400);
-  --solid-hover: var(--color-brand-500);
-  --on-solid: var(--color-night-950);
-  --danger: #fca5a5;
+  --body: #c9d6f2;
+  --muted: #9fb2d6;
+  --accent: var(--color-brand-300);
+  --accent-hover: #ffffff;
+  --solid: var(--color-brand-500);
+  --solid-hover: var(--color-brand-400);
+  --on-solid: #ffffff;
+  --danger: #ff9a9a;
   --dots: var(--color-night-700);
-  --glow: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
+  --glow: color-mix(in oklab, var(--color-brand-500) 14%, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   :root[data-theme="system"] {
     color-scheme: dark;
-    --page: var(--color-night-950);
-    --card: var(--color-night-900);
-    --line: var(--color-night-700);
-    --field: var(--color-night-950);
-    --field-focus: var(--color-night-950);
+    --page: var(--color-night-1000);
+    --card: #09122b;
+    --line: #1a2850;
+    --field: #050b1d;
+    --field-focus: #050b1d;
     --ink: #ffffff;
-    --body: #d4d4d4;
-    --muted: #a3a3a3;
-    --accent: var(--color-brand-400);
-    --accent-hover: var(--color-brand-50);
-    --solid: var(--color-brand-400);
-    --solid-hover: var(--color-brand-500);
-    --on-solid: var(--color-night-950);
-    --danger: #fca5a5;
+    --body: #c9d6f2;
+    --muted: #9fb2d6;
+    --accent: var(--color-brand-300);
+    --accent-hover: #ffffff;
+    --solid: var(--color-brand-500);
+    --solid-hover: var(--color-brand-400);
+    --on-solid: #ffffff;
+    --danger: #ff9a9a;
     --dots: var(--color-night-700);
-    --glow: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
+    --glow: color-mix(in oklab, var(--color-brand-500) 14%, transparent);
   }
 }
 
@@ -114,7 +117,7 @@ input:-webkit-autofill:focus {
 }
 
 input:-webkit-autofill:focus {
-  box-shadow: 0 0 0 1000px var(--field-focus) inset, 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+  box-shadow: 0 0 0 1000px var(--field-focus) inset, 0 0 0 4px color-mix(in srgb, var(--solid) 45%, transparent);
 }
 
 ::view-transition-group(*) {

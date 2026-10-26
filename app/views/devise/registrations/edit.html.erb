@@ -4,14 +4,14 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-5" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, autocomplete: "email", required: true) %>
+  <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, placeholder: t(".email_placeholder"), autocomplete: "email", required: true) %>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <p class="text-sm text-muted"><%= t(".awaiting_confirmation", email: resource.unconfirmed_email) %></p>
   <% end %>
 
-  <%= render Input::Component.new(form: f, attribute: :password, label: t(".new_password"), type: :password, placeholder: (t(".password_placeholder", length: @minimum_password_length) if @minimum_password_length), autocomplete: "new-password") %>
-  <%= render Input::Component.new(form: f, attribute: :password_confirmation, label: t(".confirm_password"), type: :password, autocomplete: "new-password") %>
+  <%= render Input::Component.new(form: f, attribute: :password, label: t(".new_password"), type: :password, placeholder: t(".password_placeholder"), autocomplete: "new-password") %>
+  <%= render Input::Component.new(form: f, attribute: :password_confirmation, label: t(".confirm_password"), type: :password, placeholder: t(".confirm_password_placeholder"), autocomplete: "new-password") %>
 
   <%= render Button::Component.new(form: f, label: t(".submit")) %>
 <% end %>

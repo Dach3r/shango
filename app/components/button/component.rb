@@ -2,7 +2,7 @@ class Button::Component < ApplicationComponent
   BASE = "flex #{CONTROL_SIZE} w-full cursor-pointer items-center justify-center rounded-xl text-center text-base font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-card"
   VARIANTS = {
     primary: "bg-solid text-on-solid shadow-sm shadow-brand-700/20 hover:bg-solid-hover focus:ring-solid/50",
-    secondary: "bg-accent/12 text-accent ring-1 ring-inset ring-accent/25 hover:bg-accent/20 hover:ring-accent/50 focus:ring-accent/50"
+    secondary: "bg-accent/8 text-accent ring-1 ring-inset ring-accent/30 hover:bg-accent/15 hover:ring-accent/50 focus:ring-accent/50"
   }.freeze
 
   def initialize(label:, form: nil, href: nil, variant: :primary, **options)
