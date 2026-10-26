@@ -14,7 +14,7 @@
     <% end %>
   </div>
 
-  <%= render Button::Component.new(form: f, icon: "log-in", label: t(".submit")) %>
+  <%= render Button::Component.new(form: f, label: t(".submit")) %>
 <% end %>
 
 <% if devise_mapping.registerable? %>
@@ -24,5 +24,5 @@
     <span class="h-px flex-1 bg-line"></span>
   </div>
 
-  <%= render Button::Component.new(icon: "user-plus", label: t(".sign_up"), href: new_registration_path(resource_name), variant: :secondary) %>
+  <%= render Button::Component.new(label: t(".sign_up"), href: new_registration_path(resource_name), variant: :secondary) %>
 <% end %>

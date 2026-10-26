@@ -5,7 +5,7 @@ class Button::Component < ApplicationComponent
     secondary: "bg-ink/[0.03] text-ink ring-1 ring-inset ring-line hover:bg-accent/10 hover:text-accent hover:ring-accent focus:ring-solid/50"
   }.freeze
 
-  def initialize(label:, icon:, form: nil, href: nil, variant: :primary, **options)
+  def initialize(label:, icon: nil, form: nil, href: nil, variant: :primary, **options)
     @form = form
     @label = label
     @icon = icon
@@ -25,7 +25,7 @@ class Button::Component < ApplicationComponent
   private
 
   def content_with_icon
-    safe_join([helpers.lucide_icon(@icon, class: "size-4 shrink-0"), @label])
+    safe_join([(helpers.lucide_icon(@icon, class: "size-4 shrink-0") if @icon), @label])
   end
 
   def classes

@@ -21,4 +21,12 @@ RSpec.describe Button::Component, type: :component do
       expect(page).to have_no_css("button.bg-solid")
     end
   end
+
+  context "without an icon" do
+    it "renders only the label" do
+      render_inline(described_class.new(label: "Go", href: "/x"))
+
+      expect(page).to have_no_css("a > svg")
+    end
+  end
 end

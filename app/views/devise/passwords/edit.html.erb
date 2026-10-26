@@ -8,7 +8,7 @@
   <%= render Input::Component.new(form: f, attribute: :password, label: t(".password"), type: :password, placeholder: (t(".password_placeholder", length: @minimum_password_length) if @minimum_password_length), autofocus: true, autocomplete: "new-password", required: true) %>
   <%= render Input::Component.new(form: f, attribute: :password_confirmation, label: t(".password_confirmation"), type: :password, placeholder: t(".password_confirmation_placeholder"), autocomplete: "new-password", required: true) %>
 
-  <%= render Button::Component.new(form: f, icon: "key-round", label: t(".submit")) %>
+  <%= render Button::Component.new(form: f, label: t(".submit")) %>
 <% end %>
 
 <div class="my-6 flex items-center gap-4 text-xs font-medium uppercase tracking-widest text-muted">
@@ -17,4 +17,4 @@
   <span class="h-px flex-1 bg-line"></span>
 </div>
 
-<%= render Button::Component.new(icon: "log-in", label: t(".sign_in"), href: new_session_path(resource_name), variant: :secondary) %>
+<%= render Button::Component.new(label: t(".sign_in"), href: new_session_path(resource_name), variant: :secondary) %>
