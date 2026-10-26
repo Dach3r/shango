@@ -17,21 +17,19 @@
     </div>
   <% end %>
 
-  <div class="@container flex items-start gap-2 p-3" data-resizable-target="bounds">
-    <div class="flex min-w-0 flex-1 items-stretch border border-line bg-field pr-3 transition focus-within:border-solid focus-within:ring-1 focus-within:ring-solid">
-      <div class="flex">
-        <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
-                                         class: "w-20 @xl:w-24 shrink-0 h-full border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
-                                         input_data: { action: "change->request-form#methodChanged" }) %>
-      </div>
-      <span class="w-px shrink-0 bg-line" aria-hidden="true"></span>
-      <div class="min-w-0 flex-1 py-2 pl-3">
-        <%= render CodeEditor::Component.new(name: "api_request[url]", value: api_request.url, single_line: true, placeholder: t("workbench.requests.url_placeholder"), variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url,
-                                             input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>
-      </div>
+  <div class="@container flex items-stretch border-b border-line bg-field transition focus-within:bg-field-focus" data-resizable-target="bounds">
+    <div class="flex">
+      <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
+                                       class: "w-20 @xl:w-24 shrink-0 h-full border-0! bg-transparent! px-4! font-mono text-xs font-semibold focus:ring-0!",
+                                       input_data: { action: "change->request-form#methodChanged" }) %>
+    </div>
+    <span class="w-px shrink-0 bg-line" aria-hidden="true"></span>
+    <div class="min-w-0 flex-1 px-3 py-3">
+      <%= render CodeEditor::Component.new(name: "api_request[url]", value: api_request.url, single_line: true, placeholder: t("workbench.requests.url_placeholder"), variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url,
+                                           input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>
     </div>
     <button type="button" data-request-form-target="send" data-action="request-form#toggle" title="<%= t("workbench.requests.send_hint") %>"
-            class="<%= button_classes(:primary, "group @xl:min-w-24 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
+            class="<%= button_classes(:primary, "group px-4 @xl:min-w-28 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
       <span class="contents group-data-[busy=true]:hidden">
         <%= lucide_icon "send", class: "size-4" %>
         <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
