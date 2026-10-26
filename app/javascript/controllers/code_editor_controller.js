@@ -652,7 +652,12 @@ export default class extends Controller {
         minWidth: "13.75rem",
         maxWidth: "26.25rem",
       },
-      ".cm-var-card": { fontFamily: "var(--font-sans)", fontSize: "0.75rem" },
+      ".cm-var-card": {
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: "var(--font-sans)",
+        fontSize: "0.75rem",
+      },
       ".cm-var-card-value": {
         padding: "0.5rem 0.625rem",
         border: "1px solid var(--line)",
@@ -663,8 +668,8 @@ export default class extends Controller {
         wordBreak: "break-all",
       },
       ".cm-var-card-input": {
-        display: "block",
-        width: "100%",
+        fieldSizing: "content",
+        maxWidth: "100%",
         outline: "none",
         boxSizing: "border-box",
       },
