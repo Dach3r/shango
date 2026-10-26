@@ -107,9 +107,10 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 ## 9. Current state (snapshot)
 
 - Authentication (Devise, `User` with first/last name) and a placeholder `ProjectsController#index`.
+- `Project` and `Membership` (role `owner`/`member`). `AuthenticatedController#require_project` redirects any user without an active project to `projects#new`, so every user creates a first project (name + icon) right after sign-up. `Project.create_with_owner` creates the project and its owner membership in one transaction.
 - Shared UI components (`Button`, `Input`, `Link`) and a password visibility Stimulus controller.
-- PostgreSQL schema contains only `users` and Active Storage tables; the `uuid-ossp` extension is enabled.
-- No `Project` model, tests, or other domain models yet.
+- PostgreSQL schema contains `users`, `projects`, `memberships` and Active Storage tables; the `uuid-ossp` extension is enabled.
+- No tests or other domain models yet.
 
 Update this section as features land.
 

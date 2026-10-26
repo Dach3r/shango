@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :projects, only: %i[index new create]
   resource :preferences, only: :update
 
   get "up" => "rails/health#show", as: :rails_health_check

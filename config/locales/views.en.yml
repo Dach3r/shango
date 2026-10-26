@@ -4,6 +4,9 @@ en:
       user:
         first_name: First name
         last_name: Last name
+      project:
+        name: Name
+        icon: Icon
   components:
     input:
       toggle_password: Show or hide password
@@ -20,11 +23,20 @@ en:
     index:
       title: Projects
       sign_out: Sign out
+    new:
+      title: New project
+      heading_html: Create your first project
+      name: Project name
+      name_placeholder: e.g. Example
+      icon: Icon
+      icon_search: Search icons
+      icon_empty: No icons found
+      submit: Create project
   devise:
     sessions:
       new:
         title: Sign in
-        heading_html: Power your<br>workspace back up.
+        heading_html: Welcome back
         email: Email
         email_placeholder: you@example.com
         password: Password
@@ -38,7 +50,7 @@ en:
     registrations:
       new:
         title: Create account
-        heading_html: Create your account<br>and start building.
+        heading_html: Create your account
         first_name: First name
         first_name_placeholder: e.g. Ada
         last_name: Last name
@@ -52,7 +64,7 @@ en:
         sign_in: Sign in
       edit:
         title: Edit account
-        heading_html: Tune your<br>account.
+        heading_html: Account settings
         email: Email
         awaiting_confirmation: "Awaiting confirmation for: %{email}"
         new_password: New password
@@ -68,7 +80,7 @@ en:
     passwords:
       new:
         title: Reset password
-        heading_html: Forgot your<br>password?
+        heading_html: Forgot your password?
         email: Email
         email_placeholder: you@example.com
         submit: Send instructions
@@ -76,7 +88,7 @@ en:
         or: Or
       edit:
         title: Change password
-        heading_html: Choose a new<br>password.
+        heading_html: Set a new password
         password: New password
         password_placeholder: Create a new password (at least %{length} characters)
         password_confirmation: Confirm password
@@ -87,14 +99,14 @@ en:
     confirmations:
       new:
         title: Resend confirmation
-        heading_html: Confirm your<br>email.
+        heading_html: Confirm your email
         email: Email
         email_placeholder: you@example.com
         submit: Resend instructions
     unlocks:
       new:
         title: Resend unlock
-        heading_html: Get back into<br>your account.
+        heading_html: Unlock your account
         email: Email
         email_placeholder: you@example.com
         submit: Resend instructions

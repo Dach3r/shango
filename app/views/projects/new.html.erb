@@ -1,0 +1,26 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading do %><%= t(".heading_html") %><% end %>
+
+<%= form_with(model: @project, class: "space-y-5") do |f| %>
+  <%= render "devise/shared/error_messages", resource: @project %>
+
+  <%= render Input::Component.new(form: f, attribute: :name, icon: "folder", label: t(".name"), placeholder: t(".name_placeholder"), autofocus: true, required: true) %>
+
+  <fieldset data-controller="icon-picker">
+    <legend class="mb-1.5 block text-sm font-medium text-muted"><%= t(".icon") %></legend>
+    <input type="search" placeholder="<%= t(".icon_search") %>" aria-label="<%= t(".icon_search") %>" autocomplete="off"
+           data-icon-picker-target="query" data-action="input->icon-picker#filter keydown.enter->icon-picker#preventSubmit"
+           class="mb-3 box-border h-11 w-full rounded-xl border border-line bg-field px-4 text-sm text-ink placeholder:text-faint focus:bg-field-focus focus:outline-none focus:ring-4 focus:ring-solid/45">
+    <div class="-mx-1 grid h-48 grid-cols-9 content-start gap-2 overflow-y-auto p-1">
+      <% Project::ICONS.each do |icon| %>
+        <label class="cursor-pointer" title="<%= icon %>" data-icon-picker-target="option" data-name="<%= icon %>">
+          <%= f.radio_button :icon, icon, class: "peer sr-only" %>
+          <span class="flex aspect-square w-full items-center justify-center rounded-xl border border-line bg-field text-muted transition hover:bg-field-focus peer-checked:border-solid peer-checked:text-ink peer-checked:ring-4 peer-checked:ring-solid/45 peer-focus-visible:ring-4 peer-focus-visible:ring-solid/45"><%= lucide_icon icon, class: "size-6" %></span>
+        </label>
+      <% end %>
+      <p class="col-span-full hidden py-4 text-center text-sm text-muted" data-icon-picker-target="empty"><%= t(".icon_empty") %></p>
+    </div>
+  </fieldset>
+
+  <%= render Button::Component.new(form: f, label: t(".submit")) %>
+<% end %>
