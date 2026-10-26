@@ -7,7 +7,7 @@ class Modal::Component < ApplicationComponent
 
   # title/description/icon fill the header. `submit` (label) renders the default footer with Cancel + a submit button
   # tied to the form with id `form`; pass a `footer` slot instead for custom actions, or neither for no footer.
-  def initialize(title:, description: nil, icon: nil, size: :md, form: nil, submit: nil, cancel: true, dismissible: true)
+  def initialize(title:, description: nil, icon: nil, size: :md, form: nil, submit: nil, cancel: true, dismissible: true, centered: false)
     @title = title
     @description = description
     @icon = icon
@@ -16,6 +16,7 @@ class Modal::Component < ApplicationComponent
     @submit = submit
     @cancel = cancel
     @dismissible = dismissible
+    @centered = centered
   end
 
   private
