@@ -16,11 +16,11 @@ export default class extends Controller {
 
   select(event) {
     this.activeValue = event.params.name;
+    this.remember();
   }
 
   activeValueChanged() {
     this.render();
-    this.remember();
   }
 
   render() {
