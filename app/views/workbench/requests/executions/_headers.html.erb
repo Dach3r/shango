@@ -1,10 +1,21 @@
+<% bleed = local_assigns.fetch(:bleed, false) %>
 <% if headers.blank? %>
-  <p class="text-sm text-muted"><%= empty %></p>
+  <p class="<%= class_names("text-sm text-muted", "p-4" => bleed) %>"><%= empty %></p>
 <% else %>
-  <dl class="grid grid-cols-[minmax(8rem,auto)_1fr] gap-x-6 gap-y-1.5 text-xs">
-    <% headers.each do |name, value| %>
-      <dt class="font-mono font-medium text-ink"><%= name %></dt>
-      <dd class="break-all font-mono text-body"><%= value %></dd>
-    <% end %>
-  </dl>
+  <table class="<%= class_names("w-full table-fixed border-collapse text-xs", "rounded-xl border border-line" => !bleed) %>">
+    <thead>
+      <tr class="border-b border-line bg-ink/[0.03] text-left uppercase tracking-wide text-muted">
+        <th scope="col" class="<%= class_names("w-2/5 border-r border-line px-3 py-2 font-medium", "pl-4" => bleed) %>"><%= t("workbench.executions.header_name") %></th>
+        <th scope="col" class="px-3 py-2 font-medium"><%= t("workbench.executions.header_value") %></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-line">
+      <% headers.each do |name, value| %>
+        <tr class="transition hover:bg-field/60">
+          <th scope="row" class="<%= class_names("border-r border-line px-3 py-2 text-left align-top font-mono font-medium break-all text-ink", "pl-4" => bleed) %>"><%= name %></th>
+          <td class="px-3 py-2 align-top font-mono break-all text-body"><%= value %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>

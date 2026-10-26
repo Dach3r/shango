@@ -327,6 +327,8 @@ en:
         one: "%{count} redirect"
         other: "%{count} redirects"
       no_headers: No headers.
+      header_name: Name
+      header_value: Value
       empty_body: The response has no body.
       binary: "Binary or non-text response (%{size}, %{type}). It is not displayed."
       modes:
