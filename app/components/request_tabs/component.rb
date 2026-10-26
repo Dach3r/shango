@@ -22,6 +22,6 @@ class RequestTabs::Component < ApplicationComponent
   end
 
   def classes(api_request)
-    class_names(TAB, "border-b-transparent bg-ink/[0.05] font-medium text-ink" => current?(api_request), "text-muted" => !current?(api_request))
+    class_names(TAB, "border-b-transparent bg-ink/[0.05] font-medium text-ink hover:bg-ink/[0.05]" => current?(api_request), "text-muted" => !current?(api_request))
   end
 end
