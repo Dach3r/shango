@@ -38,4 +38,13 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_css("form[action='/workbench/requests/#{saved.id}/tab?current=true']")
     expect(page).to have_css("form[action='/workbench/requests/#{other.id}/tab']")
   end
+
+  it "closes untouched drafts without a confirmation", :aggregate_failures do
+    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+
+    render_inline(described_class.new(requests: [draft]))
+
+    expect(page).to have_css("form[action='/workbench/requests/#{draft.id}'] input[name=_method][value=delete]", visible: :all)
+    expect(page).to have_no_link(href: "/workbench/requests/#{draft.id}/closure/new")
+  end
 end

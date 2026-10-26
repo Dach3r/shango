@@ -49,6 +49,10 @@ class ApiRequest < ApplicationRecord
     collection_id.nil?
   end
 
+  def untouched_draft?
+    draft? && updated_at == created_at && !body_files.attached? && !binary_body.attached?
+  end
+
   def siblings
     draft? ? project.api_requests.drafts.where(user_id:) : collection.api_requests.where(folder_id:)
   end

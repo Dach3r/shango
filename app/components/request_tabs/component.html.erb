@@ -8,7 +8,11 @@
           <span class="min-w-0 truncate"><%= api_request.name %></span>
         <% end %>
         <% close_label = t("components.request_tabs.close", name: api_request.name) %>
-        <% if api_request.draft? %>
+        <% if api_request.untouched_draft? %>
+          <%= button_to workbench_request_path(api_request), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer", data: { turbo_frame: "_top" } do %>
+            <%= lucide_icon "x", class: "size-3" %>
+          <% end %>
+        <% elsif api_request.draft? %>
           <%= link_to new_workbench_request_closure_path(api_request), data: { turbo_frame: "modal" }, aria: { label: close_label }, title: close_label, class: CLOSE do %>
             <%= lucide_icon "x", class: "size-3" %>
           <% end %>

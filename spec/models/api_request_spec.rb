@@ -78,6 +78,38 @@ RSpec.describe ApiRequest do
     end
   end
 
+  describe "#untouched_draft?" do
+    let(:project) { create(:project) }
+    let(:user) { create(:user) }
+    let(:draft) { ApiClient::Requests::CreateDraft.call(project:, user:).record }
+
+    it "is true for a draft that was never edited" do
+      expect(draft).to be_untouched_draft
+    end
+
+    it "is false once the draft changes" do
+      draft.update!(url: "https://example.com")
+
+      expect(draft).not_to be_untouched_draft
+    end
+
+    it "is false for a draft with an attached file" do
+      draft.binary_body.attach(io: StringIO.new("data"), filename: "a.bin")
+
+      expect(draft).not_to be_untouched_draft
+    end
+
+    it "is false for a draft with body files" do
+      draft.body_files.attach(io: StringIO.new("data"), filename: "a.txt")
+
+      expect(draft).not_to be_untouched_draft
+    end
+
+    it "is false for a saved request" do
+      expect(create(:api_request, project:)).not_to be_untouched_draft
+    end
+  end
+
   describe "#setting" do
     it "reads stored values and falls back to defaults", :aggregate_failures do
       api_request.update!(settings: { timeout: 10 })
