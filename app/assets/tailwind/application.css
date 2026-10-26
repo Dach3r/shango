@@ -56,6 +56,10 @@
 /* Each token is defined once as light-dark(light, dark); color-scheme picks the side. */
 :root {
   color-scheme: light;
+}
+
+:root,
+[data-palette="default"] {
   --page: light-dark(#f8f7f1, var(--color-night-1000));
   --card: light-dark(var(--color-paper), var(--color-night-950));
   --line: light-dark(#ddd8c9, var(--color-night-700));
