@@ -13,7 +13,7 @@ RSpec.describe Membership do
 
   it { is_expected.to define_enum_for(:color_scheme).with_values(system: "system", light: "light", dark: "dark").with_prefix.backed_by_column_of_type(:string) }
 
-  it { is_expected.to define_enum_for(:theme).with_values(default: "default", blue: "blue", green: "green", yellow: "yellow", red: "red", ocean: "ocean").with_prefix.backed_by_column_of_type(:string) }
+  it { is_expected.to define_enum_for(:theme).with_values(Membership::THEMES).with_prefix.backed_by_column_of_type(:string) }
 
   it "follows the OS color scheme with the default theme by default", :aggregate_failures do
     expect(membership).to be_color_scheme_system

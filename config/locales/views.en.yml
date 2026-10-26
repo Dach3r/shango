@@ -109,6 +109,19 @@ en:
           yellow: Yellow
           red: Red
           ocean: Ocean
+          purple: Purple
+          rose: Rose
+          orange: Orange
+          forest: Forest
+          midnight: Midnight
+          nord: Nord
+          dracula: Dracula
+          gruvbox: Gruvbox
+          solarized: Solarized
+          sunset: Sunset
+          coffee: Coffee
+          cyberpunk: Cyberpunk
+          mono: Mono
       update:
         updated: Theme saved.
   devise:

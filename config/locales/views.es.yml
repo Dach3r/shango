@@ -109,6 +109,19 @@ es:
           yellow: Amarillo
           red: Rojo
           ocean: Océano
+          purple: Violeta
+          rose: Rosa
+          orange: Naranja
+          forest: Bosque
+          midnight: Medianoche
+          nord: Nórdico
+          dracula: Drácula
+          gruvbox: Gruvbox
+          solarized: Solarized
+          sunset: Atardecer
+          coffee: Café
+          cyberpunk: Cyberpunk
+          mono: Monocromo
       update:
         updated: Tema guardado.
   devise:
