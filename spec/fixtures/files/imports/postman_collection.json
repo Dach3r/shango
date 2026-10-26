@@ -1,0 +1,46 @@
+{
+  "info": { "name": "Pets", "description": "Pet store", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+  "variable": [{ "key": "baseUrl", "value": "https://api.example.com" }, { "value": "no key" }],
+  "item": [
+    {
+      "name": "Pets",
+      "item": [
+        {
+          "name": "List pets",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('ok')"] } }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-Trace", "value": "{{$randomUUID}}" }, { "key": "X-Off", "value": "1", "disabled": true }, { "value": "skipped" }],
+            "url": { "raw": "{{baseUrl}}/pets?limit=10&page=2", "query": [{ "key": "limit", "value": "10" }, { "key": "page", "value": "2", "disabled": true }, { "value": "x" }] }
+          }
+        },
+        {
+          "name": "Create pet",
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "url": "{{baseUrl}}/pets?dry=1",
+            "description": { "content": "Creates" },
+            "body": { "mode": "raw", "raw": "{\"name\":\"Rex\"}", "options": { "raw": { "language": "json" } } }
+          }
+        }
+      ],
+      "auth": { "type": "basic", "basic": [{ "key": "username", "value": "u" }, { "key": "password", "value": "p" }] },
+      "event": [{ "listen": "prerequest", "script": { "exec": ["console.log(1)"] } }]
+    },
+    { "name": "Form", "request": { "method": "POST", "url": { "protocol": "https", "host": ["api", "example", "com"], "path": ["form"] }, "body": { "mode": "urlencoded", "urlencoded": [{ "key": "a", "value": "1" }, { "value": "x" }] } } },
+    { "name": "Upload", "request": { "method": "PUT", "url": "https://x.test/up", "body": { "mode": "formdata", "formdata": [{ "key": "f", "type": "file", "src": "/tmp/a.png" }, { "key": "t", "value": "v" }, { "value": "x" }] } } },
+    { "name": "Graph", "request": { "method": "POST", "url": "https://x.test/g", "body": { "mode": "graphql", "graphql": { "query": "{ a }", "variables": "{}" } } } },
+    { "name": "Binary", "request": { "method": "POST", "url": "https://x.test/b", "body": { "mode": "file", "file": { "src": "a" } } } },
+    { "name": "Text", "request": { "method": "POST", "url": "https://x.test/t", "body": { "mode": "raw", "raw": "hi" } } },
+    { "name": "Empty body", "request": { "method": "GET", "url": "https://x.test/e", "body": { "mode": "other" } } },
+    { "name": "String request", "request": "https://x.test/s" },
+    { "name": "Key", "request": { "method": "GET", "url": "https://x.test/k", "auth": { "type": "apikey", "apikey": [{ "key": "key", "value": "X-K" }, { "key": "value", "value": "v" }, { "key": "in", "value": "query" }] } } },
+    { "name": "Digest", "request": { "method": "GET", "url": "https://x.test/d", "auth": { "type": "digest", "digest": [{ "key": "username", "value": "u" }] } } },
+    { "name": "Aws", "request": { "method": "GET", "url": "https://x.test/a", "auth": { "type": "awsv4", "awsv4": [{ "key": "accessKey", "value": "ak" }, { "key": "secretKey", "value": "sk" }, { "key": "region", "value": "us-east-1" }, { "key": "service", "value": "s3" }] } } },
+    { "name": "OAuth", "request": { "method": "GET", "url": "https://x.test/o", "auth": { "type": "oauth2", "oauth2": [{ "key": "grant_type", "value": "client_credentials" }, { "key": "accessTokenUrl", "value": "https://x.test/token" }, { "key": "clientId", "value": "id" }] } } },
+    { "name": "OAuth token", "request": { "method": "GET", "url": "https://x.test/ot", "auth": { "type": "oauth2", "oauth2": [{ "key": "accessToken", "value": "tok" }] } } },
+    { "name": "Hawk", "request": { "method": "GET", "url": "https://x.test/h", "auth": { "type": "hawk", "hawk": [] } } }
+  ]
+}
