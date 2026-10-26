@@ -11,6 +11,12 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_no_link
   end
 
+  it "renders the given content after the tabs" do
+    render_inline(described_class.new(requests: [])) { "Actions" }
+
+    expect(page).to have_text("Actions")
+  end
+
   it "renders a tab per request and marks the open one", :aggregate_failures do
     first = ApiClient::Requests::CreateDraft.call(project:, user:).record.tap { |r| r.update!(name: "First") }
     saved = create(:api_request, project:, name: "Saved")

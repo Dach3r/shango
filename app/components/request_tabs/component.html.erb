@@ -24,4 +24,7 @@
                 class: "mx-2 flex size-6 shrink-0 self-center cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
     <%= lucide_icon "plus", class: "size-3.5" %>
   <% end %>
+  <% if content? %>
+    <div class="ml-auto flex shrink-0 items-center gap-2 px-3"><%= content %></div>
+  <% end %>
 </div>

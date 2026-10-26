@@ -1,18 +1,20 @@
 <% content_for :title, "#{@api_request.name} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :heading, t("workbench.title") %>
 
+<% content_for :request_actions, render("workbench/requests/actions", api_request: @api_request) %>
 <% content_for :breadcrumb, render("workbench/requests/breadcrumb", api_request: @api_request) %>
 
-<%= render layout: "workbench/workspace" do %>
+<%= render layout: "workbench/workspace", locals: { section_data: {
+  controller: "request-form",
+  request_form_run_url_value: workbench_request_executions_path(@api_request),
+  request_form_curl_url_value: workbench_request_curl_export_path(@api_request),
+  action: "keydown.ctrl+enter@window->request-form#run keydown.meta+enter@window->request-form#run keydown.ctrl+s@window->request-form#save keydown.meta+s@window->request-form#save"
+} } do %>
   <div class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
-    <div class="flex min-h-0 flex-col overflow-hidden" data-controller="request-form"
-         data-request-form-run-url-value="<%= workbench_request_executions_path(@api_request) %>"
-         data-request-form-curl-url-value="<%= workbench_request_curl_export_path(@api_request) %>"
-         data-action="keydown.ctrl+enter@window->request-form#run keydown.meta+enter@window->request-form#run keydown.ctrl+s@window->request-form#save keydown.meta+s@window->request-form#save">
+    <div class="flex min-h-0 flex-col overflow-hidden">
       <template data-request-form-target="failure">
         <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"><%= t("workbench.executions.failure") %></div>
       </template>
-      <%= render "workbench/requests/header", api_request: @api_request %>
       <%= render "workbench/requests/editor", api_request: @api_request %>
     </div>
 
