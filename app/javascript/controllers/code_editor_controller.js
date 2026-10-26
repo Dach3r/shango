@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
-
-const DYNAMIC_VARIABLES = {
-  $guid: "guid",
-  $isoTimestamp: "isoTimestamp",
-  $randomInt: "randomInt",
-  $timestamp: "timestamp",
-};
+import {
+  DYNAMIC_VARIABLES,
+  completions,
+  parseReference,
+  previewReference,
+  referenceStatus,
+} from "lib/response_reference";
 
 export default class extends Controller {
   static targets = ["input", "mount"];
@@ -16,6 +16,8 @@ export default class extends Controller {
     placeholder: String,
     variables: { type: Array, default: [] },
     variablesUrl: String,
+    responses: { type: Array, default: [] },
+    responsesUrl: String,
     labels: { type: Object, default: {} },
     wrap: { type: Boolean, default: true },
   };
@@ -191,6 +193,7 @@ export default class extends Controller {
   // Highlights {{variable}} references by state; the styles live in application.css (.cm-var-*).
   variableStatus(name) {
     if (name in DYNAMIC_VARIABLES) return "dynamic";
+    if (name.startsWith("response.")) return referenceStatus(name, this.responsesValue);
 
     const variable = this.variablesValue.find((item) => item.name === name);
     if (!variable) return "missing";
@@ -242,7 +245,40 @@ export default class extends Controller {
     });
   }
 
+  // Card for `{{response.…}}`: which request and attribute it reads, and the value it resolves to right now.
+  responseCard(name) {
+    const labels = this.labelsValue;
+    const reference = parseReference(name);
+    const source = this.responsesValue.find(({ id }) => id === reference?.requestId);
+    const card = document.createElement("div");
+    card.className = "cm-var-card";
+
+    const value = document.createElement("div");
+    value.className = "cm-var-card-value";
+    card.append(value);
+    if (source && this.hasResponsesUrlValue) {
+      value.textContent = labels.responseLoading;
+      previewReference(this.responsesUrlValue, name, labels, this.responsesValue).then(({ ok, text }) => {
+        value.textContent = text;
+        value.classList.add(ok ? "cm-var-card-set" : "cm-var-card-empty");
+      });
+    } else {
+      value.textContent = labels.responseUnknown;
+      value.classList.add("cm-var-card-missing");
+    }
+
+    const info = document.createElement("div");
+    info.className = "cm-var-card-source";
+    info.textContent = source
+      ? [labels.response, source.name, reference.attribute, reference.filter].filter(Boolean).join(" · ")
+      : labels.response;
+    card.append(info);
+    return { dom: card };
+  }
+
   variableCard(name) {
+    if (name.startsWith("response.")) return this.responseCard(name);
+
     const labels = this.labelsValue;
     const status = this.variableStatus(name);
     const variable = this.variablesValue.find((item) => item.name === name);
@@ -346,41 +382,37 @@ export default class extends Controller {
   }
 
   completeVariables(context) {
-    const match = context.matchBefore(/\{\{[\w.\-$]*/);
+    const match = context.matchBefore(/\{\{[^{}\s]*/);
     if (!match) return null;
 
-    const labels = this.labelsValue;
-    const environment = { name: labels.environment, rank: 0 };
-    const dynamic = { name: labels.dynamic, rank: 1 };
-    const options = [
-      ...this.variablesValue.map(({ name, set, value }) => ({
-        name,
-        status: set ? "set" : "empty",
-        info: set ? null : labels.empty,
-        value,
-        section: environment,
-      })),
-      ...Object.entries(DYNAMIC_VARIABLES).map(([name, key]) => ({
-        name,
-        status: "dynamic",
-        info: labels[key],
-        section: dynamic,
-      })),
-    ];
-    const closing =
-      context.state.sliceDoc(context.pos, context.pos + 2) === "}}" ? "" : "}}";
+    const typed = match.text.slice(2);
+    const { offset, options } = completions(typed, {
+      variables: this.variablesValue,
+      responses: this.responsesValue,
+      labels: this.labelsValue,
+    });
     return {
-      from: match.from + 2,
-      options: options.map(({ name, status, info, value, section }) => ({
-        label: name,
-        apply: `${name}${closing}`,
-        type: status,
-        detail: info,
-        value,
-        section,
+      from: match.from + 2 + offset,
+      options: options.map((option) => ({
+        label: option.label,
+        type: option.status,
+        detail: option.info,
+        value: option.value,
+        section: option.section,
+        apply: (view, _completion, from, to) => this.applyOption(view, option, from, to),
       })),
-      validFor: /^[\w.\-$]*$/,
     };
+  }
+
+  applyOption(view, option, from, to) {
+    const closing =
+      option.complete && view.state.sliceDoc(to, to + 2) !== "}}" ? "}}" : "";
+    view.dispatch({
+      changes: { from, to, insert: option.insert + closing },
+      selection: { anchor: from + option.insert.length + closing.length },
+      userEvent: "input.complete",
+    });
+    if (option.reopen) this.cm.startCompletion(view);
   }
 
   changed(update) {

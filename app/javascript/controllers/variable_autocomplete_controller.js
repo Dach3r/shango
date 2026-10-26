@@ -1,12 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
-const DYNAMIC_VARIABLES = {
-  $guid: "guid",
-  $isoTimestamp: "isoTimestamp",
-  $randomInt: "randomInt",
-  $timestamp: "timestamp",
-};
-const TRIGGER = /\{\{[\w.\-$]*$/;
+import { DYNAMIC_VARIABLES, completions, referenceStatus } from "lib/response_reference";
+
+const TRIGGER = /\{\{[^{}\s]*$/;
 const REFERENCE = /\{\{\s*([^{}\s]+)\s*\}\}/g;
 const MIRRORED_STYLES = [
   "fontFamily", "fontSize", "fontWeight", "fontStyle", "letterSpacing", "lineHeight", "textAlign", "textIndent",
@@ -21,6 +17,7 @@ const SKIPPED_TYPES = ["hidden", "checkbox", "radio", "file", "number", "range"]
 export default class extends Controller {
   static values = {
     variables: { type: Array, default: [] },
+    responses: { type: Array, default: [] },
     labels: { type: Object, default: {} },
   };
 
@@ -99,6 +96,7 @@ export default class extends Controller {
 
   status(name) {
     if (name in DYNAMIC_VARIABLES) return "dynamic";
+    if (name.startsWith("response.")) return referenceStatus(name, this.responsesValue);
 
     const variable = this.variablesValue.find((item) => item.name === name);
     if (!variable) return "missing";
@@ -177,25 +175,6 @@ export default class extends Controller {
     return nodes;
   }
 
-  options() {
-    const labels = this.labelsValue;
-    return [
-      ...this.variablesValue.map(({ name, set, value }) => ({
-        name,
-        status: set ? "set" : "empty",
-        info: set ? "" : labels.empty,
-        value,
-        section: labels.environment,
-      })),
-      ...Object.entries(DYNAMIC_VARIABLES).map(([name, key]) => ({
-        name,
-        status: "dynamic",
-        info: labels[key],
-        section: labels.dynamic,
-      })),
-    ];
-  }
-
   update(field) {
     if (!this.supported(field)) return;
 
@@ -203,10 +182,14 @@ export default class extends Controller {
     const match = field.value.slice(0, caret).match(TRIGGER);
     if (!match) return this.close();
 
-    const query = match[0].slice(2).toLowerCase();
-    const matches = this.options().filter(({ name }) =>
-      name.toLowerCase().includes(query),
-    );
+    const typed = match[0].slice(2);
+    const { offset, options } = completions(typed, {
+      variables: this.variablesValue,
+      responses: this.responsesValue,
+      labels: this.labelsValue,
+    });
+    const query = typed.slice(offset).toLowerCase();
+    const matches = options.filter(({ label }) => label.toLowerCase().includes(query));
     if (matches.length === 0) return this.close();
 
     this.field = field;
@@ -246,7 +229,7 @@ export default class extends Controller {
     dot.className = `cm-var-dot cm-var-dot-${option.status}`;
     const name = document.createElement("span");
     name.className = "flex-1 truncate";
-    name.textContent = option.name;
+    name.textContent = option.label;
     const info = document.createElement("span");
     info.className = "ml-6 font-sans text-[11px] text-muted";
     info.textContent = option.info;
@@ -301,11 +284,12 @@ export default class extends Controller {
     const option = this.matches[index];
     const field = this.field;
     const [from, to] = this.range;
-    const closing = field.value.slice(to, to + 2) === "}}" ? "" : "}}";
-    const insert = `${option.name}${closing}`;
+    const closed = field.value.slice(to, to + 2) === "}}";
+    const closing = option.complete && !closed ? "}}" : "";
+    const insert = `${option.insert}${closing}`;
 
     field.setRangeText(insert, from, to, "end");
-    if (closing === "") field.setSelectionRange(from + insert.length + 2, from + insert.length + 2);
+    if (option.complete && closed) field.setSelectionRange(from + insert.length + 2, from + insert.length + 2);
     this.close();
     field.dispatchEvent(new Event("input", { bubbles: true }));
   }

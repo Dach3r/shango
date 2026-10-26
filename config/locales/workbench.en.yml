@@ -31,6 +31,16 @@ en:
       iso_timestamp: ISO 8601 date
       random_int: 0 – 999
       missing: Undefined
+      response: Response
+      response_body: Body attribute – value of response body
+      response_raw: Raw body – entire response body
+      response_header: Header – value of response header
+      response_url: Request URL – URL of initiating request
+      response_loading: Loading…
+      response_no_response: No response yet. Send %{request} first.
+      response_no_match: Nothing matches this filter
+      response_unknown: Request not found in this collection
+      response_invalid: Invalid response reference
     key_value_table:
       add: Add row
       key: Key

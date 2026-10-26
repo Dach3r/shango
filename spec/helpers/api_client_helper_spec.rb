@@ -149,13 +149,19 @@ RSpec.describe ApiClientHelper do
   end
 
   describe "#variable_autocomplete_data" do
-    before { helper.define_singleton_method(:editor_variables) { [{ name: "token", set: true, value: "abc" }] } }
+    before do
+      helper.define_singleton_method(:editor_variables) { [{ name: "token", set: true, value: "abc" }] }
+      helper.define_singleton_method(:editor_responses) { [{ id: "1", name: "Login" }] }
+      helper.define_singleton_method(:editor_responses_url) { "/workbench/requests/1/response_reference" }
+    end
 
     it "exposes the variables and labels to the controller", :aggregate_failures do
       data = helper.variable_autocomplete_data(controller: "request-url")
 
       expect(data[:controller]).to eq("request-url variable-autocomplete")
       expect(JSON.parse(data[:variable_autocomplete_variables_value])).to eq([{ "name" => "token", "set" => true, "value" => "abc" }])
+      expect(JSON.parse(data[:variable_autocomplete_responses_value])).to eq([{ "id" => "1", "name" => "Login" }])
+      expect(data[:variable_autocomplete_responses_url_value]).to eq("/workbench/requests/1/response_reference")
       expect(JSON.parse(data[:variable_autocomplete_labels_value])).to include("environment" => "Environment", "isoTimestamp" => "ISO 8601 date")
     end
 

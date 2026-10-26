@@ -20,6 +20,16 @@ RSpec.describe CodeEditor::Component, type: :component do
     end
   end
 
+  context "with responses" do
+    it "passes them and the preview url to the controller", :aggregate_failures do
+      render_inline(described_class.new(responses: [{ id: "1", name: "Login" }], responses_url: "/workbench/requests/1/response_reference"))
+
+      editor = page.find("div.code-editor")
+      expect(JSON.parse(editor["data-code-editor-responses-value"])).to eq([{ "id" => "1", "name" => "Login" }])
+      expect(editor["data-code-editor-responses-url-value"]).to eq("/workbench/requests/1/response_reference")
+    end
+  end
+
   context "with a name" do
     it "renders a named textarea", :aggregate_failures do
       render_inline(described_class.new(name: "body", id: "body_field", readonly: true, input_data: { x: "1" }))

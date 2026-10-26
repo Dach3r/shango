@@ -54,6 +54,7 @@ Rails.application.routes.draw do
         resource :position, only: :update
         resource :placement, only: %i[new update]
         resource :curl_export, only: :show
+        resource :response_reference, only: :show
       end
     end
 

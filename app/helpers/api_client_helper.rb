@@ -103,6 +103,8 @@ module ApiClientHelper
     {
       controller: [controller, "variable-autocomplete"].compact.join(" "),
       variable_autocomplete_variables_value: editor_variables.to_json,
+      variable_autocomplete_responses_value: editor_responses.to_json,
+      variable_autocomplete_responses_url_value: editor_responses_url,
       variable_autocomplete_labels_value: labels.to_json
     }
   end

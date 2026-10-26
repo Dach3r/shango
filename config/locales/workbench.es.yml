@@ -31,6 +31,16 @@ es:
       iso_timestamp: Fecha ISO 8601
       random_int: 0 – 999
       missing: Sin definir
+      response: Respuesta
+      response_body: Atributo del body – valor del body de la respuesta
+      response_raw: Body completo – toda la respuesta
+      response_header: Header – valor de un header de la respuesta
+      response_url: URL del request – URL del request que la originó
+      response_loading: Cargando…
+      response_no_response: Aún no hay respuesta. Envía primero %{request}.
+      response_no_match: Nada coincide con este filtro
+      response_unknown: Request no encontrado en esta collection
+      response_invalid: Referencia de respuesta inválida
     key_value_table:
       add: Agregar fila
       key: Clave

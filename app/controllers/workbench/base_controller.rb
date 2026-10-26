@@ -1,7 +1,7 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :open_requests, :editor_variables, :editor_variables_url
+    helper_method :workspace_tree, :open_requests, :editor_variables, :editor_variables_url, :editor_responses, :editor_responses_url
 
     private
 
@@ -26,6 +26,20 @@ module Workbench
     # Where the editors create a variable that is not defined yet.
     def editor_variables_url
       environment_variables_path(current_environment) if current_environment
+    end
+
+    # Other requests of the open request's collection, offered as `{{response.…}}` sources (drafts have none).
+    def editor_responses
+      return [] unless editor_responses_url
+
+      current_project.api_requests.where(collection_id: @api_request.collection_id).where.not(id: @api_request.id).includes(:folder).order(:name).map do |sibling|
+        { id: sibling.id, name: sibling.name, method: sibling.http_method, folder: sibling.folder&.name }
+      end
+    end
+
+    # Where the editors preview what a response reference resolves to.
+    def editor_responses_url
+      workbench_request_response_reference_path(@api_request) if @api_request&.persisted? && @api_request.collection_id
     end
 
     # Re-renders a modal form (inside the "modal" frame) with its validation errors.
