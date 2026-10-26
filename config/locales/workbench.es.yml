@@ -373,6 +373,7 @@ es:
         file_body: "“%{name}” tiene un body de archivo; el contenido del archivo no se importó."
         external_ref: "La referencia externa “%{ref}” no se resolvió."
         unknown_item: "Se omitió un elemento de tipo “%{type}”."
+        variable_skipped: "Se omitió la variable “%{key}” porque su nombre no es válido."
     curl:
       empty: Pega un comando curl.
       missing_url: El comando no tiene URL.

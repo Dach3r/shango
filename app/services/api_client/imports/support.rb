@@ -2,7 +2,7 @@ module ApiClient
   module Imports
     # Helpers shared by the format importers: they all build the same request hash `Curl::Parser` produces.
     module Support
-      MAX_NODES = 5_000
+      MAX_NODES = 250_000
 
       module_function
 

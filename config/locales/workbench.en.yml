@@ -373,6 +373,7 @@ en:
         file_body: "“%{name}” has a file body; the file content was not imported."
         external_ref: "External reference “%{ref}” was not resolved."
         unknown_item: "An item of type “%{type}” was skipped."
+        variable_skipped: "Variable “%{key}” was skipped because its name is not valid."
     curl:
       empty: Paste a curl command.
       missing_url: The command has no URL.
