@@ -11,8 +11,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :locale, only: :update
-  resource :theme, only: :update
+  resource :preferences, only: :update
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

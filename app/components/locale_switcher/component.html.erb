@@ -1,6 +1,6 @@
 <div role="group" aria-label="<%= t("components.locale_switcher.label") %>" class="flex gap-1 rounded-full border border-line bg-card/80 p-1 text-xs font-semibold backdrop-blur">
   <% I18n.available_locales.each do |locale| %>
-    <%= button_to LABELS.fetch(locale), locale_path, method: :patch, params: { locale: locale }, form_class: "contents",
+    <%= button_to LABELS.fetch(locale), preferences_path, method: :patch, params: { locale: locale }, form_class: "contents",
                   class: button_classes(locale), lang: locale, aria: { label: NAMES.fetch(locale), current: ("true" if current?(locale)) } %>
   <% end %>
 </div>
