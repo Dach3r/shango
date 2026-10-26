@@ -40,6 +40,6 @@ class Input::Component < ApplicationComponent
       class: class_names(FIELD, @options[:class], "pl-11": @icon, "pr-12": password?)
     )
     html_options[:data] = (html_options[:data] || {}).merge(password_visibility_target: "input") if password?
-    @form.public_send("#{@type}_field", @attribute, **html_options)
+    @form.public_send(@type == :text_area ? "text_area" : "#{@type}_field", @attribute, **html_options)
   end
 end
