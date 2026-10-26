@@ -49,7 +49,7 @@
     <%= render TabBar::Component.new(items: tabs, label: t("workbench.tabs.label")) %>
 
     <div class="min-h-0 flex-1 overflow-y-auto">
-      <div data-tabs-target="panel" data-name="params" class="[&>div]:border-x-0 [&>div]:border-t-0">
+      <div data-tabs-target="panel" data-name="params" class="[&>div>div:first-child]:border-x-0 [&>div>div:first-child]:border-t-0">
         <%= render KeyValueTable::Component.new(name: "api_request[query_params]", rows: param_rows(api_request), key_placeholder: t("workbench.params.key"), add_label: t("workbench.params.add"),
                                                 data: { request_url_target: "params", action: "key-value-table:change->request-url#paramsChanged" }) %>
       </div>
@@ -58,7 +58,7 @@
         <%= render AuthFields::Component.new(scope: "api_request", record: api_request, inheritable: true) %>
       </div>
 
-      <div data-tabs-target="panel" data-name="headers" class="[&>div]:border-x-0 [&>div]:border-t-0" hidden>
+      <div data-tabs-target="panel" data-name="headers" class="[&>div>div:first-child]:border-x-0 [&>div>div:first-child]:border-t-0" hidden>
         <%= render KeyValueTable::Component.new(name: "api_request[headers]", rows: api_request.headers, key_placeholder: t("workbench.headers.key"), add_label: t("workbench.headers.add")) %>
       </div>
 

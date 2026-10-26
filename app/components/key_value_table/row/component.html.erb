@@ -1,14 +1,23 @@
-<div data-key-value-table-target="row" class="<%= class_names("group flex items-center gap-2 px-3", "py-1": variant != :variables, "flex-wrap gap-y-1 py-2": variant == :variables) %>">
+<div data-key-value-table-target="row" class="<%= class_names("group flex items-center", "gap-2 px-3": !pairs?, "items-stretch divide-x divide-line": pairs?, "py-1": !pairs? && variant != :variables, "flex-wrap gap-y-1 py-2": variant == :variables) %>">
   <% if persisted? %>
     <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
     <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>
   <% end %>
 
-  <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
-                                     aria: { label: t("components.key_value_table.enabled") }) %>
+  <% unless pairs? %>
+    <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
+                                       aria: { label: t("components.key_value_table.enabled") }) %>
+  <% end %>
 
-  <%= text_field_tag field_name("key"), row["key"], id: nil, placeholder: @key_placeholder, autocomplete: "off", spellcheck: false,
-                     data: { field: "key", action: "input->key-value-table#input" }, class: cell_classes("min-w-0 flex-1 font-mono text-xs") %>
+  <% if pairs? %>
+    <div class="min-w-0 flex-1 px-2 py-1">
+      <%= text_field_tag field_name("key"), row["key"], id: nil, placeholder: @key_placeholder, autocomplete: "off", spellcheck: false,
+                         data: { field: "key", action: "input->key-value-table#input" }, class: cell_classes("font-mono text-xs") %>
+    </div>
+  <% else %>
+    <%= text_field_tag field_name("key"), row["key"], id: nil, placeholder: @key_placeholder, autocomplete: "off", spellcheck: false,
+                       data: { field: "key", action: "input->key-value-table#input" }, class: cell_classes("min-w-0 flex-1 font-mono text-xs") %>
+  <% end %>
 
   <% if variant == :form_data %>
     <%= hidden_field_tag field_name("upload_token"), upload_token, id: nil %>
@@ -28,13 +37,22 @@
       <% end %>
     </div>
   <% else %>
-    <%= text_field_tag field_name("value"), value_text, id: nil, type: value_type, placeholder: value_hint, autocomplete: "off", spellcheck: false,
-                       data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes(variant == :variables ? "order-last w-full basis-full" : "min-w-0 flex-[1.4]") + " font-mono text-xs" %>
+    <% if pairs? %>
+      <div class="min-w-0 flex-[1.4] px-2 py-1">
+        <%= text_field_tag field_name("value"), value_text, id: nil, type: value_type, placeholder: value_hint, autocomplete: "off", spellcheck: false,
+                           data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes("font-mono text-xs") %>
+      </div>
+    <% else %>
+      <%= text_field_tag field_name("value"), value_text, id: nil, type: value_type, placeholder: value_hint, autocomplete: "off", spellcheck: false,
+                         data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes(variant == :variables ? "order-last w-full basis-full" : "min-w-0 flex-[1.4]") + " font-mono text-xs" %>
+    <% end %>
   <% end %>
 
-  <% if variant == :pairs %>
-    <%= text_field_tag field_name("description"), row["description"], id: nil, placeholder: t("components.key_value_table.description"), autocomplete: "off",
-                       data: { field: "description" }, class: cell_classes("hidden min-w-0 flex-1 text-xs lg:block") %>
+  <% if pairs? %>
+    <div class="hidden min-w-0 flex-1 px-2 py-1 lg:block">
+      <%= text_field_tag field_name("description"), row["description"], id: nil, placeholder: t("components.key_value_table.description"), autocomplete: "off",
+                         data: { field: "description" }, class: cell_classes("text-xs") %>
+    </div>
   <% end %>
 
   <% if variant == :variables %>
@@ -42,8 +60,19 @@
                                        data: { action: "change->key-value-table#syncMask" }) %>
   <% end %>
 
-  <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
-          class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
-    <%= lucide_icon "trash-2", class: "size-4" %>
-  </button>
+  <% if pairs? %>
+    <div class="flex w-[5.25rem] shrink-0 items-center gap-2 px-3">
+      <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
+                                         aria: { label: t("components.key_value_table.enabled") }) %>
+      <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
+              class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+        <%= lucide_icon "trash-2", class: "size-4" %>
+      </button>
+    </div>
+  <% else %>
+    <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
+            class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+      <%= lucide_icon "trash-2", class: "size-4" %>
+    </button>
+  <% end %>
 </div>
