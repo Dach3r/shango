@@ -1,5 +1,5 @@
 <div class="flex h-full flex-col">
-  <div class="flex flex-1 flex-col gap-6 px-2 py-4">
+  <div class="flex flex-1 flex-col gap-5 px-3 py-4">
     <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
     <nav aria-label="<%= t("components.sidebar.label") %>">
@@ -12,6 +12,9 @@
   </div>
 
   <div class="sticky bottom-0 shrink-0 bg-card">
+    <div class="border-t border-line px-3 py-2">
+      <%= render NavItem::Component.new(**settings) %>
+    </div>
     <%= render UserMenu::Component.new(user: @user) %>
   </div>
 </div>

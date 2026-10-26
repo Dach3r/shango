@@ -7,9 +7,10 @@ class Sidebar::Component < ApplicationComponent
     { key: :monitoring, icon: "activity" },
     { key: :servers, icon: "server" },
     { key: :logs, icon: "scroll-text" },
-    { key: :ai_assistant, icon: "sparkles" },
-    { key: :settings, icon: "settings", path: :edit_membership_path, controllers: "projects/memberships" }
+    { key: :ai_assistant, icon: "sparkles" }
   ].freeze
+
+  SETTINGS = { key: :settings, icon: "settings", path: :edit_membership_path, controllers: "projects/memberships" }.freeze
 
   def initialize(current_project:, projects:, user:)
     @current_project = current_project
@@ -20,10 +21,16 @@ class Sidebar::Component < ApplicationComponent
   private
 
   def items
-    ITEMS.map do |item|
-      href = item[:path] && helpers.public_send(item[:path])
-      { label: t("components.sidebar.#{item[:key]}"), icon: item[:icon], href:, active: active?(item, href) }
-    end
+    ITEMS.map { |item| nav_item(item) }
+  end
+
+  def settings
+    nav_item(SETTINGS)
+  end
+
+  def nav_item(item)
+    href = item[:path] && helpers.public_send(item[:path])
+    { label: t("components.sidebar.#{item[:key]}"), icon: item[:icon], href:, active: active?(item, href) }
   end
 
   # Features with their own controllers stay highlighted on every screen of the feature.
