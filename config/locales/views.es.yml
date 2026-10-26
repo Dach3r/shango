@@ -62,10 +62,6 @@ es:
       light: Claro
       dark: Oscuro
   projects:
-    index:
-      title: Proyectos
-      label: Menú de cuenta
-      sign_out: Cerrar sesión
     new:
       title: Nuevo proyecto
       heading_html: Crea tu primer proyecto

@@ -40,12 +40,6 @@ RSpec.describe "Projects" do
       expect(response).to have_http_status(:ok)
     end
 
-    it "lists projects" do
-      get projects_path
-
-      expect(response).to have_http_status(:ok)
-    end
-
     it "falls back to the oldest membership when the current one is archived", :aggregate_failures do
       other = create(:membership, user:)
       project.update!(archived_at: Time.current)

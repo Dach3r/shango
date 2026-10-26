@@ -3,9 +3,6 @@ class ProjectsController < AuthenticatedController
 
   skip_before_action :require_project, only: %i[new create]
 
-  def index
-  end
-
   def new
     @project = Project.new(icon: "rocket")
   end

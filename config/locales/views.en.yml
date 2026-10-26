@@ -62,10 +62,6 @@ en:
       light: Light
       dark: Dark
   projects:
-    index:
-      title: Projects
-      label: Account menu
-      sign_out: Sign out
     new:
       title: New project
       heading_html: Create your first project

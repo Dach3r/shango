@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :projects, only: %i[index new create]
+  resources :projects, only: %i[new create]
   resource :current_project, only: :update
   resource :preferences, only: :update
 
