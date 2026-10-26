@@ -3,11 +3,12 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["body", "template", "row"];
 
-  connect() {
-    this.ensureBlankRow();
+  add() {
+    this.insertRow();
+    this.bodyTarget.lastElementChild.querySelector("[data-field='key']")?.focus();
   }
 
-  add() {
+  insertRow() {
     const html = this.templateTarget.innerHTML.replaceAll(
       "NEW_INDEX",
       `${Date.now()}${Math.floor(Math.random() * 1000)}`,
@@ -30,13 +31,7 @@ export default class extends Controller {
     this.changed();
   }
 
-  input(event) {
-    if (
-      event.target.closest("[data-key-value-table-target='row']") ===
-        this.visibleRows().at(-1) &&
-      this.isFilled(event.target.closest("[data-key-value-table-target='row']"))
-    )
-      this.add();
+  input() {
     this.changed();
   }
 
@@ -77,13 +72,12 @@ export default class extends Controller {
     rows.filter((row) => !kept.includes(row)).forEach((row) => row.remove());
 
     pairs.forEach(([key, value]) => {
-      this.add();
+      this.insertRow();
       const row = this.bodyTarget.lastElementChild;
       row.querySelector("[data-field='key']").value = key;
       row.querySelector("[data-field='value']").value = value;
     });
     kept.forEach((row) => this.bodyTarget.appendChild(row));
-    this.ensureBlankRow();
   }
 
   rows() {
@@ -103,11 +97,6 @@ export default class extends Controller {
   enabled(row) {
     const toggle = row.querySelector("[data-field='enabled'][type='checkbox']");
     return toggle ? toggle.checked : true;
-  }
-
-  ensureBlankRow() {
-    const last = this.visibleRows().at(-1);
-    if (!last || this.isFilled(last)) this.add();
   }
 
   isFilled(row) {

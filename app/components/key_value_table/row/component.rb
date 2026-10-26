@@ -14,6 +14,10 @@ class KeyValueTable::Row::Component < ApplicationComponent
 
   attr_reader :row, :variant
 
+  def cell_classes(extra)
+    field_classes("!border-transparent !bg-transparent hover:!bg-field focus:!bg-field-focus #{extra}")
+  end
+
   def field_name(field)
     "#{@name}[#{@index}][#{field}]"
   end

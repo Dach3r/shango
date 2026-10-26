@@ -1,4 +1,4 @@
-<div data-key-value-table-target="row" class="flex items-center gap-2">
+<div data-key-value-table-target="row" class="group flex items-center gap-2 px-3 py-1.5">
   <% if persisted? %>
     <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
     <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>
@@ -8,7 +8,7 @@
                                      aria: { label: t("components.key_value_table.enabled") }) %>
 
   <%= text_field_tag field_name("key"), row["key"], id: nil, placeholder: @key_placeholder, autocomplete: "off", spellcheck: false,
-                     data: { field: "key", action: "input->key-value-table#input" }, class: field_classes("min-w-0 flex-1 font-mono text-xs") %>
+                     data: { field: "key", action: "input->key-value-table#input" }, class: cell_classes("min-w-0 flex-1 font-mono text-xs") %>
 
   <% if variant == :form_data %>
     <%= hidden_field_tag field_name("upload_token"), upload_token, id: nil %>
@@ -17,7 +17,7 @@
                                      input_data: { role: "type", action: "change->key-value-table#typeChanged" }, class: "w-24 shrink-0 !px-2") %>
     <div data-role="text" class="min-w-0 flex-1" <%= "hidden" if file? %>>
       <%= text_field_tag field_name("value"), row["value"], id: nil, placeholder: @value_placeholder, autocomplete: "off", disabled: file?,
-                         data: { field: "value", action: "input->key-value-table#input" }, class: field_classes("font-mono text-xs") %>
+                         data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes("font-mono text-xs") %>
     </div>
     <div data-role="file" class="min-w-0 flex-1" <%= "hidden" unless file? %>>
       <%= hidden_field_tag field_name("value"), row["value"], id: nil, disabled: !file? %>
@@ -29,12 +29,12 @@
     </div>
   <% else %>
     <%= text_field_tag field_name("value"), value_text, id: nil, type: value_type, placeholder: value_hint, autocomplete: "off", spellcheck: false,
-                       data: { field: "value", action: "input->key-value-table#input" }, class: field_classes("min-w-0 flex-[1.4] font-mono text-xs") %>
+                       data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes("min-w-0 flex-[1.4] font-mono text-xs") %>
   <% end %>
 
   <% if variant == :pairs %>
     <%= text_field_tag field_name("description"), row["description"], id: nil, placeholder: t("components.key_value_table.description"), autocomplete: "off",
-                       data: { field: "description" }, class: field_classes("hidden min-w-0 flex-1 text-xs lg:block") %>
+                       data: { field: "description" }, class: cell_classes("hidden min-w-0 flex-1 text-xs lg:block") %>
   <% end %>
 
   <% if variant == :variables %>
@@ -43,7 +43,7 @@
   <% end %>
 
   <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
-          class="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-faint transition hover:bg-field hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+          class="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
     <%= lucide_icon "trash-2", class: "size-4" %>
   </button>
 </div>

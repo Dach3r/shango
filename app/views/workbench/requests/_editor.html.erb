@@ -43,8 +43,8 @@
 
     <div class="min-h-0 flex-1 overflow-y-auto p-4">
       <div data-tabs-target="panel" data-name="params">
-        <p class="mb-3 text-xs text-muted"><%= t("workbench.params.hint") %></p>
-        <%= render KeyValueTable::Component.new(name: "api_request[query_params]", rows: param_rows(api_request), key_placeholder: t("workbench.params.key"),
+        <p class="mb-3 flex items-center gap-2 text-xs text-muted"><%= lucide_icon "info", class: "size-3.5 shrink-0" %><%= t("workbench.params.hint") %></p>
+        <%= render KeyValueTable::Component.new(name: "api_request[query_params]", rows: param_rows(api_request), key_placeholder: t("workbench.params.key"), add_label: t("workbench.params.add"),
                                                 data: { request_url_target: "params", action: "key-value-table:change->request-url#paramsChanged" }) %>
       </div>
 
@@ -53,8 +53,8 @@
       </div>
 
       <div data-tabs-target="panel" data-name="headers" hidden>
-        <p class="mb-3 text-xs text-muted"><%= t("workbench.headers.hint") %></p>
-        <%= render KeyValueTable::Component.new(name: "api_request[headers]", rows: api_request.headers, key_placeholder: t("workbench.headers.key")) %>
+        <p class="mb-3 flex items-center gap-2 text-xs text-muted"><%= lucide_icon "info", class: "size-3.5 shrink-0" %><%= t("workbench.headers.hint") %></p>
+        <%= render KeyValueTable::Component.new(name: "api_request[headers]", rows: api_request.headers, key_placeholder: t("workbench.headers.key"), add_label: t("workbench.headers.add")) %>
       </div>
 
       <div data-tabs-target="panel" data-name="body" hidden>

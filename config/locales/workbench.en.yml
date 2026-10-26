@@ -34,6 +34,7 @@ en:
       random_int: 0 – 999
       missing: Undefined
     key_value_table:
+      add: Add row
       key: Key
       value: Value
       description: Description
@@ -191,9 +192,11 @@ en:
       settings: Settings
     params:
       hint: Query parameters stay in sync with the URL. Disabled rows are kept here but not sent.
+      add: Add parameter
       key: Parameter
     headers:
       hint: Shango adds User-Agent and Accept unless you set them, and Content-Type from the body type.
+      add: Add header
       key: Header
     body:
       type: Body type

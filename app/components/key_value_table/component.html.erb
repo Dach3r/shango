@@ -1,8 +1,26 @@
-<%= tag.div data: wrapper_data, class: "space-y-2" do %>
-  <div data-key-value-table-target="body" class="space-y-2">
+<%= tag.div data: wrapper_data, class: "overflow-hidden rounded-xl border border-line" do %>
+  <% if @variant == :pairs %>
+    <div class="flex items-center gap-2 border-b border-line bg-ink/[0.03] px-3 py-2 text-xs font-medium uppercase tracking-wide text-muted">
+      <span class="size-5 shrink-0"></span>
+      <span class="min-w-0 flex-1 px-3"><%= @key_placeholder %></span>
+      <span class="min-w-0 flex-[1.4] px-3"><%= @value_placeholder %></span>
+      <span class="hidden min-w-0 flex-1 px-3 lg:block"><%= t("components.key_value_table.description") %></span>
+      <span class="size-8 shrink-0"></span>
+    </div>
+  <% end %>
+
+  <div data-key-value-table-target="body" class="divide-y divide-line">
     <% @rows.each_with_index do |row, index| %>
       <%= render row_component(row, index) %>
     <% end %>
+  </div>
+
+  <div class="border-t border-line px-3 py-2">
+    <button type="button" data-action="key-value-table#add"
+            class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-muted transition hover:bg-accent/10 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+      <%= lucide_icon "plus", class: "size-3.5" %>
+      <%= @add_label %>
+    </button>
   </div>
 
   <template data-key-value-table-target="template">

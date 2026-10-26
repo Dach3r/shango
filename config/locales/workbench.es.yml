@@ -34,6 +34,7 @@ es:
       random_int: 0 – 999
       missing: Sin definir
     key_value_table:
+      add: Agregar fila
       key: Clave
       value: Valor
       description: Descripción
@@ -191,9 +192,11 @@ es:
       settings: Ajustes
     params:
       hint: Los parámetros de consulta se sincronizan con la URL. Las filas deshabilitadas se conservan aquí pero no se envían.
+      add: Agregar parámetro
       key: Parámetro
     headers:
       hint: Shango agrega User-Agent y Accept si no los defines, y Content-Type según el tipo de body.
+      add: Agregar header
       key: Header
     body:
       type: Tipo de body

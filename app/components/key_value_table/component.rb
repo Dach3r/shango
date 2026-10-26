@@ -3,12 +3,13 @@ class KeyValueTable::Component < ApplicationComponent
 
   # name: form scope for the rows (e.g. "api_request[headers]").
   # variants: :pairs (key/value/description), :form_data (adds text/file type), :variables (adds secret flag).
-  def initialize(name:, rows:, variant: :pairs, key_placeholder: nil, value_placeholder: nil, data: {})
+  def initialize(name:, rows:, variant: :pairs, key_placeholder: nil, value_placeholder: nil, add_label: nil, data: {})
     @name = name
     @rows = rows.map { |row| row.respond_to?(:attributes) ? row.attributes : row.to_h }.map(&:stringify_keys)
     @variant = variant
     @key_placeholder = key_placeholder || I18n.t("components.key_value_table.key")
     @value_placeholder = value_placeholder || I18n.t("components.key_value_table.value")
+    @add_label = add_label || I18n.t("components.key_value_table.add")
     @data = data
   end
 
