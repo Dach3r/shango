@@ -85,7 +85,9 @@ es:
         collapse_nested_folders:
           label: Contraer carpetas internas
           hint: Al contraer una colección o carpeta, también se contraen las carpetas que tiene dentro.
-          toggle: Contraer también las carpetas internas
+        toggle:
+          "true": "Sí"
+          "false": "No"
         modes:
           click: Un clic
           double_click: Doble clic
