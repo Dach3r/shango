@@ -1,6 +1,6 @@
 <div class="relative <%= "h-full" if @compact %>" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
   <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
-          class="flex <%= @compact ? "h-full px-2.5 text-xs" : "h-9 px-3 text-sm border border-line bg-field" %> max-w-48 cursor-pointer items-center gap-2 text-body transition hover:bg-field-focus hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+          class="flex <%= @compact ? "h-full border-l border-line px-2.5 text-xs" : "h-9 px-3 text-sm border border-line bg-field" %> max-w-48 cursor-pointer items-center gap-2 text-body transition hover:bg-field-focus hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
     <%= lucide_icon "layers", class: "size-4 shrink-0 #{'text-accent' if @current_environment}" %>
     <span class="truncate"><%= @current_environment&.name || t("components.environment_switcher.none") %></span>
     <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>
