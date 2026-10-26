@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "submit_loading"
+import "sync_root_attributes"
