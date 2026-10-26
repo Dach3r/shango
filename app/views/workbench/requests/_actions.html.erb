@@ -1,8 +1,10 @@
 <%# Request actions. Rendered in the tab bar; the request-form controller wraps the whole workspace section. %>
-<div class="flex items-center gap-1 self-stretch border-l border-line px-3">
+<div class="flex items-center self-stretch border-l border-line px-3">
   <button type="submit" form="request_form" class="<%= button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs") %>">
     <%= lucide_icon "save", class: "size-3.5" %><%= t("workbench.requests.save") %>
   </button>
+</div>
+<div class="flex items-center self-stretch border-l border-line px-3">
   <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
     <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" aria-label="<%= t("workbench.requests.more_actions") %>" title="<%= t("workbench.requests.more_actions") %>"
             class="flex size-7 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
