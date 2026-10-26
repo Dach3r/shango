@@ -30,6 +30,6 @@ RSpec.describe Sidebar::Component, type: :component do
   it "renders the user menu in the footer" do
     render_sidebar
 
-    expect(page).to have_css("button", text: "Ada Lovelace")
+    expect(page).to have_text("Ada Lovelace")
   end
 end

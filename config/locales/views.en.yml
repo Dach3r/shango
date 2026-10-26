@@ -29,7 +29,6 @@ en:
     status_bar:
       menu: Open navigation
     user_menu:
-      label: Account menu
       sign_out: Sign out
     input:
       toggle_password: Show or hide password
