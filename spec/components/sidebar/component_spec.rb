@@ -22,9 +22,9 @@ RSpec.describe Sidebar::Component, type: :component do
   end
 
   it "links settings and highlights them on the membership screen", :aggregate_failures do
-    render_sidebar(path: "/membership/edit", controller_path: "projects/memberships")
+    render_sidebar(path: "/membership/settings", controller_path: "projects/memberships")
 
-    expect(page).to have_css("a[aria-current=page][href='/membership/edit']", text: I18n.t("components.sidebar.settings"))
+    expect(page).to have_css("a[aria-current=page][href='/membership/settings']", text: I18n.t("components.sidebar.settings"))
   end
 
   it "highlights nothing on unrelated pages" do

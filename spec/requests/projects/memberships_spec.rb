@@ -4,7 +4,7 @@ RSpec.describe "Memberships" do
   let!(:context) { sign_in_with_project }
   let(:membership) { context[2] }
 
-  describe "GET /membership/edit" do
+  describe "GET /membership/settings" do
     it "renders the settings form with the settings navigation", :aggregate_failures do
       get edit_membership_path
 
