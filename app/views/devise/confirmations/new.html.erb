@@ -1,16 +1,13 @@
-<h2>Resend confirmation instructions</h2>
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".heading") %>
 
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: "space-y-5" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %></p>
-  </div>
+  <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, autofocus: true, autocomplete: "email", required: true,
+                                  value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)) %>
 
-  <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
+  <%= render Button::Component.new(form: f, label: t(".submit")) %>
 <% end %>
 
 <%= render "devise/shared/links" %>

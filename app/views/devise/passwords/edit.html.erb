@@ -1,20 +1,20 @@
-<h2>Change your password</h2>
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".heading") %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "space-y-5" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
   <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
-    <p><%= f.label :password, "New password" %></p>
-    <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
-    <% end %>
-    <p><%= f.password_field :password %></p>
-  </div>
+  <%= render Input::Component.new(form: f, attribute: :password, label: t(".password"), type: :password, placeholder: (t(".password_placeholder", length: @minimum_password_length) if @minimum_password_length), autofocus: true, autocomplete: "new-password", required: true) %>
+  <%= render Input::Component.new(form: f, attribute: :password_confirmation, label: t(".password_confirmation"), type: :password, placeholder: t(".password_confirmation_placeholder"), autocomplete: "new-password", required: true) %>
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
+  <%= render Button::Component.new(form: f, label: t(".submit")) %>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<div class="my-6 flex items-center gap-4 text-xs font-medium uppercase tracking-widest text-muted">
+  <span class="h-px flex-1 bg-line"></span>
+  <%= t(".or") %>
+  <span class="h-px flex-1 bg-line"></span>
+</div>
+
+<%= render Button::Component.new(label: t(".sign_in"), href: new_session_path(resource_name), variant: :secondary) %>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<html lang="<%= I18n.locale %>" data-theme="<%= current_theme %>">
 <head>
   <title><%= content_for(:title) || ApplicationHelper::CONFIG[:name] %></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="view-transition" content="same-origin">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="<%= ApplicationHelper::CONFIG[:name] %>">
   <meta name="mobile-web-app-capable" content="yes">
@@ -15,7 +16,7 @@
   <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body>
-  <%= yield %>
+<body data-controller="form-validation" data-action="invalid->form-validation#mark:capture input->form-validation#clear">
+  <%= content_for?(:content) ? yield(:content) : yield %>
 </body>
 </html>

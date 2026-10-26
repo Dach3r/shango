@@ -1,34 +1,24 @@
-<h2>Sign up</h2>
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".heading") %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-5" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <p><%= f.label :first_name %></p>
-    <p><%= f.text_field :first_name %></p>
+  <div class="grid gap-5 sm:grid-cols-2">
+    <%= render Input::Component.new(form: f, attribute: :first_name, icon: "user", label: t(".first_name"), placeholder: t(".first_name_placeholder"), autofocus: true, autocomplete: "given-name", required: true) %>
+    <%= render Input::Component.new(form: f, attribute: :last_name, icon: "user", label: t(".last_name"), placeholder: t(".last_name_placeholder"), autocomplete: "family-name", required: true) %>
   </div>
 
-  <div class="field">
-    <p><%= f.label :last_name %></p>
-    <p><%= f.text_field :last_name %></p>
-  </div>
+  <%= render Input::Component.new(form: f, attribute: :email, label: t(".email"), type: :email, placeholder: t(".email_placeholder"), autocomplete: "email", required: true) %>
+  <%= render Input::Component.new(form: f, attribute: :password, label: t(".password"), type: :password, placeholder: (t(".password_placeholder", length: @minimum_password_length) if @minimum_password_length), autocomplete: "new-password", required: true) %>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password %></p>
-    <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
-    <% end %>
-    <p><%= f.password_field :password %></p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
+  <%= render Button::Component.new(form: f, label: t(".submit")) %>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<div class="my-6 flex items-center gap-4 text-xs font-medium uppercase tracking-widest text-muted">
+  <span class="h-px flex-1 bg-line"></span>
+  <%= t(".or") %>
+  <span class="h-px flex-1 bg-line"></span>
+</div>
+
+<%= render Button::Component.new(label: t(".sign_in"), href: new_session_path(resource_name), variant: :secondary) %>

@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 
   stale_when_importmap_changes
 
+  layout -> { "devise" if devise_controller? }
+
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
