@@ -17,8 +17,12 @@ export default class extends Controller {
     this.element.addEventListener("dblclick", this.requestDoubleClick, true);
 
     const closed = this.closed();
+    this.restored = new Set();
     this.branchTargets.forEach((branch) => {
-      if (closed.includes(branch.dataset.id)) branch.open = false;
+      if (!closed.includes(branch.dataset.id)) return;
+
+      this.restored.add(branch);
+      branch.open = false;
     });
   }
 
@@ -41,6 +45,13 @@ export default class extends Controller {
 
   toggled(event) {
     const branch = event.currentTarget;
+    const restoring = this.restored.delete(branch);
+    // Closing a branch closes the ones nested inside it (not when restoring saved state on connect).
+    if (!branch.open && !restoring)
+      branch
+        .querySelectorAll("details[open]")
+        .forEach((nested) => (nested.open = false));
+
     const closed = new Set(this.closed());
     branch.open
       ? closed.delete(branch.dataset.id)
