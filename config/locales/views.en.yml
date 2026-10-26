@@ -8,6 +8,26 @@ en:
         name: Name
         icon: Icon
   components:
+    nav_item:
+      soon: Soon
+    project_switcher:
+      label: Projects
+      new: New project
+    sidebar:
+      label: Project navigation
+      overview: Overview
+      api_client: API Client
+      documentation: Documentation
+      monitoring: Monitoring
+      servers: Servers
+      logs: Logs
+      ai_assistant: AI Assistant
+      settings: Settings
+    topbar:
+      menu: Open navigation
+    user_menu:
+      label: Account menu
+      sign_out: Sign out
     input:
       toggle_password: Show or hide password
     locale_switcher:
@@ -19,6 +39,10 @@ en:
       system: System
       light: Light
       dark: Dark
+  overview:
+    show:
+      title: Overview
+      empty: Nothing here yet. Project tools will show up as they become available.
   projects:
     index:
       title: Projects

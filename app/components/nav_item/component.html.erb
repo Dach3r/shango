@@ -1,0 +1,12 @@
+<% if @href %>
+  <%= link_to @href, class: classes, aria: { current: ("page" if @active) } do %>
+    <%= lucide_icon @icon, class: "size-4 shrink-0" %>
+    <span class="truncate"><%= @label %></span>
+  <% end %>
+<% else %>
+  <span class="<%= classes %>" aria-disabled="true">
+    <%= lucide_icon @icon, class: "size-4 shrink-0" %>
+    <span class="truncate"><%= @label %></span>
+    <span class="ml-auto rounded-full border border-line px-2 py-0.5 text-[10px] leading-none font-medium text-muted"><%= t("components.nav_item.soon") %></span>
+  </span>
+<% end %>

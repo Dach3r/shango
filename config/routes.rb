@@ -1,17 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations" }, failure_app: "LocalizedFailureApp"
 
-  devise_scope :user do
-    authenticated do
-      root to: "projects#index", as: :authenticated_root
-    end
-
-    unauthenticated do
-      root to: "devise/sessions#new", as: :unauthenticated_root
-    end
-  end
+  root to: "overview#show"
 
   resources :projects, only: %i[index new create]
+  resource :current_project, only: :update
   resource :preferences, only: :update
 
   get "up" => "rails/health#show", as: :rails_health_check

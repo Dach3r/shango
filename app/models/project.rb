@@ -14,7 +14,7 @@ class Project < ApplicationRecord
   ].freeze
 
   has_many :memberships, dependent: :destroy
-  has_many :users, through: :memberships
+  has_many :users, -> { merge(Membership.active) }, through: :memberships
 
   scope :active, -> { where(archived_at: nil) }
 

@@ -106,9 +106,12 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 
 ## 9. Current state (snapshot)
 
-- Authentication (Devise, `User` with first/last name) and a placeholder `ProjectsController#index`.
+- Authentication (Devise, `User` with first/last name).
+- Memberships link users to projects with a `role` (`owner`/`member`) and a nullable `revoked_at`: a revoked membership is kept as history and no longer grants access. The unique `(user_id, project_id)` index is partial (`revoked_at IS NULL`), so a user can be re-added later. `User#projects`, `Project#users` and `User#available_memberships` only consider active memberships.
+- Current selection: `users.current_membership_id` (nullable FK, `nullify` on delete). `AuthenticatedController#current_membership` returns it while it is active and its project not archived, otherwise falls back to the oldest available membership and persists it; `current_project` derives from it and `current_membership.role` is available to the UI. `CurrentProjectsController#update` switches it. Creating a project selects its owner membership.
+- Authenticated layout (`layouts/app`): sidebar (`Sidebar`, `ProjectSwitcher`, `NavItem`) + topbar (`Topbar`, `UserMenu` with theme/locale switchers and sign out). Below `lg` the sidebar is an off-canvas drawer (`drawer` Stimulus controller); menus use the `dropdown` controller. Nav entries without a route render disabled with a "Soon" badge; enable each as its feature lands. `/` is `OverviewController#show`; guests are redirected to sign in by `authenticate_user!`.
 - `Project` and `Membership` (role `owner`/`member`). `AuthenticatedController#require_project` redirects any user without an active project to `projects#new`, so every user creates a first project (name + icon) right after sign-up. `Project.create_with_owner` creates the project and its owner membership in one transaction.
-- Shared UI components (`Button`, `Input`, `Link`) and a password visibility Stimulus controller.
+- Shared UI components (`Button`, `Input`, `Link`, `Logo`, `ThemeSwitcher`, `LocaleSwitcher`) and Stimulus controllers for password visibility, icon picking, dropdowns and the drawer.
 - PostgreSQL schema contains `users`, `projects`, `memberships` and Active Storage tables; the `uuid-ossp` extension is enabled.
 - No tests or other domain models yet.
 

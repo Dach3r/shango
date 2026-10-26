@@ -1,0 +1,8 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".title") %>
+
+<section class="mx-auto flex max-w-md flex-col items-center py-20 text-center">
+  <span class="flex size-16 items-center justify-center rounded-2xl bg-solid text-on-solid"><%= lucide_icon current_project.icon, class: "size-8" %></span>
+  <h2 class="mt-6 text-2xl font-semibold tracking-tight text-ink"><%= current_project.name %></h2>
+  <p class="mt-2 text-sm text-muted"><%= t(".empty") %></p>
+</section>

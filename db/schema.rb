@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_035957) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -47,10 +47,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_035957) do
     t.string "role", default: "member", null: false
     t.uuid "project_id", null: false
     t.uuid "user_id", null: false
+    t.datetime "revoked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_memberships_on_project_id"
-    t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true
+    t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true, where: "(revoked_at IS NULL)"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -84,7 +85,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_035957) do
     t.string "last_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "current_membership_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["current_membership_id"], name: "index_users_on_current_membership_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -94,4 +97,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_035957) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
+  add_foreign_key "users", "memberships", column: "current_membership_id", on_delete: :nullify
 end

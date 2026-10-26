@@ -1,0 +1,13 @@
+<div class="flex h-full flex-col gap-6 p-4">
+  <%= render Logo::Component.new(href: root_path, class: "px-2") %>
+
+  <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
+
+  <nav aria-label="<%= t("components.sidebar.label") %>">
+    <ul class="space-y-1">
+      <% items.each do |item| %>
+        <li><%= render NavItem::Component.new(**item) %></li>
+      <% end %>
+    </ul>
+  </nav>
+</div>

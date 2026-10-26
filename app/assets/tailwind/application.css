@@ -50,6 +50,7 @@
   --color-solid-hover: var(--solid-hover);
   --color-on-solid: var(--on-solid);
   --color-danger: var(--danger);
+  --shadow-dropdown: var(--dropdown-shadow);
 }
 
 /* Each token is defined once as light-dark(light, dark); color-scheme picks the side. */
@@ -70,6 +71,7 @@
   --solid-hover: light-dark(var(--color-clay-700), var(--color-clay-400));
   --on-solid: light-dark(var(--color-paper), var(--color-night-1000));
   --danger: light-dark(#c81e1e, #ff9a9a);
+  --dropdown-shadow: 0 6px 20px light-dark(rgb(20 20 19 / 0.1), rgb(0 0 0 / 0.55));
   --dots: light-dark(#d3cdbb, var(--color-night-700));
   --glow: light-dark(
     color-mix(in oklab, var(--color-clay-500) 16%, transparent),

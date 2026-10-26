@@ -4,10 +4,11 @@ class CreateMemberships < ActiveRecord::Migration[8.1]
       t.string :role, null: false, default: "member"
       t.references :project, null: false, foreign_key: true, type: :uuid
       t.references :user, null: false, foreign_key: true, type: :uuid, index: false
+      t.datetime :revoked_at
 
       t.timestamps
     end
 
-    add_index :memberships, %i[user_id project_id], unique: true
+    add_index :memberships, %i[user_id project_id], unique: true, where: "revoked_at IS NULL"
   end
 end

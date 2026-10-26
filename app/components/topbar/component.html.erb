@@ -1,0 +1,10 @@
+<header class="flex h-16 shrink-0 items-center gap-3 border-b border-line bg-page px-4 sm:px-8">
+  <button type="button" data-drawer-target="trigger" data-action="drawer#toggle" aria-expanded="false" aria-label="<%= t("components.topbar.menu") %>"
+          class="flex size-9 cursor-pointer items-center justify-center rounded-full text-body transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 lg:hidden">
+    <%= lucide_icon "menu", class: "size-5" %>
+  </button>
+
+  <h1 class="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight text-ink"><%= @title %></h1>
+
+  <%= render UserMenu::Component.new(user: @user) %>
+</header>

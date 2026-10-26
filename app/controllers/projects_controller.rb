@@ -14,7 +14,8 @@ class ProjectsController < AuthenticatedController
     @project = Project.create_with_owner(current_user, project_params)
 
     if @project.persisted?
-      redirect_to authenticated_root_path, status: :see_other
+      current_user.update!(current_membership_id: current_user.memberships.active.find_by!(project: @project).id)
+      redirect_to root_path, status: :see_other
     else
       render :new, status: :unprocessable_entity
     end

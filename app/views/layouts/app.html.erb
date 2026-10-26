@@ -1,0 +1,19 @@
+<% content_for :content do %>
+  <div class="min-h-screen lg:grid lg:grid-cols-[16rem_1fr]" data-controller="drawer" data-action="keydown.esc->drawer#close">
+    <div hidden data-drawer-target="backdrop" data-action="click->drawer#close" class="fixed inset-0 z-30 bg-night-1000/50 lg:hidden"></div>
+
+    <aside data-drawer-target="panel" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full overflow-y-auto border-r border-line bg-card transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0">
+      <%= render Sidebar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name)) %>
+    </aside>
+
+    <div class="flex min-h-screen min-w-0 flex-col">
+      <%= render Topbar::Component.new(user: current_user, title: content_for(:heading)) %>
+
+      <main class="flex-1 px-4 py-8 sm:px-8">
+        <%= yield %>
+      </main>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

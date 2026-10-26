@@ -4,5 +4,15 @@ class Membership < ApplicationRecord
 
   enum :role, { member: "member", owner: "owner" }, default: "member"
 
-  validates :user_id, uniqueness: { scope: :project_id }
+  scope :active, -> { where(revoked_at: nil) }
+
+  validates :user_id, uniqueness: { scope: :project_id, conditions: -> { active } }
+
+  def active?
+    revoked_at.nil?
+  end
+
+  def revoke!
+    update!(revoked_at: Time.current)
+  end
 end
