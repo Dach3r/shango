@@ -1,7 +1,6 @@
 class StatusBar::Component < ApplicationComponent
-  def initialize(environments: nil, current_environment: nil, sidebar_toggle: false)
+  def initialize(environments: nil, current_environment: nil)
     @environments = environments
     @current_environment = current_environment
-    @sidebar_toggle = sidebar_toggle
   end
 end

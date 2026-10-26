@@ -18,12 +18,4 @@ RSpec.describe StatusBar::Component, type: :component do
 
     expect(page).to have_css("footer", text: "Breadcrumb")
   end
-
-  it "renders the sidebar toggle only when requested" do
-    render_inline(described_class.new)
-    expect(page).to have_no_css("button[data-action='sidebar-toggle#toggle']")
-
-    render_inline(described_class.new(sidebar_toggle: true))
-    expect(page).to have_css("button[data-action='sidebar-toggle#toggle'][aria-expanded='true']")
-  end
 end

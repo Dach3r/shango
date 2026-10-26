@@ -1,9 +1,8 @@
 <%# Sidebar tree + content area shared by every API Client screen. Render with a block. %>
 <% content_for :main_class, "flex min-h-0 flex-1" %>
-<% content_for :sidebar_toggle, "1" %>
 
 <div class="flex h-[calc(100vh-5.5rem)] w-full flex-col md:flex-row">
-  <aside data-sidebar-toggle-target="panel" class="max-h-60 shrink-0 overflow-hidden border-b border-line bg-card md:max-h-none md:w-72 md:border-r md:border-b-0">
+  <aside class="max-h-60 shrink-0 overflow-hidden border-b border-line bg-card md:max-h-none md:w-72 md:border-r md:border-b-0">
     <%= render RequestTree::Component.new(branches: workspace_tree, folder_toggle: current_membership.folder_toggle, request_open: current_membership.request_open, collapse_nested: current_membership.collapse_nested_folders, current_request_id: @api_request&.id) %>
   </aside>
 
