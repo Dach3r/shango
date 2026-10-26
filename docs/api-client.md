@@ -8,7 +8,7 @@
 
 - Collections with nested folders and requests; drag and drop to move requests and folders.
 - Open requests as tabs: every request the user opens (from the sidebar or a new draft) stays as a per-user tab above the editor, with a *+* to start a new draft. Opening the workbench with tabs open lands on the last tab; the empty state shows only when none is open. Closing a saved request's tab just closes the tab; closing a draft's tab asks to save or discard it, unless the draft was never edited, which is discarded straight away. Draft requests are per-user requests without a collection; they can be edited and sent, *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
-- Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings, description.
+- Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
 - Run a request, inspect the response (pretty / raw / HTML preview, headers, request details, redirects), per-request history (last 50).
@@ -16,7 +16,7 @@
 - Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
 - Code editor (CodeMirror 6) with `{{variable}}` autocomplete and highlighting by state: set (green), empty value (amber), undefined (red, wavy underline) and dynamic `$` helpers (accent). The popup shows each variable's value under its name; hovering a `{{variable}}` shows a card with its value (or "Undefined") and its source (Environment or Dynamic). Secret values are masked server-side and never sent.
 
-**Not included (yet)**: pre/post-request scripts and assertions (the *Scripts* tab is shown disabled), collection runner, cookie jar, WebSocket/gRPC, Postman/OpenAPI/Bruno import, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
+**Not included (yet)**: pre/post-request scripts and assertions, collection runner, cookie jar, WebSocket/gRPC, Postman/OpenAPI/Bruno import, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
 
 ## 2. Domain model
 

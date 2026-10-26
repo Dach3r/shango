@@ -1,12 +1,10 @@
-<%# The request editor form: URL bar plus Params / Authorization / Headers / Body / Settings / Docs tabs. %>
+<%# The request editor form: URL bar plus Params / Authorization / Headers / Body / Settings tabs. %>
 <% tabs = [
   { name: "params", label: t("workbench.tabs.params"), count: param_rows(api_request).count { |row| row["enabled"] } },
   { name: "authorization", label: t("workbench.tabs.authorization"), dot: !api_request.inherits_auth? && api_request.auth_type != "none" },
   { name: "headers", label: t("workbench.tabs.headers"), count: api_request.headers.count { |row| row["enabled"] } },
   { name: "body", label: t("workbench.tabs.body"), dot: api_request.body_type != "none" },
-  { name: "settings", label: t("workbench.tabs.settings") },
-  { name: "docs", label: t("workbench.tabs.docs"), dot: api_request.description.present? },
-  { name: "scripts", label: t("workbench.tabs.scripts"), disabled: true }
+  { name: "settings", label: t("workbench.tabs.settings") }
 ] %>
 
 <%= form_with model: api_request, scope: :api_request, url: workbench_request_path(api_request), method: :patch, id: "request_form", multipart: true,
@@ -65,11 +63,6 @@
 
       <div data-tabs-target="panel" data-name="settings" hidden>
         <%= render "workbench/requests/settings", api_request: api_request %>
-      </div>
-
-      <div data-tabs-target="panel" data-name="docs" hidden>
-        <label for="api_request_description" class="<%= label_classes %>"><%= t("workbench.docs.label") %></label>
-        <%= text_area_tag "api_request[description]", api_request.description, id: "api_request_description", rows: 8, placeholder: t("workbench.docs.placeholder"), class: field_classes %>
       </div>
     </div>
   </div>

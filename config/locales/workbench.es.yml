@@ -189,17 +189,12 @@ es:
       headers: Headers
       body: Body
       settings: Ajustes
-      docs: Docs
-      scripts: Scripts
     params:
       hint: Los parámetros de consulta se sincronizan con la URL. Las filas deshabilitadas se conservan aquí pero no se envían.
       key: Parámetro
     headers:
       hint: Shango agrega User-Agent y Accept si no los defines, y Content-Type según el tipo de body.
       key: Header
-    docs:
-      label: Descripción
-      placeholder: Describe qué hace esta solicitud. Más adelante alimentará la documentación de la API.
     body:
       type: Tipo de body
       none_hint: Esta solicitud no tiene body.

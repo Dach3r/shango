@@ -189,17 +189,12 @@ en:
       headers: Headers
       body: Body
       settings: Settings
-      docs: Docs
-      scripts: Scripts
     params:
       hint: Query parameters stay in sync with the URL. Disabled rows are kept here but not sent.
       key: Parameter
     headers:
       hint: Shango adds User-Agent and Accept unless you set them, and Content-Type from the body type.
       key: Header
-    docs:
-      label: Description
-      placeholder: Describe what this request does. It will feed the API documentation later.
     body:
       type: Body type
       none_hint: This request has no body.
