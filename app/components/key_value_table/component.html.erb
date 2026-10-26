@@ -1,0 +1,11 @@
+<%= tag.div data: wrapper_data, class: "space-y-2" do %>
+  <div data-key-value-table-target="body" class="space-y-2">
+    <% @rows.each_with_index do |row, index| %>
+      <%= render row_component(row, index) %>
+    <% end %>
+  </div>
+
+  <template data-key-value-table-target="template">
+    <%= render row_component({ "enabled" => true }, "NEW_INDEX") %>
+  </template>
+<% end %>

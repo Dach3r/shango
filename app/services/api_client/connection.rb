@@ -1,0 +1,27 @@
+module ApiClient
+  # Builds the Faraday connection used for every outbound call (requests and OAuth token calls).
+  class Connection
+    OPEN_TIMEOUT = 10
+
+    class InvalidUrl < StandardError; end
+
+    def self.build(url:, timeout:, verify_ssl: true, multipart: false)
+      uri = URI.parse(url.to_s)
+      raise InvalidUrl, "Only http and https URLs are supported" unless uri.is_a?(URI::HTTP) && uri.host.present?
+
+      pinned_address = SsrfPolicy.check!(uri.host)
+
+      Faraday.new do |faraday|
+        faraday.request :multipart if multipart
+        faraday.options.timeout = timeout
+        faraday.options.open_timeout = [timeout, OPEN_TIMEOUT].min
+        faraday.ssl.verify = verify_ssl
+        faraday.adapter :net_http do |http|
+          http.ipaddr = pinned_address if pinned_address
+        end
+      end
+    rescue URI::InvalidURIError => error
+      raise InvalidUrl, error.message
+    end
+  end
+end

@@ -1,0 +1,33 @@
+<dialog data-controller="dialog" data-action="close->dialog#closed <%= "click->dialog#backdrop" if @dismissible %>"
+        class="modal m-auto max-h-[90dvh] w-[calc(100%-2rem)] <%= size_class %> flex-col overflow-hidden rounded-3xl border border-line bg-card p-0 text-body shadow-dropdown open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
+  <header class="flex shrink-0 items-start gap-3 px-6 pt-5 pb-4">
+    <% if @icon %>
+      <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent"><%= lucide_icon @icon, class: "size-5" %></span>
+    <% end %>
+    <div class="min-w-0 flex-1 pt-0.5">
+      <h2 class="text-lg font-semibold tracking-tight text-ink"><%= @title %></h2>
+      <% if @description %>
+        <p class="mt-0.5 text-sm text-muted"><%= @description %></p>
+      <% end %>
+    </div>
+    <button type="button" data-action="dialog#close" aria-label="<%= t("components.modal.close") %>"
+            class="-mr-2 flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+      <%= lucide_icon "x", class: "size-4" %>
+    </button>
+  </header>
+
+  <div class="min-h-0 flex-1 overflow-y-auto px-6 pb-6"><%= content %></div>
+
+  <% if show_footer? %>
+    <footer class="flex shrink-0 items-center justify-end gap-2 border-t border-line bg-field/60 px-6 py-3.5">
+      <% if footer? %>
+        <%= footer %>
+      <% else %>
+        <% if @cancel %>
+          <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= t("components.modal.cancel") %></button>
+        <% end %>
+        <%= tag.button @submit, type: "submit", form: @form, class: button_classes(:primary) %>
+      <% end %>
+    </footer>
+  <% end %>
+</dialog>

@@ -1,11 +1,17 @@
 source "https://rubygems.org"
 
+gem "aws-sigv4", "~> 1.12"
 gem "bootsnap", require: false
 gem "devise"
 gem "devise-i18n", "~> 1.16"
 gem "dotenv-rails"
+gem "faraday", "~> 2.15"
+gem "faraday-multipart", "~> 1.2"
 gem "image_processing", "~> 1.2"
 gem "importmap-rails"
+gem "jwt", "~> 3.3"
+gem "lucide-rails", "~> 0.7.4"
+gem "net-http-digest_auth", "~> 1.4"
 gem "pg", "~> 1.1"
 gem "propshaft"
 gem "puma", ">= 5.0"
@@ -19,6 +25,7 @@ gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "turbo-rails"
 gem "tzinfo-data", platforms: %i[windows jruby]
+gem "view_component", "~> 4.19"
 
 group :development, :test do
   gem "brakeman", require: false
@@ -30,7 +37,3 @@ end
 group :development do
   gem "web-console"
 end
-
-gem "view_component", "~> 4.19"
-
-gem "lucide-rails", "~> 0.7.4"

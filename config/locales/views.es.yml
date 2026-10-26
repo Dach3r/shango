@@ -8,6 +8,9 @@ es:
         name: Nombre
         icon: Icono
   components:
+    select:
+      search: Buscar…
+      empty: Sin resultados
     nav_item:
       soon: Pronto
     project_switcher:

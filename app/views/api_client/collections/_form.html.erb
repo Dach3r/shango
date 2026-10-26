@@ -1,0 +1,22 @@
+<%= render Modal::Component.new(icon: "library", title: @collection.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "collection_form", submit: t("api_client.shared.save")) do %>
+  <%= form_with model: @collection, scope: :collection, url: (@collection.persisted? ? api_client_collection_path(@collection) : api_client_collections_path),
+                id: "collection_form", data: { turbo_frame: "_top" }, class: "space-y-5" do |form| %>
+    <%= render "api_client/shared/errors", record: @collection %>
+
+    <div>
+      <%= form.label :name, t(".name"), class: label_classes %>
+      <%= form.text_field :name, autofocus: true, autocomplete: "off", placeholder: t(".name_placeholder"), class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :description, t(".description"), class: label_classes %>
+      <%= form.text_area :description, rows: 2, class: field_classes %>
+    </div>
+
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-semibold text-ink"><%= t(".auth") %></legend>
+      <p class="text-xs text-muted"><%= t(".auth_hint") %></p>
+      <%= render AuthFields::Component.new(scope: "collection", record: @collection, inheritable: false) %>
+    </fieldset>
+  <% end %>
+  <%= render Oauth2Forms::Component.new(owner: @collection) %>
+<% end %>

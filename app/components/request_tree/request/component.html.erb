@@ -1,0 +1,8 @@
+<li draggable="true" data-drag-kind="request" data-drag-id="<%= @api_request.id %>" data-collection-id="<%= @api_request.collection_id %>" data-folder-id="<%= @api_request.folder_id %>"
+    data-drop-mode="before" data-position-url="<%= api_client_request_position_path(@api_request) %>" data-action="dragstart->tree#dragStart dragend->tree#dragEnd"
+    class="data-[drop-active=before]:shadow-[inset_0_2px_0_var(--solid)]">
+  <%= link_to api_client_request_path(@api_request), class: classes, aria: { current: (@active ? "page" : nil) } do %>
+    <span class="w-9 shrink-0"><%= render MethodBadge::Component.new(method: @api_request.http_method, short: true) %></span>
+    <span class="min-w-0 flex-1 truncate"><%= @api_request.name %></span>
+  <% end %>
+</li>

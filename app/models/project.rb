@@ -15,6 +15,11 @@ class Project < ApplicationRecord
 
   has_many :memberships, dependent: :destroy
   has_many :users, -> { merge(Membership.active) }, through: :memberships
+  has_many :environments, dependent: :destroy
+  has_many :collections, dependent: :destroy
+  has_many :folders, through: :collections
+  has_many :api_requests, dependent: :destroy
+  has_many :request_executions, dependent: :destroy
 
   scope :active, -> { where(archived_at: nil) }
 

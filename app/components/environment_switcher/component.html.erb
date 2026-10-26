@@ -1,0 +1,35 @@
+<div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+  <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
+          class="flex h-9 max-w-48 cursor-pointer items-center gap-2 rounded-full border border-line bg-field px-3 text-sm text-body transition hover:bg-field-focus hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+    <%= lucide_icon "layers", class: "size-4 shrink-0 #{'text-accent' if @current_environment}" %>
+    <span class="truncate"><%= @current_environment&.name || t("components.environment_switcher.none") %></span>
+    <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>
+  </button>
+
+  <div data-dropdown-target="menu" hidden class="absolute right-0 top-full z-30 mt-2 w-60 rounded-2xl border border-line bg-card p-1.5 shadow-dropdown">
+    <p class="px-2.5 pt-1.5 pb-1 text-xs font-medium text-muted"><%= t("components.environment_switcher.label") %></p>
+    <ul class="max-h-64 overflow-y-auto">
+      <li>
+        <%= button_to current_environment_path, method: :patch, params: { environment_id: "" }, form_class: "contents",
+                      class: "flex w-full cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+          <span class="min-w-0 flex-1 truncate"><%= t("components.environment_switcher.none") %></span>
+          <%= lucide_icon "check", class: "size-4 shrink-0 text-accent" if @current_environment.nil? %>
+        <% end %>
+      </li>
+      <% @environments.each do |environment| %>
+        <li>
+          <%= button_to current_environment_path, method: :patch, params: { environment_id: environment.id }, form_class: "contents",
+                        class: "flex w-full cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+            <span class="min-w-0 flex-1 truncate"><%= environment.name %></span>
+            <%= lucide_icon "check", class: "size-4 shrink-0 text-accent" if environment == @current_environment %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <div class="my-1.5 border-t border-line"></div>
+    <%= link_to environments_path, class: "flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-accent transition hover:bg-field hover:text-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+      <%= lucide_icon "settings-2", class: "size-4 shrink-0" %>
+      <%= t("components.environment_switcher.manage") %>
+    <% end %>
+  </div>
+</div>

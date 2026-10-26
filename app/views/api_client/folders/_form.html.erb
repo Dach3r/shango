@@ -1,0 +1,18 @@
+<%= render Modal::Component.new(icon: "folder", title: @folder.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "folder_form", submit: t("api_client.shared.save")) do %>
+  <%= form_with model: @folder, scope: :folder, url: (@folder.persisted? ? api_client_folder_path(@folder) : api_client_collection_folders_path(@collection)),
+                id: "folder_form", data: { turbo_frame: "_top" }, class: "space-y-5" do |form| %>
+    <%= render "api_client/shared/errors", record: @folder %>
+    <%= form.hidden_field :parent_id unless @folder.persisted? %>
+
+    <div>
+      <%= form.label :name, t(".name"), class: label_classes %>
+      <%= form.text_field :name, autofocus: true, autocomplete: "off", placeholder: t(".name_placeholder"), class: field_classes %>
+    </div>
+
+    <fieldset class="space-y-3">
+      <legend class="text-sm font-semibold text-ink"><%= t(".auth") %></legend>
+      <%= render AuthFields::Component.new(scope: "folder", record: @folder, inheritable: true) %>
+    </fieldset>
+  <% end %>
+  <%= render Oauth2Forms::Component.new(owner: @folder) %>
+<% end %>

@@ -1,0 +1,32 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".title") %>
+
+<section class="mx-auto max-w-3xl space-y-6">
+  <div class="flex items-start justify-between gap-4">
+    <p class="max-w-xl text-sm text-muted"><%= t(".intro") %></p>
+    <%= link_to new_environment_path, class: button_classes(:primary, "shrink-0") do %><%= lucide_icon "plus", class: "size-4" %><%= t(".new") %><% end %>
+  </div>
+
+  <% if @environments.empty? %>
+    <div class="rounded-2xl border border-dashed border-line p-10 text-center">
+      <%= lucide_icon "layers", class: "mx-auto size-8 text-faint" %>
+      <p class="mt-3 text-sm font-medium text-ink"><%= t(".empty_title") %></p>
+      <p class="mt-1 text-sm text-muted"><%= t(".empty_hint") %></p>
+    </div>
+  <% else %>
+    <ul class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+      <% @environments.each do |environment| %>
+        <li class="flex items-center gap-4 px-4 py-3">
+          <%= lucide_icon "layers", class: "size-5 shrink-0 #{'text-accent' if environment == current_environment} #{'text-muted' unless environment == current_environment}" %>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-ink"><%= environment.name %></p>
+            <p class="text-xs text-muted"><%= t(".variables", count: environment.variables.size) %><%= " · #{t('.selected')}" if environment == current_environment %></p>
+          </div>
+          <%= link_to t(".edit"), edit_environment_path(environment), class: button_classes(:ghost) %>
+          <%= button_to t(".delete"), environment_path(environment), method: :delete, class: button_classes(:ghost, "hover:!text-danger"), form_class: "contents",
+                        form: { data: { turbo_confirm: t(".confirm_delete", name: environment.name) } } %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>

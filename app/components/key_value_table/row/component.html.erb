@@ -1,0 +1,53 @@
+<div data-key-value-table-target="row" class="flex items-center gap-2">
+  <% if persisted? %>
+    <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
+    <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>
+  <% end %>
+
+  <%= hidden_field_tag field_name("enabled"), "0", id: nil %>
+  <%= check_box_tag field_name("enabled"), "1", enabled?, id: nil, data: { field: "enabled", action: "change->key-value-table#input" },
+                    class: "size-4 shrink-0 cursor-pointer rounded border-line accent-[var(--solid)]", aria: { label: t("components.key_value_table.enabled") } %>
+
+  <%= text_field_tag field_name("key"), row["key"], id: nil, placeholder: @key_placeholder, autocomplete: "off", spellcheck: false,
+                     data: { field: "key", action: "input->key-value-table#input" }, class: field_classes("min-w-0 flex-1 font-mono text-xs") %>
+
+  <% if variant == :form_data %>
+    <%= hidden_field_tag field_name("upload_token"), upload_token, id: nil %>
+    <%= hidden_field_tag field_name("attachment_id"), row["attachment_id"], id: nil if row["attachment_id"].present? %>
+    <%= render Select::Component.new(name: field_name("type"), options: [[t("components.key_value_table.text"), "text"], [t("components.key_value_table.file"), "file"]], value: row["type"] || "text",
+                                     input_data: { role: "type", action: "change->key-value-table#typeChanged" }, class: "w-24 shrink-0 !px-2") %>
+    <div data-role="text" class="min-w-0 flex-1" <%= "hidden" if file? %>>
+      <%= text_field_tag field_name("value"), row["value"], id: nil, placeholder: @value_placeholder, autocomplete: "off", disabled: file?,
+                         data: { field: "value", action: "input->key-value-table#input" }, class: field_classes("font-mono text-xs") %>
+    </div>
+    <div data-role="file" class="min-w-0 flex-1" <%= "hidden" unless file? %>>
+      <%= hidden_field_tag field_name("value"), row["value"], id: nil, disabled: !file? %>
+      <%= file_field_tag upload_name, id: nil, disabled: !file?, data: { action: "change->key-value-table#input" },
+                         class: field_classes("text-xs file:mr-3 file:rounded-md file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
+      <% if file? && row["value"].present? %>
+        <p class="mt-1 truncate text-xs text-muted"><%= row["value"] %></p>
+      <% end %>
+    </div>
+  <% else %>
+    <%= text_field_tag field_name("value"), value_text, id: nil, type: value_type, placeholder: value_hint, autocomplete: "off", spellcheck: false,
+                       data: { field: "value", action: "input->key-value-table#input" }, class: field_classes("min-w-0 flex-[1.4] font-mono text-xs") %>
+  <% end %>
+
+  <% if variant == :pairs %>
+    <%= text_field_tag field_name("description"), row["description"], id: nil, placeholder: t("components.key_value_table.description"), autocomplete: "off",
+                       data: { field: "description" }, class: field_classes("hidden min-w-0 flex-1 text-xs lg:block") %>
+  <% end %>
+
+  <% if variant == :variables %>
+    <label class="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-muted">
+      <%= hidden_field_tag field_name("secret"), "0", id: nil %>
+      <%= check_box_tag field_name("secret"), "1", secret?, id: nil, data: { action: "change->key-value-table#syncMask" }, class: "size-4 cursor-pointer rounded border-line accent-[var(--solid)]" %>
+      <%= t("components.key_value_table.secret") %>
+    </label>
+  <% end %>
+
+  <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
+          class="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-faint transition hover:bg-field hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+    <%= lucide_icon "trash-2", class: "size-4" %>
+  </button>
+</div>

@@ -1,0 +1,33 @@
+<div class="group relative">
+  <details open data-tree-target="branch" data-id="<%= collection.id %>" data-action="toggle->tree#toggled" class="group/branch">
+    <summary data-drop-mode="into" data-collection-id="<%= collection.id %>" data-folder-id=""
+             class="flex cursor-pointer list-none items-center gap-2 rounded-lg py-1.5 pr-9 pl-2 text-sm font-medium text-ink transition hover:bg-field data-[drop-active=into]:bg-accent/15 [&::-webkit-details-marker]:hidden">
+      <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition group-open/branch:rotate-90" %>
+      <%= lucide_icon "folder-open", class: "size-4 shrink-0 text-accent" %>
+      <span class="min-w-0 flex-1 truncate"><%= collection.name %></span>
+    </summary>
+
+    <ul class="ml-3 space-y-0.5 border-l border-line pl-1.5">
+      <% @branch.root_folders.each do |folder| %>
+        <li><%= render RequestTree::Folder::Component.new(folder:, branch: @branch, current_request_id: @current_request_id) %></li>
+      <% end %>
+      <% @branch.requests_in.each do |api_request| %>
+        <%= render RequestTree::Request::Component.new(api_request:, active: api_request.id == @current_request_id) %>
+      <% end %>
+      <% if @branch.root_folders.empty? && @branch.requests_in.empty? %>
+        <li class="px-2 py-1.5 text-xs text-faint"><%= t("components.request_tree.empty_collection") %></li>
+      <% end %>
+    </ul>
+  </details>
+
+  <div class="absolute right-1 top-1">
+    <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: collection.name)) do %>
+      <%= link_to new_api_client_collection_request_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
+      <%= link_to new_api_client_collection_folder_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_folder") %><% end %>
+      <%= link_to new_api_client_collection_curl_import_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "terminal", class: "size-4" %><%= t("components.request_tree.import_curl") %><% end %>
+      <%= link_to edit_api_client_collection_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
+      <%= button_to api_client_collection_path(collection), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_collection", name: collection.name) } },
+                    class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>
+    <% end %>
+  </div>
+</div>

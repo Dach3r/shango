@@ -1,0 +1,24 @@
+<% content_for :title, "#{@api_request.name} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t("api_client.title") %>
+
+<%= render layout: "api_client/workspace" do %>
+  <div class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div class="flex min-h-0 flex-col overflow-hidden" data-controller="request-form"
+         data-request-form-run-url-value="<%= api_client_request_executions_path(@api_request) %>"
+         data-request-form-curl-url-value="<%= api_client_request_curl_export_path(@api_request) %>"
+         data-action="keydown.ctrl+enter@window->request-form#run keydown.meta+enter@window->request-form#run keydown.ctrl+s@window->request-form#save keydown.meta+s@window->request-form#save">
+      <template data-request-form-target="failure">
+        <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"><%= t("api_client.executions.failure") %></div>
+      </template>
+      <%= render "api_client/requests/header", api_request: @api_request %>
+      <%= render "api_client/requests/editor", api_request: @api_request %>
+    </div>
+
+    <div class="min-h-0 border-t border-line bg-card">
+      <%= turbo_frame_tag "response_panel", class: "block h-full" do %>
+        <%= render "api_client/requests/executions/response", execution: @execution, api_request: @api_request %>
+      <% end %>
+    </div>
+  </div>
+  <%= render Oauth2Forms::Component.new(owner: @api_request) %>
+<% end %>

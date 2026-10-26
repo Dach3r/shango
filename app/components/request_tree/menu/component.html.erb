@@ -1,0 +1,9 @@
+<div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+  <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" aria-label="<%= @label %>"
+          class="flex size-7 cursor-pointer items-center justify-center rounded-lg text-faint opacity-100 transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
+    <%= lucide_icon "ellipsis", class: "size-4" %>
+  </button>
+  <div data-dropdown-target="menu" data-action="click->dropdown#close" hidden class="absolute right-0 top-full z-30 mt-1 w-52 rounded-xl border border-line bg-card p-1 shadow-dropdown">
+    <%= content %>
+  </div>
+</div>

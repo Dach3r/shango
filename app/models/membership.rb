@@ -1,6 +1,7 @@
 class Membership < ApplicationRecord
   belongs_to :user
   belongs_to :project
+  belongs_to :current_environment, class_name: "Environment", optional: true, inverse_of: :memberships
 
   enum :role, { member: "member", owner: "owner" }, default: "member"
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_130100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -43,6 +43,66 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "api_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "collection_id", null: false
+    t.uuid "folder_id"
+    t.string "name", null: false
+    t.string "http_method", default: "GET", null: false
+    t.text "url", default: "", null: false
+    t.integer "position", default: 0, null: false
+    t.jsonb "query_params", default: [], null: false
+    t.jsonb "headers", default: [], null: false
+    t.string "body_type", default: "none", null: false
+    t.text "body"
+    t.jsonb "body_form", default: [], null: false
+    t.text "graphql_variables"
+    t.string "auth_type", default: "inherit", null: false
+    t.text "auth_config"
+    t.jsonb "settings", default: {}, null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id"], name: "index_api_requests_on_collection_id"
+    t.index ["folder_id"], name: "index_api_requests_on_folder_id"
+    t.index ["project_id"], name: "index_api_requests_on_project_id"
+  end
+
+  create_table "collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.integer "position", default: 0, null: false
+    t.string "auth_type", default: "none", null: false
+    t.text "auth_config"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_collections_on_project_id"
+  end
+
+  create_table "environments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id", "name"], name: "index_environments_on_project_id_and_name", unique: true
+    t.index ["project_id"], name: "index_environments_on_project_id"
+  end
+
+  create_table "folders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "collection_id", null: false
+    t.uuid "parent_id"
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "auth_type", default: "inherit", null: false
+    t.text "auth_config"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id"], name: "index_folders_on_collection_id"
+    t.index ["parent_id"], name: "index_folders_on_parent_id"
+  end
+
   create_table "memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "role", default: "member", null: false
     t.uuid "project_id", null: false
@@ -50,6 +110,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
     t.datetime "revoked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "current_environment_id"
+    t.index ["current_environment_id"], name: "index_memberships_on_current_environment_id"
     t.index ["project_id"], name: "index_memberships_on_project_id"
     t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true, where: "(revoked_at IS NULL)"
   end
@@ -61,6 +123,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_projects_on_name"
+  end
+
+  create_table "request_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "api_request_id", null: false
+    t.uuid "user_id"
+    t.uuid "environment_id"
+    t.string "http_method", null: false
+    t.text "url", null: false
+    t.integer "status"
+    t.string "status_text"
+    t.integer "duration_ms"
+    t.bigint "size_bytes", default: 0, null: false
+    t.jsonb "request_headers", default: [], null: false
+    t.text "request_body"
+    t.jsonb "response_headers", default: [], null: false
+    t.text "response_body"
+    t.string "content_type"
+    t.boolean "body_truncated", default: false, null: false
+    t.boolean "body_omitted", default: false, null: false
+    t.jsonb "redirects", default: [], null: false
+    t.jsonb "unresolved_variables", default: [], null: false
+    t.string "error_kind"
+    t.text "error_message"
+    t.datetime "created_at", null: false
+    t.index ["api_request_id", "created_at"], name: "index_request_executions_on_api_request_id_and_created_at"
+    t.index ["api_request_id"], name: "index_request_executions_on_api_request_id"
+    t.index ["environment_id"], name: "index_request_executions_on_environment_id"
+    t.index ["project_id"], name: "index_request_executions_on_project_id"
+    t.index ["user_id"], name: "index_request_executions_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -93,9 +185,35 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "environment_id", null: false
+    t.string "key", null: false
+    t.text "value"
+    t.boolean "secret", default: false, null: false
+    t.boolean "enabled", default: true, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["environment_id", "key"], name: "index_variables_on_environment_id_and_key", unique: true
+    t.index ["environment_id"], name: "index_variables_on_environment_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "api_requests", "collections"
+  add_foreign_key "api_requests", "folders"
+  add_foreign_key "api_requests", "projects"
+  add_foreign_key "collections", "projects"
+  add_foreign_key "environments", "projects"
+  add_foreign_key "folders", "collections"
+  add_foreign_key "folders", "folders", column: "parent_id"
+  add_foreign_key "memberships", "environments", column: "current_environment_id", on_delete: :nullify
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
+  add_foreign_key "request_executions", "api_requests"
+  add_foreign_key "request_executions", "environments", on_delete: :nullify
+  add_foreign_key "request_executions", "projects"
+  add_foreign_key "request_executions", "users", on_delete: :nullify
   add_foreign_key "users", "memberships", column: "current_membership_id", on_delete: :nullify
+  add_foreign_key "variables", "environments"
 end

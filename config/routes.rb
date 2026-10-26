@@ -7,5 +7,39 @@ Rails.application.routes.draw do
   resource :current_project, only: :update
   resource :preferences, only: :update
 
+  scope module: :projects do
+    resources :environments, except: :show
+    resource :current_environment, only: :update
+  end
+
+  namespace :api_client do
+    root to: "workspaces#show"
+
+    resources :collections, except: %i[index show] do
+      resources :folders, only: %i[new create]
+      resources :requests, only: %i[new create]
+      resource :curl_import, only: %i[new create]
+    end
+
+    resources :folders, only: %i[edit update destroy] do
+      resource :position, only: :update, module: :folders
+    end
+
+    resources :requests, only: %i[show update destroy] do
+      scope module: :requests do
+        resources :executions, only: %i[create show]
+        resource :duplication, only: :create
+        resource :position, only: :update
+        resource :curl_export, only: :show
+      end
+    end
+
+    namespace :oauth2 do
+      resource :token, only: %i[create destroy]
+      resource :authorization, only: :create
+      resource :callback, only: :show
+    end
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

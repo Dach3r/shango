@@ -1,0 +1,69 @@
+<div data-controller="auth-form" class="space-y-4">
+  <div class="max-w-xs">
+    <label for="<%= @scope %>_auth_type" class="<%= label_classes %>"><%= t("api_client.auth.type") %></label>
+    <%= render Select::Component.new(name: "#{@scope}[auth_type]", options: type_options, value: selected_type, id: "#{@scope}_auth_type",
+                                     input_data: { auth_form_target: "select", action: "change->auth-form#change" }) %>
+  </div>
+
+  <% types.each do |type| %>
+    <div data-auth-form-target="section" data-type="<%= type %>" hidden>
+      <% if type == AuthConfigurable::INHERIT %>
+        <p class="text-sm text-muted"><%= t("api_client.auth.inherit_hint") %></p>
+      <% elsif type == "none" %>
+        <p class="text-sm text-muted"><%= t("api_client.auth.none_hint") %></p>
+      <% else %>
+        <% definition = strategy(type) %>
+        <div data-controller="conditional-fields" data-action="change->conditional-fields#update refresh->conditional-fields#update" class="grid gap-4 sm:grid-cols-2">
+          <% definition.fields.each do |field| %>
+            <div data-conditional-fields-target="field" data-show-when="<%= show_when(field) %>" class="<%= "sm:col-span-2" if field.type == :textarea %>">
+              <label class="<%= label_classes %>"><%= t("api_client.auth.fields.#{field.name}", default: field.name.humanize) %><%= " *" if field.required %></label>
+              <% input_options = { id: nil, data: { field_name: field.name }, placeholder: (secret_saved?(field) ? t("api_client.auth.secret_saved") : field.placeholder), autocomplete: "off", spellcheck: false } %>
+              <% case field.type %>
+              <% when :select %>
+                <%= render Select::Component.new(name: field_name(field), options: field.options.map { |option| [option_label(field, option), option] }, value: current_value(field),
+                                                 input_data: input_options[:data]) %>
+              <% when :textarea %>
+                <%= text_area_tag field_name(field), current_value(field), **input_options, rows: 4, class: field_classes("font-mono text-xs") %>
+              <% when :password %>
+                <%= password_field_tag field_name(field), current_value(field), **input_options, class: field_classes("font-mono text-xs") %>
+              <% else %>
+                <%= text_field_tag field_name(field), current_value(field), **input_options, class: field_classes("font-mono text-xs") %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if type == "oauth2" %>
+            <div class="space-y-2 rounded-xl border border-line bg-field p-3 sm:col-span-2">
+              <% if oauth2_token_ready? %>
+                <p class="text-sm text-body">
+                  <% if config["access_token"].present? %>
+                    <%= t("api_client.oauth2.token_present") %>
+                    <% if token_expires_at %><span class="text-muted">· <%= t("api_client.oauth2.expires", time: l(token_expires_at, format: :short)) %></span><% end %>
+                  <% else %>
+                    <%= t("api_client.oauth2.token_missing") %>
+                  <% end %>
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <div data-conditional-fields-target="field" data-show-when='{"grant_type": ["client_credentials", "password"]}'>
+                    <%= button_tag t("api_client.oauth2.get_token"), type: "submit", form: dom_id_for("token"), class: button_classes(:secondary) %>
+                  </div>
+                  <div data-conditional-fields-target="field" data-show-when='{"grant_type": ["authorization_code"]}'>
+                    <%= button_tag t("api_client.oauth2.authorize"), type: "submit", form: dom_id_for("authorization"), class: button_classes(:secondary) %>
+                  </div>
+                  <% if config["access_token"].present? %>
+                    <%= button_tag t("api_client.oauth2.clear_token"), type: "submit", form: dom_id_for("clear"), class: button_classes(:ghost) %>
+                  <% end %>
+                </div>
+                <p class="text-xs text-muted" data-conditional-fields-target="field" data-show-when='{"grant_type": ["authorization_code"]}'>
+                  <%= t("api_client.oauth2.redirect_hint", url: api_client_oauth2_callback_url) %>
+                </p>
+              <% else %>
+                <p class="text-sm text-muted"><%= t("api_client.oauth2.save_first") %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

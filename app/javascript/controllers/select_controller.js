@@ -1,0 +1,93 @@
+import { Controller } from "@hotwired/stimulus"
+
+// Custom single-select: a hidden input holds the value (and dispatches `change`), the menu is as wide as the trigger
+// and filters its options when a search field is present. Arrow keys move, Enter picks, Esc closes.
+export default class extends Controller {
+  static targets = ["input", "trigger", "label", "menu", "search", "list", "option", "empty"]
+
+  toggle() {
+    this.menuTarget.hidden ? this.open() : this.close()
+  }
+
+  open() {
+    this.menuTarget.hidden = false
+    this.triggerTarget.setAttribute("aria-expanded", "true")
+    if (this.hasSearchTarget) this.searchTarget.value = ""
+    this.filter()
+    this.activate(this.optionTargets.find((option) => option.getAttribute("aria-selected") === "true") || this.visibleOptions[0])
+    this.hasSearchTarget ? this.searchTarget.focus() : this.activeOption?.focus()
+  }
+
+  openFromKey() {
+    if (this.menuTarget.hidden) this.open()
+  }
+
+  close() {
+    this.menuTarget.hidden = true
+    this.triggerTarget.setAttribute("aria-expanded", "false")
+  }
+
+  closeOnOutside(event) {
+    if (!this.element.contains(event.target)) this.close()
+  }
+
+  closeOnEscape() {
+    if (this.menuTarget.hidden) return
+
+    this.close()
+    this.triggerTarget.focus()
+  }
+
+  choose(event) {
+    const option = event.currentTarget
+    const changed = this.inputTarget.value !== option.dataset.value
+
+    this.inputTarget.value = option.dataset.value
+    this.labelTarget.textContent = option.dataset.label
+    this.optionTargets.forEach((item) => {
+      const selected = item === option
+      item.setAttribute("aria-selected", String(selected))
+      item.querySelector("[data-select-target='check']").classList.toggle("invisible", !selected)
+    })
+
+    this.close()
+    this.triggerTarget.focus()
+    if (changed) this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }))
+  }
+
+  filter() {
+    const query = this.hasSearchTarget ? this.searchTarget.value.trim().toLowerCase() : ""
+
+    this.optionTargets.forEach((option) => {
+      option.parentElement.hidden = !option.dataset.label.toLowerCase().includes(query)
+    })
+    this.emptyTarget.hidden = this.visibleOptions.length > 0
+    this.activate(this.visibleOptions[0])
+  }
+
+  navigate(event) {
+    const options = this.visibleOptions
+    const index = options.indexOf(this.activeOption)
+
+    if (event.key === "ArrowDown") this.activate(options[Math.min(index + 1, options.length - 1)])
+    else if (event.key === "ArrowUp") this.activate(options[Math.max(index - 1, 0)])
+    else if (event.key === "Enter" && this.activeOption) this.activeOption.click()
+    else return
+
+    event.preventDefault()
+    if (!this.hasSearchTarget) this.activeOption?.focus()
+  }
+
+  activate(option) {
+    this.optionTargets.forEach((item) => item.toggleAttribute("data-active", item === option))
+    option?.scrollIntoView({ block: "nearest" })
+  }
+
+  get visibleOptions() {
+    return this.optionTargets.filter((option) => !option.parentElement.hidden)
+  }
+
+  get activeOption() {
+    return this.optionTargets.find((option) => option.hasAttribute("data-active"))
+  }
+}

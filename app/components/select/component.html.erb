@@ -1,0 +1,36 @@
+<div class="<%= wrapper_classes %>" data-controller="select" data-action="click@window->select#closeOnOutside keydown.esc->select#closeOnEscape">
+  <%= hidden_field_tag @name, selected_value, id: nil, data: @input_data.merge(select_target: "input") %>
+
+  <button type="button" id="<%= @id %>" data-select-target="trigger" data-action="select#toggle keydown.down->select#openFromKey:prevent keydown.up->select#openFromKey:prevent"
+          aria-haspopup="listbox" aria-expanded="false" <%= tag.attributes(aria: { label: @label }) if @label %>
+          class="<%= trigger_classes %>">
+    <span data-select-target="label" class="min-w-0 flex-1 truncate"><%= selected_label %></span>
+    <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>
+  </button>
+
+  <div data-select-target="menu" hidden
+       class="absolute left-0 top-full z-30 mt-1.5 w-max min-w-full max-w-80 rounded-xl border border-line bg-card p-1 shadow-dropdown">
+    <% if searchable? %>
+      <div class="relative p-0.5 pb-1">
+        <%= lucide_icon "search", class: "pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-[calc(50%+1px)] text-faint" %>
+        <input type="text" data-select-target="search" data-action="input->select#filter keydown->select#navigate" autocomplete="off" spellcheck="false"
+               placeholder="<%= t("components.select.search") %>" aria-label="<%= t("components.select.search") %>"
+               class="w-full rounded-lg border border-line bg-field py-1.5 pr-2 pl-8 text-sm text-ink placeholder:text-faint focus:border-solid focus:outline-none">
+      </div>
+    <% end %>
+
+    <ul role="listbox" tabindex="-1" data-select-target="list" data-action="keydown->select#navigate" class="max-h-60 overflow-y-auto">
+      <% @options.each do |label, value| %>
+        <li role="presentation">
+          <button type="button" role="option" tabindex="-1" data-select-target="option" data-value="<%= value %>" data-label="<%= label %>"
+                  aria-selected="<%= value.to_s == selected_value %>" data-action="select#choose"
+                  class="<%= option_classes %>">
+            <span class="min-w-0 flex-1 truncate"><%= label %></span>
+            <%= lucide_icon "check", class: "size-4 shrink-0 text-accent #{'invisible' unless value.to_s == selected_value}", "data-select-target" => "check" %>
+          </button>
+        </li>
+      <% end %>
+      <li role="presentation" data-select-target="empty" hidden class="px-2.5 py-2 text-sm text-muted"><%= t("components.select.empty") %></li>
+    </ul>
+  </div>
+</div>

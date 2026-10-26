@@ -1,0 +1,8 @@
+<%= tag.div class: wrapper_classes, data: wrapper_data do %>
+  <% if @name %>
+    <%= text_area_tag(@name, @value, **field_options) %>
+  <% else %>
+    <%= tag.textarea(@value, **field_options) %>
+  <% end %>
+  <div data-code-editor-target="mount" class="h-full min-h-0"></div>
+<% end %>

@@ -47,7 +47,7 @@ Entities and ownership:
 
 - A `User` owns many `Project`s.
 - A `Project` owns its `Environment`s (with `Variable`s), `Service`s, `Server`s, `NotificationChannel`s, `Collection`s, `Monitor`s, and `ApiDocumentation`.
-- A `Collection` contains nested `Folder`s, which contain `Request`s.
+- A `Collection` contains nested `Folder`s, which contain `Request`s (the model is named `ApiRequest`; each run is stored as a `RequestExecution`).
 - A `Monitor` references a `Request`, runs in an `Environment`, optionally targets a `Service`, and records many `CheckResult`s and `Incident`s.
 - An `Incident` can start many `Investigation`s (AI-assisted).
 - A `Server` optionally belongs to an `Environment`.
@@ -56,6 +56,7 @@ Entities and ownership:
 Rules:
 
 - **`Project` is the tenancy boundary.** Every project-owned record reaches its project, and every query is scoped through it. Cross-project access must be impossible by construction (scoped associations, not ad hoc `where` clauses).
+- **Selected environment.** `Membership#current_environment_id` stores the environment each member works with in a project.
 - **Reuse over duplication.** A `Monitor` references a `Request`; it does not copy URL, method, headers, or body. `ApiDocumentation` is derived from requests and extended manually.
 - **Variables resolve at execution time.** `{{name}}` references in requests, monitors, and servers are interpolated from the selected `Environment` when run.
 
@@ -64,8 +65,12 @@ Rules:
 Existing, to be followed:
 
 - Controllers behind login inherit `AuthenticatedController` (`before_action :authenticate_user!`).
+- Controllers are grouped in **feature modules** (`ApiClient::`, `Projects::`, later `Documentation::`, `Monitoring::`…), use plural REST names (`ApiClient::RequestsController`), and stay thin: they scope records through `current_project`, declare strong parameters and delegate to a service. Models stay flat (not namespaced). Each feature module has a `BaseController`.
+- Business logic lives in `app/services/<feature>/<resource>/<action>.rb`, built on `Serviceable` (`Klass.call(**kwargs)` runs the private `perform`) and returning a `Result` (`app/services/result.rb`). Plain collaborators (resolvers, clients) are ordinary classes next to them.
 - UI components live in `app/components/<name>/component.rb` (with an optional `component.html.erb`) and inherit `ApplicationComponent`, e.g. `Button::Component`.
-- Stimulus controllers in `app/javascript/controllers/`, named `<name>_controller.js`.
+- Stimulus controllers in `app/javascript/controllers/`, named `<name>_controller.js`. Third-party JS is vendored in `vendor/javascript` and pinned in `config/importmap.rb` (see [`api-client.md`](api-client.md) §7 for CodeMirror).
+- Compact form controls for editor-style screens come from `ControlsHelper`; internal lookups inside ViewComponents call `I18n.t` in `initialize` (`t` only works while rendering).
+- Translations live in `config/locales/*.{en,es}.yml`; every new key needs both languages. Inside a `render layout: ... do` block use absolute keys (lazy `t(".key")` resolves against the layout partial).
 - Tailwind with a `brand-*` color palette.
 - Lint with rubocop (`rubocop-kode`); security checks with brakeman and bundler-audit.
 
@@ -73,7 +78,7 @@ Existing, to be followed:
 
 ### API Client execution
 
-Requests run server-side: resolve environment variables, build the HTTP call, execute with timeout limits, store/return the response. Results stream back to the UI via Turbo. Outbound calls must guard against abuse (timeouts, size limits, and an SSRF policy suited to the deployment mode, since self-hosted users legitimately target private addresses).
+Requests run server-side and synchronously inside the web request: `ApiClient::RequestBuilder` resolves environment variables and authentication, `ApiClient::Executor` performs the call with Faraday (timeout, 5 MB read limit, redirect handling with per-hop SSRF checks), and `ApiClient::Requests::Run` stores a `RequestExecution` with secrets masked. The result is streamed back to the UI as a Turbo Stream. Details, auth strategies and limits: [`api-client.md`](api-client.md).
 
 ### Monitoring
 
@@ -93,7 +98,8 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 
 ## 7. Security architecture
 
-- **Secrets** (environment variables flagged sensitive, tokens, SSH keys, AI provider keys): encrypted at rest (Rails Active Record Encryption is the default candidate), masked in the UI, excluded from logs (`filter_parameters`), and never included in AI context without explicit authorization.
+- **Secrets** (environment variables, request credentials and OAuth tokens today; SSH keys and AI provider keys later): encrypted at rest with Active Record Encryption, masked in the UI and in stored request/response history, excluded from logs (`filter_parameters`), and never included in AI context without explicit authorization. Keys come from `ACTIVE_RECORD_ENCRYPTION_*` environment variables or, when unset, are derived from `secret_key_base` (see [`api-client.md`](api-client.md) §6).
+- **Outbound requests:** opt-in private-network blocking (`SHANGO_BLOCK_PRIVATE_NETWORKS=true`) for shared or cloud deployments.
 - **Authorization:** all project resources scoped to the current user's projects.
 - **SSH:** no unauthenticated or unscoped connections; session lifetime limits; audit trail.
 - **AI:** read-only by default; confirmation gates for sensitive actions.
@@ -113,14 +119,17 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 - `Project` and `Membership` (role `owner`/`member`). `AuthenticatedController#require_project` redirects any user without an active project to `projects#new`, so every user creates a first project (name + icon) right after sign-up. `Project.create_with_owner` creates the project and its owner membership in one transaction.
 - Shared UI components (`Button`, `Input`, `Link`, `Logo`, `ThemeSwitcher`, `LocaleSwitcher`) and Stimulus controllers for password visibility, icon picking, dropdowns and the drawer.
 - PostgreSQL schema contains `users`, `projects`, `memberships` and Active Storage tables; the `uuid-ossp` extension is enabled.
-- No tests or other domain models yet.
+- **API Client** (phase 2): `Environment`/`Variable` (secrets encrypted, selected per membership from the top bar), `Collection`, `Folder`, `ApiRequest`, `RequestExecution`; request editor with CodeMirror, history, cURL import/copy, drag and drop tree, authorization with inheritance (None, Basic, Bearer, API key, JWT, Digest, AWS SigV4, OAuth 2.0). See [`api-client.md`](api-client.md). Sidebar entries *API Client* and *Environments* are live.
+- Controllers for the feature live in `ApiClient::` and `Projects::` modules; logic is in `app/services` (`Serviceable` + `Result`).
+- Gems added: `faraday`, `faraday-multipart`, `jwt`, `aws-sigv4`, `net-http-digest_auth`.
+- No automated tests yet (no test framework); no other domain models.
 
 Update this section as features land.
 
 ## 10. Open technical questions
 
-- Primary key strategy: the `uuid-ossp` extension is enabled but the current schema uses default integer ids.
-- Secret storage and key management for self-hosted installs.
+- Key management for self-hosted installs: encryption keys default to values derived from `secret_key_base`; a rotation procedure is not defined.
+- Test framework: none yet; the API Client was verified manually.
 - Scheduler design for monitors and check-result retention policy.
 - Team model: sharing, roles, and permissions within a project (affects authorization design).
 - Log ingestion: pull over SSH, push via agent/webhook, or integrations.

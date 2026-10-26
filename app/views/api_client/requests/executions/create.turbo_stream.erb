@@ -1,0 +1,10 @@
+<% if @invalid_request %>
+  <%= turbo_stream.update "response_panel" do %>
+    <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
+      <%= @invalid_request.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update "response_panel", partial: "api_client/requests/executions/response", locals: { execution: @execution, api_request: @api_request } %>
+  <%= turbo_stream.refresh if @uploaded %>
+<% end %>

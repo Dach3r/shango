@@ -72,6 +72,11 @@
   --on-solid: light-dark(var(--color-paper), var(--color-night-1000));
   --danger: light-dark(#c81e1e, #ff9a9a);
   --dropdown-shadow: 0 6px 20px light-dark(rgb(20 20 19 / 0.1), rgb(0 0 0 / 0.55));
+  --syn-key: light-dark(#8a3f23, #f0a187);
+  --syn-string: light-dark(#2f6f3e, #8fcf9f);
+  --syn-number: light-dark(#7a4bb0, #c9a6f2);
+  --syn-keyword: light-dark(#a9502f, #e58a69);
+  --syn-comment: light-dark(#8a877b, #6f6d66);
   --dots: light-dark(#d3cdbb, var(--color-night-700));
   --glow: light-dark(
     color-mix(in oklab, var(--color-clay-500) 16%, transparent),
@@ -111,4 +116,44 @@ input:-webkit-autofill:focus {
   ::view-transition-new(*) {
     animation: none !important;
   }
+}
+
+/* Code editors (CodeMirror): show the plain textarea until the editor has mounted. */
+.code-editor [data-code-editor-target="mount"] {
+  display: none;
+}
+
+.code-editor[data-ready] [data-code-editor-target="mount"] {
+  display: block;
+}
+
+.code-editor[data-ready] textarea {
+  display: none;
+}
+
+.cm-var {
+  border-radius: 4px;
+  background: color-mix(in oklab, var(--accent) 16%, transparent);
+  color: var(--accent);
+}
+
+/* The type column only matters for multipart bodies. */
+[data-body-type="form_urlencoded"] [data-role="type"] {
+  display: none;
+}
+
+dialog.modal[open] {
+  animation: modal-in 0.16s ease-out;
+}
+
+dialog.modal[open]::backdrop {
+  animation: modal-fade 0.16s ease-out;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
+@keyframes modal-fade {
+  from { opacity: 0; }
 }

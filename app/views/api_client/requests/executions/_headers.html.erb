@@ -1,0 +1,10 @@
+<% if headers.blank? %>
+  <p class="text-sm text-muted"><%= empty %></p>
+<% else %>
+  <dl class="grid grid-cols-[minmax(8rem,auto)_1fr] gap-x-6 gap-y-1.5 text-xs">
+    <% headers.each do |name, value| %>
+      <dt class="font-mono font-medium text-ink"><%= name %></dt>
+      <dd class="break-all font-mono text-body"><%= value %></dd>
+    <% end %>
+  </dl>
+<% end %>

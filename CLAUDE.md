@@ -10,6 +10,7 @@ Consult when you need context:
 
 - `docs/product.md` — product vision, audience, principles, concepts, roadmap (product owner / manager view). Read before any feature work.
 - `docs/architecture.md` — stack, domain model, subsystems, security, conventions, open technical questions. Read before technical or architectural decisions.
+- `docs/api-client.md` — API Client (collections, requests, environments, auth strategies, execution, security, CodeMirror vendoring). Read before touching that feature.
 
 Add new docs under `docs/` and reference them here.
 
@@ -18,6 +19,7 @@ Add new docs under `docs/` and reference them here.
 - Distinguish vision vs roadmap vs actual repo state. Check the real code before assuming a feature exists.
 - Stay in the requested scope; ask before significant product or architecture changes.
 - Follow existing conventions (components in `app/components/<name>/component.rb`, rubocop-kode).
+- Controllers go in feature modules with plural REST names and stay thin; business logic goes in `app/services` using `Serviceable`. Models are not namespaced.
 
 ## Conventions
 

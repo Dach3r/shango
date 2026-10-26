@@ -1,0 +1,18 @@
+<nav aria-label="<%= t("components.request_tree.label") %>" data-controller="tree" data-action="dragover->tree#dragOver drop->tree#drop" class="flex h-full flex-col">
+  <div class="flex items-center justify-between gap-2 px-4 py-3">
+    <h2 class="text-sm font-semibold text-ink"><%= t("components.request_tree.title") %></h2>
+    <%= link_to new_api_client_collection_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.new_collection") }, title: t("components.request_tree.new_collection"),
+                class: "flex size-7 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+      <%= lucide_icon "plus", class: "size-4" %>
+    <% end %>
+  </div>
+
+  <div class="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-4">
+    <% if @branches.empty? %>
+      <p class="px-2 py-6 text-center text-sm text-muted"><%= t("components.request_tree.empty") %></p>
+    <% end %>
+    <% @branches.each do |branch| %>
+      <%= render RequestTree::Collection::Component.new(branch:, current_request_id: @current_request_id) %>
+    <% end %>
+  </div>
+</nav>

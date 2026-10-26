@@ -1,10 +1,10 @@
 class AuthenticatedController < ApplicationController
-  layout "app"
+  layout -> { turbo_frame_request? ? "turbo_rails/frame" : "app" }
 
   before_action :authenticate_user!
   before_action :require_project
 
-  helper_method :current_membership, :current_project
+  helper_method :current_membership, :current_project, :current_environment
 
   private
 
@@ -24,5 +24,12 @@ class AuthenticatedController < ApplicationController
 
   def current_project
     current_membership&.project
+  end
+
+  # The environment this member selected in the current project, if any.
+  def current_environment
+    return @current_environment if defined?(@current_environment)
+
+    @current_environment = current_membership&.current_environment
   end
 end

@@ -1,0 +1,21 @@
+<div class="grid max-w-2xl gap-4 sm:grid-cols-2">
+  <div>
+    <label for="api_request_settings_timeout" class="<%= label_classes %>"><%= t("api_client.settings.timeout") %></label>
+    <%= number_field_tag "api_request[settings][timeout]", api_request.setting(:timeout), id: "api_request_settings_timeout", min: 1, max: ApiRequest::MAX_TIMEOUT, class: field_classes %>
+    <p class="mt-1 text-xs text-muted"><%= t("api_client.settings.timeout_hint", max: ApiRequest::MAX_TIMEOUT) %></p>
+  </div>
+  <div>
+    <label for="api_request_settings_max_redirects" class="<%= label_classes %>"><%= t("api_client.settings.max_redirects") %></label>
+    <%= number_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: "api_request_settings_max_redirects", min: 0, max: 20, class: field_classes %>
+  </div>
+  <label class="flex cursor-pointer items-center gap-2 text-sm text-body">
+    <%= hidden_field_tag "api_request[settings][follow_redirects]", "0", id: nil %>
+    <%= check_box_tag "api_request[settings][follow_redirects]", "1", api_request.setting(:follow_redirects), id: nil, class: "size-4 cursor-pointer rounded border-line accent-[var(--solid)]" %>
+    <%= t("api_client.settings.follow_redirects") %>
+  </label>
+  <label class="flex cursor-pointer items-center gap-2 text-sm text-body">
+    <%= hidden_field_tag "api_request[settings][verify_ssl]", "0", id: nil %>
+    <%= check_box_tag "api_request[settings][verify_ssl]", "1", api_request.setting(:verify_ssl), id: nil, class: "size-4 cursor-pointer rounded border-line accent-[var(--solid)]" %>
+    <%= t("api_client.settings.verify_ssl") %>
+  </label>
+</div>

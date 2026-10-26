@@ -6,5 +6,9 @@
 
   <h1 class="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight text-ink"><%= @title %></h1>
 
+  <% if @environments %>
+    <%= render EnvironmentSwitcher::Component.new(environments: @environments, current_environment: @current_environment) %>
+  <% end %>
+
   <%= render UserMenu::Component.new(user: @user) %>
 </header>

@@ -1,0 +1,22 @@
+<section class="mx-auto max-w-3xl">
+  <%= form_with model: @environment, url: (@environment.persisted? ? environment_path(@environment) : environments_path), class: "space-y-6 rounded-2xl border border-line bg-card p-6" do |form| %>
+    <%= render "api_client/shared/errors", record: @environment %>
+
+    <div class="max-w-sm">
+      <%= form.label :name, t(".name"), class: label_classes %>
+      <%= form.text_field :name, autofocus: !@environment.persisted?, autocomplete: "off", placeholder: t(".name_placeholder"), class: field_classes %>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold text-ink"><%= t(".variables") %></h2>
+      <p class="mt-1 mb-3 text-xs text-muted"><%= t(".variables_hint") %></p>
+      <%= render KeyValueTable::Component.new(name: "environment[variables_attributes]", rows: @environment.variables, variant: :variables,
+                                              key_placeholder: t(".key_placeholder"), value_placeholder: t(".value_placeholder")) %>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <%= link_to t("api_client.shared.cancel"), environments_path, class: button_classes(:ghost) %>
+      <%= form.submit t("api_client.shared.save"), class: button_classes(:primary) %>
+    </div>
+  <% end %>
+</section>
