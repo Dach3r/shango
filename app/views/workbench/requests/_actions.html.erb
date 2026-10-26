@@ -10,7 +10,7 @@
             class="flex size-7 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
       <%= lucide_icon "ellipsis", class: "size-4" %>
     </button>
-    <div data-dropdown-target="menu" hidden class="absolute right-0 top-full z-30 mt-1 w-48 rounded-xl border border-line bg-card p-1 shadow-dropdown">
+    <div data-dropdown-target="menu" hidden class="absolute right-0 top-full z-30 mt-1 w-max min-w-48 max-w-80 rounded-xl border border-line bg-card p-1 shadow-dropdown">
       <button type="button" data-action="request-form#copyCurl" data-copied-label="<%= t("workbench.requests.copied") %>" class="flex min-h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
         <%= lucide_icon "terminal", class: "size-4 shrink-0" %><span data-label class="truncate"><%= t("workbench.requests.copy_curl") %></span>
       </button>

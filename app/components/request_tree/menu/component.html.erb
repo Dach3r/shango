@@ -3,7 +3,7 @@
           class="flex size-7 cursor-pointer items-center justify-center rounded-lg text-faint opacity-100 transition hover:bg-field hover:text-ink focus-visible:outline-none">
     <%= lucide_icon "ellipsis", class: "size-4" %>
   </button>
-  <div data-dropdown-target="menu" data-action="click->dropdown#close" hidden class="absolute right-0 top-full z-30 mt-1 w-52 rounded-xl border border-line bg-card p-1 shadow-dropdown">
+  <div data-dropdown-target="menu" data-action="click->dropdown#close" hidden class="absolute right-0 top-full z-30 mt-1 w-max min-w-52 max-w-80 rounded-xl border border-line bg-card p-1 shadow-dropdown">
     <%= content %>
   </div>
 </div>
