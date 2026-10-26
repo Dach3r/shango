@@ -21,6 +21,7 @@
 </head>
 <body class="bg-page font-sans text-body" data-controller="form-validation" data-action="invalid->form-validation#mark:capture input->form-validation#clear">
   <%= render ToastRegion::Component.new(flash: flash) %>
+  <%= render ConfirmDialog::Component.new %>
   <%= content_for?(:content) ? yield(:content) : yield %>
 </body>
 </html>

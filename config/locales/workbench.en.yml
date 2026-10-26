@@ -16,6 +16,9 @@ en:
   components:
     sidebar:
       environments: Environments
+    confirm_dialog:
+      cancel: Cancel
+      confirm: Delete
     modal:
       cancel: Cancel
       save: Save
