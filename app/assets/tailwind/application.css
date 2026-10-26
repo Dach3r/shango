@@ -30,7 +30,7 @@
   --color-night-950: #1f1e1d;
   --color-night-900: #1a1918;
   --color-night-700: #30302e;
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -55,7 +55,7 @@
 /* Each token is defined once as light-dark(light, dark); color-scheme picks the side. */
 :root {
   color-scheme: light;
-  --page: light-dark(#f4f1e8, var(--color-night-1000));
+  --page: light-dark(#f8f7f1, var(--color-night-1000));
   --card: light-dark(var(--color-paper), var(--color-night-950));
   --line: light-dark(#ddd8c9, var(--color-night-700));
   --faint: light-dark(#b3ad9d, #4a4944);

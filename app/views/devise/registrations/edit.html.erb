@@ -17,9 +17,9 @@
 <% end %>
 
 <div class="mt-8 border-t border-line pt-6">
-  <h2 class="text-sm font-semibold text-ink"><%= t(".cancel_heading") %></h2>
+  <h2 class="text-sm font-medium text-ink"><%= t(".cancel_heading") %></h2>
   <%= button_to t(".cancel_account"), registration_path(resource_name), method: :delete, data: { turbo_confirm: t(".confirm") },
-                class: "mt-3 cursor-pointer text-sm font-semibold text-danger hover:text-danger/80" %>
+                class: "mt-3 cursor-pointer text-sm font-medium text-danger hover:text-danger/80" %>
 </div>
 
 <p class="mt-6 text-center text-sm">
