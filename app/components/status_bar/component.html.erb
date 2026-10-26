@@ -3,7 +3,7 @@
     <div class="min-w-0 flex-1"><%= content %></div>
   <% end %>
 
-  <div class="ml-auto flex items-center gap-2">
+  <div class="-mr-3 ml-auto flex h-full items-center sm:-mr-4">
     <% if @environments %>
       <%= render EnvironmentSwitcher::Component.new(environments: @environments, current_environment: @current_environment, compact: true) %>
     <% end %>
