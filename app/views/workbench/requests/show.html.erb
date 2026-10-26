@@ -22,7 +22,7 @@
       <div role="separator" aria-orientation="horizontal" tabindex="0" aria-label="<%= t("workbench.executions.resize") %>"
            data-action="pointerdown->resizable#start dblclick->resizable#reset keydown->resizable#key"
            class="group absolute inset-x-0 -top-1 z-10 h-2 cursor-row-resize touch-none transition hover:bg-accent/40 focus-visible:bg-accent/40 focus-visible:outline-none">
-        <%= lucide_icon "ellipsis", class: "pointer-events-none absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 text-fg-muted opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100" %>
+        <%= lucide_icon "ellipsis", class: "pointer-events-none absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 text-muted opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100" %>
       </div>
       <%= turbo_frame_tag "response_panel", class: "block h-full" do %>
         <%= render "workbench/requests/executions/response", execution: @execution, api_request: @api_request %>
