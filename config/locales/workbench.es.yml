@@ -32,6 +32,7 @@ es:
       timestamp: Segundos Unix
       iso_timestamp: Fecha ISO 8601
       random_int: 0 – 999
+      missing: Sin definir
     key_value_table:
       key: Clave
       value: Valor

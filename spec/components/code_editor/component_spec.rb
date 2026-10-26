@@ -8,7 +8,7 @@ RSpec.describe CodeEditor::Component, type: :component do
       expect(page).to have_css("div.code-editor.extra[data-controller=code-editor][data-code-editor-language-value=json][data-foo=bar]")
       expect(page).to have_css("textarea[rows='1'][data-code-editor-target=input]", text: "{}")
       expect(page).to have_css("[data-code-editor-target=mount]")
-      expect(page.find("div.code-editor")["data-code-editor-labels-value"]).to include("\"dynamic\":\"Dynamic\"", "\"isoTimestamp\":\"ISO 8601 date\"")
+      expect(page.find("div.code-editor")["data-code-editor-labels-value"]).to include("\"dynamic\":\"Dynamic\"", "\"isoTimestamp\":\"ISO 8601 date\"", "\"missing\":\"Undefined\"")
     end
   end
 

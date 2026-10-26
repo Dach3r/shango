@@ -78,6 +78,7 @@ export default class extends Controller {
       cm.EditorView.theme(this.theme()),
       this.languageCompartment.of(this.languageExtension()),
       this.variableDecorations(),
+      this.variableHover(),
       cm.keymap.of([
         ...cm.defaultKeymap.filter((binding) => binding.key !== "Mod-Enter"),
         ...cm.historyKeymap,
@@ -196,6 +197,50 @@ export default class extends Controller {
       },
       { decorations: (plugin) => plugin.decorations },
     );
+  }
+
+  // Shows the variable's source and value (secrets arrive masked) while hovering a {{variable}}.
+  variableHover() {
+    const regexp = /\{\{\s*([^{}\s]+)\s*\}\}/g;
+    return this.cm.hoverTooltip((view, pos) => {
+      const line = view.state.doc.lineAt(pos);
+      for (const match of line.text.matchAll(regexp)) {
+        const from = line.from + match.index;
+        const to = from + match[0].length;
+        if (pos < from || pos > to) continue;
+
+        return {
+          pos: from,
+          end: to,
+          above: true,
+          create: () => ({ dom: this.variableCard(match[1]) }),
+        };
+      }
+      return null;
+    });
+  }
+
+  variableCard(name) {
+    const labels = this.labelsValue;
+    const status = this.variableStatus(name);
+    const variable = this.variablesValue.find((item) => item.name === name);
+    const card = document.createElement("div");
+    card.className = "cm-var-card";
+
+    const value = document.createElement("div");
+    value.className = `cm-var-card-value cm-var-card-${status}`;
+    if (status === "dynamic")
+      value.textContent = labels[DYNAMIC_VARIABLES[name]];
+    else if (status === "missing") value.textContent = labels.missing;
+    else value.textContent = variable.set ? variable.value : labels.empty;
+
+    const source = document.createElement("div");
+    source.className = "cm-var-card-source";
+    source.textContent =
+      status === "dynamic" ? labels.dynamic : labels.environment;
+
+    card.append(value, source);
+    return card;
   }
 
   completeVariables(context) {
@@ -363,6 +408,27 @@ export default class extends Controller {
         backgroundColor: "var(--field)",
         color: "var(--ink)",
       },
+      ".cm-tooltip.cm-tooltip-hover": {
+        padding: "10px",
+        minWidth: "220px",
+        maxWidth: "420px",
+      },
+      ".cm-var-card": { fontFamily: "var(--font-sans)", fontSize: "12px" },
+      ".cm-var-card-value": {
+        padding: "8px 10px",
+        border: "1px solid var(--line)",
+        borderRadius: "8px",
+        backgroundColor: "var(--field)",
+        color: "var(--ink)",
+        fontFamily: "var(--font-mono)",
+        wordBreak: "break-all",
+      },
+      ".cm-var-card-empty, .cm-var-card-missing": {
+        color: "var(--muted)",
+        fontFamily: "var(--font-sans)",
+      },
+      ".cm-var-card-missing": { color: "var(--danger)" },
+      ".cm-var-card-source": { marginTop: "8px", color: "var(--muted)" },
       ".cm-panels": {
         backgroundColor: "var(--card)",
         color: "var(--body)",
