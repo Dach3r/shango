@@ -10,15 +10,18 @@
   request_form_curl_url_value: workbench_request_curl_export_path(@api_request),
   action: "keydown.ctrl+enter@window->request-form#run keydown.meta+enter@window->request-form#run keydown.ctrl+s@window->request-form#save keydown.meta+s@window->request-form#save"
 } } do %>
-  <div class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
-    <div class="flex min-h-0 flex-col overflow-hidden">
+  <div class="flex min-h-0 flex-1 flex-col" data-controller="resizable">
+    <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
       <template data-request-form-target="failure">
         <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"><%= t("workbench.executions.failure") %></div>
       </template>
       <%= render "workbench/requests/editor", api_request: @api_request %>
     </div>
 
-    <div class="min-h-0 border-t border-line bg-card">
+    <div class="relative h-1/2 shrink-0 border-t border-line bg-card" data-resizable-target="panel">
+      <div role="separator" aria-orientation="horizontal" tabindex="0" aria-label="<%= t("workbench.executions.resize") %>"
+           data-action="pointerdown->resizable#start keydown->resizable#key"
+           class="absolute inset-x-0 -top-1 z-10 h-2 cursor-row-resize touch-none transition hover:bg-accent/40 focus-visible:bg-accent/40 focus-visible:outline-none"></div>
       <%= turbo_frame_tag "response_panel", class: "block h-full" do %>
         <%= render "workbench/requests/executions/response", execution: @execution, api_request: @api_request %>
       <% end %>

@@ -18,7 +18,7 @@
     </div>
   <% end %>
 
-  <div class="flex items-start gap-2 p-3">
+  <div class="flex items-start gap-2 p-3" data-resizable-target="bounds">
     <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
                                      class: "w-28 shrink-0 font-mono text-xs font-semibold") %>
     <div class="min-w-0 flex-1 rounded-lg border border-line bg-field px-3 py-2 transition focus-within:border-solid focus-within:ring-2 focus-within:ring-solid/40">
