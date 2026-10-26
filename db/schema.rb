@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_130100) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_143619) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -66,6 +66,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_130100) do
     t.index ["collection_id"], name: "index_api_requests_on_collection_id"
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
     t.index ["project_id"], name: "index_api_requests_on_project_id"
+    t.check_constraint "body_type::text = ANY (ARRAY['none'::character varying, 'json'::character varying, 'text'::character varying, 'xml'::character varying, 'form_urlencoded'::character varying, 'multipart'::character varying, 'graphql'::character varying, 'binary'::character varying]::text[])", name: "api_requests_body_type_check"
+    t.check_constraint "http_method::text = ANY (ARRAY['GET'::character varying, 'POST'::character varying, 'PUT'::character varying, 'PATCH'::character varying, 'DELETE'::character varying, 'HEAD'::character varying, 'OPTIONS'::character varying]::text[])", name: "api_requests_http_method_check"
   end
 
   create_table "collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
