@@ -1,0 +1,105 @@
+en:
+  activerecord:
+    attributes:
+      user:
+        first_name: First name
+        last_name: Last name
+  components:
+    input:
+      toggle_password: Show or hide password
+    locale_switcher:
+      label: Language
+    theme_switcher:
+      label: Theme
+      system: System
+      light: Light
+      dark: Dark
+  projects:
+    index:
+      title: Projects
+      sign_out: Sign out
+  devise:
+    sessions:
+      new:
+        title: Sign in
+        heading_html: Power your<br>workspace back up.
+        email: Email
+        email_placeholder: you@email.com
+        password: Password
+        password_placeholder: Your password
+        remember_me: Remember me
+        forgot_password: Forgot your password?
+        submit: Sign in
+        no_account: Don't have an account?
+        sign_up: Sign up
+        or: Or
+    registrations:
+      new:
+        title: Create account
+        heading: Create your account
+        first_name: First name
+        first_name_placeholder: Your first name
+        last_name: Last name
+        last_name_placeholder: Your last name
+        email: Email
+        email_placeholder: you@email.com
+        password: Password
+        password_placeholder: Minimum %{length} characters
+        submit: Create account
+        or: Or
+        sign_in: Sign in
+      edit:
+        title: Edit account
+        heading: Edit account
+        email: Email
+        awaiting_confirmation: "Awaiting confirmation for: %{email}"
+        new_password: New password
+        password_placeholder: Minimum %{length} characters
+        confirm_password: Confirm password
+        submit: Update
+        cancel_heading: Cancel my account
+        cancel_account: Cancel my account
+        confirm: Are you sure?
+        back: Back
+    passwords:
+      new:
+        title: Reset password
+        heading: Forgot your password?
+        email: Email
+        email_placeholder: you@email.com
+        submit: Send instructions
+        sign_in: Sign in
+        or: Or
+      edit:
+        title: Change password
+        heading: Change your password
+        password: New password
+        password_placeholder: Minimum %{length} characters
+        password_confirmation: Confirm password
+        password_confirmation_placeholder: Repeat your new password
+        submit: Change password
+        sign_in: Sign in
+        or: Or
+    confirmations:
+      new:
+        title: Resend confirmation
+        heading: Resend confirmation
+        email: Email
+        submit: Resend instructions
+    unlocks:
+      new:
+        title: Resend unlock
+        heading: Resend unlock
+        email: Email
+        email_placeholder: you@email.com
+        submit: Resend instructions
+    shared:
+      links:
+        sign_in_prompt: Already have an account?
+        sign_in: Sign in
+        no_account: Don't have an account?
+        sign_up: Sign up
+        forgot_password: Forgot your password?
+        confirmation: Didn't receive confirmation instructions?
+        unlock: Didn't receive unlock instructions?
+        omniauth: Continue with %{provider}

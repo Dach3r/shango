@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Localization
+
   stale_when_importmap_changes
 
   before_action :configure_permitted_parameters, if: :devise_controller?

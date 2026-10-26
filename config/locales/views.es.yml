@@ -1,0 +1,105 @@
+es:
+  activerecord:
+    attributes:
+      user:
+        first_name: Nombre
+        last_name: Apellido
+  components:
+    input:
+      toggle_password: Mostrar u ocultar contraseña
+    locale_switcher:
+      label: Idioma
+    theme_switcher:
+      label: Tema
+      system: Sistema
+      light: Claro
+      dark: Oscuro
+  projects:
+    index:
+      title: Proyectos
+      sign_out: Cerrar sesión
+  devise:
+    sessions:
+      new:
+        title: Iniciar sesión
+        heading_html: Vuelve a<br>encender tu workspace.
+        email: Correo electrónico
+        email_placeholder: tu@correo.com
+        password: Contraseña
+        password_placeholder: Tu contraseña
+        remember_me: Recordarme
+        forgot_password: ¿Olvidaste tu contraseña?
+        submit: Iniciar sesión
+        no_account: ¿No tienes cuenta?
+        sign_up: Regístrate
+        or: O
+    registrations:
+      new:
+        title: Crear cuenta
+        heading: Crea tu cuenta
+        first_name: Nombre
+        first_name_placeholder: Tu nombre
+        last_name: Apellido
+        last_name_placeholder: Tu apellido
+        email: Correo electrónico
+        email_placeholder: tu@correo.com
+        password: Contraseña
+        password_placeholder: Mínimo %{length} caracteres
+        submit: Crear cuenta
+        or: O
+        sign_in: Iniciar sesión
+      edit:
+        title: Editar cuenta
+        heading: Editar cuenta
+        email: Correo electrónico
+        awaiting_confirmation: "Esperando confirmación de: %{email}"
+        new_password: Nueva contraseña
+        password_placeholder: Mínimo %{length} caracteres
+        confirm_password: Confirmar contraseña
+        submit: Actualizar
+        cancel_heading: Cancelar mi cuenta
+        cancel_account: Cancelar mi cuenta
+        confirm: ¿Estás seguro?
+        back: Volver
+    passwords:
+      new:
+        title: Recuperar contraseña
+        heading: ¿Olvidaste tu contraseña?
+        email: Correo electrónico
+        email_placeholder: tu@correo.com
+        submit: Enviar instrucciones
+        sign_in: Iniciar sesión
+        or: O
+      edit:
+        title: Cambiar contraseña
+        heading: Cambia tu contraseña
+        password: Nueva contraseña
+        password_placeholder: Mínimo %{length} caracteres
+        password_confirmation: Confirmar contraseña
+        password_confirmation_placeholder: Repite tu nueva contraseña
+        submit: Cambiar contraseña
+        sign_in: Iniciar sesión
+        or: O
+    confirmations:
+      new:
+        title: Reenviar confirmación
+        heading: Reenviar confirmación
+        email: Correo electrónico
+        submit: Reenviar instrucciones
+    unlocks:
+      new:
+        title: Reenviar desbloqueo
+        heading: Reenviar desbloqueo
+        email: Correo electrónico
+        email_placeholder: tu@correo.com
+        submit: Reenviar instrucciones
+    shared:
+      links:
+        sign_in_prompt: ¿Ya tienes cuenta?
+        sign_in: Inicia sesión
+        no_account: ¿No tienes cuenta?
+        sign_up: Regístrate
+        forgot_password: ¿Olvidaste tu contraseña?
+        confirmation: ¿No recibiste las instrucciones de confirmación?
+        unlock: ¿No recibiste las instrucciones de desbloqueo?
+        omniauth: Continuar con %{provider}
