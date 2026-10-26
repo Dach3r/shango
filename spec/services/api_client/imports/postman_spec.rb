@@ -75,6 +75,31 @@ RSpec.describe ApiClient::Imports::Postman do
     end
   end
 
+  describe "minimal shapes" do
+    def build(items)
+      described_class.call(data: { "info" => { "name" => "N" }, "item" => items }).record[:collections].first
+    end
+
+    it "leaves folders inheriting when nothing above sets auth", :aggregate_failures do
+      folder = build([{ "name" => "F", "item" => [] }]).fetch(:folders).first
+      expect(folder).to include(auth_type: "inherit")
+    end
+
+    it "builds URLs from host and path parts without protocol or path", :aggregate_failures do
+      requests = build([
+        { "name" => "a", "request" => { "url" => { "host" => ["x", "test"] } } },
+        { "name" => "b", "request" => { "url" => { "host" => ["x"], "path" => ["p"] } } }
+      ]).fetch(:requests)
+      expect(requests.map { |request| request[:url] }).to eq(["x.test", "x/p"])
+    end
+
+    it "places API keys in the header by default" do
+      auth = { "type" => "apikey", "apikey" => [{ "key" => "key", "value" => "K" }, { "key" => "value", "value" => "v" }] }
+      request = build([{ "name" => "a", "request" => { "url" => "http://x", "auth" => auth } }]).fetch(:requests).first
+      expect(request[:auth_config]).to include("add_to" => "header")
+    end
+  end
+
   describe "environment" do
     it "imports enabled flags and secrets", :aggregate_failures do
       tree = import("postman_environment.json").record
