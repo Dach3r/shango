@@ -7,7 +7,7 @@
 **Included**
 
 - Collections with nested folders and requests; drag and drop to move requests and folders.
-- Draft requests: per-user requests without a collection, listed under *Drafts* at the top of the sidebar. They can be edited and sent; *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
+- Draft requests: per-user requests without a collection, shown as tabs (with a *+* to start a new one) above the editor, not in the sidebar. They can be edited and sent; *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings, description.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.

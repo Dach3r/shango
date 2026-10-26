@@ -14,7 +14,7 @@ RSpec.describe "Workbench drafts" do
   end
 
   describe "GET /workbench/requests/:id" do
-    it "renders the draft and lists it in the sidebar", :aggregate_failures do
+    it "renders the draft and lists it as a tab", :aggregate_failures do
       get workbench_request_path(draft)
 
       expect(response).to have_http_status(:ok)

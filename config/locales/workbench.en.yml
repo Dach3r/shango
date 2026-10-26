@@ -34,6 +34,9 @@ en:
       none: No environment
       label: Environment
       manage: Manage environments
+    draft_tabs:
+      label: Drafts
+      new_draft: New draft request
     request_tree:
       label: Collections
       title: Collections
@@ -41,9 +44,6 @@ en:
       empty: No collections yet.
       empty_collection: Empty collection
       actions: "Actions for %{name}"
-      drafts: Drafts
-      new_draft: New draft request
-      empty_drafts: No drafts
       new_request: New request
       new_folder: New folder
       new_subfolder: New subfolder

@@ -34,6 +34,9 @@ es:
       none: Sin entorno
       label: Entorno
       manage: Administrar entornos
+    draft_tabs:
+      label: Borradores
+      new_draft: Nueva solicitud en borrador
     request_tree:
       label: Colecciones
       title: Colecciones
@@ -41,9 +44,6 @@ es:
       empty: Aún no hay colecciones.
       empty_collection: Colección vacía
       actions: "Acciones de %{name}"
-      drafts: Borradores
-      new_draft: Nueva solicitud en borrador
-      empty_drafts: Sin borradores
       new_request: Nueva solicitud
       new_folder: Nueva carpeta
       new_subfolder: Nueva subcarpeta
