@@ -37,7 +37,7 @@ RSpec.describe RequestTree::Component, type: :component do
     render_inline(described_class.new(branches: [], history_groups: groups, folder_toggle: "click", request_open: "click"))
 
     expect(page).to have_link("Fetch users", href: "/workbench/requests/#{api_request.id}", visible: :all)
-    expect(page).to have_css("[data-sidebar-view-target=history]", text: "https://api.example.com/users", visible: :all)
+    expect(page).to have_css("a[title='https://api.example.com/users']", visible: :all)
     expect(page).to have_css("[data-sidebar-view-target=history]", text: I18n.t("components.request_tree.drafts"), visible: :all)
     expect(page).to have_link("Scratch", visible: :all)
   end
