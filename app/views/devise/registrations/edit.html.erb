@@ -19,10 +19,9 @@
          { attribute: :first_name, icon: "user", label: "devise.registrations.new.first_name", placeholder: "devise.registrations.new.first_name_placeholder", autocomplete: "given-name", required: true },
          { attribute: :last_name, icon: "user", label: "devise.registrations.new.last_name", placeholder: "devise.registrations.new.last_name_placeholder", autocomplete: "family-name", required: true }
        ] if @tab == "profile" %>
+    <% email_field = { attribute: :email, type: :email, label: "devise.registrations.edit.email", placeholder: "devise.registrations.edit.email_placeholder", autocomplete: "email", required: true } if @tab == "profile" %>
     <% fields = if @tab == "profile"
-         [
-           { attribute: :email, type: :email, label: "devise.registrations.edit.email", placeholder: "devise.registrations.edit.email_placeholder", autocomplete: "email", required: true }
-         ]
+         []
        else
          [
            { attribute: :password, type: :password, label: "devise.registrations.edit.new_password", placeholder: "devise.registrations.edit.password_placeholder", autocomplete: "new-password" },
@@ -39,6 +38,11 @@
             <% name_fields.each do |field| %>
               <%= render Input::Component.new(form: f, **field.except(:label, :placeholder), label: t(field[:label]), placeholder: t(field[:placeholder])) %>
             <% end %>
+          </div>
+        <% end %>
+        <% if email_field %>
+          <div class="p-5">
+            <%= render Input::Component.new(form: f, **email_field.except(:label, :placeholder), label: t(email_field[:label]), placeholder: t(email_field[:placeholder])) %>
           </div>
         <% end %>
         <% fields.each do |field| %>
