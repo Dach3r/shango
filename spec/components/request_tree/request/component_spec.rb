@@ -15,4 +15,11 @@ RSpec.describe RequestTree::Request::Component, type: :component do
 
     expect(page).to have_css("a[aria-current=page].font-medium")
   end
+
+  it "makes the name renamable in place", :aggregate_failures do
+    render_inline(described_class.new(api_request:))
+
+    expect(page).to have_css("span[data-controller=inline-rename][data-inline-rename-param-value=api_request]", text: "List")
+    expect(page).to have_css("[data-inline-rename-url-value='/workbench/requests/#{api_request.id}']")
+  end
 end

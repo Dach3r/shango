@@ -72,7 +72,7 @@ app/services/result.rb
 
 Services are called as `ApiClient::Requests::Run.call(api_request:, environment:, user:, ...)` and return `Result` (`success?`, `record`, `error`, `data`).
 
-UI: ViewComponents under `app/components/<name>/component.rb` (`RequestTree`, `KeyValueTable`, `CodeEditor`, `AuthFields`, `TabBar`, `Modal`, `EnvironmentSwitcher`, `MethodBadge`, `StatusBadge`, `Oauth2Forms`) and Stimulus controllers under `app/javascript/controllers` (`code_editor`, `tabs`, `key_value_table`, `request_form`, `request_url`, `body_type`, `auth_form`, `conditional_fields`, `tree`, `dialog`, `response_body`). Modal forms render into a `modal` Turbo Frame. Strings live in `config/locales/workbench.{en,es}.yml`.
+UI: ViewComponents under `app/components/<name>/component.rb` (`RequestTree`, `KeyValueTable`, `CodeEditor`, `AuthFields`, `TabBar`, `Modal`, `EnvironmentSwitcher`, `MethodBadge`, `StatusBadge`, `Oauth2Forms`) and Stimulus controllers under `app/javascript/controllers` (`code_editor`, `tabs`, `key_value_table`, `request_form`, `request_url`, `body_type`, `auth_form`, `conditional_fields`, `tree`, `dialog`, `response_body`, `inline_rename`). Double-clicking a collection, folder or request name in the sidebar renames it in place (`inline_rename` PATCHes only the name to the regular update endpoint; request rows delay navigation ~220 ms so a double click is not read as a click). Modal forms render into a `modal` Turbo Frame. Strings live in `config/locales/workbench.{en,es}.yml`.
 
 ## 4. Execution pipeline
 
