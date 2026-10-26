@@ -5,7 +5,7 @@ module ApiClient
     class Run
       include Serviceable
 
-      BODY_LIMIT = 1.megabyte
+      BODY_LIMIT = Executor::MAX_RESPONSE_BYTES
       TEXT_TYPES = %r{\A(text/|application/(json|xml|javascript|x-www-form-urlencoded|graphql)|.+\+(json|xml))}i
 
       def initialize(api_request:, environment:, user:, attributes: {}, uploads: {}, binary_upload: nil)
@@ -41,7 +41,7 @@ module ApiClient
         record(
           http_method: built.http_method, url: masker.string(built.url), status: reply.status, status_text: reply.status_text, duration_ms: reply.duration_ms,
           size_bytes: reply.size_bytes, request_headers: masker.request_headers(reply.sent_headers), request_body: masker.string(built.body.preview),
-          response_headers: masker.response_headers(reply.headers), response_body: body, content_type: reply.content_type, body_truncated: reply.truncated || body_truncated?(reply),
+          response_headers: masker.response_headers(reply.headers), response_body: body, content_type: reply.content_type, body_truncated: reply.truncated,
           body_omitted: omitted, redirects: reply.redirects.map { |hop| hop.transform_values { |value| value.is_a?(String) ? masker.string(value) : value } },
           unresolved_variables: built.unresolved, error_kind: reply.error_kind, error_message: masker.string(reply.error_message)
         )
@@ -64,11 +64,7 @@ module ApiClient
         text = reply.body.dup.force_encoding(Encoding::UTF_8)
         return [nil, true] unless text.valid_encoding? && !text.include?("\u0000") && (reply.content_type.to_s.match?(TEXT_TYPES) || reply.content_type.blank?)
 
-        [masker.string(text.byteslice(0, BODY_LIMIT).scrub("")), false]
-      end
-
-      def body_truncated?(reply)
-        reply.body.bytesize > BODY_LIMIT
+        [masker.string(text.scrub("")), false]
       end
 
       def prune

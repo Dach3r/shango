@@ -67,7 +67,14 @@ RSpec.describe ApiClient::Requests::Run do
     expect(execution.body_omitted).to be(true)
   end
 
-  it "truncates stored bodies over the limit", :aggregate_failures do
+  it "stores bodies over 1 MB whole", :aggregate_failures do
+    stub_request(:get, api_request.url).to_return(status: 200, body: "a" * (1.megabyte + 10), headers: { "Content-Type" => "text/plain" })
+
+    expect(execution.response_body.bytesize).to eq(1.megabyte + 10)
+    expect(execution.body_truncated).to be(false)
+  end
+
+  it "flags bodies cut at the read limit", :aggregate_failures do
     stub_request(:get, api_request.url).to_return(status: 200, body: "a" * (described_class::BODY_LIMIT + 10), headers: { "Content-Type" => "text/plain" })
 
     expect(execution.response_body.bytesize).to eq(described_class::BODY_LIMIT)

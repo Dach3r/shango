@@ -31,7 +31,7 @@ All tables use UUID primary keys. `Project` is the tenancy boundary: every recor
 | `Folder` | Self-referencing (`parent_id`) inside a collection; `auth_type` defaults to `inherit`. |
 | `ApiRequest` | The glossary's *Request*. `collection_id` is nullable: a request with no collection is a draft owned by `user_id` (a CHECK requires an owner and no folder); placing it clears `user_id`. `ApiRequest.visible_to(user)` hides other users' drafts, and controllers look requests up through it. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
 | `RequestTab` | A request the user has open as a tab (`user_id`, `api_request_id`, unique pair, cascade on delete). Tabs are ordered by creation; opening a request (`Tabs::Open`, called by `requests#show` and `CreateDraft`) is idempotent, `Tabs::Close` only removes the tab. |
-| `RequestExecution` | History entry: resolved URL, status, timing, headers, body (≤ 1 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
+| `RequestExecution` | History entry: resolved URL, status, timing, headers, body (≤ 5 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
 
 Monitoring and documentation will reference `ApiRequest`; they must not copy its fields (see architecture §4).
 
@@ -84,7 +84,7 @@ Hovering a `{{variable}}` in any editor opens a card with its value as an input:
 
 `Requests::Run` first saves any pending edits of the editor form, so *Send* also saves. The response is streamed back as a Turbo Stream into the response panel.
 
-Limits: timeout 30 s by default (max 120 s, per request), 5 MB read limit (the response is cut and flagged), 1 MB stored/displayed, binary or non-text bodies are not stored.
+Limits: timeout 30 s by default (max 120 s, per request), 5 MB read limit (the response is cut and flagged; what is read is stored and displayed whole so JSON stays formattable), binary or non-text bodies are not stored.
 
 ## 5. Authentication strategies
 
