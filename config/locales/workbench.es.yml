@@ -23,6 +23,15 @@ es:
       cancel: Cancelar
       save: Guardar
       close: Cerrar
+    code_editor:
+      environment: Entorno
+      dynamic: Dinámicas
+      set: Con valor
+      empty: Vacía
+      guid: UUID aleatorio
+      timestamp: Segundos Unix
+      iso_timestamp: Fecha ISO 8601
+      random_int: 0 – 999
     key_value_table:
       key: Clave
       value: Valor

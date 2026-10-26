@@ -21,8 +21,12 @@ class CodeEditor::Component < ApplicationComponent
   def wrapper_data
     {
       controller: "code-editor", code_editor_language_value: @language, code_editor_readonly_value: @readonly,
-      code_editor_single_line_value: @single_line, code_editor_placeholder_value: @placeholder, code_editor_variables_value: @variables.to_json
+      code_editor_single_line_value: @single_line, code_editor_placeholder_value: @placeholder, code_editor_variables_value: @variables.to_json, code_editor_labels_value: labels.to_json
     }.merge(@data)
+  end
+
+  def labels
+    I18n.t("components.code_editor").transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
   def wrapper_classes

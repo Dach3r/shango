@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 
-const DYNAMIC_VARIABLES = [
-  "$timestamp",
-  "$isoTimestamp",
-  "$guid",
-  "$randomInt",
-];
+const DYNAMIC_VARIABLES = {
+  $guid: "guid",
+  $isoTimestamp: "isoTimestamp",
+  $randomInt: "randomInt",
+  $timestamp: "timestamp",
+};
 
 export default class extends Controller {
   static targets = ["input", "mount"];
@@ -15,6 +15,7 @@ export default class extends Controller {
     singleLine: Boolean,
     placeholder: String,
     variables: { type: Array, default: [] },
+    labels: { type: Object, default: {} },
     wrap: { type: Boolean, default: true },
   };
 
@@ -123,12 +124,13 @@ export default class extends Controller {
             {
               render: (completion) => {
                 const dot = document.createElement("span");
-                dot.className = `cm-var-dot cm-var-dot-${completion.detail}`;
+                dot.className = `cm-var-dot cm-var-dot-${completion.type}`;
                 return dot;
               },
-              position: 20,
+              position: 10,
             },
           ],
+          optionClass: () => "cm-var-option",
         }),
       );
     }
@@ -154,7 +156,7 @@ export default class extends Controller {
 
   // Highlights {{variable}} references by state; the styles live in application.css (.cm-var-*).
   variableStatus(name) {
-    if (DYNAMIC_VARIABLES.includes(name)) return "dynamic";
+    if (name in DYNAMIC_VARIABLES) return "dynamic";
 
     const variable = this.variablesValue.find((item) => item.name === name);
     if (!variable) return "missing";
@@ -189,22 +191,33 @@ export default class extends Controller {
     const match = context.matchBefore(/\{\{[\w.\-$]*/);
     if (!match) return null;
 
+    const labels = this.labelsValue;
+    const environment = { name: labels.environment, rank: 0 };
+    const dynamic = { name: labels.dynamic, rank: 1 };
     const options = [
       ...this.variablesValue.map(({ name, set }) => ({
         name,
         status: set ? "set" : "empty",
+        info: set ? labels.set : labels.empty,
+        section: environment,
       })),
-      ...DYNAMIC_VARIABLES.map((name) => ({ name, status: "dynamic" })),
+      ...Object.entries(DYNAMIC_VARIABLES).map(([name, key]) => ({
+        name,
+        status: "dynamic",
+        info: labels[key],
+        section: dynamic,
+      })),
     ];
     const closing =
       context.state.sliceDoc(context.pos, context.pos + 2) === "}}" ? "" : "}}";
     return {
       from: match.from + 2,
-      options: options.map(({ name, status }) => ({
+      options: options.map(({ name, status, info, section }) => ({
         label: name,
         apply: `${name}${closing}`,
-        type: "variable",
-        detail: status,
+        type: status,
+        detail: info,
+        section,
       })),
       validFor: /^[\w.\-$]*$/,
     };
@@ -282,6 +295,44 @@ export default class extends Controller {
         borderRadius: "10px",
         boxShadow: "var(--dropdown-shadow)",
         color: "var(--body)",
+      },
+      ".cm-tooltip.cm-tooltip-autocomplete": {
+        padding: "4px",
+        minWidth: "240px",
+        fontFamily: "var(--font-sans)",
+      },
+      ".cm-tooltip-autocomplete > ul": {
+        fontFamily: "var(--font-mono)",
+        fontSize: "12.5px",
+        maxHeight: "260px",
+      },
+      ".cm-tooltip-autocomplete > ul > completion-section": {
+        padding: "8px 8px 4px",
+        border: "none",
+        color: "var(--faint)",
+        fontFamily: "var(--font-sans)",
+        fontSize: "10.5px",
+        fontWeight: "600",
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+      },
+      ".cm-tooltip-autocomplete > ul > li": {
+        display: "flex",
+        alignItems: "center",
+        padding: "5px 8px",
+        borderRadius: "8px",
+        color: "var(--body)",
+        lineHeight: "1.4",
+      },
+      ".cm-tooltip-autocomplete > ul > li > .cm-completionLabel": {
+        flex: "1",
+      },
+      ".cm-tooltip-autocomplete > ul > li > .cm-completionDetail": {
+        marginLeft: "24px",
+        fontFamily: "var(--font-sans)",
+        fontSize: "11px",
+        fontStyle: "normal",
+        color: "var(--muted)",
       },
       ".cm-tooltip-autocomplete ul li[aria-selected]": {
         backgroundColor: "var(--field)",

@@ -23,6 +23,15 @@ en:
       cancel: Cancel
       save: Save
       close: Close
+    code_editor:
+      environment: Environment
+      dynamic: Dynamic
+      set: Set
+      empty: Empty
+      guid: Random UUID
+      timestamp: Unix seconds
+      iso_timestamp: ISO 8601 date
+      random_int: 0 – 999
     key_value_table:
       key: Key
       value: Value
