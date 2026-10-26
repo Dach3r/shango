@@ -1,17 +1,29 @@
 class Button::Component < ApplicationComponent
-  BASE = "w-full cursor-pointer rounded-xl py-3.5 text-base font-semibold shadow-sm shadow-brand-700/20 transition focus:outline-none focus:ring-2 focus:ring-offset-2"
+  BASE = "flex #{CONTROL_SIZE} w-full cursor-pointer items-center justify-center rounded-xl text-center text-base font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-card"
   VARIANTS = {
-    primary: "bg-brand-500 text-white hover:bg-brand-600 focus:ring-brand-500/40"
+    primary: "bg-solid text-on-solid shadow-sm shadow-brand-700/20 hover:bg-solid-hover focus:ring-solid/50",
+    secondary: "bg-accent/12 text-accent ring-1 ring-inset ring-accent/25 hover:bg-accent/20 hover:ring-accent/50 focus:ring-accent/50"
   }.freeze
 
-  def initialize(form:, label:, variant: :primary, **options)
+  def initialize(label:, form: nil, href: nil, variant: :primary, **options)
     @form = form
     @label = label
+    @href = href
     @variant = variant
     @options = options
   end
 
   def call
-    @form.submit @label, **@options, class: class_names(BASE, VARIANTS.fetch(@variant), @options[:class])
+    if @href
+      link_to @label, @href, **@options, class: classes
+    else
+      @form.submit @label, **@options, class: classes
+    end
+  end
+
+  private
+
+  def classes
+    class_names(BASE, VARIANTS.fetch(@variant), @options[:class])
   end
 end

@@ -1,5 +1,5 @@
 class Link::Component < ApplicationComponent
-  CLASSES = "font-semibold text-brand-500 hover:text-brand-700"
+  CLASSES = "font-semibold text-accent hover:text-accent-hover"
 
   def initialize(label:, href:, **options)
     @label = label

@@ -1,10 +1,130 @@
 @import "tailwindcss";
 
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where([data-theme="system"], [data-theme="system"] *) {
+      @slot;
+    }
+  }
+}
+
 @theme {
   --color-brand-50: #f1f8f2;
   --color-brand-400: #7bc08a;
   --color-brand-500: #62ad72;
   --color-brand-600: #4f9560;
   --color-brand-700: #3f7a4e;
+  --color-night-950: #070d09;
+  --color-night-900: #0f1913;
+  --color-night-700: #2a4033;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-field: var(--field);
+  --color-field-focus: var(--field-focus);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-solid: var(--solid);
+  --color-solid-hover: var(--solid-hover);
+  --color-on-solid: var(--on-solid);
+  --color-danger: var(--danger);
+}
+
+:root {
+  color-scheme: light;
+  --page: #eaf2ec;
+  --card: #ffffff;
+  --line: #c9d9ce;
+  --field: #f2f6f3;
+  --field-focus: #ffffff;
+  --ink: #0b140f;
+  --body: #2c3a32;
+  --muted: #55665b;
+  --accent: var(--color-brand-700);
+  --accent-hover: #2f6a3f;
+  --solid: var(--color-brand-600);
+  --solid-hover: var(--color-brand-700);
+  --on-solid: #ffffff;
+  --danger: #c81e1e;
+  --dots: color-mix(in oklab, var(--color-brand-600) 40%, transparent);
+  --glow: color-mix(in oklab, var(--color-brand-500) 28%, transparent);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: var(--color-night-950);
+  --card: var(--color-night-900);
+  --line: var(--color-night-700);
+  --field: var(--color-night-950);
+  --field-focus: var(--color-night-950);
+  --ink: #ffffff;
+  --body: #d4d4d4;
+  --muted: #a3a3a3;
+  --accent: var(--color-brand-400);
+  --accent-hover: var(--color-brand-50);
+  --solid: var(--color-brand-400);
+  --solid-hover: var(--color-brand-500);
+  --on-solid: var(--color-night-950);
+  --danger: #fca5a5;
+  --dots: var(--color-night-700);
+  --glow: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    color-scheme: dark;
+    --page: var(--color-night-950);
+    --card: var(--color-night-900);
+    --line: var(--color-night-700);
+    --field: var(--color-night-950);
+    --field-focus: var(--color-night-950);
+    --ink: #ffffff;
+    --body: #d4d4d4;
+    --muted: #a3a3a3;
+    --accent: var(--color-brand-400);
+    --accent-hover: var(--color-brand-50);
+    --solid: var(--color-brand-400);
+    --solid-hover: var(--color-brand-500);
+    --on-solid: var(--color-night-950);
+    --danger: #fca5a5;
+    --dots: var(--color-night-700);
+    --glow: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
+  }
+}
+
+/* Browser autofill paints its own background; cover it with the field tokens. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+  box-shadow: 0 0 0 1000px var(--field) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--field-focus) inset, 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+::view-transition-group(*) {
+  animation-duration: 300ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
