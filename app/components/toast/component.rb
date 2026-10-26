@@ -3,7 +3,7 @@ class Toast::Component < ApplicationComponent
     notice: { icon: "circle-check", role: "status", tone: "text-accent", border: "border-solid" },
     alert: { icon: "circle-alert", role: "alert", tone: "text-danger", border: "border-danger" }
   }.freeze
-  BASE = "pointer-events-auto relative flex w-full items-center gap-3 rounded-2xl border bg-card py-3 pr-3 pl-4 text-sm shadow-lg shadow-night-1000/10 transition duration-200 ease-out starting:translate-y-2 starting:opacity-0 data-[state=closed]:translate-y-2 data-[state=closed]:opacity-0"
+  BASE = "pointer-events-auto relative flex w-full items-center gap-3 border bg-card py-3 pr-3 pl-4 text-sm transition duration-200 ease-out starting:translate-y-2 starting:opacity-0 data-[state=closed]:translate-y-2 data-[state=closed]:opacity-0"
 
   def initialize(message:, kind: :notice, **options)
     @message = message

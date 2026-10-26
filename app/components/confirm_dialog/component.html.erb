@@ -1,7 +1,7 @@
 <dialog data-controller="confirm-dialog" data-action="close->confirm-dialog#closed click->confirm-dialog#backdrop"
-        class="m-auto w-[calc(100%-2rem)] max-w-sm flex-col rounded-3xl border border-line bg-card p-0 text-body shadow-dropdown open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
+        class="m-auto w-[calc(100%-2rem)] max-w-sm flex-col border border-line bg-card p-0 text-body open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
   <div class="flex flex-col items-center gap-3 px-6 pt-7 text-center">
-    <span class="flex size-14 items-center justify-center rounded-full bg-danger/10 text-danger ring-8 ring-danger/5"><%= lucide_icon "triangle-alert", class: "size-6" %></span>
+    <span class="flex size-14 items-center justify-center border border-danger/40 bg-danger/10 text-danger"><%= lucide_icon "triangle-alert", class: "size-6" %></span>
     <p data-confirm-dialog-target="message" class="text-balance text-base font-semibold tracking-tight text-ink"></p>
   </div>
   <div class="flex gap-2 px-6 pt-5 pb-6">

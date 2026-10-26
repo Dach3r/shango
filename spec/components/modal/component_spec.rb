@@ -40,7 +40,7 @@ RSpec.describe Modal::Component, type: :component do
       modal.with_footer { "Custom" }
     end
 
-    expect(page).to have_css("header.flex-col.text-center span.rounded-full", visible: :all)
+    expect(page).to have_css("header.flex-col.text-center span.size-12", visible: :all)
     expect(page).to have_no_css("header button", visible: :all)
     expect(page).to have_no_css("dialog > div", visible: :all)
     expect(page).to have_css("footer.flex-col", text: "Custom", visible: :all)

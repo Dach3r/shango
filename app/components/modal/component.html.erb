@@ -1,8 +1,8 @@
 <dialog data-controller="dialog" data-action="close->dialog#closed <%= "click->dialog#backdrop" if @dismissible %>"
-        class="modal m-auto max-h-[90dvh] w-[calc(100%-2rem)] <%= size_class %> flex-col overflow-hidden rounded-3xl border border-line bg-card p-0 text-body shadow-dropdown open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
+        class="modal m-auto max-h-[90dvh] w-[calc(100%-2rem)] <%= size_class %> flex-col overflow-hidden border border-line bg-card p-0 text-body open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
   <header class="<%= class_names("flex shrink-0 gap-3 px-6 pt-5 pb-4", "items-start": !@centered, "flex-col items-center pt-7 text-center": @centered) %>">
     <% if @icon %>
-      <span class="<%= class_names("flex shrink-0 items-center justify-center bg-accent/10 text-accent", "size-10 rounded-xl": !@centered, "size-12 rounded-full": @centered) %>"><%= lucide_icon @icon, class: @centered ? "size-6" : "size-5" %></span>
+      <span class="<%= class_names("flex shrink-0 items-center justify-center border border-line bg-field text-accent", "size-10 ": !@centered, "size-12": @centered) %>"><%= lucide_icon @icon, class: @centered ? "size-6" : "size-5" %></span>
     <% end %>
     <div class="min-w-0 flex-1 pt-0.5">
       <h2 class="text-lg font-semibold tracking-tight text-ink"><%= @title %></h2>
@@ -12,7 +12,7 @@
     </div>
     <% unless @centered %>
       <button type="button" data-action="dialog#close" aria-label="<%= t("components.modal.close") %>"
-              class="-mr-2 flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+              class="-mr-2 flex size-8 shrink-0 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "x", class: "size-4" %>
       </button>
     <% end %>

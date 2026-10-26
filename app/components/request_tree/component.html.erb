@@ -6,15 +6,15 @@
     </h2>
     <div class="flex items-center gap-1">
       <%= link_to workbench_history_path, aria: { label: t("components.request_tree.history") }, title: t("components.request_tree.history"),
-                  class: class_names("flex size-6 items-center justify-center rounded-lg transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50", "bg-field text-ink": helpers.controller_path == "workbench/histories", "text-muted": helpers.controller_path != "workbench/histories") do %>
+                  class: class_names("flex size-6 items-center justify-center transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50", "bg-field text-ink": helpers.controller_path == "workbench/histories", "text-muted": helpers.controller_path != "workbench/histories") do %>
         <%= lucide_icon "history", class: "size-3.5" %>
       <% end %>
       <%= link_to new_workbench_import_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.import") }, title: t("components.request_tree.import"),
-                  class: "flex size-6 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+                  class: "flex size-6 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
         <%= lucide_icon "upload", class: "size-3.5" %>
       <% end %>
       <%= link_to new_workbench_collection_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.new_collection") }, title: t("components.request_tree.new_collection"),
-                  class: "flex size-6 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+                  class: "flex size-6 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
         <%= lucide_icon "plus", class: "size-3.5" %>
       <% end %>
     </div>

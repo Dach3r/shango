@@ -11,7 +11,7 @@ class StatusBadge::Component < ApplicationComponent
   end
 
   def call
-    tag.span(label, class: class_names("inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold", TONES.fetch(@execution.status_class)))
+    tag.span(label, class: class_names("inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold", TONES.fetch(@execution.status_class)))
   end
 
   private

@@ -4,7 +4,7 @@
   <%= lucide_icon config[:icon], class: "size-5 shrink-0", "aria-hidden": true %>
   <p class="min-w-0 flex-1 leading-snug"><%= @message %></p>
   <button type="button" data-action="toast#close" aria-label="<%= t("components.toast.close") %>"
-          class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full opacity-70 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+          class="flex size-7 shrink-0 cursor-pointer items-center justify-center opacity-70 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
     <%= lucide_icon "x", class: "size-4" %>
   </button>
 </div>
