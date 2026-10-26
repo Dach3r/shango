@@ -12,7 +12,7 @@
       <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-faint transition group-focus-within:text-solid"><%= lucide_icon "search", class: "size-4" %></span>
       <input type="search" placeholder="<%= t(".icon_search") %>" aria-label="<%= t(".icon_search") %>" autocomplete="off"
              data-icon-picker-target="query" data-action="input->icon-picker#filter keydown.enter->icon-picker#preventSubmit"
-             class="<%= class_names(Input::Component::FIELD, "pl-11") %> h-11 text-sm">
+             class="<%= class_names(Input::Component::FIELD, ApplicationComponent::CONTROL_SIZE, "pl-11") %>">
     </div>
     <div class="rounded-xl border border-line bg-field p-2">
       <div class="grid h-52 grid-cols-9 content-start gap-1 overflow-y-auto overscroll-contain" data-icon-picker-target="grid">
