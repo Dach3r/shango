@@ -61,8 +61,8 @@
   --faint: light-dark(#b3ad9d, #4a4944);
   --field: light-dark(#faf8f2, var(--color-night-1000));
   --field-focus: light-dark(var(--color-paper), var(--color-night-1000));
-  --ink: light-dark(var(--color-night-1000), #faf9f5);
-  --body: light-dark(#3d3d3a, #d6d4cb);
+  --ink: light-dark(var(--color-night-1000), #d6d4ca);
+  --body: light-dark(#3d3d3a, #bab8ae);
   --muted: light-dark(#66655e, #b0aea5);
   --accent: light-dark(var(--color-clay-700), var(--color-clay-400));
   --accent-hover: light-dark(var(--color-clay-800), var(--color-clay-300));
