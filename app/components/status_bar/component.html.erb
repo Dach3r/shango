@@ -4,6 +4,10 @@
     <%= lucide_icon "menu", class: "size-4" %>
   </button>
 
+  <% if content? %>
+    <div class="min-w-0 flex-1"><%= content %></div>
+  <% end %>
+
   <div class="ml-auto flex items-center gap-2">
     <% if @environments %>
       <%= render EnvironmentSwitcher::Component.new(environments: @environments, current_environment: @current_environment, compact: true) %>

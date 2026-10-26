@@ -14,7 +14,7 @@
         <%= yield %>
       </main>
 
-      <%= render StatusBar::Component.new(environments: current_project.environments.ordered, current_environment:) %>
+      <%= render StatusBar::Component.new(environments: current_project.environments.ordered, current_environment:) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
     </div>
   </div>
   <%= turbo_frame_tag "modal" %>

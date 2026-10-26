@@ -13,4 +13,10 @@ RSpec.describe StatusBar::Component, type: :component do
 
     expect(page).to have_css("button", text: I18n.t("components.environment_switcher.none"))
   end
+
+  it "renders the given content" do
+    render_inline(described_class.new) { "Breadcrumb" }
+
+    expect(page).to have_css("footer", text: "Breadcrumb")
+  end
 end

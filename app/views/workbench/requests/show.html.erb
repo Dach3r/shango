@@ -1,6 +1,8 @@
 <% content_for :title, "#{@api_request.name} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :heading, t("workbench.title") %>
 
+<% content_for :breadcrumb, render("workbench/requests/breadcrumb", api_request: @api_request) %>
+
 <%= render layout: "workbench/workspace" do %>
   <div class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
     <div class="flex min-h-0 flex-col overflow-hidden" data-controller="request-form"
