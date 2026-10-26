@@ -8,14 +8,6 @@
     <label for="api_request_settings_max_redirects" class="<%= label_classes %>"><%= t("workbench.settings.max_redirects") %></label>
     <%= number_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: "api_request_settings_max_redirects", min: 0, max: 20, class: field_classes %>
   </div>
-  <label class="flex cursor-pointer items-center gap-2 text-sm text-body">
-    <%= hidden_field_tag "api_request[settings][follow_redirects]", "0", id: nil %>
-    <%= check_box_tag "api_request[settings][follow_redirects]", "1", api_request.setting(:follow_redirects), id: nil, class: "size-4 cursor-pointer rounded border-line accent-[var(--solid)]" %>
-    <%= t("workbench.settings.follow_redirects") %>
-  </label>
-  <label class="flex cursor-pointer items-center gap-2 text-sm text-body">
-    <%= hidden_field_tag "api_request[settings][verify_ssl]", "0", id: nil %>
-    <%= check_box_tag "api_request[settings][verify_ssl]", "1", api_request.setting(:verify_ssl), id: nil, class: "size-4 cursor-pointer rounded border-line accent-[var(--solid)]" %>
-    <%= t("workbench.settings.verify_ssl") %>
-  </label>
+  <%= render Checkbox::Component.new(name: "api_request[settings][follow_redirects]", checked: api_request.setting(:follow_redirects), label: t("workbench.settings.follow_redirects"), label_class: "text-sm") %>
+  <%= render Checkbox::Component.new(name: "api_request[settings][verify_ssl]", checked: api_request.setting(:verify_ssl), label: t("workbench.settings.verify_ssl"), label_class: "text-sm") %>
 </div>

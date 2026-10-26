@@ -4,9 +4,8 @@
     <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>
   <% end %>
 
-  <%= hidden_field_tag field_name("enabled"), "0", id: nil %>
-  <%= check_box_tag field_name("enabled"), "1", enabled?, id: nil, data: { field: "enabled", action: "change->key-value-table#input" },
-                    class: "size-4 shrink-0 cursor-pointer rounded border-line accent-[var(--solid)]", aria: { label: t("components.key_value_table.enabled") } %>
+  <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
+                                     aria: { label: t("components.key_value_table.enabled") }) %>
 
   <%= text_field_tag field_name("key"), row["key"], id: nil, placeholder: @key_placeholder, autocomplete: "off", spellcheck: false,
                      data: { field: "key", action: "input->key-value-table#input" }, class: field_classes("min-w-0 flex-1 font-mono text-xs") %>
@@ -39,11 +38,8 @@
   <% end %>
 
   <% if variant == :variables %>
-    <label class="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-muted">
-      <%= hidden_field_tag field_name("secret"), "0", id: nil %>
-      <%= check_box_tag field_name("secret"), "1", secret?, id: nil, data: { action: "change->key-value-table#syncMask" }, class: "size-4 cursor-pointer rounded border-line accent-[var(--solid)]" %>
-      <%= t("components.key_value_table.secret") %>
-    </label>
+    <%= render Checkbox::Component.new(name: field_name("secret"), checked: secret?, label: t("components.key_value_table.secret"), label_class: "shrink-0 !gap-1.5 text-xs text-muted",
+                                       data: { action: "change->key-value-table#syncMask" }) %>
   <% end %>
 
   <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
