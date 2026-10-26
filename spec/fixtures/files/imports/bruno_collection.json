@@ -1,0 +1,28 @@
+{
+  "name": "Bruno Demo",
+  "version": "1",
+  "root": { "request": { "auth": { "mode": "bearer", "bearer": { "token": "{{token}}" } } } },
+  "environments": [
+    { "name": "Local", "variables": [{ "name": "host", "value": "http://localhost", "enabled": true }, { "name": "key", "value": "k", "enabled": false, "secret": true }, { "value": "no name" }] },
+    "junk"
+  ],
+  "items": [
+    { "type": "folder", "name": "Users", "seq": 2, "root": { "request": { "auth": { "mode": "basic", "basic": { "username": "u", "password": "p" } } } }, "items": [
+      { "type": "http-request", "name": "List", "seq": 1, "request": { "method": "GET", "url": "{{host}}/users?limit=5", "headers": [{ "name": "X", "value": "1", "enabled": true }, { "name": "Off", "value": "2", "enabled": false }, { "value": "x" }],
+        "params": [{ "name": "limit", "value": "5", "type": "query", "enabled": true }, { "name": "id", "value": "1", "type": "path", "enabled": true }], "auth": { "mode": "inherit" },
+        "script": { "req": "bru.setVar('a', 1)" } } }
+    ] },
+    { "type": "folder", "name": "Plain", "seq": 3, "items": [] },
+    { "type": "http-request", "name": "Json", "seq": 1, "request": { "method": "POST", "url": "{{host}}/j", "body": { "mode": "json", "json": "{\"a\":1}" }, "auth": { "mode": "none" } } },
+    { "type": "http-request", "name": "Form", "seq": 4, "request": { "method": "POST", "url": "{{host}}/f", "body": { "mode": "formUrlEncoded", "formUrlEncoded": [{ "name": "a", "value": "1", "enabled": true }] }, "auth": { "mode": "apikey", "apikey": { "key": "K", "value": "V", "placement": "queryparams" } } } },
+    { "type": "http-request", "name": "Multi", "seq": 5, "request": { "method": "POST", "url": "{{host}}/m", "body": { "mode": "multipartForm", "multipartForm": [{ "name": "f", "type": "file", "value": ["/tmp/a.png"] }, { "name": "t", "type": "text", "value": "v" }, { "value": "x" }] }, "auth": { "mode": "digest", "digest": { "username": "u" } } } },
+    { "type": "graphql-request", "name": "Graph", "seq": 6, "request": { "method": "POST", "url": "{{host}}/g", "body": { "mode": "graphql", "graphql": { "query": "{ a }", "variables": "{}" } }, "auth": { "mode": "awsv4", "awsv4": { "accessKeyId": "ak", "secretAccessKey": "sk", "region": "r", "service": "s" } } } },
+    { "type": "http-request", "name": "Xml", "seq": 7, "request": { "method": "POST", "url": "{{host}}/x", "body": { "mode": "xml", "xml": "<a/>" }, "auth": { "mode": "oauth2", "oauth2": { "grantType": "client_credentials", "accessTokenUrl": "https://x.test/t", "clientId": "c" } } } },
+    { "type": "http-request", "name": "File", "seq": 8, "request": { "method": "POST", "url": "{{host}}/b", "body": { "mode": "file" }, "auth": { "mode": "oauth2", "oauth2": { "grantType": "implicit" } } } },
+    { "type": "http-request", "name": "Text", "seq": 9, "request": { "method": "POST", "url": "{{host}}/t", "body": { "mode": "text", "text": "hi" }, "auth": { "mode": "wsse" }, "tests": "test()" } },
+    { "type": "http-request", "name": "NoBody", "seq": 10, "request": { "method": "GET", "url": "{{host}}/n", "body": { "mode": "none" } } },
+    { "type": "http-request", "name": "Bare", "seq": 11 },
+    { "type": "websocket-request", "name": "Socket", "seq": 12 },
+    "junk"
+  ]
+}
