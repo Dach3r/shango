@@ -22,11 +22,11 @@
 
   <div class="absolute right-1 top-1">
     <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: collection.name)) do %>
-      <%= link_to new_api_client_collection_request_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
-      <%= link_to new_api_client_collection_folder_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_folder") %><% end %>
-      <%= link_to new_api_client_collection_curl_import_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "terminal", class: "size-4" %><%= t("components.request_tree.import_curl") %><% end %>
-      <%= link_to edit_api_client_collection_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
-      <%= button_to api_client_collection_path(collection), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_collection", name: collection.name) } },
+      <%= link_to new_workbench_collection_request_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
+      <%= link_to new_workbench_collection_folder_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_folder") %><% end %>
+      <%= link_to new_workbench_collection_curl_import_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "terminal", class: "size-4" %><%= t("components.request_tree.import_curl") %><% end %>
+      <%= link_to edit_workbench_collection_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
+      <%= button_to workbench_collection_path(collection), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_collection", name: collection.name) } },
                     class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>
     <% end %>
   </div>

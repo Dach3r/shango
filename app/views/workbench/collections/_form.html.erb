@@ -1,0 +1,9 @@
+<%= render Modal::Component.new(icon: "library", title: @collection.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "collection_form", submit: t("workbench.shared.save")) do %>
+  <%= form_with model: @collection, scope: :collection, url: (@collection.persisted? ? workbench_collection_path(@collection) : workbench_collections_path),
+                id: "collection_form", data: { turbo_frame: "_top" }, class: "space-y-5" do |form| %>
+    <%= render "workbench/shared/errors", record: @collection %>
+
+    <%= render Input::Component.new(form: form, attribute: :name, label: t(".name"), icon: "library", placeholder: t(".name_placeholder"), autofocus: true, autocomplete: "off") %>
+    <%= render Input::Component.new(form: form, attribute: :description, label: t(".description"), type: :text_area, rows: 2) %>
+  <% end %>
+<% end %>

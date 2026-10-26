@@ -11,7 +11,7 @@ module ApiClient
 
       def perform
         copy = @api_request.dup
-        copy.name = I18n.t("api_client.requests.copy_name", name: @api_request.name)
+        copy.name = I18n.t("workbench.requests.copy_name", name: @api_request.name)
         copy.position = 0
         copy.save!
 

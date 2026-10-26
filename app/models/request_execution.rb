@@ -12,7 +12,6 @@ class RequestExecution < ApplicationRecord
     error_kind.present?
   end
 
-  # 2xx and 3xx are shown as success, everything else as a failure.
   def status_class
     return :error if error?
 

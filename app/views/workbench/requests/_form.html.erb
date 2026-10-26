@@ -1,0 +1,22 @@
+<%= render Modal::Component.new(icon: "send", title: t(".title"), form: "request_form", submit: t(".submit")) do %>
+  <%= form_with model: @api_request, scope: :api_request, url: workbench_collection_requests_path(@collection), id: "request_form", data: { turbo_frame: "_top" }, class: "space-y-4" do |form| %>
+    <%= render "workbench/shared/errors", record: @api_request %>
+    <%= form.hidden_field :folder_id %>
+
+    <div>
+      <%= form.label :name, t(".name"), class: label_classes %>
+      <%= form.text_field :name, autofocus: true, autocomplete: "off", class: field_classes %>
+    </div>
+    <div class="flex gap-2">
+      <div class="w-28 shrink-0">
+        <%= form.label :http_method, t(".method"), class: label_classes %>
+        <%= render Select::Component.new(name: form.field_name(:http_method), options: method_options, value: form.object.http_method, id: form.field_id(:http_method),
+                                         class: "font-mono text-xs font-semibold") %>
+      </div>
+      <div class="min-w-0 flex-1">
+        <%= form.label :url, t(".url"), class: label_classes %>
+        <%= form.text_field :url, autocomplete: "off", spellcheck: false, placeholder: t("workbench.requests.url_placeholder"), class: field_classes("font-mono text-xs") %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

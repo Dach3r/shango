@@ -65,7 +65,7 @@ Rules:
 Existing, to be followed:
 
 - Controllers behind login inherit `AuthenticatedController` (`before_action :authenticate_user!`).
-- Controllers are grouped in **feature modules** (`ApiClient::`, `Projects::`, later `Documentation::`, `Monitoring::`…), use plural REST names (`ApiClient::RequestsController`), and stay thin: they scope records through `current_project`, declare strong parameters and delegate to a service. Models stay flat (not namespaced). Each feature module has a `BaseController`.
+- Controllers are grouped in **feature modules** (`Workbench::`, `Projects::`, later `Documentation::`, `Monitoring::`…), use plural REST names (`Workbench::RequestsController`), and stay thin: they scope records through `current_project`, declare strong parameters and delegate to a service. Models stay flat (not namespaced). Each feature module has a `BaseController`.
 - Business logic lives in `app/services/<feature>/<resource>/<action>.rb`, built on `Serviceable` (`Klass.call(**kwargs)` runs the private `perform`) and returning a `Result` (`app/services/result.rb`). Plain collaborators (resolvers, clients) are ordinary classes next to them.
 - UI components live in `app/components/<name>/component.rb` (with an optional `component.html.erb`) and inherit `ApplicationComponent`, e.g. `Button::Component`.
 - Stimulus controllers in `app/javascript/controllers/`, named `<name>_controller.js`. Third-party JS is vendored in `vendor/javascript` and pinned in `config/importmap.rb` (see [`api-client.md`](api-client.md) §7 for CodeMirror).
@@ -120,7 +120,7 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 - Shared UI components (`Button`, `Input`, `Link`, `Logo`, `ThemeSwitcher`, `LocaleSwitcher`) and Stimulus controllers for password visibility, icon picking, dropdowns and the drawer.
 - PostgreSQL schema contains `users`, `projects`, `memberships` and Active Storage tables; the `uuid-ossp` extension is enabled.
 - **API Client** (phase 2): `Environment`/`Variable` (secrets encrypted, selected per membership from the top bar), `Collection`, `Folder`, `ApiRequest`, `RequestExecution`; request editor with CodeMirror, history, cURL import/copy, drag and drop tree, authorization per request or folder with inheritance (None, Basic, Bearer, API key, JWT, Digest, AWS SigV4, OAuth 2.0). See [`api-client.md`](api-client.md). Sidebar entries *API Client* and *Environments* are live.
-- Controllers for the feature live in `ApiClient::` and `Projects::` modules; logic is in `app/services` (`Serviceable` + `Result`).
+- Controllers for the feature live in `Workbench::` and `Projects::` modules; logic is in `app/services` (`ApiClient::` namespace) (`Serviceable` + `Result`).
 - Gems added: `faraday`, `faraday-multipart`, `jwt`, `aws-sigv4`, `net-http-digest_auth`.
 - No automated tests yet (no test framework); no other domain models.
 

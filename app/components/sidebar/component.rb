@@ -2,7 +2,7 @@ class Sidebar::Component < ApplicationComponent
   # Project tools from the product navigation; only entries with a path are live.
   ITEMS = [
     { key: :overview, icon: "layout-dashboard", path: :root_path },
-    { key: :api_client, icon: "send", path: :api_client_root_path, controllers: "api_client/" },
+    { key: :api_client, icon: "send", path: :workbench_root_path, controllers: "workbench/" },
     { key: :environments, icon: "layers", path: :environments_path, controllers: "projects/environments" },
     { key: :documentation, icon: "book-open" },
     { key: :monitoring, icon: "activity" },

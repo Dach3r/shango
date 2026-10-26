@@ -1,0 +1,324 @@
+es:
+  activerecord:
+    attributes:
+      environment:
+        name: Nombre
+      variable:
+        key: Nombre
+        value: Valor
+      collection:
+        name: Nombre
+      folder:
+        name: Nombre
+      api_request:
+        name: Nombre
+        url: URL
+  components:
+    sidebar:
+      environments: Entornos
+    modal:
+      cancel: Cancelar
+      save: Guardar
+      close: Cerrar
+    key_value_table:
+      key: Clave
+      value: Valor
+      description: Descripción
+      enabled: Habilitada
+      remove: Quitar fila
+      text: Texto
+      file: Archivo
+      secret: Secreto
+      secret_saved: Guardado · deja vacío para conservar
+    environment_switcher:
+      none: Sin entorno
+      label: Entorno
+      manage: Administrar entornos
+    request_tree:
+      label: Colecciones
+      title: Colecciones
+      new_collection: Nueva colección
+      empty: Aún no hay colecciones.
+      empty_collection: Colección vacía
+      actions: "Acciones de %{name}"
+      new_request: Nueva solicitud
+      new_folder: Nueva carpeta
+      new_subfolder: Nueva subcarpeta
+      import_curl: Importar cURL
+      edit: Editar
+      delete: Eliminar
+      confirm_delete_collection: "¿Eliminar la colección “%{name}” con todas sus carpetas y solicitudes?"
+      confirm_delete_folder: "¿Eliminar la carpeta “%{name}” con todo su contenido?"
+  projects:
+    environments:
+      index:
+        title: Entornos
+        intro: Los entornos guardan las variables (URL base, tokens…) que tus solicitudes referencian como {{nombre}}. Elige el activo desde la barra superior.
+        new: Nuevo entorno
+        empty_title: Aún no hay entornos
+        empty_hint: Crea uno (Local, Staging, Producción…) y define variables como base_url.
+        variables:
+          one: "%{count} variable"
+          other: "%{count} variables"
+        selected: seleccionado
+        edit: Editar
+        delete: Eliminar
+        confirm_delete: "¿Eliminar el entorno “%{name}”?"
+      new:
+        title: Nuevo entorno
+      edit:
+        title: Editar entorno
+      form:
+        name: Nombre
+        name_placeholder: p. ej. Producción
+        variables: Variables
+        variables_hint: Referéncialas en las solicitudes como {{nombre}}. Los valores secretos se cifran y no se vuelven a mostrar al guardar.
+        key_placeholder: Variable
+        value_placeholder: Valor
+      create:
+        created: Entorno creado.
+      update:
+        updated: Entorno actualizado.
+      destroy:
+        destroyed: Entorno eliminado.
+  workbench:
+    title: Cliente API
+    shared:
+      cancel: Cancelar
+      save: Guardar
+    workspaces:
+      show:
+        heading: Crea y ejecuta solicitudes
+        empty: Crea una colección para organizar tus solicitudes y luego agrega solicitudes o impórtalas desde un comando cURL.
+        pick: Elige una solicitud en la barra lateral o crea una nueva.
+        new_collection: Nueva colección
+    collections:
+      create:
+        created: Colección creada.
+      update:
+        updated: Colección actualizada.
+      destroy:
+        destroyed: Colección eliminada.
+      form:
+        new_title: Nueva colección
+        edit_title: Configuración de la colección
+        name: Nombre
+        name_placeholder: p. ej. API principal
+        description: Descripción
+    folders:
+      create:
+        created: Carpeta creada.
+      update:
+        updated: Carpeta actualizada.
+      destroy:
+        destroyed: Carpeta eliminada.
+      form:
+        new_title: Nueva carpeta
+        edit_title: Configuración de la carpeta
+        name: Nombre
+        name_placeholder: p. ej. Autenticación
+        auth: Autorización
+    requests:
+      create:
+        created: Solicitud creada.
+      update:
+        updated: Solicitud guardada.
+      destroy:
+        destroyed: Solicitud eliminada.
+      new:
+        default_name: Nueva solicitud
+      form:
+        title: Nueva solicitud
+        name: Nombre
+        method: Método
+        url: URL
+        submit: Crear solicitud
+      duplications:
+        create:
+          duplicated: Solicitud duplicada.
+      name: Nombre de la solicitud
+      method: Método HTTP
+      url_placeholder: "https://api.ejemplo.com/ruta o {{base_url}}/ruta"
+      send: Enviar
+      send_hint: Enviar (Ctrl/Cmd + Enter)
+      save: Guardar
+      copy_curl: Copiar cURL
+      copied: Copiado
+      duplicate: Duplicar
+      delete: Eliminar
+      confirm_delete: "¿Eliminar la solicitud “%{name}”?"
+      copy_name: "%{name} (copia)"
+    curl_imports:
+      create:
+        imported: Solicitud importada.
+      form:
+        title: Importar cURL
+        command: Comando cURL
+        hint: "Crea una solicitud en “%{collection}”."
+        submit: Importar
+    tabs:
+      label: Secciones de la solicitud
+      params: Params
+      authorization: Autorización
+      headers: Headers
+      body: Body
+      settings: Ajustes
+      docs: Docs
+      scripts: Scripts
+    params:
+      hint: Los parámetros de consulta se sincronizan con la URL. Las filas deshabilitadas se conservan aquí pero no se envían.
+      key: Parámetro
+    headers:
+      hint: Shango agrega User-Agent y Accept si no los defines, y Content-Type según el tipo de body.
+      key: Header
+    docs:
+      label: Descripción
+      placeholder: Describe qué hace esta solicitud. Más adelante alimentará la documentación de la API.
+    body:
+      type: Tipo de body
+      none_hint: Esta solicitud no tiene body.
+      placeholder: Body de la solicitud. Usa {{variables}} cuando haga falta.
+      graphql_variables: Variables (JSON)
+      form_hint: Las filas de texto se envían como campos; elige Archivo para subir un archivo.
+      binary: Archivo a enviar como body crudo
+      current_file: "Archivo actual: %{name}"
+      types:
+        none: Ninguno
+        json: JSON
+        text: Texto
+        xml: XML
+        form_urlencoded: Formulario (urlencoded)
+        multipart: Formulario (multipart)
+        graphql: GraphQL
+        binary: Archivo binario
+    settings:
+      timeout: Timeout (segundos)
+      timeout_hint: "Hasta %{max} segundos."
+      max_redirects: Máximo de redirecciones
+      follow_redirects: Seguir redirecciones
+      verify_ssl: Verificar certificados SSL
+    auth:
+      type: Tipo de auth
+      inherit_hint: Usa la autorización de la carpeta o colección padre.
+      none_hint: No se envían credenciales con esta solicitud.
+      secret_saved: Guardado · deja vacío para conservar
+      types:
+        inherit: Heredar del padre
+        none: Sin auth
+        basic: Basic auth
+        bearer: Bearer token
+        api_key: API key
+        jwt_bearer: JWT bearer
+        digest: Digest auth
+        aws_sigv4: AWS Signature v4
+        oauth2: OAuth 2.0
+      fields:
+        username: Usuario
+        password: Contraseña
+        token: Token
+        prefix: Prefijo
+        key: Clave
+        value: Valor
+        add_to: Agregar en
+        algorithm: Algoritmo
+        secret: Secreto o llave privada
+        payload: Payload (JSON)
+        headers: Headers extra (JSON)
+        query_param: Nombre del parámetro de consulta
+        access_key: Access key
+        secret_key: Secret key
+        session_token: Session token
+        region: Región
+        service: Servicio
+        grant_type: Tipo de grant
+        token_url: URL del access token
+        authorization_url: URL de autorización
+        client_id: Client ID
+        client_secret: Client secret
+        scope: Scope
+        audience: Audience
+        client_authentication: Autenticación del cliente
+      options:
+        add_to:
+          header: Header
+          query: Parámetro de consulta
+        grant_type:
+          client_credentials: Client credentials
+          password: Password
+          authorization_code: Authorization code (PKCE)
+        client_authentication:
+          basic_header: Enviar como header Basic
+          body: Enviar en el body
+    oauth2:
+      token_present: Access token guardado.
+      token_missing: Aún no hay access token.
+      expires: "expira %{time}"
+      get_token: Obtener nuevo access token
+      authorize: Autorizar en el navegador
+      clear_token: Borrar token
+      redirect_hint: "Registra esta URL de redirección en tu proveedor: %{url}"
+      save_first: Guarda primero esta configuración y vuelve a abrirla para obtener un token.
+      tokens:
+        create:
+          fetched: Access token guardado.
+          failed: "No se pudo obtener el token: %{error}"
+        destroy:
+          cleared: Token borrado.
+      callbacks:
+        show:
+          fetched: Access token guardado.
+          failed: "No se pudo obtener el token: %{error}"
+          invalid_state: La respuesta de autorización no es válida. Inténtalo de nuevo.
+      missing_token_url: Define primero la URL del token.
+      missing_authorization_url: Define primero la URL de autorización.
+      unsupported_grant: El flujo de código de autorización requiere el navegador.
+      invalid_response: El endpoint del token no devolvió JSON.
+    executions:
+      error: Error
+      failure: "No se pudo enviar la solicitud. Revisa el log del servidor e inténtalo de nuevo."
+      empty_title: Aún no hay respuesta
+      empty_hint: Presiona Enviar o Ctrl/Cmd + Enter para ejecutar esta solicitud.
+      tabs:
+        label: Secciones de la respuesta
+        body: Body
+        headers: Headers
+        request: Solicitud
+        history: Historial
+      time: Tiempo
+      size: Tamaño
+      redirects:
+        one: "%{count} redirección"
+        other: "%{count} redirecciones"
+      no_headers: Sin headers.
+      empty_body: La respuesta no tiene body.
+      binary: "Respuesta binaria o no textual (%{size}, %{type}). No se muestra."
+      modes:
+        pretty: Formateado
+        raw: Crudo
+        preview: Vista previa
+      copy: Copiar
+      copied: Copiado
+      truncated: "Solo se muestran los primeros %{limit}."
+      unresolved: "Variables sin definir: %{names}. Se enviaron tal como se escribieron."
+      request_headers: Headers enviados (secretos ocultos)
+      request_body: Body enviado
+      errors:
+        blocked: Bloqueado por la política de red
+        invalid_url: URL inválida
+        invalid_request: No se pudo construir la solicitud
+        timeout: La solicitud superó el tiempo de espera
+        ssl: Error SSL
+        dns: Host no encontrado
+        refused: Conexión rechazada
+        connection: Falló la conexión
+        unknown: Error inesperado
+    errors:
+      blank_url: Ingresa una URL para enviar la solicitud.
+      invalid_url: La URL no es válida. Solo se admiten http y https.
+      unresolved_url: "Variables sin definir en la URL: %{names}. Elige un entorno que las defina."
+      invalid_graphql_variables: Las variables de GraphQL deben ser JSON válido.
+      missing_binary: Elige un archivo para el body binario.
+    curl:
+      empty: Pega un comando curl.
+      missing_url: El comando no tiene URL.
+      missing_argument: "%{flag} necesita un valor."

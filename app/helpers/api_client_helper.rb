@@ -40,7 +40,7 @@ module ApiClientHelper
   end
 
   def body_type_options
-    ApiRequest::BODY_TYPES.map { |type| [t("api_client.body.types.#{type}"), type] }
+    ApiRequest::BODY_TYPES.map { |type| [t("workbench.body.types.#{type}"), type] }
   end
 
   def method_options

@@ -19,7 +19,7 @@ class AuthFields::Component < ApplicationComponent
   end
 
   def type_options
-    types.map { |key| [t("api_client.auth.types.#{key}"), key] }
+    types.map { |key| [t("workbench.auth.types.#{key}"), key] }
   end
 
   def selected_type
@@ -50,7 +50,7 @@ class AuthFields::Component < ApplicationComponent
   end
 
   def option_label(field, option)
-    t("api_client.auth.options.#{field.name}.#{option}", default: option.humanize)
+    t("workbench.auth.options.#{field.name}.#{option}", default: option.humanize)
   end
 
   def show_when(field)

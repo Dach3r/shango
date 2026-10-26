@@ -3,6 +3,7 @@ class Collection < ApplicationRecord
   include AuthConfigurable
 
   belongs_to :project
+
   has_many :folders, dependent: :destroy
   has_many :api_requests, dependent: :destroy
 

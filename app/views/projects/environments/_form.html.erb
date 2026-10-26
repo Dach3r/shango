@@ -1,6 +1,6 @@
 <section class="mx-auto max-w-3xl">
   <%= form_with model: @environment, url: (@environment.persisted? ? environment_path(@environment) : environments_path), class: "space-y-6 rounded-2xl border border-line bg-card p-6" do |form| %>
-    <%= render "api_client/shared/errors", record: @environment %>
+    <%= render "workbench/shared/errors", record: @environment %>
 
     <div class="max-w-sm">
       <%= form.label :name, t(".name"), class: label_classes %>
@@ -15,8 +15,8 @@
     </div>
 
     <div class="flex justify-end gap-2">
-      <%= link_to t("api_client.shared.cancel"), environments_path, class: button_classes(:ghost) %>
-      <%= form.submit t("api_client.shared.save"), class: button_classes(:primary) %>
+      <%= link_to t("workbench.shared.cancel"), environments_path, class: button_classes(:ghost) %>
+      <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
     </div>
   <% end %>
 </section>

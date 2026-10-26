@@ -23,7 +23,7 @@ Add new docs under `docs/` and reference them here.
 
 ## Conventions
 
-- **URLs always in English**, REST resources whenever possible. Multi-word paths use underscores, never hyphens (`api_client`). Static pages: `get :privacy, to: "pages#privacy"` (no redundant `as:`; use `as:` only when name differs from path). Nested actions live in their own controller (`resource :position, module: :requests`).
+- **URLs always in English**, REST resources whenever possible. Multi-word paths use underscores, never hyphens (`curl_import`). Static pages: `get :privacy, to: "pages#privacy"` (no redundant `as:`; use `as:` only when name differs from path). Nested actions live in their own controller (`resource :position, module: :requests`).
 - **Internal names**: system-defined records (roles, kinds, statuses) keep an internal `name`/value in lowercase snake_case English; display text always via i18n, never stored in DB. User-created records (projects, environments, collections, requests) store the name the user typed.
 - **i18n**: every user-facing string goes in both `en` and `es` locale files (default `en`); no hard-coded UI text.
 - **Project scope**: all domain data belongs to a project and must be queried through it (current project/membership). Data from one project never leaks into another.

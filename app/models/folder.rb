@@ -4,10 +4,12 @@ class Folder < ApplicationRecord
 
   belongs_to :collection
   belongs_to :parent, class_name: "Folder", optional: true, inverse_of: :children
+
   has_many :children, class_name: "Folder", foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
   has_many :api_requests, dependent: :destroy
 
   validates :name, presence: true
+
   validate :parent_belongs_to_collection
   validate :parent_is_not_self_or_descendant
 
@@ -19,7 +21,6 @@ class Folder < ApplicationRecord
     [AuthConfigurable::INHERIT, *super]
   end
 
-  # Parents from the nearest one up to the root folder.
   def ancestors
     chain = []
     node = parent

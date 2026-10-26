@@ -34,10 +34,10 @@ module ApiClient
 
       def perform
         tokens = tokenize
-        raise Invalid, I18n.t("api_client.curl.empty") if tokens.empty?
+        raise Invalid, I18n.t("workbench.curl.empty") if tokens.empty?
 
         parse(tokens)
-        raise Invalid, I18n.t("api_client.curl.missing_url") if @url.blank?
+        raise Invalid, I18n.t("workbench.curl.missing_url") if @url.blank?
 
         Result.success(attributes)
       rescue Invalid, ArgumentError => error
@@ -55,7 +55,7 @@ module ApiClient
         until queue.empty?
           token = queue.shift
           if token.start_with?("-") && token != "-"
-            argument = WITH_ARGUMENT.include?(token) ? (queue.shift || raise(Invalid, I18n.t("api_client.curl.missing_argument", flag: token))) : nil
+            argument = WITH_ARGUMENT.include?(token) ? (queue.shift || raise(Invalid, I18n.t("workbench.curl.missing_argument", flag: token))) : nil
             apply_flag(token, argument)
           else
             @url ||= token

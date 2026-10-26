@@ -14,7 +14,7 @@ module ApiClient
 
       def perform
         config = VariableResolver.new(@environment&.variable_values || {}).resolve_deep(@owner.auth_config)
-        return Result.failure(@owner, error: I18n.t("api_client.oauth2.missing_authorization_url")) if config["authorization_url"].blank?
+        return Result.failure(@owner, error: I18n.t("workbench.oauth2.missing_authorization_url")) if config["authorization_url"].blank?
 
         verifier = SecureRandom.urlsafe_base64(48)
         state = SecureRandom.urlsafe_base64(24)

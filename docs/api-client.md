@@ -40,9 +40,9 @@ Monitoring and documentation will reference `ApiRequest`; they must not copy its
 Controllers are grouped in **feature modules**, use plural REST names and stay thin; all logic lives in services (`app/services`, built on `Serviceable`, returning a `Result`). Models stay flat (not namespaced).
 
 ```
-app/controllers/api_client/          # feature module
+app/controllers/workbench/           # feature module (routes under /workbench)
   base_controller.rb                 # sidebar tree + modal error rendering
-  workspaces_controller.rb           # GET /api_client
+  workspaces_controller.rb           # GET /workbench
   collections_controller.rb          # CRUD (modal forms)
   folders_controller.rb, folders/positions_controller.rb
   requests_controller.rb             # show/update/destroy + modal create
@@ -52,7 +52,7 @@ app/controllers/api_client/          # feature module
   oauth2/{tokens,authorizations,callbacks}_controller.rb
 app/controllers/projects/            # project-level tools
   environments_controller.rb, current_environments_controller.rb
-app/controllers/concerns/api_client/request_parameters.rb
+app/controllers/concerns/workbench/request_parameters.rb
 
 app/services/api_client/
   collections/ folders/ requests/    # one class per action: Create, Update, Destroy, Move, Run, ImportCurl, ExportCurl…
@@ -67,7 +67,7 @@ app/services/result.rb
 
 Services are called as `ApiClient::Requests::Run.call(api_request:, environment:, user:, ...)` and return `Result` (`success?`, `record`, `error`, `data`).
 
-UI: ViewComponents under `app/components/<name>/component.rb` (`RequestTree`, `KeyValueTable`, `CodeEditor`, `AuthFields`, `TabBar`, `Modal`, `EnvironmentSwitcher`, `MethodBadge`, `StatusBadge`, `Oauth2Forms`) and Stimulus controllers under `app/javascript/controllers` (`code_editor`, `tabs`, `key_value_table`, `request_form`, `request_url`, `body_type`, `auth_form`, `conditional_fields`, `tree`, `dialog`, `response_body`). Modal forms render into a `modal` Turbo Frame. Strings live in `config/locales/api_client.{en,es}.yml`.
+UI: ViewComponents under `app/components/<name>/component.rb` (`RequestTree`, `KeyValueTable`, `CodeEditor`, `AuthFields`, `TabBar`, `Modal`, `EnvironmentSwitcher`, `MethodBadge`, `StatusBadge`, `Oauth2Forms`) and Stimulus controllers under `app/javascript/controllers` (`code_editor`, `tabs`, `key_value_table`, `request_form`, `request_url`, `body_type`, `auth_form`, `conditional_fields`, `tree`, `dialog`, `response_body`). Modal forms render into a `modal` Turbo Frame. Strings live in `config/locales/workbench.{en,es}.yml`.
 
 ## 4. Execution pipeline
 
@@ -87,7 +87,7 @@ To add a method (phase 3 candidates: OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASA
 
 1. Create `app/services/api_client/auth/<name>.rb` with the fields and `apply`.
 2. Add its class name to `Registry::STRATEGIES`.
-3. Add labels under `api_client.auth.types.<key>` and `api_client.auth.fields.*` in both locale files.
+3. Add labels under `workbench.auth.types.<key>` and `workbench.auth.fields.*` in both locale files.
 
 Delivery phases: **1** None, Basic, Bearer, API key; **2** OAuth 2.0, JWT bearer, Digest, AWS SigV4 (all implemented); **3** others on demand.
 

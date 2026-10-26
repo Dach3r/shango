@@ -2,6 +2,7 @@ class Environment < ApplicationRecord
   include Positionable
 
   belongs_to :project
+
   has_many :variables, -> { order(:position, :created_at) }, dependent: :destroy, inverse_of: :environment
   has_many :memberships, foreign_key: :current_environment_id, dependent: :nullify, inverse_of: :current_environment
 
@@ -15,7 +16,6 @@ class Environment < ApplicationRecord
     project.environments
   end
 
-  # Enabled variables as name => value, ready for interpolation.
   def variable_values
     variables.select(&:enabled).to_h { |variable| [variable.key, variable.value.to_s] }
   end

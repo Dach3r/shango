@@ -17,7 +17,7 @@ class StatusBadge::Component < ApplicationComponent
   private
 
   def label
-    return t("api_client.executions.error") if @execution.error?
+    return t("workbench.executions.error") if @execution.error?
 
     [@execution.status, @execution.status_text].compact_blank.join(" ")
   end

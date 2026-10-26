@@ -48,16 +48,16 @@ module ApiClient
 
     def resolved_url
       raw = @resolver.resolve(@api_request.url.to_s.strip)
-      raise InvalidRequest, I18n.t("api_client.errors.blank_url") if raw.blank?
-      raise InvalidRequest, I18n.t("api_client.errors.unresolved_url", names: @resolver.unresolved.to_a.sort.join(", ")) if @resolver.unresolved.any?
+      raise InvalidRequest, I18n.t("workbench.errors.blank_url") if raw.blank?
+      raise InvalidRequest, I18n.t("workbench.errors.unresolved_url", names: @resolver.unresolved.to_a.sort.join(", ")) if @resolver.unresolved.any?
 
       url = raw.match?(%r{\A[a-z][a-z0-9+.\-]*://}i) ? raw : "http://#{raw}"
       uri = URI.parse(url)
-      raise InvalidRequest, I18n.t("api_client.errors.invalid_url") unless uri.is_a?(URI::HTTP) && uri.host.present?
+      raise InvalidRequest, I18n.t("workbench.errors.invalid_url") unless uri.is_a?(URI::HTTP) && uri.host.present?
 
       url
     rescue URI::InvalidURIError
-      raise InvalidRequest, I18n.t("api_client.errors.invalid_url")
+      raise InvalidRequest, I18n.t("workbench.errors.invalid_url")
     end
 
     def resolved_headers
@@ -105,7 +105,7 @@ module ApiClient
       variables = raw_variables.empty? ? {} : JSON.parse(raw_variables)
       JSON.generate(query: @resolver.resolve(@api_request.body.to_s), variables:)
     rescue JSON::ParserError
-      raise InvalidRequest, I18n.t("api_client.errors.invalid_graphql_variables")
+      raise InvalidRequest, I18n.t("workbench.errors.invalid_graphql_variables")
     end
 
     def multipart_body(headers)
@@ -130,7 +130,7 @@ module ApiClient
 
     def binary_body(headers)
       attachment = @api_request.binary_body
-      raise InvalidRequest, I18n.t("api_client.errors.missing_binary") unless attachment.attached?
+      raise InvalidRequest, I18n.t("workbench.errors.missing_binary") unless attachment.attached?
 
       set_content_type(headers, attachment.content_type.presence || "application/octet-stream")
       Body.new(factory: -> { attachment.download }, preview: "[binary #{attachment.filename} · #{attachment.byte_size} bytes]", multipart: false)

@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resource :current_environment, only: :update
   end
 
-  namespace :api_client do
+  namespace :workbench do
     root to: "workspaces#show"
 
     resources :collections, except: %i[index show] do

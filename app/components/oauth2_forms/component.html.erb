@@ -1,9 +1,9 @@
-<%= form_with url: api_client_oauth2_token_path, method: :post, id: dom_id_for("token"), class: "hidden", data: { turbo: false } do %>
+<%= form_with url: workbench_oauth2_token_path, method: :post, id: dom_id_for("token"), class: "hidden", data: { turbo: false } do %>
   <% owner_params.each do |name, value| %><%= hidden_field_tag name, value, id: nil %><% end %>
 <% end %>
-<%= form_with url: api_client_oauth2_authorization_path, method: :post, id: dom_id_for("authorization"), class: "hidden", data: { turbo: false } do %>
+<%= form_with url: workbench_oauth2_authorization_path, method: :post, id: dom_id_for("authorization"), class: "hidden", data: { turbo: false } do %>
   <% owner_params.each do |name, value| %><%= hidden_field_tag name, value, id: nil %><% end %>
 <% end %>
-<%= form_with url: api_client_oauth2_token_path, method: :delete, id: dom_id_for("clear"), class: "hidden", data: { turbo: false } do %>
+<%= form_with url: workbench_oauth2_token_path, method: :delete, id: dom_id_for("clear"), class: "hidden", data: { turbo: false } do %>
   <% owner_params.each do |name, value| %><%= hidden_field_tag name, value, id: nil %><% end %>
 <% end %>

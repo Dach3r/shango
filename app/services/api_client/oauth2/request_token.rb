@@ -13,7 +13,7 @@ module ApiClient
 
       def perform
         config = resolver.resolve_deep(@owner.auth_config)
-        raise TokenClient::Failed, I18n.t("api_client.oauth2.unsupported_grant") if config["grant_type"] == "authorization_code"
+        raise TokenClient::Failed, I18n.t("workbench.oauth2.unsupported_grant") if config["grant_type"] == "authorization_code"
 
         TokenClient.new(config:, owner: @owner).fetch
         Result.success(@owner)

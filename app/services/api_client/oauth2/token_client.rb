@@ -41,7 +41,7 @@ module ApiClient
       private
 
       def request_token(params)
-        raise Failed, I18n.t("api_client.oauth2.missing_token_url") if @config["token_url"].blank?
+        raise Failed, I18n.t("workbench.oauth2.missing_token_url") if @config["token_url"].blank?
 
         params = params.compact_blank
         headers = { "Accept" => "application/json", "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Shango/1.0" }
@@ -63,7 +63,7 @@ module ApiClient
 
         raise Failed, [body["error"], body["error_description"]].compact.join(": ").presence || "HTTP #{response.status}"
       rescue JSON::ParserError
-        raise Failed, "HTTP #{response.status}: #{I18n.t("api_client.oauth2.invalid_response")}"
+        raise Failed, "HTTP #{response.status}: #{I18n.t("workbench.oauth2.invalid_response")}"
       end
 
       def store(body)

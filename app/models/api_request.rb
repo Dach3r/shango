@@ -11,6 +11,7 @@ class ApiRequest < ApplicationRecord
   belongs_to :project
   belongs_to :collection
   belongs_to :folder, optional: true
+
   has_many :request_executions, dependent: :destroy
 
   has_many_attached :body_files
@@ -23,9 +24,9 @@ class ApiRequest < ApplicationRecord
   validates :name, presence: true
   validates :http_method, inclusion: { in: METHODS }
   validates :body_type, inclusion: { in: BODY_TYPES }
+
   validate :folder_belongs_to_collection
 
-  # Rows arrive from forms as `{ "0" => {...} }`; store them as clean arrays right away.
   def query_params=(rows)
     super(self.class.clean_rows(rows))
   end
@@ -77,7 +78,6 @@ class ApiRequest < ApplicationRecord
   end
 
   class << self
-    # Key/value rows as submitted by the table editor; blank rows are dropped.
     def clean_rows(rows, extra: [])
       list = rows.respond_to?(:values) && !rows.is_a?(Array) ? rows.values : Array(rows)
 
