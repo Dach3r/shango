@@ -90,8 +90,10 @@ export default class extends Controller {
     const label = button.querySelector("[data-label]") || button;
     const original = label.textContent;
     label.textContent = text;
+    button.title = text;
     setTimeout(() => {
       label.textContent = original;
+      button.removeAttribute("title");
     }, 1800);
   }
 }
