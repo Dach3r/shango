@@ -33,7 +33,7 @@ es:
       missing: Sin definir
       response: Respuesta
       response_body: Atributo del body – valor del body de la respuesta
-      response_raw: Body completo – toda la respuesta
+      response_raw: Cuerpo completo – toda la respuesta
       response_header: Header – valor de un header de la respuesta
       response_url: URL del request – URL del request que la originó
       response_loading: Cargando…
@@ -236,10 +236,10 @@ es:
         submit: Importar
     tabs:
       label: Secciones de la solicitud
-      params: Params
+      params: Parámetros
       authorization: Autorización
-      headers: Headers
-      body: Body
+      headers: Encabezados
+      body: Cuerpo
       settings: Ajustes
     params:
       add: Agregar parámetro
@@ -250,7 +250,7 @@ es:
     body:
       type: Tipo de body
       none_hint: Esta solicitud no tiene body.
-      placeholder: Body de la solicitud. Usa {{variables}} cuando haga falta.
+      placeholder: Cuerpo de la solicitud. Usa {{variables}} cuando haga falta.
       graphql_variables: Variables (JSON)
       form_hint: Las filas de texto se envían como campos; elige Archivo para subir un archivo.
       binary: Archivo a enviar como body crudo
@@ -296,7 +296,7 @@ es:
         algorithm: Algoritmo
         secret: Secreto o llave privada
         payload: Payload (JSON)
-        headers: Headers extra (JSON)
+        headers: Encabezados extra (JSON)
         query_param: Nombre del parámetro de consulta
         access_key: Access key
         secret_key: Secret key
@@ -354,8 +354,8 @@ es:
       empty_hint: Presiona Enviar o Ctrl/Cmd + Enter para ejecutar esta solicitud.
       tabs:
         label: Secciones de la respuesta
-        body: Body
-        headers: Headers
+        body: Cuerpo
+        headers: Encabezados
         request: Solicitud
         payload: Payload
         history: Historial
@@ -386,7 +386,7 @@ es:
       copied: Copiado
       truncated: "Solo se muestran los primeros %{limit}."
       unresolved: "Variables sin definir: %{names}. Se enviaron tal como se escribieron."
-      request_headers: Headers enviados (secretos ocultos)
+      request_headers: Encabezados enviados (secretos ocultos)
       no_payload: No se envió payload.
       errors:
         blocked: Bloqueado por la política de red
