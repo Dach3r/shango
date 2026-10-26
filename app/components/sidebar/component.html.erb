@@ -3,15 +3,14 @@
     <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
     <nav aria-label="<%= t("components.sidebar.label") %>">
-      <ul class="space-y-0.5">
+      <ul>
         <% live_items.each do |item| %>
           <li><%= render NavItem::Component.new(**item) %></li>
         <% end %>
       </ul>
 
       <div class="mx-auto my-3 hidden h-px w-6 bg-line lg:group-data-[collapsed=true]/sidebar:block" aria-hidden="true"></div>
-      <p class="mt-4 mb-1.5 px-3 font-mono text-[0.6875rem] tracking-widest text-muted uppercase lg:group-data-[collapsed=true]/sidebar:hidden"><%= t("components.sidebar.soon") %></p>
-      <ul class="space-y-0.5">
+      <ul>
         <% soon_items.each do |item| %>
           <li><%= render NavItem::Component.new(**item) %></li>
         <% end %>
