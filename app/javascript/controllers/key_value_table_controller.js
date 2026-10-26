@@ -28,6 +28,7 @@ export default class extends Controller {
     } else {
       row.remove();
     }
+    this.ensureRow();
     this.changed();
   }
 
@@ -81,6 +82,12 @@ export default class extends Controller {
       );
     });
     kept.forEach((row) => this.bodyTarget.appendChild(row));
+    this.ensureRow();
+  }
+
+  // Pairs tables always keep one blank row; blank rows are never sent.
+  ensureRow() {
+    if (this.element.dataset.alwaysRow === "true" && this.visibleRows().length === 0) this.insertRow();
   }
 
   rows() {

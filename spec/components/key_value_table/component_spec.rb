@@ -21,4 +21,12 @@ RSpec.describe KeyValueTable::Component, type: :component do
     expect(page).to have_css("input[name='environment[variables][0][key]'][value=HOST][placeholder=K]")
     expect(page).to have_css("input[name='environment[variables][0][id]']", visible: :all)
   end
+
+  it "keeps one blank row in pairs tables only", :aggregate_failures do
+    render_inline(described_class.new(name: "api_request[headers]", rows: []))
+    expect(page).to have_css("[data-always-row=true] [data-key-value-table-target=body] [data-key-value-table-target=row]", count: 1)
+
+    render_inline(described_class.new(name: "environment[variables]", rows: [], variant: :variables))
+    expect(page).to have_css("[data-always-row=false] [data-key-value-table-target=body] [data-key-value-table-target=row]", count: 0)
+  end
 end

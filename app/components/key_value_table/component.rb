@@ -7,6 +7,7 @@ class KeyValueTable::Component < ApplicationComponent
     @name = name
     @rows = rows.map { |row| row.respond_to?(:attributes) ? row.attributes : row.to_h }.map(&:stringify_keys)
     @variant = variant
+    @rows = [{ "enabled" => true }] if pairs? && @rows.empty?
     @key_placeholder = key_placeholder || I18n.t("components.key_value_table.key")
     @value_placeholder = value_placeholder || I18n.t("components.key_value_table.value")
     @add_label = add_label || I18n.t("components.key_value_table.add")
@@ -20,7 +21,7 @@ class KeyValueTable::Component < ApplicationComponent
   end
 
   def wrapper_data
-    { controller: "key-value-table" }.merge(@data)
+    { controller: "key-value-table", always_row: pairs? }.merge(@data)
   end
 
   def row_component(row, index)

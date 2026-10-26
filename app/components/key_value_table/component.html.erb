@@ -2,9 +2,9 @@
   <div class="overflow-hidden border border-line">
     <% if pairs? %>
       <div class="flex h-11 items-center divide-x divide-line border-b border-line bg-ink/[0.03] text-xs font-medium uppercase tracking-wide text-muted">
-        <span class="min-w-0 flex-1 px-5"><%= @key_placeholder %></span>
-        <span class="min-w-0 flex-[1.4] px-5"><%= @value_placeholder %></span>
-        <span class="hidden min-w-0 flex-1 px-5 lg:block"><%= t("components.key_value_table.description") %></span>
+        <span class="min-w-0 flex-1 px-2"><span class="block px-3"><%= @key_placeholder %></span></span>
+        <span class="min-w-0 flex-[1.4] px-2"><span class="block px-3"><%= @value_placeholder %></span></span>
+        <span class="hidden min-w-0 flex-1 px-2 lg:block"><span class="block px-3"><%= t("components.key_value_table.description") %></span></span>
         <span class="h-full w-[5.25rem] shrink-0"></span>
       </div>
     <% end %>

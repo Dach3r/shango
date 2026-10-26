@@ -65,7 +65,7 @@
       <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
                                          aria: { label: t("components.key_value_table.enabled") }) %>
       <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
-              class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+              class="[.group:only-child_&]:invisible flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "trash-2", class: "size-4" %>
       </button>
     </div>
