@@ -105,8 +105,6 @@ en:
         name: Name
         name_placeholder: e.g. Main API
         description: Description
-        auth: Authorization
-        auth_hint: Applies to every request in this collection unless a folder or request sets its own.
     folders:
       create:
         created: Folder created.

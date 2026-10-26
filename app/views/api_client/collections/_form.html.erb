@@ -11,12 +11,5 @@
       <%= form.label :description, t(".description"), class: label_classes %>
       <%= form.text_area :description, rows: 2, class: field_classes %>
     </div>
-
-    <fieldset class="space-y-3">
-      <legend class="text-sm font-semibold text-ink"><%= t(".auth") %></legend>
-      <p class="text-xs text-muted"><%= t(".auth_hint") %></p>
-      <%= render AuthFields::Component.new(scope: "collection", record: @collection, inheritable: false) %>
-    </fieldset>
   <% end %>
-  <%= render Oauth2Forms::Component.new(owner: @collection) %>
 <% end %>

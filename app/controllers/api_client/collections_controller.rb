@@ -36,7 +36,7 @@ module ApiClient
     end
 
     def collection_attributes
-      params.expect(collection: [:name, :description, :auth_type, { auth_config: {} }])
+      params.expect(collection: %i[name description])
     end
   end
 end

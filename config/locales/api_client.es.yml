@@ -105,8 +105,6 @@ es:
         name: Nombre
         name_placeholder: p. ej. API principal
         description: Descripción
-        auth: Autorización
-        auth_hint: Se aplica a todas las solicitudes de la colección salvo que una carpeta o solicitud defina la suya.
     folders:
       create:
         created: Carpeta creada.

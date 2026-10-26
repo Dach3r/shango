@@ -12,7 +12,7 @@
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
 - Run a request, inspect the response (pretty / raw / HTML preview, headers, request details, redirects), per-request history (last 50).
 - Import from a cURL command and copy a request as cURL.
-- Authorization with inheritance (request → folder(s) → collection): No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
+- Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
 - Code editor (CodeMirror 6) with `{{variable}}` highlighting and autocomplete.
 
 **Not included (yet)**: pre/post-request scripts and assertions (the *Scripts* tab is shown disabled), collection runner, cookie jar, WebSocket/gRPC, Postman/OpenAPI/Bruno import, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
@@ -26,7 +26,7 @@ All tables use UUID primary keys. `Project` is the tenancy boundary: every recor
 | `Environment` | `project_id`, `name` (unique per project), `position`. Has many `Variable`s (nested attributes). |
 | `Variable` | `key`, `value` (encrypted), `secret`, `enabled`. A blank submission for a saved secret keeps the stored value. |
 | `Membership#current_environment_id` | The environment each member works with in a project (nullable, `nullify` on delete). |
-| `Collection` | `name`, `description`, `auth_type` (default `none`), `auth_config` (encrypted JSON). |
+| `Collection` | `name`, `description`, `auth_type` (default `none`), `auth_config` (encrypted JSON); not exposed in the UI, collections carry no authorization. |
 | `Folder` | Self-referencing (`parent_id`) inside a collection; `auth_type` defaults to `inherit`. |
 | `ApiRequest` | The glossary's *Request*. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
 | `RequestExecution` | History entry: resolved URL, status, timing, headers, body (≤ 1 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
@@ -91,7 +91,7 @@ To add a method (phase 3 candidates: OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASA
 
 Delivery phases: **1** None, Basic, Bearer, API key; **2** OAuth 2.0, JWT bearer, Digest, AWS SigV4 (all implemented); **3** others on demand.
 
-Inheritance: a request or folder with `inherit` uses the nearest ancestor that does not; collections never inherit (default *No auth*). `Auth::EffectiveAuth` resolves it. OAuth tokens are stored on the record that owns the OAuth settings and refreshed automatically before they expire.
+Inheritance: a request or folder with `inherit` uses the nearest ancestor that does not; collections have no authorization UI, so a request or folder with nothing above it sends *No auth*. `Auth::EffectiveAuth` resolves it. OAuth tokens are stored on the record that owns the OAuth settings and refreshed automatically before they expire.
 
 ## 6. Security
 
