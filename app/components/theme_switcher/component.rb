@@ -1,8 +1,8 @@
 class ThemeSwitcher::Component < ApplicationComponent
   ICONS = { "system" => "monitor", "light" => "sun", "dark" => "moon" }.freeze
-  BASE = "flex size-7 cursor-pointer items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+  BASE = "flex size-9 cursor-pointer items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-inset"
   ACTIVE = "bg-solid text-on-solid"
-  INACTIVE = "text-body hover:text-ink"
+  INACTIVE = "text-body hover:bg-ink/5 hover:text-ink"
 
   private
 

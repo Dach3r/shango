@@ -1,6 +1,6 @@
-<div data-controller="theme-switcher" role="group" aria-label="<%= t("components.theme_switcher.label") %>" class="flex gap-1 rounded-full border border-line bg-card/80 p-1 backdrop-blur">
+<div data-controller="theme-switcher" role="group" aria-label="<%= t("components.theme_switcher.label") %>" class="flex border border-line bg-card/80 backdrop-blur">
   <% ICONS.each do |theme, icon| %>
-    <%= button_to preferences_path, method: :patch, params: { theme: theme }, form_class: "contents", class: button_classes(theme),
+    <%= button_to preferences_path, method: :patch, params: { theme: theme }, form_class: "flex border-line not-first:border-l", class: button_classes(theme),
                   data: { action: "theme-switcher#apply", theme_switcher_theme_param: theme },
                   aria: { label: t("components.theme_switcher.#{theme}"), current: ("true" if current?(theme)) } do %>
       <%= lucide_icon icon, class: "size-4" %>

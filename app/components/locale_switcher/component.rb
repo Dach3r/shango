@@ -1,9 +1,9 @@
 class LocaleSwitcher::Component < ApplicationComponent
   LABELS = { en: "EN", es: "ES" }.freeze
   NAMES = { en: "English", es: "Español" }.freeze
-  BASE = "cursor-pointer rounded-full px-3 py-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+  BASE = "h-9 cursor-pointer px-3.5 font-mono text-xs font-medium tracking-widest transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-inset"
   ACTIVE = "bg-solid text-on-solid"
-  INACTIVE = "text-body hover:text-ink"
+  INACTIVE = "text-body hover:bg-ink/5 hover:text-ink"
 
   private
 
