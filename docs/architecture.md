@@ -69,6 +69,7 @@ Existing, to be followed:
 - Business logic lives in `app/services/<feature>/<resource>/<action>.rb`, built on `Serviceable` (`Klass.call(**kwargs)` runs the private `perform`) and returning a `Result` (`app/services/result.rb`). Plain collaborators (resolvers, clients) are ordinary classes next to them.
 - UI components live in `app/components/<name>/component.rb` (with an optional `component.html.erb`) and inherit `ApplicationComponent`, e.g. `Button::Component`.
 - Stimulus controllers in `app/javascript/controllers/`, named `<name>_controller.js`. Third-party JS is vendored in `vendor/javascript` and pinned in `config/importmap.rb` (see [`api-client.md`](api-client.md) §7 for CodeMirror).
+- **UI is "line design"**: square corners (no `rounded-*` except `rounded-full` on dots and spinners), 1px `border-line` hairlines instead of fills and shadows, hairline `ring-1` focus, active nav marked by a left accent border and tabs by an underline, mono uppercase for section labels. Colors always come from palette tokens.
 - Compact form controls for editor-style screens come from `ControlsHelper`; internal lookups inside ViewComponents call `I18n.t` in `initialize` (`t` only works while rendering).
 - Translations live in `config/locales/*.{en,es}.yml`; every new key needs both languages. Inside a `render layout: ... do` block use absolute keys (lazy `t(".key")` resolves against the layout partial).
 - Tailwind with a `brand-*` color palette.

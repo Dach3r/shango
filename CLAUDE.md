@@ -28,6 +28,7 @@ Add new docs under `docs/` and reference them here.
 - **i18n**: every user-facing string goes in both `en` and `es` locale files (default `en`); no hard-coded UI text.
 - **Project scope**: all domain data belongs to a project and must be queried through it (current project/membership). Data from one project never leaks into another.
 - **Secrets**: tokens, credentials, and sensitive variable values use Active Record encryption, never plain columns, and are never logged or rendered back unmasked.
+- **UI style**: line design (square corners, hairline borders, no shadows); see `docs/architecture.md` §5.
 - **Navigation**: never show unbuilt features as available; unbuilt nav entries render disabled with a "Soon" badge.
 - **One `create_table` per migration file**, named `create_<table>`, ordered so referenced tables come first. Other schema changes get their own `add_<column>_to_<table>` migration; never bundle unrelated changes. **Migration timestamps look real**: use the actual moment you create it (`date +%Y%m%d%H%M%S`, e.g. `20261014143752`), never round or placeholder values like `...090000` or `...130000`, and keep them after the latest existing migration. Never edit a migration that is already committed; add a new one.
 - **Enums are string-backed**, never integer: `enum :http_method, { get: "get", ... }` with `t.string ..., default: "<value>"`, plus a `CHECK` constraint in the migration.

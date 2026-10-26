@@ -429,7 +429,7 @@ input:-webkit-autofill:focus {
   display: block;
   height: 100%;
   min-height: 8rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   background: var(--field);
   animation: code-editor-pulse 1.2s ease-in-out infinite;
 }
@@ -442,7 +442,7 @@ input:-webkit-autofill:focus {
 
 .cm-var {
   --var-color: var(--accent);
-  border-radius: 0.25rem;
+  border-radius: 0;
   background: color-mix(in oklab, var(--var-color) 16%, transparent);
   color: var(--var-color);
 }
