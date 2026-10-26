@@ -11,27 +11,27 @@ RSpec.describe Topbar::Component, type: :component do
   it "highlights the api client on the workbench root", :aggregate_failures do
     render_topbar
 
-    expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"))
+    expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"), visible: :all)
     expect(page).to have_css("span[aria-disabled=true]", text: I18n.t("components.topbar.monitoring"), visible: :all)
   end
 
   it "highlights a feature on any of its controllers" do
     render_topbar(path: "/workbench/requests/1", controller_path: "workbench/requests")
 
-    expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"))
+    expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"), visible: :all)
   end
 
   it "highlights nothing on unrelated pages" do
     render_topbar(path: "/projects/new", controller_path: "projects")
 
-    expect(page).to have_no_css("a[aria-current=page]")
+    expect(page).to have_no_css("a[aria-current=page]", visible: :all)
   end
 
-  it "tucks upcoming tools into the more menu", :aggregate_failures do
+  it "keeps every tool inside the more menu", :aggregate_failures do
     render_topbar
 
-    expect(page).to have_css("ul:first-of-type a", text: I18n.t("components.topbar.api_client"))
     expect(page).to have_css("button", text: I18n.t("components.topbar.more"))
+    expect(page).to have_css("ul[hidden] a", text: I18n.t("components.topbar.api_client"), visible: :all)
     expect(page).to have_css("ul[hidden] span[aria-disabled=true]", text: I18n.t("components.topbar.logs"), visible: :all)
   end
 

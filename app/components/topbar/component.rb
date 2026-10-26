@@ -17,14 +17,6 @@ class Topbar::Component < ApplicationComponent
 
   private
 
-  def live_items
-    items.select { |item| item[:href] }
-  end
-
-  def soon_items
-    items.reject { |item| item[:href] }
-  end
-
   def items
     @items ||= ITEMS.map { |item| nav_item(item) }
   end

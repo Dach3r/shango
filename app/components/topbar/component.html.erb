@@ -3,13 +3,7 @@
 
   <span class="my-3 w-px shrink-0 bg-line md:hidden" aria-hidden="true"></span>
 
-  <nav aria-label="<%= t("components.topbar.label") %>" class="flex min-w-0 flex-1 items-stretch overflow-x-auto px-1">
-    <ul class="flex items-stretch">
-      <% live_items.each do |item| %>
-        <li class="flex"><%= render NavItem::Component.new(**item, orientation: :horizontal) %></li>
-      <% end %>
-    </ul>
-  </nav>
+  <div class="flex-1"></div>
 
   <div class="relative flex" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
     <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
@@ -19,8 +13,8 @@
       <%= lucide_icon "chevron-down", class: "size-3.5 shrink-0" %>
     </button>
 
-    <ul data-dropdown-target="menu" hidden class="absolute right-0 top-full z-30 w-60 border border-t-0 border-line bg-card">
-      <% soon_items.each do |item| %>
+    <ul data-dropdown-target="menu" hidden aria-label="<%= t("components.topbar.label") %>" class="absolute right-0 top-full z-30 w-60 border border-t-0 border-line bg-card">
+      <% items.each do |item| %>
         <li class="flex"><%= render NavItem::Component.new(**item, orientation: :menu) %></li>
       <% end %>
     </ul>

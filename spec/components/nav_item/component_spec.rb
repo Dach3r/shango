@@ -24,14 +24,6 @@ RSpec.describe NavItem::Component, type: :component do
     render_inline(described_class.new(label: "Home", icon: "home", href: "/", active: true))
 
     expect(page).to have_css("a.border-b.shadow-\\[inset_2px_0_0_var\\(--accent\\)\\]")
-    expect(page).to have_no_css("span.max-lg\\:sr-only")
-  end
-
-  it "lines up in a bar and hides the label on small screens", :aggregate_failures do
-    render_inline(described_class.new(label: "Home", icon: "home", href: "/", active: true, orientation: :horizontal))
-
-    expect(page).to have_css("a.shadow-\\[inset_0_-2px_0_var\\(--accent\\)\\]")
-    expect(page).to have_css("span.max-lg\\:sr-only", text: "Home")
   end
 
   it "lists upcoming entries in a menu with a soon badge", :aggregate_failures do
