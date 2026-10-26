@@ -27,7 +27,7 @@ class AuthFields::Component < ApplicationComponent
   end
 
   def strategy(type)
-    ApiClient::Auth::Registry.fetch(type) if ApiClient::Auth::Registry.keys.include?(type)
+    ApiClient::Auth::Registry.fetch(type)
   end
 
   def config

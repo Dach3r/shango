@@ -37,6 +37,7 @@ group :development, :test do
 end
 
 group :test do
+  gem "capybara"
   gem "shoulda-matchers", "~> 7.0"
   gem "simplecov", require: false
   gem "webmock"
