@@ -3,9 +3,9 @@
 
 <%= render layout: "projects/environments/panel" do %>
   <section class="mx-auto max-w-3xl space-y-6">
-    <div class="flex items-start justify-between gap-4">
+    <div class="flex flex-col items-start gap-4">
       <p class="max-w-xl text-sm text-muted"><%= t("projects.environments.index.intro") %></p>
-      <%= link_to new_environment_path, class: button_classes(:primary, "shrink-0") do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
+      <%= link_to new_environment_path, class: button_classes(:primary, "w-full justify-center") do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
     </div>
 
     <% if @environments.empty? %>
