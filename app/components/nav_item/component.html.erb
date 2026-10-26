@@ -1,11 +1,11 @@
 <% if @href %>
   <%= link_to @href, class: classes, title: @label, aria: { current: ("page" if @active) } do %>
     <%= lucide_icon @icon, class: "size-4 shrink-0" %>
-    <span class="truncate lg:group-data-[collapsed=true]/sidebar:hidden"><%= @label %></span>
+    <span class="<%= label_classes %>"><%= @label %></span>
   <% end %>
 <% else %>
   <span class="<%= classes %>" title="<%= @label %> · <%= t("components.nav_item.soon") %>" aria-disabled="true">
     <%= lucide_icon @icon, class: "size-4 shrink-0" %>
-    <span class="truncate lg:group-data-[collapsed=true]/sidebar:hidden"><%= @label %></span>
+    <span class="<%= label_classes %>"><%= @label %></span>
   </span>
 <% end %>

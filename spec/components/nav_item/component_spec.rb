@@ -19,4 +19,17 @@ RSpec.describe NavItem::Component, type: :component do
     expect(page).to have_css("span[aria-disabled=true].cursor-not-allowed", text: "Logs")
     expect(page).to have_css("span[title$='#{I18n.t("components.nav_item.soon")}']")
   end
+
+  it "hides the label when the sidebar is collapsed", :aggregate_failures do
+    render_inline(described_class.new(label: "Home", icon: "home", href: "/"))
+
+    expect(page.native.to_html).to include("group-data-[collapsed=true]/sidebar:hidden")
+    expect(page.native.to_html).to include("group-data-[collapsed=true]/sidebar:size-10")
+  end
+
+  it "keeps the label visible when not collapsible", :aggregate_failures do
+    render_inline(described_class.new(label: "Home", icon: "home", href: "/", collapsible: false))
+
+    expect(page.native.to_html).not_to include("group-data-[collapsed=true]/sidebar")
+  end
 end
