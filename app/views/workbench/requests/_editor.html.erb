@@ -30,14 +30,14 @@
       </div>
     </div>
     <button type="button" data-request-form-target="send" data-action="request-form#toggle" title="<%= t("workbench.requests.send_hint") %>"
-            class="<%= button_classes(:primary, "group @xl:min-w-24") %>">
+            class="<%= button_classes(:primary, "group @xl:min-w-24 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
       <span class="contents group-data-[busy=true]:hidden">
         <%= lucide_icon "send", class: "size-4" %>
         <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
         <span class="sr-only @xl:hidden"><%= t("workbench.requests.send") %></span>
       </span>
       <span class="hidden items-center gap-2 group-data-[busy=true]:flex" title="<%= t("workbench.requests.cancel_hint") %>">
-        <%= lucide_icon "square", class: "size-4" %>
+        <%= lucide_icon "circle-x", class: "size-4" %>
         <span class="hidden @xl:inline"><%= t("workbench.requests.cancel") %></span>
         <span class="sr-only @xl:hidden"><%= t("workbench.requests.cancel") %></span>
       </span>
