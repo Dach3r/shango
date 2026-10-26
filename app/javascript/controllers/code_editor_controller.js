@@ -129,6 +129,17 @@ export default class extends Controller {
               },
               position: 10,
             },
+            {
+              render: (completion) => {
+                if (!completion.value) return null;
+
+                const value = document.createElement("div");
+                value.className = "cm-var-value";
+                value.textContent = completion.value;
+                return value;
+              },
+              position: 90,
+            },
           ],
           optionClass: () => "cm-var-option",
         }),
@@ -195,10 +206,11 @@ export default class extends Controller {
     const environment = { name: labels.environment, rank: 0 };
     const dynamic = { name: labels.dynamic, rank: 1 };
     const options = [
-      ...this.variablesValue.map(({ name, set }) => ({
+      ...this.variablesValue.map(({ name, set, value }) => ({
         name,
         status: set ? "set" : "empty",
-        info: set ? labels.set : labels.empty,
+        info: set ? null : labels.empty,
+        value,
         section: environment,
       })),
       ...Object.entries(DYNAMIC_VARIABLES).map(([name, key]) => ({
@@ -212,11 +224,12 @@ export default class extends Controller {
       context.state.sliceDoc(context.pos, context.pos + 2) === "}}" ? "" : "}}";
     return {
       from: match.from + 2,
-      options: options.map(({ name, status, info, section }) => ({
+      options: options.map(({ name, status, info, value, section }) => ({
         label: name,
         apply: `${name}${closing}`,
         type: status,
         detail: info,
+        value,
         section,
       })),
       validFor: /^[\w.\-$]*$/,
@@ -298,43 +311,55 @@ export default class extends Controller {
       },
       ".cm-tooltip.cm-tooltip-autocomplete": {
         padding: "4px",
-        minWidth: "240px",
+        minWidth: "260px",
+        maxWidth: "420px",
         fontFamily: "var(--font-sans)",
       },
-      ".cm-tooltip-autocomplete > ul": {
+      ".cm-tooltip.cm-tooltip-autocomplete > ul": {
         fontFamily: "var(--font-mono)",
         fontSize: "12.5px",
         maxHeight: "260px",
       },
-      ".cm-tooltip-autocomplete > ul > completion-section": {
+      ".cm-tooltip.cm-tooltip-autocomplete > ul > completion-section": {
+        display: "block",
         padding: "8px 8px 4px",
         border: "none",
-        color: "var(--faint)",
+        color: "var(--muted)",
         fontFamily: "var(--font-sans)",
         fontSize: "10.5px",
         fontWeight: "600",
         letterSpacing: "0.06em",
         textTransform: "uppercase",
       },
-      ".cm-tooltip-autocomplete > ul > li": {
+      ".cm-tooltip.cm-tooltip-autocomplete > ul > li": {
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
         padding: "5px 8px",
         borderRadius: "8px",
         color: "var(--body)",
         lineHeight: "1.4",
       },
-      ".cm-tooltip-autocomplete > ul > li > .cm-completionLabel": {
+      ".cm-tooltip.cm-tooltip-autocomplete > ul > li > .cm-completionLabel": {
         flex: "1",
       },
-      ".cm-tooltip-autocomplete > ul > li > .cm-completionDetail": {
+      ".cm-tooltip.cm-tooltip-autocomplete > ul > li > .cm-completionDetail": {
         marginLeft: "24px",
         fontFamily: "var(--font-sans)",
         fontSize: "11px",
         fontStyle: "normal",
         color: "var(--muted)",
       },
-      ".cm-tooltip-autocomplete ul li[aria-selected]": {
+      ".cm-tooltip.cm-tooltip-autocomplete > ul > li > .cm-var-value": {
+        flexBasis: "100%",
+        overflow: "hidden",
+        marginLeft: "14px",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        fontSize: "11px",
+        color: "var(--muted)",
+      },
+      ".cm-tooltip.cm-tooltip-autocomplete ul li[aria-selected]": {
         backgroundColor: "var(--field)",
         color: "var(--ink)",
       },

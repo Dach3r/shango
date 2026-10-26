@@ -14,11 +14,14 @@ module Workbench
     end
 
     # Enabled variables of the selected environment, offered as autocomplete and highlighted in the editors.
-    # Only whether a value is set is exposed, never the value itself.
+    # Secret values are masked, so they never reach the browser.
     def editor_variables
       return [] unless current_environment
 
-      current_environment.variables.select(&:enabled).map { |variable| { name: variable.key, set: variable.value.present? } }
+      current_environment.variables.select(&:enabled).map do |variable|
+        value = variable.secret && variable.value.present? ? ApiClient::Masker::MASK : variable.value.to_s
+        { name: variable.key, set: variable.value.present?, value: }
+      end
     end
 
     # Re-renders a modal form (inside the "modal" frame) with its validation errors.
