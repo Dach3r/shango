@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-30 flex h-14 shrink-0 items-stretch border-b border-line bg-card">
+<header class="sticky top-0 z-30 flex h-12 shrink-0 items-stretch border-b border-line bg-card">
   <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
   <nav aria-label="<%= t("components.topbar.label") %>" class="flex min-w-0 flex-1 items-stretch overflow-x-auto">
