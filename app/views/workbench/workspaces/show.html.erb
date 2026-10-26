@@ -4,7 +4,7 @@
 <%= render layout: "workbench/workspace" do %>
   <div class="flex flex-1 items-center justify-center p-8">
     <div class="flex max-w-md flex-col items-center text-center">
-      <span class="flex size-16 items-center justify-center bg-solid text-on-solid"><%= lucide_icon "send", class: "size-8" %></span>
+      <span class="flex size-16 items-center justify-center border border-line bg-field text-accent"><%= lucide_icon "send", class: "size-8" %></span>
       <h2 class="mt-6 text-2xl font-semibold tracking-tight text-ink"><%= t("workbench.workspaces.show.heading") %></h2>
       <p class="mt-2 text-sm text-muted"><%= workspace_tree.empty? ? t("workbench.workspaces.show.empty") : t("workbench.workspaces.show.pick") %></p>
       <div class="mt-6 flex flex-wrap justify-center gap-2">
