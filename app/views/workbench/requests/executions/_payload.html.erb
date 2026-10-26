@@ -1,0 +1,5 @@
+<% if execution.request_body.present? %>
+  <pre class="max-h-full overflow-auto rounded-lg bg-field p-3 font-mono text-xs break-all whitespace-pre-wrap text-body"><%= execution.request_body %></pre>
+<% else %>
+  <p class="text-xs text-muted"><%= t("workbench.executions.no_payload") %></p>
+<% end %>

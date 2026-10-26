@@ -320,6 +320,7 @@ en:
         body: Body
         headers: Headers
         request: Request
+        payload: Payload
         history: History
       timing:
         show: Show timing breakdown
@@ -349,7 +350,7 @@ en:
       truncated: "Only the first %{limit} are shown."
       unresolved: "Undefined variables: %{names}. They were sent as typed."
       request_headers: Headers sent (secrets hidden)
-      request_body: Body sent
+      no_payload: No payload sent.
       errors:
         blocked: Blocked by the network policy
         invalid_url: Invalid URL

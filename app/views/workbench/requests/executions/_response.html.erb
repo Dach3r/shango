@@ -11,6 +11,7 @@
     { name: "body", label: t("workbench.executions.tabs.body") },
     { name: "headers", label: t("workbench.executions.tabs.headers"), count: execution.response_headers.size },
     { name: "request", label: t("workbench.executions.tabs.request"), dot: execution.unresolved_variables.any? },
+    { name: "payload", label: t("workbench.executions.tabs.payload") },
     { name: "history", label: t("workbench.executions.tabs.history"), count: history.size }
   ] %>
 
@@ -54,6 +55,10 @@
 
       <div data-tabs-target="panel" data-name="request" hidden class="space-y-4 p-4">
         <%= render "workbench/requests/executions/request", execution: %>
+      </div>
+
+      <div data-tabs-target="panel" data-name="payload" hidden class="p-4">
+        <%= render "workbench/requests/executions/payload", execution: %>
       </div>
 
       <div data-tabs-target="panel" data-name="history" hidden class="p-2">

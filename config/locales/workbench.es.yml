@@ -320,6 +320,7 @@ es:
         body: Body
         headers: Headers
         request: Solicitud
+        payload: Payload
         history: Historial
       timing:
         show: Ver desglose de tiempos
@@ -349,7 +350,7 @@ es:
       truncated: "Solo se muestran los primeros %{limit}."
       unresolved: "Variables sin definir: %{names}. Se enviaron tal como se escribieron."
       request_headers: Headers enviados (secretos ocultos)
-      request_body: Body enviado
+      no_payload: No se envió payload.
       errors:
         blocked: Bloqueado por la política de red
         invalid_url: URL inválida
