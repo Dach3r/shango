@@ -66,6 +66,8 @@ en:
       file: File
       secret: Secret
       secret_saved: Saved · leave blank to keep
+    status_bar:
+      toggle_sidebar: Toggle collections sidebar
     environment_switcher:
       none: No environment
       label: Environment

@@ -66,6 +66,8 @@ es:
       file: Archivo
       secret: Secreto
       secret_saved: Guardado · deja vacío para conservar
+    status_bar:
+      toggle_sidebar: Mostrar u ocultar colecciones
     environment_switcher:
       none: Sin entorno
       label: Entorno
