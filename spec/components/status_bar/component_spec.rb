@@ -19,4 +19,12 @@ RSpec.describe StatusBar::Component, type: :component do
 
     expect(page).to have_css("footer", text: "Breadcrumb")
   end
+
+  it "wires the sidebar toggle to the current state", :aggregate_failures do
+    render_inline(described_class.new)
+    expect(page).to have_css("button[data-action='sidebar#toggle'][aria-expanded=true]", visible: :all)
+
+    render_inline(described_class.new(collapsed: true))
+    expect(page).to have_css("button[data-action='sidebar#toggle'][aria-expanded=false]", visible: :all)
+  end
 end

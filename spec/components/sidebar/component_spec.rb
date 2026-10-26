@@ -38,12 +38,4 @@ RSpec.describe Sidebar::Component, type: :component do
 
     expect(page).to have_text("Ada Lovelace")
   end
-
-  it "wires the collapse toggle to the current state", :aggregate_failures do
-    render_sidebar
-    expect(page).to have_css("button[data-action='sidebar#toggle'][aria-expanded=true]", visible: :all)
-
-    render_sidebar(collapsed: true)
-    expect(page).to have_css("button[data-action='sidebar#toggle'][aria-expanded=false]", visible: :all)
-  end
 end
