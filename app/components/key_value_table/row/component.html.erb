@@ -1,4 +1,4 @@
-<div data-key-value-table-target="row" class="group flex items-center gap-2 px-3 py-1">
+<div data-key-value-table-target="row" class="<%= class_names("group flex items-center gap-2 px-3", "py-1": variant != :variables, "flex-wrap gap-y-1 py-2": variant == :variables) %>">
   <% if persisted? %>
     <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
     <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>
@@ -29,7 +29,7 @@
     </div>
   <% else %>
     <%= text_field_tag field_name("value"), value_text, id: nil, type: value_type, placeholder: value_hint, autocomplete: "off", spellcheck: false,
-                       data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes("min-w-0 flex-[1.4] font-mono text-xs") %>
+                       data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes(variant == :variables ? "order-last w-full basis-full" : "min-w-0 flex-[1.4]") + " font-mono text-xs" %>
   <% end %>
 
   <% if variant == :pairs %>

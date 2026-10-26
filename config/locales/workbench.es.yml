@@ -90,6 +90,7 @@ es:
       edit:
         title: Editar entorno
       form:
+        new_title: Nuevo entorno
         name: Nombre
         name_placeholder: p. ej. Producción
         variables: Variables

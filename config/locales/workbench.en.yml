@@ -90,6 +90,7 @@ en:
       edit:
         title: Edit environment
       form:
+        new_title: New environment
         name: Name
         name_placeholder: e.g. Production
         variables: Variables

@@ -1,22 +1,31 @@
-<section class="mx-auto max-w-3xl">
-  <%= form_with model: @environment, url: (@environment.persisted? ? environment_path(@environment) : environments_path), class: "space-y-6 rounded-2xl border border-line bg-card p-6" do |form| %>
+<%= form_with model: @environment, url: (@environment.persisted? ? environment_path(@environment) : environments_path), class: "flex min-h-full flex-col" do |form| %>
+  <% if turbo_frame_request? %>
+    <div class="mb-5 flex items-center gap-2">
+      <%= link_to environments_path, aria: { label: t("workbench.shared.cancel") }, class: "-ml-2 flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "arrow-left", class: "size-4" %><% end %>
+      <h3 class="truncate text-sm font-semibold text-ink"><%= @environment.persisted? ? @environment.name_was : t(".new_title") %></h3>
+    </div>
+  <% end %>
+
+  <div class="flex-1 space-y-6">
     <%= render "workbench/shared/errors", record: @environment %>
 
-    <div class="max-w-sm">
+    <div>
       <%= form.label :name, t(".name"), class: label_classes %>
       <%= form.text_field :name, autofocus: !@environment.persisted?, autocomplete: "off", placeholder: t(".name_placeholder"), class: field_classes %>
     </div>
 
     <div>
-      <h2 class="text-sm font-semibold text-ink"><%= t(".variables") %></h2>
-      <p class="mt-1 mb-3 text-xs text-muted"><%= t(".variables_hint") %></p>
+      <div class="mb-2 flex items-baseline justify-between gap-2">
+        <h2 class="text-xs font-medium text-muted"><%= t(".variables") %></h2>
+      </div>
       <%= render KeyValueTable::Component.new(name: "environment[variables_attributes]", rows: @environment.variables, variant: :variables,
                                               key_placeholder: t(".key_placeholder"), value_placeholder: t(".value_placeholder")) %>
+      <p class="mt-2 text-xs text-faint"><%= t(".variables_hint") %></p>
     </div>
+  </div>
 
-    <div class="flex justify-end gap-2">
-      <%= link_to t("workbench.shared.cancel"), environments_path, class: button_classes(:ghost) %>
-      <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
-    </div>
-  <% end %>
-</section>
+  <div class="sticky bottom-0 -mx-4 -mb-4 mt-6 flex justify-end gap-2 border-t border-line bg-card px-4 py-3">
+    <%= link_to t("workbench.shared.cancel"), environments_path, class: button_classes(:ghost) %>
+    <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
+  </div>
+<% end %>

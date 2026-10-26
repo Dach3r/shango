@@ -26,6 +26,16 @@ RSpec.describe "Environments" do
     end
   end
 
+  describe "form from the side panel" do
+    it "shows a back header with the title", :aggregate_failures do
+      get new_environment_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      expect(response.body).to include("<h3", I18n.t("projects.environments.form.new_title"))
+
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      expect(response.body).to include(environment.name)
+    end
+  end
+
   describe "GET /environments/new" do
     it "renders the form" do
       get new_environment_path
