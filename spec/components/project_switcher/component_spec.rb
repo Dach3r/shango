@@ -9,7 +9,7 @@ RSpec.describe ProjectSwitcher::Component, type: :component do
 
     expect(page).to have_css("button[aria-haspopup] span", text: "Alpha")
     expect(page).to have_css("button", text: "Beta", visible: :all)
-    expect(page).to have_css("svg.text-accent", count: 1, visible: :all)
+    expect(page).to have_css("svg.text-accent", count: 2, visible: :all)
     expect(page).to have_link(I18n.t("components.project_switcher.new"), visible: :all)
   end
 end

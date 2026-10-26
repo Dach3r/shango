@@ -9,6 +9,16 @@ export default class extends Controller {
     this.panelTarget.hidden = false;
   }
 
+  // Re-clicking the trigger of the panel that is already showing closes it instead of reloading it.
+  toggle(event) {
+    if (!this.panelTarget.hidden && this.titleTarget.textContent === event.params.title) {
+      event.preventDefault();
+      this.close();
+    } else {
+      this.open(event);
+    }
+  }
+
   close() {
     this.panelTarget.hidden = true;
   }
