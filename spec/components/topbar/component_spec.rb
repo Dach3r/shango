@@ -1,43 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Topbar::Component, type: :component do
-  let(:project) { create(:project, name: "Alpha") }
+  it "renders the project switcher", :aggregate_failures do
+    project = create(:project, name: "Alpha")
+    render_inline(described_class.new(current_project: project, projects: [project]))
 
-  def render_topbar(path: "/workbench", controller_path: "workbench/workspaces", **options)
-    allow(vc_test_controller).to receive(:controller_path).and_return(controller_path)
-    with_request_url(path) { render_inline(described_class.new(current_project: project, projects: [project], user: create(:user, first_name: "Ada", last_name: "Lovelace"), **options)) }
-  end
-
-  it "highlights the api client on the workbench root", :aggregate_failures do
-    render_topbar
-
-    expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"), visible: :all)
-    expect(page).to have_css("span[aria-disabled=true]", text: I18n.t("components.topbar.monitoring"), visible: :all)
-  end
-
-  it "highlights a feature on any of its controllers" do
-    render_topbar(path: "/workbench/requests/1", controller_path: "workbench/requests")
-
-    expect(page).to have_css("a[aria-current=page]", text: I18n.t("components.topbar.api_client"), visible: :all)
-  end
-
-  it "highlights nothing on unrelated pages" do
-    render_topbar(path: "/projects/new", controller_path: "projects")
-
-    expect(page).to have_no_css("a[aria-current=page]", visible: :all)
-  end
-
-  it "keeps every tool inside the more menu", :aggregate_failures do
-    render_topbar
-
-    expect(page).to have_css("button", text: I18n.t("components.topbar.more"))
-    expect(page).to have_css("ul[hidden] a", text: I18n.t("components.topbar.api_client"), visible: :all)
-    expect(page).to have_css("ul[hidden] span[aria-disabled=true]", text: I18n.t("components.topbar.logs"), visible: :all)
-  end
-
-  it "renders the user menu at the end of the bar" do
-    render_topbar
-
-    expect(page).to have_text("Ada Lovelace")
+    expect(page).to have_css("header button[title=Alpha]")
+    expect(page).to have_no_text(I18n.t("components.tools_nav.title"))
   end
 end

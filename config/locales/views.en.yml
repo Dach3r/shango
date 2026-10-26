@@ -37,9 +37,9 @@ en:
         sidebar: Sidebar
         themes: Themes
         members: Members
-    topbar:
+    tools_nav:
+      title: Tools
       label: Project navigation
-      more: More tools
       api_client: API Client
       documentation: Documentation
       monitoring: Monitoring
@@ -47,6 +47,7 @@ en:
       logs: Logs
       ai_assistant: AI Assistant
     user_menu:
+      title: Account
       settings: Settings
       label: Account menu
       sign_out: Sign out
@@ -131,6 +132,10 @@ en:
           coffee: Coffee
           cyberpunk: Cyberpunk
           mono: Mono
+  users:
+    accounts:
+      show:
+        title: Account
   devise:
     sessions:
       new:

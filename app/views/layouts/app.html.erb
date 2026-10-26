@@ -1,6 +1,6 @@
 <% content_for :content do %>
   <div class="flex min-h-screen flex-col" data-controller="right-sidebar">
-    <%= render Topbar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name), user: current_user) %>
+    <%= render Topbar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name)) %>
 
     <div class="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[1fr_auto]">
       <div class="flex min-w-0 flex-col">
@@ -26,7 +26,7 @@
       </aside>
     </div>
 
-    <%= render StatusBar::Component.new(environments: current_project.environments.ordered, current_environment:) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
+    <%= render StatusBar::Component.new(user: current_user, environments: current_project.environments.ordered, current_environment:) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
   </div>
   <%= turbo_frame_tag "modal" %>
 <% end %>

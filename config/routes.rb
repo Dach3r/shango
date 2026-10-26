@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :projects, only: %i[new create]
   resource :current_project, only: :update
   resource :preferences, only: :update
+  resource :account, only: :show, module: :users
 
   scope module: :projects do
     resources :environments, except: :show do

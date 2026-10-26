@@ -37,9 +37,9 @@ es:
         sidebar: Barra lateral
         themes: Temas
         members: Miembros
-    topbar:
+    tools_nav:
+      title: Herramientas
       label: Navegación del proyecto
-      more: Más herramientas
       api_client: Cliente API
       documentation: Documentación
       monitoring: Monitoreo
@@ -47,6 +47,7 @@ es:
       logs: Logs
       ai_assistant: Asistente IA
     user_menu:
+      title: Cuenta
       settings: Configuración
       label: Menú de cuenta
       sign_out: Cerrar sesión
@@ -131,6 +132,10 @@ es:
           coffee: Café
           cyberpunk: Cyberpunk
           mono: Monocromo
+  users:
+    accounts:
+      show:
+        title: Cuenta
   devise:
     sessions:
       new:

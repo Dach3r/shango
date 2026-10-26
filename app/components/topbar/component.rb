@@ -1,33 +1,6 @@
 class Topbar::Component < ApplicationComponent
-  # Project tools from the product navigation; only entries with a path are live.
-  ITEMS = [
-    { key: :api_client, icon: "send", path: :workbench_root_path, controllers: "workbench/" },
-    { key: :documentation, icon: "book-open" },
-    { key: :monitoring, icon: "activity" },
-    { key: :servers, icon: "server" },
-    { key: :logs, icon: "scroll-text" },
-    { key: :ai_assistant, icon: "sparkles" }
-  ].freeze
-
-  def initialize(current_project:, projects:, user:)
+  def initialize(current_project:, projects:)
     @current_project = current_project
     @projects = projects
-    @user = user
-  end
-
-  private
-
-  def items
-    @items ||= ITEMS.map { |item| nav_item(item) }
-  end
-
-  def nav_item(item)
-    href = item[:path] && helpers.public_send(item[:path])
-    { label: t("components.topbar.#{item[:key]}"), icon: item[:icon], href:, active: active?(item, href) }
-  end
-
-  # Features with their own controllers stay highlighted on every screen of the feature.
-  def active?(item, href)
-    href.present? && helpers.controller_path.start_with?(item[:controllers])
   end
 end
