@@ -20,7 +20,7 @@
 
     <div class="relative h-1/2 shrink-0 border-t border-line bg-card" data-resizable-target="panel">
       <div role="separator" aria-orientation="horizontal" tabindex="0" aria-label="<%= t("workbench.executions.resize") %>"
-           data-action="pointerdown->resizable#start keydown->resizable#key"
+           data-action="pointerdown->resizable#start dblclick->resizable#reset keydown->resizable#key"
            class="absolute inset-x-0 -top-1 z-10 h-2 cursor-row-resize touch-none transition hover:bg-accent/40 focus-visible:bg-accent/40 focus-visible:outline-none"></div>
       <%= turbo_frame_tag "response_panel", class: "block h-full" do %>
         <%= render "workbench/requests/executions/response", execution: @execution, api_request: @api_request %>

@@ -5,7 +5,7 @@ const MIN_HEIGHT = 120;
 const KEY_STEP = 24;
 
 // Drag the handle to resize the panel. It can grow until only the bounds
-// element (the URL bar) stays visible above it.
+// element (the URL bar) stays visible above it. Double click restores the default height.
 export default class extends Controller {
   static targets = ["panel", "bounds"];
 
@@ -33,6 +33,15 @@ export default class extends Controller {
     document.addEventListener("pointermove", this.onMove);
     document.addEventListener("pointerup", this.onEnd);
     document.body.classList.add("select-none", "cursor-row-resize");
+  }
+
+  reset() {
+    this.panelTarget.style.height = "";
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (_) {
+      /* storage unavailable */
+    }
   }
 
   key(event) {
