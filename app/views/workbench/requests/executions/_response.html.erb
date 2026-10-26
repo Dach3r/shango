@@ -53,7 +53,7 @@
         <%= render "workbench/requests/executions/headers", headers: execution.response_headers, bleed: true, empty: t("workbench.executions.no_headers") %>
       </div>
 
-      <div data-tabs-target="panel" data-name="request" hidden class="space-y-4 p-4">
+      <div data-tabs-target="panel" data-name="request" hidden>
         <%= render "workbench/requests/executions/request", execution: %>
       </div>
 

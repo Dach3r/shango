@@ -1,0 +1,4 @@
+<% parts = url_parts(url) %>
+<span class="font-mono text-xs break-all">
+  <span class="text-faint"><%= parts[:scheme] %></span><span class="font-semibold text-ink"><%= parts[:host] %></span><span class="text-body"><%= parts[:path] %></span><span class="text-accent"><%= parts[:query] %></span><span class="text-faint"><%= parts[:fragment] %></span>
+</span>

@@ -11,7 +11,7 @@
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
-- Run a request, inspect the response (pretty / raw / HTML preview, headers, request details, the payload sent in its own tab (read-only code editor with highlighting and copy), redirects), per-request history (last 50).
+- Run a request, inspect the response (pretty / raw / HTML preview, headers, request details (method and URL with host, path and query styled apart, redirect hops as a chain, sent headers in the same table as the response headers), the payload sent in its own tab (read-only code editor with highlighting and copy), redirects), per-request history (last 50).
 - Import from a cURL command and copy a request as cURL.
 - Import whole collections and environments from Postman, Insomnia, Bruno and OpenAPI/Swagger exports (see §9).
 - Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).

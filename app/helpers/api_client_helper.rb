@@ -64,6 +64,11 @@ module ApiClientHelper
     execution.request_body.to_s.lstrip.start_with?("<") ? "xml" : "text"
   end
 
+  # URL split into the pieces the request tab styles separately.
+  def url_parts(url)
+    url.to_s.match(%r{\A(?<scheme>[a-z][a-z0-9+.-]*://)?(?<host>[^/?#]*)(?<path>[^?#]*)(?<query>\?[^#]*)?(?<fragment>#.*)?\z}im).named_captures.symbolize_keys
+  end
+
   # Response body formatted for reading; falls back to the raw text when it cannot be parsed.
   def pretty_body(execution)
     body = execution.response_body.to_s

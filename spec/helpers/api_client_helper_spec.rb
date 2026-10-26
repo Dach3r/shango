@@ -57,6 +57,16 @@ RSpec.describe ApiClientHelper do
     end
   end
 
+  describe "#url_parts" do
+    it "splits scheme, host, path, query and fragment" do
+      expect(helper.url_parts("https://a.io/x/y?q=1#top")).to eq(scheme: "https://", host: "a.io", path: "/x/y", query: "?q=1", fragment: "#top")
+    end
+
+    it "keeps schemeless and templated URLs readable" do
+      expect(helper.url_parts("{{base}}/users")).to include(scheme: nil, host: "{{base}}", path: "/users")
+    end
+  end
+
   describe "#payload_language" do
     def execution(body, headers = [])
       build(:request_execution, request_body: body, request_headers: headers)
