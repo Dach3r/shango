@@ -25,6 +25,12 @@
         <span><%= t("workbench.executions.redirects", count: execution.redirects.size) %></span>
       <% end %>
       <span class="ml-auto"><%= l(execution.created_at, format: :short) %></span>
+      <% if execution.new_record? && !execution.error? %>
+        <%= button_to workbench_request_execution_saves_path(api_request, execution.id),
+                      class: "flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+          <%= lucide_icon "save", class: "size-3.5" %><%= t("workbench.executions.save") %>
+        <% end %>
+      <% end %>
     </div>
 
     <%= render TabBar::Component.new(items: tabs, label: t("workbench.executions.tabs.label")) %>

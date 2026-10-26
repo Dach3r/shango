@@ -32,6 +32,21 @@ RSpec.describe RequestExecution do
     end
   end
 
+  describe "pending executions" do
+    before { allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new) }
+
+    it "restores a stashed execution by id", :aggregate_failures do
+      execution = build(:request_execution, id: SecureRandom.uuid, url: "https://api.example.com/a")
+
+      expect(execution.stash).to eq(execution)
+      expect(described_class.pending(execution.id)).to have_attributes(id: execution.id, url: "https://api.example.com/a")
+    end
+
+    it "is nil for unknown ids" do
+      expect(described_class.pending(SecureRandom.uuid)).to be_nil
+    end
+  end
+
   describe ".recent" do
     it "orders newest first" do
       old = create(:request_execution, created_at: 1.day.ago)

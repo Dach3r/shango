@@ -10,10 +10,14 @@ RSpec.describe ApiClient::Requests::Run do
   let(:result) { described_class.call(api_request:, environment:, user:, attributes:) }
   let(:execution) { result.record }
 
-  it "records the execution", :aggregate_failures do
+  before { allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new) }
+
+  it "builds the execution without storing it", :aggregate_failures do
     stub_request(:get, api_request.url).to_return(status: 200, body: "hello", headers: { "Content-Type" => "text/plain" })
 
     expect(result).to be_success
+    expect(execution).to be_new_record
+    expect(RequestExecution.pending(execution.id)).to have_attributes(response_body: "hello", url: api_request.url)
     expect(execution).to have_attributes(
       http_method: "GET", url: api_request.url, status: 200, status_text: "OK", response_body: "hello", content_type: "text/plain", size_bytes: 5,
       body_omitted: false, body_truncated: false, error_kind: nil, user:, environment:, project:, api_request:, redirects: []
@@ -94,19 +98,10 @@ RSpec.describe ApiClient::Requests::Run do
     expect(execution).to have_attributes(error_kind: "invalid_request", url: "{{missing}}/x", unresolved_variables: ["missing"], status: nil)
   end
 
-  it "keeps only the most recent executions" do
-    create_list(:request_execution, RequestExecution::KEEP_PER_REQUEST + 2, api_request:)
+  it "does not touch the history" do
     stub_request(:get, api_request.url).to_return(status: 200)
 
-    result
-
-    expect(api_request.request_executions.count).to eq(RequestExecution::KEEP_PER_REQUEST)
-  end
-
-  it "keeps all executions below the limit" do
-    stub_request(:get, api_request.url).to_return(status: 200)
-
-    expect { result }.to change(api_request.request_executions, :count).by(1)
+    expect { result }.not_to change(RequestExecution, :count)
   end
 
   describe "with pending edits" do
