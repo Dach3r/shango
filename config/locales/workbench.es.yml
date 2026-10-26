@@ -172,6 +172,7 @@ es:
       send_hint: Enviar (Ctrl/Cmd + Enter)
       save: Guardar
       copy_curl: Copiar cURL
+      more_actions: Más acciones
       copied: Copiado
       duplicate: Duplicar
       delete: Eliminar
