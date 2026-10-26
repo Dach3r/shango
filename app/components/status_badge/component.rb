@@ -2,8 +2,8 @@ class StatusBadge::Component < ApplicationComponent
   TONES = {
     success: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
     client_error: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-    server_error: "bg-red-500/15 text-red-700 dark:text-red-400",
-    error: "bg-red-500/15 text-red-700 dark:text-red-400"
+    server_error: "bg-danger/15 text-danger",
+    error: "bg-danger/15 text-danger"
   }.freeze
 
   def initialize(execution:)

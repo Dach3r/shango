@@ -16,12 +16,12 @@ RSpec.describe StatusBadge::Component, type: :component do
   it "renders a server error tone" do
     render_inline(described_class.new(execution: build(:request_execution, status: 500)))
 
-    expect(page).to have_css("span.text-red-700", text: "500")
+    expect(page).to have_css("span.text-danger", text: "500")
   end
 
   it "renders the error label for failed executions" do
     render_inline(described_class.new(execution: build(:request_execution, status: nil, error_kind: "timeout")))
 
-    expect(page).to have_css("span.text-red-700", text: I18n.t("workbench.executions.error"))
+    expect(page).to have_css("span.text-danger", text: I18n.t("workbench.executions.error"))
   end
 end

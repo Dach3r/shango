@@ -70,7 +70,7 @@
   --solid: light-dark(var(--color-clay-600), var(--color-clay-500));
   --solid-hover: light-dark(var(--color-clay-700), var(--color-clay-400));
   --on-solid: light-dark(var(--color-paper), var(--color-night-1000));
-  --danger: light-dark(#c81e1e, #ff9a9a);
+  --danger: light-dark(#b42318, #e5645f);
   --dropdown-shadow: 0 6px 20px light-dark(rgb(20 20 19 / 0.1), rgb(0 0 0 / 0.55));
   --syn-key: light-dark(#8a3f23, #f0a187);
   --syn-string: light-dark(#2f6f3e, #8fcf9f);
