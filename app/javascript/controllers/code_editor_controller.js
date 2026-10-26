@@ -26,6 +26,7 @@ export default class extends Controller {
 
     this.cm = cm;
     this.languageCompartment = new cm.Compartment();
+    this.variablesCompartment = new cm.Compartment();
     this.mountTarget.replaceChildren();
     this.view = new cm.EditorView({
       parent: this.mountTarget,
@@ -65,6 +66,16 @@ export default class extends Controller {
     });
   }
 
+  // Another editor saved a variable: keep this one's highlighting and hover cards in sync.
+  variableSaved({ detail: { url, set, value } }) {
+    this.variablesValue = this.variablesValue.map((item) =>
+      item.url === url ? { ...item, set, value } : item,
+    );
+    this.view?.dispatch({
+      effects: this.variablesCompartment.reconfigure(this.variableDecorations()),
+    });
+  }
+
   changeLanguage(event) {
     this.languageValue = event.detail.language;
   }
@@ -77,7 +88,7 @@ export default class extends Controller {
       cm.syntaxHighlighting(this.highlightStyle()),
       cm.EditorView.theme(this.theme()),
       this.languageCompartment.of(this.languageExtension()),
-      this.variableDecorations(),
+      this.variablesCompartment.of(this.variableDecorations()),
       this.variableHover(),
       cm.keymap.of([
         ...cm.defaultKeymap.filter((binding) => binding.key !== "Mod-Enter"),
@@ -213,7 +224,7 @@ export default class extends Controller {
           pos: from,
           end: to,
           above: true,
-          create: () => ({ dom: this.variableCard(match[1]) }),
+          create: () => this.variableCard(match[1]),
         };
       }
       return null;
@@ -227,12 +238,15 @@ export default class extends Controller {
     const card = document.createElement("div");
     card.className = "cm-var-card";
 
-    const value = document.createElement("div");
-    value.className = `cm-var-card-value cm-var-card-${status}`;
-    if (status === "dynamic")
-      value.textContent = labels[DYNAMIC_VARIABLES[name]];
-    else if (status === "missing") value.textContent = labels.missing;
-    else value.textContent = variable.set ? variable.value : labels.empty;
+    const value =
+      status === "set" || status === "empty"
+        ? this.variableInput(variable)
+        : document.createElement("div");
+    if (value.tagName === "DIV") {
+      value.className = `cm-var-card-value cm-var-card-${status}`;
+      value.textContent =
+        status === "dynamic" ? labels[DYNAMIC_VARIABLES[name]] : labels.missing;
+    }
 
     const source = document.createElement("div");
     source.className = "cm-var-card-source";
@@ -240,7 +254,55 @@ export default class extends Controller {
       status === "dynamic" ? labels.dynamic : labels.environment;
 
     card.append(value, source);
-    return card;
+    return { dom: card, destroy: () => value.flush?.() };
+  }
+
+  // Edits the variable in place. Secrets arrive masked, so their input starts empty and a blank save keeps the stored value.
+  variableInput(variable) {
+    const input = document.createElement("input");
+    input.className = "cm-var-card-value cm-var-card-input";
+    input.value = variable.secret ? "" : variable.value;
+    input.placeholder = variable.secret && variable.set ? variable.value : this.labelsValue.empty;
+    input.autocomplete = "off";
+    input.spellcheck = false;
+
+    let saved = input.value;
+    let timer = null;
+    input.flush = () => {
+      clearTimeout(timer);
+      if (input.value !== saved) this.saveVariable(variable, (saved = input.value));
+    };
+    input.addEventListener("input", () => {
+      clearTimeout(timer);
+      timer = setTimeout(input.flush, 600);
+    });
+    input.addEventListener("change", input.flush);
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") input.flush();
+      if (event.key === "Escape") this.view.focus();
+    });
+    return input;
+  }
+
+  async saveVariable(variable, value) {
+    const response = await fetch(variable.url, {
+      method: "PATCH",
+      body: new URLSearchParams({ "variable[value]": value }),
+      headers: {
+        Accept: "application/json",
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")
+          ?.content,
+      },
+      credentials: "same-origin",
+    });
+    if (!response.ok) return;
+
+    const { set, value: shown } = await response.json();
+    window.dispatchEvent(
+      new CustomEvent("variable:saved", {
+        detail: { url: variable.url, set, value: shown },
+      }),
+    );
   }
 
   completeVariables(context) {
@@ -423,6 +485,13 @@ export default class extends Controller {
         fontFamily: "var(--font-mono)",
         wordBreak: "break-all",
       },
+      ".cm-var-card-input": {
+        display: "block",
+        width: "100%",
+        outline: "none",
+        boxSizing: "border-box",
+      },
+      ".cm-var-card-input:focus": { borderColor: "var(--accent)" },
       ".cm-var-card-empty, .cm-var-card-missing": {
         color: "var(--muted)",
         fontFamily: "var(--font-sans)",

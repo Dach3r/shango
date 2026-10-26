@@ -19,8 +19,7 @@ module Workbench
       return [] unless current_environment
 
       current_environment.variables.select(&:enabled).map do |variable|
-        value = variable.secret && variable.value.present? ? ApiClient::Masker::MASK : variable.value.to_s
-        { name: variable.key, set: variable.value.present?, value: }
+        { name: variable.key, set: variable.value.present?, value: variable.masked_value, secret: variable.secret, url: environment_variable_path(current_environment, variable) }
       end
     end
 

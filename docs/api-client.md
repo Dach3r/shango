@@ -56,7 +56,7 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   curl_imports_controller.rb
   oauth2/{tokens,authorizations,callbacks}_controller.rb
 app/controllers/projects/            # project-level tools
-  environments_controller.rb, current_environments_controller.rb
+  environments_controller.rb, current_environments_controller.rb, environments/variables_controller.rb
 app/controllers/concerns/workbench/request_parameters.rb
 
 app/services/api_client/
@@ -66,7 +66,7 @@ app/services/api_client/
   oauth2/                            # token client + services
   curl/{parser,exporter}.rb
   request_builder.rb executor.rb connection.rb ssrf_policy.rb variable_resolver.rb masker.rb
-app/services/projects/environments/  # Create, Update, Destroy, Select
+app/services/projects/environments/  # Create, Update, Destroy, Select, UpdateVariable
 app/services/result.rb
 ```
 
@@ -75,6 +75,8 @@ Services are called as `ApiClient::Requests::Run.call(api_request:, environment:
 UI: ViewComponents under `app/components/<name>/component.rb` (`RequestTree`, `KeyValueTable`, `CodeEditor`, `AuthFields`, `TabBar`, `Modal`, `EnvironmentSwitcher`, `MethodBadge`, `StatusBadge`, `Oauth2Forms`) and Stimulus controllers under `app/javascript/controllers` (`code_editor`, `tabs`, `key_value_table`, `request_form`, `request_url`, `body_type`, `auth_form`, `conditional_fields`, `tree`, `dialog`, `response_body`, `inline_rename`, `resizable`). The response panel height is resizable by dragging (or arrow keys on) the handle on its top border; it can grow until only the URL bar remains visible above it, the height is remembered in `localStorage`, and a double click on the handle restores the default (`resizable`). Collections and folders expand and collapse with a double click by default; each member can switch to single click in *Settings* (`memberships.folder_toggle`, passed to the `tree` controller as `data-tree-toggle-value`; with double click, the name still renames and the rest of the row toggles). With `memberships.request_open = double_click` (`data-tree-open-value`) a request row only opens on double click, and its name no longer renames in place. Right-clicking a collection, folder or request row opens its actions menu (the same one as the hover "…" button, `context_menu` controller) at the pointer; each item has an icon, and *Rename* starts the in-place rename (requests also get *Duplicate* and *Delete* there). Double-clicking a collection, folder or request name in the sidebar renames it in place (`inline_rename` PATCHes only the name to the regular update endpoint; request rows delay navigation ~220 ms so a double click is not read as a click). Changing the method in the editor selector restyles that request's badge in the sidebar and tab bar right away, before saving (`request_form#methodChanged` over `[data-method-badge]`, presets from `MethodBadge::Component.presets`). Key/value tables (params, headers, form data, variables) render as a bordered card with a column header (params and headers), borderless cells and a hover-only remove button; rows are only added with the *Add* button below the table (focusing the new row's key), never automatically. Modal forms render into a `modal` Turbo Frame. Strings live in `config/locales/workbench.{en,es}.yml`.
 
 ## 4. Execution pipeline
+
+Hovering a `{{variable}}` in any editor opens a card with its value as an input: edits save to the selected environment through `PATCH /environments/:environment_id/variables/:id` (debounced, on change and when the card closes) and every editor on the page refreshes its highlighting. Secrets arrive masked, so their input starts empty and a blank save keeps the stored value. Undefined and dynamic variables stay read-only.
 
 1. `RequestBuilder` resolves `{{variables}}` from the selected environment (plus `{{$timestamp}}`, `{{$isoTimestamp}}`, `{{$guid}}`, `{{$randomInt}}`), builds URL, headers and body, resolves the effective auth and applies it. Undefined variables in the URL abort the run with a clear message; elsewhere they are sent as typed and reported in the response.
 2. `Executor` sends the request with Faraday (`Net::HTTP`). Redirects are followed by the executor itself, so each hop goes through the SSRF policy; credential headers are dropped when a redirect leaves the origin. A Digest `401` challenge is answered once.

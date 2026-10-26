@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   resource :preferences, only: :update
 
   scope module: :projects do
-    resources :environments, except: :show
+    resources :environments, except: :show do
+      resources :variables, only: :update, module: :environments
+    end
     resource :current_environment, only: :update
     resource :membership, only: %i[edit update], path_names: { edit: "settings" }
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }

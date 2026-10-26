@@ -21,7 +21,8 @@ class CodeEditor::Component < ApplicationComponent
   def wrapper_data
     {
       controller: "code-editor", code_editor_language_value: @language, code_editor_readonly_value: @readonly,
-      code_editor_single_line_value: @single_line, code_editor_placeholder_value: @placeholder, code_editor_variables_value: @variables.to_json, code_editor_labels_value: labels.to_json
+      code_editor_single_line_value: @single_line, code_editor_placeholder_value: @placeholder, code_editor_variables_value: @variables.to_json, code_editor_labels_value: labels.to_json,
+      action: "variable:saved@window->code-editor#variableSaved"
     }.merge(@data)
   end
 
