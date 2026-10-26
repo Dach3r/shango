@@ -1,12 +1,12 @@
 <%= render Modal::Component.new(icon: "upload", title: t(".title"), description: t(".description"), size: :lg, form: "import_form", submit: t(".submit"), submit_icon: "upload") do %>
   <%= form_with url: workbench_import_path, method: :post, multipart: true, id: "import_form", data: { turbo_frame: "_top" }, class: "space-y-4" do %>
     <% if @error.present? %>
-      <div role="alert" class="rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= @error %></div>
+      <div role="alert" class="border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= @error %></div>
     <% end %>
 
     <div>
       <label for="import_file" class="<%= label_classes %>"><%= t(".file") %></label>
-      <%= file_field_tag :file, id: "import_file", accept: ".json,.yaml,.yml,application/json", class: field_classes("file:mr-3 file:rounded-lg file:border-0 file:bg-accent/10 file:px-3 file:py-1 file:text-xs file:font-medium file:text-accent") %>
+      <%= file_field_tag :file, id: "import_file", accept: ".json,.yaml,.yml,application/json", class: field_classes("file:mr-3 file:border-0 file:bg-accent/10 file:px-3 file:py-1 file:text-xs file:font-medium file:text-accent") %>
     </div>
 
     <div>

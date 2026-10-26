@@ -8,7 +8,7 @@
   <p data-body-type-target="panel" data-types="none" class="text-sm text-muted"><%= t("workbench.body.none_hint") %></p>
 
   <div data-body-type-target="panel" data-types="json text xml graphql" hidden>
-    <div class="h-64 rounded-lg border border-line bg-field p-1 focus-within:border-solid">
+    <div class="h-64 border border-line bg-field p-1 focus-within:border-solid">
       <%= render CodeEditor::Component.new(name: "api_request[body]", value: api_request.body, language: (api_request.body_type == "json" ? "json" : (api_request.body_type == "xml" ? "xml" : "text")),
                                            variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url, placeholder: t("workbench.body.placeholder"), class: "h-full",
                                            data: { action: "body-type:language@window->code-editor#changeLanguage" }) %>
@@ -17,7 +17,7 @@
 
   <div data-body-type-target="panel" data-types="graphql" hidden>
     <label class="<%= label_classes %>"><%= t("workbench.body.graphql_variables") %></label>
-    <div class="h-32 rounded-lg border border-line bg-field p-1 focus-within:border-solid">
+    <div class="h-32 border border-line bg-field p-1 focus-within:border-solid">
       <%= render CodeEditor::Component.new(name: "api_request[graphql_variables]", value: api_request.graphql_variables, language: "json", variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url, class: "h-full", placeholder: "{}") %>
     </div>
   </div>
@@ -30,7 +30,7 @@
   <div data-body-type-target="panel" data-types="binary" hidden>
     <label for="api_request_binary_upload" class="<%= label_classes %>"><%= t("workbench.body.binary") %></label>
     <%= file_field_tag "api_request[binary_upload]", id: "api_request_binary_upload",
-                       class: field_classes("max-w-md text-xs file:mr-3 file:rounded-md file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
+                       class: field_classes("max-w-md text-xs file:mr-3 file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
     <% if api_request.binary_body.attached? %>
       <p class="mt-2 text-xs text-muted"><%= t("workbench.body.current_file", name: api_request.binary_body.filename) %></p>
     <% end %>

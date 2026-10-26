@@ -2,7 +2,7 @@
 <% if headers.blank? %>
   <p class="<%= class_names("text-sm text-muted", "p-4" => bleed) %>"><%= empty %></p>
 <% else %>
-  <table class="<%= class_names("w-full table-fixed border-collapse text-xs", "rounded-xl border border-line" => !bleed) %>">
+  <table class="<%= class_names("w-full table-fixed border-collapse text-xs", "border border-line" => !bleed) %>">
     <tbody class="divide-y divide-line">
       <% headers.each do |name, value| %>
         <tr class="transition hover:bg-field/60">

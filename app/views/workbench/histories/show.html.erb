@@ -10,7 +10,7 @@
       </header>
 
       <% if @groups.empty? %>
-        <div class="rounded-2xl border border-dashed border-line p-8 text-center">
+        <div class="border border-dashed border-line p-8 text-center">
           <%= lucide_icon "history", class: "mx-auto size-8 text-faint" %>
           <p class="mt-3 text-sm font-medium text-ink"><%= t("workbench.histories.show.empty_title") %></p>
           <p class="mt-1 text-sm text-muted"><%= t("workbench.histories.show.empty_hint") %></p>
@@ -18,8 +18,8 @@
       <% end %>
 
       <% @groups.each do |group| %>
-        <details open class="group/branch overflow-hidden rounded-xl border border-line bg-card">
-          <summary class="flex cursor-pointer list-none items-center gap-2 px-4 py-2.5 text-sm font-medium text-ink transition hover:bg-field focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 [&::-webkit-details-marker]:hidden">
+        <details open class="group/branch overflow-hidden border border-line bg-card">
+          <summary class="flex cursor-pointer list-none items-center gap-2 px-4 py-2.5 text-sm font-medium text-ink transition hover:bg-field focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 [&::-webkit-details-marker]:hidden">
             <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
             <%= lucide_icon group.collection ? "folder-open" : "file-pen-line", class: "size-4 shrink-0 text-accent" %>
             <span class="min-w-0 flex-1 truncate"><%= group.collection ? group.collection.name : t("workbench.histories.show.drafts") %></span>
@@ -28,7 +28,7 @@
           <ul class="divide-y divide-line border-t border-line">
             <% group.executions.each do |execution| %>
               <li>
-                <%= link_to workbench_request_path(execution.api_request), class: "flex items-center gap-3 px-4 py-2.5 transition hover:bg-field focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+                <%= link_to workbench_request_path(execution.api_request), class: "flex items-center gap-3 px-4 py-2.5 transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
                   <span class="w-12 shrink-0"><%= render MethodBadge::Component.new(method: execution.http_method, short: true) %></span>
                   <span class="min-w-0 flex-1">
                     <span class="block truncate text-sm font-medium text-ink"><%= execution.api_request.name %></span>

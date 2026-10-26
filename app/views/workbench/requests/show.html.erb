@@ -15,7 +15,7 @@
   <div class="flex min-h-0 flex-1 flex-col" data-controller="resizable">
     <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
       <template data-request-form-target="failure">
-        <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"><%= t("workbench.executions.failure") %></div>
+        <div role="alert" class="m-4 border border-danger/40 bg-danger/10 p-4 text-sm text-danger"><%= t("workbench.executions.failure") %></div>
       </template>
       <%= render "workbench/requests/editor", api_request: @api_request %>
     </div>

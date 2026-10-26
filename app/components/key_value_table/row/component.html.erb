@@ -22,7 +22,7 @@
     <div data-role="file" class="min-w-0 flex-1" <%= "hidden" unless file? %>>
       <%= hidden_field_tag field_name("value"), row["value"], id: nil, disabled: !file? %>
       <%= file_field_tag upload_name, id: nil, disabled: !file?, data: { action: "change->key-value-table#input" },
-                         class: field_classes("text-xs file:mr-3 file:rounded-md file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
+                         class: field_classes("text-xs file:mr-3 file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
       <% if file? && row["value"].present? %>
         <p class="mt-1 truncate text-xs text-muted"><%= row["value"] %></p>
       <% end %>
@@ -43,7 +43,7 @@
   <% end %>
 
   <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
-          class="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+          class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
     <%= lucide_icon "trash-2", class: "size-4" %>
   </button>
 </div>

@@ -1,5 +1,5 @@
 class CodeEditor::Component < ApplicationComponent
-  FALLBACK = "block w-full rounded-lg border border-line bg-field px-3 py-2 font-mono text-xs text-ink"
+  FALLBACK = "block w-full border border-line bg-field px-3 py-2 font-mono text-xs text-ink"
 
   def initialize(value: "", name: nil, id: nil, language: "text", readonly: false, single_line: false, placeholder: nil, variables: [], variables_url: nil, responses: [], responses_url: nil, form: nil, data: {}, input_data: {}, **options)
     @value = value.to_s

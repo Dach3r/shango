@@ -206,7 +206,7 @@ export default class extends Controller {
       this.popup = document.createElement("ul");
       this.popup.setAttribute("role", "listbox");
       this.popup.className =
-        "fixed z-[100] max-h-64 min-w-64 max-w-md overflow-auto rounded-xl border border-line bg-card p-1 font-mono text-xs text-body shadow-[var(--dropdown-shadow)]";
+        "fixed z-[100] max-h-64 min-w-64 max-w-md overflow-auto border border-line bg-card p-1 font-mono text-xs text-body shadow-[var(--dropdown-shadow)]";
       this.popup.addEventListener("mousedown", (event) => event.preventDefault());
       document.body.append(this.popup);
     }
@@ -223,7 +223,7 @@ export default class extends Controller {
   item(option, index) {
     const item = document.createElement("li");
     item.setAttribute("role", "option");
-    item.className = `cursor-pointer rounded-lg px-2 py-1.5 ${index === this.selected ? "bg-field text-ink" : ""}`;
+    item.className = `cursor-pointer px-2 py-1.5 ${index === this.selected ? "bg-field text-ink" : ""}`;
 
     const row = document.createElement("div");
     row.className = "flex items-center";

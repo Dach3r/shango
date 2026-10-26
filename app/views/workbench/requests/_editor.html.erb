@@ -12,16 +12,16 @@
   <%= render ResponseReferenceModal::Component.new(responses: editor_responses) %>
   <%= hidden_field_tag "place", 1, id: nil if api_request.draft? %>
   <% if api_request.errors.any? %>
-    <div role="alert" class="mx-4 mt-3 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
+    <div role="alert" class="mx-4 mt-3 border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
       <%= api_request.errors.full_messages.to_sentence %>
     </div>
   <% end %>
 
   <div class="@container flex items-start gap-2 p-3" data-resizable-target="bounds">
-    <div class="flex min-w-0 flex-1 items-stretch rounded-lg border border-line bg-field pr-3 transition focus-within:border-solid focus-within:ring-2 focus-within:ring-solid/40">
+    <div class="flex min-w-0 flex-1 items-stretch border border-line bg-field pr-3 transition focus-within:border-solid focus-within:ring-1 focus-within:ring-solid">
       <div class="flex">
         <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
-                                         class: "w-20 @xl:w-24 shrink-0 h-full rounded-none! rounded-l-[0.4375rem]! border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
+                                         class: "w-20 @xl:w-24 shrink-0 h-full border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
                                          input_data: { action: "change->request-form#methodChanged" }) %>
       </div>
       <span class="w-px shrink-0 bg-line" aria-hidden="true"></span>

@@ -1,9 +1,9 @@
 <%= turbo_frame_tag "modal" do %>
   <%= render Modal::Component.new(icon: "file-pen-line", title: t(".title"), description: t(".description"), size: :sm, centered: true) do |modal| %>
-    <div class="flex items-center gap-2.5 rounded-xl border border-line bg-field px-3.5 py-2.5">
+    <div class="flex items-center gap-2.5 border border-line bg-field px-3.5 py-2.5">
       <%= lucide_icon "file-text", class: "size-4 shrink-0 text-muted" %>
       <span class="min-w-0 flex-1 truncate text-sm font-medium text-ink"><%= @api_request.name %></span>
-      <span class="shrink-0 rounded-md bg-accent/10 px-1.5 py-0.5 text-xs font-medium text-accent"><%= t("workbench.requests.draft") %></span>
+      <span class="shrink-0 bg-accent/10 px-1.5 py-0.5 text-xs font-medium text-accent"><%= t("workbench.requests.draft") %></span>
     </div>
     <% modal.with_footer do %>
       <%= link_to new_workbench_request_placement_path(@api_request), class: button_classes(:primary, "w-full") do %>

@@ -41,7 +41,7 @@ export default class extends Controller {
     input.type = "text";
     input.value = this.original;
     input.className =
-      "w-full min-w-0 rounded border border-accent bg-field px-1 text-sm text-ink outline-none";
+      "w-full min-w-0 border border-accent bg-field px-1 text-sm text-ink outline-none";
     ["click", "dblclick", "keydown", "keyup", "mousedown"].forEach((name) =>
       input.addEventListener(name, (e) => e.stopPropagation()),
     );

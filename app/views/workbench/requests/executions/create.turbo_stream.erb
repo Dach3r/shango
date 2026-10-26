@@ -1,6 +1,6 @@
 <% if @invalid_request %>
   <%= turbo_stream.update "response_panel" do %>
-    <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
+    <div role="alert" class="m-4 border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
       <%= @invalid_request.errors.full_messages.to_sentence %>
     </div>
   <% end %>

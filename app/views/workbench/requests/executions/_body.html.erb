@@ -1,5 +1,5 @@
 <% if execution.error? %>
-  <div role="alert" class="m-4 rounded-xl border border-danger/40 bg-danger/10 p-4">
+  <div role="alert" class="m-4 border border-danger/40 bg-danger/10 p-4">
     <p class="text-sm font-semibold text-danger"><%= t("workbench.executions.errors.#{execution.error_kind}", default: t("workbench.executions.errors.unknown")) %></p>
     <p class="mt-1 break-words font-mono text-xs text-body"><%= execution.error_message %></p>
   </div>
@@ -16,22 +16,22 @@
       <% modes = %w[pretty raw] + (html ? %w[preview] : []) %>
       <% modes.each do |mode| %>
         <button type="button" data-response-body-target="mode" data-action="response-body#show" data-response-body-mode-param="<%= mode %>" aria-pressed="<%= mode == "pretty" %>"
-                class="cursor-pointer rounded-md px-2 py-1 text-xs font-medium text-muted transition hover:text-ink aria-pressed:bg-field aria-pressed:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+                class="cursor-pointer px-2 py-1 text-xs font-medium text-muted transition hover:text-ink aria-pressed:bg-field aria-pressed:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
           <%= t("workbench.executions.modes.#{mode}") %>
         </button>
       <% end %>
       <button type="button" data-action="response-body#copy" data-copied-label="<%= t("workbench.executions.copied") %>"
-              class="ml-auto flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+              class="ml-auto flex cursor-pointer items-center gap-1.5 px-2 py-1 text-xs font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "copy", class: "size-3.5" %><span data-label><%= t("workbench.executions.copy") %></span>
       </button>
     </div>
     <% if execution.body_truncated %>
-      <p class="mx-3 mb-2 rounded-lg bg-amber-500/15 px-3 py-1.5 text-xs text-amber-700 dark:text-amber-400"><%= t("workbench.executions.truncated", limit: format_size(ApiClient::Requests::Run::BODY_LIMIT)) %></p>
+      <p class="mx-3 mb-2 bg-amber-500/15 px-3 py-1.5 text-xs text-amber-700 dark:text-amber-400"><%= t("workbench.executions.truncated", limit: format_size(ApiClient::Requests::Run::BODY_LIMIT)) %></p>
     <% end %>
     <div class="min-h-0 flex-1 px-1">
       <%= render CodeEditor::Component.new(value: pretty, language: body_language(execution.content_type), readonly: true, class: "h-full", data: { response_body_target: "editor" }) %>
       <% if html %>
-        <iframe data-response-body-target="frame" hidden sandbox="" srcdoc="<%= raw %>" title="<%= t("workbench.executions.modes.preview") %>" class="size-full rounded-lg bg-white"></iframe>
+        <iframe data-response-body-target="frame" hidden sandbox="" srcdoc="<%= raw %>" title="<%= t("workbench.executions.modes.preview") %>" class="size-full bg-white"></iframe>
       <% end %>
     </div>
   </div>

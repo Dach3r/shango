@@ -33,7 +33,7 @@
           <% end %>
 
           <% if type == "oauth2" %>
-            <div class="space-y-2 rounded-xl border border-line bg-field p-3 sm:col-span-2">
+            <div class="space-y-2 border border-line bg-field p-3 sm:col-span-2">
               <% if oauth2_token_ready? %>
                 <p class="text-sm text-body">
                   <% if config["access_token"].present? %>

@@ -589,7 +589,7 @@ export default class extends Controller {
       ".cm-tooltip": {
         backgroundColor: "var(--card)",
         border: "1px solid var(--line)",
-        borderRadius: "0.625rem",
+        borderRadius: "0",
         boxShadow: "var(--dropdown-shadow)",
         color: "var(--body)",
       },
@@ -620,7 +620,7 @@ export default class extends Controller {
         flexWrap: "wrap",
         alignItems: "center",
         padding: "0.3125rem 0.5rem",
-        borderRadius: "0.5rem",
+        borderRadius: "0",
         color: "var(--body)",
         lineHeight: "1.4",
       },
@@ -656,7 +656,7 @@ export default class extends Controller {
       ".cm-var-card-value": {
         padding: "0.5rem 0.625rem",
         border: "1px solid var(--line)",
-        borderRadius: "0.5rem",
+        borderRadius: "0",
         backgroundColor: "var(--field)",
         color: "var(--ink)",
         fontFamily: "var(--font-mono)",
