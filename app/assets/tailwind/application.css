@@ -84,12 +84,62 @@
   );
 }
 
-:root[data-theme="dark"] {
+[data-theme="dark"] {
   color-scheme: dark;
 }
 
-:root[data-theme="system"] {
+[data-theme="system"] {
   color-scheme: light dark;
+}
+
+/* Palettes recolor the accent tokens; ocean also tints the surfaces. Scoped to any element so previews can use them. */
+[data-palette="blue"] {
+  --accent: light-dark(#1d4ed8, #7aa7f7);
+  --accent-hover: light-dark(#1e40af, #a8c5fa);
+  --solid: light-dark(#2563eb, #4f8df5);
+  --solid-hover: light-dark(#1d4ed8, #7aa7f7);
+  --glow: color-mix(in oklab, #3b82f6 14%, transparent);
+}
+
+[data-palette="green"] {
+  --accent: light-dark(#17693a, #6fcf93);
+  --accent-hover: light-dark(#0f5129, #9be0b5);
+  --solid: light-dark(#1f8a4c, #3fb36b);
+  --solid-hover: light-dark(#17693a, #6fcf93);
+  --glow: color-mix(in oklab, #22a35a 14%, transparent);
+}
+
+[data-palette="yellow"] {
+  --accent: light-dark(#8a5c00, #f2c94c);
+  --accent-hover: light-dark(#6b4700, #f7dc85);
+  --solid: light-dark(#d99a00, #f2c94c);
+  --solid-hover: light-dark(#b88100, #f7dc85);
+  --on-solid: var(--color-night-1000);
+  --glow: color-mix(in oklab, #f2c94c 16%, transparent);
+}
+
+[data-palette="red"] {
+  --accent: light-dark(#b42318, #f08a82);
+  --accent-hover: light-dark(#8f1c13, #f6b1ab);
+  --solid: light-dark(#d92d20, #ef5b50);
+  --solid-hover: light-dark(#b42318, #f08a82);
+  --danger: light-dark(#7a271a, #ffb4ab);
+  --glow: color-mix(in oklab, #ef4438 14%, transparent);
+}
+
+[data-palette="ocean"] {
+  --page: light-dark(#eef6f8, #0b1a21);
+  --card: light-dark(var(--color-paper), #10242d);
+  --line: light-dark(#cde0e6, #1f3a46);
+  --faint: light-dark(#9ab4bd, #3d5a66);
+  --field: light-dark(#f4fafb, #0b1a21);
+  --field-focus: light-dark(var(--color-paper), #0b1a21);
+  --dots: light-dark(#c2d8df, #1f3a46);
+  --accent: light-dark(#0b6b7d, #5fd0e3);
+  --accent-hover: light-dark(#085667, #94e2ef);
+  --solid: light-dark(#0e8aa0, #2fb8cf);
+  --solid-hover: light-dark(#0b6b7d, #5fd0e3);
+  --glow: color-mix(in oklab, #19b3cc 14%, transparent);
 }
 
 /* Browser autofill paints its own background; cover it with the field tokens. */
