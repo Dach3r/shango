@@ -426,6 +426,12 @@ input:-webkit-autofill:focus {
 .cm-var-empty { --var-color: var(--syn-number); }
 .cm-var-missing { --var-color: var(--danger); text-decoration: underline wavy; }
 
+.cm-ref-chip {
+  padding: 0 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
 .cm-var-dot {
   display: inline-block;
   width: 8px;

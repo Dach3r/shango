@@ -208,9 +208,69 @@ export default class extends Controller {
     const decorator = new cm.MatchDecorator({
       regexp: /\{\{\s*([^{}\s]+)\s*\}\}/g,
       decoration: (match) =>
-        cm.Decoration.mark({
-          class: `cm-var cm-var-${this.variableStatus(match[1])}`,
-        }),
+        this.referenceName(match[1]) ? null : cm.Decoration.mark({ class: `cm-var cm-var-${this.variableStatus(match[1])}` }),
+    });
+    const marks = cm.ViewPlugin.fromClass(
+      class {
+        constructor(view) {
+          this.decorations = decorator.createDeco(view);
+        }
+        update(update) {
+          this.decorations = decorator.updateDeco(update, this.decorations);
+        }
+      },
+      { decorations: (plugin) => plugin.decorations },
+    );
+
+    return [marks, this.referenceChips()];
+  }
+
+  // A valid `{{response.…}}` of this collection, once it is a reference to a known request.
+  referenceName(name) {
+    return name.startsWith("response.") && this.variableStatus(name) === "dynamic" ? name : null;
+  }
+
+  // Replaces each valid `{{response.…}}` with a chip naming the request, attribute and filter (the stored text is unchanged);
+  // clicking it opens the modal.
+  referenceChips() {
+    const cm = this.cm;
+    const controller = this;
+    const chip = class extends cm.WidgetType {
+      constructor(raw, text) {
+        super();
+        this.raw = raw;
+        this.text = text;
+      }
+      eq(other) {
+        return other.raw === this.raw && other.text === this.text;
+      }
+      toDOM(view) {
+        const node = document.createElement("span");
+        node.className = "cm-var cm-var-dynamic cm-ref-chip";
+        node.textContent = this.text;
+        node.addEventListener("mousedown", (event) => {
+          event.preventDefault();
+          if (controller.readonlyValue) return;
+
+          const from = view.posAtDOM(node);
+          controller.editReference(from, from + this.raw.length);
+        });
+        return node;
+      }
+      ignoreEvent() {
+        return true;
+      }
+    };
+    const decorator = new cm.MatchDecorator({
+      regexp: /\{\{\s*(response\.[^{}\s]+)\s*\}\}/g,
+      decoration: (match) => {
+        const reference = this.referenceName(match[1]) && parseReference(match[1]);
+        if (!reference) return null;
+
+        const source = this.responsesValue.find(({ id }) => id === reference.requestId);
+        const text = [source.name, reference.attribute, reference.filter].filter(Boolean).join(" · ");
+        return cm.Decoration.replace({ widget: new chip(match[0], text) });
+      },
     });
 
     return cm.ViewPlugin.fromClass(
@@ -222,7 +282,11 @@ export default class extends Controller {
           this.decorations = decorator.updateDeco(update, this.decorations);
         }
       },
-      { decorations: (plugin) => plugin.decorations },
+      {
+        decorations: (plugin) => plugin.decorations,
+        provide: (plugin) =>
+          cm.EditorView.atomicRanges.of((view) => view.plugin(plugin)?.decorations ?? cm.Decoration.none),
+      },
     );
   }
 
