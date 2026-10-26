@@ -6,7 +6,7 @@ RSpec.describe "Projects" do
   describe "without a project" do
     before { sign_in user }
 
-    it "redirects overview to the new project form" do
+    it "redirects the root to the new project form" do
       get root_path
 
       expect(response).to redirect_to(new_project_path)
@@ -34,7 +34,7 @@ RSpec.describe "Projects" do
     let!(:context) { sign_in_with_project(user) }
     let(:project) { context[1] }
 
-    it "shows the overview" do
+    it "shows the workbench on the root" do
       get root_path
 
       expect(response).to have_http_status(:ok)

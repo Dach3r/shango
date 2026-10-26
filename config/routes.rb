@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations" }, failure_app: "LocalizedFailureApp"
 
-  root to: "overview#show"
+  authenticated :user do
+    root to: "workbench/workspaces#show"
+  end
+
+  devise_scope :user do
+    unauthenticated do
+      root to: "devise/sessions#new", as: :unauthenticated_root
+    end
+  end
 
   resources :projects, only: %i[index new create]
   resource :current_project, only: :update

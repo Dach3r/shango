@@ -29,7 +29,6 @@ es:
         members: Miembros
     sidebar:
       label: Navegación del proyecto
-      overview: Resumen
       api_client: Cliente API
       documentation: Documentación
       monitoring: Monitoreo
@@ -52,10 +51,6 @@ es:
       system: Sistema
       light: Claro
       dark: Oscuro
-  overview:
-    show:
-      title: Resumen
-      empty: Aún no hay nada aquí. Las herramientas del proyecto aparecerán a medida que estén disponibles.
   projects:
     index:
       title: Proyectos

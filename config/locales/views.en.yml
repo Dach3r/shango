@@ -29,7 +29,6 @@ en:
         members: Members
     sidebar:
       label: Project navigation
-      overview: Overview
       api_client: API Client
       documentation: Documentation
       monitoring: Monitoring
@@ -52,10 +51,6 @@ en:
       system: System
       light: Light
       dark: Dark
-  overview:
-    show:
-      title: Overview
-      empty: Nothing here yet. Project tools will show up as they become available.
   projects:
     index:
       title: Projects

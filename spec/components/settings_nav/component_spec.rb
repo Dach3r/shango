@@ -24,7 +24,7 @@ RSpec.describe SettingsNav::Component, type: :component do
   end
 
   it "highlights nothing on other controllers" do
-    render_nav(controller_path: "overview")
+    render_nav(controller_path: "projects")
 
     expect(page).to have_no_css("a[aria-current=page]")
   end

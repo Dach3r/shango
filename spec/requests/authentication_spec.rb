@@ -6,8 +6,14 @@ RSpec.describe "Authentication" do
   end
 
   describe "guests" do
-    it "redirects to sign in" do
+    it "renders the sign in page on the root" do
       get root_path
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "redirects protected pages to sign in" do
+      get new_project_path
 
       expect(response).to redirect_to(new_user_session_path)
     end
