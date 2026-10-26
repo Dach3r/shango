@@ -33,6 +33,14 @@ RSpec.describe Sidebar::Component, type: :component do
     expect(page).to have_no_css("a[aria-current=page]")
   end
 
+  it "separates live tools from upcoming ones", :aggregate_failures do
+    render_sidebar
+
+    expect(page).to have_css("p", text: I18n.t("components.sidebar.soon"))
+    expect(page).to have_css("ul:first-of-type a", text: I18n.t("components.sidebar.api_client"))
+    expect(page).to have_css("ul:last-of-type span[aria-disabled=true]", text: I18n.t("components.sidebar.logs"))
+  end
+
   it "renders the user menu in the footer" do
     render_sidebar
 

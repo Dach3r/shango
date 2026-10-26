@@ -3,16 +3,24 @@
     <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
     <nav aria-label="<%= t("components.sidebar.label") %>">
-      <ul class="space-y-1">
-        <% items.each do |item| %>
+      <ul class="space-y-0.5">
+        <% live_items.each do |item| %>
+          <li><%= render NavItem::Component.new(**item) %></li>
+        <% end %>
+      </ul>
+
+      <div class="mx-auto my-3 hidden h-px w-6 bg-line lg:group-data-[collapsed=true]/sidebar:block" aria-hidden="true"></div>
+      <p class="mt-4 mb-1.5 px-3 text-[11px] font-medium tracking-wide text-muted uppercase lg:group-data-[collapsed=true]/sidebar:hidden"><%= t("components.sidebar.soon") %></p>
+      <ul class="space-y-0.5">
+        <% soon_items.each do |item| %>
           <li><%= render NavItem::Component.new(**item) %></li>
         <% end %>
       </ul>
     </nav>
   </div>
 
-  <div class="sticky bottom-0 shrink-0 bg-card">
-    <div class="border-t border-line px-3 py-2">
+  <div class="sticky bottom-0 shrink-0 bg-page">
+    <div class="px-3 pt-2">
       <%= render NavItem::Component.new(**settings) %>
     </div>
     <%= render UserMenu::Component.new(user: @user) %>

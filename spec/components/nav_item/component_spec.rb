@@ -4,7 +4,7 @@ RSpec.describe NavItem::Component, type: :component do
   it "renders an active link", :aggregate_failures do
     render_inline(described_class.new(label: "Home", icon: "home", href: "/", active: true))
 
-    expect(page).to have_css("a[href='/'][aria-current=page].bg-field", text: "Home")
+    expect(page).to have_css("a[href='/'][aria-current=page].bg-card", text: "Home")
   end
 
   it "renders an inactive link" do

@@ -3,11 +3,11 @@
     <div hidden data-drawer-target="backdrop" data-action="click->drawer#close" class="fixed inset-0 z-30 bg-night-1000/50 lg:hidden"></div>
 
     <div class="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[16rem_1fr] lg:group-data-[collapsed=true]/sidebar:grid-cols-[4rem_1fr]">
-      <aside data-drawer-target="panel" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full overflow-y-auto border-r border-line bg-card transition-transform duration-200 lg:sticky lg:top-0 lg:h-[calc(100vh-2.5rem)] lg:w-full lg:translate-none lg:overflow-x-hidden">
+      <aside data-drawer-target="panel" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full overflow-y-auto border-r border-line bg-page transition-transform duration-200 lg:sticky lg:top-0 lg:h-[calc(100vh-2.5rem)] lg:w-full lg:translate-none lg:overflow-x-hidden lg:border-r-0">
         <%= render Sidebar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name), user: current_user) %>
       </aside>
 
-      <div class="flex min-w-0 flex-col">
+      <div class="flex min-w-0 flex-col lg:m-2 lg:ml-0 lg:overflow-hidden lg:rounded-xl lg:border lg:border-line lg:bg-card">
         <main class="<%= content_for?(:main_class) ? yield(:main_class) : "flex-1 px-4 py-8 sm:px-8" %>">
           <% if content_for?(:heading) && !content_for?(:main_class) %>
             <h1 class="mx-auto mb-6 max-w-3xl truncate text-lg font-semibold tracking-tight text-ink"><%= yield :heading %></h1>

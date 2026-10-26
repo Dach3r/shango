@@ -20,8 +20,16 @@ class Sidebar::Component < ApplicationComponent
 
   private
 
+  def live_items
+    items.select { |item| item[:href] }
+  end
+
+  def soon_items
+    items.reject { |item| item[:href] }
+  end
+
   def items
-    ITEMS.map { |item| nav_item(item) }
+    @items ||= ITEMS.map { |item| nav_item(item) }
   end
 
   def settings
@@ -35,9 +43,6 @@ class Sidebar::Component < ApplicationComponent
 
   # Features with their own controllers stay highlighted on every screen of the feature.
   def active?(item, href)
-    return false if href.blank?
-    return helpers.controller_path.start_with?(item[:controllers]) if item[:controllers]
-
-    helpers.current_page?(href)
+    href.present? && helpers.controller_path.start_with?(item[:controllers])
   end
 end
