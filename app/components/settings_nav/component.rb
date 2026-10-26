@@ -28,7 +28,7 @@ class SettingsNav::Component < ApplicationComponent
   def items(entries)
     entries.map do |item|
       href = item[:path] && helpers.public_send(item[:path], **item.fetch(:params, {}))
-      { label: t("components.settings_nav.items.#{item[:key]}"), icon: item[:icon], href:, active: href.present? && active?(item), collapsible: false }
+      { label: t("components.settings_nav.items.#{item[:key]}"), icon: item[:icon], href:, active: href.present? && active?(item) }
     end
   end
 

@@ -1,0 +1,19 @@
+<header class="sticky top-0 z-30 flex h-14 shrink-0 items-stretch border-b border-line bg-card">
+  <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
+
+  <nav aria-label="<%= t("components.topbar.label") %>" class="flex min-w-0 flex-1 items-stretch overflow-x-auto">
+    <ul class="flex">
+      <% live_items.each do |item| %>
+        <li class="flex"><%= render NavItem::Component.new(**item, orientation: :horizontal) %></li>
+      <% end %>
+    </ul>
+
+    <ul class="flex">
+      <% soon_items.each do |item| %>
+        <li class="flex"><%= render NavItem::Component.new(**item, orientation: :horizontal) %></li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <%= render UserMenu::Component.new(user: @user) %>
+</header>

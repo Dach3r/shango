@@ -1,12 +1,8 @@
 <% content_for :content do %>
-  <div class="group/sidebar flex min-h-screen flex-col" data-controller="drawer sidebar right-sidebar" data-collapsed="<%= sidebar_collapsed? %>" data-action="keydown.esc->drawer#close">
-    <div hidden data-drawer-target="backdrop" data-action="click->drawer#close" class="fixed inset-0 z-30 bg-night-1000/50 lg:hidden"></div>
+  <div class="flex min-h-screen flex-col" data-controller="right-sidebar">
+    <%= render Topbar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name), user: current_user) %>
 
-    <div class="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[16rem_1fr_auto] lg:group-data-[collapsed=true]/sidebar:grid-cols-[4rem_1fr_auto]">
-      <aside data-drawer-target="panel" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full overflow-y-auto border-r border-line bg-card transition-transform duration-200 lg:sticky lg:top-0 lg:h-[calc(100vh-2.5rem)] lg:w-full lg:translate-none lg:overflow-x-hidden">
-        <%= render Sidebar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name), user: current_user) %>
-      </aside>
-
+    <div class="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[1fr_auto]">
       <div class="flex min-w-0 flex-col">
         <main class="<%= content_for?(:main_class) ? yield(:main_class) : "flex-1 px-4 py-8 sm:px-8" %>">
           <% if content_for?(:heading) && !content_for?(:main_class) %>
@@ -16,7 +12,7 @@
         </main>
       </div>
 
-      <aside hidden data-right-sidebar-target="panel" aria-label="<%= t("layouts.app.right_sidebar") %>" class="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-line bg-card lg:sticky lg:top-0 lg:z-auto lg:h-[calc(100vh-2.5rem)] lg:w-[28rem] lg:max-w-none">
+      <aside hidden data-right-sidebar-target="panel" aria-label="<%= t("layouts.app.right_sidebar") %>" class="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-line bg-card lg:sticky lg:top-14 lg:z-auto lg:h-[calc(100vh-6rem)] lg:w-[28rem] lg:max-w-none">
         <header class="flex h-10 shrink-0 items-center justify-between gap-2 border-b border-line px-4">
           <h2 class="truncate text-sm font-semibold text-ink" data-right-sidebar-target="title"></h2>
           <button type="button" data-action="right-sidebar#close" aria-label="<%= t("layouts.app.close_right_sidebar") %>"
@@ -30,7 +26,7 @@
       </aside>
     </div>
 
-    <%= render StatusBar::Component.new(environments: current_project.environments.ordered, current_environment:, collapsed: sidebar_collapsed?) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
+    <%= render StatusBar::Component.new(environments: current_project.environments.ordered, current_environment:) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
   </div>
   <%= turbo_frame_tag "modal" %>
 <% end %>

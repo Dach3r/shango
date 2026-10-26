@@ -1,13 +1,13 @@
-<div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+<div class="relative shrink-0" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
   <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
           title="<%= @current_project.name %>"
-          class="flex w-full cursor-pointer items-center gap-3 border-b border-line bg-field h-14 px-3 text-left transition lg:group-data-[collapsed=true]/sidebar:justify-center lg:group-data-[collapsed=true]/sidebar:px-0 hover:bg-field-focus focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+          class="flex h-full w-14 cursor-pointer items-center justify-center gap-3 border-r border-line bg-field text-left transition sm:w-60 sm:justify-start sm:px-3 hover:bg-field-focus focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
     <span class="flex size-8 shrink-0 items-center justify-center bg-solid text-on-solid"><%= lucide_icon @current_project.icon, class: "size-4" %></span>
-    <span class="min-w-0 flex-1 truncate text-sm font-medium text-ink lg:group-data-[collapsed=true]/sidebar:hidden"><%= @current_project.name %></span>
-    <%= lucide_icon "chevrons-up-down", class: "size-4 shrink-0 text-muted lg:group-data-[collapsed=true]/sidebar:hidden" %>
+    <span class="hidden min-w-0 flex-1 truncate text-sm font-medium text-ink sm:block"><%= @current_project.name %></span>
+    <%= lucide_icon "chevrons-up-down", class: "hidden size-4 shrink-0 text-muted sm:block" %>
   </button>
 
-  <div data-dropdown-target="menu" hidden class="absolute inset-x-0 top-full z-30 mt-2 lg:group-data-[collapsed=true]/sidebar:fixed lg:group-data-[collapsed=true]/sidebar:inset-x-auto lg:group-data-[collapsed=true]/sidebar:top-auto lg:group-data-[collapsed=true]/sidebar:left-2 lg:group-data-[collapsed=true]/sidebar:w-60 border border-line bg-card p-0">
+  <div data-dropdown-target="menu" hidden class="absolute left-0 top-full z-30 w-60 border border-t-0 border-line bg-card p-0">
     <p class="px-3 py-2 text-xs font-medium text-muted"><%= t("components.project_switcher.label") %></p>
     <ul class="max-h-64 overflow-y-auto">
       <% @projects.each do |project| %>

@@ -37,17 +37,14 @@ en:
         sidebar: Sidebar
         themes: Themes
         members: Members
-    sidebar:
+    topbar:
       label: Project navigation
-      toggle: Collapse or expand the sidebar
       api_client: API Client
       documentation: Documentation
       monitoring: Monitoring
       servers: Servers
       logs: Logs
       ai_assistant: AI Assistant
-    status_bar:
-      menu: Open navigation
     user_menu:
       settings: Settings
       label: Account menu

@@ -37,17 +37,14 @@ es:
         sidebar: Barra lateral
         themes: Temas
         members: Miembros
-    sidebar:
+    topbar:
       label: Navegación del proyecto
-      toggle: Contraer o expandir la barra lateral
       api_client: Cliente API
       documentation: Documentación
       monitoring: Monitoreo
       servers: Servidores
       logs: Logs
       ai_assistant: Asistente IA
-    status_bar:
-      menu: Abrir navegación
     user_menu:
       settings: Configuración
       label: Menú de cuenta

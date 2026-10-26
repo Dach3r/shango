@@ -1,4 +1,4 @@
-class Sidebar::Component < ApplicationComponent
+class Topbar::Component < ApplicationComponent
   # Project tools from the product navigation; only entries with a path are live.
   ITEMS = [
     { key: :api_client, icon: "send", path: :workbench_root_path, controllers: "workbench/" },
@@ -31,7 +31,7 @@ class Sidebar::Component < ApplicationComponent
 
   def nav_item(item)
     href = item[:path] && helpers.public_send(item[:path])
-    { label: t("components.sidebar.#{item[:key]}"), icon: item[:icon], href:, active: active?(item, href) }
+    { label: t("components.topbar.#{item[:key]}"), icon: item[:icon], href:, active: active?(item, href) }
   end
 
   # Features with their own controllers stay highlighted on every screen of the feature.

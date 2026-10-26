@@ -43,7 +43,7 @@ RSpec.describe "Environments" do
       get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
 
       expect(response.body).to include('<turbo-frame id="right_sidebar">')
-      expect(response.body).not_to include("data-controller=\"drawer sidebar right-sidebar\"")
+      expect(response.body).not_to include("data-controller=\"right-sidebar\"")
     end
   end
 

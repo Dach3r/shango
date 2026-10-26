@@ -1,26 +1,28 @@
 class NavItem::Component < ApplicationComponent
-  BASE = "flex items-center gap-3 border-b border-line h-14 px-3 text-base font-medium transition focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
-  COLLAPSIBLE = "lg:group-data-[collapsed=true]/sidebar:justify-center lg:group-data-[collapsed=true]/sidebar:px-0"
-  LABEL_COLLAPSIBLE = "lg:group-data-[collapsed=true]/sidebar:hidden"
-  ACTIVE = "bg-field shadow-[inset_2px_0_0_var(--accent)] font-semibold text-accent"
+  BASE = "flex items-center gap-3 px-3 text-base font-medium transition focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
+  ORIENTATIONS = {
+    vertical: { base: "h-14 border-b border-line", active: "shadow-[inset_2px_0_0_var(--accent)]", label: "" },
+    horizontal: { base: "h-full border-r border-line px-4", active: "shadow-[inset_0_-2px_0_var(--accent)]", label: "max-lg:sr-only" }
+  }.freeze
+  ACTIVE = "bg-field font-semibold text-accent"
   LINK = "text-body hover:bg-field hover:text-ink"
   DISABLED = "cursor-not-allowed text-faint"
 
-  def initialize(label:, icon:, href: nil, active: false, collapsible: true)
+  def initialize(label:, icon:, href: nil, active: false, orientation: :vertical)
     @label = label
     @icon = icon
     @href = href
     @active = active
-    @collapsible = collapsible
+    @orientation = ORIENTATIONS.fetch(orientation)
   end
 
   private
 
   def label_classes
-    class_names("truncate", LABEL_COLLAPSIBLE => @collapsible)
+    class_names("truncate", @orientation[:label])
   end
 
   def classes
-    class_names(BASE, COLLAPSIBLE => @collapsible, ACTIVE => @active, LINK => @href && !@active, DISABLED => !@href)
+    class_names(BASE, @orientation[:base], ACTIVE => @active, @orientation[:active] => @active, LINK => @href && !@active, DISABLED => !@href)
   end
 end
