@@ -3,7 +3,7 @@
                 id: "collection_form", data: { turbo_frame: "_top" }, class: "space-y-5" do |form| %>
     <%= render "api_client/shared/errors", record: @collection %>
 
-    <%= render Input::Component.new(form: form, attribute: :name, label: t(".name"), placeholder: t(".name_placeholder"), autofocus: true, autocomplete: "off") %>
+    <%= render Input::Component.new(form: form, attribute: :name, label: t(".name"), icon: "library", placeholder: t(".name_placeholder"), autofocus: true, autocomplete: "off") %>
     <%= render Input::Component.new(form: form, attribute: :description, label: t(".description"), type: :text_area, rows: 2) %>
   <% end %>
 <% end %>
