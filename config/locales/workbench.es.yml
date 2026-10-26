@@ -242,11 +242,9 @@ es:
       body: Body
       settings: Ajustes
     params:
-      hint: Los parámetros se agregan a la URL y viceversa. Desmarca una fila para dejar de enviarla sin borrarla.
       add: Agregar parámetro
       key: Parámetro
     headers:
-      hint: Shango agrega User-Agent y Accept si no los defines, y Content-Type según el tipo de body.
       add: Agregar header
       key: Header
     body:

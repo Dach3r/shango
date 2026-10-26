@@ -242,11 +242,9 @@ en:
       body: Body
       settings: Settings
     params:
-      hint: Parameters are added to the URL and vice versa. Uncheck a row to stop sending it without deleting it.
       add: Add parameter
       key: Parameter
     headers:
-      hint: Shango adds User-Agent and Accept unless you set them, and Content-Type from the body type.
       add: Add header
       key: Header
     body:
