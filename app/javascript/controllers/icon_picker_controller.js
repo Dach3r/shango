@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["query", "option", "empty"];
+  static targets = ["query", "option", "empty", "grid"];
 
   filter() {
     const query = this.queryTarget.value
@@ -17,6 +17,7 @@ export default class extends Controller {
     });
 
     this.emptyTarget.classList.toggle("hidden", visible > 0);
+    this.gridTarget.scrollTop = 0;
   }
 
   // Enter in the search box must not submit the form.
