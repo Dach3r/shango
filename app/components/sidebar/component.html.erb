@@ -9,7 +9,6 @@
         <% end %>
       </ul>
 
-      <div class="mx-auto my-3 hidden h-px w-6 bg-line lg:group-data-[collapsed=true]/sidebar:block" aria-hidden="true"></div>
       <ul>
         <% soon_items.each do |item| %>
           <li><%= render NavItem::Component.new(**item) %></li>

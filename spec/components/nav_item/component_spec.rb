@@ -24,7 +24,7 @@ RSpec.describe NavItem::Component, type: :component do
     render_inline(described_class.new(label: "Home", icon: "home", href: "/"))
 
     expect(page.native.to_html).to include("group-data-[collapsed=true]/sidebar:hidden")
-    expect(page.native.to_html).to include("group-data-[collapsed=true]/sidebar:size-10")
+    expect(page.native.to_html).to include("group-data-[collapsed=true]/sidebar:px-0")
   end
 
   it "keeps the label visible when not collapsible", :aggregate_failures do
