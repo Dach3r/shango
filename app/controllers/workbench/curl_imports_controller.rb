@@ -9,7 +9,7 @@ module Workbench
       result = ApiClient::Requests::ImportCurl.call(collection: @collection, command: params[:command], folder_id: params[:folder_id])
       return redirect_to(workbench_request_path(result.record), notice: t(".imported"), status: :see_other) if result.success?
 
-      @error = result.error || result.record&.errors&.full_messages&.to_sentence
+      @error = result.error || result.record.errors.full_messages.to_sentence
       render_form_errors
     end
 

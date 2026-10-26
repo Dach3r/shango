@@ -1,0 +1,37 @@
+require "rails_helper"
+
+RSpec.describe "Workbench workspace" do
+  include_context "with workbench project"
+
+  it "requires sign in" do
+    sign_out user
+    get workbench_root_path
+
+    expect(response).to redirect_to(new_user_session_path)
+  end
+
+  it "renders the tree without an environment" do
+    folder
+    create(:api_request, collection:, folder:)
+    get workbench_root_path
+
+    expect(response.body).to include(collection.name, folder.name)
+  end
+
+  it "offers the selected environment's variables", :aggregate_failures do
+    environment = create(:environment, project:)
+    create(:variable, environment:, key: "BASE_URL")
+    create(:variable, environment:, key: "OFF", enabled: false)
+    membership.update!(current_environment: environment)
+    get workbench_request_path(api_request)
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("BASE_URL")
+  end
+
+  it "renders inside a turbo frame layout" do
+    get workbench_root_path, headers: { "Turbo-Frame" => "modal" }
+
+    expect(response).to have_http_status(:ok)
+  end
+end
