@@ -1,0 +1,22 @@
+{
+  "swagger": "2.0",
+  "info": { "title": "Legacy" },
+  "host": "legacy.test",
+  "basePath": "/api/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "securityDefinitions": {
+    "basic": { "type": "basic" },
+    "oauth": { "type": "oauth2", "flow": "application", "tokenUrl": "https://legacy.test/token", "scopes": { "a": "A" } }
+  },
+  "security": [{ "basic": [] }],
+  "definitions": { "Item": { "type": "object", "properties": { "id": { "type": "integer" } } } },
+  "paths": {
+    "/items": {
+      "post": { "tags": ["items"], "parameters": [{ "in": "body", "name": "body", "schema": { "$ref": "#/definitions/Item" } }] },
+      "put": { "consumes": ["application/x-www-form-urlencoded"], "parameters": [{ "in": "formData", "name": "a", "type": "string" }] },
+      "patch": { "consumes": ["multipart/form-data"], "parameters": [{ "in": "formData", "name": "f", "type": "file" }], "security": [{ "oauth": [] }] },
+      "get": { "parameters": [{ "in": "query", "name": "q", "type": "string", "required": true }] }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Petstore", "description": "Pets" },
+  "servers": [{ "url": "https://{env}.pets.test/v1", "variables": { "env": { "default": "api" } } }],
+  "security": [{ "bearerAuth": [] }],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer" },
+      "basicAuth": { "type": "http", "scheme": "basic" },
+      "digestAuth": { "type": "http", "scheme": "digest" },
+      "keyHeader": { "type": "apiKey", "in": "header", "name": "X-Key" },
+      "keyQuery": { "type": "apiKey", "in": "query", "name": "k" },
+      "keyCookie": { "type": "apiKey", "in": "cookie", "name": "c" },
+      "oauth": { "type": "oauth2", "flows": { "clientCredentials": { "tokenUrl": "https://pets.test/token", "scopes": { "read": "r", "write": "w" } } } },
+      "oauthImplicit": { "type": "oauth2", "flows": { "implicit": { "authorizationUrl": "https://pets.test/a", "scopes": {} } } },
+      "oidc": { "type": "openIdConnect", "openIdConnectUrl": "https://pets.test/.well-known" },
+      "weird": {}
+    },
+    "parameters": { "Limit": { "name": "limit", "in": "query", "required": true, "schema": { "type": "integer", "default": 10 } } },
+    "schemas": {
+      "Pet": { "type": "object", "properties": { "name": { "type": "string", "example": "Rex" }, "tags": { "type": "array", "items": { "type": "string" } }, "age": { "type": "integer" }, "ok": { "type": "boolean" }, "owner": { "$ref": "#/components/schemas/Owner" } } },
+      "Owner": { "allOf": [{ "type": "object", "properties": { "id": { "type": "number" } } }, { "properties": { "kind": { "enum": ["a", "b"] } } }] },
+      "Either": { "oneOf": [{ "type": "string", "default": "x" }, { "type": "integer" }] },
+      "Loop": { "type": "object", "properties": { "self": { "$ref": "#/components/schemas/Loop" } } }
+    },
+    "requestBodies": { "PetBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } } } }
+  },
+  "paths": {
+    "/pets": {
+      "parameters": [{ "name": "X-Trace", "in": "header", "schema": { "type": "string" } }, { "name": "Accept", "in": "header" }],
+      "get": { "tags": ["pets"], "summary": "List pets", "description": "All pets", "parameters": [{ "$ref": "#/components/parameters/Limit" }, { "name": "q", "in": "query", "example": ["a"] }, { "name": "obj", "in": "query", "schema": { "$ref": "#/components/schemas/Owner" } }, { "in": "query" }, { "name": "free", "in": "query", "schema": { "description": "anything" } }, { "name": "shape", "in": "query", "schema": { "properties": { "a": { "type": "string" } } } }] },
+      "post": { "tags": ["pets"], "operationId": "createPet", "requestBody": { "$ref": "#/components/requestBodies/PetBody" }, "security": [{ "basicAuth": [] }] }
+    },
+    "/pets/{petId}": {
+      "get": { "tags": ["pets"], "security": [{ "keyHeader": [] }] },
+      "delete": { "security": [{ "keyQuery": [] }] },
+      "put": { "requestBody": { "content": { "application/xml": { "schema": { "type": "object" }, "example": "<pet/>" } } }, "security": [{ "keyCookie": [] }] },
+      "patch": { "requestBody": { "content": { "text/plain": { "examples": { "one": { "value": "hello" } } } } }, "security": [{ "oauth": [] }] },
+      "head": { "security": [{ "oauthImplicit": [] }] },
+      "options": { "security": [{ "oidc": [] }] },
+      "trace": {}
+    },
+    "/forms": {
+      "post": { "tags": ["forms"], "requestBody": { "content": { "application/x-www-form-urlencoded": { "schema": { "properties": { "a": { "type": "string" }, "n": { "type": "integer" } } } } } }, "security": [{ "digestAuth": [] }] },
+      "put": { "tags": ["forms"], "requestBody": { "content": { "multipart/form-data": { "schema": { "properties": { "file": { "type": "string", "format": "binary" } } } } } }, "security": [{ "weird": [] }] },
+      "patch": { "tags": ["forms"], "requestBody": { "content": {} }, "security": [{ "missing": [] }] },
+      "delete": { "tags": ["forms"], "security": [] }
+    },
+    "/misc": {
+      "post": { "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Either" } } } } },
+      "put": { "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Loop" } } } } },
+      "patch": { "requestBody": { "content": { "application/json": { "schema": { "$ref": "https://other.test/schema.json" } } } } },
+      "get": { "requestBody": { "content": { "application/json": { "example": { "a": 1 } } } } },
+      "delete": { "requestBody": { "content": { "application/json": { "example": null } } } }
+    },
+    "/jsonstr": { "post": { "requestBody": { "content": { "application/json": { "example": "{\"a\":1}" } } } } },
+    "/skip": "junk"
+  }
+}
