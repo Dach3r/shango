@@ -1,10 +1,19 @@
 <%= turbo_frame_tag "modal" do %>
-  <%= render Modal::Component.new(icon: "file-pen-line", title: t(".title"), description: t(".description", name: @api_request.name), size: :sm, centered: true) do |modal| %>
+  <%= render Modal::Component.new(icon: "file-pen-line", title: t(".title"), description: t(".description"), size: :sm, centered: true) do |modal| %>
+    <div class="flex items-center gap-2.5 rounded-xl border border-line bg-field px-3.5 py-2.5">
+      <%= lucide_icon "file-text", class: "size-4 shrink-0 text-muted" %>
+      <span class="min-w-0 flex-1 truncate text-sm font-medium text-ink"><%= @api_request.name %></span>
+      <span class="shrink-0 rounded-md bg-accent/10 px-1.5 py-0.5 text-xs font-medium text-accent"><%= t("workbench.requests.draft") %></span>
+    </div>
     <% modal.with_footer do %>
-      <%= link_to t(".save"), new_workbench_request_placement_path(@api_request), class: button_classes(:primary, "w-full") %>
+      <%= link_to new_workbench_request_placement_path(@api_request), class: button_classes(:primary, "w-full") do %>
+        <%= lucide_icon "folder-down", class: "size-4" %><%= t(".save") %>
+      <% end %>
       <div class="flex w-full gap-2">
-        <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost, "flex-1") %>"><%= t(".cancel") %></button>
-        <%= button_to t(".discard"), workbench_request_path(@api_request), method: :delete, class: button_classes(:danger, "w-full"), form_class: "flex-1", data: { turbo_frame: "_top" } %>
+        <button type="button" data-action="dialog#close" class="<%= button_classes(:secondary, "flex-1") %>"><%= t(".cancel") %></button>
+        <%= button_to workbench_request_path(@api_request), method: :delete, class: button_classes(:danger, "w-full"), form_class: "flex-1", data: { turbo_frame: "_top" } do %>
+          <%= lucide_icon "trash-2", class: "size-4" %><%= t(".discard") %>
+        <% end %>
       </div>
     <% end %>
   <% end %>

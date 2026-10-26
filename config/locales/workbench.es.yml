@@ -126,10 +126,10 @@ es:
       closures:
         new:
           title: "¿Cerrar este borrador?"
-          description: "«%{name}» no se ha guardado en una colección. Guárdalo para conservar tu trabajo o descártalo."
-          discard: "No guardar"
-          cancel: Cancelar
-          save: Guardar cambios
+          description: "Este borrador no está en ninguna colección. Guárdalo para conservar tu trabajo o descártalo."
+          discard: Descartar
+          cancel: Seguir editando
+          save: Guardar en una colección
       placements:
         form:
           title: "Guardar solicitud en…"

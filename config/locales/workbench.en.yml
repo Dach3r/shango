@@ -126,10 +126,10 @@ en:
       closures:
         new:
           title: "Close this draft?"
-          description: "“%{name}” hasn't been saved to a collection. Save it to keep your work, or discard it."
-          discard: "Don't save"
-          cancel: Cancel
-          save: Save changes
+          description: "This draft isn't in any collection yet. Save it to keep your work, or discard it."
+          discard: Discard
+          cancel: Keep editing
+          save: Save to a collection
       placements:
         form:
           title: "Save request to…"
