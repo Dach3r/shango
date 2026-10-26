@@ -9,6 +9,8 @@ en:
       toggle_password: Show or hide password
     locale_switcher:
       label: Language
+    toast:
+      close: Dismiss notification
     theme_switcher:
       label: Theme
       system: System

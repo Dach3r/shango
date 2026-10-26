@@ -15,13 +15,6 @@
         <h1 class="mb-8 text-3xl leading-tight font-bold tracking-tight text-ink sm:text-4xl"><%= yield :heading %></h1>
       <% end %>
 
-      <% if notice.present? %>
-        <p role="status" class="mb-6 rounded-xl bg-solid/10 px-4 py-3 text-center text-sm text-accent ring-1 ring-accent/30"><%= notice %></p>
-      <% end %>
-      <% if alert.present? %>
-        <p role="alert" class="mb-6 rounded-xl bg-danger/10 px-4 py-3 text-center text-sm text-danger ring-1 ring-danger/30"><%= alert %></p>
-      <% end %>
-
       <%= yield %>
     </div>
   </main>

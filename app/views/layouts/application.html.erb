@@ -20,6 +20,7 @@
   <%= javascript_importmap_tags %>
 </head>
 <body class="bg-page font-sans text-body" data-controller="form-validation" data-action="invalid->form-validation#mark:capture input->form-validation#clear">
+  <%= render ToastRegion::Component.new(flash: flash) %>
   <%= content_for?(:content) ? yield(:content) : yield %>
 </body>
 </html>
