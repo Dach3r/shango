@@ -10,8 +10,6 @@ class Sidebar::Component < ApplicationComponent
     { key: :ai_assistant, icon: "sparkles" }
   ].freeze
 
-  SETTINGS = { key: :settings, icon: "settings", path: :edit_membership_path, controllers: "projects/memberships" }.freeze
-
   def initialize(current_project:, projects:, user:)
     @current_project = current_project
     @projects = projects
@@ -30,10 +28,6 @@ class Sidebar::Component < ApplicationComponent
 
   def items
     @items ||= ITEMS.map { |item| nav_item(item) }
-  end
-
-  def settings
-    nav_item(SETTINGS)
   end
 
   def nav_item(item)

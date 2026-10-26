@@ -36,11 +36,11 @@ en:
       servers: Servers
       logs: Logs
       ai_assistant: AI Assistant
-      settings: Settings
       soon: Coming soon
     status_bar:
       menu: Open navigation
     user_menu:
+      settings: Settings
       label: Account menu
       sign_out: Sign out
     input:

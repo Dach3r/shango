@@ -36,11 +36,11 @@ es:
       servers: Servidores
       logs: Logs
       ai_assistant: Asistente IA
-      settings: Configuración
       soon: Próximamente
     status_bar:
       menu: Abrir navegación
     user_menu:
+      settings: Configuración
       label: Menú de cuenta
       sign_out: Cerrar sesión
     input:

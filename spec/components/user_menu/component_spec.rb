@@ -7,6 +7,7 @@ RSpec.describe UserMenu::Component, type: :component do
 
     expect(page.text(:all)).to include("Ada Lovelace")
     expect(page.text(:all)).to include("ada@example.com")
+    expect(page).to have_link(I18n.t("components.user_menu.settings"), href: "/membership/settings", visible: :all)
     expect(page).to have_button(I18n.t("components.user_menu.sign_out"), visible: :all)
     expect(page).to have_css("[data-controller=theme-switcher]", visible: :all)
     expect(page).to have_css("[data-controller=dropdown] button[aria-haspopup=true]", visible: :all)
