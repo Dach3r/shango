@@ -31,7 +31,15 @@ group :development, :test do
   gem "brakeman", require: false
   gem "bundler-audit", require: false
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "factory_bot_rails"
+  gem "rspec-rails", "~> 8.0"
   gem "rubocop-kode", git: "https://github.com/Dach3r/rubocop-kode", require: false
+end
+
+group :test do
+  gem "shoulda-matchers", "~> 7.0"
+  gem "simplecov", require: false
+  gem "webmock"
 end
 
 group :development do
