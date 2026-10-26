@@ -33,7 +33,9 @@ export default class extends Controller {
       if (this.supported(event.target)) this.highlight(event.target);
     };
     this.mirrors = new Map();
-    this.observer = new MutationObserver(() => this.highlightAll());
+    this.observer = new MutationObserver((records) => {
+      if (records.some((record) => !this.insideMirror(record.target))) this.highlightAll();
+    });
     this.observer.observe(this.element, {
       childList: true,
       subtree: true,
@@ -78,6 +80,11 @@ export default class extends Controller {
     );
   }
 
+  insideMirror(node) {
+    const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    return Boolean(element?.closest("[data-variable-mirror]"));
+  }
+
   highlightAll = () => {
     this.mirrors.forEach((mirror, field) => {
       if (!field.isConnected) {
@@ -119,6 +126,7 @@ export default class extends Controller {
     if (!mirror) {
       mirror = document.createElement("div");
       mirror.setAttribute("aria-hidden", "true");
+      mirror.dataset.variableMirror = "";
       mirror.append(document.createElement("div"));
       field.before(mirror);
       this.mirrors.set(field, mirror);
