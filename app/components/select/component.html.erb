@@ -2,7 +2,7 @@
   <%= hidden_field_tag @name, selected_value, id: nil, data: @input_data.merge(select_target: "input") %>
 
   <button type="button" id="<%= @id %>" data-select-target="trigger" data-action="select#toggle keydown.down->select#openFromKey:prevent keydown.up->select#openFromKey:prevent"
-          aria-haspopup="listbox" aria-expanded="false" <%= tag.attributes(aria: { label: @label }) if @label %>
+          aria-haspopup="listbox" aria-expanded="false" <%= "disabled" if @disabled %> <%= tag.attributes(aria: { label: @label }) if @label %>
           class="<%= trigger_classes %>">
     <span data-select-target="label" class="min-w-0 flex-1 truncate"><%= selected_label %></span>
     <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>

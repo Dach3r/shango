@@ -6,13 +6,14 @@ class Select::Component < ApplicationComponent
 
   # options: [[label, value], ...]. Search shows by default once there are more than SEARCH_THRESHOLD options.
   # input_data goes on the hidden input (it dispatches `change`); class sizes the control like any field (`w-28`, `font-mono`).
-  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, input_data: {}, **html)
+  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, input_data: {}, **html)
     @name = name
     @options = options
     @value = value.to_s
     @id = id
     @label = label
     @searchable = searchable
+    @disabled = disabled
     @input_data = input_data
     @class = html[:class]
   end

@@ -1,0 +1,43 @@
+<template id="response-reference-template">
+  <%= render Modal::Component.new(title: label("response_edit_title")) do |modal| %>
+    <div class="space-y-4" data-response-reference="form">
+      <div>
+        <span class="<%= label_classes %>"><%= label("response_function_label") %></span>
+        <%= render Select::Component.new(name: "function", options: [[label("response_function"), "response"]], disabled: true) %>
+      </div>
+      <div>
+        <span class="<%= label_classes %>"><%= label("response_attribute") %></span>
+        <%= render Select::Component.new(name: "attribute", options: attribute_options, label: label("response_attribute")) %>
+      </div>
+      <div>
+        <span class="<%= label_classes %>"><%= label("response_request") %></span>
+        <%= render Select::Component.new(name: "request", options: request_options, label: label("response_request")) %>
+      </div>
+      <div data-response-reference="filter-field">
+        <label class="<%= label_classes %>" data-response-reference="filter-label" for="response-reference-filter"></label>
+        <input type="text" id="response-reference-filter" autocomplete="off" spellcheck="false" data-response-reference="filter"
+               class="<%= field_classes("font-mono") %>">
+      </div>
+      <div>
+        <span class="<%= label_classes %>"><%= label("response_trigger") %></span>
+        <%= render Select::Component.new(name: "trigger", options: [[label("response_trigger_never"), "never"]], disabled: true) %>
+        <p class="mt-1 text-xs text-muted"><%= label("response_trigger_hint") %></p>
+      </div>
+      <div class="border-t border-line pt-4">
+        <div class="mb-1 flex items-center justify-between">
+          <label for="response-reference-preview" class="text-xs font-medium text-muted"><%= label("response_preview") %></label>
+          <button type="button" data-response-reference="refresh" class="<%= button_classes(:ghost, "px-2! py-1! text-xs") %>">
+            <%= lucide_icon "refresh-cw", class: "size-3.5" %><%= label("response_refresh") %>
+          </button>
+        </div>
+        <textarea id="response-reference-preview" readonly data-response-reference="preview"
+                  class="<%= field_classes("min-h-28 resize-y font-mono text-xs") %>"></textarea>
+      </div>
+    </div>
+    <% modal.with_footer do %>
+      <button type="button" data-response-reference="done" class="<%= button_classes(:primary) %>">
+        <%= lucide_icon "check", class: "size-4 shrink-0" %><%= label("response_done") %>
+      </button>
+    <% end %>
+  <% end %>
+</template>

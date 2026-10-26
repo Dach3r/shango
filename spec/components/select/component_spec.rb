@@ -46,6 +46,12 @@ RSpec.describe Select::Component, type: :component do
     expect(page).to have_css("button.font-mono:not(.w-28)")
   end
 
+  it "disables the trigger" do
+    render_inline(described_class.new(name: "n", options:, disabled: true))
+
+    expect(page).to have_css("button[data-select-target=trigger][disabled]")
+  end
+
   it "is full width without sizing classes" do
     render_inline(described_class.new(name: "n", options:))
 

@@ -12,6 +12,10 @@ export default class extends Controller {
     "empty",
   ];
 
+  connect() {
+    this.render();
+  }
+
   toggle() {
     this.menuTarget.hidden ? this.open() : this.close();
   }
@@ -52,23 +56,31 @@ export default class extends Controller {
   }
 
   choose(event) {
-    const option = event.currentTarget;
-    const changed = this.inputTarget.value !== option.dataset.value;
+    const changed = this.inputTarget.value !== event.currentTarget.dataset.value;
 
-    this.inputTarget.value = option.dataset.value;
-    this.labelTarget.textContent = option.dataset.label;
-    this.optionTargets.forEach((item) => {
-      const selected = item === option;
-      item.setAttribute("aria-selected", String(selected));
-      item
-        .querySelector("[data-select-target='check']")
-        .classList.toggle("invisible", !selected);
-    });
+    this.inputTarget.value = event.currentTarget.dataset.value;
+    this.render();
 
     this.close();
     this.triggerTarget.focus();
     if (changed)
       this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  // Shows the option matching the input's value, so the value can be set before the controller connects.
+  render() {
+    const selected = this.optionTargets.find(
+      (option) => option.dataset.value === this.inputTarget.value,
+    );
+    if (!selected) return;
+
+    this.labelTarget.textContent = selected.dataset.label;
+    this.optionTargets.forEach((item) => {
+      item.setAttribute("aria-selected", String(item === selected));
+      item
+        .querySelector("[data-select-target='check']")
+        .classList.toggle("invisible", item !== selected);
+    });
   }
 
   filter() {
