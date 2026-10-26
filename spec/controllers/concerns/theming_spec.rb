@@ -28,4 +28,20 @@ RSpec.describe Theming do
       expect(response.body).to eq("system")
     end
   end
+
+  describe "membership theme", type: :controller do
+    controller(AuthenticatedController) do
+      def index
+        render plain: "#{current_theme}/#{current_palette}"
+      end
+    end
+
+    it "prefers the saved color scheme and palette over the cookie" do
+      sign_in create(:membership, color_scheme: "light", theme: "blue").user
+      cookies[:theme] = "dark"
+      get :index
+
+      expect(response.body).to eq("light/blue")
+    end
+  end
 end

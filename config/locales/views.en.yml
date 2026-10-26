@@ -28,6 +28,7 @@ en:
         security: Security
         delete_account: Cancel account
         sidebar: Sidebar
+        themes: Themes
         members: Members
     sidebar:
       label: Project navigation
@@ -86,6 +87,30 @@ en:
           double_click: Double click
       update:
         updated: Settings saved.
+    themes:
+      edit:
+        title: Themes
+        heading: Themes
+        description: How Shango looks for you in this project. This only applies to you.
+        color_scheme:
+          label: Color scheme
+          hint: Light, dark, or follow your operating system.
+        color_schemes:
+          system: System
+          light: Light
+          dark: Dark
+        theme:
+          label: Theme
+          hint: The accent colors used across the workspace.
+        themes:
+          default: Clay
+          blue: Blue
+          green: Green
+          yellow: Yellow
+          red: Red
+          ocean: Ocean
+      update:
+        updated: Theme saved.
   devise:
     sessions:
       new:
@@ -128,10 +153,7 @@ en:
           cancel_hint: This action cannot be undone.
         preferences:
           heading: Preferences
-          description: Theme and language for your account.
-          theme:
-            label: Theme
-            hint: Choose how Shango looks, or follow your system.
+          description: Language for your account.
           locale:
             label: Language
             hint: The language of the interface.

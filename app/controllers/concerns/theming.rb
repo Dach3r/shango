@@ -6,7 +6,7 @@ module Theming
   DEFAULT = "system".freeze
 
   included do
-    helper_method :current_theme
+    helper_method :current_theme, :current_palette
   end
 
   # Returns the theme as a string when it is supported, nil otherwise.
@@ -16,7 +16,16 @@ module Theming
 
   private
 
+  # Signed-in members use the scheme saved on their membership; public pages use the cookie.
   def current_theme
-    Theming.supported(cookies[COOKIE_KEY]) || DEFAULT
+    theme_membership&.color_scheme || Theming.supported(cookies[COOKIE_KEY]) || DEFAULT
+  end
+
+  def current_palette
+    theme_membership&.theme || Membership::THEMES.fetch(:default)
+  end
+
+  def theme_membership
+    current_membership if request.env["warden"]&.authenticated?(:user) && respond_to?(:current_membership, true)
   end
 end

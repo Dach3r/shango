@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :environments, except: :show
     resource :current_environment, only: :update
     resource :membership, only: %i[edit update], path_names: { edit: "settings" }
+    resource :theme, only: %i[edit update], path_names: { edit: "settings" }
   end
 
   namespace :workbench do

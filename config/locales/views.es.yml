@@ -28,6 +28,7 @@ es:
         security: Seguridad
         delete_account: Cancelar mi cuenta
         sidebar: Barra lateral
+        themes: Temas
         members: Miembros
     sidebar:
       label: Navegación del proyecto
@@ -86,6 +87,30 @@ es:
           double_click: Doble clic
       update:
         updated: Configuración guardada.
+    themes:
+      edit:
+        title: Temas
+        heading: Temas
+        description: Cómo ves Shango en este proyecto. Solo aplica para ti.
+        color_scheme:
+          label: Esquema de color
+          hint: Claro, oscuro o el de tu sistema operativo.
+        color_schemes:
+          system: Sistema
+          light: Claro
+          dark: Oscuro
+        theme:
+          label: Tema
+          hint: Los colores de acento usados en todo el espacio de trabajo.
+        themes:
+          default: Arcilla
+          blue: Azul
+          green: Verde
+          yellow: Amarillo
+          red: Rojo
+          ocean: Océano
+      update:
+        updated: Tema guardado.
   devise:
     sessions:
       new:
@@ -128,10 +153,7 @@ es:
           cancel_hint: Esta acción no se puede deshacer.
         preferences:
           heading: Preferencias
-          description: Tema e idioma de tu cuenta.
-          theme:
-            label: Tema
-            hint: Elige cómo se ve Shango o sigue el de tu sistema.
+          description: Idioma de tu cuenta.
           locale:
             label: Idioma
             hint: El idioma de la interfaz.

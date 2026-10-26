@@ -1,0 +1,16 @@
+<label class="group flex cursor-pointer flex-col gap-2 text-center text-sm text-muted transition hover:text-ink has-[:checked]:text-ink">
+  <%= form.radio_button :theme, theme, class: "sr-only peer", data: { action: "theme-preview#apply" } %>
+  <div data-palette="<%= theme %>" aria-hidden="true" class="relative h-24 overflow-hidden rounded-xl border border-line bg-page shadow-sm transition group-has-[:checked]:border-solid group-has-[:checked]:ring-2 group-has-[:checked]:ring-solid/40 group-has-[:focus-visible]:ring-4 group-has-[:focus-visible]:ring-solid/30">
+    <div class="absolute inset-y-0 left-0 w-1/4 border-r border-line bg-card"></div>
+    <div class="absolute inset-x-0 top-0 left-1/4 h-4 border-b border-line"></div>
+    <div class="absolute top-6 left-[32%] h-3 w-1/4 rounded-sm bg-solid"></div>
+    <div class="absolute top-11 left-[32%] h-1.5 w-1/2 rounded-full bg-line"></div>
+    <div class="absolute top-14 left-[32%] h-1.5 w-2/5 rounded-full bg-line"></div>
+    <div class="absolute bottom-2 left-[32%] flex gap-1.5">
+      <span class="size-2.5 rounded-sm bg-accent"></span>
+      <span class="size-2.5 rounded-sm bg-muted"></span>
+      <span class="size-2.5 rounded-sm bg-danger"></span>
+    </div>
+  </div>
+  <span><%= t("projects.themes.edit.themes.#{theme}") %></span>
+</label>
