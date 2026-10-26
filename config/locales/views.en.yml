@@ -7,6 +7,10 @@ en:
       project:
         name: Name
         icon: Icon
+  layouts:
+    app:
+      right_sidebar: Side panel
+      close_right_sidebar: Close side panel
   components:
     select:
       search: Search…

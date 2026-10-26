@@ -7,6 +7,10 @@ es:
       project:
         name: Nombre
         icon: Icono
+  layouts:
+    app:
+      right_sidebar: Panel lateral
+      close_right_sidebar: Cerrar panel lateral
   components:
     select:
       search: Buscar…

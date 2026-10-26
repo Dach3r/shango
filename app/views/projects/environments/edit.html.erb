@@ -1,4 +1,6 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :heading, t(".title") %>
 
-<%= render "projects/environments/form" %>
+<%= render layout: "projects/environments/panel" do %>
+  <%= render "projects/environments/form" %>
+<% end %>

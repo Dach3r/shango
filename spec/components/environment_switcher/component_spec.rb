@@ -15,6 +15,12 @@ RSpec.describe EnvironmentSwitcher::Component, type: :component do
     end
   end
 
+  it "opens the environments manager in the right sidebar", :aggregate_failures do
+    render_inline(described_class.new(environments: [], current_environment: nil))
+
+    expect(page).to have_css("a[data-turbo-frame='right_sidebar'][data-action='dropdown#close right-sidebar#open']", visible: :all)
+  end
+
   context "with a current environment" do
     it "shows its name and marks it", :aggregate_failures do
       render_inline(described_class.new(environments: [staging, production], current_environment: staging))

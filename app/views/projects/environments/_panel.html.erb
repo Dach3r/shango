@@ -1,0 +1,5 @@
+<% if turbo_frame_request? %>
+  <%= turbo_frame_tag "right_sidebar" do %><%= yield %><% end %>
+<% else %>
+  <%= yield %>
+<% end %>

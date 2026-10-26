@@ -27,7 +27,7 @@
       <% end %>
     </ul>
     <div class="my-1.5 border-t border-line"></div>
-    <%= link_to environments_path, class: "flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-accent transition hover:bg-field hover:text-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+    <%= link_to environments_path, data: { turbo_frame: "right_sidebar", action: "dropdown#close right-sidebar#open", right_sidebar_title_param: t("components.environment_switcher.manage_title") }, class: "flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-accent transition hover:bg-field hover:text-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
       <%= lucide_icon "settings-2", class: "size-4 shrink-0" %>
       <%= t("components.environment_switcher.manage") %>
     <% end %>

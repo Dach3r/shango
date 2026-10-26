@@ -48,6 +48,7 @@ es:
       none: Sin entorno
       label: Entorno
       manage: Administrar entornos
+      manage_title: Entornos
     request_tabs:
       label: Solicitudes abiertas
       close: "Cerrar %{name}"

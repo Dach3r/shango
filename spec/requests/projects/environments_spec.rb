@@ -17,6 +17,15 @@ RSpec.describe "Environments" do
     end
   end
 
+  describe "GET /environments from the side panel" do
+    it "wraps the content in the right sidebar frame and skips the app layout", :aggregate_failures do
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response.body).to include('<turbo-frame id="right_sidebar">')
+      expect(response.body).not_to include("data-controller=\"drawer sidebar right-sidebar\"")
+    end
+  end
+
   describe "GET /environments/new" do
     it "renders the form" do
       get new_environment_path

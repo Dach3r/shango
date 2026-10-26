@@ -48,6 +48,7 @@ en:
       none: No environment
       label: Environment
       manage: Manage environments
+      manage_title: Environments
     request_tabs:
       label: Open requests
       close: "Close %{name}"
