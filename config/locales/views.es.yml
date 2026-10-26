@@ -8,6 +8,9 @@ es:
         name: Nombre
         icon: Icono
   layouts:
+    devise:
+      panel_label: Workspace de desarrollo
+      panel_note: Código abierto
     app:
       right_sidebar: Panel lateral
       close_right_sidebar: Cerrar panel lateral

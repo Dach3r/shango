@@ -8,6 +8,9 @@ en:
         name: Name
         icon: Icon
   layouts:
+    devise:
+      panel_label: Developer Workspace
+      panel_note: Open source
     app:
       right_sidebar: Side panel
       close_right_sidebar: Close side panel

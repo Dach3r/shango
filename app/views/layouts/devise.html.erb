@@ -1,22 +1,36 @@
 <% content_for :palette, "mono" %>
 <% content_for :content do %>
-  <main class="relative flex min-h-screen items-center justify-center overflow-hidden bg-page px-5 py-12 font-sans text-body">
-    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[1.75rem_1.75rem] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]"></div>
-    <div class="pointer-events-none absolute top-1/2 left-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--glow) blur-3xl"></div>
+  <main class="relative flex min-h-screen overflow-hidden bg-page font-sans text-body [--radius-md:0rem] [--radius-xl:0rem]">
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[1.75rem_1.75rem] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)] lg:[mask-image:radial-gradient(ellipse_at_72%_50%,black_25%,transparent_75%)]"></div>
+    <div class="pointer-events-none absolute top-1/2 left-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--glow) blur-3xl lg:left-[72%]"></div>
 
-    <%= render Logo::Component.new(href: root_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
+    <aside aria-hidden="true" class="relative hidden flex-[1.25_1_0%] flex-col justify-between bg-solid px-14 py-10 text-on-solid lg:flex [clip-path:polygon(0_0,100%_0,100%_11%,95%_11%,95%_22%,90%_22%,90%_33%,85%_33%,85%_44%,80%_44%,80%_55%,75%_55%,75%_66%,70%_66%,70%_77%,65%_77%,65%_88%,60%_88%,60%_100%,0_100%)]">
+      <div class="flex justify-between font-mono text-xs tracking-widest uppercase">
+        <span><%= t("layouts.devise.panel_label") %></span>
+        <span class="mr-[6%]"><%= t("layouts.devise.panel_note") %></span>
+      </div>
+      <pre class="font-mono text-5xl leading-tight font-medium tracking-tighter xl:text-6xl">{
+  "status": "ok",
+  "welcome": true
+}</pre>
+      <%= render Bolt::Component.new(class: "h-14 w-auto fill-current") %>
+    </aside>
 
-    <div class="absolute right-5 bottom-5 z-10 flex items-center gap-2">
-      <%= render ThemeSwitcher::Component.new %>
-      <%= render LocaleSwitcher::Component.new %>
-    </div>
+    <div class="relative flex min-w-0 flex-1 items-center justify-center px-5 py-24">
+      <%= render Logo::Component.new(href: root_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
 
-    <div class="relative w-full max-w-xl rounded-[1.75rem] border border-line bg-card p-8 sm:p-10">
-      <% if content_for?(:heading) %>
-        <h1 class="mb-8 text-center text-3xl leading-tight font-semibold tracking-tight text-balance text-ink sm:text-4xl"><%= yield :heading %></h1>
-      <% end %>
+      <div class="absolute right-5 bottom-5 z-10 flex items-center gap-2">
+        <%= render ThemeSwitcher::Component.new %>
+        <%= render LocaleSwitcher::Component.new %>
+      </div>
 
-      <%= yield %>
+      <div class="relative w-full max-w-xl border border-line bg-card p-8 sm:p-10">
+        <% if content_for?(:heading) %>
+          <h1 class="mb-8 text-center text-3xl leading-tight font-semibold tracking-tight text-balance text-ink sm:text-4xl"><%= yield :heading %></h1>
+        <% end %>
+
+        <%= yield %>
+      </div>
     </div>
   </main>
 <% end %>
