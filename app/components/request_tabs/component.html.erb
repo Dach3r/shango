@@ -1,5 +1,5 @@
 <div class="flex h-10 shrink-0 items-stretch border-b border-line">
-  <nav aria-label="<%= t("components.request_tabs.label") %>" data-controller="request-tabs" class="flex min-w-0 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+  <nav aria-label="<%= t("components.request_tabs.label") %>" data-controller="request-tabs" data-action="keydown@window->request-tabs#closeCurrent" class="flex min-w-0 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <% @requests.each do |api_request| %>
       <div class="<%= classes(api_request) %>" data-request-tab>
         <%= link_to workbench_request_path(api_request), class: "flex min-w-0 items-center gap-2 py-2 pr-2 pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-lg",
@@ -9,15 +9,15 @@
         <% end %>
         <% close_label = t("components.request_tabs.close", name: api_request.name) %>
         <% if api_request.untouched_draft? %>
-          <%= button_to workbench_request_path(api_request), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer", data: { turbo_frame: "_top" } do %>
+          <%= button_to workbench_request_path(api_request), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer", data: { turbo_frame: "_top", request_tab_close: true } do %>
             <%= lucide_icon "x", class: "size-3" %>
           <% end %>
         <% elsif api_request.draft? %>
-          <%= link_to new_workbench_request_closure_path(api_request), data: { turbo_frame: "modal" }, aria: { label: close_label }, title: close_label, class: CLOSE do %>
+          <%= link_to new_workbench_request_closure_path(api_request), data: { turbo_frame: "modal", request_tab_close: true }, aria: { label: close_label }, title: close_label, class: CLOSE do %>
             <%= lucide_icon "x", class: "size-3" %>
           <% end %>
         <% else %>
-          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer" do %>
+          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer", data: { request_tab_close: true } do %>
             <%= lucide_icon "x", class: "size-3" %>
           <% end %>
         <% end %>

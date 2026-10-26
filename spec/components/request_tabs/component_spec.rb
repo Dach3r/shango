@@ -29,6 +29,15 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_link(I18n.t("components.request_tabs.close", name: "First"), href: "/workbench/requests/#{first.id}/closure/new")
   end
 
+  it "wires the close shortcut to each tab's close control", :aggregate_failures do
+    saved = create(:api_request, project:, name: "Saved")
+
+    render_inline(described_class.new(requests: [saved], current_request_id: saved.id))
+
+    expect(page).to have_css("nav[data-action='keydown@window->request-tabs#closeCurrent']")
+    expect(page).to have_css("[data-request-tab] [data-request-tab-close]")
+  end
+
   it "closes saved requests without a confirmation", :aggregate_failures do
     saved = create(:api_request, project:, name: "Saved")
     other = create(:api_request, project:, name: "Other")
