@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   DYNAMIC_VARIABLES,
   completions,
+  openResponseModal,
   parseReference,
   previewReference,
   referenceStatus,
@@ -103,6 +104,7 @@ export default class extends Controller {
       this.languageCompartment.of(this.languageExtension()),
       this.variablesCompartment.of(this.variableDecorations()),
       this.variableHover(),
+      this.referenceClick(),
       cm.keymap.of([
         ...cm.defaultKeymap.filter((binding) => binding.key !== "Mod-Enter"),
         ...cm.historyKeymap,
@@ -385,14 +387,13 @@ export default class extends Controller {
     const match = context.matchBefore(/\{\{[^{}\s]*/);
     if (!match) return null;
 
-    const typed = match.text.slice(2);
-    const { offset, options } = completions(typed, {
+    const options = completions(match.text.slice(2), {
       variables: this.variablesValue,
       responses: this.responsesValue,
       labels: this.labelsValue,
     });
     return {
-      from: match.from + 2 + offset,
+      from: match.from + 2,
       options: options.map((option) => ({
         label: option.label,
         type: option.status,
@@ -412,7 +413,47 @@ export default class extends Controller {
       selection: { anchor: from + option.insert.length + closing.length },
       userEvent: "input.complete",
     });
-    if (option.reopen) this.cm.startCompletion(view);
+    if (option.edit) this.editReference(from - 2, from + option.insert.length + 2);
+  }
+
+  // Opens the "edit tag" modal for the `{{response.…}}` between `from` and `to` and writes the result back.
+  editReference(from, to) {
+    const reference = parseReference(this.view.state.sliceDoc(from + 2, to - 2).trim());
+    if (!reference || !this.hasResponsesUrlValue) return;
+
+    openResponseModal({
+      reference,
+      responses: this.responsesValue,
+      url: this.responsesUrlValue,
+      labels: this.labelsValue,
+      onDone: (name) => {
+        this.view.dispatch({ changes: { from, to, insert: `{{${name}}}` } });
+        this.view.focus();
+      },
+    });
+  }
+
+  // Clicking a `{{response.…}}` opens its modal, like clicking a tag in Insomnia.
+  referenceClick() {
+    return this.cm.EditorView.domEventHandlers({
+      click: (event, view) => {
+        if (this.readonlyValue) return false;
+
+        const pos = view.posAtCoords({ x: event.clientX, y: event.clientY });
+        if (pos === null) return false;
+
+        const line = view.state.doc.lineAt(pos);
+        for (const match of line.text.matchAll(/\{\{\s*(response\.[^{}\s]+)\s*\}\}/g)) {
+          const from = line.from + match.index;
+          const to = from + match[0].length;
+          if (pos <= from || pos >= to) continue;
+
+          this.editReference(from, to);
+          return true;
+        }
+        return false;
+      },
+    });
   }
 
   changed(update) {

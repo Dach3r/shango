@@ -41,6 +41,20 @@ es:
       response_no_match: Nada coincide con este filtro
       response_unknown: Request no encontrado en esta collection
       response_invalid: Referencia de respuesta inválida
+      response_edit_title: Editar referencia de respuesta
+      response_function_label: Función a ejecutar
+      response_function: Respuesta – usa valores de la respuesta de otros requests
+      response_attribute: Atributo
+      response_request: Request
+      response_filter_body: Filtro (JSONPath)
+      response_filter_header: Nombre del header
+      response_trigger: Comportamiento de disparo
+      response_trigger_never: Nunca – no reenviar el request
+      response_trigger_hint: El request no se vuelve a enviar; envíalo antes para tener una respuesta reciente.
+      response_preview: Vista previa
+      response_refresh: Actualizar
+      response_done: Listo
+      response_close: Cerrar
     key_value_table:
       add: Agregar fila
       key: Clave

@@ -41,6 +41,20 @@ en:
       response_no_match: Nothing matches this filter
       response_unknown: Request not found in this collection
       response_invalid: Invalid response reference
+      response_edit_title: Edit response reference
+      response_function_label: Function to perform
+      response_function: Response – reference values from other requests' responses
+      response_attribute: Attribute
+      response_request: Request
+      response_filter_body: Filter (JSONPath)
+      response_filter_header: Header name
+      response_trigger: Trigger behavior
+      response_trigger_never: Never – never resend request
+      response_trigger_hint: The request is not sent again; send it first to get a fresh response.
+      response_preview: Live preview
+      response_refresh: Refresh
+      response_done: Done
+      response_close: Close
     key_value_table:
       add: Add row
       key: Key

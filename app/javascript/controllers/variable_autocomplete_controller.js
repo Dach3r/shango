@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-import { DYNAMIC_VARIABLES, completions, referenceStatus } from "lib/response_reference";
+import { DYNAMIC_VARIABLES, completions, openResponseModal, parseReference, referenceStatus } from "lib/response_reference";
 
 const TRIGGER = /\{\{[^{}\s]*$/;
 const REFERENCE = /\{\{\s*([^{}\s]+)\s*\}\}/g;
@@ -18,6 +18,7 @@ export default class extends Controller {
   static values = {
     variables: { type: Array, default: [] },
     responses: { type: Array, default: [] },
+    responsesUrl: String,
     labels: { type: Object, default: {} },
   };
 
@@ -43,6 +44,7 @@ export default class extends Controller {
     this.element.addEventListener("input", this.onRefresh);
     this.element.addEventListener("keyup", this.onRelayout);
     this.element.addEventListener("click", this.onRelayout);
+    this.element.addEventListener("click", this.referenceClick);
     this.element.addEventListener("focusin", this.onRelayout);
     this.element.addEventListener("variable-autocomplete:refresh", this.onRefresh);
     this.element.addEventListener("scroll", this.onRelayout, true);
@@ -58,6 +60,7 @@ export default class extends Controller {
     this.element.removeEventListener("input", this.onRefresh);
     this.element.removeEventListener("keyup", this.onRelayout);
     this.element.removeEventListener("click", this.onRelayout);
+    this.element.removeEventListener("click", this.referenceClick);
     this.element.removeEventListener("focusin", this.onRelayout);
     this.element.removeEventListener("variable-autocomplete:refresh", this.onRefresh);
     this.element.removeEventListener("scroll", this.onRelayout, true);
@@ -182,13 +185,12 @@ export default class extends Controller {
     const match = field.value.slice(0, caret).match(TRIGGER);
     if (!match) return this.close();
 
-    const typed = match[0].slice(2);
-    const { offset, options } = completions(typed, {
+    const query = match[0].slice(2).toLowerCase();
+    const options = completions(query, {
       variables: this.variablesValue,
       responses: this.responsesValue,
       labels: this.labelsValue,
     });
-    const query = typed.slice(offset).toLowerCase();
     const matches = options.filter(({ label }) => label.toLowerCase().includes(query));
     if (matches.length === 0) return this.close();
 
@@ -292,7 +294,42 @@ export default class extends Controller {
     if (option.complete && closed) field.setSelectionRange(from + insert.length + 2, from + insert.length + 2);
     this.close();
     field.dispatchEvent(new Event("input", { bubbles: true }));
+    if (option.edit) this.editReference(field, from - 2, from + insert.length + (closed ? 2 : 0));
   }
+
+  // Opens the "edit tag" modal for the `{{response.…}}` between `from` and `to` of the field and writes the result back.
+  editReference(field, from, to) {
+    const reference = parseReference(field.value.slice(from, to).replace(/^\{\{\s*|\s*\}\}$/g, ""));
+    if (!reference || !this.hasResponsesUrlValue) return;
+
+    openResponseModal({
+      reference,
+      responses: this.responsesValue,
+      url: this.responsesUrlValue,
+      labels: this.labelsValue,
+      onDone: (name) => {
+        field.setRangeText(`{{${name}}}`, from, to, "end");
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        field.focus();
+      },
+    });
+  }
+
+  // Clicking inside a `{{response.…}}` reference of a field opens its modal.
+  referenceClick = (event) => {
+    const field = event.target;
+    if (!this.supported(field) || field.selectionStart !== field.selectionEnd) return;
+
+    const caret = field.selectionStart;
+    for (const match of field.value.matchAll(/\{\{\s*response\.[^{}\s]+\s*\}\}/g)) {
+      const to = match.index + match[0].length;
+      if (caret <= match.index || caret >= to) continue;
+
+      this.close();
+      this.editReference(field, match.index, to);
+      return;
+    }
+  };
 
   close() {
     this.popup?.remove();
