@@ -16,11 +16,11 @@
     </div>
   <% end %>
 
-  <div class="flex items-start gap-2 p-3" data-resizable-target="bounds">
+  <div class="@container flex items-start gap-2 p-3" data-resizable-target="bounds">
     <div class="flex min-w-0 flex-1 items-stretch rounded-lg border border-line bg-field pr-3 transition focus-within:border-solid focus-within:ring-2 focus-within:ring-solid/40">
       <div class="flex">
         <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
-                                         class: "w-24 shrink-0 h-full rounded-none! rounded-l-[7px]! border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
+                                         class: "w-20 @xl:w-24 shrink-0 h-full rounded-none! rounded-l-[7px]! border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
                                          input_data: { action: "change->request-form#methodChanged" }) %>
       </div>
       <span class="w-px shrink-0 bg-line" aria-hidden="true"></span>
@@ -30,10 +30,11 @@
       </div>
     </div>
     <button type="button" data-request-form-target="send" data-action="request-form#run" title="<%= t("workbench.requests.send_hint") %>"
-            class="<%= button_classes(:primary, "group min-w-24 data-[busy=true]:opacity-70") %>">
+            class="<%= button_classes(:primary, "group @xl:min-w-24 data-[busy=true]:opacity-70") %>">
       <%= lucide_icon "send", class: "size-4 group-data-[busy=true]:hidden" %>
       <%= lucide_icon "loader-circle", class: "hidden size-4 animate-spin group-data-[busy=true]:block" %>
-      <%= t("workbench.requests.send") %>
+      <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
+      <span class="sr-only @xl:hidden"><%= t("workbench.requests.send") %></span>
     </button>
   </div>
 
