@@ -25,7 +25,7 @@
                                        input_data: { action: "change->request-form#methodChanged" }) %>
       <span class="-my-2 w-px shrink-0 self-stretch bg-line" aria-hidden="true"></span>
       <div class="min-w-0 flex-1">
-        <%= render CodeEditor::Component.new(name: "api_request[url]", value: api_request.url, single_line: true, placeholder: t("workbench.requests.url_placeholder"), variables: variable_names,
+        <%= render CodeEditor::Component.new(name: "api_request[url]", value: api_request.url, single_line: true, placeholder: t("workbench.requests.url_placeholder"), variables: editor_variables,
                                              input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>
       </div>
     </div>

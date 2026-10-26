@@ -182,10 +182,27 @@ input:-webkit-autofill:focus {
 }
 
 .cm-var {
+  --var-color: var(--accent);
   border-radius: 4px;
-  background: color-mix(in oklab, var(--accent) 16%, transparent);
-  color: var(--accent);
+  background: color-mix(in oklab, var(--var-color) 16%, transparent);
+  color: var(--var-color);
 }
+
+.cm-var-set { --var-color: var(--syn-string); }
+.cm-var-empty { --var-color: var(--syn-number); }
+.cm-var-missing { --var-color: var(--danger); text-decoration: underline wavy; }
+
+.cm-var-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 9999px;
+  background: var(--accent);
+}
+
+.cm-var-dot-set { background: var(--syn-string); }
+.cm-var-dot-empty { background: var(--syn-number); }
 
 /* The type column only matters for multipart bodies. */
 [data-body-type="form_urlencoded"] [data-role="type"] {

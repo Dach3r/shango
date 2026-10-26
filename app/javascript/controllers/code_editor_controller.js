@@ -119,6 +119,16 @@ export default class extends Controller {
         cm.autocompletion({
           override: [(context) => this.completeVariables(context)],
           icons: false,
+          addToOptions: [
+            {
+              render: (completion) => {
+                const dot = document.createElement("span");
+                dot.className = `cm-var-dot cm-var-dot-${completion.detail}`;
+                return dot;
+              },
+              position: 20,
+            },
+          ],
         }),
       );
     }
@@ -142,12 +152,24 @@ export default class extends Controller {
     }
   }
 
-  // Highlights {{variable}} references; the style lives in application.css (.cm-var).
+  // Highlights {{variable}} references by state; the styles live in application.css (.cm-var-*).
+  variableStatus(name) {
+    if (DYNAMIC_VARIABLES.includes(name)) return "dynamic";
+
+    const variable = this.variablesValue.find((item) => item.name === name);
+    if (!variable) return "missing";
+
+    return variable.set ? "set" : "empty";
+  }
+
   variableDecorations() {
     const cm = this.cm;
     const decorator = new cm.MatchDecorator({
-      regexp: /\{\{\s*[^{}\s]+\s*\}\}/g,
-      decoration: cm.Decoration.mark({ class: "cm-var" }),
+      regexp: /\{\{\s*([^{}\s]+)\s*\}\}/g,
+      decoration: (match) =>
+        cm.Decoration.mark({
+          class: `cm-var cm-var-${this.variableStatus(match[1])}`,
+        }),
     });
 
     return cm.ViewPlugin.fromClass(
@@ -167,15 +189,22 @@ export default class extends Controller {
     const match = context.matchBefore(/\{\{[\w.\-$]*/);
     if (!match) return null;
 
-    const names = [...this.variablesValue, ...DYNAMIC_VARIABLES];
+    const options = [
+      ...this.variablesValue.map(({ name, set }) => ({
+        name,
+        status: set ? "set" : "empty",
+      })),
+      ...DYNAMIC_VARIABLES.map((name) => ({ name, status: "dynamic" })),
+    ];
     const closing =
       context.state.sliceDoc(context.pos, context.pos + 2) === "}}" ? "" : "}}";
     return {
       from: match.from + 2,
-      options: names.map((name) => ({
+      options: options.map(({ name, status }) => ({
         label: name,
         apply: `${name}${closing}`,
         type: "variable",
+        detail: status,
       })),
       validFor: /^[\w.\-$]*$/,
     };

@@ -14,7 +14,7 @@
 - Run a request, inspect the response (pretty / raw / HTML preview, headers, request details, redirects), per-request history (last 50).
 - Import from a cURL command and copy a request as cURL.
 - Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
-- Code editor (CodeMirror 6) with `{{variable}}` highlighting and autocomplete.
+- Code editor (CodeMirror 6) with `{{variable}}` autocomplete and highlighting by state: set (green), empty value (amber), undefined (red, wavy underline) and dynamic `$` helpers (accent). Only whether a value is set is sent to the browser, never the value.
 
 **Not included (yet)**: pre/post-request scripts and assertions (the *Scripts* tab is shown disabled), collection runner, cookie jar, WebSocket/gRPC, Postman/OpenAPI/Bruno import, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
 

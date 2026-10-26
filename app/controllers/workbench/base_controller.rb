@@ -1,7 +1,7 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :open_requests, :variable_names
+    helper_method :workspace_tree, :open_requests, :editor_variables
 
     private
 
@@ -13,9 +13,12 @@ module Workbench
       @open_requests ||= ApiClient::Tabs::Load.call(project: current_project, user: current_user)
     end
 
-    # Names of the selected environment's variables, offered as autocomplete in the editors.
-    def variable_names
-      current_environment ? current_environment.variables.select(&:enabled).map(&:key) : []
+    # Enabled variables of the selected environment, offered as autocomplete and highlighted in the editors.
+    # Only whether a value is set is exposed, never the value itself.
+    def editor_variables
+      return [] unless current_environment
+
+      current_environment.variables.select(&:enabled).map { |variable| { name: variable.key, set: variable.value.present? } }
     end
 
     # Re-renders a modal form (inside the "modal" frame) with its validation errors.

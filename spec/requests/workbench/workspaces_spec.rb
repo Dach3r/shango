@@ -29,13 +29,15 @@ RSpec.describe "Workbench workspace" do
 
   it "offers the selected environment's variables", :aggregate_failures do
     environment = create(:environment, project:)
-    create(:variable, environment:, key: "BASE_URL")
+    create(:variable, environment:, key: "BASE_URL", value: "https://secret.example")
+    create(:variable, environment:, key: "EMPTY", value: "")
     create(:variable, environment:, key: "OFF", enabled: false)
     membership.update!(current_environment: environment)
     get workbench_request_path(api_request)
 
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("BASE_URL")
+    expect(response.body).to include("&quot;name&quot;:&quot;BASE_URL&quot;,&quot;set&quot;:true", "&quot;name&quot;:&quot;EMPTY&quot;,&quot;set&quot;:false")
+    expect(response.body).not_to include("secret.example", "OFF")
   end
 
   it "renders inside a turbo frame layout" do
