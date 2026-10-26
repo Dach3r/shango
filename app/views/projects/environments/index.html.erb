@@ -4,10 +4,7 @@
 
 <%= render layout: "projects/environments/panel" do %>
   <section class="mx-auto max-w-3xl space-y-4">
-    <p class="flex gap-2.5 rounded-xl bg-field/60 px-3 py-2.5 text-xs leading-relaxed text-muted">
-      <%= lucide_icon "info", class: "mt-0.5 size-3.5 shrink-0 text-faint" %>
-      <span><%= t("projects.environments.index.intro") %></span>
-    </p>
+    <p class="text-xs leading-relaxed text-muted"><%= t("projects.environments.index.intro") %></p>
 
     <% if @environments.empty? %>
       <div class="rounded-2xl border border-dashed border-line p-8 text-center">
@@ -16,31 +13,35 @@
         <p class="mt-1 text-sm text-muted"><%= t("projects.environments.index.empty_hint") %></p>
       </div>
     <% else %>
-      <ul class="space-y-2">
+      <ul class="space-y-3">
         <% @environments.each do |environment| %>
           <% active = environment == current_environment %>
-          <li class="<%= class_names("group relative flex items-center gap-3 overflow-hidden rounded-xl border py-3 pr-2 pl-4 transition", "border-accent/40 bg-accent/5": active, "border-line bg-card hover:bg-field": !active) %>">
-            <% if active %><span class="absolute inset-y-0 left-0 w-1 bg-accent" aria-hidden="true"></span><% end %>
-            <span class="<%= class_names("flex size-9 shrink-0 items-center justify-center rounded-lg transition", "bg-accent text-white": active, "bg-field text-muted group-hover:bg-card": !active) %>"><%= lucide_icon "layers", class: "size-4" %></span>
+          <li class="<%= class_names("flex items-center gap-3 rounded-2xl border py-3.5 pr-2 pl-4 transition", "border-accent bg-card": active, "border-line": !active) %>">
             <div class="min-w-0 flex-1">
               <p class="truncate text-sm font-semibold text-ink" title="<%= environment.name %>"><%= environment.name %></p>
-              <p class="mt-0.5 flex items-center gap-2 text-xs text-muted">
-                <span class="inline-flex items-center gap-1"><%= lucide_icon "braces", class: "size-3 text-faint" %><%= t("projects.environments.index.variables", count: environment.variables.size) %></span>
-                <% if active %>
-                  <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent/15 px-1.5 py-0.5 text-[10px] font-medium text-accent"><span class="size-1.5 rounded-full bg-accent"></span><%= t("projects.environments.index.selected") %></span>
-                <% end %>
-              </p>
+              <p class="mt-0.5 text-xs text-muted"><%= t("projects.environments.index.variables", count: environment.variables.size) %></p>
             </div>
-            <div class="flex shrink-0 items-center opacity-60 transition group-hover:opacity-100 group-focus-within:opacity-100">
-              <%= link_to edit_environment_path(environment), title: t("projects.environments.index.edit"), aria_label: t("projects.environments.index.edit"), class: "flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-card hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4" %><% end %>
-              <%= button_to environment_path(environment), method: :delete, title: t("projects.environments.index.delete"), aria_label: t("projects.environments.index.delete"), class: "flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-danger/10 hover:!text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50", form_class: "contents",
-                            form: { data: { turbo_confirm: t("projects.environments.index.confirm_delete", name: environment.name) } } do %><%= lucide_icon "trash-2", class: "size-4" %><% end %>
+            <% if active %>
+              <span class="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-solid pr-3 pl-2.5 text-xs font-semibold text-on-solid"><%= lucide_icon "check", class: "size-3.5" %><%= t("projects.environments.index.in_use") %></span>
+            <% else %>
+              <%= button_to t("projects.environments.index.activate"), current_environment_path, method: :patch, params: { environment_id: environment.id }, form: { data: { turbo_frame: "_top" } }, form_class: "contents",
+                            class: "inline-flex h-9 shrink-0 cursor-pointer items-center rounded-lg border border-line px-3.5 text-xs font-medium text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" %>
+            <% end %>
+            <div class="relative shrink-0" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+              <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" title="<%= t("projects.environments.index.actions") %>" aria-label="<%= t("projects.environments.index.actions") %>"
+                      class="flex size-10 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"><%= lucide_icon "ellipsis", class: "size-4" %></button>
+              <div data-dropdown-target="menu" hidden class="absolute top-full right-0 z-30 mt-1 w-40 rounded-xl border border-line bg-card p-1 shadow-dropdown">
+                <%= link_to edit_environment_path(environment), class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4 shrink-0" %><%= t("projects.environments.index.edit") %><% end %>
+                <%= button_to environment_path(environment), method: :delete, form_class: "contents",
+                              class: "flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm text-danger transition hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50",
+                              form: { data: { turbo_confirm: t("projects.environments.index.confirm_delete", name: environment.name) } } do %><%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("projects.environments.index.delete") %><% end %>
+              </div>
             </div>
           </li>
         <% end %>
       </ul>
     <% end %>
 
-    <%= link_to new_environment_path, class: "flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-line px-3 py-2.5 text-sm font-medium text-muted transition hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
+    <%= link_to new_environment_path, class: "flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-line px-3 py-3 text-sm font-medium text-muted transition hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
   </section>
 <% end %>

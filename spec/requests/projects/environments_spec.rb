@@ -16,6 +16,16 @@ RSpec.describe "Environments" do
       expect(response.body).to include(environment.name)
     end
 
+    it "marks the active environment and offers to activate the others", :aggregate_failures do
+      other = create(:environment, project:)
+      membership.update!(current_environment: environment)
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response.body).to include(I18n.t("projects.environments.index.in_use"))
+      expect(response.body.scan(%(">#{I18n.t("projects.environments.index.activate")}<)).size).to eq(1)
+      expect(response.body).to include(other.name)
+    end
+
     it "redirects to the workbench outside the side panel", :aggregate_failures do
       get environments_path
       expect(response).to redirect_to(workbench_root_path)

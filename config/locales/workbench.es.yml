@@ -81,14 +81,16 @@ es:
     environments:
       index:
         title: Entornos
-        intro: Los entornos guardan las variables (URL base, tokens…) que tus solicitudes referencian como {{nombre}}. Elige el activo desde la barra superior.
+        intro: Los entornos guardan las variables (URL base, tokens…) que tus solicitudes referencian como {{nombre}}. Activa el que usarán tus solicitudes.
         new: Nuevo entorno
         empty_title: Aún no hay entornos
         empty_hint: Crea uno (Local, Staging, Producción…) y define variables como base_url.
         variables:
           one: "%{count} variable"
           other: "%{count} variables"
-        selected: seleccionado
+        in_use: En uso
+        activate: Activar
+        actions: Más acciones
         edit: Editar
         delete: Eliminar
         confirm_delete: "¿Eliminar el entorno “%{name}”?"

@@ -81,14 +81,16 @@ en:
     environments:
       index:
         title: Environments
-        intro: Environments hold the variables (base URL, tokens…) your requests reference as {{name}}. Pick the active one from the top bar.
+        intro: Environments hold the variables (base URL, tokens…) your requests reference as {{name}}. Activate the one your requests should use.
         new: New environment
         empty_title: No environments yet
         empty_hint: Create one (Local, Staging, Production…) and define variables like base_url.
         variables:
           one: "%{count} variable"
           other: "%{count} variables"
-        selected: selected
+        in_use: In use
+        activate: Activate
+        actions: More actions
         edit: Edit
         delete: Delete
         confirm_delete: "Delete the environment “%{name}”?"
