@@ -2,5 +2,42 @@
 <% content_for :heading, t(".title") %>
 
 <%= render layout: "projects/environments/panel" do %>
-  <%= render "projects/environments/form" %>
+  <%= form_with model: @environment, url: environments_path, class: "flex min-h-full flex-col" do |form| %>
+    <div class="flex-1 space-y-6">
+      <div class="flex items-start gap-3">
+        <%= link_to environments_path, aria: { label: t("workbench.shared.cancel") }, class: "-ml-2 mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "arrow-left", class: "size-4" %><% end %>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-sm font-semibold text-ink"><%= t("projects.environments.new.title") %></h3>
+          <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("projects.environments.new.subtitle") %></p>
+        </div>
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent"><%= lucide_icon "layers", class: "size-5" %></span>
+      </div>
+
+      <%= render "workbench/shared/errors", record: @environment %>
+
+      <section class="space-y-2 rounded-2xl border border-line bg-field/40 p-4">
+        <%= form.label :name, t("projects.environments.form.name"), class: label_classes %>
+        <%= form.text_field :name, autofocus: true, autocomplete: "off", placeholder: t("projects.environments.form.name_placeholder"), class: field_classes %>
+        <p class="text-xs text-faint"><%= t("projects.environments.new.name_hint") %></p>
+      </section>
+
+      <section class="space-y-2">
+        <div class="flex items-center gap-2">
+          <%= lucide_icon "braces", class: "size-4 text-muted" %>
+          <h2 class="text-xs font-medium text-muted"><%= t("projects.environments.form.variables") %></h2>
+        </div>
+        <%= render KeyValueTable::Component.new(name: "environment[variables_attributes]", rows: @environment.variables, variant: :variables,
+                                                key_placeholder: t("projects.environments.form.key_placeholder"), value_placeholder: t("projects.environments.form.value_placeholder")) %>
+        <p class="flex items-start gap-2 text-xs leading-relaxed text-faint">
+          <%= lucide_icon "lock", class: "mt-0.5 size-3.5 shrink-0" %>
+          <span><%= t("projects.environments.form.variables_hint") %></span>
+        </p>
+      </section>
+    </div>
+
+    <div class="sticky bottom-0 -mx-4 -mb-4 mt-6 flex justify-end gap-2 border-t border-line bg-card px-4 py-3">
+      <%= link_to t("workbench.shared.cancel"), environments_path, class: button_classes(:ghost) %>
+      <%= form.submit t("projects.environments.new.submit"), class: button_classes(:primary) %>
+    </div>
+  <% end %>
 <% end %>

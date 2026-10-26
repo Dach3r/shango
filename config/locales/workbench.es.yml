@@ -85,10 +85,12 @@ es:
         confirm_delete: "¿Eliminar el entorno “%{name}”?"
       new:
         title: Nuevo entorno
+        subtitle: "Ponle nombre y agrega las variables que usan tus solicitudes, como una URL base o un token."
+        name_hint: "Se muestra en el selector de entornos, p. ej. Producción, Staging."
+        submit: Crear entorno
       edit:
         title: Editar entorno
       form:
-        new_title: Nuevo entorno
         name: Nombre
         name_placeholder: p. ej. Producción
         variables: Variables

@@ -85,10 +85,12 @@ en:
         confirm_delete: "Delete the environment “%{name}”?"
       new:
         title: New environment
+        subtitle: "Name it and add the variables your requests reference, like a base URL or a token."
+        name_hint: "Shown in the environment picker, e.g. Production, Staging."
+        submit: Create environment
       edit:
         title: Edit environment
       form:
-        new_title: New environment
         name: Name
         name_placeholder: e.g. Production
         variables: Variables
