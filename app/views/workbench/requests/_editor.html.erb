@@ -21,7 +21,7 @@
   <div class="flex items-start gap-2 p-3" data-resizable-target="bounds">
     <div class="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-line bg-field px-3 py-2 transition focus-within:border-solid focus-within:ring-2 focus-within:ring-solid/40">
       <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
-                                       class: "w-24 shrink-0 border-0! bg-transparent! p-0! font-mono text-xs font-semibold focus:ring-0! focus:bg-transparent!",
+                                       class: "w-24 shrink-0 border-0! bg-card! px-2.5! py-1! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
                                        input_data: { action: "change->request-form#methodChanged" }) %>
       <span class="-my-2 w-px shrink-0 self-stretch bg-line" aria-hidden="true"></span>
       <div class="min-w-0 flex-1">
