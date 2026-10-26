@@ -13,6 +13,18 @@ RSpec.describe ApiClient::Requests::ExportCurl do
     expect(result.data[:curl]).to include("-X POST", "'https://api.test/items'", "--data-raw")
   end
 
+  it "resolves response references for the user" do
+    allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+    user = create(:user)
+    source = create(:api_request, collection: api_request.collection)
+    create(:request_execution, api_request: source, user:, response_body: '{"id":7}')
+    api_request.update!(url: "https://api.test/items/{{response.body.#{source.id}.$.id}}")
+
+    result = described_class.call(api_request:, environment: nil, user:)
+
+    expect(result.data[:curl]).to include("'https://api.test/items/7'")
+  end
+
   it "fails when the request cannot be built" do
     api_request.update!(url: "")
 

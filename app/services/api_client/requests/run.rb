@@ -28,7 +28,7 @@ module ApiClient
           @api_request.reload
         end
 
-        built = RequestBuilder.call(api_request: @api_request, environment: @environment)
+        built = RequestBuilder.call(api_request: @api_request, environment: @environment, user: @user)
         execution = built.success? ? execute(built.record) : invalid(built)
         Result.success(execution.stash)
       end

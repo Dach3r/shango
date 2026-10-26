@@ -13,8 +13,10 @@ module ApiClient
 
     attr_reader :unresolved
 
-    def initialize(values = {})
+    # `extra` is an optional callable that gets the name when no variable or helper matches (e.g. response references).
+    def initialize(values = {}, extra: nil)
       @values = values.transform_keys(&:to_s)
+      @extra = extra
       @unresolved = Set.new
     end
 
@@ -47,7 +49,7 @@ module ApiClient
     def lookup(name)
       return @values[name] if @values.key?(name)
 
-      DYNAMIC[name]&.call
+      DYNAMIC[name]&.call || @extra&.call(name)
     end
   end
 end

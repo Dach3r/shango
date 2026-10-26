@@ -24,6 +24,17 @@ RSpec.describe ApiClient::Requests::Run do
     )
   end
 
+  it "lets a later request in the collection use the unsaved response", :aggregate_failures do
+    stub_request(:get, api_request.url).to_return(status: 200, body: '{"id":638}', headers: { "Content-Type" => "application/json" })
+    described_class.call(api_request:, environment:, user:)
+    follower = create(:api_request, collection:, url: "https://api.example.com/items/{{response.body.#{api_request.id}.$.id}}")
+    stub_request(:get, "https://api.example.com/items/638").to_return(status: 200, body: "found")
+
+    run = described_class.call(api_request: follower, environment:, user:)
+
+    expect(run.record).to have_attributes(url: "https://api.example.com/items/638", response_body: "found")
+  end
+
   it "stores the response timings" do
     stub_request(:get, "https://api.example.com/items").to_return(status: 200, body: "ok")
 

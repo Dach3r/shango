@@ -19,14 +19,26 @@ module ApiClient
 
     class InvalidRequest < StandardError; end
 
-    def initialize(api_request:, environment: nil, dry_run: false)
+    def initialize(api_request:, environment: nil, dry_run: false, user: nil)
       @api_request = api_request
       @environment = environment
       @dry_run = dry_run
-      @resolver = VariableResolver.new(environment&.variable_values || {})
+      @resolver = VariableResolver.new(environment&.variable_values || {}, extra: response_lookup(user))
     end
 
     private
+
+    def response_lookup(user)
+      return unless user
+
+      lambda do |name|
+        next unless ResponseReference.reference?(name)
+
+        # Break up `{{` so a response can never inject variable references into the request.
+        found = ResponseReference.call(api_request: @api_request, user:, name:)
+        found.record.gsub("{{", "{ {") if found.success?
+      end
+    end
 
     def perform
       url = resolved_url

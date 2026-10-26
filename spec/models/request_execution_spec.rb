@@ -47,6 +47,32 @@ RSpec.describe RequestExecution do
     end
   end
 
+  describe ".latest_for" do
+    let(:user) { create(:user) }
+    let(:api_request) { create(:api_request) }
+
+    before { allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new) }
+
+    it "prefers the freshest stashed run over the saved ones", :aggregate_failures do
+      create(:request_execution, api_request:, user:, url: "https://api.example.com/saved")
+      stashed = build(:request_execution, id: SecureRandom.uuid, api_request:, user:, url: "https://api.example.com/stashed").stash
+
+      expect(described_class.latest_for(api_request, user).id).to eq(stashed.id)
+    end
+
+    it "falls back to the newest saved run of the user", :aggregate_failures do
+      create(:request_execution, api_request:, user: create(:user), url: "https://api.example.com/other")
+      create(:request_execution, api_request:, user:, url: "https://api.example.com/old", created_at: 1.day.ago)
+      latest = create(:request_execution, api_request:, user:, url: "https://api.example.com/new")
+
+      expect(described_class.latest_for(api_request, user)).to eq(latest)
+    end
+
+    it "is nil without any response" do
+      expect(described_class.latest_for(api_request, user)).to be_nil
+    end
+  end
+
   describe ".recent" do
     it "orders newest first" do
       old = create(:request_execution, created_at: 1.day.ago)

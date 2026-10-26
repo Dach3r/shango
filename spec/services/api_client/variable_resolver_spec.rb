@@ -27,6 +27,14 @@ RSpec.describe ApiClient::VariableResolver do
       expect(resolver.unresolved.to_a).to contain_exactly("missing", "$nope")
     end
 
+    it "asks the extra lookup for unknown names", :aggregate_failures do
+      extra = ->(name) { name == "response.x" ? "from response" : nil }
+      resolver = described_class.new(values, extra:)
+
+      expect(resolver.resolve("{{response.x}} {{other}}")).to eq("from response {{other}}")
+      expect(resolver.unresolved.to_a).to eq(["other"])
+    end
+
     it "stops on circular references", :aggregate_failures do
       expect(resolver.resolve("{{loop_a}}")).to match(/\{\{loop_[ab]\}\}/)
       expect(resolver.unresolved).not_to be_empty

@@ -9,6 +9,47 @@ RSpec.describe ApiClient::RequestBuilder do
   let(:api_request) { create(:api_request, { collection:, auth_type: "none", url: "https://api.example.com/items" }.merge(attributes)) }
   let(:built) { result.record }
 
+  describe "response references" do
+    subject(:result) { described_class.call(api_request:, environment:, dry_run: true, user:) }
+
+    let(:user) { create(:user) }
+    let(:source) { create(:api_request, collection:) }
+    let(:attributes) do
+      { url: "https://api.example.com/items/{{response.body.#{source.id}.$.id}}", headers: [{ "key" => "X-Echo", "value" => "{{response.body.#{source.id}.$.note}}" }] }
+    end
+
+    before do
+      allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+      create(:request_execution, api_request: source, user:, response_body: '{"id":638,"note":"{{secret}}"}')
+    end
+
+    it "fills values from the latest response of a request in the collection", :aggregate_failures do
+      expect(built.url).to eq("https://api.example.com/items/638")
+      expect(built.unresolved).to be_empty
+    end
+
+    it "does not let a response inject variable references" do
+      expect(built.headers["X-Echo"]).to eq("{ {secret}}")
+    end
+
+    context "without a response yet" do
+      before { source.request_executions.destroy_all }
+
+      it "aborts on the url", :aggregate_failures do
+        expect(result).to be_failure
+        expect(result.data[:unresolved]).to eq(["response.body.#{source.id}.$.id"])
+      end
+    end
+
+    context "without a user" do
+      subject(:result) { described_class.call(api_request:, environment:, dry_run: true) }
+
+      it "leaves the reference unresolved" do
+        expect(result).to be_failure
+      end
+    end
+  end
+
   describe "url" do
     it "builds a successful result", :aggregate_failures do
       expect(result).to be_success
