@@ -1,12 +1,12 @@
 <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
   <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
-          class="flex h-9 max-w-48 cursor-pointer items-center gap-2 rounded-full border border-line bg-field px-3 text-sm text-body transition hover:bg-field-focus hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+          class="flex <%= @compact ? "h-7 px-2.5 text-xs" : "h-9 px-3 text-sm" %> max-w-48 cursor-pointer items-center gap-2 rounded-full border border-line bg-field text-body transition hover:bg-field-focus hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
     <%= lucide_icon "layers", class: "size-4 shrink-0 #{'text-accent' if @current_environment}" %>
     <span class="truncate"><%= @current_environment&.name || t("components.environment_switcher.none") %></span>
     <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>
   </button>
 
-  <div data-dropdown-target="menu" hidden class="absolute right-0 top-full z-30 mt-2 w-60 rounded-2xl border border-line bg-card p-1.5 shadow-dropdown">
+  <div data-dropdown-target="menu" hidden class="absolute right-0 <%= @compact ? "bottom-full mb-2" : "top-full mt-2" %> z-30 w-60 rounded-2xl border border-line bg-card p-1.5 shadow-dropdown">
     <p class="px-2.5 pt-1.5 pb-1 text-xs font-medium text-muted"><%= t("components.environment_switcher.label") %></p>
     <ul class="max-h-64 overflow-y-auto">
       <li>

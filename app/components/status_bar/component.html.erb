@@ -1,0 +1,14 @@
+<footer class="sticky bottom-0 z-20 flex h-10 shrink-0 items-center gap-3 border-t border-line bg-page px-3 sm:px-4">
+  <button type="button" data-drawer-target="trigger" data-action="drawer#toggle" aria-expanded="false" aria-label="<%= t("components.status_bar.menu") %>"
+          class="flex size-7 cursor-pointer items-center justify-center rounded-full text-body transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 lg:hidden">
+    <%= lucide_icon "menu", class: "size-4" %>
+  </button>
+
+  <div class="ml-auto flex items-center gap-2">
+    <% if @environments %>
+      <%= render EnvironmentSwitcher::Component.new(environments: @environments, current_environment: @current_environment, compact: true) %>
+    <% end %>
+
+    <%= render UserMenu::Component.new(user: @user, compact: true) %>
+  </div>
+</footer>

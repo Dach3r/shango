@@ -7,11 +7,14 @@
     </aside>
 
     <div class="flex min-h-screen min-w-0 flex-col">
-      <%= render Topbar::Component.new(user: current_user, title: content_for(:heading), environments: current_project.environments.ordered, current_environment:) %>
-
       <main class="<%= content_for?(:main_class) ? yield(:main_class) : "flex-1 px-4 py-8 sm:px-8" %>">
+        <% if content_for?(:heading) && !content_for?(:main_class) %>
+          <h1 class="mx-auto mb-6 max-w-3xl truncate text-lg font-semibold tracking-tight text-ink"><%= yield :heading %></h1>
+        <% end %>
         <%= yield %>
       </main>
+
+      <%= render StatusBar::Component.new(user: current_user, environments: current_project.environments.ordered, current_environment:) %>
     </div>
   </div>
   <%= turbo_frame_tag "modal" %>

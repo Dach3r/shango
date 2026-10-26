@@ -26,7 +26,7 @@ en:
       logs: Logs
       ai_assistant: AI Assistant
       settings: Settings
-    topbar:
+    status_bar:
       menu: Open navigation
     user_menu:
       label: Account menu
