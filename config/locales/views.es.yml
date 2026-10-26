@@ -38,7 +38,7 @@ es:
     registrations:
       new:
         title: Crear cuenta
-        heading: Crea tu cuenta
+        heading_html: Crea tu cuenta<br>y empieza a construir.
         first_name: Nombre
         first_name_placeholder: "Ej: Ada"
         last_name: Apellido
@@ -52,7 +52,7 @@ es:
         sign_in: Iniciar sesión
       edit:
         title: Editar cuenta
-        heading: Editar cuenta
+        heading_html: Ajusta tu<br>cuenta.
         email: Correo electrónico
         awaiting_confirmation: "Esperando confirmación de: %{email}"
         new_password: Nueva contraseña
@@ -68,7 +68,7 @@ es:
     passwords:
       new:
         title: Recuperar contraseña
-        heading: ¿Olvidaste tu contraseña?
+        heading_html: ¿Olvidaste tu<br>contraseña?
         email: Correo electrónico
         email_placeholder: tu@ejemplo.com
         submit: Enviar instrucciones
@@ -76,7 +76,7 @@ es:
         or: O
       edit:
         title: Cambiar contraseña
-        heading: Cambia tu contraseña
+        heading_html: Elige una nueva<br>contraseña.
         password: Nueva contraseña
         password_placeholder: Crea una nueva contraseña (al menos %{length} caracteres)
         password_confirmation: Confirmar contraseña
@@ -87,14 +87,14 @@ es:
     confirmations:
       new:
         title: Reenviar confirmación
-        heading: Reenviar confirmación
+        heading_html: Confirma tu<br>correo.
         email: Correo electrónico
         email_placeholder: tu@ejemplo.com
         submit: Reenviar instrucciones
     unlocks:
       new:
         title: Reenviar desbloqueo
-        heading: Reenviar desbloqueo
+        heading_html: Recupera el acceso<br>a tu cuenta.
         email: Correo electrónico
         email_placeholder: tu@ejemplo.com
         submit: Reenviar instrucciones

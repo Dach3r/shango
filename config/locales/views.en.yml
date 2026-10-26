@@ -38,7 +38,7 @@ en:
     registrations:
       new:
         title: Create account
-        heading: Create your account
+        heading_html: Create your account<br>and start building.
         first_name: First name
         first_name_placeholder: e.g. Ada
         last_name: Last name
@@ -52,7 +52,7 @@ en:
         sign_in: Sign in
       edit:
         title: Edit account
-        heading: Edit account
+        heading_html: Tune your<br>account.
         email: Email
         awaiting_confirmation: "Awaiting confirmation for: %{email}"
         new_password: New password
@@ -68,7 +68,7 @@ en:
     passwords:
       new:
         title: Reset password
-        heading: Forgot your password?
+        heading_html: Forgot your<br>password?
         email: Email
         email_placeholder: you@example.com
         submit: Send instructions
@@ -76,7 +76,7 @@ en:
         or: Or
       edit:
         title: Change password
-        heading: Change your password
+        heading_html: Choose a new<br>password.
         password: New password
         password_placeholder: Create a new password (at least %{length} characters)
         password_confirmation: Confirm password
@@ -87,14 +87,14 @@ en:
     confirmations:
       new:
         title: Resend confirmation
-        heading: Resend confirmation
+        heading_html: Confirm your<br>email.
         email: Email
         email_placeholder: you@example.com
         submit: Resend instructions
     unlocks:
       new:
         title: Resend unlock
-        heading: Resend unlock
+        heading_html: Get back into<br>your account.
         email: Email
         email_placeholder: you@example.com
         submit: Resend instructions
