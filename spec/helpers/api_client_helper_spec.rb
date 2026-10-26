@@ -121,4 +121,20 @@ RSpec.describe ApiClientHelper do
       expect(helper.method_options).to eq(ApiRequest::METHODS.map { |m| [m, m] })
     end
   end
+
+  describe "#variable_autocomplete_data" do
+    before { helper.define_singleton_method(:editor_variables) { [{ name: "token", set: true, value: "abc" }] } }
+
+    it "exposes the variables and labels to the controller", :aggregate_failures do
+      data = helper.variable_autocomplete_data(controller: "request-url")
+
+      expect(data[:controller]).to eq("request-url variable-autocomplete")
+      expect(JSON.parse(data[:variable_autocomplete_variables_value])).to eq([{ "name" => "token", "set" => true, "value" => "abc" }])
+      expect(JSON.parse(data[:variable_autocomplete_labels_value])).to include("environment" => "Environment", "isoTimestamp" => "ISO 8601 date")
+    end
+
+    it "defaults to the autocomplete controller alone" do
+      expect(helper.variable_autocomplete_data[:controller]).to eq("variable-autocomplete")
+    end
+  end
 end

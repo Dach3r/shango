@@ -80,6 +80,16 @@ module ApiClientHelper
     ApiRequest::BODY_TYPES.map { |type| [t("workbench.body.types.#{type}"), type] }
   end
 
+  # Data attributes that turn the plain inputs inside an element into `{{variable}}` autocompletes.
+  def variable_autocomplete_data(controller: nil)
+    labels = I18n.t("components.code_editor").transform_keys { |key| key.to_s.camelize(:lower) }
+    {
+      controller: [controller, "variable-autocomplete"].compact.join(" "),
+      variable_autocomplete_variables_value: editor_variables.to_json,
+      variable_autocomplete_labels_value: labels.to_json
+    }
+  end
+
   def method_options
     ApiRequest::METHODS.map { |method| [method, method] }
   end
