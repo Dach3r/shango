@@ -1,28 +1,33 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
-const EDITOR_LANGUAGE = { json: "json", xml: "xml", text: "text", graphql: "text" }
+const EDITOR_LANGUAGE = {
+  json: "json",
+  xml: "xml",
+  text: "text",
+  graphql: "text",
+};
 
-// Shows the body editor that matches the selected body type and switches the editor language.
 export default class extends Controller {
-  static targets = ["select", "panel"]
+  static targets = ["select", "panel"];
 
   connect() {
-    this.render()
+    this.render();
   }
 
   change() {
-    this.render()
+    this.render();
   }
 
   render() {
-    const type = this.selectTarget.value
-    this.element.dataset.bodyType = type
+    const type = this.selectTarget.value;
+    this.element.dataset.bodyType = type;
     this.panelTargets.forEach((panel) => {
-      const active = panel.dataset.types.split(" ").includes(type)
-      panel.hidden = !active
-    })
+      const active = panel.dataset.types.split(" ").includes(type);
+      panel.hidden = !active;
+    });
 
-    const language = EDITOR_LANGUAGE[type]
-    if (language) this.dispatch("language", { detail: { language }, prefix: "body-type" })
+    const language = EDITOR_LANGUAGE[type];
+    if (language)
+      this.dispatch("language", { detail: { language }, prefix: "body-type" });
   }
 }

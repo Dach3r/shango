@@ -1,25 +1,28 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
-// Auth type picker: only the selected strategy's fields are visible and submitted.
 export default class extends Controller {
-  static targets = ["select", "section"]
+  static targets = ["select", "section"];
 
   connect() {
-    this.render()
+    this.render();
   }
 
   change() {
-    this.render()
+    this.render();
   }
 
   render() {
-    const type = this.selectTarget.value
+    const type = this.selectTarget.value;
 
     this.sectionTargets.forEach((section) => {
-      const active = section.dataset.type === type
-      section.hidden = !active
-      section.querySelectorAll("input, textarea, select").forEach((field) => { field.disabled = !active })
-      section.querySelector("[data-controller~='conditional-fields']")?.dispatchEvent(new CustomEvent("refresh"))
-    })
+      const active = section.dataset.type === type;
+      section.hidden = !active;
+      section.querySelectorAll("input, textarea, select").forEach((field) => {
+        field.disabled = !active;
+      });
+      section
+        .querySelector("[data-controller~='conditional-fields']")
+        ?.dispatchEvent(new CustomEvent("refresh"));
+    });
   }
 }
