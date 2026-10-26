@@ -8,7 +8,5 @@
     <% if @environments %>
       <%= render EnvironmentSwitcher::Component.new(environments: @environments, current_environment: @current_environment, compact: true) %>
     <% end %>
-
-    <%= render UserMenu::Component.new(user: @user, compact: true) %>
   </div>
 </footer>

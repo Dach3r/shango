@@ -10,4 +10,8 @@
       <% end %>
     </ul>
   </nav>
+
+  <div class="mt-auto border-t border-line pt-4">
+    <%= render UserMenu::Component.new(user: @user) %>
+  </div>
 </div>

@@ -1,6 +1,5 @@
 class UserMenu::Component < ApplicationComponent
-  def initialize(user:, compact: false)
+  def initialize(user:)
     @user = user
-    @compact = compact
   end
 end

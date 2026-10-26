@@ -12,9 +12,10 @@ class Sidebar::Component < ApplicationComponent
     { key: :settings, icon: "settings" }
   ].freeze
 
-  def initialize(current_project:, projects:)
+  def initialize(current_project:, projects:, user:)
     @current_project = current_project
     @projects = projects
+    @user = user
   end
 
   private

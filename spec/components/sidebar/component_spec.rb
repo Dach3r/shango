@@ -5,7 +5,7 @@ RSpec.describe Sidebar::Component, type: :component do
 
   def render_sidebar(path: "/", controller_path: "overview")
     allow(vc_test_controller).to receive(:controller_path).and_return(controller_path)
-    with_request_url(path) { render_inline(described_class.new(current_project: project, projects: [project])) }
+    with_request_url(path) { render_inline(described_class.new(current_project: project, projects: [project], user: create(:user, first_name: "Ada", last_name: "Lovelace"))) }
   end
 
   it "highlights the overview on the root page", :aggregate_failures do
@@ -25,5 +25,11 @@ RSpec.describe Sidebar::Component, type: :component do
     render_sidebar(path: "/projects/new", controller_path: "projects")
 
     expect(page).to have_no_css("a[aria-current=page]")
+  end
+
+  it "renders the user menu in the footer" do
+    render_sidebar
+
+    expect(page).to have_css("button", text: "Ada Lovelace")
   end
 end

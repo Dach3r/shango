@@ -3,7 +3,7 @@
     <div hidden data-drawer-target="backdrop" data-action="click->drawer#close" class="fixed inset-0 z-30 bg-night-1000/50 lg:hidden"></div>
 
     <aside data-drawer-target="panel" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full overflow-y-auto border-r border-line bg-card transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0">
-      <%= render Sidebar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name)) %>
+      <%= render Sidebar::Component.new(current_project: current_project, projects: current_user.projects.active.order(:name), user: current_user) %>
     </aside>
 
     <div class="flex min-h-screen min-w-0 flex-col">
@@ -14,7 +14,7 @@
         <%= yield %>
       </main>
 
-      <%= render StatusBar::Component.new(user: current_user, environments: current_project.environments.ordered, current_environment:) %>
+      <%= render StatusBar::Component.new(environments: current_project.environments.ordered, current_environment:) %>
     </div>
   </div>
   <%= turbo_frame_tag "modal" %>
