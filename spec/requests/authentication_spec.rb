@@ -70,27 +70,59 @@ RSpec.describe "Authentication" do
   end
 
   describe "account update" do
-    let(:user) { create(:user) }
+    let!(:user) { sign_in_with_project[0] }
 
-    before { sign_in user }
+    it "serves the account settings at /users/settings" do
+      expect(edit_user_registration_path).to eq("/users/settings")
+    end
 
-    it "renders the edit form" do
+    it "renders the profile tab by default", :aggregate_failures do
       get edit_user_registration_path
 
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include(%(name="user[email]"))
+      expect(response.body).to include(I18n.t("components.settings_nav.items.sidebar"))
     end
 
-    it "updates the name without the password", :aggregate_failures do
-      put user_registration_path, params: { user: { first_name: "Changed", last_name: "Name", password: "", password_confirmation: "", current_password: "" } }
+    it "renders the security tab", :aggregate_failures do
+      get edit_user_registration_path(tab: "security")
 
-      expect(response).to have_http_status(:see_other)
-      expect(user.reload.first_name).to eq("Changed")
+      expect(response.body).to include(I18n.t("devise.registrations.edit.cancel_account"))
+      expect(response.body).not_to include(%(name="user[email]"))
     end
 
-    it "updates the password when provided", :aggregate_failures do
-      put user_registration_path, params: { user: { first_name: "Ada", last_name: "Lovelace", password: "newpassword1", password_confirmation: "newpassword1" } }
+    it "falls back to the profile tab on an unknown tab" do
+      get edit_user_registration_path(tab: "nope")
 
-      expect(response).to have_http_status(:see_other)
+      expect(response.body).to include(%(name="user[email]"))
+    end
+
+    it "sends users without a project to create one" do
+      sign_in create(:user)
+
+      get edit_user_registration_path
+
+      expect(response).to redirect_to(new_project_path)
+    end
+
+    it "updates name and email without the password", :aggregate_failures do
+      put user_registration_path, params: { user: { first_name: "Changed", last_name: "Name", email: "changed@example.com", password: "", password_confirmation: "" } }
+
+      expect(response).to redirect_to(edit_user_registration_path(tab: "profile"))
+      expect(user.reload).to have_attributes(first_name: "Changed", email: "changed@example.com")
+    end
+
+    it "re-renders the profile when invalid", :aggregate_failures do
+      put user_registration_path, params: { user: { first_name: "" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(user.reload.first_name).not_to be_blank
+    end
+
+    it "updates the password from the security tab", :aggregate_failures do
+      put user_registration_path(tab: "security"), params: { user: { password: "newpassword1", password_confirmation: "newpassword1" } }
+
+      expect(response).to redirect_to(edit_user_registration_path(tab: "security"))
       expect(user.reload.valid_password?("newpassword1")).to be(true)
     end
   end

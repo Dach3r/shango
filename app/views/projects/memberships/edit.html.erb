@@ -1,48 +1,32 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<% content_for :main_class, "flex min-h-0 flex-1" %>
 
-<div class="flex min-h-[calc(100vh-2.5rem)] w-full flex-col md:flex-row">
-  <aside class="shrink-0 border-b border-line bg-card px-2 py-4 md:w-72 md:border-r md:border-b-0">
-    <%= render SettingsNav::Component.new(project: current_project) %>
-  </aside>
+<%= render layout: "settings/shell", locals: { title: t(".title"), heading: t(".heading"), description: t(".description") } do %>
+  <%= form_with model: @membership, url: membership_path, method: :patch do |form| %>
+    <%= render "workbench/shared/errors", record: @membership %>
 
-  <div class="min-w-0 flex-1 overflow-y-auto px-4 py-8 sm:px-8">
-    <h1 class="mx-auto mb-6 max-w-5xl truncate text-lg font-semibold tracking-tight text-ink"><%= t(".title") %></h1>
+    <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+      <% %i[folder_toggle request_open].each do |setting| %>
+        <fieldset class="grid gap-4 p-5 md:grid-cols-[1fr_17rem] md:items-center md:gap-8">
+          <div class="min-w-0">
+            <legend class="float-left w-full text-sm font-semibold text-ink"><%= t("projects.memberships.edit.#{setting}.label") %></legend>
+            <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.memberships.edit.#{setting}.hint") %></p>
+          </div>
 
-    <section class="mx-auto min-w-0 max-w-5xl">
-      <header class="mb-6">
-        <h2 class="text-base font-semibold text-ink"><%= t(".heading") %></h2>
-        <p class="mt-1 text-sm text-muted"><%= t(".description") %></p>
-      </header>
-
-      <%= form_with model: @membership, url: membership_path, method: :patch do |form| %>
-        <%= render "workbench/shared/errors", record: @membership %>
-
-        <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
-          <% %i[folder_toggle request_open].each do |setting| %>
-            <fieldset class="grid gap-4 p-5 md:grid-cols-[1fr_17rem] md:items-center md:gap-8">
-              <div class="min-w-0">
-                <legend class="float-left w-full text-sm font-semibold text-ink"><%= t(".#{setting}.label") %></legend>
-                <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t(".#{setting}.hint") %></p>
-              </div>
-
-              <div class="grid grid-cols-2 gap-1 rounded-xl border border-line bg-field p-1">
-                <% Membership::CLICK_MODES.each_key do |value| %>
-                  <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-solid/30">
-                    <%= form.radio_button setting, value, class: "sr-only" %>
-                    <%= lucide_icon(value == "click" ? "mouse-pointer-click" : "mouse-pointer-2", class: "size-4 shrink-0", "aria-hidden": true) %>
-                    <span><%= t(".modes.#{value}") %></span>
-                  </label>
-                <% end %>
-              </div>
-            </fieldset>
-          <% end %>
-        </div>
-
-        <div class="mt-4 flex justify-end">
-          <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
-        </div>
+          <div class="grid grid-cols-2 gap-1 rounded-xl border border-line bg-field p-1">
+            <% Membership::CLICK_MODES.each_key do |value| %>
+              <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-solid/30">
+                <%= form.radio_button setting, value, class: "sr-only" %>
+                <%= lucide_icon(value == "click" ? "mouse-pointer-click" : "mouse-pointer-2", class: "size-4 shrink-0", "aria-hidden": true) %>
+                <span><%= t("projects.memberships.edit.modes.#{value}") %></span>
+              </label>
+            <% end %>
+          </div>
+        </fieldset>
       <% end %>
-    </section>
-  </div>
-</div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
+    </div>
+  <% end %>
+<% end %>

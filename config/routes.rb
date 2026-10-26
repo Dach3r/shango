@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { registrations: "users/registrations" }, failure_app: "LocalizedFailureApp"
+  devise_for :users, path_names: { edit: "settings" }, controllers: { registrations: "users/registrations" }, failure_app: "LocalizedFailureApp"
 
   authenticated :user do
     root to: redirect("/workbench")

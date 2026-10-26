@@ -37,6 +37,7 @@ en:
       logs: Logs
       ai_assistant: AI Assistant
       settings: Settings
+      soon: Coming soon
     status_bar:
       menu: Open navigation
     user_menu:
@@ -114,10 +115,14 @@ en:
         or: Or
         sign_in: Sign in
       edit:
-        title: Edit account
-        heading_html: Account settings
+        title: Settings
+        profile:
+          heading: Profile
+          description: Your name and the email you use to sign in.
+        security:
+          heading: Security
+          description: Change your password or cancel your account.
         email: Email
-        awaiting_confirmation: "Awaiting confirmation for: %{email}"
         new_password: New password
         email_placeholder: you@example.com
         password_placeholder: Leave blank to keep your current password
@@ -127,7 +132,6 @@ en:
         cancel_heading: Cancel my account
         cancel_account: Cancel my account
         confirm: Are you sure?
-        back: Back
     passwords:
       new:
         title: Reset password

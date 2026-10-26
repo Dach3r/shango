@@ -37,6 +37,7 @@ es:
       logs: Logs
       ai_assistant: Asistente IA
       settings: Configuración
+      soon: Próximamente
     status_bar:
       menu: Abrir navegación
     user_menu:
@@ -114,10 +115,14 @@ es:
         or: O
         sign_in: Iniciar sesión
       edit:
-        title: Editar cuenta
-        heading_html: Configuración de tu cuenta
+        title: Configuración
+        profile:
+          heading: Perfil
+          description: Tu nombre y el correo con el que inicias sesión.
+        security:
+          heading: Seguridad
+          description: Cambia tu contraseña o cancela tu cuenta.
         email: Correo electrónico
-        awaiting_confirmation: "Esperando confirmación de: %{email}"
         new_password: Nueva contraseña
         email_placeholder: tu@ejemplo.com
         password_placeholder: Déjala en blanco para mantener la actual
@@ -127,7 +132,6 @@ es:
         cancel_heading: Cancelar mi cuenta
         cancel_account: Cancelar mi cuenta
         confirm: ¿Estás seguro?
-        back: Volver
     passwords:
       new:
         title: Recuperar contraseña
