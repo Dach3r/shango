@@ -1,0 +1,31 @@
+type: collection.insomnia.rest/5.0
+name: Blog
+collection:
+  - name: Posts
+    children:
+      - name: Get post
+        method: GET
+        url: "{{ _.base }}/posts/1"
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: abc
+      - name: Deep
+        children: []
+  - name: Create post
+    method: POST
+    url: "{{ _.base }}/posts"
+    body:
+      mimeType: application/json
+      text: '{"t":1}'
+  - not-a-hash
+environments:
+  name: Base Environment
+  data:
+    base: https://blog.test
+  subEnvironments:
+    - name: Local
+      data:
+        base: http://localhost:3000
