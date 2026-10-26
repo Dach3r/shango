@@ -14,8 +14,6 @@ es:
         name: Nombre
         url: URL
   components:
-    sidebar:
-      environments: Entornos
     confirm_dialog:
       cancel: Cancelar
       confirm: Eliminar

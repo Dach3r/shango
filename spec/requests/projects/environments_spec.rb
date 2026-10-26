@@ -11,9 +11,20 @@ RSpec.describe "Environments" do
   describe "GET /environments" do
     it "lists the project's environments" do
       create(:variable, environment:, key: "HOST")
-      get environments_path
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
 
       expect(response.body).to include(environment.name)
+    end
+
+    it "redirects to the workbench outside the side panel", :aggregate_failures do
+      get environments_path
+      expect(response).to redirect_to(workbench_root_path)
+
+      get new_environment_path
+      expect(response).to redirect_to(workbench_root_path)
+
+      get edit_environment_path(environment)
+      expect(response).to redirect_to(workbench_root_path)
     end
   end
 
@@ -38,7 +49,7 @@ RSpec.describe "Environments" do
 
   describe "GET /environments/new" do
     it "renders the form" do
-      get new_environment_path
+      get new_environment_path, headers: { "Turbo-Frame" => "right_sidebar" }
 
       expect(response).to have_http_status(:ok)
     end
@@ -61,13 +72,13 @@ RSpec.describe "Environments" do
 
   describe "GET /environments/:id/edit" do
     it "renders the form" do
-      get edit_environment_path(environment)
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
 
       expect(response).to have_http_status(:ok)
     end
 
     it "does not find environments of other projects" do
-      get edit_environment_path(foreign_environment)
+      get edit_environment_path(foreign_environment), headers: { "Turbo-Frame" => "right_sidebar" }
 
       expect(response).to have_http_status(:not_found)
     end

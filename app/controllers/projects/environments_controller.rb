@@ -1,5 +1,6 @@
 module Projects
   class EnvironmentsController < AuthenticatedController
+    before_action :require_frame, only: %i[index new edit]
     before_action :set_environment, only: %i[edit update destroy]
 
     def index
@@ -34,6 +35,10 @@ module Projects
     end
 
     private
+
+    def require_frame
+      redirect_to workbench_root_path unless turbo_frame_request?
+    end
 
     def set_environment
       @environment = current_project.environments.find(params[:id])
