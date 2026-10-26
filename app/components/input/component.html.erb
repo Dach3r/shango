@@ -1,6 +1,6 @@
 <%= tag.div data: { controller: ("password-visibility" if password?) } do %>
   <%= @form.label @attribute, @label, class: label_classes %>
-  <div class="relative">
+  <div class="group relative">
   <% if @icon %>
     <span class="<%= icon_classes %>"><%= lucide_icon @icon, class: "size-5" %></span>
   <% end %>

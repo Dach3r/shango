@@ -1,8 +1,9 @@
 class Input::Component < ApplicationComponent
   LABEL = "mb-1.5 block text-sm font-medium text-body"
-  FIELD = "block w-full rounded-xl border border-line bg-field #{CONTROL_SIZE} px-4 text-base text-ink transition placeholder:text-muted/60 focus:border-solid focus:bg-field-focus focus:ring-4 focus:ring-solid/45 focus:outline-none aria-invalid:border-danger aria-invalid:ring-4 aria-invalid:ring-danger/25 aria-invalid:focus:border-danger"
-  TOGGLE = "text-muted hover:text-ink"
-  ICON = "text-muted"
+  FIELD = "block w-full rounded-xl border border-line bg-field #{CONTROL_SIZE} px-4 text-base text-ink transition placeholder:text-line focus:border-solid focus:bg-field-focus focus:ring-4 focus:ring-solid/45 focus:outline-none aria-invalid:border-danger aria-invalid:ring-4 aria-invalid:ring-danger/25 aria-invalid:focus:border-danger"
+  ADORNMENT = "text-line transition group-focus-within:text-solid group-has-[[aria-invalid=true]]:text-danger"
+  TOGGLE = "#{ADORNMENT} hover:text-ink"
+  ICON = ADORNMENT
   DEFAULT_ICONS = {email: "mail", password: "lock"}.freeze
 
   def initialize(form:, attribute:, label:, type: :text, icon: DEFAULT_ICONS[type], placeholder: nil, **options)
