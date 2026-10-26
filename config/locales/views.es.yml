@@ -38,7 +38,6 @@ es:
         themes: Temas
         members: Miembros
     tools_nav:
-      title: Herramientas
       label: Navegación del proyecto
       api_client: Cliente API
       documentation: Documentación

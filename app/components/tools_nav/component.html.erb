@@ -1,8 +1,7 @@
-<nav data-turbo-frame="_top" aria-label="<%= t("components.tools_nav.label") %>" class="py-1">
-  <p class="px-4 pb-1 pt-3 font-mono text-xs uppercase tracking-wider text-faint"><%= t("components.tools_nav.title") %></p>
-  <ul class="pb-1">
+<nav data-turbo-frame="_top" aria-label="<%= t("components.tools_nav.label") %>">
+  <ul>
     <% items.each do |item| %>
-      <li class="flex"><%= render NavItem::Component.new(**item, orientation: :menu) %></li>
+      <li class="flex border-b border-line last:border-b-0"><%= render NavItem::Component.new(**item, orientation: :menu) %></li>
     <% end %>
   </ul>
 </nav>
