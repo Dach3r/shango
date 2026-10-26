@@ -17,7 +17,7 @@
     </div>
   <% end %>
 
-  <div class="@container flex items-stretch border-b border-line bg-accent/[0.07] transition focus-within:bg-accent/[0.12]" data-resizable-target="bounds">
+  <div class="@container flex items-stretch border-b border-line bg-ink/[0.05] transition focus-within:bg-ink/[0.08]" data-resizable-target="bounds">
     <div class="flex">
       <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
                                        class: "w-24 @xl:w-28 shrink-0 h-full border-0! bg-transparent! justify-center! gap-3! px-4! font-mono text-xs font-semibold focus:ring-0! [&>[data-select-target=label]]:flex-none",
