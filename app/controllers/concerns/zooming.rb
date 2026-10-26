@@ -17,6 +17,8 @@ module Zooming
   private
 
   def current_zoom
+    return "100" if devise_controller? && !user_signed_in?
+
     Zooming.supported(cookies[COOKIE_KEY]) || DEFAULT
   end
 end

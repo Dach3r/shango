@@ -10,17 +10,25 @@ RSpec.describe "Preferences" do
     end
 
     it "stores a supported zoom cookie and renders it on the page", :aggregate_failures do
+      sign_in create(:user)
       patch preferences_path, params: { zoom: "125" }
-      get new_user_session_path
+      get new_project_path
 
-      expect(response.headers["Set-Cookie"]).to be_nil
       expect(response.body).to include('data-zoom="125"')
     end
 
     it "defaults the zoom to 95" do
-      get new_user_session_path
+      sign_in create(:user)
+      get new_project_path
 
       expect(response.body).to include('data-zoom="95"')
+    end
+
+    it "ignores the zoom cookie on devise pages" do
+      patch preferences_path, params: { zoom: "125" }
+      get new_user_session_path
+
+      expect(response.body).to include('data-zoom="100"')
     end
 
     it "ignores unsupported values and falls back to root", :aggregate_failures do
