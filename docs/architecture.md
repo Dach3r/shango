@@ -122,14 +122,14 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 - **API Client** (phase 2): `Environment`/`Variable` (secrets encrypted, selected per membership from the top bar), `Collection`, `Folder`, `ApiRequest`, `RequestExecution`; request editor with CodeMirror, history, cURL import/copy, drag and drop tree, authorization per request or folder with inheritance (None, Basic, Bearer, API key, JWT, Digest, AWS SigV4, OAuth 2.0). See [`api-client.md`](api-client.md). Sidebar entries *API Client* and *Environments* are live.
 - Controllers for the feature live in `Workbench::` and `Projects::` modules; logic is in `app/services` (`ApiClient::` namespace) (`Serviceable` + `Result`).
 - Gems added: `faraday`, `faraday-multipart`, `jwt`, `aws-sigv4`, `net-http-digest_auth`.
-- No automated tests yet (no test framework); no other domain models.
+- Tests: RSpec (`spec/`) with FactoryBot, shoulda-matchers, WebMock and ViewComponent test helpers. Run `bundle exec rspec`; SimpleCov enforces 100% line and branch coverage over `app/` (report in `coverage/`, git-ignored). Layout: `spec/models`, `spec/services`, `spec/components`, `spec/requests` (controllers and views), `spec/support`, `spec/factories`. Set `PARTIAL_RUN=1` to run a subset without the minimum check, and `COVERAGE_DIR` to redirect the report. JavaScript (Stimulus) is not covered.
 
 Update this section as features land.
 
 ## 10. Open technical questions
 
 - Key management for self-hosted installs: encryption keys default to values derived from `secret_key_base`; a rotation procedure is not defined.
-- Test framework: none yet; the API Client was verified manually.
+- JavaScript tests (Stimulus controllers) and system/browser specs are not set up.
 - Scheduler design for monitors and check-result retention policy.
 - Team model: sharing, roles, and permissions within a project (affects authorization design).
 - Log ingestion: pull over SSH, push via agent/webhook, or integrations.

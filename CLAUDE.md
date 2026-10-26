@@ -40,4 +40,5 @@ Add new docs under `docs/` and reference them here.
   - `📦 build` packaging and dependency bumps (`📦 build(deps)`, Dependabot included, never `⬆️`) · `👷 ci` CI workflows · `🚀 ci`/`chore` deploy · `⏪ revert`
 - **Auto-commit**: after every important change (feature, fix, refactor, migration, config/docs update) commit automatically without asking. Stage only files of that change (no `git add -A`, other WIP stays untouched), one logical commit per change, run `bundle exec rubocop` on touched files first. Never push, never amend, never commit `.env` or secrets.
 - Keep code comment density low, match surrounding style.
+- **Tests**: RSpec, `bundle exec rspec`; coverage must stay at 100% (line and branch, enforced by SimpleCov). Every code change ships its specs in the same commit; use factories from `spec/factories`.
 - **Docs**: a behavior change updates its document in `docs/` in the same commit. Docs and CLAUDE.md are in English.
