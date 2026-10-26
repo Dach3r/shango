@@ -1,7 +1,7 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :open_requests, :editor_variables
+    helper_method :workspace_tree, :open_requests, :editor_variables, :editor_variables_url
 
     private
 
@@ -21,6 +21,11 @@ module Workbench
       current_environment.variables.select(&:enabled).map do |variable|
         { name: variable.key, set: variable.value.present?, value: variable.masked_value, secret: variable.secret, url: environment_variable_path(current_environment, variable) }
       end
+    end
+
+    # Where the editors create a variable that is not defined yet.
+    def editor_variables_url
+      environment_variables_path(current_environment) if current_environment
     end
 
     # Re-renders a modal form (inside the "modal" frame) with its validation errors.

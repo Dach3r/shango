@@ -15,6 +15,7 @@ export default class extends Controller {
     singleLine: Boolean,
     placeholder: String,
     variables: { type: Array, default: [] },
+    variablesUrl: String,
     labels: { type: Object, default: {} },
     wrap: { type: Boolean, default: true },
   };
@@ -71,6 +72,16 @@ export default class extends Controller {
     this.variablesValue = this.variablesValue.map((item) =>
       item.url === url ? { ...item, set, value } : item,
     );
+    this.view?.dispatch({
+      effects: this.variablesCompartment.reconfigure(this.variableDecorations()),
+    });
+  }
+
+  // Another editor defined a variable that was missing: highlight and offer it here too.
+  variableCreated({ detail }) {
+    if (this.variablesValue.some((item) => item.name === detail.name)) return;
+
+    this.variablesValue = [...this.variablesValue, detail];
     this.view?.dispatch({
       effects: this.variablesCompartment.reconfigure(this.variableDecorations()),
     });
@@ -238,10 +249,13 @@ export default class extends Controller {
     const card = document.createElement("div");
     card.className = "cm-var-card";
 
-    const value =
-      status === "set" || status === "empty"
-        ? this.variableInput(variable)
-        : document.createElement("div");
+    const editable =
+      status === "set" ||
+      status === "empty" ||
+      (status === "missing" && this.hasVariablesUrlValue);
+    const value = editable
+      ? this.variableInput(variable ?? { name, set: false, value: "" })
+      : document.createElement("div");
     if (value.tagName === "DIV") {
       value.className = `cm-var-card-value cm-var-card-${status}`;
       value.textContent =
@@ -262,7 +276,7 @@ export default class extends Controller {
     const input = document.createElement("input");
     input.className = "cm-var-card-value cm-var-card-input";
     input.value = variable.secret ? "" : variable.value;
-    input.placeholder = variable.secret && variable.set ? variable.value : this.labelsValue.empty;
+    input.placeholder = variable.secret && variable.set ? variable.value : this.labelsValue[variable.url ? "empty" : "missing"];
     input.autocomplete = "off";
     input.spellcheck = false;
 
@@ -285,6 +299,8 @@ export default class extends Controller {
   }
 
   async saveVariable(variable, value) {
+    if (!variable.url) return this.createVariable(variable, value);
+
     const response = await fetch(variable.url, {
       method: "PATCH",
       body: new URLSearchParams({ "variable[value]": value }),
@@ -303,6 +319,30 @@ export default class extends Controller {
         detail: { url: variable.url, set, value: shown },
       }),
     );
+  }
+
+  // Defines a missing variable in the selected environment; once created, later edits of the card update it.
+  async createVariable(variable, value) {
+    if (!value) return;
+
+    const response = await fetch(this.variablesUrlValue, {
+      method: "POST",
+      body: new URLSearchParams({
+        "variable[key]": variable.name,
+        "variable[value]": value,
+      }),
+      headers: {
+        Accept: "application/json",
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")
+          ?.content,
+      },
+      credentials: "same-origin",
+    });
+    if (!response.ok) return;
+
+    const created = await response.json();
+    Object.assign(variable, created);
+    window.dispatchEvent(new CustomEvent("variable:created", { detail: created }));
   }
 
   completeVariables(context) {

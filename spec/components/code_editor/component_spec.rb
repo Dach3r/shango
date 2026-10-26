@@ -12,6 +12,14 @@ RSpec.describe CodeEditor::Component, type: :component do
     end
   end
 
+  context "with a variables url" do
+    it "passes it to the controller" do
+      render_inline(described_class.new(variables_url: "/environments/1/variables"))
+
+      expect(page).to have_css("div.code-editor[data-code-editor-variables-url-value='/environments/1/variables']")
+    end
+  end
+
   context "with a name" do
     it "renders a named textarea", :aggregate_failures do
       render_inline(described_class.new(name: "body", id: "body_field", readonly: true, input_data: { x: "1" }))

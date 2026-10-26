@@ -5,6 +5,28 @@ RSpec.describe "Environment variables" do
   let(:project) { context[1] }
   let(:environment) { create(:environment, project:) }
 
+  describe "POST /environments/:environment_id/variables" do
+    it "creates the variable", :aggregate_failures do
+      post environment_variables_path(environment), params: { variable: { key: "locale", value: "es" } }
+
+      variable = environment.variables.find_by!(key: "locale")
+      expect(response).to have_http_status(:created)
+      expect(response.parsed_body).to eq("name" => "locale", "set" => true, "value" => "es", "secret" => false, "url" => environment_variable_path(environment, variable))
+    end
+
+    it "rejects an invalid key" do
+      post environment_variables_path(environment), params: { variable: { key: "bad key", value: "es" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "does not find environments of other projects" do
+      post environment_variables_path(create(:environment)), params: { variable: { key: "locale", value: "es" } }
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "PATCH /environments/:environment_id/variables/:id" do
     it "updates the value", :aggregate_failures do
       variable = create(:variable, environment:, value: "old")
