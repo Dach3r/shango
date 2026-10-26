@@ -3,7 +3,7 @@
     <div class="pointer-events-none absolute inset-0 [view-transition-name:devise-dots] bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]"></div>
     <div class="pointer-events-none absolute top-1/2 left-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--glow) blur-3xl"></div>
 
-    <%= render Logo::Component.new(href: new_user_session_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
+    <%= render Logo::Component.new(href: root_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
 
     <div class="absolute right-5 bottom-5 z-10 flex items-center gap-2">
       <%= render ThemeSwitcher::Component.new %>
