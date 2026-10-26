@@ -9,8 +9,22 @@ RSpec.describe "Preferences" do
       expect(response.headers["Set-Cookie"].join).to include("theme=dark", "locale=es")
     end
 
+    it "stores a supported zoom cookie and renders it on the page", :aggregate_failures do
+      patch preferences_path, params: { zoom: "125" }
+      get new_user_session_path
+
+      expect(response.headers["Set-Cookie"]).to be_nil
+      expect(response.body).to include('data-zoom="125"')
+    end
+
+    it "defaults the zoom to 90" do
+      get new_user_session_path
+
+      expect(response.body).to include('data-zoom="90"')
+    end
+
     it "ignores unsupported values and falls back to root", :aggregate_failures do
-      patch preferences_path, params: { theme: "neon", locale: "xx" }
+      patch preferences_path, params: { theme: "neon", locale: "xx", zoom: "999" }
 
       expect(response).to redirect_to("/")
       expect(response.headers["Set-Cookie"]).to be_nil

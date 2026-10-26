@@ -96,6 +96,43 @@
   color-scheme: light dark;
 }
 
+/* Zoom scales every rem-based size from the root font size. */
+[data-zoom="70"] {
+  font-size: 70%;
+}
+
+[data-zoom="80"] {
+  font-size: 80%;
+}
+
+[data-zoom="90"] {
+  font-size: 90%;
+}
+
+[data-zoom="100"] {
+  font-size: 100%;
+}
+
+[data-zoom="110"] {
+  font-size: 110%;
+}
+
+[data-zoom="125"] {
+  font-size: 125%;
+}
+
+[data-zoom="150"] {
+  font-size: 150%;
+}
+
+[data-zoom="175"] {
+  font-size: 175%;
+}
+
+[data-zoom="200"] {
+  font-size: 200%;
+}
+
 /* Palettes recolor the accent tokens; ocean also tints the surfaces. Scoped to any element so previews can use them. */
 [data-palette="blue"] {
   --accent: light-dark(#1d4ed8, #7aa7f7);

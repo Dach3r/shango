@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Localization
   include Theming
   include SidebarState
+  include Zooming
 
   stale_when_importmap_changes
 

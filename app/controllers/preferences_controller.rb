@@ -1,6 +1,7 @@
 class PreferencesController < ApplicationController
   PREFERENCES = {
     theme: { source: Theming, options: {} },
+    zoom: { source: Zooming, options: {} },
     locale: { source: Localization, options: { httponly: true } }
   }.freeze
 

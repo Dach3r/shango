@@ -54,6 +54,9 @@ es:
       toggle_password: Mostrar u ocultar contraseña
     locale_switcher:
       label: Idioma
+    zoom_picker:
+      label: Zoom
+      default: Predeterminado
     toast:
       close: Cerrar notificación
     theme_switcher:
@@ -167,10 +170,13 @@ es:
           cancel_hint: Esta acción no se puede deshacer.
         preferences:
           heading: Preferencias
-          description: Idioma de tu cuenta.
+          description: Idioma y zoom de tu cuenta.
           locale:
             label: Idioma
             hint: El idioma de la interfaz.
+          zoom:
+            label: Zoom
+            hint: Haz la interfaz más pequeña o más grande.
         security:
           heading: Seguridad
           description: Cambia tu contraseña.

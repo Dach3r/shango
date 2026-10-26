@@ -54,6 +54,9 @@ en:
       toggle_password: Show or hide password
     locale_switcher:
       label: Language
+    zoom_picker:
+      label: Zoom
+      default: Default
     toast:
       close: Dismiss notification
     theme_switcher:
@@ -167,10 +170,13 @@ en:
           cancel_hint: This action cannot be undone.
         preferences:
           heading: Preferences
-          description: Language for your account.
+          description: Language and zoom for your account.
           locale:
             label: Language
             hint: The language of the interface.
+          zoom:
+            label: Zoom
+            hint: Make the interface smaller or larger.
         security:
           heading: Security
           description: Change your password.

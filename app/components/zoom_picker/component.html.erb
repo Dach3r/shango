@@ -1,0 +1,16 @@
+<%= form_with url: preferences_path, method: :patch, data: { controller: "zoom" } do %>
+  <fieldset>
+    <legend class="sr-only"><%= t("components.zoom_picker.label") %></legend>
+    <div class="grid gap-1">
+      <% levels.each do |level| %>
+        <label class="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 text-sm text-body transition hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent/50">
+          <%= radio_button_tag :zoom, level, current?(level), class: "accent-solid size-4 cursor-pointer", data: { action: "zoom#apply" } %>
+          <span>
+            <span class="<%= "font-semibold text-ink" if default?(level) %>"><%= level %>%</span>
+            <%= t("components.zoom_picker.default") if default?(level) %>
+          </span>
+        </label>
+      <% end %>
+    </div>
+  </fieldset>
+<% end %>
