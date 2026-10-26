@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Localization
   include Theming
+  include SidebarState
 
   stale_when_importmap_changes
 

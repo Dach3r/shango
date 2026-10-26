@@ -11,7 +11,8 @@ class Sidebar::Component < ApplicationComponent
     { key: :settings, icon: "settings", path: :edit_membership_path, controllers: "projects/memberships" }
   ].freeze
 
-  def initialize(current_project:, projects:, user:)
+  def initialize(current_project:, projects:, user:, collapsed: false)
+    @collapsed = collapsed
     @current_project = current_project
     @projects = projects
     @user = user

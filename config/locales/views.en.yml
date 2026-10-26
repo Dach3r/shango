@@ -29,6 +29,8 @@ en:
         members: Members
     sidebar:
       label: Project navigation
+      toggle: Collapse or expand the sidebar
+      collapse: Collapse
       api_client: API Client
       documentation: Documentation
       monitoring: Monitoring

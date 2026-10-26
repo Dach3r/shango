@@ -12,6 +12,12 @@
   </div>
 
   <div class="sticky bottom-0 shrink-0 border-t border-line bg-page">
+    <button type="button" data-sidebar-target="toggle" data-action="sidebar#toggle" aria-expanded="<%= !@collapsed %>" title="<%= t("components.sidebar.toggle") %>"
+            class="hidden h-10 w-full cursor-pointer items-center gap-3 px-4 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/50 lg:flex lg:group-data-[collapsed=true]/sidebar:justify-center lg:group-data-[collapsed=true]/sidebar:px-0">
+      <%= lucide_icon "panel-left-close", class: "size-4 shrink-0 lg:group-data-[collapsed=true]/sidebar:hidden" %>
+      <%= lucide_icon "panel-left-open", class: "hidden size-4 shrink-0 lg:group-data-[collapsed=true]/sidebar:block" %>
+      <span class="lg:group-data-[collapsed=true]/sidebar:hidden"><%= t("components.sidebar.collapse") %></span>
+    </button>
     <%= render UserMenu::Component.new(user: @user) %>
   </div>
 </div>

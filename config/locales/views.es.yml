@@ -29,6 +29,8 @@ es:
         members: Miembros
     sidebar:
       label: Navegación del proyecto
+      toggle: Contraer o expandir la barra lateral
+      collapse: Contraer
       api_client: Cliente API
       documentation: Documentación
       monitoring: Monitoreo

@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe Sidebar::Component, type: :component do
   let(:project) { create(:project, name: "Alpha") }
 
-  def render_sidebar(path: "/workbench", controller_path: "workbench/workspaces")
+  def render_sidebar(path: "/workbench", controller_path: "workbench/workspaces", **options)
     allow(vc_test_controller).to receive(:controller_path).and_return(controller_path)
-    with_request_url(path) { render_inline(described_class.new(current_project: project, projects: [project], user: create(:user, first_name: "Ada", last_name: "Lovelace"))) }
+    with_request_url(path) { render_inline(described_class.new(current_project: project, projects: [project], user: create(:user, first_name: "Ada", last_name: "Lovelace"), **options)) }
   end
 
   it "highlights the api client on the workbench root", :aggregate_failures do
@@ -37,5 +37,13 @@ RSpec.describe Sidebar::Component, type: :component do
     render_sidebar
 
     expect(page).to have_text("Ada Lovelace")
+  end
+
+  it "wires the collapse toggle to the current state", :aggregate_failures do
+    render_sidebar
+    expect(page).to have_css("button[data-action='sidebar#toggle'][aria-expanded=true]", visible: :all)
+
+    render_sidebar(collapsed: true)
+    expect(page).to have_css("button[data-action='sidebar#toggle'][aria-expanded=false]", visible: :all)
   end
 end
