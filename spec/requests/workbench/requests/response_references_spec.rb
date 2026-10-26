@@ -53,7 +53,7 @@ RSpec.describe "Workbench request response references" do
       get workbench_request_path(draft)
 
       expect(response.body).to include("data-code-editor-responses-value=\"[]\"")
-      expect(response.body).not_to include("/response_reference")
+      expect(response.body).not_to include("responses-url-value")
     end
   end
 end
