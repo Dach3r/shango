@@ -19,6 +19,13 @@
   --color-brand-500: #f2b14c;
   --color-brand-600: #e39e2e;
   --color-brand-700: #8a5200;
+  --color-paper: #ffffff;
+  --color-clay-300: #f0a187;
+  --color-clay-400: #e58a69;
+  --color-clay-500: #d97757;
+  --color-clay-600: #c15f3c;
+  --color-clay-700: #a9502f;
+  --color-clay-800: #8a3f23;
   --color-night-1000: #141413;
   --color-night-950: #1f1e1d;
   --color-night-900: #1a1918;
@@ -45,70 +52,37 @@
   --color-danger: var(--danger);
 }
 
+/* Each token is defined once as light-dark(light, dark); color-scheme picks the side. */
 :root {
   color-scheme: light;
-  /* Warm ivory neutrals + clay accent. */
-  --page: #f4f1e8;
-  --card: #ffffff;
-  --line: #ddd8c9;
-  --faint: #b3ad9d;
-  --field: #faf8f2;
-  --field-focus: #ffffff;
-  --ink: #141413;
-  --body: #3d3d3a;
-  --muted: #66655e;
-  --accent: #a9502f;
-  --accent-hover: #8a3f23;
-  --solid: #c15f3c;
-  --solid-hover: #a9502f;
-  --on-solid: #ffffff;
-  --danger: #c81e1e;
-  --dots: #d3cdbb;
-  --glow: color-mix(in oklab, #d97757 16%, transparent);
+  --page: light-dark(#f4f1e8, var(--color-night-1000));
+  --card: light-dark(var(--color-paper), var(--color-night-950));
+  --line: light-dark(#ddd8c9, var(--color-night-700));
+  --faint: light-dark(#b3ad9d, #4a4944);
+  --field: light-dark(#faf8f2, var(--color-night-1000));
+  --field-focus: light-dark(var(--color-paper), var(--color-night-1000));
+  --ink: light-dark(var(--color-night-1000), #faf9f5);
+  --body: light-dark(#3d3d3a, #d6d4cb);
+  --muted: light-dark(#66655e, #b0aea5);
+  --accent: light-dark(var(--color-clay-700), var(--color-clay-400));
+  --accent-hover: light-dark(var(--color-clay-800), var(--color-clay-300));
+  --solid: light-dark(var(--color-clay-600), var(--color-clay-500));
+  --solid-hover: light-dark(var(--color-clay-700), var(--color-clay-400));
+  --on-solid: light-dark(var(--color-paper), var(--color-night-1000));
+  --danger: light-dark(#c81e1e, #ff9a9a);
+  --dots: light-dark(#d3cdbb, var(--color-night-700));
+  --glow: light-dark(
+    color-mix(in oklab, var(--color-clay-500) 16%, transparent),
+    color-mix(in oklab, var(--color-clay-500) 10%, transparent)
+  );
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: var(--color-night-1000);
-  --card: var(--color-night-950);
-  --line: var(--color-night-700);
-  --faint: #4a4944;
-  --field: var(--color-night-1000);
-  --field-focus: var(--color-night-1000);
-  --ink: #faf9f5;
-  --body: #d6d4cb;
-  --muted: #b0aea5;
-  --accent: #e58a69;
-  --accent-hover: #f0a187;
-  --solid: #d97757;
-  --solid-hover: #e58a69;
-  --on-solid: #141413;
-  --danger: #ff9a9a;
-  --dots: var(--color-night-700);
-  --glow: color-mix(in oklab, #d97757 10%, transparent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] {
-    color-scheme: dark;
-    --page: var(--color-night-1000);
-    --card: var(--color-night-950);
-    --line: var(--color-night-700);
-    --faint: #4a4944;
-    --field: var(--color-night-1000);
-    --field-focus: var(--color-night-1000);
-    --ink: #faf9f5;
-    --body: #d6d4cb;
-    --muted: #b0aea5;
-    --accent: #e58a69;
-    --accent-hover: #f0a187;
-    --solid: #d97757;
-    --solid-hover: #e58a69;
-    --on-solid: #141413;
-    --danger: #ff9a9a;
-    --dots: var(--color-night-700);
-    --glow: color-mix(in oklab, #d97757 10%, transparent);
-  }
+:root[data-theme="system"] {
+  color-scheme: light dark;
 }
 
 /* Browser autofill paints its own background; cover it with the field tokens. */
