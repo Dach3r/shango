@@ -149,7 +149,6 @@ es:
         password_placeholder: Déjala en blanco para mantener la actual
         confirm_password_placeholder: Repite tu nueva contraseña
         confirm_password: Confirmar contraseña
-        submit: Actualizar
         cancel_heading: Cancelar mi cuenta
         cancel_account: Cancelar mi cuenta
         confirm: ¿Estás seguro?

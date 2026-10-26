@@ -44,9 +44,7 @@
         <% end %>
       </div>
 
-      <div class="mt-4 flex justify-end">
-        <%= f.submit t("devise.registrations.edit.submit"), class: button_classes(:primary) %>
-      </div>
+      <%= render "settings/save_button" %>
     <% end %>
   <% end %>
 

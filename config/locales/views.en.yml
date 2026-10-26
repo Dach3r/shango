@@ -149,7 +149,6 @@ en:
         password_placeholder: Leave blank to keep your current password
         confirm_password_placeholder: Repeat your new password
         confirm_password: Confirm password
-        submit: Update
         cancel_heading: Cancel my account
         cancel_account: Cancel my account
         confirm: Are you sure?
