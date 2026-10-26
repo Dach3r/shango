@@ -16,6 +16,17 @@ en:
     project_switcher:
       label: Projects
       new: New project
+    settings_nav:
+      label: Settings sections
+      groups:
+        account: My account
+        membership: "%{project} · my membership"
+        project: Project
+      items:
+        profile: Profile
+        security: Security
+        sidebar: Sidebar
+        members: Members
     sidebar:
       label: Project navigation
       overview: Overview
@@ -61,6 +72,8 @@ en:
     memberships:
       edit:
         title: Settings
+        heading: Sidebar
+        description: How collections, folders and requests behave in the API Client sidebar. This only applies to you in this project.
         folder_toggle:
           label: Collections and folders
           hint: How they expand and collapse in the API Client sidebar. This only applies to you in this project.

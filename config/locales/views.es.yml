@@ -16,6 +16,17 @@ es:
     project_switcher:
       label: Proyectos
       new: Nuevo proyecto
+    settings_nav:
+      label: Secciones de configuración
+      groups:
+        account: Mi cuenta
+        membership: "%{project} · mi membresía"
+        project: Proyecto
+      items:
+        profile: Perfil
+        security: Seguridad
+        sidebar: Barra lateral
+        members: Miembros
     sidebar:
       label: Navegación del proyecto
       overview: Resumen
@@ -61,6 +72,8 @@ es:
     memberships:
       edit:
         title: Configuración
+        heading: Barra lateral
+        description: Cómo se comportan colecciones, carpetas y solicitudes en la barra lateral del API Client. Solo aplica para ti en este proyecto.
         folder_toggle:
           label: Colecciones y carpetas
           hint: Cómo se expanden y contraen en la barra lateral del API Client. Solo aplica para ti en este proyecto.

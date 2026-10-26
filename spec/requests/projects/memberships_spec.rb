@@ -5,10 +5,11 @@ RSpec.describe "Memberships" do
   let(:membership) { context[2] }
 
   describe "GET /membership/edit" do
-    it "renders the settings form" do
+    it "renders the settings form with the settings navigation", :aggregate_failures do
       get edit_membership_path
 
       expect(response.body).to include(I18n.t("projects.memberships.edit.request_open.label"))
+      expect(response.body).to include(I18n.t("components.settings_nav.items.sidebar"))
     end
   end
 
