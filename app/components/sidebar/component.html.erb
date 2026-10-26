@@ -1,5 +1,5 @@
 <div class="flex h-full flex-col">
-  <div class="flex flex-1 flex-col gap-3">
+  <div class="flex flex-1 flex-col">
     <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
     <nav aria-label="<%= t("components.sidebar.label") %>">
