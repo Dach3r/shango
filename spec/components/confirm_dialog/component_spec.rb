@@ -8,5 +8,6 @@ RSpec.describe ConfirmDialog::Component, type: :component do
     expect(page).to have_css("[data-confirm-dialog-target=message]")
     expect(page).to have_button(I18n.t("components.confirm_dialog.cancel"))
     expect(page).to have_button(I18n.t("components.confirm_dialog.confirm"))
+    expect(page).to have_css("button svg", count: 2)
   end
 end
