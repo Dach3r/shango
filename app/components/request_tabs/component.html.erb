@@ -1,7 +1,7 @@
 <div class="flex h-10 shrink-0 items-stretch border-b border-line">
-  <nav aria-label="<%= t("components.request_tabs.label") %>" class="flex min-w-0 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+  <nav aria-label="<%= t("components.request_tabs.label") %>" data-controller="request-tabs" class="flex min-w-0 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <% @requests.each do |api_request| %>
-      <div class="<%= classes(api_request) %>">
+      <div class="<%= classes(api_request) %>" data-request-tab>
         <%= link_to workbench_request_path(api_request), class: "flex min-w-0 items-center gap-2 py-2 pr-2 pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-lg",
                     aria: { current: (api_request.id == @current_request_id ? "page" : nil) } do %>
           <%= render MethodBadge::Component.new(method: api_request.http_method, short: true, request_id: api_request.id) %>
