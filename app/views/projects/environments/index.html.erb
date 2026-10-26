@@ -7,7 +7,7 @@
     <p class="text-xs leading-relaxed text-muted"><%= t("projects.environments.index.intro") %></p>
 
     <% if @environments.empty? %>
-      <div class="rounded-2xl border border-dashed border-line p-8 text-center">
+      <div class="border border-dashed border-line p-8 text-center">
         <%= lucide_icon "layers", class: "mx-auto size-8 text-faint" %>
         <p class="mt-3 text-sm font-medium text-ink"><%= t("projects.environments.index.empty_title") %></p>
         <p class="mt-1 text-sm text-muted"><%= t("projects.environments.index.empty_hint") %></p>
@@ -16,24 +16,24 @@
       <ul class="space-y-3">
         <% @environments.each do |environment| %>
           <% active = environment == current_environment %>
-          <li class="<%= class_names("flex items-center gap-3 rounded-2xl border py-3.5 pr-2 pl-4 transition", "border-accent bg-card": active, "border-line": !active) %>">
+          <li class="<%= class_names("flex items-center gap-3 border py-3.5 pr-2 pl-4 transition", "border-accent bg-card": active, "border-line": !active) %>">
             <div class="min-w-0 flex-1">
               <p class="truncate text-sm font-semibold text-ink" title="<%= environment.name %>"><%= environment.name %></p>
               <p class="mt-0.5 text-xs text-muted"><%= t("projects.environments.index.variables", count: environment.variables.size) %></p>
             </div>
             <% if active %>
-              <span class="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-solid pr-3 pl-2.5 text-xs font-semibold text-on-solid"><%= lucide_icon "check", class: "size-3.5" %><%= t("projects.environments.index.in_use") %></span>
+              <span class="inline-flex h-9 shrink-0 items-center gap-1.5 bg-solid pr-3 pl-2.5 text-xs font-semibold text-on-solid"><%= lucide_icon "check", class: "size-3.5" %><%= t("projects.environments.index.in_use") %></span>
             <% else %>
               <%= button_to t("projects.environments.index.activate"), current_environment_path, method: :patch, params: { environment_id: environment.id }, form: { data: { turbo_frame: "_top" } }, form_class: "contents",
-                            class: "inline-flex h-9 shrink-0 cursor-pointer items-center rounded-lg border border-line px-3.5 text-xs font-medium text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" %>
+                            class: "inline-flex h-9 shrink-0 cursor-pointer items-center border border-line px-3.5 text-xs font-medium text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %>
             <% end %>
             <div class="relative shrink-0" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
               <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" title="<%= t("projects.environments.index.actions") %>" aria-label="<%= t("projects.environments.index.actions") %>"
-                      class="flex size-10 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"><%= lucide_icon "ellipsis", class: "size-4" %></button>
-              <div data-dropdown-target="menu" hidden class="absolute top-full right-0 z-30 mt-1 w-40 rounded-xl border border-line bg-card p-1 shadow-dropdown">
-                <%= link_to edit_environment_path(environment), class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4 shrink-0" %><%= t("projects.environments.index.edit") %><% end %>
+                      class="flex size-10 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"><%= lucide_icon "ellipsis", class: "size-4" %></button>
+              <div data-dropdown-target="menu" hidden class="absolute top-full right-0 z-30 mt-1 w-40 border border-line bg-card p-1">
+                <%= link_to edit_environment_path(environment), class: "flex items-center gap-2.5 px-2.5 py-2 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4 shrink-0" %><%= t("projects.environments.index.edit") %><% end %>
                 <%= button_to environment_path(environment), method: :delete, form_class: "contents",
-                              class: "flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm text-danger transition hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50",
+                              class: "flex w-full cursor-pointer items-center gap-2.5 px-2.5 py-2 text-left text-sm text-danger transition hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50",
                               form: { data: { turbo_confirm: t("projects.environments.index.confirm_delete", name: environment.name) } } do %><%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("projects.environments.index.delete") %><% end %>
               </div>
             </div>
@@ -42,6 +42,6 @@
       </ul>
     <% end %>
 
-    <%= link_to new_environment_path, class: "flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-line px-3 py-3 text-sm font-medium text-muted transition hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
+    <%= link_to new_environment_path, class: "flex w-full items-center justify-center gap-2 border border-dashed border-line px-3 py-3 text-sm font-medium text-muted transition hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
   </section>
 <% end %>

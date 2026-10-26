@@ -2,7 +2,7 @@
 
 <%= render layout: "settings/shell", locals: { heading: t(".#{@tab}.heading"), description: t(".#{@tab}.description") } do %>
   <% if @tab == "preferences" %>
-    <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+    <div class="divide-y divide-line overflow-hidden border border-line bg-card">
       <% { locale: LocaleSwitcher::Component, zoom: ZoomPicker::Component }.each do |setting, switcher| %>
         <div class="<%= class_names("grid gap-4 p-5", "md:grid-cols-[1fr_auto] md:items-center md:gap-8" => setting == :locale) %>">
           <div class="min-w-0">
@@ -39,7 +39,7 @@
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name, tab: @tab), html: { method: :put }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+      <div class="divide-y divide-line overflow-hidden border border-line bg-card">
         <% rows.each do |row| %>
           <div class="grid gap-4 p-5 <%= "md:grid-cols-2" if row.size > 1 %> md:gap-8">
             <% row.each do |field| %>
@@ -54,7 +54,7 @@
   <% end %>
 
   <% if @tab == "delete_account" %>
-    <div class="overflow-hidden rounded-2xl border border-line bg-card">
+    <div class="overflow-hidden border border-line bg-card">
       <div class="grid gap-4 p-5 md:grid-cols-[1fr_20rem] md:items-center md:gap-8">
         <div class="min-w-0">
           <p class="text-sm font-semibold text-ink"><%= t("devise.registrations.edit.cancel_heading") %></p>

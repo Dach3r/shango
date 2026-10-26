@@ -14,12 +14,12 @@
              data-icon-picker-target="query" data-action="input->icon-picker#filter keydown.enter->icon-picker#preventSubmit"
              class="<%= class_names(Input::Component::FIELD, ApplicationComponent::CONTROL_SIZE, "pl-11") %>">
     </div>
-    <div class="rounded-xl border border-line bg-field p-2">
+    <div class="border border-line bg-field p-2">
       <div class="grid h-52 grid-cols-9 content-start gap-1 overflow-y-auto overscroll-contain" data-icon-picker-target="grid">
         <% Project::ICONS.each do |icon| %>
           <label class="cursor-pointer" title="<%= icon %>" data-icon-picker-target="option" data-name="<%= icon %>">
             <%= f.radio_button :icon, icon, class: "peer sr-only" %>
-            <span class="flex aspect-square w-full items-center justify-center rounded-lg border border-transparent text-muted transition hover:bg-field-focus hover:text-ink peer-checked:border-solid peer-checked:bg-solid/15 peer-checked:text-ink peer-focus-visible:ring-4 peer-focus-visible:ring-solid/45"><%= lucide_icon icon, class: "size-5" %></span>
+            <span class="flex aspect-square w-full items-center justify-center border border-transparent text-muted transition hover:bg-field-focus hover:text-ink peer-checked:border-solid peer-checked:bg-solid/15 peer-checked:text-ink peer-focus-visible:ring-1 peer-focus-visible:ring-solid"><%= lucide_icon icon, class: "size-5" %></span>
           </label>
         <% end %>
         <p class="col-span-full hidden py-4 text-center text-sm text-muted" data-icon-picker-target="empty"><%= t(".icon_empty") %></p>

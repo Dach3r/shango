@@ -4,7 +4,7 @@
   <%= form_with model: @membership, url: membership_path, method: :patch do |form| %>
     <%= render "workbench/shared/errors", record: @membership %>
 
-    <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+    <div class="divide-y divide-line overflow-hidden border border-line bg-card">
       <% %i[folder_toggle request_open].each do |setting| %>
         <fieldset class="grid gap-4 p-5 md:grid-cols-[1fr_17rem] md:items-center md:gap-8">
           <div class="min-w-0">
@@ -12,9 +12,9 @@
             <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.memberships.edit.#{setting}.hint") %></p>
           </div>
 
-          <div class="grid grid-cols-2 gap-1 rounded-xl border border-line bg-field p-1">
+          <div class="grid grid-cols-2 gap-1 border border-line bg-field p-1">
             <% Membership::CLICK_MODES.each_key do |value| %>
-              <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-solid/30">
+              <label class="flex cursor-pointer items-center justify-center gap-2 border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-solid">
                 <%= form.radio_button setting, value, class: "sr-only" %>
                 <%= lucide_icon(value == "click" ? "mouse-pointer-click" : "mouse-pointer-2", class: "size-4 shrink-0", "aria-hidden": true) %>
                 <span><%= t("projects.memberships.edit.modes.#{value}") %></span>
@@ -30,9 +30,9 @@
           <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.memberships.edit.collapse_nested_folders.hint") %></p>
         </div>
 
-        <div class="grid grid-cols-2 gap-1 rounded-xl border border-line bg-field p-1">
+        <div class="grid grid-cols-2 gap-1 border border-line bg-field p-1">
           <% { "true" => "check", "false" => "x" }.each do |value, icon| %>
-            <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-solid/30">
+            <label class="flex cursor-pointer items-center justify-center gap-2 border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-solid">
               <%= form.radio_button :collapse_nested_folders, value, class: "sr-only" %>
               <%= lucide_icon icon, class: "size-4 shrink-0", "aria-hidden": true %>
               <span><%= t("projects.memberships.edit.toggle.#{value}") %></span>
