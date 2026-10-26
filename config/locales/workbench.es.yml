@@ -191,7 +191,7 @@ es:
       body: Body
       settings: Ajustes
     params:
-      hint: Los parámetros de consulta se sincronizan con la URL. Las filas deshabilitadas se conservan aquí pero no se envían.
+      hint: Los parámetros se agregan a la URL y viceversa. Desmarca una fila para dejar de enviarla sin borrarla.
       add: Agregar parámetro
       key: Parámetro
     headers:

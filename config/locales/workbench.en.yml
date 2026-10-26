@@ -191,7 +191,7 @@ en:
       body: Body
       settings: Settings
     params:
-      hint: Query parameters stay in sync with the URL. Disabled rows are kept here but not sent.
+      hint: Parameters are added to the URL and vice versa. Uncheck a row to stop sending it without deleting it.
       add: Add parameter
       key: Parameter
     headers:
