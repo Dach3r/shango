@@ -68,6 +68,7 @@ en:
       new_request: New request
       new_folder: New folder
       new_subfolder: New subfolder
+      history: Request history
       import: Import collections
       import_curl: Import cURL
       edit: Edit
@@ -117,6 +118,18 @@ en:
         pick: Pick a request from the sidebar, or create a new one.
         new_collection: New collection
         new_request: New request
+    histories:
+      show:
+        title: History
+        heading: Request history
+        subtitle: Responses you saved, grouped by collection. The latest 200 are shown.
+        drafts: Drafts
+        empty_title: No saved responses yet
+        empty_hint: Run a request and press Save response to keep it here.
+        count:
+          one: "%{count} response"
+          other: "%{count} responses"
+        no_environment: No environment
     collections:
       create:
         created: Collection created.

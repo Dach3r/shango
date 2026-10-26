@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     end
 
     resource :import, only: %i[new create]
+    resource :history, only: :show
 
     resources :drafts, only: :create
     resource :tabs, only: :destroy

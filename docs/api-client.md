@@ -11,7 +11,7 @@
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
-- Run a request, inspect the response (pretty / raw / HTML preview, headers, request details (method and URL with host, path and query styled apart, redirect hops as a chain, sent headers in the same table as the response headers), the payload sent in its own tab (read-only code editor with highlighting and copy), redirects), per-request history (last 50).
+- Run a request, inspect the response (pretty / raw / HTML preview, headers, request details (method and URL with host, path and query styled apart, redirect hops as a chain, sent headers in the same table as the response headers), the payload sent in its own tab (read-only code editor with highlighting and copy), redirects), per-request history (last 50), plus a global history page (`/workbench/history`) with the user's saved responses grouped by collection (drafts last, latest 200).
 - Import from a cURL command and copy a request as cURL.
 - Import whole collections and environments from Postman, Insomnia, Bruno and OpenAPI/Swagger exports (see §9).
 - Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
@@ -55,6 +55,7 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   requests/tabs_controller.rb        # DELETE = close a request's tab
   requests/executions_controller.rb  # POST = run (unsaved), GET = history item
   requests/executions/saves_controller.rb  # POST = save a run's response to history
+  histories_controller.rb  # GET /workbench/history = the user's saved executions grouped by collection (`Executions::History`)
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb
   imports_controller.rb              # GET/POST /workbench/import (collections, folders, requests, environments)
