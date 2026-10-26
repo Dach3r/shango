@@ -61,6 +61,7 @@ es:
       new_request: Nueva solicitud
       new_folder: Nueva carpeta
       new_subfolder: Nueva subcarpeta
+      import: Importar colecciones
       import_curl: Importar cURL
       edit: Editar
       rename: Cambiar nombre
@@ -357,6 +358,33 @@ es:
       invalid_graphql_variables: Las variables de GraphQL deben ser JSON válido.
       missing_binary: Elige un archivo para el body binario.
     imports:
+      create:
+        imported: "Se importaron %{counts}."
+        warnings:
+          one: "1 elemento requiere atención: %{details}"
+          other: "%{count} elementos requieren atención: %{details}"
+        counts:
+          collections:
+            one: "%{count} colección"
+            other: "%{count} colecciones"
+          folders:
+            one: "%{count} carpeta"
+            other: "%{count} carpetas"
+          requests:
+            one: "%{count} request"
+            other: "%{count} requests"
+          environments:
+            one: "%{count} entorno"
+            other: "%{count} entornos"
+      form:
+        title: Importar colecciones
+        description: Trae colecciones, requests y entornos desde otro cliente de APIs.
+        submit: Importar
+        file: Archivo
+        content: O pega el contenido
+        content_placeholder: "Pega una exportación JSON o YAML"
+        formats: "Compatibles: Postman (colección v2 y entorno), Insomnia (JSON v4, YAML v5), Bruno (exportación JSON) y OpenAPI 3 / Swagger 2."
+        apidog: "Apidog: exporta tu proyecto como Postman u OpenAPI e importa ese archivo."
       errors:
         empty: Elige un archivo o pega su contenido.
         too_large: El archivo es demasiado grande (máximo %{max} MB).

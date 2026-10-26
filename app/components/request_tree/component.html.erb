@@ -4,10 +4,16 @@
       <%= lucide_icon "library", class: "size-4 text-muted" %>
       <%= t("components.request_tree.title") %>
     </h2>
-    <%= link_to new_workbench_collection_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.new_collection") }, title: t("components.request_tree.new_collection"),
-                class: "flex size-6 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
-      <%= lucide_icon "plus", class: "size-3.5" %>
-    <% end %>
+    <div class="flex items-center gap-1">
+      <%= link_to new_workbench_import_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.import") }, title: t("components.request_tree.import"),
+                  class: "flex size-6 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+        <%= lucide_icon "upload", class: "size-3.5" %>
+      <% end %>
+      <%= link_to new_workbench_collection_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.new_collection") }, title: t("components.request_tree.new_collection"),
+                  class: "flex size-6 items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+        <%= lucide_icon "plus", class: "size-3.5" %>
+      <% end %>
+    </div>
   </div>
 
   <div class="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-4">

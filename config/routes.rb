@@ -33,6 +33,8 @@ Rails.application.routes.draw do
       resource :curl_import, only: %i[new create]
     end
 
+    resource :import, only: %i[new create]
+
     resources :drafts, only: :create
 
     resources :folders, only: %i[edit update destroy] do

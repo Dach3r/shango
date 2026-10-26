@@ -9,6 +9,12 @@ RSpec.describe RequestTree::Component, type: :component do
     expect(page).to have_text(I18n.t("components.request_tree.empty"))
   end
 
+  it "links to the import modal" do
+    render_inline(described_class.new(branches: [], folder_toggle: "double_click", request_open: "click"))
+
+    expect(page).to have_link(I18n.t("components.request_tree.import"), href: "/workbench/import/new")
+  end
+
   it "renders collections, folders, nested folders and requests", :aggregate_failures do
     collection = create(:collection, project:, name: "Docs")
     folder = create(:folder, collection:, name: "Users")
