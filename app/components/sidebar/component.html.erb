@@ -1,7 +1,5 @@
 <div class="flex h-full flex-col">
   <div class="flex flex-1 flex-col gap-6 p-4">
-    <%= render Logo::Component.new(href: root_path, class: "px-2") %>
-
     <%= render ProjectSwitcher::Component.new(current_project: @current_project, projects: @projects) %>
 
     <nav aria-label="<%= t("components.sidebar.label") %>">
