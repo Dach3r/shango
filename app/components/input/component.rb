@@ -1,6 +1,7 @@
 class Input::Component < ApplicationComponent
   LABEL = "mb-1.5 block text-sm font-medium text-muted"
-  FIELD = "block w-full rounded-xl border border-line bg-field #{CONTROL_SIZE} px-4 text-base text-ink transition placeholder:text-faint focus:border-solid focus:bg-field-focus focus:ring-4 focus:ring-solid/45 focus:outline-none aria-invalid:border-danger aria-invalid:ring-4 aria-invalid:ring-danger/25 aria-invalid:focus:border-danger"
+  FIELD = "block w-full rounded-xl border border-line bg-field px-4 text-base text-ink transition placeholder:text-faint focus:border-solid focus:bg-field-focus focus:ring-4 focus:ring-solid/45 focus:outline-none aria-invalid:border-danger aria-invalid:ring-4 aria-invalid:ring-danger/25 aria-invalid:focus:border-danger"
+  TEXT_FIELD = "min-h-28 py-3.5 leading-relaxed"
   ADORNMENT = "text-faint transition group-not-focus-within:group-has-[input:not(:placeholder-shown):not([aria-invalid=true])]:text-ink group-focus-within:text-solid group-has-[[aria-invalid=true]]:text-danger"
   TOGGLE = "#{ADORNMENT} hover:text-ink"
   ICON = ADORNMENT
@@ -17,6 +18,10 @@ class Input::Component < ApplicationComponent
   end
 
   private
+
+  def text_area?
+    @type == :text_area
+  end
 
   def password?
     @type == :password
@@ -37,9 +42,9 @@ class Input::Component < ApplicationComponent
   def field
     html_options = @options.merge(
       placeholder: @placeholder,
-      class: class_names(FIELD, @options[:class], "pl-11": @icon, "pr-12": password?)
+      class: class_names(FIELD, (text_area? ? TEXT_FIELD : CONTROL_SIZE), @options[:class], "pl-11": @icon, "pr-12": password?)
     )
     html_options[:data] = (html_options[:data] || {}).merge(password_visibility_target: "input") if password?
-    @form.public_send(@type == :text_area ? "text_area" : "#{@type}_field", @attribute, **html_options)
+    @form.public_send(text_area? ? "text_area" : "#{@type}_field", @attribute, **html_options)
   end
 end
