@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_171048) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_172431) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -68,9 +68,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_171048) do
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
     t.index ["project_id"], name: "index_api_requests_on_project_id"
     t.index ["user_id"], name: "index_api_requests_on_user_id"
-    t.check_constraint "body_type::text = ANY (ARRAY['none'::character varying, 'json'::character varying, 'text'::character varying, 'xml'::character varying, 'form_urlencoded'::character varying, 'multipart'::character varying, 'graphql'::character varying, 'binary'::character varying]::text[])", name: "api_requests_body_type_check"
+    t.check_constraint "body_type::text = ANY (ARRAY['none'::character varying::text, 'json'::character varying::text, 'text'::character varying::text, 'xml'::character varying::text, 'form_urlencoded'::character varying::text, 'multipart'::character varying::text, 'graphql'::character varying::text, 'binary'::character varying::text])", name: "api_requests_body_type_check"
     t.check_constraint "collection_id IS NOT NULL OR user_id IS NOT NULL AND folder_id IS NULL", name: "api_requests_draft_check"
-    t.check_constraint "http_method::text = ANY (ARRAY['GET'::character varying, 'POST'::character varying, 'PUT'::character varying, 'PATCH'::character varying, 'DELETE'::character varying, 'HEAD'::character varying, 'OPTIONS'::character varying]::text[])", name: "api_requests_http_method_check"
+    t.check_constraint "http_method::text = ANY (ARRAY['GET'::character varying::text, 'POST'::character varying::text, 'PUT'::character varying::text, 'PATCH'::character varying::text, 'DELETE'::character varying::text, 'HEAD'::character varying::text, 'OPTIONS'::character varying::text])", name: "api_requests_http_method_check"
   end
 
   create_table "collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -118,11 +118,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_171048) do
     t.uuid "current_environment_id"
     t.string "folder_toggle", default: "double_click", null: false
     t.string "request_open", default: "click", null: false
+    t.string "color_scheme", default: "system", null: false
+    t.string "theme", default: "default", null: false
     t.index ["current_environment_id"], name: "index_memberships_on_current_environment_id"
     t.index ["project_id"], name: "index_memberships_on_project_id"
     t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true, where: "(revoked_at IS NULL)"
+    t.check_constraint "color_scheme::text = ANY (ARRAY['system'::character varying, 'light'::character varying, 'dark'::character varying]::text[])", name: "memberships_color_scheme_check"
     t.check_constraint "folder_toggle::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_folder_toggle_check"
     t.check_constraint "request_open::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_request_open_check"
+    t.check_constraint "theme::text = ANY (ARRAY['default'::character varying, 'blue'::character varying, 'green'::character varying, 'yellow'::character varying, 'red'::character varying, 'ocean'::character varying]::text[])", name: "memberships_theme_check"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
