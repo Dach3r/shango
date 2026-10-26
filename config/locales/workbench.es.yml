@@ -128,8 +128,6 @@ es:
           cancel: Cancelar
           save: Guardar cambios
       placements:
-        update:
-          placed: "Solicitud guardada en “%{name}”."
         form:
           title: "Guardar solicitud en…"
           description: "Elige dónde guardar esta solicitud. Si cierras esta ventana se mantiene como borrador."
@@ -151,9 +149,6 @@ es:
         method: Método
         url: URL
         submit: Crear solicitud
-      duplications:
-        create:
-          duplicated: Solicitud duplicada.
       name: Nombre de la solicitud
       method: Método HTTP
       url_placeholder: "https://api.ejemplo.com/ruta o {{base_url}}/ruta"
@@ -167,8 +162,6 @@ es:
       confirm_delete: "¿Eliminar la solicitud “%{name}”?"
       copy_name: "%{name} (copia)"
     curl_imports:
-      create:
-        imported: Solicitud importada.
       form:
         title: Importar cURL
         command: Comando cURL

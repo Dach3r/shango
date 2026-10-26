@@ -128,8 +128,6 @@ en:
           cancel: Cancel
           save: Save changes
       placements:
-        update:
-          placed: "Request saved to “%{name}”."
         form:
           title: "Save request to…"
           description: "Choose where to save this request. Closing this window keeps it as a draft."
@@ -151,9 +149,6 @@ en:
         method: Method
         url: URL
         submit: Create request
-      duplications:
-        create:
-          duplicated: Request duplicated.
       name: Request name
       method: HTTP method
       url_placeholder: "https://api.example.com/path or {{base_url}}/path"
@@ -167,8 +162,6 @@ en:
       confirm_delete: "Delete the request “%{name}”?"
       copy_name: "%{name} (copy)"
     curl_imports:
-      create:
-        imported: Request imported.
       form:
         title: Import cURL
         command: cURL command

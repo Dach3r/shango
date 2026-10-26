@@ -10,7 +10,7 @@ module Workbench
       def update
         collection, folder = destination
         result = ApiClient::Requests::Place.call(api_request: @api_request, collection:, folder:)
-        return redirect_to(workbench_request_path(@api_request), notice: t(".placed", name: collection.name), status: :see_other) if result.success?
+        return redirect_to(workbench_request_path(@api_request), status: :see_other) if result.success?
 
         render_form_errors(partial: "form")
       end
