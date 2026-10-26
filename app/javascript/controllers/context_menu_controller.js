@@ -24,11 +24,12 @@ export default class extends Controller {
   }
 
   rename() {
-    this.element
-      .querySelector("[data-controller~='inline-rename']")
-      .dispatchEvent(
-        new MouseEvent("dblclick", { bubbles: true, cancelable: true }),
-      );
+    const target = this.element.querySelector(
+      "[data-controller~='inline-rename']",
+    );
+    this.application
+      .getControllerForElementAndIdentifier(target, "inline-rename")
+      .begin();
   }
 
   get menu() {

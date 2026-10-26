@@ -23,10 +23,14 @@ export default class extends Controller {
   }
 
   edit(event) {
-    if (this.editing) return;
-
     event.preventDefault();
     event.stopPropagation();
+    this.begin();
+  }
+
+  begin() {
+    if (this.editing) return;
+
     clearTimeout(this.timer);
     this.editing = true;
     this.original = this.element.textContent.trim();
@@ -51,8 +55,11 @@ export default class extends Controller {
     input.addEventListener("blur", () => this.commit(input));
     this.element.textContent = "";
     this.element.append(input);
-    input.focus();
-    input.select();
+    // Wait for the menu click to finish so closing the menu does not steal the focus back.
+    setTimeout(() => {
+      input.focus();
+      input.select();
+    });
   }
 
   async commit(input) {
