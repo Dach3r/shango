@@ -26,6 +26,7 @@ es:
         profile: Perfil
         preferences: Preferencias
         security: Seguridad
+        delete_account: Cancelar mi cuenta
         sidebar: Barra lateral
         members: Miembros
     sidebar:
@@ -120,6 +121,13 @@ es:
         profile:
           heading: Perfil
           description: Tu nombre y el correo con el que inicias sesión.
+        fields:
+          first_name_hint: Tu nombre de pila.
+          last_name_hint: Tu apellido.
+          email_hint: La dirección con la que inicias sesión.
+          password_hint: Déjala en blanco para mantener la actual.
+          password_confirmation_hint: Repite la nueva contraseña.
+          cancel_hint: Esta acción no se puede deshacer.
         preferences:
           heading: Preferencias
           description: Tema e idioma de tu cuenta.
@@ -131,7 +139,10 @@ es:
             hint: El idioma de la interfaz.
         security:
           heading: Seguridad
-          description: Cambia tu contraseña o cancela tu cuenta.
+          description: Cambia tu contraseña.
+        delete_account:
+          heading: Cancelar mi cuenta
+          description: Elimina tu cuenta de forma permanente.
         email: Correo electrónico
         new_password: Nueva contraseña
         email_placeholder: tu@ejemplo.com

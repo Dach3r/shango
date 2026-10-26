@@ -7,13 +7,14 @@ class Input::Component < ApplicationComponent
   ICON = ADORNMENT
   DEFAULT_ICONS = { email: "mail", password: "lock" }.freeze
 
-  def initialize(form:, attribute:, label:, type: :text, icon: DEFAULT_ICONS[type], placeholder: nil, **options)
+  def initialize(form:, attribute:, label:, type: :text, icon: DEFAULT_ICONS[type], placeholder: nil, label_class: LABEL, **options)
     @form = form
     @attribute = attribute
     @label = label
     @type = type
     @icon = icon
     @placeholder = placeholder
+    @label_class = label_class
     @options = options
   end
 
@@ -28,7 +29,7 @@ class Input::Component < ApplicationComponent
   end
 
   def label_classes
-    LABEL
+    @label_class
   end
 
   def icon_classes

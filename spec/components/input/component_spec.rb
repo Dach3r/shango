@@ -15,6 +15,12 @@ RSpec.describe Input::Component, type: :component do
     expect(page).to have_css("span.absolute svg")
   end
 
+  it "applies a custom label class" do
+    render_input(label_class: "sr-only")
+
+    expect(page).to have_css("label.sr-only", text: "Email")
+  end
+
   it "renders no icon when none applies", :aggregate_failures do
     render_input
 

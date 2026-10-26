@@ -4,7 +4,8 @@ class SettingsNav::Component < ApplicationComponent
     { key: :account, items: [
       { key: :profile, icon: "user", path: :edit_user_registration_path, controllers: "users/registrations", tab: "profile" },
       { key: :preferences, icon: "sliders-horizontal", path: :edit_user_registration_path, params: { tab: "preferences" }, controllers: "users/registrations", tab: "preferences" },
-      { key: :security, icon: "shield", path: :edit_user_registration_path, params: { tab: "security" }, controllers: "users/registrations", tab: "security" }
+      { key: :security, icon: "shield", path: :edit_user_registration_path, params: { tab: "security" }, controllers: "users/registrations", tab: "security" },
+      { key: :delete_account, icon: "trash-2", path: :edit_user_registration_path, params: { tab: "delete_account" }, controllers: "users/registrations", tab: "delete_account" }
     ] },
     { key: :membership, items: [{ key: :sidebar, icon: "panel-left", path: :edit_membership_path, controllers: "projects/memberships" }] },
     { key: :project, items: [{ key: :members, icon: "users" }] }

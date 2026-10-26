@@ -1,7 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   include ProjectContext
 
-  TABS = %w[profile preferences security].freeze
+  TABS = %w[profile preferences security delete_account].freeze
 
   layout -> { action_name.in?(%w[edit update]) ? "app" : "devise" }
 

@@ -92,10 +92,19 @@ RSpec.describe "Authentication" do
       expect(response.body).not_to include(%(name="user[email]"))
     end
 
-    it "renders the security tab", :aggregate_failures do
+    it "renders the security tab without the cancel account action", :aggregate_failures do
       get edit_user_registration_path(tab: "security")
 
-      expect(response.body).to include(I18n.t("devise.registrations.edit.cancel_account"))
+      expect(response.body).to include(%(name="user[password]"))
+      expect(response.body).not_to include(%(name="user[email]"))
+      expect(response.body).not_to include(%(data-turbo-confirm="#{I18n.t("devise.registrations.edit.confirm")}"))
+    end
+
+    it "renders the cancel account tab with only the cancel action", :aggregate_failures do
+      get edit_user_registration_path(tab: "delete_account")
+
+      expect(response.body).to include(%(data-turbo-confirm="#{I18n.t("devise.registrations.edit.confirm")}"))
+      expect(response.body).not_to include(%(name="user[password]"))
       expect(response.body).not_to include(%(name="user[email]"))
     end
 
