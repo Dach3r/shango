@@ -1,4 +1,4 @@
-<div class="group relative">
+<div class="group relative" data-controller="context-menu" data-action="contextmenu->context-menu#open">
   <details open data-tree-target="branch" data-id="<%= collection.id %>" data-action="toggle->tree#toggled" class="group/branch">
     <summary data-action="click->tree#summaryClick dblclick->tree#summaryDoubleClick" data-drop-mode="into" data-collection-id="<%= collection.id %>" data-folder-id=""
              class="flex cursor-pointer list-none items-center gap-2 rounded-lg py-1.5 pr-9 pl-2 text-sm font-medium text-ink transition hover:bg-field data-[drop-active=into]:bg-accent/15 [&::-webkit-details-marker]:hidden">
@@ -25,6 +25,7 @@
       <%= link_to new_workbench_collection_request_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
       <%= link_to new_workbench_collection_folder_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_folder") %><% end %>
       <%= link_to new_workbench_collection_curl_import_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "terminal", class: "size-4" %><%= t("components.request_tree.import_curl") %><% end %>
+      <button type="button" data-action="context-menu#rename" class="<%= RequestTree::Menu::Component::ITEM %>"><%= lucide_icon "pencil", class: "size-4" %><%= t("components.request_tree.rename") %></button>
       <%= link_to edit_workbench_collection_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
       <%= button_to workbench_collection_path(collection), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_collection", name: collection.name) } },
                     class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>

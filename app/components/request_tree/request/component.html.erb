@@ -1,8 +1,16 @@
 <li draggable="true" data-drag-kind="request" data-drag-id="<%= @api_request.id %>" data-collection-id="<%= @api_request.collection_id %>" data-folder-id="<%= @api_request.folder_id %>"
-    data-drop-mode="before" data-position-url="<%= workbench_request_position_path(@api_request) %>" data-action="dragstart->tree#dragStart dragend->tree#dragEnd"
-    class="data-[drop-active=before]:shadow-[inset_0_2px_0_var(--solid)]">
+    data-drop-mode="before" data-position-url="<%= workbench_request_position_path(@api_request) %>" data-controller="context-menu" data-action="dragstart->tree#dragStart dragend->tree#dragEnd contextmenu->context-menu#open"
+    class="group relative data-[drop-active=before]:shadow-[inset_0_2px_0_var(--solid)]">
   <%= link_to workbench_request_path(@api_request), class: classes, aria: { current: (@active ? "page" : nil) } do %>
     <span class="w-9 shrink-0"><%= render MethodBadge::Component.new(method: @api_request.http_method, short: true, request_id: @api_request.id) %></span>
     <span data-controller="inline-rename" data-inline-rename-url-value="<%= workbench_request_path(@api_request) %>" data-inline-rename-href-value="<%= workbench_request_path(@api_request) %>" data-inline-rename-param-value="api_request" data-action="click->inline-rename#navigate dblclick->inline-rename#edit" class="min-w-0 flex-1 truncate"><%= @api_request.name %></span>
   <% end %>
+  <div class="absolute right-1 top-1">
+    <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: @api_request.name)) do %>
+      <button type="button" data-action="context-menu#rename" class="<%= RequestTree::Menu::Component::ITEM %>"><%= lucide_icon "pencil", class: "size-4" %><%= t("components.request_tree.rename") %></button>
+      <%= button_to workbench_request_duplication_path(@api_request), method: :post, form_class: "contents", class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "copy", class: "size-4" %><%= t("components.request_tree.duplicate") %><% end %>
+      <%= button_to workbench_request_path(@api_request), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("workbench.requests.confirm_delete", name: @api_request.name) } },
+                    class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>
+    <% end %>
+  </div>
 </li>

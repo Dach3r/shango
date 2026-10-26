@@ -53,6 +53,8 @@ en:
       new_subfolder: New subfolder
       import_curl: Import cURL
       edit: Edit
+      rename: Rename
+      duplicate: Duplicate
       delete: Delete
       confirm_delete_collection: "Delete the collection “%{name}” with all its folders and requests?"
       confirm_delete_folder: "Delete the folder “%{name}” with everything inside it?"

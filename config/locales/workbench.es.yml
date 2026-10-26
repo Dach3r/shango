@@ -53,6 +53,8 @@ es:
       new_subfolder: Nueva subcarpeta
       import_curl: Importar cURL
       edit: Editar
+      rename: Cambiar nombre
+      duplicate: Duplicar
       delete: Eliminar
       confirm_delete_collection: "¿Eliminar la colección “%{name}” con todas sus carpetas y solicitudes?"
       confirm_delete_folder: "¿Eliminar la carpeta “%{name}” con todo su contenido?"

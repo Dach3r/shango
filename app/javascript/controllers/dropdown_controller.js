@@ -14,6 +14,7 @@ export default class extends Controller {
 
   close() {
     this.menuTarget.hidden = true;
+    this.menuTarget.removeAttribute("style");
     this.triggerTarget.setAttribute("aria-expanded", "false");
   }
 

@@ -22,4 +22,13 @@ RSpec.describe RequestTree::Request::Component, type: :component do
     expect(page).to have_css("span[data-controller=inline-rename][data-inline-rename-param-value=api_request]", text: "List")
     expect(page).to have_css("[data-inline-rename-url-value='/workbench/requests/#{api_request.id}']")
   end
+
+  it "opens an actions menu with icons on right click", :aggregate_failures do
+    render_inline(described_class.new(api_request:))
+
+    expect(page).to have_css("li[data-controller=context-menu][data-action*='contextmenu->context-menu#open']")
+    expect(page).to have_css("[data-dropdown-target=menu] button[data-action='context-menu#rename'] svg", visible: :all)
+    expect(page).to have_css("form[action='/workbench/requests/#{api_request.id}/duplication'] svg", visible: :all)
+    expect(page).to have_css("form[action='/workbench/requests/#{api_request.id}'] button.\\!text-danger svg", visible: :all)
+  end
 end
