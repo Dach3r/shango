@@ -7,7 +7,7 @@
 **Included**
 
 - Collections with nested folders and requests; drag and drop to move requests and folders.
-- Open requests as tabs: every request the user opens (from the sidebar or a new draft) stays as a per-user tab above the editor, with a *+* to start a new draft. Closing a saved request's tab just closes the tab; closing a draft's tab asks to save or discard it. Draft requests are per-user requests without a collection; they can be edited and sent, *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
+- Open requests as tabs: every request the user opens (from the sidebar or a new draft) stays as a per-user tab above the editor, with a *+* to start a new draft. Opening the workbench with tabs open lands on the last tab; the empty state shows only when none is open. Closing a saved request's tab just closes the tab; closing a draft's tab asks to save or discard it. Draft requests are per-user requests without a collection; they can be edited and sent, *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings, description.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.

@@ -18,6 +18,15 @@ RSpec.describe "Workbench workspace" do
     expect(response.body).to include(collection.name, folder.name)
   end
 
+  it "opens the last open tab instead of the empty state" do
+    create(:request_tab, user:, api_request:)
+    last = create(:api_request, collection:)
+    create(:request_tab, user:, api_request: last)
+    get workbench_root_path
+
+    expect(response).to redirect_to(workbench_request_path(last))
+  end
+
   it "offers the selected environment's variables", :aggregate_failures do
     environment = create(:environment, project:)
     create(:variable, environment:, key: "BASE_URL")
