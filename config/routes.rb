@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations" }, failure_app: "LocalizedFailureApp"
 
   authenticated :user do
-    root to: "workbench/workspaces#show"
+    root to: redirect("/workbench")
   end
 
   devise_scope :user do

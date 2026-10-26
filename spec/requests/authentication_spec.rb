@@ -60,6 +60,15 @@ RSpec.describe "Authentication" do
     end
   end
 
+  describe "members" do
+    it "redirects the root to the workbench" do
+      sign_in create(:user)
+      get root_path
+
+      expect(response).to redirect_to(workbench_root_path)
+    end
+  end
+
   describe "account update" do
     let(:user) { create(:user) }
 

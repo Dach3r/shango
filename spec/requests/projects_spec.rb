@@ -6,8 +6,8 @@ RSpec.describe "Projects" do
   describe "without a project" do
     before { sign_in user }
 
-    it "redirects the root to the new project form" do
-      get root_path
+    it "redirects the workbench to the new project form" do
+      get workbench_root_path
 
       expect(response).to redirect_to(new_project_path)
     end
@@ -34,8 +34,8 @@ RSpec.describe "Projects" do
     let!(:context) { sign_in_with_project(user) }
     let(:project) { context[1] }
 
-    it "shows the workbench on the root" do
-      get root_path
+    it "shows the workbench" do
+      get workbench_root_path
 
       expect(response).to have_http_status(:ok)
     end
@@ -49,7 +49,7 @@ RSpec.describe "Projects" do
     it "falls back to the oldest membership when the current one is archived", :aggregate_failures do
       other = create(:membership, user:)
       project.update!(archived_at: Time.current)
-      get root_path
+      get workbench_root_path
 
       expect(response).to have_http_status(:ok)
       expect(user.reload.current_membership_id).to eq(other.id)
