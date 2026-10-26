@@ -1,7 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   include ProjectContext
 
-  TABS = %w[profile security].freeze
+  TABS = %w[profile preferences security].freeze
 
   layout -> { action_name.in?(%w[edit update]) ? "app" : "devise" }
 

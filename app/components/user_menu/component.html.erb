@@ -19,15 +19,6 @@
       </div>
     </div>
     <div class="my-1.5 border-t border-line"></div>
-    <div class="flex min-h-10 items-center justify-between gap-3 px-2.5 py-2">
-      <span class="text-sm text-body"><%= t("components.theme_switcher.label") %></span>
-      <%= render ThemeSwitcher::Component.new %>
-    </div>
-    <div class="flex min-h-10 items-center justify-between gap-3 px-2.5 py-2">
-      <span class="text-sm text-body"><%= t("components.locale_switcher.label") %></span>
-      <%= render LocaleSwitcher::Component.new %>
-    </div>
-    <div class="my-1.5 border-t border-line"></div>
     <%= link_to edit_membership_path,
                 class: "flex min-h-10 w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
       <%= lucide_icon "settings", class: "size-4 shrink-0" %>

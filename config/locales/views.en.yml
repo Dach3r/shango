@@ -24,6 +24,7 @@ en:
         project: Project
       items:
         profile: Profile
+        preferences: Preferences
         security: Security
         sidebar: Sidebar
         members: Members
@@ -119,6 +120,9 @@ en:
         profile:
           heading: Profile
           description: Your name and the email you use to sign in.
+        preferences:
+          heading: Preferences
+          description: Theme and language for your account.
         security:
           heading: Security
           description: Change your password or cancel your account.

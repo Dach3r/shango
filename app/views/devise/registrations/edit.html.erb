@@ -1,24 +1,37 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 
 <%= render layout: "settings/shell", locals: { title: t(".title"), heading: t(".#{@tab}.heading"), description: t(".#{@tab}.description") } do %>
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name, tab: @tab), html: { method: :put, class: "space-y-5" }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
-
-    <% if @tab == "profile" %>
-      <div class="grid gap-5 sm:grid-cols-2">
-        <%= render Input::Component.new(form: f, attribute: :first_name, icon: "user", label: t("devise.registrations.new.first_name"), placeholder: t("devise.registrations.new.first_name_placeholder"), autocomplete: "given-name", required: true) %>
-        <%= render Input::Component.new(form: f, attribute: :last_name, icon: "user", label: t("devise.registrations.new.last_name"), placeholder: t("devise.registrations.new.last_name_placeholder"), autocomplete: "family-name", required: true) %>
+  <% if @tab == "preferences" %>
+    <div class="divide-y divide-line rounded-2xl border border-line bg-card">
+      <div class="flex min-h-14 items-center justify-between gap-4 px-4 py-3">
+        <span class="text-sm font-medium text-ink"><%= t("components.theme_switcher.label") %></span>
+        <%= render ThemeSwitcher::Component.new %>
       </div>
-
-      <%= render Input::Component.new(form: f, attribute: :email, label: t("devise.registrations.edit.email"), type: :email, placeholder: t("devise.registrations.edit.email_placeholder"), autocomplete: "email", required: true) %>
-    <% else %>
-      <%= render Input::Component.new(form: f, attribute: :password, label: t("devise.registrations.edit.new_password"), type: :password, placeholder: t("devise.registrations.edit.password_placeholder"), autocomplete: "new-password") %>
-      <%= render Input::Component.new(form: f, attribute: :password_confirmation, label: t("devise.registrations.edit.confirm_password"), type: :password, placeholder: t("devise.registrations.edit.confirm_password_placeholder"), autocomplete: "new-password") %>
-    <% end %>
-
-    <div class="flex justify-end">
-      <%= render Button::Component.new(form: f, label: t("devise.registrations.edit.submit")) %>
+      <div class="flex min-h-14 items-center justify-between gap-4 px-4 py-3">
+        <span class="text-sm font-medium text-ink"><%= t("components.locale_switcher.label") %></span>
+        <%= render LocaleSwitcher::Component.new %>
+      </div>
     </div>
+  <% else %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name, tab: @tab), html: { method: :put, class: "space-y-5" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <% if @tab == "profile" %>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <%= render Input::Component.new(form: f, attribute: :first_name, icon: "user", label: t("devise.registrations.new.first_name"), placeholder: t("devise.registrations.new.first_name_placeholder"), autocomplete: "given-name", required: true) %>
+          <%= render Input::Component.new(form: f, attribute: :last_name, icon: "user", label: t("devise.registrations.new.last_name"), placeholder: t("devise.registrations.new.last_name_placeholder"), autocomplete: "family-name", required: true) %>
+        </div>
+
+        <%= render Input::Component.new(form: f, attribute: :email, label: t("devise.registrations.edit.email"), type: :email, placeholder: t("devise.registrations.edit.email_placeholder"), autocomplete: "email", required: true) %>
+      <% else %>
+        <%= render Input::Component.new(form: f, attribute: :password, label: t("devise.registrations.edit.new_password"), type: :password, placeholder: t("devise.registrations.edit.password_placeholder"), autocomplete: "new-password") %>
+        <%= render Input::Component.new(form: f, attribute: :password_confirmation, label: t("devise.registrations.edit.confirm_password"), type: :password, placeholder: t("devise.registrations.edit.confirm_password_placeholder"), autocomplete: "new-password") %>
+      <% end %>
+
+      <div class="flex justify-end">
+        <%= render Button::Component.new(form: f, label: t("devise.registrations.edit.submit")) %>
+      </div>
+    <% end %>
   <% end %>
 
   <% if @tab == "security" %>

@@ -3,6 +3,7 @@ class SettingsNav::Component < ApplicationComponent
   GROUPS = [
     { key: :account, items: [
       { key: :profile, icon: "user", path: :edit_user_registration_path, controllers: "users/registrations", tab: "profile" },
+      { key: :preferences, icon: "sliders-horizontal", path: :edit_user_registration_path, params: { tab: "preferences" }, controllers: "users/registrations", tab: "preferences" },
       { key: :security, icon: "shield", path: :edit_user_registration_path, params: { tab: "security" }, controllers: "users/registrations", tab: "security" }
     ] },
     { key: :membership, items: [{ key: :sidebar, icon: "panel-left", path: :edit_membership_path, controllers: "projects/memberships" }] },

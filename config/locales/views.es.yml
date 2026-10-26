@@ -24,6 +24,7 @@ es:
         project: Proyecto
       items:
         profile: Perfil
+        preferences: Preferencias
         security: Seguridad
         sidebar: Barra lateral
         members: Miembros
@@ -119,6 +120,9 @@ es:
         profile:
           heading: Perfil
           description: Tu nombre y el correo con el que inicias sesión.
+        preferences:
+          heading: Preferencias
+          description: Tema e idioma de tu cuenta.
         security:
           heading: Seguridad
           description: Cambia tu contraseña o cancela tu cuenta.

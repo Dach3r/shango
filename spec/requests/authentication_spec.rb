@@ -84,6 +84,14 @@ RSpec.describe "Authentication" do
       expect(response.body).to include(I18n.t("components.settings_nav.items.sidebar"))
     end
 
+    it "renders the preferences tab with the theme and language switchers", :aggregate_failures do
+      get edit_user_registration_path(tab: "preferences")
+
+      expect(response.body).to include(I18n.t("components.theme_switcher.label"))
+      expect(response.body).to include(I18n.t("components.locale_switcher.label"))
+      expect(response.body).not_to include(%(name="user[email]"))
+    end
+
     it "renders the security tab", :aggregate_failures do
       get edit_user_registration_path(tab: "security")
 
