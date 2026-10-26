@@ -160,8 +160,6 @@ en:
           heading: Profile
           description: Your name and the email you use to sign in.
         fields:
-          password_hint: Leave it blank to keep the current one.
-          password_confirmation_hint: Repeat the new password.
           cancel_hint: This action cannot be undone.
         preferences:
           heading: Preferences

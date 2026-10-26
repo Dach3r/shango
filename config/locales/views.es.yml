@@ -160,8 +160,6 @@ es:
           heading: Perfil
           description: Tu nombre y el correo con el que inicias sesión.
         fields:
-          password_hint: Déjala en blanco para mantener la actual.
-          password_confirmation_hint: Repite la nueva contraseña.
           cancel_hint: Esta acción no se puede deshacer.
         preferences:
           heading: Preferencias

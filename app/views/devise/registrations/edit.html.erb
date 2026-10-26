@@ -15,17 +15,22 @@
       <% end %>
     </div>
   <% elsif @tab != "delete_account" %>
-    <% name_fields = [
-         { attribute: :first_name, icon: "user", label: "devise.registrations.new.first_name", placeholder: "devise.registrations.new.first_name_placeholder", autocomplete: "given-name", required: true },
-         { attribute: :last_name, icon: "user", label: "devise.registrations.new.last_name", placeholder: "devise.registrations.new.last_name_placeholder", autocomplete: "family-name", required: true }
-       ] if @tab == "profile" %>
-    <% email_field = { attribute: :email, type: :email, label: "devise.registrations.edit.email", placeholder: "devise.registrations.edit.email_placeholder", autocomplete: "email", required: true } if @tab == "profile" %>
-    <% fields = if @tab == "profile"
-         []
+    <% rows = if @tab == "profile"
+         [
+           [
+             { attribute: :first_name, icon: "user", label: "devise.registrations.new.first_name", placeholder: "devise.registrations.new.first_name_placeholder", autocomplete: "given-name", required: true },
+             { attribute: :last_name, icon: "user", label: "devise.registrations.new.last_name", placeholder: "devise.registrations.new.last_name_placeholder", autocomplete: "family-name", required: true }
+           ],
+           [
+             { attribute: :email, type: :email, label: "devise.registrations.edit.email", placeholder: "devise.registrations.edit.email_placeholder", autocomplete: "email", required: true }
+           ]
+         ]
        else
          [
-           { attribute: :password, type: :password, label: "devise.registrations.edit.new_password", placeholder: "devise.registrations.edit.password_placeholder", autocomplete: "new-password" },
-           { attribute: :password_confirmation, type: :password, label: "devise.registrations.edit.confirm_password", placeholder: "devise.registrations.edit.confirm_password_placeholder", autocomplete: "new-password" }
+           [
+             { attribute: :password, type: :password, label: "devise.registrations.edit.new_password", placeholder: "devise.registrations.edit.password_placeholder", autocomplete: "new-password" },
+             { attribute: :password_confirmation, type: :password, label: "devise.registrations.edit.confirm_password", placeholder: "devise.registrations.edit.confirm_password_placeholder", autocomplete: "new-password" }
+           ]
          ]
        end %>
 
@@ -33,26 +38,11 @@
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
-        <% if name_fields %>
-          <div class="grid gap-4 p-5 md:grid-cols-2 md:gap-8">
-            <% name_fields.each do |field| %>
+        <% rows.each do |row| %>
+          <div class="grid gap-4 p-5 <%= "md:grid-cols-2" if row.size > 1 %> md:gap-8">
+            <% row.each do |field| %>
               <%= render Input::Component.new(form: f, **field.except(:label, :placeholder), label: t(field[:label]), placeholder: t(field[:placeholder])) %>
             <% end %>
-          </div>
-        <% end %>
-        <% if email_field %>
-          <div class="p-5">
-            <%= render Input::Component.new(form: f, **email_field.except(:label, :placeholder), label: t(email_field[:label]), placeholder: t(email_field[:placeholder])) %>
-          </div>
-        <% end %>
-        <% fields.each do |field| %>
-          <div class="grid gap-4 p-5 md:grid-cols-[1fr_20rem] md:items-center md:gap-8">
-            <div class="min-w-0">
-              <p class="text-sm font-semibold text-ink"><%= t(field[:label]) %></p>
-              <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("devise.registrations.edit.fields.#{field[:attribute]}_hint") %></p>
-            </div>
-
-            <%= render Input::Component.new(form: f, **field.except(:label, :placeholder), label: t(field[:label]), placeholder: t(field[:placeholder]), label_class: "sr-only") %>
           </div>
         <% end %>
       </div>
