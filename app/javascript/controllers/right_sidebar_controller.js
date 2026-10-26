@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 // Right-hand panel that hosts a Turbo Frame. Links targeting the frame call open() with a title param.
-// The panel spans from the left edge of the anchor target (the status bar's project switcher) to the window edge.
+// The panel spans from the left edge of the first anchor target (the status bar switchers) to the window edge.
 export default class extends Controller {
   static targets = ["panel", "title", "anchor"];
 
