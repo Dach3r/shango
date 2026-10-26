@@ -6,8 +6,9 @@ module ApiClient
 
       OWNERS = { "Collection" => :collections, "Folder" => :folders, "ApiRequest" => :api_requests }.freeze
 
-      def initialize(project:, type:, id:)
+      def initialize(project:, user:, type:, id:)
         @project = project
+        @user = user
         @type = type.to_s
         @id = id
       end
@@ -16,7 +17,9 @@ module ApiClient
 
       def perform
         association = OWNERS[@type] or raise ActiveRecord::RecordNotFound
-        owner = @project.public_send(association).find(@id)
+        scope = @project.public_send(association)
+        scope = scope.visible_to(@user) if association == :api_requests
+        owner = scope.find(@id)
         raise ActiveRecord::RecordNotFound unless owner.auth_type == "oauth2"
 
         owner

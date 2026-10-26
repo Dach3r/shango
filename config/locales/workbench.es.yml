@@ -41,6 +41,9 @@ es:
       empty: Aún no hay colecciones.
       empty_collection: Colección vacía
       actions: "Acciones de %{name}"
+      drafts: Borradores
+      new_draft: Nueva solicitud en borrador
+      empty_drafts: Sin borradores
       new_request: Nueva solicitud
       new_folder: Nueva carpeta
       new_subfolder: Nueva subcarpeta
@@ -92,6 +95,7 @@ es:
         empty: Crea una colección para organizar tus solicitudes y luego agrega solicitudes o impórtalas desde un comando cURL.
         pick: Elige una solicitud en la barra lateral o crea una nueva.
         new_collection: Nueva colección
+        new_request: Nueva solicitud
     collections:
       create:
         created: Colección creada.
@@ -119,6 +123,18 @@ es:
         name_placeholder: p. ej. Autenticación
         auth: Autorización
     requests:
+      draft: Borrador
+      draft_name: Nueva solicitud
+      placements:
+        update:
+          placed: "Solicitud guardada en “%{name}”."
+        form:
+          title: "Guardar solicitud en…"
+          description: "Elige dónde guardar esta solicitud. Si cierras esta ventana se mantiene como borrador."
+          destination: Guardar en
+          keep_draft: Mantener como borrador
+          submit: Guardar aquí
+          no_collections: "Crea una colección primero para guardar solicitudes en ella. Mientras tanto la solicitud sigue como borrador."
       create:
         created: Solicitud creada.
       update:

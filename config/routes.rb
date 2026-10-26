@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       resource :curl_import, only: %i[new create]
     end
 
+    resources :drafts, only: :create
+
     resources :folders, only: %i[edit update destroy] do
       resource :position, only: :update, module: :folders
     end
@@ -30,6 +32,7 @@ Rails.application.routes.draw do
         resources :executions, only: %i[create show]
         resource :duplication, only: :create
         resource :position, only: :update
+        resource :placement, only: %i[new update]
         resource :curl_export, only: :show
       end
     end

@@ -7,7 +7,7 @@ module Workbench
       private
 
       def set_api_request
-        @api_request = current_project.api_requests.find(params[:request_id])
+        @api_request = current_project.api_requests.visible_to(current_user).find(params[:request_id])
       end
     end
   end

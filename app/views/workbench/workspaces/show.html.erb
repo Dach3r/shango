@@ -7,9 +7,14 @@
       <span class="flex size-16 items-center justify-center rounded-2xl bg-solid text-on-solid"><%= lucide_icon "send", class: "size-8" %></span>
       <h2 class="mt-6 text-2xl font-semibold tracking-tight text-ink"><%= t("workbench.workspaces.show.heading") %></h2>
       <p class="mt-2 text-sm text-muted"><%= workspace_tree.empty? ? t("workbench.workspaces.show.empty") : t("workbench.workspaces.show.pick") %></p>
-      <%= link_to new_workbench_collection_path, data: { turbo_frame: "modal" }, class: button_classes(:primary, "mt-6") do %>
-        <%= lucide_icon "plus", class: "size-4" %><%= t("workbench.workspaces.show.new_collection") %>
-      <% end %>
+      <div class="mt-6 flex flex-wrap justify-center gap-2">
+        <%= button_to workbench_drafts_path, method: :post, class: button_classes(:primary), form_class: "contents" do %>
+          <%= lucide_icon "send", class: "size-4" %><%= t("workbench.workspaces.show.new_request") %>
+        <% end %>
+        <%= link_to new_workbench_collection_path, data: { turbo_frame: "modal" }, class: button_classes(:secondary) do %>
+          <%= lucide_icon "plus", class: "size-4" %><%= t("workbench.workspaces.show.new_collection") %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

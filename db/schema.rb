@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_143619) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_150248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -45,7 +45,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_143619) do
 
   create_table "api_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
-    t.uuid "collection_id", null: false
+    t.uuid "collection_id"
     t.uuid "folder_id"
     t.string "name", null: false
     t.string "http_method", default: "GET", null: false
@@ -63,10 +63,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_143619) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "user_id"
     t.index ["collection_id"], name: "index_api_requests_on_collection_id"
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
     t.index ["project_id"], name: "index_api_requests_on_project_id"
+    t.index ["user_id"], name: "index_api_requests_on_user_id"
     t.check_constraint "body_type::text = ANY (ARRAY['none'::character varying, 'json'::character varying, 'text'::character varying, 'xml'::character varying, 'form_urlencoded'::character varying, 'multipart'::character varying, 'graphql'::character varying, 'binary'::character varying]::text[])", name: "api_requests_body_type_check"
+    t.check_constraint "collection_id IS NOT NULL OR user_id IS NOT NULL AND folder_id IS NULL", name: "api_requests_draft_check"
     t.check_constraint "http_method::text = ANY (ARRAY['GET'::character varying, 'POST'::character varying, 'PUT'::character varying, 'PATCH'::character varying, 'DELETE'::character varying, 'HEAD'::character varying, 'OPTIONS'::character varying]::text[])", name: "api_requests_http_method_check"
   end
 
@@ -205,6 +208,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_143619) do
   add_foreign_key "api_requests", "collections"
   add_foreign_key "api_requests", "folders"
   add_foreign_key "api_requests", "projects"
+  add_foreign_key "api_requests", "users", on_delete: :cascade
   add_foreign_key "collections", "projects"
   add_foreign_key "environments", "projects"
   add_foreign_key "folders", "collections"

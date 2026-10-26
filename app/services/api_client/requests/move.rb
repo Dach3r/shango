@@ -16,6 +16,7 @@ module ApiClient
       def perform
         collection = @api_request.project.collections.find(@collection_id || @api_request.collection_id)
         @api_request.collection = collection
+        @api_request.user = nil
         @api_request.folder = @folder_id && collection.folders.find(@folder_id)
         return Result.failure(@api_request) unless @api_request.save
 

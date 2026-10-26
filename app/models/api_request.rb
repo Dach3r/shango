@@ -9,8 +9,9 @@ class ApiRequest < ApplicationRecord
   BODY_FORM_EXTRA = %w[type attachment_id upload_token].freeze
 
   belongs_to :project
-  belongs_to :collection
+  belongs_to :collection, optional: true
   belongs_to :folder, optional: true
+  belongs_to :user, optional: true
 
   has_many :request_executions, dependent: :destroy
 
@@ -26,6 +27,10 @@ class ApiRequest < ApplicationRecord
   validates :body_type, inclusion: { in: BODY_TYPES }
 
   validate :folder_belongs_to_collection
+  validate :draft_has_owner
+
+  scope :drafts, -> { where(collection_id: nil) }
+  scope :visible_to, ->(user) { where.not(collection_id: nil).or(where(user_id: user.id)) }
 
   def query_params=(rows)
     super(self.class.clean_rows(rows))
@@ -39,8 +44,12 @@ class ApiRequest < ApplicationRecord
     super(self.class.clean_rows(rows, extra: BODY_FORM_EXTRA))
   end
 
+  def draft?
+    collection_id.nil?
+  end
+
   def siblings
-    collection.api_requests.where(folder_id:)
+    draft? ? project.api_requests.drafts.where(user_id:) : collection.api_requests.where(folder_id:)
   end
 
   def allowed_auth_types
@@ -75,6 +84,10 @@ class ApiRequest < ApplicationRecord
 
   def folder_belongs_to_collection
     errors.add(:folder, :invalid) if folder && folder.collection_id != collection_id
+  end
+
+  def draft_has_owner
+    errors.add(:user, :blank) if draft? && user_id.blank?
   end
 
   class << self

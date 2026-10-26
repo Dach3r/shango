@@ -1,12 +1,16 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :variable_names
+    helper_method :workspace_tree, :draft_requests, :variable_names
 
     private
 
     def workspace_tree
       @workspace_tree ||= ApiClient::Tree::Load.call(project: current_project)
+    end
+
+    def draft_requests
+      @draft_requests ||= ApiClient::Tree::LoadDrafts.call(project: current_project, user: current_user)
     end
 
     # Names of the selected environment's variables, offered as autocomplete in the editors.

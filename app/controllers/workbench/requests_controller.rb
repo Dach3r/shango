@@ -23,6 +23,7 @@ module Workbench
 
     def update
       result = ApiClient::Requests::Update.call(api_request: @api_request, attributes: request_attributes, uploads: request_uploads, binary_upload:)
+      return render_placement if result.success? && @api_request.draft? && params[:place].present?
       return redirect_to(workbench_request_path(@api_request), notice: t(".updated"), status: :see_other) if result.success?
 
       @execution = @api_request.request_executions.recent.first
@@ -36,12 +37,17 @@ module Workbench
 
     private
 
+    # Saving a draft asks where it should go; the edits are already persisted, so closing the modal keeps it as a draft.
+    def render_placement
+      render turbo_stream: turbo_stream.update("modal", partial: "workbench/requests/placements/form")
+    end
+
     def set_collection
       @collection = current_project.collections.find(params[:collection_id])
     end
 
     def set_api_request
-      @api_request = current_project.api_requests.find(params[:id])
+      @api_request = current_project.api_requests.visible_to(current_user).find(params[:id])
     end
   end
 end

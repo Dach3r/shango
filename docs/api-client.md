@@ -7,6 +7,7 @@
 **Included**
 
 - Collections with nested folders and requests; drag and drop to move requests and folders.
+- Draft requests: per-user requests without a collection, listed under *Drafts* at the top of the sidebar. They can be edited and sent; *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings, description.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
@@ -28,7 +29,7 @@ All tables use UUID primary keys. `Project` is the tenancy boundary: every recor
 | `Membership#current_environment_id` | The environment each member works with in a project (nullable, `nullify` on delete). |
 | `Collection` | `name`, `description`, `auth_type` (default `none`), `auth_config` (encrypted JSON); not exposed in the UI, collections carry no authorization. |
 | `Folder` | Self-referencing (`parent_id`) inside a collection; `auth_type` defaults to `inherit`. |
-| `ApiRequest` | The glossary's *Request*. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
+| `ApiRequest` | The glossary's *Request*. `collection_id` is nullable: a request with no collection is a draft owned by `user_id` (a CHECK requires an owner and no folder); placing it clears `user_id`. `ApiRequest.visible_to(user)` hides other users' drafts, and controllers look requests up through it. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
 | `RequestExecution` | History entry: resolved URL, status, timing, headers, body (≤ 1 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
 
 Monitoring and documentation will reference `ApiRequest`; they must not copy its fields (see architecture §4).
@@ -46,6 +47,8 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   collections_controller.rb          # CRUD (modal forms)
   folders_controller.rb, folders/positions_controller.rb
   requests_controller.rb             # show/update/destroy + modal create
+  drafts_controller.rb               # POST = new blank draft
+  requests/placements_controller.rb  # modal to save a draft into a collection/folder
   requests/executions_controller.rb  # POST = run, GET = history item
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb
@@ -91,7 +94,7 @@ To add a method (phase 3 candidates: OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASA
 
 Delivery phases: **1** None, Basic, Bearer, API key; **2** OAuth 2.0, JWT bearer, Digest, AWS SigV4 (all implemented); **3** others on demand.
 
-Inheritance: a request or folder with `inherit` uses the nearest ancestor that does not; collections have no authorization UI, so a request or folder with nothing above it sends *No auth*. `Auth::EffectiveAuth` resolves it. OAuth tokens are stored on the record that owns the OAuth settings and refreshed automatically before they expire.
+Inheritance: a request or folder with `inherit` uses the nearest ancestor that does not; collections have no authorization UI, so a request or folder with nothing above it sends *No auth*, and so does a draft that inherits. `Auth::EffectiveAuth` resolves it. OAuth tokens are stored on the record that owns the OAuth settings and refreshed automatically before they expire.
 
 ## 6. Security
 

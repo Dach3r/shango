@@ -18,7 +18,7 @@ module Workbench
       private
 
       def set_owner
-        @owner = ApiClient::Oauth2::FindOwner.call(project: current_project, type: params[:owner_type], id: params[:owner_id])
+        @owner = ApiClient::Oauth2::FindOwner.call(project: current_project, user: current_user, type: params[:owner_type], id: params[:owner_id])
       end
     end
   end

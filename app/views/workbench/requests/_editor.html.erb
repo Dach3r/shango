@@ -11,6 +11,7 @@
 
 <%= form_with model: api_request, scope: :api_request, url: workbench_request_path(api_request), method: :patch, id: "request_form", multipart: true,
               class: "flex min-h-0 flex-1 flex-col", data: { request_form_target: "form", controller: "request-url" } do |form| %>
+  <%= hidden_field_tag "place", 1, id: nil if api_request.draft? %>
   <% if api_request.errors.any? %>
     <div role="alert" class="mx-4 mt-3 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
       <%= api_request.errors.full_messages.to_sentence %>

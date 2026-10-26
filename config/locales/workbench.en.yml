@@ -41,6 +41,9 @@ en:
       empty: No collections yet.
       empty_collection: Empty collection
       actions: "Actions for %{name}"
+      drafts: Drafts
+      new_draft: New draft request
+      empty_drafts: No drafts
       new_request: New request
       new_folder: New folder
       new_subfolder: New subfolder
@@ -89,9 +92,10 @@ en:
     workspaces:
       show:
         heading: Build and run requests
-        empty: Create a collection to organize your requests, then add requests or import them from a cURL command.
+        empty: Start with a request, or create a collection to organize them and import from a cURL command.
         pick: Pick a request from the sidebar, or create a new one.
         new_collection: New collection
+        new_request: New request
     collections:
       create:
         created: Collection created.
@@ -119,6 +123,18 @@ en:
         name_placeholder: e.g. Authentication
         auth: Authorization
     requests:
+      draft: Draft
+      draft_name: New request
+      placements:
+        update:
+          placed: "Request saved to “%{name}”."
+        form:
+          title: "Save request to…"
+          description: "Choose where to save this request. Closing this window keeps it as a draft."
+          destination: Save to
+          keep_draft: Keep as draft
+          submit: Save here
+          no_collections: "Create a collection first to save requests into it. Until then the request stays as a draft."
       create:
         created: Request created.
       update:

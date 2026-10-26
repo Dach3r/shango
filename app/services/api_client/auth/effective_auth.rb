@@ -15,12 +15,14 @@ module ApiClient
 
       def perform
         owner = chain.find { |node| !node.inherits_auth? } || @api_request.collection
+        return Resolved.new(type: "none", config: {}, owner: nil) unless owner
+
         Resolved.new(type: owner.auth_type, config: owner.auth_config, owner:)
       end
 
       def chain
         folders = @api_request.folder ? [@api_request.folder, *@api_request.folder.ancestors] : []
-        [@api_request, *folders, @api_request.collection]
+        [@api_request, *folders, @api_request.collection].compact
       end
     end
   end

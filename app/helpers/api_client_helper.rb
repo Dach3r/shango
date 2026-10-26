@@ -1,6 +1,14 @@
 module ApiClientHelper
   BODY_LANGUAGES = { /json/ => "json", /xml/ => "xml", /html/ => "html", /javascript/ => "javascript" }.freeze
 
+  # Select options for saving a draft: every collection and folder as "collection:<id>" / "folder:<id>".
+  def destination_options(branches)
+    branches.flat_map do |branch|
+      collection = branch.collection
+      [[collection.name, "collection:#{collection.id}"], *folder_destinations(branch, nil, collection.name)]
+    end
+  end
+
   def format_duration(milliseconds)
     return "-" if milliseconds.nil?
 
@@ -48,6 +56,13 @@ module ApiClientHelper
   end
 
   private
+
+  def folder_destinations(branch, parent, path)
+    (parent ? branch.children_of(parent) : branch.root_folders).flat_map do |folder|
+      label = "#{path} / #{folder.name}"
+      [[label, "folder:#{folder.id}"], *folder_destinations(branch, folder, label)]
+    end
+  end
 
   def pretty_xml(body)
     document = Nokogiri::XML(body) { |config| config.noblanks }

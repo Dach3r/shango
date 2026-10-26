@@ -4,6 +4,7 @@ class User < ApplicationRecord
   belongs_to :current_membership, class_name: "Membership", optional: true
 
   has_many :memberships, dependent: :destroy
+  has_many :api_requests, dependent: :destroy
   has_many :projects, -> { merge(Membership.active) }, through: :memberships
 
   validates :first_name, :last_name, presence: true

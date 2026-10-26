@@ -1,7 +1,7 @@
 <%# Request title and actions. Lives outside the editor form; the name input joins it through its `form` attribute. %>
 <div class="flex flex-wrap items-center gap-3 border-b border-line px-4 py-2">
   <div class="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
-    <span class="shrink-0 truncate"><%= api_request.collection.name %></span>
+    <span class="shrink-0 truncate"><%= api_request.draft? ? t("workbench.requests.draft") : api_request.collection.name %></span>
     <% if api_request.folder %>
       <% api_request.folder.ancestors.reverse.each do |folder| %>
         <%= lucide_icon "chevron-right", class: "size-3 shrink-0" %><span class="shrink-0 truncate"><%= folder.name %></span>
