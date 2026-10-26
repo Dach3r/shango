@@ -2,14 +2,14 @@
   <%= @form.label @attribute, @label, class: label_classes %>
   <div class="group relative">
   <% if @icon %>
-    <span class="<%= icon_classes %>"><%= lucide_icon @icon, class: "size-5" %></span>
+    <span class="<%= icon_classes %>"><%= lucide_icon @icon, class: "size-4.5" %></span>
   <% end %>
   <%= field %>
   <% if password? %>
     <button type="button" aria-label="<%= t("components.input.toggle_password") %>" data-action="password-visibility#toggle"
             class="<%= toggle_classes %>">
-      <%= lucide_icon "eye", class: "size-5", "data-password-visibility-target" => "show" %>
-      <%= lucide_icon "eye-off", class: "hidden size-5", "data-password-visibility-target" => "hide" %>
+      <%= lucide_icon "eye", class: "size-4.5", "data-password-visibility-target" => "show" %>
+      <%= lucide_icon "eye-off", class: "hidden size-4.5", "data-password-visibility-target" => "hide" %>
     </button>
   <% end %>
   </div>
