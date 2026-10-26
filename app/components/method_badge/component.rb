@@ -10,13 +10,21 @@ class MethodBadge::Component < ApplicationComponent
   }.freeze
   ABBREVIATIONS = { "DELETE" => "DEL", "OPTIONS" => "OPT", "PATCH" => "PAT" }.freeze
 
-  def initialize(method:, short: false)
+  BASE = "font-mono text-[11px] font-semibold tracking-tight".freeze
+
+  # Short label and classes per method, so the client can restyle badges when the method changes before saving.
+  def self.presets
+    COLORS.to_h { |method, color| [method, { label: ABBREVIATIONS.fetch(method, method), classes: "#{BASE} #{color}" }] }
+  end
+
+  def initialize(method:, short: false, request_id: nil)
     @method = method.to_s.upcase
     @short = short
+    @request_id = request_id
   end
 
   def call
-    tag.span(label, class: class_names("font-mono text-[11px] font-semibold tracking-tight", COLORS.fetch(@method, "text-muted")))
+    tag.span(label, class: class_names(BASE, COLORS.fetch(@method, "text-muted")), data: { method_badge: @request_id })
   end
 
   private

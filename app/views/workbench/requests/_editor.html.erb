@@ -20,7 +20,8 @@
 
   <div class="flex items-start gap-2 p-3" data-resizable-target="bounds">
     <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
-                                     class: "w-28 shrink-0 font-mono text-xs font-semibold") %>
+                                     class: "w-28 shrink-0 font-mono text-xs font-semibold",
+                                     input_data: { action: "change->request-form#methodChanged" }) %>
     <div class="min-w-0 flex-1 rounded-lg border border-line bg-field px-3 py-2 transition focus-within:border-solid focus-within:ring-2 focus-within:ring-solid/40">
       <%= render CodeEditor::Component.new(name: "api_request[url]", value: api_request.url, single_line: true, placeholder: t("workbench.requests.url_placeholder"), variables: variable_names,
                                            input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>

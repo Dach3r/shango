@@ -8,6 +8,8 @@
   controller: "request-form",
   request_form_run_url_value: workbench_request_executions_path(@api_request),
   request_form_curl_url_value: workbench_request_curl_export_path(@api_request),
+  request_form_request_id_value: @api_request.id,
+  request_form_methods_value: MethodBadge::Component.presets,
   action: "keydown.ctrl+enter@window->request-form#run keydown.meta+enter@window->request-form#run keydown.ctrl+s@window->request-form#save keydown.meta+s@window->request-form#save"
 } } do %>
   <div class="flex min-h-0 flex-1 flex-col" data-controller="resizable">

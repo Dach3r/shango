@@ -2,7 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["form", "send", "failure"];
-  static values = { runUrl: String, curlUrl: String };
+  static values = {
+    runUrl: String,
+    curlUrl: String,
+    requestId: String,
+    methods: Object,
+  };
 
   async run(event) {
     event?.preventDefault();
@@ -42,6 +47,18 @@ export default class extends Controller {
     const panel = document.getElementById("response_panel");
     if (panel && this.hasFailureTarget)
       panel.replaceChildren(this.failureTarget.content.cloneNode(true));
+  }
+
+  methodChanged(event) {
+    const preset = this.methodsValue[event.target.value.toUpperCase()];
+    if (!preset) return;
+
+    document
+      .querySelectorAll(`[data-method-badge="${this.requestIdValue}"]`)
+      .forEach((badge) => {
+        badge.textContent = preset.label;
+        badge.className = preset.classes;
+      });
   }
 
   save(event) {

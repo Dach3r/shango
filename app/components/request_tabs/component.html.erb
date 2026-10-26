@@ -4,7 +4,7 @@
       <div class="<%= classes(api_request) %>">
         <%= link_to workbench_request_path(api_request), class: "flex min-w-0 items-center gap-2 py-2 pr-2 pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-lg",
                     aria: { current: (api_request.id == @current_request_id ? "page" : nil) } do %>
-          <%= render MethodBadge::Component.new(method: api_request.http_method, short: true) %>
+          <%= render MethodBadge::Component.new(method: api_request.http_method, short: true, request_id: api_request.id) %>
           <span class="min-w-0 truncate"><%= api_request.name %></span>
         <% end %>
         <% close_label = t("components.request_tabs.close", name: api_request.name) %>
