@@ -6,7 +6,7 @@ module Projects
 
     def update
       @membership = current_membership
-      return redirect_to(edit_theme_path, notice: t(".updated"), status: :see_other) if @membership.update(theme_params)
+      return redirect_to(edit_theme_path, status: :see_other) if @membership.update(theme_params)
 
       render :edit, status: :unprocessable_entity
     end

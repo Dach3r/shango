@@ -126,8 +126,6 @@ es:
           coffee: Café
           cyberpunk: Cyberpunk
           mono: Monocromo
-      update:
-        updated: Tema guardado.
   devise:
     sessions:
       new:

@@ -126,8 +126,6 @@ en:
           coffee: Coffee
           cyberpunk: Cyberpunk
           mono: Mono
-      update:
-        updated: Theme saved.
   devise:
     sessions:
       new:
