@@ -76,6 +76,9 @@ export default class extends Controller {
       const row = this.bodyTarget.lastElementChild;
       row.querySelector("[data-field='key']").value = key;
       row.querySelector("[data-field='value']").value = value;
+      row.querySelectorAll("[data-field]").forEach((field) =>
+        field.dispatchEvent(new CustomEvent("variable-autocomplete:refresh", { bubbles: true })),
+      );
     });
     kept.forEach((row) => this.bodyTarget.appendChild(row));
   }

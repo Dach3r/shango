@@ -7,10 +7,17 @@ const DYNAMIC_VARIABLES = {
   $timestamp: "timestamp",
 };
 const TRIGGER = /\{\{[\w.\-$]*$/;
+const REFERENCE = /\{\{\s*([^{}\s]+)\s*\}\}/g;
+const MIRRORED_STYLES = [
+  "fontFamily", "fontSize", "fontWeight", "fontStyle", "letterSpacing", "lineHeight", "textAlign", "textIndent",
+  "paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
+  "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+];
 const FIELDS = "input, textarea";
 const SKIPPED_TYPES = ["hidden", "checkbox", "radio", "file", "number", "range"];
 
-// Offers `{{variable}}` completion on the plain inputs inside this element (code editors bring their own).
+// Offers `{{variable}}` completion on the plain inputs inside this element (code editors bring their own)
+// and highlights the references by state, like the code editor does, with a mirror layer over the field.
 export default class extends Controller {
   static values = {
     variables: { type: Array, default: [] },
@@ -21,12 +28,42 @@ export default class extends Controller {
     this.onInput = (event) => this.update(event.target);
     this.onKeydown = (event) => this.keydown(event);
     this.onFocusOut = () => this.close();
+    this.onRefresh = (event) => this.highlight(event.target);
+    this.onRelayout = (event) => {
+      if (this.supported(event.target)) this.highlight(event.target);
+    };
+    this.mirrors = new Map();
+    this.observer = new MutationObserver(() => this.highlightAll());
+    this.observer.observe(this.element, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["hidden"],
+    });
+    window.addEventListener("resize", this.highlightAll);
+    this.element.addEventListener("input", this.onRefresh);
+    this.element.addEventListener("keyup", this.onRelayout);
+    this.element.addEventListener("click", this.onRelayout);
+    this.element.addEventListener("focusin", this.onRelayout);
+    this.element.addEventListener("variable-autocomplete:refresh", this.onRefresh);
+    this.element.addEventListener("scroll", this.onRelayout, true);
     this.element.addEventListener("input", this.onInput);
     this.element.addEventListener("keydown", this.onKeydown, true);
     this.element.addEventListener("focusout", this.onFocusOut);
+    this.highlightAll();
   }
 
   disconnect() {
+    this.observer.disconnect();
+    window.removeEventListener("resize", this.highlightAll);
+    this.element.removeEventListener("input", this.onRefresh);
+    this.element.removeEventListener("keyup", this.onRelayout);
+    this.element.removeEventListener("click", this.onRelayout);
+    this.element.removeEventListener("focusin", this.onRelayout);
+    this.element.removeEventListener("variable-autocomplete:refresh", this.onRefresh);
+    this.element.removeEventListener("scroll", this.onRelayout, true);
+    this.mirrors.forEach((mirror) => mirror.remove());
+    this.mirrors.clear();
     this.element.removeEventListener("input", this.onInput);
     this.element.removeEventListener("keydown", this.onKeydown, true);
     this.element.removeEventListener("focusout", this.onFocusOut);
@@ -39,6 +76,97 @@ export default class extends Controller {
       !SKIPPED_TYPES.includes(field.type) &&
       !field.closest("[data-controller~='code-editor'], [data-controller~='select']")
     );
+  }
+
+  highlightAll = () => {
+    this.mirrors.forEach((mirror, field) => {
+      if (!field.isConnected) {
+        mirror.remove();
+        this.mirrors.delete(field);
+      }
+    });
+    this.element.querySelectorAll(FIELDS).forEach((field) => {
+      if (this.supported(field)) this.highlight(field);
+    });
+  };
+
+  status(name) {
+    if (name in DYNAMIC_VARIABLES) return "dynamic";
+
+    const variable = this.variablesValue.find((item) => item.name === name);
+    if (!variable) return "missing";
+
+    return variable.set ? "set" : "empty";
+  }
+
+  // Paints `{{variable}}` references over a field whose own text turns transparent; masked fields show as text while they hold one.
+  highlight(field) {
+    if (!this.supported(field)) return;
+
+    const referenced = field.value.includes("{{");
+    if (field.dataset.masked === undefined && field.type === "password") field.dataset.masked = "";
+    if (field.dataset.masked !== undefined) field.type = referenced ? "text" : "password";
+
+    let mirror = this.mirrors.get(field);
+    const active = referenced && field.offsetParent !== null && field.value.match(REFERENCE);
+    if (!active) {
+      if (mirror) mirror.hidden = true;
+      field.style.color = "";
+      field.style.caretColor = "";
+      return;
+    }
+
+    if (!mirror) {
+      mirror = document.createElement("div");
+      mirror.setAttribute("aria-hidden", "true");
+      mirror.append(document.createElement("div"));
+      field.before(mirror);
+      this.mirrors.set(field, mirror);
+    }
+
+    const styles = getComputedStyle(field);
+    const color = field.style.color === "transparent" ? mirror.style.color : styles.color;
+    const multiline = field.tagName === "TEXTAREA";
+    const style = mirror.style;
+    MIRRORED_STYLES.forEach((property) => (style[property] = styles[property]));
+    Object.assign(style, {
+      position: "absolute",
+      left: `${field.offsetLeft}px`,
+      top: `${field.offsetTop}px`,
+      width: `${field.offsetWidth}px`,
+      height: `${field.offsetHeight}px`,
+      margin: "0",
+      borderStyle: "solid",
+      borderColor: "transparent",
+      boxSizing: "border-box",
+      overflow: "hidden",
+      pointerEvents: "none",
+      color,
+      whiteSpace: multiline ? "pre-wrap" : "pre",
+      overflowWrap: multiline ? "break-word" : "normal",
+    });
+    mirror.hidden = false;
+    field.style.color = "transparent";
+    field.style.caretColor = color;
+
+    const content = mirror.firstChild;
+    content.style.transform = `translate(${-field.scrollLeft}px, ${-field.scrollTop}px)`;
+    content.replaceChildren(...this.segments(field.value));
+  }
+
+  segments(text) {
+    const nodes = [];
+    let last = 0;
+    for (const match of text.matchAll(REFERENCE)) {
+      nodes.push(document.createTextNode(text.slice(last, match.index)));
+      const mark = document.createElement("span");
+      mark.className = `cm-var cm-var-${this.status(match[1])}`;
+      mark.textContent = match[0];
+      nodes.push(mark);
+      last = match.index + match[0].length;
+    }
+    nodes.push(document.createTextNode(text.slice(last)));
+    return nodes;
   }
 
   options() {
