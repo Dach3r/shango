@@ -32,7 +32,7 @@ class CodeEditor::Component < ApplicationComponent
   end
 
   def wrapper_classes
-    class_names("code-editor min-h-0", "overflow-hidden", @options[:class])
+    class_names("code-editor min-h-0", "overflow-hidden", { "code-editor-readonly" => @readonly }, @options[:class])
   end
 
   def field_options

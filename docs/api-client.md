@@ -112,7 +112,7 @@ Inheritance: a request or folder with `inherit` uses the nearest ancestor that d
 
 ## 7. Code editor (CodeMirror 6)
 
-CodeMirror is vendored as **one** esbuild bundle at `vendor/javascript/codemirror.js` and pinned in `config/importmap.rb` (`pin "codemirror", to: "codemirror.js"`). A single bundle avoids loading several copies of `@codemirror/state`, which breaks editors with *Unrecognized extension value*. It is loaded lazily by `code_editor_controller.js`, so pages without editors do not pay for it.
+CodeMirror is vendored as **one** esbuild bundle at `vendor/javascript/codemirror.js` and pinned in `config/importmap.rb` (`pin "codemirror", to: "codemirror.js"`). A single bundle avoids loading several copies of `@codemirror/state`, which breaks editors with *Unrecognized extension value*. It is imported lazily by `code_editor_controller.js` but pinned with `preload: true` (`modulepreload`), so the download overlaps with the page load. Until the editor mounts, read-only editors (response body) show a pulsing skeleton instead of the raw fallback textarea; editable ones keep the textarea so the form works without JS.
 
 To rebuild (Node is needed only for this):
 

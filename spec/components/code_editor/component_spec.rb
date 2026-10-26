@@ -24,7 +24,7 @@ RSpec.describe CodeEditor::Component, type: :component do
     it "renders a named textarea", :aggregate_failures do
       render_inline(described_class.new(name: "body", id: "body_field", readonly: true, input_data: { x: "1" }))
 
-      expect(page).to have_css("textarea#body_field[name=body][rows='8'][readonly][data-x='1']")
+      expect(page).to have_css(".code-editor.code-editor-readonly textarea#body_field[name=body][rows='8'][readonly][data-x='1']")
     end
   end
 end
