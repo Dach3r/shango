@@ -22,3 +22,7 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+## License
+
+Shango is released under the [GNU Affero General Public License v3.0](LICENSE).

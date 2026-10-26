@@ -41,4 +41,5 @@ Add new docs under `docs/` and reference them here.
 - **Auto-commit**: after every important change (feature, fix, refactor, migration, config/docs update) commit automatically without asking. Stage only files of that change (no `git add -A`, other WIP stays untouched), one logical commit per change, run `bundle exec rubocop` on touched files first. Never push, never amend, never commit `.env` or secrets.
 - Keep code comment density low, match surrounding style.
 - **Tests**: RSpec, `bundle exec rspec`; coverage must stay at 100% (line and branch, enforced by SimpleCov). Every code change ships its specs in the same commit; use factories from `spec/factories`.
+- **License**: AGPL-3.0 (`LICENSE`, see `docs/product.md` §13). Only add dependencies with AGPL-compatible licenses (MIT, BSD, Apache-2.0, LGPL; never GPL-2.0-only). External contributions need a CLA before merge.
 - **Docs**: a behavior change updates its document in `docs/` in the same commit. Docs and CLAUDE.md are in English.

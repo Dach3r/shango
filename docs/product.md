@@ -257,6 +257,14 @@ Shango is initially built for personal use and open source distribution. It must
 
 If the product gets traction, a managed cloud version may follow. Keep that evolution in mind without anticipating complexity we do not yet need.
 
+### License
+
+Shango is licensed under the [GNU Affero General Public License v3.0](../LICENSE) (AGPL-3.0).
+
+- Anyone can run, modify, and self-host Shango freely.
+- Anyone offering a modified Shango as a network service must publish their changes under the same license, which protects the option of a managed cloud version.
+- Relicensing is possible only for code whose copyright we hold or have been granted the right to relicense. Before accepting the first external contribution, set up a CLA (or equivalent copyright assignment) that allows relicensing. Versions already published keep the license they were released under.
+
 ## 14. Roadmap
 
 Indicative order; may change as we learn. Each phase must deliver usable, verifiable functionality. Do not build complete systems before they are needed.
