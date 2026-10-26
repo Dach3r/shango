@@ -79,12 +79,6 @@ es:
         variables_hint: Referéncialas en las solicitudes como {{nombre}}. Los valores secretos se cifran y no se vuelven a mostrar al guardar.
         key_placeholder: Variable
         value_placeholder: Valor
-      create:
-        created: Entorno creado.
-      update:
-        updated: Entorno actualizado.
-      destroy:
-        destroyed: Entorno eliminado.
   workbench:
     title: Cliente API
     shared:

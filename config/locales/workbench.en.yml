@@ -79,12 +79,6 @@ en:
         variables_hint: Reference them in requests as {{name}}. Secret values are encrypted and never shown again after saving.
         key_placeholder: Variable
         value_placeholder: Value
-      create:
-        created: Environment created.
-      update:
-        updated: Environment updated.
-      destroy:
-        destroyed: Environment deleted.
   workbench:
     title: API Client
     shared:

@@ -16,7 +16,7 @@ module Workbench
 
     def create
       result = ApiClient::Requests::Create.call(collection: @collection, attributes: request_attributes)
-      return redirect_to(workbench_request_path(result.record), notice: t(".created"), status: :see_other) if result.success?
+      return redirect_to(workbench_request_path(result.record), status: :see_other) if result.success?
 
       @api_request = result.record
       render_form_errors
@@ -25,7 +25,7 @@ module Workbench
     def update
       result = ApiClient::Requests::Update.call(api_request: @api_request, attributes: request_attributes, uploads: request_uploads, binary_upload:)
       return render_placement if result.success? && @api_request.draft? && params[:place].present?
-      return redirect_to(workbench_request_path(@api_request), notice: t(".updated"), status: :see_other) if result.success?
+      return redirect_to(workbench_request_path(@api_request), status: :see_other) if result.success?
 
       @execution = @api_request.request_executions.recent.first
       render :show, status: :unprocessable_entity
@@ -33,7 +33,7 @@ module Workbench
 
     def destroy
       ApiClient::Requests::Destroy.call(api_request: @api_request)
-      redirect_to workbench_root_path, notice: t(".destroyed"), status: :see_other
+      redirect_to workbench_root_path, status: :see_other
     end
 
     private
