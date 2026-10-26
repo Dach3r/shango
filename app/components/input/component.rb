@@ -5,7 +5,7 @@ class Input::Component < ApplicationComponent
   ADORNMENT = "text-faint transition group-not-focus-within:group-has-[input:not(:placeholder-shown):not([aria-invalid=true])]:text-ink group-focus-within:text-solid group-has-[[aria-invalid=true]]:text-danger"
   TOGGLE = "#{ADORNMENT} hover:text-ink"
   ICON = ADORNMENT
-  DEFAULT_ICONS = {email: "mail", password: "lock"}.freeze
+  DEFAULT_ICONS = { email: "mail", password: "lock" }.freeze
 
   def initialize(form:, attribute:, label:, type: :text, icon: DEFAULT_ICONS[type], placeholder: nil, **options)
     @form = form
