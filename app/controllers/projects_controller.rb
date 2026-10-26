@@ -7,7 +7,7 @@ class ProjectsController < AuthenticatedController
   end
 
   def new
-    @project = Project.new(icon: Project::ICONS.first)
+    @project = Project.new(icon: "rocket")
   end
 
   def create
