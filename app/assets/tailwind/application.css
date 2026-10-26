@@ -142,6 +142,216 @@
   --glow: color-mix(in oklab, #19b3cc 14%, transparent);
 }
 
+[data-palette="purple"] {
+  --accent: light-dark(#6d28d9, #b79cf5);
+  --accent-hover: light-dark(#5b21b6, #d3c2fa);
+  --solid: light-dark(#7c3aed, #9a73f0);
+  --solid-hover: light-dark(#6d28d9, #b79cf5);
+  --glow: color-mix(in oklab, #8b5cf6 14%, transparent);
+}
+
+[data-palette="rose"] {
+  --accent: light-dark(#be123c, #f58aa8);
+  --accent-hover: light-dark(#9f1239, #f9b4c7);
+  --solid: light-dark(#e11d48, #f0587f);
+  --solid-hover: light-dark(#be123c, #f58aa8);
+  --glow: color-mix(in oklab, #f43f5e 14%, transparent);
+}
+
+[data-palette="orange"] {
+  --accent: light-dark(#b45309, #fb9d4b);
+  --accent-hover: light-dark(#92400e, #fdc08a);
+  --solid: light-dark(#ea6a0a, #f58a2f);
+  --solid-hover: light-dark(#c2570a, #fb9d4b);
+  --on-solid: var(--color-night-1000);
+  --glow: color-mix(in oklab, #f97316 14%, transparent);
+}
+
+[data-palette="forest"] {
+  --page: light-dark(#f1f6f0, #0d1a12);
+  --card: light-dark(var(--color-paper), #12241a);
+  --line: light-dark(#cfe0cf, #244433);
+  --faint: light-dark(#9db39f, #3f5f4d);
+  --field: light-dark(#f6faf5, #0d1a12);
+  --field-focus: light-dark(var(--color-paper), #0d1a12);
+  --dots: light-dark(#c6d8c6, #244433);
+  --accent: light-dark(#2f6b3a, #8fd19e);
+  --accent-hover: light-dark(#1f5129, #b5e3bf);
+  --solid: light-dark(#3b8a4a, #58b36a);
+  --solid-hover: light-dark(#2f6b3a, #8fd19e);
+  --glow: color-mix(in oklab, #4caf64 14%, transparent);
+}
+
+[data-palette="midnight"] {
+  --page: light-dark(#eef0fa, #0a0d1f);
+  --card: light-dark(var(--color-paper), #11152e);
+  --line: light-dark(#d3d8ef, #232a52);
+  --faint: light-dark(#9ea6cf, #3f4878);
+  --field: light-dark(#f4f5fc, #0a0d1f);
+  --field-focus: light-dark(var(--color-paper), #0a0d1f);
+  --dots: light-dark(#c7cdea, #232a52);
+  --ink: light-dark(var(--color-night-1000), #dcdff5);
+  --body: light-dark(#3d3d3a, #b3b8dc);
+  --muted: light-dark(#5d6188, #9aa0cc);
+  --accent: light-dark(#4338ca, #9aa5ff);
+  --accent-hover: light-dark(#3730a3, #c0c7ff);
+  --solid: light-dark(#4f46e5, #7480ff);
+  --solid-hover: light-dark(#4338ca, #9aa5ff);
+  --glow: color-mix(in oklab, #6366f1 14%, transparent);
+}
+
+[data-palette="nord"] {
+  --page: light-dark(#eceff4, #2e3440);
+  --card: light-dark(var(--color-paper), #3b4252);
+  --line: light-dark(#d8dee9, #4c566a);
+  --faint: light-dark(#a6b0c3, #616e88);
+  --field: light-dark(#f3f5f9, #2e3440);
+  --field-focus: light-dark(var(--color-paper), #2e3440);
+  --dots: light-dark(#d0d7e4, #4c566a);
+  --ink: light-dark(#2e3440, #eceff4);
+  --body: light-dark(#434c5e, #d8dee9);
+  --muted: light-dark(#667085, #aab3c5);
+  --accent: light-dark(#4c6a8f, #88c0d0);
+  --accent-hover: light-dark(#3b5575, #a8d4df);
+  --solid: light-dark(#5e81ac, #81a1c1);
+  --solid-hover: light-dark(#4c6a8f, #88c0d0);
+  --on-solid: light-dark(var(--color-paper), #2e3440);
+  --danger: light-dark(#bf616a, #d9808a);
+  --glow: color-mix(in oklab, #88c0d0 14%, transparent);
+}
+
+[data-palette="dracula"] {
+  --page: light-dark(#f6f4fb, #282a36);
+  --card: light-dark(var(--color-paper), #343746);
+  --line: light-dark(#ddd8ee, #44475a);
+  --faint: light-dark(#b4acd0, #6272a4);
+  --field: light-dark(#faf8fe, #21222c);
+  --field-focus: light-dark(var(--color-paper), #21222c);
+  --dots: light-dark(#d6d0ea, #44475a);
+  --ink: light-dark(#282a36, #f8f8f2);
+  --body: light-dark(#3d3d4f, #e0e0e8);
+  --muted: light-dark(#6a6a86, #b0b4d0);
+  --accent: light-dark(#6a35bd, #bd93f9);
+  --accent-hover: light-dark(#552a99, #d6bcfc);
+  --solid: light-dark(#7c3aed, #a77af0);
+  --solid-hover: light-dark(#6a35bd, #bd93f9);
+  --danger: light-dark(#c0262d, #ff5555);
+  --glow: color-mix(in oklab, #bd93f9 14%, transparent);
+}
+
+[data-palette="gruvbox"] {
+  --page: light-dark(#f2e5bc, #282828);
+  --card: light-dark(#fbf1c7, #3c3836);
+  --line: light-dark(#d5c4a1, #504945);
+  --faint: light-dark(#bdae93, #7c6f64);
+  --field: light-dark(#f9f5d7, #1d2021);
+  --field-focus: light-dark(#fbf1c7, #1d2021);
+  --dots: light-dark(#d5c4a1, #504945);
+  --ink: light-dark(#3c3836, #ebdbb2);
+  --body: light-dark(#504945, #d5c4a1);
+  --muted: light-dark(#7c6f64, #a89984);
+  --accent: light-dark(#af3a03, #fe8019);
+  --accent-hover: light-dark(#8f2f02, #fabd2f);
+  --solid: light-dark(#d65d0e, #fe8019);
+  --solid-hover: light-dark(#af3a03, #fabd2f);
+  --danger: light-dark(#9d0006, #fb4934);
+  --glow: color-mix(in oklab, #fe8019 14%, transparent);
+}
+
+[data-palette="solarized"] {
+  --page: light-dark(#fdf6e3, #002b36);
+  --card: light-dark(#fffdf5, #073642);
+  --line: light-dark(#e3dcc2, #12505e);
+  --faint: light-dark(#b9b3a0, #586e75);
+  --field: light-dark(#fbf3dc, #00212b);
+  --field-focus: light-dark(#fffdf5, #00212b);
+  --dots: light-dark(#e3dcc2, #12505e);
+  --ink: light-dark(#073642, #eee8d5);
+  --body: light-dark(#586e75, #93a1a1);
+  --muted: light-dark(#657b83, #839496);
+  --accent: light-dark(#1f6fa8, #4aa3e0);
+  --accent-hover: light-dark(#17557f, #7cbdea);
+  --solid: light-dark(#268bd2, #268bd2);
+  --solid-hover: light-dark(#1f6fa8, #4aa3e0);
+  --danger: light-dark(#dc322f, #f0605d);
+  --glow: color-mix(in oklab, #268bd2 14%, transparent);
+}
+
+[data-palette="sunset"] {
+  --page: light-dark(#fff4ec, #1c0f14);
+  --card: light-dark(var(--color-paper), #2a1519);
+  --line: light-dark(#f0d5c4, #4a2630);
+  --faint: light-dark(#d0a99a, #7a4452);
+  --field: light-dark(#fff9f4, #160b0f);
+  --field-focus: light-dark(var(--color-paper), #160b0f);
+  --dots: light-dark(#f0d5c4, #4a2630);
+  --ink: light-dark(var(--color-night-1000), #f6dfd6);
+  --body: light-dark(#3d3d3a, #d9bdb3);
+  --muted: light-dark(#7a5f57, #c4a39a);
+  --accent: light-dark(#c2255c, #ff7a9c);
+  --accent-hover: light-dark(#9c1d49, #ffa3b9);
+  --solid: light-dark(#e8472f, #ff6b57);
+  --solid-hover: light-dark(#c2255c, #ff7a9c);
+  --glow: color-mix(in oklab, #ff6b57 14%, transparent);
+}
+
+[data-palette="coffee"] {
+  --page: light-dark(#f5ede4, #1a1411);
+  --card: light-dark(#fffaf4, #241c17);
+  --line: light-dark(#e0d2c2, #3b2f27);
+  --faint: light-dark(#b8a794, #5b4a3d);
+  --field: light-dark(#faf4ec, #14100d);
+  --field-focus: light-dark(#fffaf4, #14100d);
+  --dots: light-dark(#e0d2c2, #3b2f27);
+  --ink: light-dark(#2b1f17, #eadfd2);
+  --body: light-dark(#4a3b30, #cdbfae);
+  --muted: light-dark(#7a6a5a, #b3a390);
+  --accent: light-dark(#6f431f, #d9a066);
+  --accent-hover: light-dark(#5e3817, #e8bf91);
+  --solid: light-dark(#8b5a2b, #c58a4e);
+  --solid-hover: light-dark(#6f431f, #d9a066);
+  --glow: color-mix(in oklab, #c58a4e 14%, transparent);
+}
+
+[data-palette="cyberpunk"] {
+  --page: light-dark(#f6f0ff, #0b0614);
+  --card: light-dark(var(--color-paper), #150c24);
+  --line: light-dark(#e1d3f7, #2e1a4d);
+  --faint: light-dark(#b9a3dc, #53357d);
+  --field: light-dark(#fbf7ff, #07030d);
+  --field-focus: light-dark(var(--color-paper), #07030d);
+  --dots: light-dark(#e1d3f7, #2e1a4d);
+  --ink: light-dark(#1a0b2e, #f1e6ff);
+  --body: light-dark(#3f2d5c, #cdb8ee);
+  --muted: light-dark(#6d5a8f, #b49fd9);
+  --accent: light-dark(#c4007a, #ff4fc3);
+  --accent-hover: light-dark(#9c0061, #ff8ad6);
+  --solid: light-dark(#e0148f, #ff2fb5);
+  --solid-hover: light-dark(#c4007a, #ff4fc3);
+  --on-solid: light-dark(var(--color-paper), #0b0614);
+  --danger: light-dark(#d1203f, #ff4d6d);
+  --glow: color-mix(in oklab, #ff2fb5 14%, transparent);
+}
+
+[data-palette="mono"] {
+  --page: light-dark(#f4f4f4, #0e0e0e);
+  --card: light-dark(var(--color-paper), #171717);
+  --line: light-dark(#dcdcdc, #2b2b2b);
+  --faint: light-dark(#aaaaaa, #454545);
+  --field: light-dark(#fafafa, #0a0a0a);
+  --field-focus: light-dark(var(--color-paper), #0a0a0a);
+  --dots: light-dark(#d4d4d4, #2b2b2b);
+  --ink: light-dark(#111111, #f2f2f2);
+  --body: light-dark(#333333, #c8c8c8);
+  --muted: light-dark(#666666, #a0a0a0);
+  --accent: light-dark(#111111, #ffffff);
+  --accent-hover: light-dark(#333333, #dddddd);
+  --solid: light-dark(#1a1a1a, #f2f2f2);
+  --solid-hover: light-dark(#000000, #ffffff);
+  --on-solid: light-dark(var(--color-paper), #111111);
+  --glow: color-mix(in oklab, #888888 14%, transparent);
+}
+
 /* Browser autofill paints its own background; cover it with the field tokens. */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
