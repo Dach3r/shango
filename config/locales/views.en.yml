@@ -122,8 +122,6 @@ en:
           heading: Profile
           description: Your name and the email you use to sign in.
         fields:
-          first_name_hint: Your given name.
-          last_name_hint: Your family name.
           email_hint: The address you use to sign in.
           password_hint: Leave it blank to keep the current one.
           password_confirmation_hint: Repeat the new password.

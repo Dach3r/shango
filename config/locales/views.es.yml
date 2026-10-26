@@ -122,8 +122,6 @@ es:
           heading: Perfil
           description: Tu nombre y el correo con el que inicias sesión.
         fields:
-          first_name_hint: Tu nombre de pila.
-          last_name_hint: Tu apellido.
           email_hint: La dirección con la que inicias sesión.
           password_hint: Déjala en blanco para mantener la actual.
           password_confirmation_hint: Repite la nueva contraseña.

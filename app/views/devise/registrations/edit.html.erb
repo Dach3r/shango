@@ -15,10 +15,12 @@
       <% end %>
     </div>
   <% elsif @tab != "delete_account" %>
+    <% name_fields = [
+         { attribute: :first_name, icon: "user", label: "devise.registrations.new.first_name", placeholder: "devise.registrations.new.first_name_placeholder", autocomplete: "given-name", required: true },
+         { attribute: :last_name, icon: "user", label: "devise.registrations.new.last_name", placeholder: "devise.registrations.new.last_name_placeholder", autocomplete: "family-name", required: true }
+       ] if @tab == "profile" %>
     <% fields = if @tab == "profile"
          [
-           { attribute: :first_name, icon: "user", label: "devise.registrations.new.first_name", placeholder: "devise.registrations.new.first_name_placeholder", autocomplete: "given-name", required: true },
-           { attribute: :last_name, icon: "user", label: "devise.registrations.new.last_name", placeholder: "devise.registrations.new.last_name_placeholder", autocomplete: "family-name", required: true },
            { attribute: :email, type: :email, label: "devise.registrations.edit.email", placeholder: "devise.registrations.edit.email_placeholder", autocomplete: "email", required: true }
          ]
        else
@@ -32,6 +34,13 @@
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+        <% if name_fields %>
+          <div class="grid gap-4 p-5 md:grid-cols-2 md:gap-8">
+            <% name_fields.each do |field| %>
+              <%= render Input::Component.new(form: f, **field.except(:label, :placeholder), label: t(field[:label]), placeholder: t(field[:placeholder])) %>
+            <% end %>
+          </div>
+        <% end %>
         <% fields.each do |field| %>
           <div class="grid gap-4 p-5 md:grid-cols-[1fr_20rem] md:items-center md:gap-8">
             <div class="min-w-0">
