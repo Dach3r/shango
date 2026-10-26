@@ -2,7 +2,7 @@ class Select::Component < ApplicationComponent
   include ControlsHelper
 
   SEARCH_THRESHOLD = 7
-  OPTION = "flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink aria-selected:text-ink data-[active]:bg-field data-[active]:text-ink focus-visible:outline-none"
+  OPTION = "flex w-full cursor-pointer items-center gap-2 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink aria-selected:text-ink data-[active]:bg-field data-[active]:text-ink focus-visible:outline-none"
 
   # options: [[label, value], ...]. Search shows by default once there are more than SEARCH_THRESHOLD options.
   # input_data goes on the hidden input (it dispatches `change`); class sizes the control like any field (`w-28`, `font-mono`).
