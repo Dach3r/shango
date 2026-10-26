@@ -1,5 +1,5 @@
 <%# Request path and name. Lives in the status bar, outside the editor form; the name input joins it through its `form` attribute. %>
-<div class="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
+<div class="flex min-w-0 flex-1 items-center gap-2 text-xs text-muted">
   <span class="shrink-0 truncate"><%= api_request.draft? ? t("workbench.requests.draft") : api_request.collection.name %></span>
   <% if api_request.folder %>
     <% api_request.folder.ancestors.reverse.each do |folder| %>
@@ -9,5 +9,5 @@
   <% end %>
   <%= lucide_icon "chevron-right", class: "size-3 shrink-0" %>
   <input type="text" name="api_request[name]" form="request_form" value="<%= api_request.name %>" aria-label="<%= t("workbench.requests.name") %>" autocomplete="off"
-         class="field-sizing-content min-w-16 max-w-full border border-transparent bg-transparent px-2 py-1 text-sm font-medium text-ink transition hover:border-line focus:border-solid focus:bg-field-focus focus:outline-none">
+         class="field-sizing-content min-w-16 max-w-full border border-transparent bg-transparent px-2 py-1 text-xs text-ink transition hover:border-line focus:border-solid focus:bg-field-focus focus:outline-none">
 </div>
