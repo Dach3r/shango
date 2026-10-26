@@ -1,6 +1,6 @@
 <% content_for :content do %>
   <main data-palette="mono" class="relative flex min-h-screen items-center justify-center overflow-hidden bg-page px-5 py-12 font-sans text-body">
-    <div class="pointer-events-none absolute inset-0 [view-transition-name:devise-dots] bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[1.75rem_1.75rem] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]"></div>
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[1.75rem_1.75rem] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]"></div>
     <div class="pointer-events-none absolute top-1/2 left-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--glow) blur-3xl"></div>
 
     <%= render Logo::Component.new(href: root_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
@@ -10,7 +10,7 @@
       <%= render LocaleSwitcher::Component.new %>
     </div>
 
-    <div class="relative w-full max-w-xl [view-transition-name:devise-card] rounded-[1.75rem] border border-line bg-card p-8 sm:p-10">
+    <div class="relative w-full max-w-xl rounded-[1.75rem] border border-line bg-card p-8 sm:p-10">
       <% if content_for?(:heading) %>
         <h1 class="mb-8 text-center text-3xl leading-tight font-semibold tracking-tight text-balance text-ink sm:text-4xl"><%= yield :heading %></h1>
       <% end %>

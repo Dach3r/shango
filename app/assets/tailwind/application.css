@@ -407,18 +407,6 @@ input:-webkit-autofill:focus {
   box-shadow: 0 0 0 1000px var(--field-focus) inset, 0 0 0 0.25rem color-mix(in srgb, var(--solid) 45%, transparent);
 }
 
-::view-transition-group(*) {
-  animation-duration: 300ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
 /* Code editors (CodeMirror): show the plain textarea until the editor has mounted. */
 .code-editor [data-code-editor-target="mount"] {
   display: none;
