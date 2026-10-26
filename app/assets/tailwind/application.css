@@ -19,10 +19,10 @@
   --color-brand-500: #f2b14c;
   --color-brand-600: #e39e2e;
   --color-brand-700: #8a5200;
-  --color-night-1000: #16181b;
-  --color-night-950: #1e2125;
-  --color-night-900: #1a1d21;
-  --color-night-700: #2e3238;
+  --color-night-1000: #141413;
+  --color-night-950: #1f1e1d;
+  --color-night-900: #1a1918;
+  --color-night-700: #30302e;
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
@@ -31,6 +31,7 @@
   --color-page: var(--page);
   --color-card: var(--card);
   --color-line: var(--line);
+  --color-faint: var(--faint);
   --color-field: var(--field);
   --color-field-focus: var(--field-focus);
   --color-ink: var(--ink);
@@ -46,22 +47,24 @@
 
 :root {
   color-scheme: light;
-  --page: #f6f4ee;
+  /* Warm ivory neutrals + clay accent. */
+  --page: #f4f1e8;
   --card: #ffffff;
-  --line: #e4e0d5;
-  --field: #fbfaf7;
+  --line: #ddd8c9;
+  --faint: #b3ad9d;
+  --field: #faf8f2;
   --field-focus: #ffffff;
-  --ink: var(--color-night-900);
-  --body: #3a3f46;
-  --muted: #5e636b;
-  --accent: var(--color-brand-700);
-  --accent-hover: #5e3700;
-  --solid: var(--color-brand-500);
-  --solid-hover: var(--color-brand-600);
-  --on-solid: #1a1405;
+  --ink: #141413;
+  --body: #3d3d3a;
+  --muted: #66655e;
+  --accent: #a9502f;
+  --accent-hover: #8a3f23;
+  --solid: #c15f3c;
+  --solid-hover: #a9502f;
+  --on-solid: #ffffff;
   --danger: #c81e1e;
-  --dots: #e0dccf;
-  --glow: color-mix(in oklab, var(--color-brand-500) 10%, transparent);
+  --dots: #d3cdbb;
+  --glow: color-mix(in oklab, #d97757 16%, transparent);
 }
 
 :root[data-theme="dark"] {
@@ -69,19 +72,20 @@
   --page: var(--color-night-1000);
   --card: var(--color-night-950);
   --line: var(--color-night-700);
+  --faint: #4a4944;
   --field: var(--color-night-1000);
   --field-focus: var(--color-night-1000);
-  --ink: #eceae6;
-  --body: #c9cdd2;
-  --muted: #a3a8af;
-  --accent: var(--color-brand-500);
-  --accent-hover: var(--color-brand-300);
-  --solid: var(--color-brand-500);
-  --solid-hover: var(--color-brand-300);
-  --on-solid: #1a1405;
+  --ink: #faf9f5;
+  --body: #d6d4cb;
+  --muted: #b0aea5;
+  --accent: #e58a69;
+  --accent-hover: #f0a187;
+  --solid: #d97757;
+  --solid-hover: #e58a69;
+  --on-solid: #141413;
   --danger: #ff9a9a;
   --dots: var(--color-night-700);
-  --glow: color-mix(in oklab, var(--color-brand-500) 6%, transparent);
+  --glow: color-mix(in oklab, #d97757 10%, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -90,19 +94,20 @@
     --page: var(--color-night-1000);
     --card: var(--color-night-950);
     --line: var(--color-night-700);
+    --faint: #4a4944;
     --field: var(--color-night-1000);
     --field-focus: var(--color-night-1000);
-    --ink: #eceae6;
-    --body: #c9cdd2;
-    --muted: #a3a8af;
-    --accent: var(--color-brand-500);
-    --accent-hover: var(--color-brand-300);
-    --solid: var(--color-brand-500);
-    --solid-hover: var(--color-brand-300);
-    --on-solid: #1a1405;
+    --ink: #faf9f5;
+    --body: #d6d4cb;
+    --muted: #b0aea5;
+    --accent: #e58a69;
+    --accent-hover: #f0a187;
+    --solid: #d97757;
+    --solid-hover: #e58a69;
+    --on-solid: #141413;
     --danger: #ff9a9a;
     --dots: var(--color-night-700);
-    --glow: color-mix(in oklab, var(--color-brand-500) 6%, transparent);
+    --glow: color-mix(in oklab, #d97757 10%, transparent);
   }
 }
 
