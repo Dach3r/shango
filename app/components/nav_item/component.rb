@@ -1,10 +1,10 @@
 class NavItem::Component < ApplicationComponent
-  BASE = "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+  BASE = "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
   COLLAPSIBLE = "lg:group-data-[collapsed=true]/sidebar:mx-auto lg:group-data-[collapsed=true]/sidebar:size-10 lg:group-data-[collapsed=true]/sidebar:justify-center lg:group-data-[collapsed=true]/sidebar:p-0"
   LABEL_COLLAPSIBLE = "lg:group-data-[collapsed=true]/sidebar:hidden"
-  ACTIVE = "bg-accent/15 font-semibold text-accent"
-  LINK = "text-body hover:bg-field hover:text-ink"
-  DISABLED = "cursor-not-allowed text-faint"
+  ACTIVE = "border-l-2 border-accent bg-field font-semibold text-accent"
+  LINK = "border-transparent text-body hover:bg-field hover:text-ink"
+  DISABLED = "cursor-not-allowed border-transparent text-faint"
 
   def initialize(label:, icon:, href: nil, active: false, collapsible: true)
     @label = label

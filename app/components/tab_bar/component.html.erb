@@ -4,13 +4,13 @@
             data-action="tabs#select" data-tabs-name-param="<%= item[:name] %>" <%= "disabled" if item[:disabled] %>>
       <%= item[:label] %>
       <% if item[:count].to_i.positive? %>
-        <span class="rounded-full bg-field px-1.5 text-xs text-muted"><%= item[:count] %></span>
+        <span class="border border-line bg-field px-1.5 font-mono text-xs text-muted"><%= item[:count] %></span>
       <% end %>
       <% if item[:dot] %>
         <span class="size-1.5 rounded-full bg-solid" aria-hidden="true"></span>
       <% end %>
       <% if item[:disabled] %>
-        <span class="rounded-full bg-field px-1.5 text-[0.625rem] font-medium uppercase text-faint"><%= t("components.nav_item.soon") %></span>
+        <span class="border border-line bg-field px-1.5 font-mono text-[0.625rem] font-medium uppercase text-faint"><%= t("components.nav_item.soon") %></span>
       <% end %>
     </button>
   <% end %>

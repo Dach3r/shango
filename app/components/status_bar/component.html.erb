@@ -1,11 +1,11 @@
 <footer class="sticky bottom-0 z-20 flex h-10 shrink-0 items-center gap-3 border-t border-line bg-page px-3 sm:px-4">
   <button type="button" data-drawer-target="trigger" data-action="drawer#toggle" aria-expanded="false" aria-label="<%= t("components.status_bar.menu") %>"
-          class="flex size-7 cursor-pointer items-center justify-center rounded-full text-body transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 lg:hidden">
+          class="flex size-7 cursor-pointer items-center justify-center text-body transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 lg:hidden">
     <%= lucide_icon "menu", class: "size-4" %>
   </button>
 
   <button type="button" data-sidebar-target="toggle" data-action="sidebar#toggle" aria-expanded="<%= !@collapsed %>" aria-label="<%= t("components.sidebar.toggle") %>" title="<%= t("components.sidebar.toggle") %>"
-          class="-ml-3 hidden h-full w-10 shrink-0 cursor-pointer items-center justify-center border-r border-line text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/50 sm:-ml-4 lg:flex">
+          class="-ml-3 hidden h-full w-10 shrink-0 cursor-pointer items-center justify-center border-r border-line text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50 sm:-ml-4 lg:flex">
     <%= lucide_icon "panel-left-close", class: "size-4 group-data-[collapsed=true]/sidebar:hidden" %>
     <%= lucide_icon "panel-left-open", class: "hidden size-4 group-data-[collapsed=true]/sidebar:block" %>
   </button>

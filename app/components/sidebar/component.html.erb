@@ -10,7 +10,7 @@
       </ul>
 
       <div class="mx-auto my-3 hidden h-px w-6 bg-line lg:group-data-[collapsed=true]/sidebar:block" aria-hidden="true"></div>
-      <p class="mt-4 mb-1.5 px-3 text-[0.6875rem] font-medium tracking-wide text-muted uppercase lg:group-data-[collapsed=true]/sidebar:hidden"><%= t("components.sidebar.soon") %></p>
+      <p class="mt-4 mb-1.5 px-3 font-mono text-[0.6875rem] tracking-widest text-muted uppercase lg:group-data-[collapsed=true]/sidebar:hidden"><%= t("components.sidebar.soon") %></p>
       <ul class="space-y-0.5">
         <% soon_items.each do |item| %>
           <li><%= render NavItem::Component.new(**item) %></li>
