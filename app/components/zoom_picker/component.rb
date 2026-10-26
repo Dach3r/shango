@@ -6,7 +6,7 @@ class ZoomPicker::Component < ApplicationComponent
   end
 
   def default?(level)
-    level == Zooming::NEUTRAL
+    level == Zooming::DEFAULT
   end
 
   def current?(level)

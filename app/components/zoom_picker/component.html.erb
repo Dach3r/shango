@@ -1,13 +1,15 @@
 <%= form_with url: preferences_path, method: :patch, data: { controller: "zoom" } do %>
   <fieldset>
     <legend class="sr-only"><%= t("components.zoom_picker.label") %></legend>
-    <div class="grid gap-1">
+    <div class="flex flex-wrap gap-2">
       <% levels.each do |level| %>
-        <label class="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 text-sm text-body transition hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent/50">
-          <%= radio_button_tag :zoom, level, current?(level), class: "accent-solid size-4 cursor-pointer", data: { action: "zoom#apply" } %>
-          <span>
-            <span class="<%= "font-semibold text-ink" if default?(level) %>"><%= level %>%</span>
-            <%= t("components.zoom_picker.default") if default?(level) %>
+        <label class="cursor-pointer">
+          <%= radio_button_tag :zoom, level, current?(level), class: "peer sr-only", data: { action: "zoom#apply" } %>
+          <span class="flex min-w-[4.25rem] flex-col items-center rounded-lg border border-line bg-card px-3 py-1.5 text-sm font-medium text-body transition hover:border-accent/50 hover:text-ink peer-checked:border-transparent peer-checked:bg-solid peer-checked:text-on-solid peer-focus-visible:ring-2 peer-focus-visible:ring-accent/50">
+            <%= level %>%
+            <% if default?(level) %>
+              <span class="text-[0.625rem] font-normal leading-tight opacity-70"><%= t("components.zoom_picker.default") %></span>
+            <% end %>
           </span>
         </label>
       <% end %>

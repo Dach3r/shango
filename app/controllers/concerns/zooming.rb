@@ -4,7 +4,6 @@ module Zooming
   COOKIE_KEY = :zoom
   LEVELS = %w[75 85 95 100 110 125 150 175 200].freeze
   DEFAULT = "95".freeze
-  NEUTRAL = "100".freeze
 
   included do
     helper_method :current_zoom
