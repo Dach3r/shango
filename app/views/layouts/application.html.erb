@@ -19,7 +19,7 @@
   <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body data-controller="form-validation" data-action="invalid->form-validation#mark:capture input->form-validation#clear">
+<body class="bg-page font-sans text-body" data-controller="form-validation" data-action="invalid->form-validation#mark:capture input->form-validation#clear">
   <%= content_for?(:content) ? yield(:content) : yield %>
 </body>
 </html>
