@@ -42,7 +42,7 @@ RSpec.describe "Environments" do
     it "wraps the content in the right sidebar frame and skips the app layout", :aggregate_failures do
       get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
 
-      expect(response.body).to include('<turbo-frame id="right_sidebar">')
+      expect(response.body).to include('<turbo-frame class="flex flex-1 flex-col" id="right_sidebar">')
       expect(response.body).not_to include("data-controller=\"right-sidebar\"")
     end
   end

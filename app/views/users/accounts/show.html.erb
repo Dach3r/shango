@@ -2,7 +2,7 @@
 <% content_for :heading, t(".title") %>
 
 <%= render layout: "projects/environments/panel" do %>
-  <section class="-m-4 divide-y divide-line">
+  <section class="-m-4 flex flex-1 flex-col divide-y divide-line">
     <div class="flex items-center gap-3 p-4">
       <span class="flex size-12 shrink-0 items-center justify-center bg-solid text-base font-semibold text-on-solid" aria-hidden="true"><%= current_user.initials %></span>
       <div class="min-w-0">
@@ -13,14 +13,14 @@
 
     <%= render ToolsNav::Component.new %>
 
-    <div>
+    <div class="mt-auto">
       <%= link_to edit_user_registration_path, data: { turbo_frame: "_top" },
-                  class: "flex h-11 w-full items-center gap-3 px-4 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+                  class: "flex h-10 w-full items-center gap-3 border-t border-line px-4 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
         <%= lucide_icon "settings", class: "size-4 shrink-0" %>
         <%= t("components.user_menu.settings") %>
       <% end %>
       <%= button_to destroy_user_session_path, method: :delete, form_class: "contents", form: { data: { turbo_frame: "_top" } },
-                    class: "flex h-11 w-full cursor-pointer items-center gap-3 border-t border-line px-4 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+                    class: "flex h-10 w-full cursor-pointer items-center gap-3 border-t border-line px-4 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
         <%= lucide_icon "log-out", class: "size-4 shrink-0" %>
         <%= t("components.user_menu.sign_out") %>
       <% end %>
