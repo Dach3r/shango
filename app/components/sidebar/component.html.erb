@@ -19,8 +19,8 @@
     </nav>
   </div>
 
-  <div class="sticky bottom-0 shrink-0 bg-page">
-    <div class="px-3 pt-2">
+  <div class="sticky bottom-0 shrink-0 bg-card">
+    <div class="border-t border-line px-3 py-2">
       <%= render NavItem::Component.new(**settings) %>
     </div>
     <%= render UserMenu::Component.new(user: @user) %>
