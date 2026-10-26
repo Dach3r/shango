@@ -20,5 +20,6 @@ RSpec.describe DraftTabs::Component, type: :component do
     expect(page).to have_link("First", href: "/workbench/requests/#{first.id}")
     expect(page).to have_css("a[aria-current=page]", text: "Second")
     expect(page).to have_no_css("a[aria-current=page]", text: "First")
+    expect(page).to have_link(I18n.t("components.draft_tabs.close", name: "First"), href: "/workbench/requests/#{first.id}/closure/new")
   end
 end

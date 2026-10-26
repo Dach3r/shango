@@ -36,6 +36,7 @@ en:
       manage: Manage environments
     draft_tabs:
       label: Drafts
+      close: "Close %{name}"
       new_draft: New draft request
     request_tree:
       label: Collections
@@ -125,6 +126,13 @@ en:
     requests:
       draft: Draft
       draft_name: New request
+      closures:
+        new:
+          title: "Close this draft?"
+          description: "“%{name}” hasn't been saved to a collection. Save it to keep your work, or discard it."
+          discard: "Don't save"
+          cancel: Cancel
+          save: Save changes
       placements:
         update:
           placed: "Request saved to “%{name}”."

@@ -36,6 +36,7 @@ es:
       manage: Administrar entornos
     draft_tabs:
       label: Borradores
+      close: "Cerrar %{name}"
       new_draft: Nueva solicitud en borrador
     request_tree:
       label: Colecciones
@@ -125,6 +126,13 @@ es:
     requests:
       draft: Borrador
       draft_name: Nueva solicitud
+      closures:
+        new:
+          title: "¿Cerrar este borrador?"
+          description: "«%{name}» no se ha guardado en una colección. Guárdalo para conservar tu trabajo o descártalo."
+          discard: "No guardar"
+          cancel: Cancelar
+          save: Guardar cambios
       placements:
         update:
           placed: "Solicitud guardada en “%{name}”."

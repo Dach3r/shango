@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :requests, only: %i[show update destroy] do
       scope module: :requests do
         resources :executions, only: %i[create show]
+        resource :closure, only: :new
         resource :duplication, only: :create
         resource :position, only: :update
         resource :placement, only: %i[new update]

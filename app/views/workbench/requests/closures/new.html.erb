@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render Modal::Component.new(icon: "file-pen-line", title: t(".title"), description: t(".description", name: @api_request.name), size: :sm) do |modal| %>
+    <% modal.with_footer do %>
+      <%= button_to t(".discard"), workbench_request_path(@api_request), method: :delete, class: button_classes(:danger), form_class: "mr-auto", data: { turbo_frame: "_top" } %>
+      <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= t(".cancel") %></button>
+      <%= link_to t(".save"), new_workbench_request_placement_path(@api_request), class: button_classes(:primary) %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,14 +1,22 @@
-<div class="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-line px-2 py-1.5">
+<div class="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-line px-2 py-1">
   <nav aria-label="<%= t("components.draft_tabs.label") %>" class="flex items-center gap-1">
     <% @drafts.each do |api_request| %>
-      <%= link_to workbench_request_path(api_request), class: classes(api_request), aria: { current: (api_request.id == @current_request_id ? "page" : nil) } do %>
-        <%= render MethodBadge::Component.new(method: api_request.http_method, short: true) %>
-        <span class="min-w-0 truncate"><%= api_request.name %></span>
-      <% end %>
+      <div class="<%= classes(api_request) %>">
+        <%= link_to workbench_request_path(api_request), class: "flex min-w-0 items-center gap-2 py-1 pl-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-lg",
+                    aria: { current: (api_request.id == @current_request_id ? "page" : nil) } do %>
+          <%= render MethodBadge::Component.new(method: api_request.http_method, short: true) %>
+          <span class="min-w-0 truncate"><%= api_request.name %></span>
+        <% end %>
+        <%= link_to new_workbench_request_closure_path(api_request), data: { turbo_frame: "modal" }, aria: { label: t("components.draft_tabs.close", name: api_request.name) },
+                    title: t("components.draft_tabs.close", name: api_request.name),
+                    class: "mr-1 flex size-4 shrink-0 items-center justify-center rounded text-muted opacity-0 transition hover:bg-line hover:text-ink focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 group-hover:opacity-100" do %>
+          <%= lucide_icon "x", class: "size-3" %>
+        <% end %>
+      </div>
     <% end %>
   </nav>
   <%= button_to workbench_drafts_path, method: :post, form_class: "contents", aria: { label: t("components.draft_tabs.new_draft") }, title: t("components.draft_tabs.new_draft"),
-                class: "flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
-    <%= lucide_icon "plus", class: "size-4" %>
+                class: "flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
+    <%= lucide_icon "plus", class: "size-3.5" %>
   <% end %>
 </div>
