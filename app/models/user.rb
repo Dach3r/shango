@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy
   has_many :api_requests, dependent: :destroy
+  has_many :request_tabs, dependent: :destroy
   has_many :projects, -> { merge(Membership.active) }, through: :memberships
 
   validates :first_name, :last_name, presence: true

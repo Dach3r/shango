@@ -1,21 +1,26 @@
 <div class="flex h-10 shrink-0 items-stretch overflow-x-auto border-b border-line">
-  <nav aria-label="<%= t("components.draft_tabs.label") %>" class="flex items-stretch">
-    <% @drafts.each do |api_request| %>
+  <nav aria-label="<%= t("components.request_tabs.label") %>" class="flex items-stretch">
+    <% @requests.each do |api_request| %>
       <div class="<%= classes(api_request) %>">
         <%= link_to workbench_request_path(api_request), class: "flex min-w-0 items-center gap-2 py-2 pr-2 pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-lg",
                     aria: { current: (api_request.id == @current_request_id ? "page" : nil) } do %>
           <%= render MethodBadge::Component.new(method: api_request.http_method, short: true) %>
           <span class="min-w-0 truncate"><%= api_request.name %></span>
         <% end %>
-        <%= link_to new_workbench_request_closure_path(api_request), data: { turbo_frame: "modal" }, aria: { label: t("components.draft_tabs.close", name: api_request.name) },
-                    title: t("components.draft_tabs.close", name: api_request.name),
-                    class: "mr-2 flex size-5 shrink-0 items-center justify-center rounded-md text-muted opacity-0 transition hover:bg-ink/10 hover:text-ink focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 group-hover:opacity-100" do %>
-          <%= lucide_icon "x", class: "size-3" %>
+        <% close_label = t("components.request_tabs.close", name: api_request.name) %>
+        <% if api_request.draft? %>
+          <%= link_to new_workbench_request_closure_path(api_request), data: { turbo_frame: "modal" }, aria: { label: close_label }, title: close_label, class: CLOSE do %>
+            <%= lucide_icon "x", class: "size-3" %>
+          <% end %>
+        <% else %>
+          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer" do %>
+            <%= lucide_icon "x", class: "size-3" %>
+          <% end %>
         <% end %>
       </div>
     <% end %>
   </nav>
-  <%= button_to workbench_drafts_path, method: :post, form_class: "contents", aria: { label: t("components.draft_tabs.new_draft") }, title: t("components.draft_tabs.new_draft"),
+  <%= button_to workbench_drafts_path, method: :post, form_class: "contents", aria: { label: t("components.request_tabs.new_draft") }, title: t("components.request_tabs.new_draft"),
                 class: "mx-2 flex size-6 shrink-0 self-center cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50" do %>
     <%= lucide_icon "plus", class: "size-3.5" %>
   <% end %>

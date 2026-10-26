@@ -14,6 +14,7 @@ class ApiRequest < ApplicationRecord
   belongs_to :user, optional: true
 
   has_many :request_executions, dependent: :destroy
+  has_many :request_tabs, dependent: :destroy
 
   has_many_attached :body_files
   has_one_attached :binary_body

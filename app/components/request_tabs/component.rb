@@ -1,15 +1,21 @@
-class DraftTabs::Component < ApplicationComponent
+class RequestTabs::Component < ApplicationComponent
   TAB = "group flex max-w-52 shrink-0 items-center border-r border-line text-xs transition hover:bg-field"
 
-  # drafts: the user's collection-less requests, shown as tabs; current_request_id highlights the open one.
-  def initialize(drafts:, current_request_id: nil)
-    @drafts = drafts
+  CLOSE = "mr-2 flex size-5 shrink-0 items-center justify-center rounded-md text-muted opacity-0 transition hover:bg-ink/10 hover:text-ink focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 group-hover:opacity-100"
+
+  # requests: the ones the user has open as tabs; current_request_id highlights the one being edited.
+  def initialize(requests:, current_request_id: nil)
+    @requests = requests
     @current_request_id = current_request_id
   end
 
   private
 
+  def current?(api_request)
+    api_request.id == @current_request_id
+  end
+
   def classes(api_request)
-    class_names(TAB, "bg-field font-medium text-ink" => api_request.id == @current_request_id, "text-muted" => api_request.id != @current_request_id)
+    class_names(TAB, "bg-field font-medium text-ink" => current?(api_request), "text-muted" => !current?(api_request))
   end
 end

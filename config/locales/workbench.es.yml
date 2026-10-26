@@ -34,8 +34,8 @@ es:
       none: Sin entorno
       label: Entorno
       manage: Administrar entornos
-    draft_tabs:
-      label: Borradores
+    request_tabs:
+      label: Solicitudes abiertas
       close: "Cerrar %{name}"
       new_draft: Nueva solicitud en borrador
     request_tree:

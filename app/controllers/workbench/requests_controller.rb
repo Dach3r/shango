@@ -6,6 +6,7 @@ module Workbench
     before_action :set_api_request, only: %i[show update destroy]
 
     def show
+      ApiClient::Tabs::Open.call(api_request: @api_request, user: current_user)
       @execution = @api_request.request_executions.recent.first
     end
 

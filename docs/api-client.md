@@ -7,7 +7,7 @@
 **Included**
 
 - Collections with nested folders and requests; drag and drop to move requests and folders.
-- Draft requests: per-user requests without a collection, shown as tabs (with a *+* to start a new one) above the editor, not in the sidebar. They can be edited and sent; *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
+- Open requests as tabs: every request the user opens (from the sidebar or a new draft) stays as a per-user tab above the editor, with a *+* to start a new draft. Closing a saved request's tab just closes the tab; closing a draft's tab asks to save or discard it. Draft requests are per-user requests without a collection; they can be edited and sent, *Save* asks which collection or folder to move them into, and closing that dialog keeps the draft.
 - Request editor: method, URL, query params (kept in sync with the URL), headers, body, authorization, settings, description.
 - Body types: none, JSON, text, XML, GraphQL, form-urlencoded, multipart (text and file fields), binary file.
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
@@ -30,6 +30,7 @@ All tables use UUID primary keys. `Project` is the tenancy boundary: every recor
 | `Collection` | `name`, `description`, `auth_type` (default `none`), `auth_config` (encrypted JSON); not exposed in the UI, collections carry no authorization. |
 | `Folder` | Self-referencing (`parent_id`) inside a collection; `auth_type` defaults to `inherit`. |
 | `ApiRequest` | The glossary's *Request*. `collection_id` is nullable: a request with no collection is a draft owned by `user_id` (a CHECK requires an owner and no folder); placing it clears `user_id`. `ApiRequest.visible_to(user)` hides other users' drafts, and controllers look requests up through it. Named `ApiRequest` to avoid clashing with `ActionDispatch::Request`. Rows (`query_params`, `headers`, `body_form`) are JSON arrays of `{key, value, enabled, description}`; `settings` holds timeout, redirects and SSL verification. Files use Active Storage (`body_files`, `binary_body`). |
+| `RequestTab` | A request the user has open as a tab (`user_id`, `api_request_id`, unique pair, cascade on delete). Tabs are ordered by creation; opening a request (`Tabs::Open`, called by `requests#show` and `CreateDraft`) is idempotent, `Tabs::Close` only removes the tab. |
 | `RequestExecution` | History entry: resolved URL, status, timing, headers, body (≤ 1 MB, text only), redirects, unresolved variables, error kind/message. Secrets are masked before saving. Last 50 per request are kept. |
 
 Monitoring and documentation will reference `ApiRequest`; they must not copy its fields (see architecture §4).
@@ -49,6 +50,7 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   requests_controller.rb             # show/update/destroy + modal create
   drafts_controller.rb               # POST = new blank draft
   requests/placements_controller.rb  # modal to save a draft into a collection/folder
+  requests/tabs_controller.rb        # DELETE = close a request's tab
   requests/executions_controller.rb  # POST = run, GET = history item
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_150248) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_161237) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -160,6 +160,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_150248) do
     t.index ["user_id"], name: "index_request_executions_on_user_id"
   end
 
+  create_table "request_tabs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "api_request_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_request_id"], name: "index_request_tabs_on_api_request_id"
+    t.index ["user_id", "api_request_id"], name: "index_request_tabs_on_user_id_and_api_request_id", unique: true
+    t.index ["user_id"], name: "index_request_tabs_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -220,6 +230,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_150248) do
   add_foreign_key "request_executions", "environments", on_delete: :nullify
   add_foreign_key "request_executions", "projects"
   add_foreign_key "request_executions", "users", on_delete: :nullify
+  add_foreign_key "request_tabs", "api_requests", on_delete: :cascade
+  add_foreign_key "request_tabs", "users", on_delete: :cascade
   add_foreign_key "users", "memberships", column: "current_membership_id", on_delete: :nullify
   add_foreign_key "variables", "environments"
 end

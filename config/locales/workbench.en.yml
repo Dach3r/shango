@@ -34,8 +34,8 @@ en:
       none: No environment
       label: Environment
       manage: Manage environments
-    draft_tabs:
-      label: Drafts
+    request_tabs:
+      label: Open requests
       close: "Close %{name}"
       new_draft: New draft request
     request_tree:

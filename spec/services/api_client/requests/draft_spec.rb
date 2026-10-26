@@ -61,12 +61,11 @@ RSpec.describe "Draft requests" do
     end
   end
 
-  describe ApiClient::Tree::LoadDrafts do
-    it "lists only the user's drafts" do
-      mine = ApiClient::Requests::CreateDraft.call(project:, user:).record
-      ApiClient::Requests::CreateDraft.call(project:, user: create(:user))
+  describe ApiClient::Requests::CreateDraft do
+    it "opens the draft as a tab" do
+      draft = described_class.call(project:, user:).record
 
-      expect(described_class.call(project:, user:)).to eq([mine])
+      expect(RequestTab.where(user:, api_request: draft)).to exist
     end
   end
 

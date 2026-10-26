@@ -1,7 +1,7 @@
 module ApiClient
-  module Tree
-    # The user's draft requests for the sidebar (no request bodies are loaded).
-    class LoadDrafts
+  module Tabs
+    # The requests the user has open as tabs, oldest first (no request bodies are loaded).
+    class Load
       include Serviceable
 
       def initialize(project:, user:)
@@ -12,7 +12,9 @@ module ApiClient
       private
 
       def perform
-        @project.api_requests.drafts.where(user_id: @user.id).select(*Load::REQUEST_COLUMNS).order(:position, :created_at).to_a
+        @project.api_requests.select(*Tree::Load::REQUEST_COLUMNS)
+                .joins(:request_tabs).where(request_tabs: { user_id: @user.id })
+                .order("request_tabs.created_at", "request_tabs.id").to_a
       end
     end
   end

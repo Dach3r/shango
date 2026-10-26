@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       scope module: :requests do
         resources :executions, only: %i[create show]
         resource :closure, only: :new
+        resource :tab, only: :destroy
         resource :duplication, only: :create
         resource :position, only: :update
         resource :placement, only: %i[new update]
