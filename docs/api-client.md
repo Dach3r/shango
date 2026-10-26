@@ -13,10 +13,11 @@
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the top bar.
 - Run a request, inspect the response (pretty / raw / HTML preview, headers, request details, redirects), per-request history (last 50).
 - Import from a cURL command and copy a request as cURL.
+- Import whole collections and environments from Postman, Insomnia, Bruno and OpenAPI/Swagger exports (see §9).
 - Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
 - Code editor (CodeMirror 6) with `{{variable}}` autocomplete and highlighting by state: set (green), empty value (amber), undefined (red, wavy underline) and dynamic `$` helpers (accent). The popup shows each variable's value under its name; hovering a `{{variable}}` shows a card with its value (or "Undefined") and its source (Environment or Dynamic). Secret values are masked server-side and never sent.
 
-**Not included (yet)**: pre/post-request scripts and assertions, collection runner, cookie jar, WebSocket/gRPC, Postman/OpenAPI/Bruno import, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
+**Not included (yet)**: pre/post-request scripts and assertions, collection runner, cookie jar, WebSocket/gRPC, import of scripts and of Bruno `.bru` folders or Apidog native files, export of collections, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
 
 ## 2. Domain model
 
@@ -55,6 +56,7 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   requests/executions/saves_controller.rb  # POST = save a run's response to history
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb
+  imports_controller.rb              # GET/POST /workbench/import (collections, folders, requests, environments)
   oauth2/{tokens,authorizations,callbacks}_controller.rb
 app/controllers/projects/            # project-level tools
   environments_controller.rb, current_environments_controller.rb, environments/variables_controller.rb
@@ -66,6 +68,7 @@ app/services/api_client/
   auth/                              # strategy registry (see §5)
   oauth2/                            # token client + services
   curl/{parser,exporter}.rb
+  imports/                           # detector, one importer per format, support helpers, Import (persist)
   request_builder.rb executor.rb connection.rb timing.rb ssrf_policy.rb variable_resolver.rb masker.rb
 app/services/projects/environments/  # Create, Update, Destroy, Select, UpdateVariable
 app/services/result.rb
@@ -133,9 +136,34 @@ Current build: codemirror 6.0.2, @codemirror/state 6.7.6, @codemirror/view 6.43.
 - Do not run `bin/rails tailwindcss:build` or `assets:precompile` in development: they create `public/assets`, which makes Propshaft serve a stale manifest. If CSS or new assets seem frozen, delete `public/assets`.
 - The editor form is multipart. New files are saved with the request; *Send* refreshes the page after uploads so file rows pick up their stored ids.
 
-## 9. Open questions
+## 9. Importing collections
+
+*Import* (upload icon in the sidebar header, `GET/POST /workbench/import`) accepts a file or pasted text, JSON or YAML, up to 5 MB, and detects the format by itself (`ApiClient::Imports::Detector`):
+
+| Source | Supported export |
+|--------|------------------|
+| Postman | Collection v2.x and environment files |
+| Insomnia | v4 JSON export, v5 YAML/JSON |
+| Bruno | JSON export of a collection |
+| OpenAPI | OpenAPI 3.x and Swagger 2.0 (JSON or YAML) |
+| Apidog | Export the project as Postman or OpenAPI and import that file |
+
+Pipeline: `Imports::Import` parses the content (`JSON.parse`, then `YAML.safe_load` without classes or aliases), runs the `Detector`, calls the format importer (`Postman`, `Insomnia`, `Bruno`, `Openapi`: pure functions that return a normalized tree of collections, folders, requests and environments plus `warnings`) and persists it in **one transaction** through the regular `Collections::Create`, `Folders::Create`, `Requests::Create` and `Projects::Environments::Create` services, always inside the current project. Any failure rolls everything back. Requests use the same attribute hash as `Curl::Parser`.
+
+Mapping rules:
+
+- Existing collection or environment names get a ` (2)`, ` (3)` suffix; nothing is overwritten.
+- Auth maps to the strategy registry (basic, bearer, API key, digest, AWS SigV4, OAuth 2.0 with client credentials/password/authorization code, Postman JWT is not mapped); anything else becomes *inherit* with a warning. Collection-level auth is pushed down to top-level folders and requests, since collections carry no authorization.
+- Variables: Insomnia `{{ _.name }}` becomes `{{name}}`, Postman `{{$randomUUID}}` becomes `{{$guid}}`; unsupported dynamic helpers are kept as typed and reported. Postman collection variables become an environment named `<collection> variables`; Insomnia sub-environments are merged over the base environment and nested data is flattened to `a.b` keys; Bruno and Postman secret flags are kept. Variables whose name is not a valid key are skipped with a warning.
+- OpenAPI: tags become folders, the first server (or `host` + `basePath`) becomes the `baseUrl` environment variable and URLs use `{{baseUrl}}`; path parameters become `{{param}}`; optional query and header parameters are imported disabled; request bodies are generated from examples or schemas (local `$ref`s only, depth-limited).
+- Not imported (reported as warnings): scripts, tests, file contents of file bodies, unsupported auth types, external `$ref`s.
+- Limits: 5 MB, 250 000 JSON nodes. Secrets travel through the encrypted models and `content`/`file` params are filtered from logs. Nothing is fetched from the network.
+
+Fixtures for each format live in `spec/fixtures/files/imports/`.
+
+## 10. Open questions
 
 - Team model: who can see or edit shared collections and environments (product open question).
 - Cookie jar and `Set-Cookie` handling (response cookies are shown merged into one header).
-- Import of Postman/OpenAPI/Bruno collections and export of collections.
+- Export of collections, and import of Bruno `.bru` folders / Apidog native files.
 - Automated tests: the repository has no test framework yet; the feature was verified manually and with throwaway scripts.
