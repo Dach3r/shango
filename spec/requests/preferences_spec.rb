@@ -17,10 +17,10 @@ RSpec.describe "Preferences" do
       expect(response.body).to include('data-zoom="125"')
     end
 
-    it "defaults the zoom to 90" do
+    it "defaults the zoom to 95" do
       get new_user_session_path
 
-      expect(response.body).to include('data-zoom="90"')
+      expect(response.body).to include('data-zoom="95"')
     end
 
     it "ignores unsupported values and falls back to root", :aggregate_failures do
