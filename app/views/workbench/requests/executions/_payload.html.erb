@@ -1,5 +1,17 @@
-<% if execution.request_body.present? %>
-  <pre class="max-h-full overflow-auto rounded-lg bg-field p-3 font-mono text-xs break-all whitespace-pre-wrap text-body"><%= execution.request_body %></pre>
+<% if execution.request_body.blank? %>
+  <p class="p-4 text-sm text-muted"><%= t("workbench.executions.no_payload") %></p>
 <% else %>
-  <p class="text-xs text-muted"><%= t("workbench.executions.no_payload") %></p>
+  <div class="flex h-full min-h-0 flex-col" data-controller="response-body" data-response-body-pretty-value="<%= execution.request_body %>">
+    <div class="flex items-center gap-2 px-3 py-2 text-xs text-muted">
+      <span class="font-mono uppercase"><%= payload_language(execution) %></span>
+      <span class="tabular-nums"><%= format_size(execution.request_body.bytesize) %></span>
+      <button type="button" data-action="response-body#copy" data-copied-label="<%= t("workbench.executions.copied") %>"
+              class="ml-auto flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50">
+        <%= lucide_icon "copy", class: "size-3.5" %><span data-label><%= t("workbench.executions.copy") %></span>
+      </button>
+    </div>
+    <div class="min-h-0 flex-1 px-1">
+      <%= render CodeEditor::Component.new(value: execution.request_body, language: payload_language(execution), readonly: true, class: "h-full") %>
+    </div>
+  </div>
 <% end %>

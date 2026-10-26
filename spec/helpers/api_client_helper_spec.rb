@@ -57,6 +57,22 @@ RSpec.describe ApiClientHelper do
     end
   end
 
+  describe "#payload_language" do
+    def execution(body, headers = [])
+      build(:request_execution, request_body: body, request_headers: headers)
+    end
+
+    it "uses the Content-Type header" do
+      expect(helper.payload_language(execution("a=1", [["content-type", "application/xml"]]))).to eq("xml")
+    end
+
+    it "sniffs JSON, XML and plain text from the body", :aggregate_failures do
+      expect(helper.payload_language(execution('{"a":1}'))).to eq("json")
+      expect(helper.payload_language(execution("<a/>"))).to eq("xml")
+      expect(helper.payload_language(execution("a=1"))).to eq("text")
+    end
+  end
+
   describe "#pretty_body" do
     def execution(body, type)
       build(:request_execution, response_body: body, content_type: type)

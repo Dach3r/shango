@@ -52,6 +52,18 @@ module ApiClientHelper
     BODY_LANGUAGES.find { |pattern, _| content_type.to_s.match?(pattern) }&.last || "text"
   end
 
+  # Language of the payload that was sent: its Content-Type header, else sniffed from the body.
+  def payload_language(execution)
+    _, content_type = execution.request_headers.find { |name, _| name.to_s.casecmp?("content-type") }
+    language = body_language(content_type)
+    return language unless language == "text"
+
+    JSON.parse(execution.request_body.to_s)
+    "json"
+  rescue JSON::ParserError
+    execution.request_body.to_s.lstrip.start_with?("<") ? "xml" : "text"
+  end
+
   # Response body formatted for reading; falls back to the raw text when it cannot be parsed.
   def pretty_body(execution)
     body = execution.response_body.to_s
