@@ -354,6 +354,23 @@ es:
       unresolved_url: "Variables sin definir en la URL: %{names}. Elige un entorno que las defina."
       invalid_graphql_variables: Las variables de GraphQL deben ser JSON válido.
       missing_binary: Elige un archivo para el body binario.
+    imports:
+      errors:
+        empty: Elige un archivo o pega su contenido.
+        too_large: El archivo es demasiado grande (máximo %{max} MB).
+        invalid_content: El contenido no es JSON ni YAML válido.
+        unknown_format: "Formato no reconocido. Compatibles: Postman, Insomnia, Bruno (JSON) y OpenAPI/Swagger."
+        too_complex: El archivo tiene demasiados elementos para importar.
+        nothing_to_import: El archivo no tiene nada que importar.
+        invalid_openapi: El documento OpenAPI no tiene paths para importar.
+        failed: "La importación falló: %{message}"
+      warnings:
+        auth_unsupported: "El tipo de autorización “%{type}” no está soportado; la request hereda en su lugar."
+        variable_unsupported: "La variable dinámica {{%{name}}} no está soportada y se dejó tal cual."
+        scripts: "“%{name}” tiene scripts, que no están soportados y se omitieron."
+        file_body: "“%{name}” tiene un body de archivo; el contenido del archivo no se importó."
+        external_ref: "La referencia externa “%{ref}” no se resolvió."
+        unknown_item: "Se omitió un elemento de tipo “%{type}”."
     curl:
       empty: Pega un comando curl.
       missing_url: El comando no tiene URL.
