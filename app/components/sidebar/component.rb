@@ -9,7 +9,7 @@ class Sidebar::Component < ApplicationComponent
     { key: :servers, icon: "server" },
     { key: :logs, icon: "scroll-text" },
     { key: :ai_assistant, icon: "sparkles" },
-    { key: :settings, icon: "settings" }
+    { key: :settings, icon: "settings", path: :edit_membership_path, controllers: "projects/memberships" }
   ].freeze
 
   def initialize(current_project:, projects:, user:)

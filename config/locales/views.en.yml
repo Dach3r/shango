@@ -58,6 +58,16 @@ en:
       icon_search: Search icons
       icon_empty: No icons found
       submit: Create project
+    memberships:
+      edit:
+        title: Settings
+        folder_toggle: Collections and folders
+        folder_toggle_hint: How they expand and collapse in the API Client sidebar. This only applies to you in this project.
+        folder_toggles:
+          click: Single click
+          double_click: Double click
+      update:
+        updated: Settings saved.
   devise:
     sessions:
       new:

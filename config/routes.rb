@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   scope module: :projects do
     resources :environments, except: :show
     resource :current_environment, only: :update
+    resource :membership, only: %i[edit update]
   end
 
   namespace :workbench do

@@ -285,6 +285,7 @@ en:
       unsupported_grant: The authorization code grant needs the browser flow.
       invalid_response: The token endpoint did not return JSON.
     executions:
+      resize: Resize the response panel
       error: Error
       failure: "The request could not be sent. Check the server log and try again."
       empty_title: No response yet

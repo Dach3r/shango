@@ -1,0 +1,25 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".title") %>
+
+<section class="mx-auto max-w-3xl">
+  <%= form_with model: @membership, url: membership_path, method: :patch, class: "space-y-6 rounded-2xl border border-line bg-card p-6" do |form| %>
+    <%= render "workbench/shared/errors", record: @membership %>
+
+    <fieldset>
+      <legend class="text-sm font-semibold text-ink"><%= t(".folder_toggle") %></legend>
+      <p class="mt-1 mb-3 text-xs text-muted"><%= t(".folder_toggle_hint") %></p>
+      <div class="space-y-2">
+        <% Membership::FOLDER_TOGGLES.each_key do |value| %>
+          <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-line bg-field px-3 py-2 text-sm text-ink has-[:checked]:border-solid">
+            <%= form.radio_button :folder_toggle, value, class: "mt-0.5 accent-[var(--color-solid)]" %>
+            <span><%= t(".folder_toggles.#{value}") %></span>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
+
+    <div class="flex justify-end">
+      <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
+    </div>
+  <% end %>
+</section>

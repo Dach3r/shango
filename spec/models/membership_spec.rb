@@ -7,6 +7,12 @@ RSpec.describe Membership do
   it { is_expected.to belong_to(:project) }
   it { is_expected.to define_enum_for(:role).with_values(member: "member", owner: "owner").backed_by_column_of_type(:string) }
 
+  it { is_expected.to define_enum_for(:folder_toggle).with_values(click: "click", double_click: "double_click").with_prefix.backed_by_column_of_type(:string) }
+
+  it "toggles folders on double click by default" do
+    expect(membership).to be_folder_toggle_double_click
+  end
+
   describe "uniqueness" do
     it "rejects a second active membership for the same user and project", :aggregate_failures do
       duplicate = build(:membership, user: membership.user, project: membership.project)

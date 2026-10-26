@@ -58,6 +58,16 @@ es:
       icon_search: Buscar icono
       icon_empty: No se encontraron iconos
       submit: Crear proyecto
+    memberships:
+      edit:
+        title: Configuración
+        folder_toggle: Colecciones y carpetas
+        folder_toggle_hint: Cómo se expanden y contraen en la barra lateral del API Client. Solo aplica para ti en este proyecto.
+        folder_toggles:
+          click: Un clic
+          double_click: Doble clic
+      update:
+        updated: Configuración guardada.
   devise:
     sessions:
       new:

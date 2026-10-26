@@ -1,6 +1,6 @@
 <div class="group relative">
   <details open data-tree-target="branch" data-id="<%= collection.id %>" data-action="toggle->tree#toggled" class="group/branch">
-    <summary data-drop-mode="into" data-collection-id="<%= collection.id %>" data-folder-id=""
+    <summary data-action="click->tree#summaryClick dblclick->tree#summaryDoubleClick" data-drop-mode="into" data-collection-id="<%= collection.id %>" data-folder-id=""
              class="flex cursor-pointer list-none items-center gap-2 rounded-lg py-1.5 pr-9 pl-2 text-sm font-medium text-ink transition hover:bg-field data-[drop-active=into]:bg-accent/15 [&::-webkit-details-marker]:hidden">
       <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition group-open/branch:rotate-90" %>
       <%= lucide_icon "folder-open", class: "size-4 shrink-0 text-accent" %>

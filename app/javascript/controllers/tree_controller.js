@@ -4,6 +4,7 @@ const STORAGE_KEY = "api-client:tree:closed";
 
 export default class extends Controller {
   static targets = ["branch"];
+  static values = { toggle: { type: String, default: "double_click" } };
 
   connect() {
     const closed = this.closed();
@@ -23,6 +24,19 @@ export default class extends Controller {
     } catch (_) {
       /* storage unavailable */
     }
+  }
+
+  // With double click toggling, a plain click on a branch row must not open or close it.
+  summaryClick(event) {
+    if (this.toggleValue === "double_click") event.preventDefault();
+  }
+
+  // Names rename on double click (inline-rename stops the event), so this only sees the rest of the row.
+  summaryDoubleClick(event) {
+    if (this.toggleValue !== "double_click") return;
+
+    const branch = event.currentTarget.closest("details");
+    branch.open = !branch.open;
   }
 
   dragStart(event) {

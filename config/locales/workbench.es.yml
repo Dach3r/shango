@@ -285,6 +285,7 @@ es:
       unsupported_grant: El flujo de código de autorización requiere el navegador.
       invalid_response: El endpoint del token no devolvió JSON.
     executions:
+      resize: Cambiar el alto de la respuesta
       error: Error
       failure: "No se pudo enviar la solicitud. Revisa el log del servidor e inténtalo de nuevo."
       empty_title: Aún no hay respuesta
