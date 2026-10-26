@@ -1,7 +1,7 @@
 <div class="relative w-full" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
   <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false"
           aria-label="<%= t("components.user_menu.label") %>" title="<%= @user.full_name %>"
-          class="flex w-full cursor-pointer items-center gap-3 border-t border-line bg-field px-3 py-3 text-left transition hover:bg-field-focus focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 lg:group-data-[collapsed=true]/sidebar:mx-auto lg:group-data-[collapsed=true]/sidebar:size-10 lg:group-data-[collapsed=true]/sidebar:justify-center lg:group-data-[collapsed=true]/sidebar:border-transparent lg:group-data-[collapsed=true]/sidebar:bg-transparent lg:group-data-[collapsed=true]/sidebar:p-0">
+          class="flex w-full cursor-pointer items-center gap-3 border-t border-line bg-field h-14 px-3 text-left transition hover:bg-field-focus focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 lg:group-data-[collapsed=true]/sidebar:mx-auto lg:group-data-[collapsed=true]/sidebar:size-10 lg:group-data-[collapsed=true]/sidebar:justify-center lg:group-data-[collapsed=true]/sidebar:border-transparent lg:group-data-[collapsed=true]/sidebar:bg-transparent lg:group-data-[collapsed=true]/sidebar:p-0">
     <span class="flex size-8 shrink-0 items-center justify-center bg-solid text-xs font-semibold text-on-solid" aria-hidden="true"><%= @user.initials %></span>
     <span class="min-w-0 flex-1 lg:group-data-[collapsed=true]/sidebar:hidden">
       <span class="block truncate text-sm font-medium text-ink"><%= @user.full_name %></span>
@@ -10,22 +10,22 @@
     <%= lucide_icon "chevrons-up-down", class: "size-4 shrink-0 text-muted lg:group-data-[collapsed=true]/sidebar:hidden" %>
   </button>
 
-  <div data-dropdown-target="menu" hidden class="absolute inset-x-0 bottom-full z-30 mb-2 border border-line bg-card p-1.5 lg:group-data-[collapsed=true]/sidebar:fixed lg:group-data-[collapsed=true]/sidebar:inset-x-auto lg:group-data-[collapsed=true]/sidebar:bottom-16 lg:group-data-[collapsed=true]/sidebar:left-2 lg:group-data-[collapsed=true]/sidebar:w-64">
-    <div class="flex items-center gap-3 px-2.5 py-2">
+  <div data-dropdown-target="menu" hidden class="absolute inset-x-0 bottom-full z-30 mb-2 border border-line bg-card p-0 lg:group-data-[collapsed=true]/sidebar:fixed lg:group-data-[collapsed=true]/sidebar:inset-x-auto lg:group-data-[collapsed=true]/sidebar:bottom-16 lg:group-data-[collapsed=true]/sidebar:left-2 lg:group-data-[collapsed=true]/sidebar:w-64">
+    <div class="flex h-14 items-center gap-3 px-3">
       <span class="flex size-9 shrink-0 items-center justify-center bg-solid text-xs font-semibold text-on-solid" aria-hidden="true"><%= @user.initials %></span>
       <div class="min-w-0">
         <p class="truncate text-sm font-medium text-ink"><%= @user.full_name %></p>
         <p class="truncate text-xs text-muted"><%= @user.email %></p>
       </div>
     </div>
-    <div class="my-1.5 border-t border-line"></div>
+    <div class="border-t border-line"></div>
     <%= link_to edit_user_registration_path,
-                class: "flex min-h-10 w-full items-center gap-3 px-2.5 py-2 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+                class: "flex h-14 w-full items-center gap-3 px-3 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
       <%= lucide_icon "settings", class: "size-4 shrink-0" %>
       <%= t("components.user_menu.settings") %>
     <% end %>
     <%= button_to destroy_user_session_path, method: :delete, form_class: "contents",
-                  class: "flex min-h-10 w-full cursor-pointer items-center gap-3 px-2.5 py-2 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+                  class: "flex h-14 w-full cursor-pointer items-center gap-3 px-3 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
       <%= lucide_icon "log-out", class: "size-4 shrink-0" %>
       <%= t("components.user_menu.sign_out") %>
     <% end %>
