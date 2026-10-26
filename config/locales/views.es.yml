@@ -41,6 +41,7 @@ es:
     status_bar:
       menu: Abrir navegación
     user_menu:
+      label: Menú de cuenta
       sign_out: Cerrar sesión
     input:
       toggle_password: Mostrar u ocultar contraseña
@@ -56,6 +57,7 @@ es:
   projects:
     index:
       title: Proyectos
+      label: Menú de cuenta
       sign_out: Cerrar sesión
     new:
       title: Nuevo proyecto
