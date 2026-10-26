@@ -87,7 +87,7 @@ RSpec.describe ApiClient::Imports::Postman do
 
     it "builds URLs from host and path parts without protocol or path", :aggregate_failures do
       requests = build([
-        { "name" => "a", "request" => { "url" => { "host" => ["x", "test"] } } },
+        { "name" => "a", "request" => { "url" => { "host" => %w[x test] } } },
         { "name" => "b", "request" => { "url" => { "host" => ["x"], "path" => ["p"] } } }
       ]).fetch(:requests)
       expect(requests.map { |request| request[:url] }).to eq(["x.test", "x/p"])
