@@ -1,5 +1,5 @@
 <%= link_to account_path, aria_label: t("components.user_menu.label"), title: @user.full_name,
-            data: { turbo_frame: "right_sidebar", action: "right-sidebar#toggle", right_sidebar_title_param: t("components.user_menu.title") },
+            data: { turbo_frame: "right_sidebar", action: "right-sidebar#toggle", right_sidebar_title_param: t("components.user_menu.title"), right_sidebar_bare_param: true },
             class: "flex h-full shrink-0 cursor-pointer items-center border-l border-line px-2.5 transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
   <span class="flex size-6 items-center justify-center bg-field text-xs font-semibold text-ink" aria-hidden="true"><%= @user.initials %></span>
 <% end %>

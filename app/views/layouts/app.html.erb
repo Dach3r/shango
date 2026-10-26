@@ -11,7 +11,7 @@
       </div>
 
       <aside hidden data-right-sidebar-target="panel" aria-label="<%= t("layouts.app.right_sidebar") %>" class="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-line bg-page lg:sticky lg:top-0 lg:z-auto lg:h-[calc(100vh-2.5rem)] lg:w-[var(--right-sidebar-width,28rem)] lg:max-w-none">
-        <header class="flex h-10 shrink-0 items-center justify-between gap-2 border-b border-line px-4">
+        <header data-right-sidebar-target="header" class="flex h-10 shrink-0 [&[hidden]]:hidden items-center justify-between gap-2 border-b border-line px-4">
           <h2 class="truncate text-sm font-semibold text-ink" data-right-sidebar-target="title"></h2>
           <button type="button" data-action="right-sidebar#close" aria-label="<%= t("layouts.app.close_right_sidebar") %>"
                   class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
