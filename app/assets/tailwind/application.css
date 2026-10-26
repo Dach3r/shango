@@ -60,12 +60,12 @@
 
 :root,
 [data-palette="default"] {
-  --page: light-dark(#f8f7f1, var(--color-night-1000));
-  --card: light-dark(var(--color-paper), var(--color-night-950));
-  --line: light-dark(#ddd8c9, var(--color-night-700));
-  --faint: light-dark(#b3ad9d, #4a4944);
-  --field: light-dark(#faf8f2, var(--color-night-1000));
-  --field-focus: light-dark(var(--color-paper), var(--color-night-1000));
+  --page: light-dark(#f8f6ef, #1a1a19);
+  --card: light-dark(var(--color-paper), #242422);
+  --line: light-dark(#cdc7b3, #413f3b);
+  --faint: light-dark(#9a9482, #5f5d56);
+  --field: light-dark(#faf8f2, #1a1a19);
+  --field-focus: light-dark(var(--color-paper), #1a1a19);
   --ink: light-dark(var(--color-night-1000), #d6d4ca);
   --body: light-dark(#3d3d3a, #bab8ae);
   --muted: light-dark(#66655e, #b0aea5);
@@ -81,7 +81,7 @@
   --syn-number: light-dark(#7a4bb0, #c9a6f2);
   --syn-keyword: light-dark(#a9502f, #e58a69);
   --syn-comment: light-dark(#8a877b, #6f6d66);
-  --dots: light-dark(#d3cdbb, var(--color-night-700));
+  --dots: light-dark(#c9c3af, #3a3935);
   --glow: light-dark(
     color-mix(in oklab, var(--color-clay-500) 16%, transparent),
     color-mix(in oklab, var(--color-clay-500) 10%, transparent)
@@ -132,13 +132,13 @@
 }
 
 [data-palette="ocean"] {
-  --page: light-dark(#eef6f8, #0b1a21);
-  --card: light-dark(var(--color-paper), #10242d);
-  --line: light-dark(#cde0e6, #1f3a46);
-  --faint: light-dark(#9ab4bd, #3d5a66);
-  --field: light-dark(#f4fafb, #0b1a21);
-  --field-focus: light-dark(var(--color-paper), #0b1a21);
-  --dots: light-dark(#c2d8df, #1f3a46);
+  --page: light-dark(#eef6f8, #0e222b);
+  --card: light-dark(var(--color-paper), #14303b);
+  --line: light-dark(#b3d0d9, #2d5262);
+  --faint: light-dark(#7fa0ab, #50788a);
+  --field: light-dark(#f4fafb, #0e222b);
+  --field-focus: light-dark(var(--color-paper), #0e222b);
+  --dots: light-dark(#b3d0d9, #2d5262);
   --accent: light-dark(#0b6b7d, #5fd0e3);
   --accent-hover: light-dark(#085667, #94e2ef);
   --solid: light-dark(#0e8aa0, #2fb8cf);
@@ -172,13 +172,13 @@
 }
 
 [data-palette="forest"] {
-  --page: light-dark(#f1f6f0, #0d1a12);
-  --card: light-dark(var(--color-paper), #12241a);
-  --line: light-dark(#cfe0cf, #244433);
-  --faint: light-dark(#9db39f, #3f5f4d);
-  --field: light-dark(#f6faf5, #0d1a12);
-  --field-focus: light-dark(var(--color-paper), #0d1a12);
-  --dots: light-dark(#c6d8c6, #244433);
+  --page: light-dark(#f0f6ef, #10231a);
+  --card: light-dark(var(--color-paper), #17301f);
+  --line: light-dark(#b8d2b9, #335b45);
+  --faint: light-dark(#84a287, #56806a);
+  --field: light-dark(#f6faf5, #10231a);
+  --field-focus: light-dark(var(--color-paper), #10231a);
+  --dots: light-dark(#b8d2b9, #335b45);
   --accent: light-dark(#2f6b3a, #8fd19e);
   --accent-hover: light-dark(#1f5129, #b5e3bf);
   --solid: light-dark(#3b8a4a, #58b36a);
@@ -187,13 +187,13 @@
 }
 
 [data-palette="midnight"] {
-  --page: light-dark(#eef0fa, #0a0d1f);
-  --card: light-dark(var(--color-paper), #11152e);
-  --line: light-dark(#d3d8ef, #232a52);
-  --faint: light-dark(#9ea6cf, #3f4878);
-  --field: light-dark(#f4f5fc, #0a0d1f);
-  --field-focus: light-dark(var(--color-paper), #0a0d1f);
-  --dots: light-dark(#c7cdea, #232a52);
+  --page: light-dark(#eef0fa, #0f1430);
+  --card: light-dark(var(--color-paper), #171c3d);
+  --line: light-dark(#bcc4e8, #343d74);
+  --faint: light-dark(#8791c4, #5863a0);
+  --field: light-dark(#f4f5fc, #0f1430);
+  --field-focus: light-dark(var(--color-paper), #0f1430);
+  --dots: light-dark(#bcc4e8, #343d74);
   --ink: light-dark(var(--color-night-1000), #dcdff5);
   --body: light-dark(#3d3d3a, #b3b8dc);
   --muted: light-dark(#5d6188, #9aa0cc);
@@ -205,13 +205,13 @@
 }
 
 [data-palette="nord"] {
-  --page: light-dark(#eceff4, #2e3440);
-  --card: light-dark(var(--color-paper), #3b4252);
-  --line: light-dark(#d8dee9, #4c566a);
-  --faint: light-dark(#a6b0c3, #616e88);
+  --page: light-dark(#eaeef4, #2e3440);
+  --card: light-dark(var(--color-paper), #3f485a);
+  --line: light-dark(#c4cddd, #5b677f);
+  --faint: light-dark(#8e9ab3, #7584a0);
   --field: light-dark(#f3f5f9, #2e3440);
   --field-focus: light-dark(var(--color-paper), #2e3440);
-  --dots: light-dark(#d0d7e4, #4c566a);
+  --dots: light-dark(#c4cddd, #5b677f);
   --ink: light-dark(#2e3440, #eceff4);
   --body: light-dark(#434c5e, #d8dee9);
   --muted: light-dark(#667085, #aab3c5);
@@ -225,13 +225,13 @@
 }
 
 [data-palette="dracula"] {
-  --page: light-dark(#f6f4fb, #282a36);
-  --card: light-dark(var(--color-paper), #343746);
-  --line: light-dark(#ddd8ee, #44475a);
-  --faint: light-dark(#b4acd0, #6272a4);
-  --field: light-dark(#faf8fe, #21222c);
-  --field-focus: light-dark(var(--color-paper), #21222c);
-  --dots: light-dark(#d6d0ea, #44475a);
+  --page: light-dark(#f5f3fb, #282a36);
+  --card: light-dark(var(--color-paper), #3a3d4f);
+  --line: light-dark(#cbc4e4, #565a73);
+  --faint: light-dark(#9f96c4, #7384b8);
+  --field: light-dark(#faf8fe, #222430);
+  --field-focus: light-dark(var(--color-paper), #222430);
+  --dots: light-dark(#cbc4e4, #565a73);
   --ink: light-dark(#282a36, #f8f8f2);
   --body: light-dark(#3d3d4f, #e0e0e8);
   --muted: light-dark(#6a6a86, #b0b4d0);
@@ -244,13 +244,13 @@
 }
 
 [data-palette="gruvbox"] {
-  --page: light-dark(#f2e5bc, #282828);
+  --page: light-dark(#f0e3b8, #262626);
   --card: light-dark(#fbf1c7, #3c3836);
-  --line: light-dark(#d5c4a1, #504945);
-  --faint: light-dark(#bdae93, #7c6f64);
-  --field: light-dark(#f9f5d7, #1d2021);
-  --field-focus: light-dark(#fbf1c7, #1d2021);
-  --dots: light-dark(#d5c4a1, #504945);
+  --line: light-dark(#c2b088, #5e564f);
+  --faint: light-dark(#a89a7c, #8a7d70);
+  --field: light-dark(#f9f5d7, #1e2021);
+  --field-focus: light-dark(#fbf1c7, #1e2021);
+  --dots: light-dark(#c2b088, #5e564f);
   --ink: light-dark(#3c3836, #ebdbb2);
   --body: light-dark(#504945, #d5c4a1);
   --muted: light-dark(#7c6f64, #a89984);
@@ -263,13 +263,13 @@
 }
 
 [data-palette="solarized"] {
-  --page: light-dark(#fdf6e3, #002b36);
-  --card: light-dark(#fffdf5, #073642);
-  --line: light-dark(#e3dcc2, #12505e);
-  --faint: light-dark(#b9b3a0, #586e75);
-  --field: light-dark(#fbf3dc, #00212b);
-  --field-focus: light-dark(#fffdf5, #00212b);
-  --dots: light-dark(#e3dcc2, #12505e);
+  --page: light-dark(#faf2dc, #02323f);
+  --card: light-dark(#fffdf5, #0a4150);
+  --line: light-dark(#d6cdab, #1f6272);
+  --faint: light-dark(#a69f88, #688590);
+  --field: light-dark(#fbf3dc, #012a35);
+  --field-focus: light-dark(#fffdf5, #012a35);
+  --dots: light-dark(#d6cdab, #1f6272);
   --ink: light-dark(#073642, #eee8d5);
   --body: light-dark(#586e75, #93a1a1);
   --muted: light-dark(#657b83, #839496);
@@ -282,13 +282,13 @@
 }
 
 [data-palette="sunset"] {
-  --page: light-dark(#fff4ec, #1c0f14);
-  --card: light-dark(var(--color-paper), #2a1519);
-  --line: light-dark(#f0d5c4, #4a2630);
-  --faint: light-dark(#d0a99a, #7a4452);
-  --field: light-dark(#fff9f4, #160b0f);
-  --field-focus: light-dark(var(--color-paper), #160b0f);
-  --dots: light-dark(#f0d5c4, #4a2630);
+  --page: light-dark(#fff1e6, #22121a);
+  --card: light-dark(var(--color-paper), #2f181d);
+  --line: light-dark(#e8c3ac, #5a2e3a);
+  --faint: light-dark(#c29581, #8c5262);
+  --field: light-dark(#fff9f4, #1b0d12);
+  --field-focus: light-dark(var(--color-paper), #1b0d12);
+  --dots: light-dark(#e8c3ac, #5a2e3a);
   --ink: light-dark(var(--color-night-1000), #f6dfd6);
   --body: light-dark(#3d3d3a, #d9bdb3);
   --muted: light-dark(#7a5f57, #c4a39a);
@@ -300,13 +300,13 @@
 }
 
 [data-palette="coffee"] {
-  --page: light-dark(#f5ede4, #1a1411);
-  --card: light-dark(#fffaf4, #241c17);
-  --line: light-dark(#e0d2c2, #3b2f27);
-  --faint: light-dark(#b8a794, #5b4a3d);
-  --field: light-dark(#faf4ec, #14100d);
-  --field-focus: light-dark(#fffaf4, #14100d);
-  --dots: light-dark(#e0d2c2, #3b2f27);
+  --page: light-dark(#f3eadf, #1f1814);
+  --card: light-dark(#fffaf4, #2a201a);
+  --line: light-dark(#d2c0aa, #4a3b30);
+  --faint: light-dark(#a49078, #6d5a4a);
+  --field: light-dark(#faf4ec, #19130f);
+  --field-focus: light-dark(#fffaf4, #19130f);
+  --dots: light-dark(#d2c0aa, #4a3b30);
   --ink: light-dark(#2b1f17, #eadfd2);
   --body: light-dark(#4a3b30, #cdbfae);
   --muted: light-dark(#7a6a5a, #b3a390);
@@ -318,13 +318,13 @@
 }
 
 [data-palette="cyberpunk"] {
-  --page: light-dark(#f6f0ff, #0b0614);
-  --card: light-dark(var(--color-paper), #150c24);
-  --line: light-dark(#e1d3f7, #2e1a4d);
-  --faint: light-dark(#b9a3dc, #53357d);
-  --field: light-dark(#fbf7ff, #07030d);
-  --field-focus: light-dark(var(--color-paper), #07030d);
-  --dots: light-dark(#e1d3f7, #2e1a4d);
+  --page: light-dark(#f5eeff, #130a21);
+  --card: light-dark(var(--color-paper), #1a0f2e);
+  --line: light-dark(#cfbcf0, #3d2366);
+  --faint: light-dark(#a58ad0, #68449c);
+  --field: light-dark(#fbf7ff, #0f0719);
+  --field-focus: light-dark(var(--color-paper), #0f0719);
+  --dots: light-dark(#cfbcf0, #3d2366);
   --ink: light-dark(#1a0b2e, #f1e6ff);
   --body: light-dark(#3f2d5c, #cdb8ee);
   --muted: light-dark(#6d5a8f, #b49fd9);
@@ -338,13 +338,13 @@
 }
 
 [data-palette="mono"] {
-  --page: light-dark(#f4f4f4, #0e0e0e);
-  --card: light-dark(var(--color-paper), #171717);
-  --line: light-dark(#dcdcdc, #2b2b2b);
-  --faint: light-dark(#aaaaaa, #454545);
-  --field: light-dark(#fafafa, #0a0a0a);
-  --field-focus: light-dark(var(--color-paper), #0a0a0a);
-  --dots: light-dark(#d4d4d4, #2b2b2b);
+  --page: light-dark(#f4f4f4, #161616);
+  --card: light-dark(var(--color-paper), #1c1c1c);
+  --line: light-dark(#c4c4c4, #3a3a3a);
+  --faint: light-dark(#8f8f8f, #5a5a5a);
+  --field: light-dark(#fafafa, #101010);
+  --field-focus: light-dark(var(--color-paper), #101010);
+  --dots: light-dark(#c4c4c4, #3a3a3a);
   --ink: light-dark(#111111, #f2f2f2);
   --body: light-dark(#333333, #c8c8c8);
   --muted: light-dark(#666666, #a0a0a0);
