@@ -1,4 +1,4 @@
-<div data-key-value-table-target="row" class="group flex items-center gap-2 px-3 py-1.5">
+<div data-key-value-table-target="row" class="group flex items-center gap-2 px-3 py-1">
   <% if persisted? %>
     <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
     <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>

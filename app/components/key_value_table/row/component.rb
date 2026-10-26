@@ -15,7 +15,7 @@ class KeyValueTable::Row::Component < ApplicationComponent
   attr_reader :row, :variant
 
   def cell_classes(extra)
-    field_classes("!border-transparent !bg-transparent hover:!bg-field focus:!bg-field-focus #{extra}")
+    field_classes("!border-transparent !bg-transparent hover:!bg-field focus:!bg-field-focus h-9 !py-0 #{extra}")
   end
 
   def field_name(field)
