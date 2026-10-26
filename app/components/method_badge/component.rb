@@ -10,7 +10,7 @@ class MethodBadge::Component < ApplicationComponent
   }.freeze
   ABBREVIATIONS = { "DELETE" => "DEL", "OPTIONS" => "OPT", "PATCH" => "PAT" }.freeze
 
-  BASE = "font-mono text-[11px] font-semibold tracking-tight".freeze
+  BASE = "font-mono text-[0.6875rem] font-semibold tracking-tight".freeze
 
   # Short label and classes per method, so the client can restyle badges when the method changes before saving.
   def self.presets

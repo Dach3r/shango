@@ -21,7 +21,7 @@
     <div class="flex min-w-0 flex-1 items-stretch rounded-lg border border-line bg-field pr-3 transition focus-within:border-solid focus-within:ring-2 focus-within:ring-solid/40">
       <div class="flex">
         <%= render Select::Component.new(name: "api_request[http_method]", options: method_options, value: api_request.http_method, label: t("workbench.requests.method"),
-                                         class: "w-20 @xl:w-24 shrink-0 h-full rounded-none! rounded-l-[7px]! border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
+                                         class: "w-20 @xl:w-24 shrink-0 h-full rounded-none! rounded-l-[0.4375rem]! border-0! bg-card! px-3! font-mono text-xs font-semibold focus:ring-0! focus:bg-card!",
                                          input_data: { action: "change->request-form#methodChanged" }) %>
       </div>
       <span class="w-px shrink-0 bg-line" aria-hidden="true"></span>

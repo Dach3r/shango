@@ -233,14 +233,14 @@ export default class extends Controller {
     name.className = "flex-1 truncate";
     name.textContent = option.label;
     const info = document.createElement("span");
-    info.className = "ml-6 font-sans text-[11px] text-muted";
+    info.className = "ml-6 font-sans text-[0.6875rem] text-muted";
     info.textContent = option.info;
     row.append(dot, name, info);
     item.append(row);
 
     if (option.value) {
       const value = document.createElement("div");
-      value.className = "ml-3.5 truncate text-[11px] text-muted";
+      value.className = "ml-3.5 truncate text-[0.6875rem] text-muted";
       value.textContent = option.value;
       item.append(value);
     }

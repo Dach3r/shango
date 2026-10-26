@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-const MENU_WIDTH = 216;
+const MENU_WIDTH_REM = 13.5;
 
 // Right click opens the row's actions menu at the pointer; the "…" button keeps working as usual.
 export default class extends Controller {
@@ -14,10 +14,12 @@ export default class extends Controller {
     event.stopPropagation();
     this.dropdowns.forEach((dropdown) => dropdown.close());
     this.dropdown.open();
+    const menuWidth =
+      MENU_WIDTH_REM * parseFloat(getComputedStyle(document.documentElement).fontSize);
     Object.assign(menu.style, {
       position: "fixed",
       top: `${event.clientY}px`,
-      left: `${Math.min(event.clientX, window.innerWidth - MENU_WIDTH)}px`,
+      left: `${Math.min(event.clientX, window.innerWidth - menuWidth)}px`,
       right: "auto",
       marginTop: "0",
     });
