@@ -1,14 +1,14 @@
-<nav aria-label="<%= t("components.request_tree.label") %>" data-controller="tree" data-tree-toggle-value="<%= @folder_toggle %>" data-tree-open-value="<%= @request_open %>" data-tree-collapse-nested-value="<%= @collapse_nested %>" data-action="dragover->tree#dragOver drop->tree#drop" class="flex h-full flex-col">
-  <div class="flex h-10 shrink-0 items-center justify-between gap-2 border-b border-line px-4">
+<nav aria-label="<%= t("components.request_tree.label") %>" data-controller="tree sidebar-view" data-tree-toggle-value="<%= @folder_toggle %>" data-tree-open-value="<%= @request_open %>" data-tree-collapse-nested-value="<%= @collapse_nested %>" data-action="dragover->tree#dragOver drop->tree#drop" class="flex h-full flex-col">
+  <div data-sidebar-view-target="collections" class="flex h-10 shrink-0 items-center justify-between gap-2 border-b border-line px-4">
     <h2 class="flex items-center gap-2 text-sm font-semibold text-ink">
       <%= lucide_icon "library", class: "size-4 text-muted" %>
       <%= t("components.request_tree.title") %>
     </h2>
     <div class="flex items-center gap-1">
-      <%= link_to workbench_history_path, aria: { label: t("components.request_tree.history") }, title: t("components.request_tree.history"),
-                  class: class_names("flex size-6 items-center justify-center transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50", "bg-field text-ink": helpers.controller_path == "workbench/histories", "text-muted": helpers.controller_path != "workbench/histories") do %>
+      <button type="button" data-action="sidebar-view#showHistory" aria-label="<%= t("components.request_tree.history") %>" title="<%= t("components.request_tree.history") %>"
+              class="flex size-6 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "history", class: "size-3.5" %>
-      <% end %>
+      </button>
       <%= link_to new_workbench_import_path, data: { turbo_frame: "modal" }, aria: { label: t("components.request_tree.import") }, title: t("components.request_tree.import"),
                   class: "flex size-6 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
         <%= lucide_icon "upload", class: "size-3.5" %>
@@ -20,12 +20,48 @@
     </div>
   </div>
 
-  <div class="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-4">
+  <div data-sidebar-view-target="history" hidden class="flex h-10 shrink-0 items-center gap-2 border-b border-line px-4">
+    <button type="button" data-action="sidebar-view#showCollections" aria-label="<%= t("components.request_tree.back") %>" title="<%= t("components.request_tree.back") %>"
+            class="flex size-6 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+      <%= lucide_icon "arrow-left", class: "size-3.5" %>
+    </button>
+    <h2 class="text-sm font-semibold text-ink"><%= t("components.request_tree.history_title") %></h2>
+  </div>
+
+  <div data-sidebar-view-target="collections" class="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-4">
     <% if @branches.empty? %>
       <p class="px-2 py-6 text-center text-sm text-muted"><%= t("components.request_tree.empty") %></p>
     <% end %>
     <% @branches.each do |branch| %>
       <%= render RequestTree::Collection::Component.new(branch:, current_request_id: @current_request_id) %>
+    <% end %>
+  </div>
+  <div data-sidebar-view-target="history" hidden class="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-4">
+    <% if @history_groups.empty? %>
+      <p class="px-2 py-6 text-center text-sm text-muted"><%= t("components.request_tree.history_empty") %></p>
+    <% end %>
+    <% @history_groups.each do |group| %>
+      <details open class="group/history">
+        <summary class="flex cursor-pointer list-none items-center gap-2 px-2 py-1.5 text-sm text-ink transition hover:bg-field focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 [&::-webkit-details-marker]:hidden">
+          <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
+          <span class="min-w-0 flex-1 truncate"><%= group.collection ? group.collection.name : t("components.request_tree.drafts") %></span>
+          <span class="shrink-0 text-xs text-muted"><%= group.executions.size %></span>
+        </summary>
+        <ul>
+          <% group.executions.each do |execution| %>
+            <li>
+              <%= link_to helpers.workbench_request_path(execution.api_request), class: "flex items-center gap-2 px-2 py-1.5 pl-7 transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+                <span class="w-9 shrink-0"><%= render MethodBadge::Component.new(method: execution.http_method, short: true) %></span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-sm text-ink"><%= execution.api_request.name %></span>
+                  <span class="block truncate font-mono text-xs text-muted"><%= execution.url %></span>
+                </span>
+                <span class="shrink-0 text-xs text-muted"><%= l(execution.created_at, format: :short) %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </details>
     <% end %>
   </div>
 </nav>

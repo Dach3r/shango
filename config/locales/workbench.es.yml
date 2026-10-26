@@ -93,6 +93,10 @@ es:
       new_folder: Nueva carpeta
       new_subfolder: Nueva subcarpeta
       history: Historial de solicitudes
+      history_title: Historial
+      history_empty: Aún no hay respuestas guardadas. Ejecuta una solicitud y pulsa Guardar respuesta para conservarla aquí.
+      drafts: Borradores
+      back: Volver a colecciones
       import: Importar colecciones
       import_curl: Importar cURL
       edit: Editar
@@ -144,18 +148,6 @@ es:
         pick: Elige una solicitud en la barra lateral o crea una nueva.
         new_collection: Nueva colección
         new_request: Nueva solicitud
-    histories:
-      show:
-        title: Historial
-        heading: Historial de solicitudes
-        subtitle: Las respuestas que guardaste, agrupadas por colección. Se muestran las últimas 200.
-        drafts: Borradores
-        empty_title: Aún no hay respuestas guardadas
-        empty_hint: Ejecuta una solicitud y pulsa Guardar respuesta para conservarla aquí.
-        count:
-          one: "%{count} respuesta"
-          other: "%{count} respuestas"
-        no_environment: Sin entorno
     collections:
       create:
         created: Colección creada.

@@ -1,9 +1,13 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :open_requests, :editor_variables, :editor_variables_url, :editor_responses, :editor_responses_url
+    helper_method :workspace_tree, :workspace_history, :open_requests, :editor_variables, :editor_variables_url, :editor_responses, :editor_responses_url
 
     private
+
+    def workspace_history
+      @workspace_history ||= ApiClient::Executions::History.call(project: current_project, user: current_user)
+    end
 
     def workspace_tree
       @workspace_tree ||= ApiClient::Tree::Load.call(project: current_project)
