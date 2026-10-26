@@ -76,7 +76,7 @@ en:
         description: How collections, folders and requests behave in the API Client sidebar. This only applies to you in this project.
         folder_toggle:
           label: Collections and folders
-          hint: How they expand and collapse in the API Client sidebar. This only applies to you in this project.
+          hint: How they expand and collapse in the API Client sidebar.
         request_open:
           label: Requests
           hint: How they open from the API Client sidebar. With double click, rename them from the request itself.

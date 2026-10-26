@@ -10,30 +10,36 @@
     <h1 class="mx-auto mb-6 max-w-3xl truncate text-lg font-semibold tracking-tight text-ink"><%= t(".title") %></h1>
 
     <section class="mx-auto min-w-0 max-w-3xl">
-      <header class="mb-4">
+      <header class="mb-6">
         <h2 class="text-base font-semibold text-ink"><%= t(".heading") %></h2>
         <p class="mt-1 text-sm text-muted"><%= t(".description") %></p>
       </header>
 
-      <%= form_with model: @membership, url: membership_path, method: :patch, class: "space-y-6 rounded-2xl border border-line bg-card p-6" do |form| %>
+      <%= form_with model: @membership, url: membership_path, method: :patch do |form| %>
         <%= render "workbench/shared/errors", record: @membership %>
 
-        <% %i[folder_toggle request_open].each do |setting| %>
-          <fieldset>
-            <legend class="text-sm font-semibold text-ink"><%= t(".#{setting}.label") %></legend>
-            <p class="mt-1 mb-3 text-xs text-muted"><%= t(".#{setting}.hint") %></p>
-            <div class="space-y-2">
-              <% Membership::CLICK_MODES.each_key do |value| %>
-                <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-line bg-field px-3 py-2 text-sm text-ink has-[:checked]:border-solid">
-                  <%= form.radio_button setting, value, class: "mt-0.5 accent-[var(--color-solid)]" %>
-                  <span><%= t(".modes.#{value}") %></span>
-                </label>
-              <% end %>
-            </div>
-          </fieldset>
-        <% end %>
+        <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+          <% %i[folder_toggle request_open].each do |setting| %>
+            <fieldset class="grid gap-4 p-5 md:grid-cols-[1fr_17rem] md:items-center md:gap-8">
+              <div class="min-w-0">
+                <legend class="float-left w-full text-sm font-semibold text-ink"><%= t(".#{setting}.label") %></legend>
+                <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t(".#{setting}.hint") %></p>
+              </div>
 
-        <div class="flex justify-end">
+              <div class="grid grid-cols-2 gap-1 rounded-xl border border-line bg-field p-1">
+                <% Membership::CLICK_MODES.each_key do |value| %>
+                  <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-solid/30">
+                    <%= form.radio_button setting, value, class: "sr-only" %>
+                    <%= lucide_icon(value == "click" ? "mouse-pointer-click" : "mouse-pointer-2", class: "size-4 shrink-0", "aria-hidden": true) %>
+                    <span><%= t(".modes.#{value}") %></span>
+                  </label>
+                <% end %>
+              </div>
+            </fieldset>
+          <% end %>
+        </div>
+
+        <div class="mt-4 flex justify-end">
           <%= form.submit t("workbench.shared.save"), class: button_classes(:primary) %>
         </div>
       <% end %>

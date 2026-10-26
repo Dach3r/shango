@@ -76,7 +76,7 @@ es:
         description: Cómo se comportan colecciones, carpetas y solicitudes en la barra lateral del API Client. Solo aplica para ti en este proyecto.
         folder_toggle:
           label: Colecciones y carpetas
-          hint: Cómo se expanden y contraen en la barra lateral del API Client. Solo aplica para ti en este proyecto.
+          hint: Cómo se expanden y contraen en la barra lateral del API Client.
         request_open:
           label: Solicitudes
           hint: Cómo se abren desde la barra lateral del API Client. Con doble clic, renómbralas desde la propia solicitud.
