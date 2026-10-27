@@ -46,7 +46,7 @@
   <div class="flex min-h-0 flex-1 flex-col" data-controller="tabs body-type" data-tabs-active-value="params" data-tabs-key-value="request-editor">
     <%= render TabBar::Component.new(items: tabs, label: t("workbench.tabs.label")) do %>
       <div data-tabs-target="panel" data-name="body" class="w-28" hidden>
-        <%= render Select::Component.new(name: "api_request[body_type]", options: body_type_options, value: api_request.body_type, id: "api_request_body_type", label: t("workbench.body.type"), class: "border-y-0 border-r-0",
+        <%= render Select::Component.new(name: "api_request[body_type]", options: body_type_options, value: api_request.body_type, id: "api_request_body_type", label: t("workbench.body.type"), class: "border-y-0 border-r-0", align: :right,
                                          input_data: { body_type_target: "select", action: "change->body-type#change" }) %>
       </div>
     <% end %>

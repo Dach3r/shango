@@ -9,7 +9,7 @@
   </button>
 
   <div data-select-target="menu" hidden
-       class="absolute left-0 top-full z-30 mt-1.5 w-max min-w-full max-w-80 border border-line bg-card p-1">
+       class="<%= menu_classes %>">
     <% if searchable? %>
       <div class="relative p-0.5 pb-1">
         <%= lucide_icon "search", class: "pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-[calc(50%+1px)] text-faint" %>

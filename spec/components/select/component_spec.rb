@@ -19,6 +19,14 @@ RSpec.describe Select::Component, type: :component do
     expect(page).to have_no_css("button[aria-label]")
   end
 
+  it "anchors the menu to the left by default and to the right on request", :aggregate_failures do
+    render_inline(described_class.new(name: "n", options:))
+    expect(page).to have_css("[data-select-target=menu].left-0")
+
+    render_inline(described_class.new(name: "n", options:, align: :right))
+    expect(page).to have_css("[data-select-target=menu].right-0")
+  end
+
   it "renders empty when there are no options", :aggregate_failures do
     render_inline(described_class.new(name: "n", options: []))
 
