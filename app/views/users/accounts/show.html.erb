@@ -3,14 +3,6 @@
 
 <%= render layout: "projects/environments/panel" do %>
   <section class="-m-4 flex flex-1 flex-col divide-y divide-line">
-    <div class="flex items-center gap-3 p-4">
-      <span class="flex size-12 shrink-0 items-center justify-center bg-solid text-base font-semibold text-on-solid" aria-hidden="true"><%= current_user.initials %></span>
-      <div class="min-w-0">
-        <p class="truncate text-sm font-medium text-ink"><%= current_user.full_name %></p>
-        <p class="truncate text-xs text-muted"><%= current_user.email %></p>
-      </div>
-    </div>
-
     <%= render ToolsNav::Component.new %>
 
     <div class="mt-auto border-t border-line">
@@ -24,6 +16,13 @@
         <%= lucide_icon "log-out", class: "size-4 shrink-0" %>
         <%= t("components.user_menu.sign_out") %>
       <% end %>
+      <div class="flex items-center gap-3 p-4">
+        <span class="flex size-12 shrink-0 items-center justify-center bg-solid text-base font-semibold text-on-solid" aria-hidden="true"><%= current_user.initials %></span>
+        <div class="min-w-0">
+          <p class="truncate text-sm font-medium text-ink"><%= current_user.full_name %></p>
+          <p class="truncate text-xs text-muted"><%= current_user.email %></p>
+        </div>
+      </div>
     </div>
   </section>
 <% end %>
