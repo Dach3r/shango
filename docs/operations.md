@@ -65,3 +65,9 @@ All state is in PostgreSQL plus uploaded files:
 - **Sidebar tree cache:** the workspace tree is loaded with three bounded queries per page (no request bodies) and is covered by a query-count spec; it is not cached because moves and bulk position updates would need reliable invalidation. Revisit when projects with thousands of requests show up in profiling.
 - **Slow response headers:** the total deadline (`Executor::MAX_DURATION`) is checked between body chunks and redirect hops; a server that drips response *headers* is still bounded only by the per-read timeout.
 - **Docker image:** the `Dockerfile` follows the Rails 8 pattern but has not been built in CI yet.
+
+## 6. Seeds
+
+`bin/rails db:seed` (also run by `db:setup` and `db:prepare` on a fresh database) loads `db/seeds/base/*.seeds.rb` in every environment and then `db/seeds/<environment>/*.seeds.rb` for the current one, alphabetically. Seeds must be idempotent. Put what the app needs everywhere in `base/`; production only ever loads `base/`.
+
+- **Performance account (development only):** `db/seeds/development/performance_account.seeds.rb` creates `perf@shango.test` (password `password123`) with 25 projects, each with 6 collections, 108 nested folders, 420 requests, 4 environments with 40 variables, history, cookies, network runs, drafts and open tabs (about 70k rows, ~25 s), so pages and queries can be measured with realistic volume. Rows go in with `insert_all` (no callbacks; encrypted columns stay encrypted). Re-running leaves an existing account untouched; `SEED_RESET=1 bin/rails db:seed` rebuilds it. Resize it with `SEED_PROJECTS`, `SEED_COLLECTIONS`, `SEED_FOLDERS`, `SEED_REQUESTS` (per collection), `SEED_ENVIRONMENTS`, `SEED_VARIABLES` (per environment), `SEED_EXECUTIONS` (per request), `SEED_COOKIES`, `SEED_DRAFTS`, `SEED_TABS` and `SEED_TEAMMATES`.

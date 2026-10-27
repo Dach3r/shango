@@ -1,9 +1,11 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+# Loads every db/seeds/base/*.seeds.rb (all environments) and then every db/seeds/<environment>/*.seeds.rb, in
+# alphabetical order. Seeds must be idempotent so `bin/rails db:seed` can run at any point.
 #
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Add a file to db/seeds/base for records the app needs everywhere, or to db/seeds/<environment> for one environment
+# only (for example db/seeds/development/performance_account.seeds.rb).
+%w[base].push(Rails.env.to_s).uniq.each do |scope|
+  Rails.root.glob("db/seeds/#{scope}/*.seeds.rb").sort.each do |file|
+    puts "== Seeding #{scope}/#{file.basename(".seeds.rb")}"
+    load file
+  end
+end
