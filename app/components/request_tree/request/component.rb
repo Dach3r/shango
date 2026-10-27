@@ -1,5 +1,5 @@
 class RequestTree::Request::Component < ApplicationComponent
-  ROW = "flex items-center gap-2 py-1.5 pr-9 pl-2 text-sm transition hover:bg-field focus:outline-none focus-visible:outline-none"
+  ROW = "flex items-center gap-2 py-1.5 pr-9 pl-2 text-[0.8125rem] transition hover:bg-field focus:outline-none focus-visible:outline-none"
 
   def initialize(api_request:, active: false)
     @api_request = api_request
