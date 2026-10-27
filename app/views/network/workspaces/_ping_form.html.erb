@@ -3,9 +3,11 @@
   <%= form_with scope: :ping, url: network_pings_path, class: "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0" do |form| %>
     <%= form.label :host, t("network.ping.host"), class: "sr-only" %>
     <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
-    <%= form.label :port, t("network.ping.port"), class: "sr-only" %>
-    <%= form.text_field :port, value: input.fetch("port", Network::Pings::Run::DEFAULT_PORT), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, placeholder: t("network.ping.port"), title: t("network.ping.port"), class: bar_field_classes("w-24 font-mono") %>
-    <%= render Select::Component.new(name: "ping[attempts]", options: (1..Network::Pings::Run::MAX_ATTEMPTS).map { |count| [t("network.ping.attempts_option", count:), count] }, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), id: "ping_attempts", label: t("network.ping.attempts"), class: "w-36 font-mono") %>
+    <% port = input.fetch("port", Network::Pings::Run::DEFAULT_PORT).to_s %>
+    <% port_options = Network::Services::NAMES.map { |number, name| ["#{number} · #{name}", number] } %>
+    <% port_options.unshift([port, port]) unless Network::Services::NAMES.key?(port.to_i) && port == port.to_i.to_s %>
+    <%= render Select::Component.new(name: "ping[port]", options: port_options, value: port, id: "ping_port", label: t("network.ping.port"), searchable: false, class: "w-44 font-mono") %>
+    <%= render Select::Component.new(name: "ping[attempts]", options: (1..Network::Pings::Run::MAX_ATTEMPTS).map { |count| [t("network.ping.attempts_option", count:), count] }, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), id: "ping_attempts", label: t("network.ping.attempts"), searchable: false, class: "w-36 font-mono") %>
     <%= form.button type: :submit, class: button_classes(:primary) do %>
       <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
     <% end %>
