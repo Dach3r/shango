@@ -60,6 +60,7 @@ de:
       ai_assistant: KI-Assistent
     user_menu:
       title: Konto
+      menu: Menü
       settings: Einstellungen
       label: Kontomenü
       sign_out: Abmelden

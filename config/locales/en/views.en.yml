@@ -60,6 +60,7 @@ en:
       ai_assistant: AI Assistant
     user_menu:
       title: Account
+      menu: Menu
       settings: Settings
       label: Account menu
       sign_out: Sign out

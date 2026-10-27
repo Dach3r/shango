@@ -60,6 +60,7 @@ pt-BR:
       ai_assistant: Assistente de IA
     user_menu:
       title: Conta
+      menu: Menu
       settings: Configurações
       label: Menu da conta
       sign_out: Sair

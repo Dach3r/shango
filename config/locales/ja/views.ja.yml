@@ -60,6 +60,7 @@ ja:
       ai_assistant: AI アシスタント
     user_menu:
       title: アカウント
+      menu: メニュー
       settings: 設定
       label: アカウントメニュー
       sign_out: ログアウト

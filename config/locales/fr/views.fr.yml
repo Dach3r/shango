@@ -60,6 +60,7 @@ fr:
       ai_assistant: "Assistant IA"
     user_menu:
       title: "Compte"
+      menu: "Menu"
       settings: "Paramètres"
       label: "Menu du compte"
       sign_out: "Se déconnecter"

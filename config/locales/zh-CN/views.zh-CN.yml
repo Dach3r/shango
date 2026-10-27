@@ -60,6 +60,7 @@ zh-CN:
       ai_assistant: AI 助手
     user_menu:
       title: 账户
+      menu: 菜单
       settings: 设置
       label: 账户菜单
       sign_out: 退出登录

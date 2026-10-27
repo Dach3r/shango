@@ -60,6 +60,7 @@ ru:
       ai_assistant: AI-ассистент
     user_menu:
       title: Аккаунт
+      menu: Меню
       settings: Настройки
       label: Меню аккаунта
       sign_out: Выйти

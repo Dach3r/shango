@@ -60,6 +60,7 @@ hi:
       ai_assistant: "AI असिस्टेंट"
     user_menu:
       title: "खाता"
+      menu: "मेन्यू"
       settings: "सेटिंग्स"
       label: "खाता मेनू"
       sign_out: "साइन आउट"

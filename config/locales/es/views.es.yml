@@ -60,6 +60,7 @@ es:
       ai_assistant: Asistente IA
     user_menu:
       title: Cuenta
+      menu: Menú
       settings: Configuración
       label: Menú de cuenta
       sign_out: Cerrar sesión
