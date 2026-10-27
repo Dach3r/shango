@@ -65,7 +65,7 @@
         <%= render KeyValueTable::Component.new(name: "api_request[headers]", rows: api_request.headers, key_placeholder: t("workbench.headers.key"), add_label: t("workbench.headers.add")) %>
       </div>
 
-      <div data-tabs-target="panel" data-name="body" class="p-4" hidden>
+      <div data-tabs-target="panel" data-name="body" class="h-full" hidden>
         <%= render "workbench/requests/body", api_request: api_request %>
       </div>
 
