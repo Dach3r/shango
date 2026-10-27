@@ -16,7 +16,7 @@
         <%= lucide_icon "log-out", class: "size-4 shrink-0" %>
         <%= t("components.user_menu.sign_out") %>
       <% end %>
-      <div class="flex items-center gap-3 p-4">
+      <div class="flex items-center gap-3 border-t border-line p-4">
         <span class="flex size-12 shrink-0 items-center justify-center bg-solid text-base font-semibold text-on-solid" aria-hidden="true"><%= current_user.initials %></span>
         <div class="min-w-0">
           <p class="truncate text-sm font-medium text-ink"><%= current_user.full_name %></p>
