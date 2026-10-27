@@ -91,7 +91,7 @@ Hovering a `{{variable}}` in any editor opens a card with its value as an input:
 
 `Requests::Run` first saves any pending edits of the editor form, so *Send* also saves. The response is streamed back as a Turbo Stream into the response panel.
 
-Limits: timeout 30 s by default (max 120 s, per request), 5 MB read limit (the response is cut and flagged; what is read is stored and displayed whole so JSON stays formattable), binary or non-text bodies are not stored.
+Limits: timeout 30 s by default (max 120 s, per request; it is the per-attempt timeout, and the whole execution including redirects and digest retries is also capped at 120 s, `Executor::MAX_DURATION`, so a slow server cannot hold a web thread), at most 10 redirects (`ApiRequest::MAX_REDIRECTS`), 5 MB read limit (the response is cut and flagged; what is read is stored and displayed whole so JSON stays formattable), binary or non-text bodies are not stored.
 
 ## 5. Authentication strategies
 

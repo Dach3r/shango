@@ -61,7 +61,7 @@ RSpec.describe ApiRequest do
     it "fills defaults and clamps values", :aggregate_failures do
       api_request.update!(settings: { timeout: 9999, max_redirects: 99, follow_redirects: "false", verify_ssl: false })
 
-      expect(api_request.settings).to eq("timeout" => 120, "follow_redirects" => false, "max_redirects" => 20, "verify_ssl" => false)
+      expect(api_request.settings).to eq("timeout" => 120, "follow_redirects" => false, "max_redirects" => 10, "verify_ssl" => false)
     end
 
     it "falls back to defaults for non-hash settings" do

@@ -6,6 +6,7 @@ module ApiClient
     include Serviceable
 
     MAX_RESPONSE_BYTES = 5.megabytes
+    MAX_DURATION = 120
     REDIRECT_STATUSES = [301, 302, 303, 307, 308].freeze
     CREDENTIAL_HEADERS = %w[authorization proxy-authorization cookie x-api-key].freeze
 
@@ -20,6 +21,7 @@ module ApiClient
 
     Attempt = Struct.new(:status, :status_text, :headers, :body, :size, :truncated, keyword_init: true)
     TooLarge = Class.new(StandardError)
+    DeadlineExceeded = Class.new(StandardError)
 
     def initialize(built:)
       @built = built
@@ -29,6 +31,7 @@ module ApiClient
 
     def perform
       started = monotonic_now
+      @deadline = started + MAX_DURATION
       @timing = Timing.new
       state = { method: @built.http_method, url: @built.url, headers: @built.headers.dup, send_body: true }
       redirects = []
@@ -57,7 +60,7 @@ module ApiClient
     end
 
     def attempt(state)
-      connection = Connection.build(url: state[:url], timeout: @built.timeout, verify_ssl: @built.verify_ssl, multipart: @built.body.multipart && state[:send_body], timing: @timing)
+      connection = Connection.build(url: state[:url], timeout: attempt_timeout, verify_ssl: @built.verify_ssl, multipart: @built.body.multipart && state[:send_body], timing: @timing)
       buffer = String.new(encoding: Encoding::BINARY)
       seen = {}
       body = state[:send_body] ? @built.body.factory.call : nil
@@ -65,6 +68,7 @@ module ApiClient
       @timing.begin_attempt
       response = connection.run_request(state[:method].downcase.to_sym, state[:url], body, state[:headers]) do |request|
         request.options.on_data = proc do |chunk, total, env|
+          check_deadline!
           @timing.first_byte!
           seen[:status] ||= env.status
           seen[:status_text] ||= env.reason_phrase
@@ -84,6 +88,16 @@ module ApiClient
     rescue TooLarge
       @timing.end_attempt
       Attempt.new(status: seen[:status], status_text: seen[:status_text], headers: seen[:headers] || {}, body: buffer, size: MAX_RESPONSE_BYTES, truncated: true)
+    end
+
+    def check_deadline!
+      raise DeadlineExceeded, "The request exceeded the maximum duration of #{MAX_DURATION} seconds" if monotonic_now >= @deadline
+    end
+
+    # The per-attempt timeout never outlives the overall deadline.
+    def attempt_timeout
+      check_deadline!
+      [@built.timeout, (@deadline - monotonic_now).ceil].min
     end
 
     def challenge?(attempt)
@@ -138,7 +152,7 @@ module ApiClient
       case error
       when SsrfPolicy::Blocked then ["blocked", error.message]
       when Connection::InvalidUrl then ["invalid_url", error.message]
-      when Faraday::TimeoutError then ["timeout", error.message]
+      when Faraday::TimeoutError, DeadlineExceeded then ["timeout", error.message]
       when Faraday::SSLError then ["ssl", error.message]
       when Faraday::ConnectionFailed then connection_failure(error)
       when SocketError then ["dns", error.message]

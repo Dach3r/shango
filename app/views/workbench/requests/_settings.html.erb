@@ -6,7 +6,7 @@
   </div>
   <div>
     <label for="api_request_settings_max_redirects" class="<%= label_classes %>"><%= t("workbench.settings.max_redirects") %></label>
-    <%= number_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: "api_request_settings_max_redirects", min: 0, max: 20, class: field_classes %>
+    <%= number_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: "api_request_settings_max_redirects", min: 0, max: ApiRequest::MAX_REDIRECTS, class: field_classes %>
   </div>
   <%= render Checkbox::Component.new(name: "api_request[settings][follow_redirects]", checked: api_request.setting(:follow_redirects), label: t("workbench.settings.follow_redirects"), label_class: "text-sm") %>
   <%= render Checkbox::Component.new(name: "api_request[settings][verify_ssl]", checked: api_request.setting(:verify_ssl), label: t("workbench.settings.verify_ssl"), label_class: "text-sm") %>

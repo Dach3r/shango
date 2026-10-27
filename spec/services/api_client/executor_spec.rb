@@ -215,6 +215,33 @@ RSpec.describe ApiClient::Executor do
       expect(reply.error_kind).to eq("timeout")
     end
 
+    it "stops when the total duration is exceeded while reading", :aggregate_failures do
+      stub_const("#{described_class}::MAX_DURATION", 0)
+      stub_request(:get, url).to_return(status: 200, body: "hello")
+
+      expect(reply).to have_attributes(error_kind: "timeout", error_message: /maximum duration of 0 seconds/)
+    end
+
+    it "stops following redirects once the deadline passes mid-call", :aggregate_failures do
+      now = 0.0
+      allow_any_instance_of(described_class).to receive(:monotonic_now) { now } # rubocop:disable RSpec/AnyInstance
+      stub_request(:get, url).to_return { now = 500.0 and { status: 302, headers: { "Location" => "/next" } } }
+      next_stub = stub_request(:get, "https://api.example.com/next").to_return(status: 200)
+
+      expect(reply).to have_attributes(error_kind: "timeout")
+      expect(next_stub).not_to have_been_requested
+    end
+
+    it "caps the attempt timeout to the time left", :aggregate_failures do
+      allow(ApiClient::Connection).to receive(:build).and_call_original
+      stub_request(:get, url).to_return(status: 200)
+      stub_const("#{described_class}::MAX_DURATION", 2)
+
+      reply
+
+      expect(ApiClient::Connection).to have_received(:build).with(hash_including(timeout: 2))
+    end
+
     it "reports ssl errors" do
       fail_with(Faraday::SSLError.new("bad cert"))
 
