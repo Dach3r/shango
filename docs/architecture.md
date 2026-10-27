@@ -100,7 +100,7 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 ## 7. Security architecture
 
 - **Secrets** (environment variables, request credentials and OAuth tokens today; SSH keys and AI provider keys later): encrypted at rest with Active Record Encryption, masked in the UI and in stored request/response history, excluded from logs (`filter_parameters`), and never included in AI context without explicit authorization. Keys come from `ACTIVE_RECORD_ENCRYPTION_*` environment variables or, when unset, are derived from `secret_key_base` (see [`api-client.md`](api-client.md) §6).
-- **Outbound requests:** opt-in private-network blocking (`SHANGO_BLOCK_PRIVATE_NETWORKS=true`) for shared or cloud deployments.
+- **Outbound requests:** private-network blocking is on by default in production; each operator decides with `SHANGO_BLOCK_PRIVATE_NETWORKS=true|false` (see [`api-client.md`](api-client.md) §6).
 - **Authorization:** all project resources scoped to the current user's projects.
 - **SSH:** no unauthenticated or unscoped connections; session lifetime limits; audit trail.
 - **AI:** read-only by default; confirmation gates for sensitive actions.

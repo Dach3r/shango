@@ -6,7 +6,20 @@ RSpec.describe ApiClient::SsrfPolicy do
   end
 
   describe ".enabled?" do
-    it "is off by default" do
+    it "is off by default outside production" do
+      expect(described_class.enabled?).to be(false)
+    end
+
+    it "is on by default in production" do
+      allow(Rails.env).to receive(:production?).and_return(true)
+
+      expect(described_class.enabled?).to be(true)
+    end
+
+    it "can be turned off explicitly in production" do
+      allow(Rails.env).to receive(:production?).and_return(true)
+      stub_const("ENV", ENV.to_h.merge("SHANGO_BLOCK_PRIVATE_NETWORKS" => "false"))
+
       expect(described_class.enabled?).to be(false)
     end
 
@@ -46,6 +59,9 @@ RSpec.describe ApiClient::SsrfPolicy do
       expect(described_class.blocked?("192.168.1.1")).to be(true)
       expect(described_class.blocked?("::1")).to be(true)
       expect(described_class.blocked?("::ffff:127.0.0.1")).to be(true)
+      expect(described_class.blocked?("169.254.169.254")).to be(true)
+      expect(described_class.blocked?("64:ff9b::a00:1")).to be(true)
+      expect(described_class.blocked?("2002:c0a8:101::1")).to be(true)
     end
 
     it "allows public addresses", :aggregate_failures do
