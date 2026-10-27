@@ -103,7 +103,7 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 
 ## 7. Security architecture
 
-- **Secrets** (environment variables, request credentials and OAuth tokens today; SSH keys and AI provider keys later): encrypted at rest with Active Record Encryption, masked in the UI and in stored request/response history, excluded from logs (`filter_parameters`), and never included in AI context without explicit authorization. Keys come from `ACTIVE_RECORD_ENCRYPTION_*` environment variables or, when unset, are derived from `secret_key_base` (see [`api-client.md`](api-client.md) §6).
+- **Secrets** (environment variables, request credentials and OAuth tokens today; SSH keys and AI provider keys later): encrypted at rest with Active Record Encryption, masked in the UI and in stored request/response history, excluded from logs (`filter_parameters`), and never included in AI context without explicit authorization. Keys come from `ACTIVE_RECORD_ENCRYPTION_*` environment variables, which production requires; dev and test derive them from `secret_key_base`. Rotation is a documented procedure with a rake task (see [`api-client.md`](api-client.md) §6).
 - **Outbound requests:** private-network blocking is on by default in production; each operator decides with `SHANGO_BLOCK_PRIVATE_NETWORKS=true|false` (see [`api-client.md`](api-client.md) §6).
 - **Network tools (Target):** port check and TCP ping reuse the outbound-request guard and pin the connection to the checked address; DNS queries only go to fixed public resolvers and to authoritative nameservers that also pass the guard; one host per run, connect-only probes, per-user rate limit, audit log line per run (see [`network-tools.md`](network-tools.md) §6).
 - **Content Security Policy** (`config/initializers/content_security_policy.rb`): `default-src 'self'`, scripts from `'self'` plus a per-request nonce (the importmap tag carries it; no inline scripts or `on*` handlers may be added), inline styles allowed (CodeMirror injects `<style>`, and srcdoc response previews inherit the policy), Google Fonts allowed for CSS/fonts, `img-src` self/data/blob/https, `connect-src 'self'` (Turbo, fetch, Action Cable), `object-src 'none'`, `base-uri 'self'`, `frame-ancestors 'none'`. `form-action` is deliberately not set because Chrome enforces it on redirects and would break the OAuth 2.0 authorization redirect. `SHANGO_CSP_REPORT_ONLY=true` reports violations in the browser console without blocking, useful when adding third-party assets. Other headers: Rails defaults (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`) plus a restrictive `Permissions-Policy` (`config/initializers/security_headers.rb`).
@@ -141,7 +141,6 @@ Update this section as features land.
 
 ## 10. Open technical questions
 
-- Key management for self-hosted installs: encryption keys default to values derived from `secret_key_base`; a rotation procedure is not defined.
 - JavaScript tests (Stimulus controllers) and system/browser specs are not set up.
 - Scheduler design for monitors and check-result retention policy.
 - Team model: sharing, roles, and permissions within a project (affects authorization design).
