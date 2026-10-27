@@ -1,6 +1,6 @@
 <% content_for :title, "#{@api_request.name} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :heading, t("workbench.title") %>
-<% content_for :head, javascript_importmap_module_preload_tags(entry_point: "workbench") %>
+<% content_for :module_preload, javascript_importmap_module_preload_tags(entry_point: "workbench") %>
 
 <% content_for :request_actions, render("workbench/requests/actions", api_request: @api_request) %>
 <% content_for :breadcrumb, render("workbench/requests/breadcrumb", api_request: @api_request) %>
