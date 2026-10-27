@@ -341,6 +341,7 @@ es:
     executions:
       resize: Cambiar el alto de la respuesta
       error: Error
+      running: Enviando solicitud…
       failure: "No se pudo enviar la solicitud. Revisa el log del servidor e inténtalo de nuevo."
       empty_title: Aún no hay respuesta
       empty_hint: Presiona Enviar o Ctrl/Cmd + Enter para ejecutar esta solicitud.
@@ -390,6 +391,7 @@ es:
         refused: Conexión rechazada
         connection: Falló la conexión
         unknown: Error inesperado
+        cancelled: Cancelada
     errors:
       blank_url: Ingresa una URL para enviar la solicitud.
       invalid_url: La URL no es válida. Solo se admiten http y https.

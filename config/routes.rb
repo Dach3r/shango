@@ -46,6 +46,8 @@ Rails.application.routes.draw do
     resources :requests, only: %i[show update destroy] do
       scope module: :requests do
         resources :executions, only: %i[create show] do
+          resource :result, only: :show, module: :executions
+          resource :cancellation, only: :create, module: :executions
           resources :saves, only: :create, module: :executions
         end
         resource :closure, only: :new

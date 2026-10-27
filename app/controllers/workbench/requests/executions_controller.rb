@@ -17,12 +17,20 @@ module Workbench
           attributes: request_attributes, uploads: request_uploads, binary_upload:
         )
 
+        return render_queued(result.data[:run_id]) if result.success? && result.data[:run_id]
+
         @execution = result.record if result.success?
         @invalid_request = result.record if result.failure?
         render status: result.success? ? :ok : :unprocessable_entity
       end
 
       private
+
+      # The run continues in a worker; the browser polls the id from this header (see request_form_controller).
+      def render_queued(run_id)
+        response.headers["X-Execution-Id"] = run_id
+        render :running, status: :accepted
+      end
 
       def throttled
         render turbo_stream: turbo_stream.update("response_panel", partial: "workbench/requests/executions/throttled"), status: :too_many_requests

@@ -342,6 +342,7 @@ en:
       resize: Resize the response panel
       error: Error
       failure: "The request could not be sent. Check the server log and try again."
+      running: Sending request…
       empty_title: No response yet
       empty_hint: Press Send or Ctrl/Cmd + Enter to run this request.
       tabs:
@@ -390,6 +391,7 @@ en:
         refused: Connection refused
         connection: Connection failed
         unknown: Unexpected error
+        cancelled: Cancelled
     errors:
       blank_url: Enter a URL to send the request.
       invalid_url: The URL is not valid. Only http and https are supported.
