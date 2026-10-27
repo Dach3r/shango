@@ -1,10 +1,4 @@
-<div data-controller="body-type" class="space-y-4">
-  <div class="max-w-xs">
-    <label for="api_request_body_type" class="<%= label_classes %>"><%= t("workbench.body.type") %></label>
-    <%= render Select::Component.new(name: "api_request[body_type]", options: body_type_options, value: api_request.body_type, id: "api_request_body_type",
-                                     input_data: { body_type_target: "select", action: "change->body-type#change" }) %>
-  </div>
-
+<div class="space-y-4">
   <p data-body-type-target="panel" data-types="none" class="text-sm text-muted"><%= t("workbench.body.none_hint") %></p>
 
   <div data-body-type-target="panel" data-types="json text xml graphql" hidden>

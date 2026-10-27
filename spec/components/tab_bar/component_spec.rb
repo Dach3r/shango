@@ -19,4 +19,10 @@ RSpec.describe TabBar::Component, type: :component do
     expect(page).to have_css("button[data-name=docs][disabled]", text: I18n.t("components.nav_item.soon"))
     expect(page).to have_no_css("button[data-name=plain] span")
   end
+
+  it "renders trailing content beside the tabs" do
+    render_inline(described_class.new(items:, label: "Request")) { "Extra" }
+
+    expect(page).to have_css("[role=tablist] + div", text: "Extra")
+  end
 end
