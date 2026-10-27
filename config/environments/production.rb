@@ -58,9 +58,15 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = Shango::Mailing.url_options
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
+  if Shango::Mailing.enabled?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = Shango::Mailing.smtp_settings
+    config.action_mailer.raise_delivery_errors = true
+  end
+
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
   #   password: Rails.application.credentials.dig(:smtp, :password),
