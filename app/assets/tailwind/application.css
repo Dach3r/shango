@@ -394,6 +394,26 @@
   --glow: color-mix(in oklab, #888888 14%, transparent);
 }
 
+[data-palette="graphite"] {
+  --page: light-dark(#f8f9fa, #202124);
+  --card: light-dark(var(--color-paper), #292a2d);
+  --line: light-dark(#dadce0, #3c4043);
+  --faint: light-dark(#9aa0a6, #5f6368);
+  --field: light-dark(#f1f3f4, #303134);
+  --field-focus: light-dark(var(--color-paper), #35363a);
+  --dots: light-dark(#dadce0, #3c4043);
+  --ink: light-dark(#202124, #e8eaed);
+  --body: light-dark(#3c4043, #bdc1c6);
+  --muted: light-dark(#5f6368, #9aa0a6);
+  --accent: light-dark(#1a73e8, #8ab4f8);
+  --accent-hover: light-dark(#1557b0, #aecbfa);
+  --solid: light-dark(#1a73e8, #4c6ef5);
+  --solid-hover: light-dark(#1557b0, #6a87f7);
+  --on-solid: light-dark(var(--color-paper), var(--color-paper));
+  --danger: light-dark(#d93025, #f28b82);
+  --glow: color-mix(in oklab, #4c6ef5 14%, transparent);
+}
+
 /* Browser autofill paints its own background; cover it with the field tokens. */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

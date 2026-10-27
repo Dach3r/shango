@@ -149,6 +149,7 @@ ru:
           coffee: Кофе
           cyberpunk: Киберпанк
           mono: Моно
+          graphite: Графит
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ ru:
           ack_title: "Подтверждение"
           ack: "Я понимаю, что мой аккаунт и эти проекты будут удалены навсегда и их нельзя будет восстановить."
           confirm_title: "Подтвердите паролем"
+          requests_short: "Запросы"
         cancel_account: Удалить мой аккаунт
         confirm: Вы уверены?
         current_password: Текущий пароль

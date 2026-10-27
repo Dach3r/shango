@@ -149,6 +149,7 @@ zh-CN:
           coffee: 咖啡
           cyberpunk: 赛博朋克
           mono: 单色
+          graphite: 石墨
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ zh-CN:
           ack_title: "确认知悉"
           ack: "我了解我的账户和这些项目将被永久删除且无法恢复。"
           confirm_title: "用密码确认"
+          requests_short: "请求"
         cancel_account: 注销我的账户
         confirm: 确定吗？
         current_password: 当前密码

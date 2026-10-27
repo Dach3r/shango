@@ -149,6 +149,7 @@ de:
           coffee: Coffee
           cyberpunk: Cyberpunk
           mono: Mono
+          graphite: Graphit
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ de:
           ack_title: "Bestätigung"
           ack: "Ich verstehe, dass mein Konto und diese Projekte endgültig gelöscht werden und nicht wiederhergestellt werden können."
           confirm_title: "Mit deinem Passwort bestätigen"
+          requests_short: "Anfragen"
         cancel_account: Mein Konto kündigen
         confirm: Bist du sicher?
         current_password: Aktuelles Passwort

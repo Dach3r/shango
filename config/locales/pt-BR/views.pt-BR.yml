@@ -149,6 +149,7 @@ pt-BR:
           coffee: Café
           cyberpunk: Cyberpunk
           mono: Mono
+          graphite: Grafite
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ pt-BR:
           ack_title: "Ciente"
           ack: "Entendo que minha conta e estes projetos serão excluídos permanentemente e não poderão ser recuperados."
           confirm_title: "Confirme com sua senha"
+          requests_short: "Solicitações"
         cancel_account: Cancelar minha conta
         confirm: Tem certeza?
         current_password: Senha atual

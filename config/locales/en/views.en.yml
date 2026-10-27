@@ -149,6 +149,7 @@ en:
           coffee: Coffee
           cyberpunk: Cyberpunk
           mono: Mono
+          graphite: Graphite
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ en:
           ack_title: "Acknowledge"
           ack: "I understand that my account and these projects will be permanently erased and cannot be recovered."
           confirm_title: "Confirm with your password"
+          requests_short: "Requests"
         cancel_account: Cancel my account
         confirm: Are you sure?
         current_password: Current password

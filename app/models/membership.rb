@@ -5,7 +5,7 @@ class Membership < ApplicationRecord
 
   CLICK_MODES = { click: "click", double_click: "double_click" }.freeze
   COLOR_SCHEMES = { system: "system", light: "light", dark: "dark" }.freeze
-  THEMES = %w[default blue green yellow red ocean purple rose orange forest midnight nord dracula gruvbox solarized sunset coffee cyberpunk mono].to_h { |theme| [theme.to_sym, theme] }.freeze
+  THEMES = %w[default blue green yellow red ocean purple rose orange forest midnight nord dracula gruvbox solarized sunset coffee cyberpunk mono graphite].to_h { |theme| [theme.to_sym, theme] }.freeze
 
   enum :role, { member: "member", owner: "owner" }, default: "member"
   enum :folder_toggle, CLICK_MODES, default: "double_click", prefix: true, validate: true

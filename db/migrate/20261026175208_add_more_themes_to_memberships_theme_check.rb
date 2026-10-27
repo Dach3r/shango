@@ -1,6 +1,6 @@
 class AddMoreThemesToMembershipsThemeCheck < ActiveRecord::Migration[8.1]
   OLD = %w[default blue green yellow red ocean].freeze
-  NEW = (OLD + %w[purple rose orange forest midnight nord dracula gruvbox solarized sunset coffee cyberpunk mono]).freeze
+  NEW = (OLD + %w[purple rose orange forest midnight nord dracula gruvbox solarized sunset coffee cyberpunk mono graphite]).freeze
 
   def up
     replace_check(NEW)

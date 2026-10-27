@@ -149,6 +149,7 @@ ja:
           coffee: コーヒー
           cyberpunk: サイバーパンク
           mono: モノ
+          graphite: グラファイト
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ ja:
           ack_title: "確認事項"
           ack: "アカウントとこれらのプロジェクトが完全に削除され、復元できないことを理解しました。"
           confirm_title: "パスワードで確認"
+          requests_short: "リクエスト"
         cancel_account: アカウントを解約
         confirm: よろしいですか？
         current_password: 現在のパスワード

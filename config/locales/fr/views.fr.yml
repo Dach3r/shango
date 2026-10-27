@@ -149,6 +149,7 @@ fr:
           coffee: "Café"
           cyberpunk: "Cyberpunk"
           mono: "Mono"
+          graphite: "Graphite"
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ fr:
           ack_title: "Compris"
           ack: "Je comprends que mon compte et ces projets seront supprimés définitivement et ne pourront pas être récupérés."
           confirm_title: "Confirmez avec votre mot de passe"
+          requests_short: "Requêtes"
         cancel_account: "Supprimer mon compte"
         confirm: "Êtes-vous sûr ?"
         current_password: "Mot de passe actuel"

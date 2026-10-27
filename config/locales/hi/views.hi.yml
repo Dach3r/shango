@@ -149,6 +149,7 @@ hi:
           coffee: "Coffee"
           cyberpunk: "Cyberpunk"
           mono: "Mono"
+          graphite: "ग्रेफाइट"
   users:
     accounts:
       show:
@@ -225,6 +226,7 @@ hi:
           ack_title: "स्वीकृति"
           ack: "मैं समझता/समझती हूँ कि मेरा खाता और ये प्रोजेक्ट हमेशा के लिए मिटा दिए जाएँगे और पुनर्प्राप्त नहीं होंगे।"
           confirm_title: "पासवर्ड से पुष्टि करें"
+          requests_short: "अनुरोध"
         cancel_account: "मेरा खाता रद्द करें"
         confirm: "क्या आप सुनिश्चित हैं?"
         current_password: "वर्तमान पासवर्ड"
