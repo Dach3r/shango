@@ -15,4 +15,17 @@ RSpec.describe LocaleSwitcher::Component, type: :component do
     expect(page).to have_css("button[lang=zh-CN][aria-label=中文]", text: "ZH")
     expect(page).to have_css("button[lang=pt-BR][aria-label=Português]", text: "PT")
   end
+
+  it "renders a plain group by default" do
+    render_inline(described_class.new)
+
+    expect(page).to have_no_css("[data-controller~=disclosure]")
+  end
+
+  it "collapses behind a globe toggle when collapsible", :aggregate_failures do
+    render_inline(described_class.new(collapsible: true))
+
+    expect(page).to have_css("[data-controller~=disclosure] button[data-disclosure-target=trigger][aria-expanded=false] svg")
+    expect(page).to have_css("[data-disclosure-target=panel][inert] button[lang]", count: I18n.available_locales.size, visible: :all)
+  end
 end

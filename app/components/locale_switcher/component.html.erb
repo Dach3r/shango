@@ -1,6 +1,22 @@
-<div role="group" aria-label="<%= t("components.locale_switcher.label") %>" class="flex border border-line bg-card/80 backdrop-blur">
-  <% I18n.available_locales.each do |locale| %>
-    <%= button_to LABELS.fetch(locale), preferences_path, method: :patch, params: { locale: locale }, form_class: "flex border-line not-first:border-l",
-                  class: button_classes(locale), lang: locale, aria: { label: NAMES.fetch(locale), current: ("true" if current?(locale)) } %>
-  <% end %>
-</div>
+<% buttons = capture do %>
+  <div class="flex">
+    <% I18n.available_locales.each do |locale| %>
+      <%= button_to LABELS.fetch(locale), preferences_path, method: :patch, params: { locale: locale }, form_class: "flex border-line not-first:border-l", class: button_classes(locale),
+                    lang: locale, data: { action: "locale-switcher#apply", locale_switcher_locale_param: locale }, aria: { label: NAMES.fetch(locale), current: ("true" if current?(locale)) } %>
+    <% end %>
+  </div>
+<% end %>
+
+<% if collapsible %>
+  <div data-controller="disclosure locale-switcher" class="group/locale flex border border-line bg-card/80 backdrop-blur">
+    <div data-disclosure-target="panel" inert class="grid grid-cols-[0fr] transition-[grid-template-columns] duration-300 ease-out group-data-open/locale:grid-cols-[1fr] motion-reduce:transition-none">
+      <div role="group" aria-label="<%= t("components.locale_switcher.label") %>" class="min-w-0 overflow-hidden group-data-open/locale:border-r group-data-open/locale:border-line"><%= buttons %></div>
+    </div>
+    <button type="button" data-disclosure-target="trigger" data-action="disclosure#toggle" aria-expanded="false" aria-label="<%= t("components.locale_switcher.label") %>"
+            class="flex size-9 shrink-0 cursor-pointer items-center justify-center text-body transition hover:bg-ink/5 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-inset">
+      <%= lucide_icon "globe", class: "size-4" %>
+    </button>
+  </div>
+<% else %>
+  <div data-controller="locale-switcher" role="group" aria-label="<%= t("components.locale_switcher.label") %>" class="border border-line bg-card/80 backdrop-blur"><%= buttons %></div>
+<% end %>

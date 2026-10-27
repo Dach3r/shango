@@ -1,3 +1,4 @@
+<% turbo_refreshes_with method: :morph, scroll: :preserve %>
 <% content_for :palette, "mono" %>
 <% content_for :content do %>
   <main class="relative flex min-h-screen overflow-hidden bg-page font-sans text-body">
@@ -21,7 +22,7 @@
 
       <div class="absolute right-5 bottom-5 z-10 flex items-center gap-2">
         <%= render ThemeSwitcher::Component.new %>
-        <%= render LocaleSwitcher::Component.new %>
+        <%= render LocaleSwitcher::Component.new(collapsible: true) %>
       </div>
 
       <div class="relative w-full max-w-xl border border-line bg-card p-8 sm:p-10">

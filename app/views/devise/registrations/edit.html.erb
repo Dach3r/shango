@@ -1,4 +1,5 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <%= render layout: "settings/shell", locals: { heading: t(".#{@tab}.heading"), description: t(".#{@tab}.description") } do %>
   <% if @tab == "preferences" %>
