@@ -2,7 +2,8 @@ class NavItem::Component < ApplicationComponent
   BASE = "flex items-center gap-2.5 px-3 text-base font-medium transition focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
   ORIENTATIONS = {
     vertical: { base: "h-11 border-b border-line", active: "shadow-[inset_2px_0_0_var(--accent)]", label: "", badge: false },
-    menu: { base: "h-10 w-full px-4 text-sm", active: "shadow-[inset_2px_0_0_var(--accent)]", label: "flex-1", badge: true }
+    menu: { base: "h-10 w-full px-4 text-sm", active: "shadow-[inset_2px_0_0_var(--accent)]", label: "flex-1", badge: true },
+    settings: { base: "h-10 w-full px-4 text-sm", active: "", label: "flex-1", badge: true }
   }.freeze
   ACTIVE = "bg-field font-semibold text-accent"
   LINK = "text-body hover:bg-field hover:text-ink"

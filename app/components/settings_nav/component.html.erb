@@ -4,7 +4,7 @@
       <h2 class="truncate border-b border-line bg-page px-4 py-2.5 font-mono text-[0.625rem] font-semibold tracking-wider text-muted uppercase"><%= group[:label] %></h2>
       <ul>
         <% group[:items].each do |item| %>
-          <li class="flex border-b border-line"><%= render NavItem::Component.new(**item, orientation: :menu) %></li>
+          <li class="flex border-b border-line"><%= render NavItem::Component.new(**item, orientation: :settings) %></li>
         <% end %>
       </ul>
     </div>

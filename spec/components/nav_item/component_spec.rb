@@ -33,4 +33,11 @@ RSpec.describe NavItem::Component, type: :component do
     expect(page).to have_css("span[aria-disabled=true].w-full", text: "Logs")
     expect(page).to have_css("span", text: I18n.t("components.nav_item.soon"))
   end
+
+  it "renders the active settings entry without the accent bar" do
+    render_inline(described_class.new(label: "Profile", icon: "user", href: "/", active: true, orientation: :settings))
+
+    expect(page).to have_css("a.text-accent.w-full")
+    expect(page).to have_no_css("a.shadow-\\[inset_2px_0_0_var\\(--accent\\)\\]")
+  end
 end
