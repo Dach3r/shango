@@ -7,4 +7,12 @@ RSpec.describe LocaleSwitcher::Component, type: :component do
     expect(page).to have_css("button[lang=es][aria-current=true].bg-solid", text: "ES")
     expect(page).to have_css("button[lang=en].text-body:not([aria-current])", text: "EN")
   end
+
+  it "offers every available locale with its native name", :aggregate_failures do
+    render_inline(described_class.new)
+
+    expect(page).to have_css("button[lang]", count: I18n.available_locales.size)
+    expect(page).to have_css("button[lang=zh-CN][aria-label=中文]", text: "ZH")
+    expect(page).to have_css("button[lang=pt-BR][aria-label=Português]", text: "PT")
+  end
 end

@@ -4,7 +4,8 @@ RSpec.describe Localization do
   describe ".supported" do
     it "returns supported locales as strings", :aggregate_failures do
       expect(described_class.supported("es")).to eq("es")
-      expect(described_class.supported("fr")).to be_nil
+      expect(described_class.supported("pt-BR")).to eq("pt-BR")
+      expect(described_class.supported("it")).to be_nil
       expect(described_class.supported(nil)).to be_nil
     end
   end

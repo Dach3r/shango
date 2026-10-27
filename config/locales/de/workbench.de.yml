@@ -1,0 +1,512 @@
+de:
+  activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "Die Variablennamen müssen eindeutig sein."
+    attributes:
+      environment:
+        name: Name
+      variable:
+        key: Name
+        value: Wert
+      cookie:
+        name: Name
+        value: Wert
+        domain: Domain
+        path: Pfad
+      collection:
+        name: Name
+      folder:
+        name: Name
+      api_request:
+        name: Name
+        url: URL
+  components:
+    confirm_dialog:
+      cancel: Abbrechen
+      confirm: Löschen
+    modal:
+      cancel: Abbrechen
+      save: Speichern
+      close: Schließen
+    code_editor:
+      environment: Umgebung
+      dynamic: Dynamisch
+      set: Gesetzt
+      empty: Leer
+      guid: Zufällige UUID
+      timestamp: Unix-Sekunden
+      iso_timestamp: ISO-8601-Datum
+      random_int: 0 – 999
+      missing: Nicht definiert
+      response: Antwort
+      response_body: "Body-Attribut – Wert aus dem Antwort-Body"
+      response_raw: "Roher Body – gesamter Antwort-Body"
+      response_header: "Header – Wert eines Antwort-Headers"
+      response_url: "Anfrage-URL – URL der auslösenden Anfrage"
+      response_loading: Lädt…
+      response_no_response: "Noch keine Antwort. Sende zuerst %{request}."
+      response_no_match: Nichts passt zu diesem Filter
+      response_unknown: Anfrage in dieser Sammlung nicht gefunden
+      response_invalid: Ungültige Antwortreferenz
+      response_edit_title: Antwortreferenz bearbeiten
+      response_function_label: Auszuführende Funktion
+      response_function: "Antwort – Werte aus Antworten anderer Anfragen referenzieren"
+      response_attribute: Attribut
+      response_request: Anfrage
+      response_filter_body: Filter (JSONPath)
+      response_filter_header: Header-Name
+      response_trigger: Auslöseverhalten
+      response_trigger_never: "Nie – Anfrage nie erneut senden"
+      response_trigger_hint: "Die Anfrage wird nicht erneut gesendet; sende sie zuerst, um eine frische Antwort zu erhalten."
+      response_preview: Live-Vorschau
+      response_refresh: Aktualisieren
+      response_done: Fertig
+      response_close: Schließen
+    key_value_table:
+      add: Zeile hinzufügen
+      key: Schlüssel
+      value: Wert
+      description: Beschreibung
+      enabled: Aktiv
+      remove: Zeile entfernen
+      text: Text
+      file: Datei
+      secret: Geheim
+      secret_saved: "Gespeichert · leer lassen zum Beibehalten"
+    environment_switcher:
+      none: Keine Umgebung
+      label: Umgebung
+      manage: Umgebungen verwalten
+      manage_title: Umgebungen
+      cookies: Cookies
+      cookies_title: Cookies
+    request_tabs:
+      label: Offene Anfragen
+      close: "%{name} schließen"
+      draft_hint: "Entwurf, noch nicht gespeichert"
+      new_draft: Neue Entwurfsanfrage
+      actions: "Tab-Aktionen"
+      new_request: "Neue Anfrage"
+      duplicate: "Tab duplizieren"
+      close_tab: "Tab schließen"
+      close_left: "Tabs links schließen"
+      close_right: "Tabs rechts schließen"
+      close_all: "Alle Tabs schließen"
+    request_tree:
+      label: Sammlungen
+      title: Sammlungen
+      new_collection: Neue Sammlung
+      empty: Noch keine Sammlungen.
+      empty_collection: Leere Sammlung
+      actions: "Aktionen für %{name}"
+      new_request: Neue Anfrage
+      new_folder: Neuer Ordner
+      new_subfolder: Neuer Unterordner
+      history: Anfrageverlauf
+      history_title: Verlauf
+      history_empty: Noch keine gespeicherten Antworten. Führe eine Anfrage aus und klicke auf Antwort speichern, um sie hier zu behalten.
+      drafts: Entwürfe
+      back: Zurück zu den Sammlungen
+      import: Sammlungen importieren
+      import_curl: cURL importieren
+      edit: Bearbeiten
+      rename: Umbenennen
+      duplicate: Duplizieren
+      delete: Löschen
+      confirm_delete_collection: "Die Sammlung „%{name}“ mit allen Ordnern und Anfragen löschen?"
+      confirm_delete_folder: "Den Ordner „%{name}“ mit allem Inhalt löschen?"
+  projects:
+    cookies:
+      index:
+        title: Cookies
+        intro: "Cookies, die Server setzen, werden für die ausgewählte Umgebung gespeichert und bei späteren Anfragen mitgesendet, sodass eine Anmeldung für den nächsten Aufruf erhalten bleibt. Du kannst Cookies auch von Hand hinzufügen oder bearbeiten."
+        scope: "Umgebung: %{name}"
+        scope_none: Keine Umgebung
+        empty_title: Noch keine Cookies
+        empty_hint: Sende eine Anfrage, deren Antwort ein Cookie setzt, und es erscheint hier.
+        session: Sitzung
+        expires: "Läuft ab %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Cookie löschen
+        new: Cookie hinzufügen
+        edit: Cookie bearbeiten
+        clear: Alle Cookies löschen
+        confirm_clear: "Alle für diese Umgebung gespeicherten Cookies löschen?"
+      create:
+        created: Cookie hinzugefügt.
+      update:
+        updated: Cookie gespeichert.
+      form:
+        new_title: "Neues Cookie"
+        name: "Name"
+        value: "Wert"
+        value_hint: "Wird verschlüsselt gespeichert und hier im Klartext angezeigt."
+        domain: "Domain"
+        path: "Pfad"
+        expires_at: "Läuft ab"
+        expires_at_hint: "Leer lassen für ein Sitzungs-Cookie."
+        host_only: "Nur Host (nicht an Subdomains senden)"
+        secure: "Secure (nur https)"
+        http_only: "HttpOnly"
+    environments:
+      index:
+        title: Umgebungen
+        intro: Umgebungen enthalten die Variablen (Basis-URL, Tokens…), die deine Anfragen als {{name}} referenzieren. Aktiviere die Umgebung, die deine Anfragen verwenden sollen.
+        new: Neue Umgebung
+        empty_title: Noch keine Umgebungen
+        empty_hint: Lege eine an (Local, Staging, Production…) und definiere Variablen wie base_url.
+        variables:
+          one: "%{count} Variable"
+          other: "%{count} Variablen"
+        in_use: In Verwendung
+        activate: Aktivieren
+        actions: Weitere Aktionen
+        edit: Bearbeiten
+        delete: Löschen
+        confirm_delete: "Die Umgebung „%{name}“ löschen?"
+      new:
+        title: Neue Umgebung
+        subtitle: "Gib ihr einen Namen und füge die Variablen hinzu, die deine Anfragen referenzieren, etwa eine Basis-URL oder ein Token."
+        name_hint: "Wird in der Umgebungsauswahl angezeigt, z. B. Production, Staging."
+        submit: Umgebung erstellen
+      edit:
+        title: Umgebung bearbeiten
+      form:
+        name: Name
+        name_placeholder: z. B. Production
+        variables: Variablen
+        variables_hint: Referenziere sie in Anfragen als {{name}}. Geheime Werte werden verschlüsselt und nach dem Speichern nie wieder angezeigt.
+        key_placeholder: Variable
+        value_placeholder: Wert
+  workbench:
+    title: API Client
+    shared:
+      cancel: Abbrechen
+      save: Speichern
+    workspaces:
+      show:
+        heading: Anfragen erstellen und ausführen
+        empty: Starte mit einer Anfrage oder lege eine Sammlung an, um sie zu organisieren und einen cURL-Befehl zu importieren.
+        pick: Wähle eine Anfrage in der Seitenleiste oder erstelle eine neue.
+        new_collection: Neue Sammlung
+        new_request: Neue Anfrage
+    collections:
+      create:
+        created: Sammlung erstellt.
+      update:
+        updated: Sammlung aktualisiert.
+      destroy:
+        destroyed: Sammlung gelöscht.
+      form:
+        new_title: Neue Sammlung
+        edit_title: Sammlungseinstellungen
+        name: Name
+        name_placeholder: z. B. Haupt-API
+        description: Beschreibung
+    folders:
+      create:
+        created: Ordner erstellt.
+      update:
+        updated: Ordner aktualisiert.
+      destroy:
+        destroyed: Ordner gelöscht.
+      form:
+        new_title: Neuer Ordner
+        edit_title: Ordnereinstellungen
+        name: Name
+        name_placeholder: z. B. Authentifizierung
+        auth: Autorisierung
+    requests:
+      draft: Entwurf
+      draft_name: Neue Anfrage
+      closures:
+        new:
+          title: "Diesen Entwurf schließen?"
+          description: "Dieser Entwurf ist noch in keiner Sammlung. Speichere ihn, um deine Arbeit zu behalten, oder verwirf ihn."
+          discard: Verwerfen
+          cancel: Weiter bearbeiten
+          save: In Sammlung speichern
+      placements:
+        form:
+          title: "Anfrage speichern unter…"
+          description: "Wähle, wo diese Anfrage gespeichert werden soll. Wenn du dieses Fenster schließt, bleibt sie ein Entwurf."
+          destination: Speichern in
+          keep_draft: Als Entwurf behalten
+          submit: Hier speichern
+      create:
+        created: Anfrage erstellt.
+      update:
+        updated: Anfrage gespeichert.
+      destroy:
+        destroyed: Anfrage gelöscht.
+      new:
+        default_name: Neue Anfrage
+      form:
+        title: Neue Anfrage
+        name: Name
+        method: Methode
+        url: URL
+        submit: Anfrage erstellen
+      name: Anfragename
+      method: HTTP-Methode
+      url_placeholder: "https://api.example.com/path oder {{base_url}}/path"
+      send: Senden
+      send_hint: Senden (Strg/Cmd + Enter)
+      cancel: Abbrechen
+      cancel_hint: Anfrage abbrechen
+      save: Speichern
+      copy_curl: cURL kopieren
+      more_actions: Weitere Aktionen
+      copied: Kopiert
+      duplicate: Duplizieren
+      delete: Löschen
+      confirm_delete: "Die Anfrage „%{name}“ löschen?"
+      copy_name: "%{name} (Kopie)"
+    curl_imports:
+      form:
+        title: cURL importieren
+        command: cURL-Befehl
+        hint: "Erstellt eine Anfrage in „%{collection}“."
+        submit: Importieren
+    tabs:
+      label: Anfrageabschnitte
+      params: Params
+      authorization: Autorisierung
+      headers: Headers
+      body: Body
+      settings: Einstellungen
+    params:
+      add: Parameter hinzufügen
+      key: Parameter
+    headers:
+      add: Header hinzufügen
+      key: Header
+    body:
+      type: Body-Typ
+      none_hint: Diese Anfrage hat keinen Body.
+      placeholder: Anfrage-Body. Verwende bei Bedarf {{variables}}.
+      graphql_variables: Variablen (JSON)
+      form_hint: Textzeilen werden als Felder gesendet; wähle Datei, um eine Datei hochzuladen.
+      binary: Datei, die als roher Body gesendet wird
+      current_file: "Aktuelle Datei: %{name}"
+      types:
+        none: Keiner
+        json: JSON
+        text: Text
+        xml: XML
+        form_urlencoded: Formular (urlencoded)
+        multipart: Formular (multipart)
+        graphql: GraphQL
+        binary: Binärdatei
+    settings:
+      timeout: Timeout (Sekunden)
+      timeout_hint: "Bis zu %{max} Sekunden."
+      max_redirects: Max. Weiterleitungen
+      follow_redirects: Weiterleitungen folgen
+      verify_ssl: SSL-Zertifikate prüfen
+      use_cookie_jar: Cookie-Speicher verwenden (Cookies senden und speichern)
+    auth:
+      type: Auth-Typ
+      inherit_hint: Verwendet die Autorisierung des übergeordneten Ordners oder der Sammlung.
+      none_hint: Mit dieser Anfrage werden keine Zugangsdaten gesendet.
+      secret_saved: "Gespeichert · leer lassen zum Beibehalten"
+      types:
+        inherit: Vom Übergeordneten erben
+        none: Keine Auth
+        basic: Basic Auth
+        bearer: Bearer Token
+        api_key: API-Schlüssel
+        jwt_bearer: JWT Bearer
+        digest: Digest Auth
+        aws_sigv4: AWS Signature v4
+        oauth2: OAuth 2.0
+      fields:
+        username: Benutzername
+        password: Passwort
+        token: Token
+        prefix: Präfix
+        key: Schlüssel
+        value: Wert
+        add_to: Hinzufügen zu
+        algorithm: Algorithmus
+        secret: Secret oder privater Schlüssel
+        payload: Payload (JSON)
+        headers: Zusätzliche Header (JSON)
+        query_param: Name des Query-Parameters
+        access_key: Access Key
+        secret_key: Secret Key
+        session_token: Session Token
+        region: Region
+        service: Dienst
+        grant_type: Grant-Typ
+        token_url: Access-Token-URL
+        authorization_url: Autorisierungs-URL
+        client_id: Client-ID
+        client_secret: Client Secret
+        scope: Scope
+        audience: Audience
+        client_authentication: Client-Authentifizierung
+      options:
+        add_to:
+          header: Header
+          query: Query-Parameter
+        grant_type:
+          client_credentials: Client Credentials
+          password: Passwort
+          authorization_code: Authorization Code (PKCE)
+        client_authentication:
+          basic_header: Als Basic-Auth-Header senden
+          body: Im Anfrage-Body senden
+    oauth2:
+      token_present: Access Token gespeichert.
+      token_missing: Noch kein Access Token.
+      expires: "läuft %{time} ab"
+      get_token: Neuen Access Token holen
+      authorize: Im Browser autorisieren
+      clear_token: Token löschen
+      redirect_hint: "Registriere diese Redirect-URL bei deinem Anbieter: %{url}"
+      save_first: Speichere zuerst diese Einstellungen und öffne sie dann erneut, um einen Token zu holen.
+      tokens:
+        create:
+          fetched: Access Token gespeichert.
+          failed: "Token konnte nicht abgerufen werden: %{error}"
+        destroy:
+          cleared: Token gelöscht.
+      callbacks:
+        show:
+          fetched: Access Token gespeichert.
+          failed: "Token konnte nicht abgerufen werden: %{error}"
+          invalid_state: Die Autorisierungsantwort war ungültig. Versuche es erneut.
+      missing_token_url: Lege zuerst eine Token-URL fest.
+      missing_authorization_url: Lege zuerst eine Autorisierungs-URL fest.
+      unsupported_grant: Der Authorization-Code-Grant benötigt den Browser-Ablauf.
+      invalid_response: Der Token-Endpunkt hat kein JSON zurückgegeben.
+    executions:
+      resize: Antwortbereich in der Größe ändern
+      error: Fehler
+      failure: "Die Anfrage konnte nicht gesendet werden. Prüfe das Server-Log und versuche es erneut."
+      running: Anfrage wird gesendet…
+      empty_title: Noch keine Antwort
+      empty_hint: Drücke Senden oder Strg/Cmd + Enter, um diese Anfrage auszuführen.
+      tabs:
+        label: Antwortabschnitte
+        body: Body
+        headers: Headers
+        cookies: Cookies
+        timing: Timing
+        request: Anfrage
+        payload: Payload
+        history: Verlauf
+      cookies:
+        name: Name
+        value: Wert
+        domain: Domain
+        path: Pfad
+        expires: Läuft ab
+        flags: Flags
+        session: Sitzung
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
+      timing:
+        total: Gesamt
+        show: Zeitaufschlüsselung anzeigen
+        title: Antwortzeit
+        phases:
+          dns: DNS-Abfrage
+          tcp: TCP-Handshake
+          tls: TLS-Handshake
+          ttfb: Warten (TTFB)
+          download: Download
+          process: Verarbeitung
+      time: Zeit
+      size: Größe
+      redirects:
+        one: "%{count} Weiterleitung"
+        other: "%{count} Weiterleitungen"
+      no_headers: Keine Headers.
+      empty_body: Die Antwort hat keinen Body.
+      binary: "Binäre oder nicht-textuelle Antwort (%{size}, %{type}). Sie wird nicht angezeigt."
+      modes:
+        pretty: Formatiert
+        raw: Roh
+        preview: Vorschau
+      copy: Kopieren
+      save: Antwort speichern
+      copied: Kopiert
+      truncated: "Nur die ersten %{limit} werden angezeigt."
+      unresolved: "Nicht definierte Variablen: %{names}. Sie wurden unverändert gesendet."
+      request_headers: Gesendete Headers (Secrets verborgen)
+      no_payload: Kein Payload gesendet.
+      errors:
+        blocked: Von der Netzwerkrichtlinie blockiert
+        invalid_url: Ungültige URL
+        invalid_request: Die Anfrage konnte nicht erstellt werden
+        timeout: Zeitüberschreitung der Anfrage
+        ssl: SSL-Fehler
+        dns: Host nicht gefunden
+        refused: Verbindung abgelehnt
+        connection: Verbindung fehlgeschlagen
+        unknown: Unerwarteter Fehler
+        cancelled: Abgebrochen
+    errors:
+      blank_url: Gib eine URL ein, um die Anfrage zu senden.
+      invalid_url: Die URL ist ungültig. Nur http und https werden unterstützt.
+      unresolved_url: "Nicht definierte Variablen in der URL: %{names}. Wähle eine Umgebung, die sie definiert."
+      invalid_graphql_variables: GraphQL-Variablen müssen gültiges JSON sein.
+      missing_binary: Wähle eine Datei für den Binär-Body.
+    imports:
+      create:
+        imported: "%{counts} importiert."
+        warnings:
+          one: "1 Eintrag braucht Aufmerksamkeit: %{details}"
+          other: "%{count} Einträge brauchen Aufmerksamkeit: %{details}"
+        counts:
+          collections:
+            one: "%{count} Sammlung"
+            other: "%{count} Sammlungen"
+          folders:
+            one: "%{count} Ordner"
+            other: "%{count} Ordner"
+          requests:
+            one: "%{count} Anfrage"
+            other: "%{count} Anfragen"
+          environments:
+            one: "%{count} Umgebung"
+            other: "%{count} Umgebungen"
+      form:
+        title: Sammlungen importieren
+        description: Übernimm Sammlungen, Anfragen und Umgebungen aus einem anderen API-Client.
+        submit: Importieren
+        file: Datei
+        content: Oder Inhalt einfügen
+        content_placeholder: "JSON- oder YAML-Export einfügen"
+        formats: "Unterstützt: Postman (Collection v2 und Environment), Insomnia (v4 JSON, v5 YAML), Bruno (JSON-Export) und OpenAPI 3 / Swagger 2."
+        apidog: "Apidog: Exportiere dein Projekt als Postman oder OpenAPI und importiere diese Datei."
+      errors:
+        empty: Wähle eine Datei oder füge ihren Inhalt ein.
+        too_large: Die Datei ist zu groß (maximal %{max} MB).
+        invalid_content: Der Inhalt ist kein gültiges JSON oder YAML.
+        unknown_format: "Format nicht erkannt. Unterstützt: Postman, Insomnia, Bruno (JSON) und OpenAPI/Swagger."
+        too_complex: Die Datei enthält zu viele Einträge für den Import.
+        nothing_to_import: Die Datei enthält nichts zum Importieren.
+        invalid_openapi: Das OpenAPI-Dokument enthält keine Pfade zum Importieren.
+        failed: "Import fehlgeschlagen: %{message}"
+      warnings:
+        auth_unsupported: "Der Autorisierungstyp „%{type}“ wird nicht unterstützt; die Anfrage erbt stattdessen."
+        variable_unsupported: "Die dynamische Variable {{%{name}}} wird nicht unterstützt und wurde unverändert beibehalten."
+        scripts: "„%{name}“ enthält Skripte, die nicht unterstützt und übersprungen wurden."
+        file_body: "„%{name}“ hat einen Datei-Body; der Dateiinhalt wurde nicht importiert."
+        external_ref: "Die externe Referenz „%{ref}“ wurde nicht aufgelöst."
+        unknown_item: "Ein Eintrag vom Typ „%{type}“ wurde übersprungen."
+        variable_skipped: "Die Variable „%{key}“ wurde übersprungen, da ihr Name ungültig ist."
+    curl:
+      empty: Füge einen curl-Befehl ein.
+      missing_url: Der Befehl enthält keine URL.
+      missing_argument: "%{flag} benötigt einen Wert."

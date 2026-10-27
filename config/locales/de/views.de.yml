@@ -1,0 +1,263 @@
+de:
+  mailing:
+    disabled: E-Mail ist auf dieser Instanz nicht konfiguriert.
+  throttling:
+    limited: Zu viele Versuche. Warte einen Moment und versuche es erneut.
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} ist größer als das Limit von %{max} MB."
+              uploads_too_large: Die Dateien zusammen sind größer als das Limit von %{max} MB.
+              too_many_uploads: Zu viele Dateien in einer Anfrage (maximal %{max}).
+    attributes:
+      user:
+        first_name: Vorname
+        last_name: Nachname
+      project:
+        name: Name
+        icon: Icon
+  layouts:
+    devise:
+      panel_label: Developer Workspace
+      panel_note: Open Source
+    app:
+      right_sidebar: Seitenpanel
+      close_right_sidebar: Seitenpanel schließen
+  components:
+    select:
+      search: Suchen…
+      empty: Keine Ergebnisse
+    nav_item:
+      soon: Bald
+    project_switcher:
+      label: Projekte
+      new: Neues Projekt
+    settings_nav:
+      label: Einstellungsbereiche
+      groups:
+        account: Mein Konto
+        appearance: Darstellung
+        project: Projekt
+      items:
+        profile: Profil
+        preferences: Präferenzen
+        security: Sicherheit
+        delete_account: Konto kündigen
+        sidebar: Seitenleiste
+        themes: Themes
+        members: Mitglieder
+    tools_nav:
+      label: Projektnavigation
+      api_client: API Client
+      documentation: Dokumentation
+      monitoring: Monitoring
+      servers: Server
+      network: Netzwerk
+      logs: Logs
+      ai_assistant: KI-Assistent
+    user_menu:
+      title: Konto
+      settings: Einstellungen
+      label: Kontomenü
+      sign_out: Abmelden
+    input:
+      toggle_password: Passwort ein- oder ausblenden
+    locale_switcher:
+      label: Sprache
+    zoom_picker:
+      label: Zoom
+      default: Standard
+    toast:
+      close: Benachrichtigung schließen
+    theme_switcher:
+      label: Theme
+      system: System
+      light: Hell
+      dark: Dunkel
+  settings:
+    save_bar:
+      unsaved: Du hast ungespeicherte Änderungen
+      discard: Verwerfen
+  projects:
+    new:
+      title: Neues Projekt
+      heading_html: Erstelle dein erstes Projekt
+      name: Projektname
+      name_placeholder: z. B. Beispiel
+      icon: Icon
+      icon_search: Icons suchen
+      icon_empty: Keine Icons gefunden
+      submit: Projekt erstellen
+    memberships:
+      edit:
+        title: Einstellungen
+        heading: Seitenleiste
+        description: Wie sich Sammlungen, Ordner und Anfragen in der Seitenleiste des API Clients verhalten. Das gilt nur für dich in diesem Projekt.
+        folder_toggle:
+          label: Sammlungen und Ordner
+          hint: Wie sie sich in der Seitenleiste des API Clients auf- und zuklappen.
+        request_open:
+          label: Anfragen
+          hint: Wie sie sich aus der Seitenleiste des API Clients öffnen. Bei Doppelklick benennst du sie in der Anfrage selbst um.
+        collapse_nested_folders:
+          label: Verschachtelte Ordner einklappen
+          hint: Beim Schließen einer Sammlung oder eines Ordners werden auch die darin liegenden Ordner geschlossen.
+        toggle:
+          "true": Ja
+          "false": "Nein"
+        modes:
+          click: Einfacher Klick
+          double_click: Doppelklick
+      update:
+        updated: Einstellungen gespeichert.
+    themes:
+      edit:
+        title: Themes
+        heading: Themes
+        description: Wie Shango für dich in diesem Projekt aussieht. Das gilt nur für dich.
+        color_scheme:
+          label: Farbschema
+          hint: Hell, dunkel oder passend zu deinem Betriebssystem.
+        color_schemes:
+          system: System
+          light: Hell
+          dark: Dunkel
+        theme:
+          label: Theme
+          hint: Die Akzentfarben im gesamten Workspace.
+        themes:
+          default: Clay
+          blue: Blau
+          green: Grün
+          yellow: Gelb
+          red: Rot
+          ocean: Ocean
+          purple: Lila
+          rose: Rosé
+          orange: Orange
+          forest: Forest
+          midnight: Midnight
+          nord: Nord
+          dracula: Dracula
+          gruvbox: Gruvbox
+          solarized: Solarized
+          sunset: Sunset
+          coffee: Coffee
+          cyberpunk: Cyberpunk
+          mono: Mono
+  users:
+    accounts:
+      show:
+        title: Konto
+  devise:
+    sessions:
+      new:
+        title: Anmelden
+        heading_html: Willkommen zurück
+        email: E-Mail
+        email_placeholder: du@example.com
+        password: Passwort
+        password_placeholder: Gib dein Passwort ein
+        remember_me: Angemeldet bleiben
+        forgot_password: Passwort vergessen?
+        submit: Anmelden
+        no_account: Noch kein Konto?
+        sign_up: Registrieren
+        or: Oder
+    registrations:
+      new:
+        title: Konto erstellen
+        heading_html: Erstelle dein Konto
+        first_name: Vorname
+        first_name_placeholder: z. B. Ada
+        last_name: Nachname
+        last_name_placeholder: z. B. Lovelace
+        email: E-Mail
+        email_placeholder: du@example.com
+        password: Passwort
+        password_placeholder: Mindestens %{length} Zeichen
+        submit: Konto erstellen
+        or: Oder
+        sign_in: Anmelden
+      edit:
+        title: Einstellungen
+        profile:
+          heading: Profil
+          description: Dein Name und die E-Mail-Adresse, mit der du dich anmeldest.
+        fields:
+          cancel_hint: Diese Aktion kann nicht rückgängig gemacht werden.
+        preferences:
+          heading: Präferenzen
+          description: Sprache und Zoom für dein Konto.
+          locale:
+            label: Sprache
+            hint: Die Sprache der Oberfläche.
+          zoom:
+            label: Zoom
+            hint: Die Oberfläche kleiner oder größer darstellen.
+        security:
+          heading: Sicherheit
+          description: Ändere dein Passwort.
+        delete_account:
+          heading: Konto kündigen
+          description: Dein Konto dauerhaft löschen.
+        email: E-Mail
+        new_password: Neues Passwort
+        email_placeholder: du@example.com
+        password_placeholder: Leer lassen, um das aktuelle Passwort zu behalten
+        confirm_password_placeholder: Wiederhole dein neues Passwort
+        confirm_password: Passwort bestätigen
+        cancel_heading: Mein Konto kündigen
+        cancel_account: Mein Konto kündigen
+        confirm: Bist du sicher?
+        current_password: Aktuelles Passwort
+        current_password_placeholder: Gib dein aktuelles Passwort ein
+      destroy:
+        wrong_password: "Das Passwort ist falsch. Dein Konto wurde nicht gekündigt."
+        sole_owner: "Du bist der einzige Eigentümer von %{projects}, das noch weitere Mitglieder hat. Durch die Kündigung bliebe es ohne Eigentümer."
+    passwords:
+      new:
+        title: Passwort zurücksetzen
+        heading_html: Passwort vergessen?
+        email: E-Mail
+        email_placeholder: du@example.com
+        submit: Anleitung senden
+        sign_in: Anmelden
+        or: Oder
+      edit:
+        title: Passwort ändern
+        heading_html: Neues Passwort festlegen
+        password: Neues Passwort
+        password_placeholder: Neues Passwort erstellen (mindestens %{length} Zeichen)
+        password_confirmation: Passwort bestätigen
+        password_confirmation_placeholder: Wiederhole dein neues Passwort
+        submit: Passwort ändern
+        sign_in: Anmelden
+        or: Oder
+    confirmations:
+      new:
+        title: Bestätigung erneut senden
+        heading_html: Bestätige deine E-Mail-Adresse
+        email: E-Mail
+        email_placeholder: du@example.com
+        submit: Anleitung erneut senden
+    unlocks:
+      new:
+        title: Entsperrung erneut senden
+        heading_html: Entsperre dein Konto
+        email: E-Mail
+        email_placeholder: du@example.com
+        submit: Anleitung erneut senden
+    shared:
+      links:
+        sign_in_prompt: Du hast schon ein Konto?
+        sign_in: Anmelden
+        no_account: Noch kein Konto?
+        sign_up: Registrieren
+        forgot_password: Passwort vergessen?
+        confirmation: Keine Bestätigungsanleitung erhalten?
+        unlock: Keine Entsperranleitung erhalten?
+        omniauth: Weiter mit %{provider}

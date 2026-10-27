@@ -1,0 +1,263 @@
+hi:
+  mailing:
+    disabled: "इस इंस्टेंस पर ईमेल कॉन्फ़िगर नहीं है।"
+  throttling:
+    limited: "बहुत ज़्यादा प्रयास हुए। थोड़ी देर रुकें और फिर कोशिश करें।"
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} %{max} MB की सीमा से बड़ी है।"
+              uploads_too_large: "फ़ाइलें मिलाकर %{max} MB की सीमा से बड़ी हैं।"
+              too_many_uploads: "एक रिक्वेस्ट में बहुत ज़्यादा फ़ाइलें हैं (अधिकतम %{max})।"
+    attributes:
+      user:
+        first_name: "पहला नाम"
+        last_name: "उपनाम"
+      project:
+        name: "नाम"
+        icon: "आइकन"
+  layouts:
+    devise:
+      panel_label: "Developer Workspace"
+      panel_note: "ओपन सोर्स"
+    app:
+      right_sidebar: "साइड पैनल"
+      close_right_sidebar: "साइड पैनल बंद करें"
+  components:
+    select:
+      search: "खोजें…"
+      empty: "कोई परिणाम नहीं"
+    nav_item:
+      soon: "जल्द आ रहा है"
+    project_switcher:
+      label: "प्रोजेक्ट"
+      new: "नया प्रोजेक्ट"
+    settings_nav:
+      label: "सेटिंग्स के अनुभाग"
+      groups:
+        account: "मेरा खाता"
+        appearance: "दिखावट"
+        project: "प्रोजेक्ट"
+      items:
+        profile: "प्रोफ़ाइल"
+        preferences: "प्राथमिकताएँ"
+        security: "सुरक्षा"
+        delete_account: "खाता रद्द करें"
+        sidebar: "साइडबार"
+        themes: "थीम"
+        members: "सदस्य"
+    tools_nav:
+      label: "प्रोजेक्ट नेविगेशन"
+      api_client: "API Client"
+      documentation: "डॉक्यूमेंटेशन"
+      monitoring: "मॉनिटरिंग"
+      servers: "सर्वर"
+      network: "नेटवर्क"
+      logs: "लॉग"
+      ai_assistant: "AI असिस्टेंट"
+    user_menu:
+      title: "खाता"
+      settings: "सेटिंग्स"
+      label: "खाता मेनू"
+      sign_out: "साइन आउट"
+    input:
+      toggle_password: "पासवर्ड दिखाएँ या छिपाएँ"
+    locale_switcher:
+      label: "भाषा"
+    zoom_picker:
+      label: "ज़ूम"
+      default: "डिफ़ॉल्ट"
+    toast:
+      close: "सूचना बंद करें"
+    theme_switcher:
+      label: "थीम"
+      system: "सिस्टम"
+      light: "लाइट"
+      dark: "डार्क"
+  settings:
+    save_bar:
+      unsaved: "आपके बदलाव सहेजे नहीं गए हैं"
+      discard: "छोड़ें"
+  projects:
+    new:
+      title: "नया प्रोजेक्ट"
+      heading_html: "अपना पहला प्रोजेक्ट बनाएँ"
+      name: "प्रोजेक्ट का नाम"
+      name_placeholder: "उदा. Example"
+      icon: "आइकन"
+      icon_search: "आइकन खोजें"
+      icon_empty: "कोई आइकन नहीं मिला"
+      submit: "प्रोजेक्ट बनाएँ"
+    memberships:
+      edit:
+        title: "सेटिंग्स"
+        heading: "साइडबार"
+        description: "API Client के साइडबार में कलेक्शन, फ़ोल्डर और रिक्वेस्ट का व्यवहार कैसा हो। यह इस प्रोजेक्ट में सिर्फ़ आप पर लागू होता है।"
+        folder_toggle:
+          label: "कलेक्शन और फ़ोल्डर"
+          hint: "API Client के साइडबार में ये कैसे खुलते और बंद होते हैं।"
+        request_open:
+          label: "रिक्वेस्ट"
+          hint: "API Client के साइडबार से ये कैसे खुलती हैं। डबल क्लिक चुनने पर नाम बदलना रिक्वेस्ट के अंदर से होता है।"
+        collapse_nested_folders:
+          label: "भीतरी फ़ोल्डर समेटें"
+          hint: "कलेक्शन या फ़ोल्डर बंद करने पर उसके अंदर के फ़ोल्डर भी बंद हो जाते हैं।"
+        toggle:
+          "true": "हाँ"
+          "false": "नहीं"
+        modes:
+          click: "सिंगल क्लिक"
+          double_click: "डबल क्लिक"
+      update:
+        updated: "सेटिंग्स सहेज ली गईं।"
+    themes:
+      edit:
+        title: "थीम"
+        heading: "थीम"
+        description: "इस प्रोजेक्ट में Shango आपको कैसा दिखे। यह सिर्फ़ आप पर लागू होता है।"
+        color_scheme:
+          label: "रंग योजना"
+          hint: "लाइट, डार्क, या अपने ऑपरेटिंग सिस्टम के अनुसार।"
+        color_schemes:
+          system: "सिस्टम"
+          light: "लाइट"
+          dark: "डार्क"
+        theme:
+          label: "थीम"
+          hint: "पूरे वर्कस्पेस में इस्तेमाल होने वाले एक्सेंट रंग।"
+        themes:
+          default: "Clay"
+          blue: "नीला"
+          green: "हरा"
+          yellow: "पीला"
+          red: "लाल"
+          ocean: "Ocean"
+          purple: "बैंगनी"
+          rose: "गुलाबी"
+          orange: "नारंगी"
+          forest: "Forest"
+          midnight: "Midnight"
+          nord: "Nord"
+          dracula: "Dracula"
+          gruvbox: "Gruvbox"
+          solarized: "Solarized"
+          sunset: "Sunset"
+          coffee: "Coffee"
+          cyberpunk: "Cyberpunk"
+          mono: "Mono"
+  users:
+    accounts:
+      show:
+        title: "खाता"
+  devise:
+    sessions:
+      new:
+        title: "साइन इन"
+        heading_html: "वापसी पर स्वागत है"
+        email: "ईमेल"
+        email_placeholder: "you@example.com"
+        password: "पासवर्ड"
+        password_placeholder: "अपना पासवर्ड दर्ज करें"
+        remember_me: "मुझे याद रखें"
+        forgot_password: "पासवर्ड भूल गए?"
+        submit: "साइन इन"
+        no_account: "खाता नहीं है?"
+        sign_up: "साइन अप"
+        or: "या"
+    registrations:
+      new:
+        title: "खाता बनाएँ"
+        heading_html: "अपना खाता बनाएँ"
+        first_name: "पहला नाम"
+        first_name_placeholder: "उदा. Ada"
+        last_name: "उपनाम"
+        last_name_placeholder: "उदा. Lovelace"
+        email: "ईमेल"
+        email_placeholder: "you@example.com"
+        password: "पासवर्ड"
+        password_placeholder: "कम से कम %{length} अक्षर"
+        submit: "खाता बनाएँ"
+        or: "या"
+        sign_in: "साइन इन"
+      edit:
+        title: "सेटिंग्स"
+        profile:
+          heading: "प्रोफ़ाइल"
+          description: "आपका नाम और वह ईमेल जिससे आप साइन इन करते हैं।"
+        fields:
+          cancel_hint: "यह कार्रवाई वापस नहीं ली जा सकती।"
+        preferences:
+          heading: "प्राथमिकताएँ"
+          description: "आपके खाते की भाषा और ज़ूम।"
+          locale:
+            label: "भाषा"
+            hint: "इंटरफ़ेस की भाषा।"
+          zoom:
+            label: "ज़ूम"
+            hint: "इंटरफ़ेस को छोटा या बड़ा करें।"
+        security:
+          heading: "सुरक्षा"
+          description: "अपना पासवर्ड बदलें।"
+        delete_account:
+          heading: "खाता रद्द करें"
+          description: "अपना खाता हमेशा के लिए हटाएँ।"
+        email: "ईमेल"
+        new_password: "नया पासवर्ड"
+        email_placeholder: "you@example.com"
+        password_placeholder: "वर्तमान पासवर्ड रखने के लिए खाली छोड़ें"
+        confirm_password_placeholder: "नया पासवर्ड दोबारा लिखें"
+        confirm_password: "पासवर्ड की पुष्टि करें"
+        cancel_heading: "मेरा खाता रद्द करें"
+        cancel_account: "मेरा खाता रद्द करें"
+        confirm: "क्या आप सुनिश्चित हैं?"
+        current_password: "वर्तमान पासवर्ड"
+        current_password_placeholder: "अपना वर्तमान पासवर्ड दर्ज करें"
+      destroy:
+        wrong_password: "पासवर्ड गलत है। आपका खाता रद्द नहीं किया गया।"
+        sole_owner: "आप %{projects} के अकेले ओनर हैं, जिसमें अब भी दूसरे सदस्य हैं। खाता रद्द करने पर उसका कोई ओनर नहीं रहेगा।"
+    passwords:
+      new:
+        title: "पासवर्ड रीसेट करें"
+        heading_html: "पासवर्ड भूल गए?"
+        email: "ईमेल"
+        email_placeholder: "you@example.com"
+        submit: "निर्देश भेजें"
+        sign_in: "साइन इन"
+        or: "या"
+      edit:
+        title: "पासवर्ड बदलें"
+        heading_html: "नया पासवर्ड सेट करें"
+        password: "नया पासवर्ड"
+        password_placeholder: "नया पासवर्ड बनाएँ (कम से कम %{length} अक्षर)"
+        password_confirmation: "पासवर्ड की पुष्टि करें"
+        password_confirmation_placeholder: "नया पासवर्ड दोबारा लिखें"
+        submit: "पासवर्ड बदलें"
+        sign_in: "साइन इन"
+        or: "या"
+    confirmations:
+      new:
+        title: "पुष्टि दोबारा भेजें"
+        heading_html: "अपने ईमेल की पुष्टि करें"
+        email: "ईमेल"
+        email_placeholder: "you@example.com"
+        submit: "निर्देश दोबारा भेजें"
+    unlocks:
+      new:
+        title: "अनलॉक दोबारा भेजें"
+        heading_html: "अपना खाता अनलॉक करें"
+        email: "ईमेल"
+        email_placeholder: "you@example.com"
+        submit: "निर्देश दोबारा भेजें"
+    shared:
+      links:
+        sign_in_prompt: "पहले से खाता है?"
+        sign_in: "साइन इन"
+        no_account: "खाता नहीं है?"
+        sign_up: "साइन अप"
+        forgot_password: "पासवर्ड भूल गए?"
+        confirmation: "पुष्टि के निर्देश नहीं मिले?"
+        unlock: "अनलॉक के निर्देश नहीं मिले?"
+        omniauth: "%{provider} से जारी रखें"

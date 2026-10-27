@@ -1,0 +1,505 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "変数名は一意である必要があります。"
+    attributes:
+      environment:
+        name: 名前
+      variable:
+        key: 名前
+        value: 値
+      cookie:
+        name: 名前
+        value: 値
+        domain: ドメイン
+        path: パス
+      collection:
+        name: 名前
+      folder:
+        name: 名前
+      api_request:
+        name: 名前
+        url: URL
+  components:
+    confirm_dialog:
+      cancel: キャンセル
+      confirm: 削除
+    modal:
+      cancel: キャンセル
+      save: 保存
+      close: 閉じる
+    code_editor:
+      environment: 環境
+      dynamic: 動的
+      set: 設定済み
+      empty: 空
+      guid: ランダムな UUID
+      timestamp: Unix 秒
+      iso_timestamp: ISO 8601 形式の日付
+      random_int: 0 – 999
+      missing: 未定義
+      response: レスポンス
+      response_body: "Body 属性 – レスポンスボディの値"
+      response_raw: "Raw ボディ – レスポンスボディ全体"
+      response_header: "Header – レスポンスヘッダーの値"
+      response_url: "リクエスト URL – 送信元リクエストの URL"
+      response_loading: 読み込み中…
+      response_no_response: "まだレスポンスがありません。先に %{request} を送信してください。"
+      response_no_match: このフィルターに一致するものはありません
+      response_unknown: このコレクションにリクエストが見つかりません
+      response_invalid: レスポンス参照が無効です
+      response_edit_title: レスポンス参照を編集
+      response_function_label: 実行する関数
+      response_function: "レスポンス – 他のリクエストのレスポンスの値を参照"
+      response_attribute: 属性
+      response_request: リクエスト
+      response_filter_body: フィルター (JSONPath)
+      response_filter_header: ヘッダー名
+      response_trigger: トリガーの動作
+      response_trigger_never: "なし – リクエストを再送しない"
+      response_trigger_hint: リクエストは再送されません。最新のレスポンスを取得するには先に送信してください。
+      response_preview: ライブプレビュー
+      response_refresh: 更新
+      response_done: 完了
+      response_close: 閉じる
+    key_value_table:
+      add: 行を追加
+      key: キー
+      value: 値
+      description: 説明
+      enabled: 有効
+      remove: 行を削除
+      text: テキスト
+      file: ファイル
+      secret: シークレット
+      secret_saved: "保存済み · 変更しない場合は空欄のまま"
+    environment_switcher:
+      none: 環境なし
+      label: 環境
+      manage: 環境を管理
+      manage_title: 環境
+      cookies: Cookie
+      cookies_title: Cookie
+    request_tabs:
+      label: 開いているリクエスト
+      close: "%{name} を閉じる"
+      draft_hint: "下書き（未保存）"
+      new_draft: 新しい下書きリクエスト
+      actions: "タブの操作"
+      new_request: "新規リクエスト"
+      duplicate: "タブを複製"
+      close_tab: "タブを閉じる"
+      close_left: "左のタブを閉じる"
+      close_right: "右のタブを閉じる"
+      close_all: "すべてのタブを閉じる"
+    request_tree:
+      label: コレクション
+      title: コレクション
+      new_collection: 新規コレクション
+      empty: コレクションはまだありません。
+      empty_collection: 空のコレクション
+      actions: "%{name} の操作"
+      new_request: 新規リクエスト
+      new_folder: 新規フォルダ
+      new_subfolder: 新規サブフォルダ
+      history: リクエスト履歴
+      history_title: 履歴
+      history_empty: 保存されたレスポンスはまだありません。リクエストを実行し、「レスポンスを保存」を押すとここに保存されます。
+      drafts: 下書き
+      back: コレクションに戻る
+      import: コレクションをインポート
+      import_curl: cURL をインポート
+      edit: 編集
+      rename: 名前を変更
+      duplicate: 複製
+      delete: 削除
+      confirm_delete_collection: "コレクション「%{name}」を、すべてのフォルダとリクエストを含めて削除しますか？"
+      confirm_delete_folder: "フォルダ「%{name}」を、中身をすべて含めて削除しますか？"
+  projects:
+    cookies:
+      index:
+        title: Cookie
+        intro: "サーバーが設定した Cookie は選択中の環境に保存され、以降のリクエストで自動的に送信されるため、ログイン状態が次の呼び出しにも引き継がれます。Cookie を手動で追加・編集することもできます。"
+        scope: "環境: %{name}"
+        scope_none: 環境なし
+        empty_title: Cookie はまだありません
+        empty_hint: レスポンスで Cookie を設定するリクエストを送信すると、ここに表示されます。
+        session: セッション
+        expires: "有効期限 %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Cookie を削除
+        new: Cookie を追加
+        edit: Cookie を編集
+        clear: すべての Cookie を消去
+        confirm_clear: "この環境に保存されているすべての Cookie を削除しますか？"
+      create:
+        created: Cookie を追加しました。
+      update:
+        updated: Cookie を保存しました。
+      form:
+        new_title: "新規 Cookie"
+        name: "名前"
+        value: "値"
+        value_hint: "暗号化して保存され、ここでは平文で表示されます。"
+        domain: "ドメイン"
+        path: "パス"
+        expires_at: "有効期限"
+        expires_at_hint: "セッション Cookie にする場合は空欄のままにしてください。"
+        host_only: "ホストのみ（サブドメインには送信しない）"
+        secure: "Secure（https のみ）"
+        http_only: "HttpOnly"
+    environments:
+      index:
+        title: 環境
+        intro: "環境には、リクエストから {{name}} として参照する変数（ベース URL、トークンなど）を保存します。リクエストで使用する環境を有効にしてください。"
+        new: 新規環境
+        empty_title: 環境はまだありません
+        empty_hint: "Local、Staging、Production などの環境を作成し、base_url のような変数を定義しましょう。"
+        variables:
+          other: "%{count} 個の変数"
+        in_use: 使用中
+        activate: 有効にする
+        actions: その他の操作
+        edit: 編集
+        delete: 削除
+        confirm_delete: "環境「%{name}」を削除しますか？"
+      new:
+        title: 新規環境
+        subtitle: "名前を付けて、ベース URL やトークンなど、リクエストから参照する変数を追加します。"
+        name_hint: "環境の選択メニューに表示されます（例: Production、Staging）。"
+        submit: 環境を作成
+      edit:
+        title: 環境を編集
+      form:
+        name: 名前
+        name_placeholder: "例: Production"
+        variables: 変数
+        variables_hint: "リクエストから {{name}} として参照します。シークレットの値は暗号化され、保存後は再表示されません。"
+        key_placeholder: 変数
+        value_placeholder: 値
+  workbench:
+    title: API Client
+    shared:
+      cancel: キャンセル
+      save: 保存
+    workspaces:
+      show:
+        heading: リクエストを作成して実行
+        empty: リクエストから始めるか、コレクションを作成して整理し、cURL コマンドからインポートしましょう。
+        pick: サイドバーからリクエストを選ぶか、新しく作成してください。
+        new_collection: 新規コレクション
+        new_request: 新規リクエスト
+    collections:
+      create:
+        created: コレクションを作成しました。
+      update:
+        updated: コレクションを更新しました。
+      destroy:
+        destroyed: コレクションを削除しました。
+      form:
+        new_title: 新規コレクション
+        edit_title: コレクションの設定
+        name: 名前
+        name_placeholder: "例: Main API"
+        description: 説明
+    folders:
+      create:
+        created: フォルダを作成しました。
+      update:
+        updated: フォルダを更新しました。
+      destroy:
+        destroyed: フォルダを削除しました。
+      form:
+        new_title: 新規フォルダ
+        edit_title: フォルダの設定
+        name: 名前
+        name_placeholder: "例: Authentication"
+        auth: 認可
+    requests:
+      draft: 下書き
+      draft_name: 新規リクエスト
+      closures:
+        new:
+          title: "この下書きを閉じますか？"
+          description: "この下書きはまだどのコレクションにも入っていません。作業内容を残すには保存し、不要なら破棄してください。"
+          discard: 破棄
+          cancel: 編集を続ける
+          save: コレクションに保存
+      placements:
+        form:
+          title: "リクエストの保存先…"
+          description: "このリクエストの保存先を選択してください。このウィンドウを閉じると下書きのままになります。"
+          destination: 保存先
+          keep_draft: 下書きのままにする
+          submit: ここに保存
+      create:
+        created: リクエストを作成しました。
+      update:
+        updated: リクエストを保存しました。
+      destroy:
+        destroyed: リクエストを削除しました。
+      new:
+        default_name: 新規リクエスト
+      form:
+        title: 新規リクエスト
+        name: 名前
+        method: メソッド
+        url: URL
+        submit: リクエストを作成
+      name: リクエスト名
+      method: HTTP メソッド
+      url_placeholder: "https://api.example.com/path または {{base_url}}/path"
+      send: 送信
+      send_hint: 送信 (Ctrl/Cmd + Enter)
+      cancel: キャンセル
+      cancel_hint: リクエストをキャンセル
+      save: 保存
+      copy_curl: cURL をコピー
+      more_actions: その他の操作
+      copied: コピーしました
+      duplicate: 複製
+      delete: 削除
+      confirm_delete: "リクエスト「%{name}」を削除しますか？"
+      copy_name: "%{name}（コピー）"
+    curl_imports:
+      form:
+        title: cURL をインポート
+        command: cURL コマンド
+        hint: "「%{collection}」にリクエストを作成します。"
+        submit: インポート
+    tabs:
+      label: リクエストのセクション
+      params: Params
+      authorization: 認可
+      headers: Headers
+      body: Body
+      settings: 設定
+    params:
+      add: パラメータを追加
+      key: パラメータ
+    headers:
+      add: ヘッダーを追加
+      key: ヘッダー
+    body:
+      type: ボディの種類
+      none_hint: このリクエストにはボディがありません。
+      placeholder: "リクエストボディ。必要に応じて {{variables}} を使用できます。"
+      graphql_variables: 変数 (JSON)
+      form_hint: テキスト行はフィールドとして送信されます。ファイルをアップロードするには「ファイル」を選択してください。
+      binary: そのままボディとして送信するファイル
+      current_file: "現在のファイル: %{name}"
+      types:
+        none: なし
+        json: JSON
+        text: テキスト
+        xml: XML
+        form_urlencoded: フォーム (urlencoded)
+        multipart: フォーム (multipart)
+        graphql: GraphQL
+        binary: バイナリファイル
+    settings:
+      timeout: タイムアウト（秒）
+      timeout_hint: "最大 %{max} 秒です。"
+      max_redirects: 最大リダイレクト数
+      follow_redirects: リダイレクトに従う
+      verify_ssl: SSL 証明書を検証する
+      use_cookie_jar: "Cookie ジャーを使用する（Cookie の送信と保存）"
+    auth:
+      type: 認証タイプ
+      inherit_hint: 親フォルダまたはコレクションの認可を使用します。
+      none_hint: このリクエストでは認証情報を送信しません。
+      secret_saved: "保存済み · 変更しない場合は空欄のまま"
+      types:
+        inherit: 親から継承
+        none: 認証なし
+        basic: Basic 認証
+        bearer: Bearer トークン
+        api_key: API キー
+        jwt_bearer: JWT Bearer
+        digest: Digest 認証
+        aws_sigv4: AWS Signature v4
+        oauth2: OAuth 2.0
+      fields:
+        username: ユーザー名
+        password: パスワード
+        token: トークン
+        prefix: プレフィックス
+        key: キー
+        value: 値
+        add_to: 追加先
+        algorithm: アルゴリズム
+        secret: シークレットまたは秘密鍵
+        payload: ペイロード (JSON)
+        headers: 追加ヘッダー (JSON)
+        query_param: クエリパラメータ名
+        access_key: アクセスキー
+        secret_key: シークレットキー
+        session_token: セッショントークン
+        region: リージョン
+        service: サービス
+        grant_type: グラントタイプ
+        token_url: アクセストークン URL
+        authorization_url: 認可 URL
+        client_id: クライアント ID
+        client_secret: クライアントシークレット
+        scope: スコープ
+        audience: オーディエンス
+        client_authentication: クライアント認証
+      options:
+        add_to:
+          header: ヘッダー
+          query: クエリパラメータ
+        grant_type:
+          client_credentials: クライアントクレデンシャル
+          password: パスワード
+          authorization_code: 認可コード (PKCE)
+        client_authentication:
+          basic_header: Basic 認証ヘッダーとして送信
+          body: リクエストボディで送信
+    oauth2:
+      token_present: アクセストークンを保存しました。
+      token_missing: アクセストークンはまだありません。
+      expires: "有効期限 %{time}"
+      get_token: 新しいアクセストークンを取得
+      authorize: ブラウザで認可
+      clear_token: トークンを消去
+      redirect_hint: "このリダイレクト URL をプロバイダーに登録してください: %{url}"
+      save_first: 先にこれらの設定を保存し、再度開いてトークンを取得してください。
+      tokens:
+        create:
+          fetched: アクセストークンを保存しました。
+          failed: "トークンを取得できませんでした: %{error}"
+        destroy:
+          cleared: トークンを消去しました。
+      callbacks:
+        show:
+          fetched: アクセストークンを保存しました。
+          failed: "トークンを取得できませんでした: %{error}"
+          invalid_state: 認可レスポンスが無効です。もう一度お試しください。
+      missing_token_url: 先にトークン URL を設定してください。
+      missing_authorization_url: 先に認可 URL を設定してください。
+      unsupported_grant: 認可コードグラントにはブラウザでのフローが必要です。
+      invalid_response: トークンエンドポイントが JSON を返しませんでした。
+    executions:
+      resize: レスポンスパネルのサイズを変更
+      error: エラー
+      failure: "リクエストを送信できませんでした。サーバーログを確認して、もう一度お試しください。"
+      running: リクエストを送信中…
+      empty_title: レスポンスはまだありません
+      empty_hint: 送信ボタンまたは Ctrl/Cmd + Enter でこのリクエストを実行します。
+      tabs:
+        label: レスポンスのセクション
+        body: Body
+        headers: Headers
+        cookies: Cookie
+        timing: タイミング
+        request: リクエスト
+        payload: ペイロード
+        history: 履歴
+      cookies:
+        name: 名前
+        value: 値
+        domain: ドメイン
+        path: パス
+        expires: 有効期限
+        flags: フラグ
+        session: セッション
+        max_age: "%{seconds} 秒"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
+      timing:
+        total: 合計
+        show: タイミングの内訳を表示
+        title: レスポンスタイム
+        phases:
+          dns: DNS ルックアップ
+          tcp: TCP ハンドシェイク
+          tls: TLS ハンドシェイク
+          ttfb: 待機 (TTFB)
+          download: ダウンロード
+          process: 処理
+      time: 時間
+      size: サイズ
+      redirects:
+        other: "%{count} 件のリダイレクト"
+      no_headers: ヘッダーはありません。
+      empty_body: レスポンスにボディがありません。
+      binary: "バイナリまたはテキスト以外のレスポンスです（%{size}、%{type}）。表示されません。"
+      modes:
+        pretty: 整形
+        raw: Raw
+        preview: プレビュー
+      copy: コピー
+      save: レスポンスを保存
+      copied: コピーしました
+      truncated: "最初の %{limit} のみ表示しています。"
+      unresolved: "未定義の変数: %{names}。入力されたまま送信されました。"
+      request_headers: 送信したヘッダー（シークレットは非表示）
+      no_payload: 送信したペイロードはありません。
+      errors:
+        blocked: ネットワークポリシーによりブロックされました
+        invalid_url: URL が無効です
+        invalid_request: リクエストを構築できませんでした
+        timeout: リクエストがタイムアウトしました
+        ssl: SSL エラー
+        dns: ホストが見つかりません
+        refused: 接続が拒否されました
+        connection: 接続に失敗しました
+        unknown: 予期しないエラー
+        cancelled: キャンセルしました
+    errors:
+      blank_url: リクエストを送信するには URL を入力してください。
+      invalid_url: URL が正しくありません。http と https のみ対応しています。
+      unresolved_url: "URL に未定義の変数があります: %{names}。これらを定義している環境を選択してください。"
+      invalid_graphql_variables: GraphQL の変数は有効な JSON である必要があります。
+      missing_binary: バイナリボディに使用するファイルを選択してください。
+    imports:
+      create:
+        imported: "%{counts} をインポートしました。"
+        warnings:
+          other: "%{count} 件の項目に確認が必要です: %{details}"
+        counts:
+          collections:
+            other: "%{count} 個のコレクション"
+          folders:
+            other: "%{count} 個のフォルダ"
+          requests:
+            other: "%{count} 件のリクエスト"
+          environments:
+            other: "%{count} 個の環境"
+      form:
+        title: コレクションをインポート
+        description: 他の API クライアントからコレクション、リクエスト、環境を取り込みます。
+        submit: インポート
+        file: ファイル
+        content: または内容を貼り付け
+        content_placeholder: "JSON または YAML のエクスポートを貼り付け"
+        formats: "対応形式: Postman（コレクション v2 と環境）、Insomnia（v4 JSON、v5 YAML）、Bruno（JSON エクスポート）、OpenAPI 3 / Swagger 2。"
+        apidog: "Apidog: プロジェクトを Postman または OpenAPI 形式でエクスポートし、そのファイルをインポートしてください。"
+      errors:
+        empty: ファイルを選択するか、内容を貼り付けてください。
+        too_large: ファイルが大きすぎます（最大 %{max} MB）。
+        invalid_content: 内容が有効な JSON または YAML ではありません。
+        unknown_format: "形式を認識できません。対応形式: Postman、Insomnia、Bruno (JSON)、OpenAPI/Swagger。"
+        too_complex: ファイルの項目が多すぎてインポートできません。
+        nothing_to_import: ファイルにインポートできるものがありません。
+        invalid_openapi: OpenAPI ドキュメントにインポートできるパスがありません。
+        failed: "インポートに失敗しました: %{message}"
+      warnings:
+        auth_unsupported: "認可タイプ「%{type}」には対応していないため、リクエストは代わりに継承になります。"
+        variable_unsupported: "動的変数 {{%{name}}} には対応していないため、入力されたまま残しました。"
+        scripts: "「%{name}」にはスクリプトがありますが、対応していないためスキップしました。"
+        file_body: "「%{name}」にはファイルボディがあります。ファイルの内容はインポートされませんでした。"
+        external_ref: "外部参照「%{ref}」は解決されませんでした。"
+        unknown_item: "タイプ「%{type}」の項目をスキップしました。"
+        variable_skipped: "変数「%{key}」は名前が無効なためスキップしました。"
+    curl:
+      empty: curl コマンドを貼り付けてください。
+      missing_url: コマンドに URL がありません。
+      missing_argument: "%{flag} には値が必要です。"

@@ -1,0 +1,263 @@
+ru:
+  mailing:
+    disabled: Электронная почта не настроена на этом сервере.
+  throttling:
+    limited: Слишком много попыток. Подождите немного и повторите.
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} превышает лимит в %{max} МБ."
+              uploads_too_large: Суммарный размер файлов превышает лимит в %{max} МБ.
+              too_many_uploads: "Слишком много файлов в одном запросе (максимум %{max})."
+    attributes:
+      user:
+        first_name: Имя
+        last_name: Фамилия
+      project:
+        name: Название
+        icon: Иконка
+  layouts:
+    devise:
+      panel_label: Рабочее пространство разработчика
+      panel_note: Открытый исходный код
+    app:
+      right_sidebar: Боковая панель
+      close_right_sidebar: Закрыть боковую панель
+  components:
+    select:
+      search: Поиск…
+      empty: Ничего не найдено
+    nav_item:
+      soon: Скоро
+    project_switcher:
+      label: Проекты
+      new: Новый проект
+    settings_nav:
+      label: Разделы настроек
+      groups:
+        account: Мой аккаунт
+        appearance: Оформление
+        project: Проект
+      items:
+        profile: Профиль
+        preferences: Предпочтения
+        security: Безопасность
+        delete_account: Удалить аккаунт
+        sidebar: Боковая панель
+        themes: Темы
+        members: Участники
+    tools_nav:
+      label: Навигация по проекту
+      api_client: API Client
+      documentation: Документация
+      monitoring: Мониторинг
+      servers: Серверы
+      network: Сеть
+      logs: Логи
+      ai_assistant: AI-ассистент
+    user_menu:
+      title: Аккаунт
+      settings: Настройки
+      label: Меню аккаунта
+      sign_out: Выйти
+    input:
+      toggle_password: Показать или скрыть пароль
+    locale_switcher:
+      label: Язык
+    zoom_picker:
+      label: Масштаб
+      default: По умолчанию
+    toast:
+      close: Закрыть уведомление
+    theme_switcher:
+      label: Тема
+      system: Системная
+      light: Светлая
+      dark: Тёмная
+  settings:
+    save_bar:
+      unsaved: Есть несохранённые изменения
+      discard: Отменить
+  projects:
+    new:
+      title: Новый проект
+      heading_html: Создайте свой первый проект
+      name: Название проекта
+      name_placeholder: например, Example
+      icon: Иконка
+      icon_search: Поиск иконок
+      icon_empty: Иконки не найдены
+      submit: Создать проект
+    memberships:
+      edit:
+        title: Настройки
+        heading: Боковая панель
+        description: Как коллекции, папки и запросы ведут себя в боковой панели API Client. Действует только для вас в этом проекте.
+        folder_toggle:
+          label: Коллекции и папки
+          hint: Как они раскрываются и сворачиваются в боковой панели API Client.
+        request_open:
+          label: Запросы
+          hint: Как они открываются из боковой панели API Client. При двойном клике переименовывать их можно в самом запросе.
+        collapse_nested_folders:
+          label: Сворачивать вложенные папки
+          hint: Закрытие коллекции или папки закрывает и вложенные в неё папки.
+        toggle:
+          "true": Да
+          "false": "Нет"
+        modes:
+          click: Одиночный клик
+          double_click: Двойной клик
+      update:
+        updated: Настройки сохранены.
+    themes:
+      edit:
+        title: Темы
+        heading: Темы
+        description: Как Shango выглядит для вас в этом проекте. Действует только для вас.
+        color_scheme:
+          label: Цветовая схема
+          hint: Светлая, тёмная или как в вашей операционной системе.
+        color_schemes:
+          system: Системная
+          light: Светлая
+          dark: Тёмная
+        theme:
+          label: Тема
+          hint: Акцентные цвета, используемые во всём рабочем пространстве.
+        themes:
+          default: Глина
+          blue: Синяя
+          green: Зелёная
+          yellow: Жёлтая
+          red: Красная
+          ocean: Океан
+          purple: Пурпурная
+          rose: Розовая
+          orange: Оранжевая
+          forest: Лес
+          midnight: Полночь
+          nord: Nord
+          dracula: Dracula
+          gruvbox: Gruvbox
+          solarized: Solarized
+          sunset: Закат
+          coffee: Кофе
+          cyberpunk: Киберпанк
+          mono: Моно
+  users:
+    accounts:
+      show:
+        title: Аккаунт
+  devise:
+    sessions:
+      new:
+        title: Вход
+        heading_html: С возвращением
+        email: Электронная почта
+        email_placeholder: you@example.com
+        password: Пароль
+        password_placeholder: Введите пароль
+        remember_me: Запомнить меня
+        forgot_password: Забыли пароль?
+        submit: Войти
+        no_account: Нет аккаунта?
+        sign_up: Зарегистрироваться
+        or: Или
+    registrations:
+      new:
+        title: Создать аккаунт
+        heading_html: Создайте свой аккаунт
+        first_name: Имя
+        first_name_placeholder: например, Ада
+        last_name: Фамилия
+        last_name_placeholder: например, Лавлейс
+        email: Электронная почта
+        email_placeholder: you@example.com
+        password: Пароль
+        password_placeholder: "Не менее %{length} символов"
+        submit: Создать аккаунт
+        or: Или
+        sign_in: Войти
+      edit:
+        title: Настройки
+        profile:
+          heading: Профиль
+          description: Ваше имя и адрес почты, с которым вы входите.
+        fields:
+          cancel_hint: Это действие нельзя отменить.
+        preferences:
+          heading: Предпочтения
+          description: Язык и масштаб для вашего аккаунта.
+          locale:
+            label: Язык
+            hint: Язык интерфейса.
+          zoom:
+            label: Масштаб
+            hint: Сделайте интерфейс меньше или больше.
+        security:
+          heading: Безопасность
+          description: Смена пароля.
+        delete_account:
+          heading: Удалить аккаунт
+          description: Безвозвратно удалить ваш аккаунт.
+        email: Электронная почта
+        new_password: Новый пароль
+        email_placeholder: you@example.com
+        password_placeholder: Оставьте пустым, чтобы сохранить текущий пароль
+        confirm_password_placeholder: Повторите новый пароль
+        confirm_password: Подтвердите пароль
+        cancel_heading: Удалить мой аккаунт
+        cancel_account: Удалить мой аккаунт
+        confirm: Вы уверены?
+        current_password: Текущий пароль
+        current_password_placeholder: Введите текущий пароль
+      destroy:
+        wrong_password: "Неверный пароль. Ваш аккаунт не был удалён."
+        sole_owner: "Вы единственный владелец проекта %{projects}, в котором остались другие участники. После удаления аккаунта у него не будет владельца."
+    passwords:
+      new:
+        title: Сброс пароля
+        heading_html: Забыли пароль?
+        email: Электронная почта
+        email_placeholder: you@example.com
+        submit: Отправить инструкции
+        sign_in: Войти
+        or: Или
+      edit:
+        title: Смена пароля
+        heading_html: Задайте новый пароль
+        password: Новый пароль
+        password_placeholder: "Придумайте новый пароль (не менее %{length} символов)"
+        password_confirmation: Подтвердите пароль
+        password_confirmation_placeholder: Повторите новый пароль
+        submit: Изменить пароль
+        sign_in: Войти
+        or: Или
+    confirmations:
+      new:
+        title: Повторная отправка подтверждения
+        heading_html: Подтвердите свою почту
+        email: Электронная почта
+        email_placeholder: you@example.com
+        submit: Отправить инструкции ещё раз
+    unlocks:
+      new:
+        title: Повторная отправка разблокировки
+        heading_html: Разблокируйте свой аккаунт
+        email: Электронная почта
+        email_placeholder: you@example.com
+        submit: Отправить инструкции ещё раз
+    shared:
+      links:
+        sign_in_prompt: Уже есть аккаунт?
+        sign_in: Войти
+        no_account: Нет аккаунта?
+        sign_up: Зарегистрироваться
+        forgot_password: Забыли пароль?
+        confirmation: Не получили инструкции по подтверждению?
+        unlock: Не получили инструкции по разблокировке?
+        omniauth: "Продолжить через %{provider}"

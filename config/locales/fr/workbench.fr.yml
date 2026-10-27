@@ -1,0 +1,512 @@
+fr:
+  activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "Les noms de variables doivent être uniques."
+    attributes:
+      environment:
+        name: "Nom"
+      variable:
+        key: "Nom"
+        value: "Valeur"
+      cookie:
+        name: "Nom"
+        value: "Valeur"
+        domain: "Domaine"
+        path: "Chemin"
+      collection:
+        name: "Nom"
+      folder:
+        name: "Nom"
+      api_request:
+        name: "Nom"
+        url: "URL"
+  components:
+    confirm_dialog:
+      cancel: "Annuler"
+      confirm: "Supprimer"
+    modal:
+      cancel: "Annuler"
+      save: "Enregistrer"
+      close: "Fermer"
+    code_editor:
+      environment: "Environnement"
+      dynamic: "Dynamique"
+      set: "Définie"
+      empty: "Vide"
+      guid: "UUID aléatoire"
+      timestamp: "Secondes Unix"
+      iso_timestamp: "Date ISO 8601"
+      random_int: "0 – 999"
+      missing: "Non définie"
+      response: "Réponse"
+      response_body: "Attribut du corps – valeur du corps de la réponse"
+      response_raw: "Corps brut – corps complet de la réponse"
+      response_header: "En-tête – valeur d'un en-tête de la réponse"
+      response_url: "URL de la requête – URL de la requête initiale"
+      response_loading: "Chargement…"
+      response_no_response: "Pas encore de réponse. Envoyez d'abord %{request}."
+      response_no_match: "Aucun résultat pour ce filtre"
+      response_unknown: "Requête introuvable dans cette collection"
+      response_invalid: "Référence de réponse invalide"
+      response_edit_title: "Modifier la référence de réponse"
+      response_function_label: "Fonction à exécuter"
+      response_function: "Réponse – référencer des valeurs issues des réponses d'autres requêtes"
+      response_attribute: "Attribut"
+      response_request: "Requête"
+      response_filter_body: "Filtre (JSONPath)"
+      response_filter_header: "Nom de l'en-tête"
+      response_trigger: "Comportement de déclenchement"
+      response_trigger_never: "Jamais – ne jamais renvoyer la requête"
+      response_trigger_hint: "La requête n'est pas renvoyée ; envoyez-la d'abord pour obtenir une réponse à jour."
+      response_preview: "Aperçu en direct"
+      response_refresh: "Actualiser"
+      response_done: "Terminé"
+      response_close: "Fermer"
+    key_value_table:
+      add: "Ajouter une ligne"
+      key: "Clé"
+      value: "Valeur"
+      description: "Description"
+      enabled: "Activée"
+      remove: "Supprimer la ligne"
+      text: "Texte"
+      file: "Fichier"
+      secret: "Secret"
+      secret_saved: "Enregistré · laissez vide pour conserver"
+    environment_switcher:
+      none: "Aucun environnement"
+      label: "Environnement"
+      manage: "Gérer les environnements"
+      manage_title: "Environnements"
+      cookies: "Cookies"
+      cookies_title: "Cookies"
+    request_tabs:
+      label: "Requêtes ouvertes"
+      close: "Fermer %{name}"
+      draft_hint: "Brouillon, pas encore enregistré"
+      new_draft: "Nouveau brouillon de requête"
+      actions: "Actions de l'onglet"
+      new_request: "Nouvelle requête"
+      duplicate: "Dupliquer l'onglet"
+      close_tab: "Fermer l'onglet"
+      close_left: "Fermer les onglets à gauche"
+      close_right: "Fermer les onglets à droite"
+      close_all: "Fermer tous les onglets"
+    request_tree:
+      label: "Collections"
+      title: "Collections"
+      new_collection: "Nouvelle collection"
+      empty: "Aucune collection pour l'instant."
+      empty_collection: "Collection vide"
+      actions: "Actions pour %{name}"
+      new_request: "Nouvelle requête"
+      new_folder: "Nouveau dossier"
+      new_subfolder: "Nouveau sous-dossier"
+      history: "Historique des requêtes"
+      history_title: "Historique"
+      history_empty: "Aucune réponse enregistrée pour l'instant. Exécutez une requête et cliquez sur Enregistrer la réponse pour la conserver ici."
+      drafts: "Brouillons"
+      back: "Retour aux collections"
+      import: "Importer des collections"
+      import_curl: "Importer cURL"
+      edit: "Modifier"
+      rename: "Renommer"
+      duplicate: "Dupliquer"
+      delete: "Supprimer"
+      confirm_delete_collection: "Supprimer la collection « %{name} » avec tous ses dossiers et requêtes ?"
+      confirm_delete_folder: "Supprimer le dossier « %{name} » avec tout son contenu ?"
+  projects:
+    cookies:
+      index:
+        title: "Cookies"
+        intro: "Les cookies définis par les serveurs sont conservés pour l'environnement sélectionné et renvoyés lors des requêtes suivantes, afin qu'une connexion se poursuive d'un appel à l'autre. Vous pouvez aussi ajouter ou modifier des cookies à la main."
+        scope: "Environnement : %{name}"
+        scope_none: "Aucun environnement"
+        empty_title: "Aucun cookie pour l'instant"
+        empty_hint: "Envoyez une requête dont la réponse définit un cookie et il apparaîtra ici."
+        session: "Session"
+        expires: "Expire le %{date}"
+        secure: "Secure"
+        http_only: "HttpOnly"
+        delete: "Supprimer le cookie"
+        new: "Ajouter un cookie"
+        edit: "Modifier le cookie"
+        clear: "Supprimer tous les cookies"
+        confirm_clear: "Supprimer tous les cookies stockés pour cet environnement ?"
+      create:
+        created: "Cookie ajouté."
+      update:
+        updated: "Cookie enregistré."
+      form:
+        new_title: "Nouveau cookie"
+        name: "Nom"
+        value: "Valeur"
+        value_hint: "Stockée chiffrée et affichée ici en clair."
+        domain: "Domaine"
+        path: "Chemin"
+        expires_at: "Expire"
+        expires_at_hint: "Laissez vide pour un cookie de session."
+        host_only: "Hôte uniquement (ne pas envoyer aux sous-domaines)"
+        secure: "Secure (https uniquement)"
+        http_only: "HttpOnly"
+    environments:
+      index:
+        title: "Environnements"
+        intro: "Les environnements contiennent les variables (URL de base, jetons…) que vos requêtes référencent sous la forme {{name}}. Activez celui que vos requêtes doivent utiliser."
+        new: "Nouvel environnement"
+        empty_title: "Aucun environnement pour l'instant"
+        empty_hint: "Créez-en un (Local, Staging, Production…) et définissez des variables comme base_url."
+        variables:
+          one: "%{count} variable"
+          other: "%{count} variables"
+        in_use: "Utilisé"
+        activate: "Activer"
+        actions: "Plus d'actions"
+        edit: "Modifier"
+        delete: "Supprimer"
+        confirm_delete: "Supprimer l'environnement « %{name} » ?"
+      new:
+        title: "Nouvel environnement"
+        subtitle: "Donnez-lui un nom et ajoutez les variables que vos requêtes référencent, comme une URL de base ou un jeton."
+        name_hint: "Affiché dans le sélecteur d'environnement, ex. Production, Staging."
+        submit: "Créer l'environnement"
+      edit:
+        title: "Modifier l'environnement"
+      form:
+        name: "Nom"
+        name_placeholder: "ex. Production"
+        variables: "Variables"
+        variables_hint: "Référencez-les dans les requêtes sous la forme {{name}}. Les valeurs secrètes sont chiffrées et ne sont plus jamais affichées après l'enregistrement."
+        key_placeholder: "Variable"
+        value_placeholder: "Valeur"
+  workbench:
+    title: "API Client"
+    shared:
+      cancel: "Annuler"
+      save: "Enregistrer"
+    workspaces:
+      show:
+        heading: "Créez et exécutez des requêtes"
+        empty: "Commencez par une requête, ou créez une collection pour les organiser et importer depuis une commande cURL."
+        pick: "Choisissez une requête dans la barre latérale, ou créez-en une nouvelle."
+        new_collection: "Nouvelle collection"
+        new_request: "Nouvelle requête"
+    collections:
+      create:
+        created: "Collection créée."
+      update:
+        updated: "Collection mise à jour."
+      destroy:
+        destroyed: "Collection supprimée."
+      form:
+        new_title: "Nouvelle collection"
+        edit_title: "Paramètres de la collection"
+        name: "Nom"
+        name_placeholder: "ex. API principale"
+        description: "Description"
+    folders:
+      create:
+        created: "Dossier créé."
+      update:
+        updated: "Dossier mis à jour."
+      destroy:
+        destroyed: "Dossier supprimé."
+      form:
+        new_title: "Nouveau dossier"
+        edit_title: "Paramètres du dossier"
+        name: "Nom"
+        name_placeholder: "ex. Authentification"
+        auth: "Autorisation"
+    requests:
+      draft: "Brouillon"
+      draft_name: "Nouvelle requête"
+      closures:
+        new:
+          title: "Fermer ce brouillon ?"
+          description: "Ce brouillon n'est dans aucune collection pour l'instant. Enregistrez-le pour conserver votre travail, ou abandonnez-le."
+          discard: "Abandonner"
+          cancel: "Continuer à modifier"
+          save: "Enregistrer dans une collection"
+      placements:
+        form:
+          title: "Enregistrer la requête dans…"
+          description: "Choisissez où enregistrer cette requête. Fermer cette fenêtre la conserve comme brouillon."
+          destination: "Enregistrer dans"
+          keep_draft: "Garder comme brouillon"
+          submit: "Enregistrer ici"
+      create:
+        created: "Requête créée."
+      update:
+        updated: "Requête enregistrée."
+      destroy:
+        destroyed: "Requête supprimée."
+      new:
+        default_name: "Nouvelle requête"
+      form:
+        title: "Nouvelle requête"
+        name: "Nom"
+        method: "Méthode"
+        url: "URL"
+        submit: "Créer la requête"
+      name: "Nom de la requête"
+      method: "Méthode HTTP"
+      url_placeholder: "https://api.example.com/path ou {{base_url}}/path"
+      send: "Envoyer"
+      send_hint: "Envoyer (Ctrl/Cmd + Entrée)"
+      cancel: "Annuler"
+      cancel_hint: "Annuler la requête"
+      save: "Enregistrer"
+      copy_curl: "Copier cURL"
+      more_actions: "Plus d'actions"
+      copied: "Copié"
+      duplicate: "Dupliquer"
+      delete: "Supprimer"
+      confirm_delete: "Supprimer la requête « %{name} » ?"
+      copy_name: "%{name} (copie)"
+    curl_imports:
+      form:
+        title: "Importer cURL"
+        command: "Commande cURL"
+        hint: "Crée une requête dans « %{collection} »."
+        submit: "Importer"
+    tabs:
+      label: "Sections de la requête"
+      params: "Params"
+      authorization: "Autorisation"
+      headers: "En-têtes"
+      body: "Corps"
+      settings: "Paramètres"
+    params:
+      add: "Ajouter un paramètre"
+      key: "Paramètre"
+    headers:
+      add: "Ajouter un en-tête"
+      key: "En-tête"
+    body:
+      type: "Type de corps"
+      none_hint: "Cette requête n'a pas de corps."
+      placeholder: "Corps de la requête. Utilisez {{variables}} si nécessaire."
+      graphql_variables: "Variables (JSON)"
+      form_hint: "Les lignes de texte sont envoyées comme champs ; choisissez Fichier pour téléverser un fichier."
+      binary: "Fichier à envoyer comme corps brut"
+      current_file: "Fichier actuel : %{name}"
+      types:
+        none: "Aucun"
+        json: "JSON"
+        text: "Texte"
+        xml: "XML"
+        form_urlencoded: "Formulaire (urlencoded)"
+        multipart: "Formulaire (multipart)"
+        graphql: "GraphQL"
+        binary: "Fichier binaire"
+    settings:
+      timeout: "Délai d'expiration (secondes)"
+      timeout_hint: "Jusqu'à %{max} secondes."
+      max_redirects: "Redirections max."
+      follow_redirects: "Suivre les redirections"
+      verify_ssl: "Vérifier les certificats SSL"
+      use_cookie_jar: "Utiliser le gestionnaire de cookies (envoyer et enregistrer les cookies)"
+    auth:
+      type: "Type d'authentification"
+      inherit_hint: "Utilise l'autorisation du dossier ou de la collection parent."
+      none_hint: "Aucun identifiant n'est envoyé avec cette requête."
+      secret_saved: "Enregistré · laissez vide pour conserver"
+      types:
+        inherit: "Hériter du parent"
+        none: "Aucune authentification"
+        basic: "Basic auth"
+        bearer: "Bearer token"
+        api_key: "Clé d'API"
+        jwt_bearer: "JWT bearer"
+        digest: "Digest auth"
+        aws_sigv4: "AWS Signature v4"
+        oauth2: "OAuth 2.0"
+      fields:
+        username: "Nom d'utilisateur"
+        password: "Mot de passe"
+        token: "Jeton"
+        prefix: "Préfixe"
+        key: "Clé"
+        value: "Valeur"
+        add_to: "Ajouter à"
+        algorithm: "Algorithme"
+        secret: "Secret ou clé privée"
+        payload: "Payload (JSON)"
+        headers: "En-têtes supplémentaires (JSON)"
+        query_param: "Nom du paramètre de requête"
+        access_key: "Clé d'accès"
+        secret_key: "Clé secrète"
+        session_token: "Jeton de session"
+        region: "Région"
+        service: "Service"
+        grant_type: "Type d'autorisation"
+        token_url: "URL du jeton d'accès"
+        authorization_url: "URL d'autorisation"
+        client_id: "Client ID"
+        client_secret: "Client secret"
+        scope: "Scope"
+        audience: "Audience"
+        client_authentication: "Authentification du client"
+      options:
+        add_to:
+          header: "En-tête"
+          query: "Paramètre de requête"
+        grant_type:
+          client_credentials: "Client credentials"
+          password: "Mot de passe"
+          authorization_code: "Authorization code (PKCE)"
+        client_authentication:
+          basic_header: "Envoyer en en-tête Basic auth"
+          body: "Envoyer dans le corps de la requête"
+    oauth2:
+      token_present: "Jeton d'accès enregistré."
+      token_missing: "Pas encore de jeton d'accès."
+      expires: "expire %{time}"
+      get_token: "Obtenir un nouveau jeton d'accès"
+      authorize: "Autoriser dans le navigateur"
+      clear_token: "Effacer le jeton"
+      redirect_hint: "Enregistrez cette URL de redirection auprès de votre fournisseur : %{url}"
+      save_first: "Enregistrez d'abord ces paramètres, puis rouvrez-les pour obtenir un jeton."
+      tokens:
+        create:
+          fetched: "Jeton d'accès enregistré."
+          failed: "Impossible d'obtenir un jeton : %{error}"
+        destroy:
+          cleared: "Jeton effacé."
+      callbacks:
+        show:
+          fetched: "Jeton d'accès enregistré."
+          failed: "Impossible d'obtenir un jeton : %{error}"
+          invalid_state: "La réponse d'autorisation n'était pas valide. Réessayez."
+      missing_token_url: "Définissez d'abord une URL de jeton."
+      missing_authorization_url: "Définissez d'abord une URL d'autorisation."
+      unsupported_grant: "Le type authorization code nécessite le flux navigateur."
+      invalid_response: "Le point de terminaison du jeton n'a pas renvoyé de JSON."
+    executions:
+      resize: "Redimensionner le panneau de réponse"
+      error: "Erreur"
+      failure: "La requête n'a pas pu être envoyée. Consultez le journal du serveur et réessayez."
+      running: "Envoi de la requête…"
+      empty_title: "Pas encore de réponse"
+      empty_hint: "Cliquez sur Envoyer ou appuyez sur Ctrl/Cmd + Entrée pour exécuter cette requête."
+      tabs:
+        label: "Sections de la réponse"
+        body: "Corps"
+        headers: "En-têtes"
+        cookies: "Cookies"
+        timing: "Durées"
+        request: "Requête"
+        payload: "Payload"
+        history: "Historique"
+      cookies:
+        name: "Nom"
+        value: "Valeur"
+        domain: "Domaine"
+        path: "Chemin"
+        expires: "Expire"
+        flags: "Attributs"
+        session: "Session"
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: "Secure"
+          httponly: "HttpOnly"
+      timing:
+        total: "Total"
+        show: "Afficher le détail des durées"
+        title: "Temps de réponse"
+        phases:
+          dns: "Résolution DNS"
+          tcp: "Handshake TCP"
+          tls: "Handshake TLS"
+          ttfb: "Attente (TTFB)"
+          download: "Téléchargement"
+          process: "Traitement"
+      time: "Durée"
+      size: "Taille"
+      redirects:
+        one: "%{count} redirection"
+        other: "%{count} redirections"
+      no_headers: "Aucun en-tête."
+      empty_body: "La réponse n'a pas de corps."
+      binary: "Réponse binaire ou non textuelle (%{size}, %{type}). Elle n'est pas affichée."
+      modes:
+        pretty: "Formaté"
+        raw: "Brut"
+        preview: "Aperçu"
+      copy: "Copier"
+      save: "Enregistrer la réponse"
+      copied: "Copié"
+      truncated: "Seuls les %{limit} premiers sont affichés."
+      unresolved: "Variables non définies : %{names}. Elles ont été envoyées telles quelles."
+      request_headers: "En-têtes envoyés (secrets masqués)"
+      no_payload: "Aucun payload envoyé."
+      errors:
+        blocked: "Bloquée par la politique réseau"
+        invalid_url: "URL invalide"
+        invalid_request: "La requête n'a pas pu être construite"
+        timeout: "La requête a expiré"
+        ssl: "Erreur SSL"
+        dns: "Hôte introuvable"
+        refused: "Connexion refusée"
+        connection: "Échec de la connexion"
+        unknown: "Erreur inattendue"
+        cancelled: "Annulée"
+    errors:
+      blank_url: "Saisissez une URL pour envoyer la requête."
+      invalid_url: "L'URL n'est pas valide. Seuls http et https sont pris en charge."
+      unresolved_url: "Variables non définies dans l'URL : %{names}. Choisissez un environnement qui les définit."
+      invalid_graphql_variables: "Les variables GraphQL doivent être du JSON valide."
+      missing_binary: "Choisissez un fichier pour le corps binaire."
+    imports:
+      create:
+        imported: "Import terminé : %{counts}."
+        warnings:
+          one: "1 élément demande votre attention : %{details}"
+          other: "%{count} éléments demandent votre attention : %{details}"
+        counts:
+          collections:
+            one: "%{count} collection"
+            other: "%{count} collections"
+          folders:
+            one: "%{count} dossier"
+            other: "%{count} dossiers"
+          requests:
+            one: "%{count} requête"
+            other: "%{count} requêtes"
+          environments:
+            one: "%{count} environnement"
+            other: "%{count} environnements"
+      form:
+        title: "Importer des collections"
+        description: "Importez des collections, requêtes et environnements depuis un autre client API."
+        submit: "Importer"
+        file: "Fichier"
+        content: "Ou collez le contenu"
+        content_placeholder: "Collez un export JSON ou YAML"
+        formats: "Formats pris en charge : Postman (collection v2 et environnement), Insomnia (JSON v4, YAML v5), Bruno (export JSON) et OpenAPI 3 / Swagger 2."
+        apidog: "Apidog : exportez votre projet en Postman ou OpenAPI et importez ce fichier."
+      errors:
+        empty: "Choisissez un fichier ou collez son contenu."
+        too_large: "Le fichier est trop volumineux (maximum %{max} Mo)."
+        invalid_content: "Le contenu n'est pas du JSON ou du YAML valide."
+        unknown_format: "Format non reconnu. Pris en charge : Postman, Insomnia, Bruno (JSON) et OpenAPI/Swagger."
+        too_complex: "Le fichier contient trop d'éléments à importer."
+        nothing_to_import: "Le fichier ne contient rien à importer."
+        invalid_openapi: "Le document OpenAPI ne contient aucun chemin à importer."
+        failed: "Échec de l'import : %{message}"
+      warnings:
+        auth_unsupported: "Le type d'autorisation « %{type} » n'est pas pris en charge ; la requête hérite à la place."
+        variable_unsupported: "La variable dynamique {{%{name}}} n'est pas prise en charge et a été conservée telle quelle."
+        scripts: "« %{name} » contient des scripts, non pris en charge et ignorés."
+        file_body: "« %{name} » a un corps de type fichier ; le contenu du fichier n'a pas été importé."
+        external_ref: "La référence externe « %{ref} » n'a pas été résolue."
+        unknown_item: "Un élément de type « %{type} » a été ignoré."
+        variable_skipped: "La variable « %{key} » a été ignorée car son nom n'est pas valide."
+    curl:
+      empty: "Collez une commande curl."
+      missing_url: "La commande n'a pas d'URL."
+      missing_argument: "%{flag} nécessite une valeur."

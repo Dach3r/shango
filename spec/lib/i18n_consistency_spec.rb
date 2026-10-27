@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Locale files" do
+  PLURALS = %w[zero one two few many other].freeze
+
   def flatten(hash, prefix = nil)
     hash.flat_map do |key, value|
       path = [prefix, key].compact.join(".")
@@ -16,27 +18,41 @@ RSpec.describe "Locale files" do
     Array(value).join(" ").scan(/%\{(\w+)\}/).flatten.sort
   end
 
-  %w[views workbench].each do |name|
-    context "with #{name}" do
-      let(:en) { load_locale(name, :en) }
-      let(:es) { load_locale(name, :es) }
+  def base_key(key)
+    parts = key.split(".")
+    PLURALS.include?(parts.last) ? parts[0..-2].join(".") : key
+  end
 
-      it "has the same keys in en and es", :aggregate_failures do
-        expect(en.keys - es.keys).to be_empty
-        expect(es.keys - en.keys).to be_empty
-      end
+  def base_keys(translations)
+    translations.keys.map { |key| base_key(key) }.uniq
+  end
 
-      it "uses the same interpolation variables in both languages", :aggregate_failures do
-        en.each do |key, value|
-          next unless es.key?(key)
+  it "supports every available locale" do
+    expect(I18n.available_locales).to eq(%i[en es zh-CN hi pt-BR ru ja de fr])
+  end
 
-          expect(placeholders(es[key])).to eq(placeholders(value)), "#{name}.#{key} interpolations differ"
+  %w[views workbench network].each do |name|
+    (I18n.available_locales - [:en]).each do |locale|
+      context "with #{name} in #{locale}" do
+        let(:en) { load_locale(name, :en) }
+        let(:other) { load_locale(name, locale) }
+
+        it "has the same keys as en", :aggregate_failures do
+          expect(base_keys(en) - base_keys(other)).to be_empty
+          expect(base_keys(other) - base_keys(en)).to be_empty
         end
-      end
 
-      it "has no blank translations", :aggregate_failures do
-        [en, es].each do |translations|
-          blank = translations.select { |_, value| value.nil? || value.to_s.strip.empty? }.keys
+        it "uses the same interpolation variables as en", :aggregate_failures do
+          en.each do |key, value|
+            next unless other.key?(key)
+            next if PLURALS.include?(key.split(".").last) && !key.end_with?(".other")
+
+            expect(placeholders(other[key])).to eq(placeholders(value)), "#{name}.#{key} interpolations differ"
+          end
+        end
+
+        it "has no blank translations" do
+          blank = other.select { |_, value| value.nil? || value.to_s.strip.empty? }.keys
           expect(blank).to be_empty
         end
       end

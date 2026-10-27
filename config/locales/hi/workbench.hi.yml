@@ -1,0 +1,512 @@
+hi:
+  activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "वेरिएबल के नाम अलग-अलग होने चाहिए।"
+    attributes:
+      environment:
+        name: "नाम"
+      variable:
+        key: "नाम"
+        value: "मान"
+      cookie:
+        name: "नाम"
+        value: "मान"
+        domain: "डोमेन"
+        path: "पाथ"
+      collection:
+        name: "नाम"
+      folder:
+        name: "नाम"
+      api_request:
+        name: "नाम"
+        url: "URL"
+  components:
+    confirm_dialog:
+      cancel: "रद्द करें"
+      confirm: "हटाएँ"
+    modal:
+      cancel: "रद्द करें"
+      save: "सहेजें"
+      close: "बंद करें"
+    code_editor:
+      environment: "एनवायरनमेंट"
+      dynamic: "डायनामिक"
+      set: "सेट"
+      empty: "खाली"
+      guid: "रैंडम UUID"
+      timestamp: "Unix सेकंड"
+      iso_timestamp: "ISO 8601 तारीख़"
+      random_int: "0 – 999"
+      missing: "अपरिभाषित"
+      response: "रिस्पॉन्स"
+      response_body: "Body एट्रिब्यूट – रिस्पॉन्स बॉडी का मान"
+      response_raw: "Raw बॉडी – पूरी रिस्पॉन्स बॉडी"
+      response_header: "Header – रिस्पॉन्स हेडर का मान"
+      response_url: "रिक्वेस्ट URL – शुरू करने वाली रिक्वेस्ट का URL"
+      response_loading: "लोड हो रहा है…"
+      response_no_response: "अभी कोई रिस्पॉन्स नहीं। पहले %{request} भेजें।"
+      response_no_match: "इस फ़िल्टर से कुछ मेल नहीं खाता"
+      response_unknown: "इस कलेक्शन में रिक्वेस्ट नहीं मिली"
+      response_invalid: "रिस्पॉन्स रेफ़रेंस अमान्य है"
+      response_edit_title: "रिस्पॉन्स रेफ़रेंस संपादित करें"
+      response_function_label: "चलाने वाला फ़ंक्शन"
+      response_function: "Response – दूसरी रिक्वेस्ट के रिस्पॉन्स से मान लें"
+      response_attribute: "एट्रिब्यूट"
+      response_request: "रिक्वेस्ट"
+      response_filter_body: "फ़िल्टर (JSONPath)"
+      response_filter_header: "हेडर का नाम"
+      response_trigger: "ट्रिगर व्यवहार"
+      response_trigger_never: "Never – रिक्वेस्ट दोबारा कभी न भेजें"
+      response_trigger_hint: "रिक्वेस्ट दोबारा नहीं भेजी जाती; नया रिस्पॉन्स पाने के लिए इसे पहले भेजें।"
+      response_preview: "लाइव प्रीव्यू"
+      response_refresh: "रीफ़्रेश"
+      response_done: "हो गया"
+      response_close: "बंद करें"
+    key_value_table:
+      add: "पंक्ति जोड़ें"
+      key: "Key"
+      value: "मान"
+      description: "विवरण"
+      enabled: "चालू"
+      remove: "पंक्ति हटाएँ"
+      text: "टेक्स्ट"
+      file: "फ़ाइल"
+      secret: "सीक्रेट"
+      secret_saved: "सहेजा गया · रखने के लिए खाली छोड़ें"
+    environment_switcher:
+      none: "कोई एनवायरनमेंट नहीं"
+      label: "एनवायरनमेंट"
+      manage: "एनवायरनमेंट प्रबंधित करें"
+      manage_title: "एनवायरनमेंट"
+      cookies: "कुकीज़"
+      cookies_title: "कुकीज़"
+    request_tabs:
+      label: "खुली रिक्वेस्ट"
+      close: "%{name} बंद करें"
+      draft_hint: "ड्राफ़्ट, अभी सहेजा नहीं गया"
+      new_draft: "नई ड्राफ़्ट रिक्वेस्ट"
+      actions: "टैब की कार्रवाइयाँ"
+      new_request: "नई रिक्वेस्ट"
+      duplicate: "टैब डुप्लिकेट करें"
+      close_tab: "टैब बंद करें"
+      close_left: "बाईं ओर के टैब बंद करें"
+      close_right: "दाईं ओर के टैब बंद करें"
+      close_all: "सभी टैब बंद करें"
+    request_tree:
+      label: "कलेक्शन"
+      title: "कलेक्शन"
+      new_collection: "नया कलेक्शन"
+      empty: "अभी कोई कलेक्शन नहीं।"
+      empty_collection: "खाली कलेक्शन"
+      actions: "%{name} की कार्रवाइयाँ"
+      new_request: "नई रिक्वेस्ट"
+      new_folder: "नया फ़ोल्डर"
+      new_subfolder: "नया सबफ़ोल्डर"
+      history: "रिक्वेस्ट हिस्ट्री"
+      history_title: "हिस्ट्री"
+      history_empty: "अभी कोई सहेजा रिस्पॉन्स नहीं। रिक्वेस्ट चलाएँ और यहाँ रखने के लिए Save response दबाएँ।"
+      drafts: "ड्राफ़्ट"
+      back: "कलेक्शन पर वापस"
+      import: "कलेक्शन इम्पोर्ट करें"
+      import_curl: "cURL इम्पोर्ट करें"
+      edit: "संपादित करें"
+      rename: "नाम बदलें"
+      duplicate: "डुप्लिकेट करें"
+      delete: "हटाएँ"
+      confirm_delete_collection: "कलेक्शन “%{name}” को उसके सभी फ़ोल्डर और रिक्वेस्ट सहित हटाएँ?"
+      confirm_delete_folder: "फ़ोल्डर “%{name}” को उसके अंदर की हर चीज़ सहित हटाएँ?"
+  projects:
+    cookies:
+      index:
+        title: "कुकीज़"
+        intro: "सर्वर जो कुकीज़ सेट करते हैं, वे चुने गए एनवायरनमेंट के लिए रखी जाती हैं और अगली रिक्वेस्ट के साथ वापस भेजी जाती हैं, ताकि साइन इन अगली कॉल में भी बना रहे। आप कुकीज़ हाथ से जोड़ या संपादित भी कर सकते हैं।"
+        scope: "एनवायरनमेंट: %{name}"
+        scope_none: "कोई एनवायरनमेंट नहीं"
+        empty_title: "अभी कोई कुकी नहीं"
+        empty_hint: "ऐसी रिक्वेस्ट भेजें जिसका रिस्पॉन्स कुकी सेट करे, वह यहाँ दिखेगी।"
+        session: "सेशन"
+        expires: "%{date} को समाप्त"
+        secure: "Secure"
+        http_only: "HttpOnly"
+        delete: "कुकी हटाएँ"
+        new: "कुकी जोड़ें"
+        edit: "कुकी संपादित करें"
+        clear: "सभी कुकीज़ साफ़ करें"
+        confirm_clear: "इस एनवायरनमेंट की सभी सहेजी कुकीज़ हटाएँ?"
+      create:
+        created: "कुकी जोड़ी गई।"
+      update:
+        updated: "कुकी सहेजी गई।"
+      form:
+        new_title: "नई कुकी"
+        name: "नाम"
+        value: "मान"
+        value_hint: "एन्क्रिप्ट करके सहेजी जाती है और यहाँ सादे टेक्स्ट में दिखती है।"
+        domain: "डोमेन"
+        path: "पाथ"
+        expires_at: "समाप्ति"
+        expires_at_hint: "सेशन कुकी के लिए खाली छोड़ें।"
+        host_only: "सिर्फ़ होस्ट (सबडोमेन को न भेजें)"
+        secure: "Secure (सिर्फ़ https)"
+        http_only: "HttpOnly"
+    environments:
+      index:
+        title: "एनवायरनमेंट"
+        intro: "एनवायरनमेंट में वे वेरिएबल रहते हैं (बेस URL, टोकन…) जिन्हें आपकी रिक्वेस्ट {{name}} के रूप में इस्तेमाल करती हैं। जिसे आपकी रिक्वेस्ट इस्तेमाल करें, उसे सक्रिय करें।"
+        new: "नया एनवायरनमेंट"
+        empty_title: "अभी कोई एनवायरनमेंट नहीं"
+        empty_hint: "एक बनाएँ (Local, Staging, Production…) और base_url जैसे वेरिएबल परिभाषित करें।"
+        variables:
+          one: "%{count} वेरिएबल"
+          other: "%{count} वेरिएबल"
+        in_use: "इस्तेमाल में"
+        activate: "सक्रिय करें"
+        actions: "और कार्रवाइयाँ"
+        edit: "संपादित करें"
+        delete: "हटाएँ"
+        confirm_delete: "एनवायरनमेंट “%{name}” हटाएँ?"
+      new:
+        title: "नया एनवायरनमेंट"
+        subtitle: "इसे नाम दें और वे वेरिएबल जोड़ें जिन्हें आपकी रिक्वेस्ट इस्तेमाल करती हैं, जैसे बेस URL या टोकन।"
+        name_hint: "एनवायरनमेंट पिकर में दिखता है, जैसे Production, Staging।"
+        submit: "एनवायरनमेंट बनाएँ"
+      edit:
+        title: "एनवायरनमेंट संपादित करें"
+      form:
+        name: "नाम"
+        name_placeholder: "उदा. Production"
+        variables: "वेरिएबल"
+        variables_hint: "रिक्वेस्ट में इन्हें {{name}} के रूप में इस्तेमाल करें। सीक्रेट मान एन्क्रिप्ट होते हैं और सहेजने के बाद दोबारा नहीं दिखाए जाते।"
+        key_placeholder: "वेरिएबल"
+        value_placeholder: "मान"
+  workbench:
+    title: "API Client"
+    shared:
+      cancel: "रद्द करें"
+      save: "सहेजें"
+    workspaces:
+      show:
+        heading: "रिक्वेस्ट बनाएँ और चलाएँ"
+        empty: "एक रिक्वेस्ट से शुरू करें, या उन्हें व्यवस्थित करने के लिए कलेक्शन बनाएँ और cURL कमांड से इम्पोर्ट करें।"
+        pick: "साइडबार से कोई रिक्वेस्ट चुनें, या नई बनाएँ।"
+        new_collection: "नया कलेक्शन"
+        new_request: "नई रिक्वेस्ट"
+    collections:
+      create:
+        created: "कलेक्शन बनाया गया।"
+      update:
+        updated: "कलेक्शन अपडेट हुआ।"
+      destroy:
+        destroyed: "कलेक्शन हटाया गया।"
+      form:
+        new_title: "नया कलेक्शन"
+        edit_title: "कलेक्शन सेटिंग्स"
+        name: "नाम"
+        name_placeholder: "उदा. Main API"
+        description: "विवरण"
+    folders:
+      create:
+        created: "फ़ोल्डर बनाया गया।"
+      update:
+        updated: "फ़ोल्डर अपडेट हुआ।"
+      destroy:
+        destroyed: "फ़ोल्डर हटाया गया।"
+      form:
+        new_title: "नया फ़ोल्डर"
+        edit_title: "फ़ोल्डर सेटिंग्स"
+        name: "नाम"
+        name_placeholder: "उदा. Authentication"
+        auth: "Authorization"
+    requests:
+      draft: "ड्राफ़्ट"
+      draft_name: "नई रिक्वेस्ट"
+      closures:
+        new:
+          title: "यह ड्राफ़्ट बंद करें?"
+          description: "यह ड्राफ़्ट अभी किसी कलेक्शन में नहीं है। अपना काम रखने के लिए इसे सहेजें, या छोड़ दें।"
+          discard: "छोड़ें"
+          cancel: "संपादन जारी रखें"
+          save: "कलेक्शन में सहेजें"
+      placements:
+        form:
+          title: "रिक्वेस्ट यहाँ सहेजें…"
+          description: "चुनें कि यह रिक्वेस्ट कहाँ सहेजनी है। यह विंडो बंद करने पर यह ड्राफ़्ट ही रहती है।"
+          destination: "यहाँ सहेजें"
+          keep_draft: "ड्राफ़्ट रखें"
+          submit: "यहीं सहेजें"
+      create:
+        created: "रिक्वेस्ट बनाई गई।"
+      update:
+        updated: "रिक्वेस्ट सहेजी गई।"
+      destroy:
+        destroyed: "रिक्वेस्ट हटाई गई।"
+      new:
+        default_name: "नई रिक्वेस्ट"
+      form:
+        title: "नई रिक्वेस्ट"
+        name: "नाम"
+        method: "मेथड"
+        url: "URL"
+        submit: "रिक्वेस्ट बनाएँ"
+      name: "रिक्वेस्ट का नाम"
+      method: "HTTP मेथड"
+      url_placeholder: "https://api.example.com/path या {{base_url}}/path"
+      send: "भेजें"
+      send_hint: "भेजें (Ctrl/Cmd + Enter)"
+      cancel: "रद्द करें"
+      cancel_hint: "रिक्वेस्ट रद्द करें"
+      save: "सहेजें"
+      copy_curl: "cURL कॉपी करें"
+      more_actions: "और कार्रवाइयाँ"
+      copied: "कॉपी हो गया"
+      duplicate: "डुप्लिकेट करें"
+      delete: "हटाएँ"
+      confirm_delete: "रिक्वेस्ट “%{name}” हटाएँ?"
+      copy_name: "%{name} (कॉपी)"
+    curl_imports:
+      form:
+        title: "cURL इम्पोर्ट करें"
+        command: "cURL कमांड"
+        hint: "“%{collection}” में एक रिक्वेस्ट बनाता है।"
+        submit: "इम्पोर्ट करें"
+    tabs:
+      label: "रिक्वेस्ट के अनुभाग"
+      params: "Params"
+      authorization: "Authorization"
+      headers: "Headers"
+      body: "Body"
+      settings: "सेटिंग्स"
+    params:
+      add: "पैरामीटर जोड़ें"
+      key: "पैरामीटर"
+    headers:
+      add: "हेडर जोड़ें"
+      key: "हेडर"
+    body:
+      type: "Body टाइप"
+      none_hint: "इस रिक्वेस्ट में कोई बॉडी नहीं है।"
+      placeholder: "रिक्वेस्ट बॉडी। ज़रूरत हो तो {{variables}} इस्तेमाल करें।"
+      graphql_variables: "वेरिएबल (JSON)"
+      form_hint: "टेक्स्ट पंक्तियाँ फ़ील्ड के रूप में भेजी जाती हैं; फ़ाइल अपलोड करने के लिए File चुनें।"
+      binary: "रॉ बॉडी के रूप में भेजी जाने वाली फ़ाइल"
+      current_file: "वर्तमान फ़ाइल: %{name}"
+      types:
+        none: "कोई नहीं"
+        json: "JSON"
+        text: "टेक्स्ट"
+        xml: "XML"
+        form_urlencoded: "Form (urlencoded)"
+        multipart: "Form (multipart)"
+        graphql: "GraphQL"
+        binary: "बाइनरी फ़ाइल"
+    settings:
+      timeout: "टाइमआउट (सेकंड)"
+      timeout_hint: "अधिकतम %{max} सेकंड।"
+      max_redirects: "अधिकतम रीडायरेक्ट"
+      follow_redirects: "रीडायरेक्ट फ़ॉलो करें"
+      verify_ssl: "SSL सर्टिफ़िकेट सत्यापित करें"
+      use_cookie_jar: "कुकी जार इस्तेमाल करें (कुकीज़ भेजें और सहेजें)"
+    auth:
+      type: "Auth टाइप"
+      inherit_hint: "पैरेंट फ़ोल्डर या कलेक्शन का authorization इस्तेमाल करता है।"
+      none_hint: "इस रिक्वेस्ट के साथ कोई क्रेडेंशियल नहीं भेजा जाता।"
+      secret_saved: "सहेजा गया · रखने के लिए खाली छोड़ें"
+      types:
+        inherit: "पैरेंट से लें"
+        none: "कोई Auth नहीं"
+        basic: "Basic auth"
+        bearer: "Bearer token"
+        api_key: "API key"
+        jwt_bearer: "JWT bearer"
+        digest: "Digest auth"
+        aws_sigv4: "AWS Signature v4"
+        oauth2: "OAuth 2.0"
+      fields:
+        username: "यूज़रनेम"
+        password: "पासवर्ड"
+        token: "टोकन"
+        prefix: "प्रीफ़िक्स"
+        key: "Key"
+        value: "मान"
+        add_to: "यहाँ जोड़ें"
+        algorithm: "एल्गोरिदम"
+        secret: "सीक्रेट या प्राइवेट key"
+        payload: "Payload (JSON)"
+        headers: "अतिरिक्त हेडर (JSON)"
+        query_param: "क्वेरी पैरामीटर का नाम"
+        access_key: "Access key"
+        secret_key: "Secret key"
+        session_token: "सेशन टोकन"
+        region: "रीजन"
+        service: "सर्विस"
+        grant_type: "Grant type"
+        token_url: "Access token URL"
+        authorization_url: "Authorization URL"
+        client_id: "Client ID"
+        client_secret: "Client secret"
+        scope: "Scope"
+        audience: "Audience"
+        client_authentication: "क्लाइंट ऑथेंटिकेशन"
+      options:
+        add_to:
+          header: "Header"
+          query: "क्वेरी पैरामीटर"
+        grant_type:
+          client_credentials: "Client credentials"
+          password: "Password"
+          authorization_code: "Authorization code (PKCE)"
+        client_authentication:
+          basic_header: "Basic auth हेडर के रूप में भेजें"
+          body: "रिक्वेस्ट बॉडी में भेजें"
+    oauth2:
+      token_present: "Access token सहेजा गया।"
+      token_missing: "अभी कोई access token नहीं।"
+      expires: "%{time} को समाप्त"
+      get_token: "नया access token पाएँ"
+      authorize: "ब्राउज़र में अधिकृत करें"
+      clear_token: "टोकन साफ़ करें"
+      redirect_hint: "यह रीडायरेक्ट URL अपने प्रोवाइडर के साथ रजिस्टर करें: %{url}"
+      save_first: "पहले ये सेटिंग्स सहेजें, फिर टोकन पाने के लिए इन्हें दोबारा खोलें।"
+      tokens:
+        create:
+          fetched: "Access token सहेजा गया।"
+          failed: "टोकन नहीं मिल सका: %{error}"
+        destroy:
+          cleared: "टोकन साफ़ किया गया।"
+      callbacks:
+        show:
+          fetched: "Access token सहेजा गया।"
+          failed: "टोकन नहीं मिल सका: %{error}"
+          invalid_state: "ऑथराइज़ेशन रिस्पॉन्स मान्य नहीं था। फिर कोशिश करें।"
+      missing_token_url: "पहले टोकन URL सेट करें।"
+      missing_authorization_url: "पहले authorization URL सेट करें।"
+      unsupported_grant: "Authorization code grant के लिए ब्राउज़र फ़्लो ज़रूरी है।"
+      invalid_response: "टोकन एंडपॉइंट ने JSON नहीं लौटाया।"
+    executions:
+      resize: "रिस्पॉन्स पैनल का आकार बदलें"
+      error: "त्रुटि"
+      failure: "रिक्वेस्ट भेजी नहीं जा सकी। सर्वर लॉग देखें और फिर कोशिश करें।"
+      running: "रिक्वेस्ट भेजी जा रही है…"
+      empty_title: "अभी कोई रिस्पॉन्स नहीं"
+      empty_hint: "इस रिक्वेस्ट को चलाने के लिए Send या Ctrl/Cmd + Enter दबाएँ।"
+      tabs:
+        label: "रिस्पॉन्स के अनुभाग"
+        body: "Body"
+        headers: "Headers"
+        cookies: "कुकीज़"
+        timing: "टाइमिंग"
+        request: "रिक्वेस्ट"
+        payload: "Payload"
+        history: "हिस्ट्री"
+      cookies:
+        name: "नाम"
+        value: "मान"
+        domain: "डोमेन"
+        path: "पाथ"
+        expires: "समाप्ति"
+        flags: "फ़्लैग"
+        session: "सेशन"
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: "Secure"
+          httponly: "HttpOnly"
+      timing:
+        total: "कुल"
+        show: "टाइमिंग ब्रेकडाउन दिखाएँ"
+        title: "रिस्पॉन्स टाइम"
+        phases:
+          dns: "DNS लुकअप"
+          tcp: "TCP हैंडशेक"
+          tls: "TLS हैंडशेक"
+          ttfb: "प्रतीक्षा (TTFB)"
+          download: "डाउनलोड"
+          process: "प्रोसेसिंग"
+      time: "समय"
+      size: "आकार"
+      redirects:
+        one: "%{count} रीडायरेक्ट"
+        other: "%{count} रीडायरेक्ट"
+      no_headers: "कोई हेडर नहीं।"
+      empty_body: "रिस्पॉन्स में कोई बॉडी नहीं है।"
+      binary: "बाइनरी या नॉन-टेक्स्ट रिस्पॉन्स (%{size}, %{type})। इसे दिखाया नहीं जाता।"
+      modes:
+        pretty: "Pretty"
+        raw: "Raw"
+        preview: "Preview"
+      copy: "कॉपी करें"
+      save: "रिस्पॉन्स सहेजें"
+      copied: "कॉपी हो गया"
+      truncated: "सिर्फ़ पहले %{limit} दिखाए गए हैं।"
+      unresolved: "अपरिभाषित वेरिएबल: %{names}। इन्हें जैसा लिखा था वैसा ही भेजा गया।"
+      request_headers: "भेजे गए हेडर (सीक्रेट छिपे हुए)"
+      no_payload: "कोई payload नहीं भेजा गया।"
+      errors:
+        blocked: "नेटवर्क पॉलिसी ने ब्लॉक किया"
+        invalid_url: "अमान्य URL"
+        invalid_request: "रिक्वेस्ट बनाई नहीं जा सकी"
+        timeout: "रिक्वेस्ट टाइमआउट हो गई"
+        ssl: "SSL त्रुटि"
+        dns: "होस्ट नहीं मिला"
+        refused: "कनेक्शन अस्वीकृत"
+        connection: "कनेक्शन विफल"
+        unknown: "अप्रत्याशित त्रुटि"
+        cancelled: "रद्द किया गया"
+    errors:
+      blank_url: "रिक्वेस्ट भेजने के लिए URL दर्ज करें।"
+      invalid_url: "URL मान्य नहीं है। सिर्फ़ http और https समर्थित हैं।"
+      unresolved_url: "URL में अपरिभाषित वेरिएबल: %{names}। ऐसा एनवायरनमेंट चुनें जो उन्हें परिभाषित करता हो।"
+      invalid_graphql_variables: "GraphQL वेरिएबल मान्य JSON होने चाहिए।"
+      missing_binary: "बाइनरी बॉडी के लिए फ़ाइल चुनें।"
+    imports:
+      create:
+        imported: "%{counts} इम्पोर्ट किए गए।"
+        warnings:
+          one: "1 आइटम पर ध्यान चाहिए: %{details}"
+          other: "%{count} आइटम पर ध्यान चाहिए: %{details}"
+        counts:
+          collections:
+            one: "%{count} कलेक्शन"
+            other: "%{count} कलेक्शन"
+          folders:
+            one: "%{count} फ़ोल्डर"
+            other: "%{count} फ़ोल्डर"
+          requests:
+            one: "%{count} रिक्वेस्ट"
+            other: "%{count} रिक्वेस्ट"
+          environments:
+            one: "%{count} एनवायरनमेंट"
+            other: "%{count} एनवायरनमेंट"
+      form:
+        title: "कलेक्शन इम्पोर्ट करें"
+        description: "किसी दूसरे API क्लाइंट से कलेक्शन, रिक्वेस्ट और एनवायरनमेंट लाएँ।"
+        submit: "इम्पोर्ट करें"
+        file: "फ़ाइल"
+        content: "या कंटेंट पेस्ट करें"
+        content_placeholder: "JSON या YAML एक्सपोर्ट पेस्ट करें"
+        formats: "समर्थित: Postman (collection v2 और environment), Insomnia (v4 JSON, v5 YAML), Bruno (JSON export) और OpenAPI 3 / Swagger 2।"
+        apidog: "Apidog: अपना प्रोजेक्ट Postman या OpenAPI के रूप में एक्सपोर्ट करें और वह फ़ाइल इम्पोर्ट करें।"
+      errors:
+        empty: "फ़ाइल चुनें या उसका कंटेंट पेस्ट करें।"
+        too_large: "फ़ाइल बहुत बड़ी है (अधिकतम %{max} MB)।"
+        invalid_content: "कंटेंट मान्य JSON या YAML नहीं है।"
+        unknown_format: "फ़ॉर्मैट पहचाना नहीं गया। समर्थित: Postman, Insomnia, Bruno (JSON) और OpenAPI/Swagger।"
+        too_complex: "फ़ाइल में इम्पोर्ट करने के लिए बहुत ज़्यादा आइटम हैं।"
+        nothing_to_import: "फ़ाइल में इम्पोर्ट करने लायक कुछ नहीं है।"
+        invalid_openapi: "OpenAPI दस्तावेज़ में इम्पोर्ट करने के लिए कोई path नहीं है।"
+        failed: "इम्पोर्ट विफल: %{message}"
+      warnings:
+        auth_unsupported: "Authorization टाइप “%{type}” समर्थित नहीं है; इसके बजाय रिक्वेस्ट पैरेंट से लेती है।"
+        variable_unsupported: "डायनामिक वेरिएबल {{%{name}}} समर्थित नहीं है और जैसा लिखा था वैसा ही रखा गया।"
+        scripts: "“%{name}” में स्क्रिप्ट हैं, जो समर्थित नहीं हैं और छोड़ दी गईं।"
+        file_body: "“%{name}” की बॉडी फ़ाइल है; फ़ाइल का कंटेंट इम्पोर्ट नहीं हुआ।"
+        external_ref: "बाहरी रेफ़रेंस “%{ref}” रिज़ॉल्व नहीं हुआ।"
+        unknown_item: "“%{type}” टाइप का एक आइटम छोड़ दिया गया।"
+        variable_skipped: "वेरिएबल “%{key}” छोड़ दिया गया क्योंकि उसका नाम मान्य नहीं है।"
+    curl:
+      empty: "curl कमांड पेस्ट करें।"
+      missing_url: "कमांड में कोई URL नहीं है।"
+      missing_argument: "%{flag} के लिए मान चाहिए।"

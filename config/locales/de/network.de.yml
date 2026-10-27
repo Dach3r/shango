@@ -1,0 +1,90 @@
+de:
+  network:
+    title: Netzwerk
+    tabs:
+      label: Netzwerk-Tools
+      dns: DNS
+      ports: Ports
+      ping: Ping
+    errors:
+      blank: Gib eine Domain oder einen Host ein.
+      invalid: "Das ist kein gültiger Hostname und keine gültige IP-Adresse. Verwende nur den Namen, ohne Schema, Pfad oder Port."
+      unresolved_variable: "Die Variable {{%{name}}} ist in der ausgewählten Umgebung nicht definiert oder deaktiviert."
+      secret_variable: "Die Variable {{%{name}}} ist geheim und kann nicht als Netzwerkziel verwendet werden."
+      blocked: "Dieser Host ist nicht erlaubt: %{detail}."
+      unresolved: Der Hostname wird nicht aufgelöst.
+      invalid_type: Wähle einen unterstützten Eintragstyp.
+      blank_ports: Gib mindestens einen Port ein.
+      invalid_ports: "\"%{token}\" ist kein gültiger Port. Verwende Zahlen von 1 bis 65535, Bereiche wie 8000-8010 oder common."
+      too_many_ports: "Prüfe höchstens %{max} Ports auf einmal."
+      invalid_port: Gib einen Port zwischen 1 und 65535 ein.
+      invalid_attempts: "Wähle zwischen 1 und %{max} Versuchen."
+    statuses:
+      ok: Antwortet
+      cname: Alias
+      nodata: Keine Einträge
+      nxdomain: Nicht gefunden
+      servfail: Serverfehler
+      refused: Abgelehnt
+      timeout: Zeitüberschreitung
+      error: Fehler
+      blocked: Blockiert
+      unresolved: Keine Adresse
+      match: Stimmt überein
+      mismatch: Weicht ab
+      no_answer: Keine Antwort
+      open: Offen
+      closed: Geschlossen
+      filtered: Gefiltert
+    dns:
+      intro: Frage öffentliche Resolver und die autoritativen Nameserver der Domain nach einem Eintrag, um zu sehen, ob sich eine DNS-Änderung verbreitet hat.
+      domain: Domain
+      domain_placeholder: example.com oder {{host}}
+      type: Typ
+      expected: Erwarteter Wert
+      expected_placeholder: 203.0.113.10
+      expected_hint: Optional. Jeder Resolver wird als übereinstimmend oder abweichend markiert, so siehst du, wie weit sich eine Änderung verbreitet hat.
+      submit: DNS prüfen
+      no_authoritative: Die autoritativen Nameserver dieser Domain konnten nicht ermittelt werden.
+      summary:
+        expected: "%{matched} von %{total} Resolvern stimmen mit dem erwarteten Wert überein"
+        answered: "%{answered} von %{total} Resolvern haben geantwortet"
+        agree: Alle Antworten stimmen überein.
+        differ: Die Antworten unterscheiden sich zwischen den Resolvern, die Änderung wird möglicherweise noch verbreitet.
+      groups:
+        authoritative: Autoritative Nameserver
+        public: Öffentliche Resolver
+      columns:
+        resolver: Resolver
+        answer: Antwort
+        ttl: TTL
+        latency: Latenz
+        status: Status
+    ports:
+      intro: Prüfe vom Shango-Server aus, welche TCP-Ports auf einem Host antworten, zum Beispiel nach einer Firewall-Änderung oder dem Deployment eines Dienstes.
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 oder {{host}}
+      ports: Ports
+      ports_placeholder: 22, 80, 443 oder 8000-8010
+      ports_hint: "Zahlen, Bereiche und common, durch Kommas getrennt. Höchstens %{max} Ports."
+      submit: Ports prüfen
+      summary: "%{open} offen, %{closed} geschlossen, %{filtered} gefiltert"
+      all_filtered: Nichts hat geantwortet. Eine Firewall verwirft möglicherweise die Pakete, oder der Host ist offline.
+      columns:
+        port: Port
+        service: Üblicher Dienst
+        latency: Latenz
+        status: Status
+    ping:
+      intro: Prüfe, ob ein Host antwortet, indem mehrmals TCP-Verbindungen zu einem Port geöffnet und gemessen werden.
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 oder {{host}}
+      port: Port
+      attempts: Versuche
+      hint: Das ist ein TCP-Ping, kein ICMP. Eine abgelehnte Verbindung beweist trotzdem, dass der Host online ist; nur Stille zählt als Verlust.
+      submit: Ping starten
+      summary: "%{received} von %{sent} beantwortet, %{loss}% Verlust"
+      latency: "min %{min} ms · Ø %{avg} ms · max %{max} ms"
+      only_refused: Der Host antwortet, aber auf diesem Port lauscht nichts.
+      no_answer: Keine Antwort. Der Host ist möglicherweise offline, oder eine Firewall verwirft die Pakete.
+      stopped: "Nach %{count} Zeitüberschreitungen in Folge gestoppt."

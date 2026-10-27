@@ -1,0 +1,90 @@
+zh-CN:
+  network:
+    title: 网络
+    tabs:
+      label: 网络工具
+      dns: DNS
+      ports: 端口
+      ping: Ping
+    errors:
+      blank: 请输入域名或主机。
+      invalid: "这不是有效的主机名或 IP 地址。只需填写名称，不要包含协议、路径或端口。"
+      unresolved_variable: "变量 {{%{name}}} 在所选环境中未定义或已被禁用。"
+      secret_variable: "变量 {{%{name}}} 是机密变量，不能用作网络目标。"
+      blocked: "不允许使用此主机：%{detail}。"
+      unresolved: 无法解析该主机名。
+      invalid_type: 请选择受支持的记录类型。
+      blank_ports: 请至少输入一个端口。
+      invalid_ports: "\"%{token}\" 不是有效的端口。请使用 1 到 65535 的数字、形如 8000-8010 的范围，或 common。"
+      too_many_ports: "每次最多检查 %{max} 个端口。"
+      invalid_port: 请输入 1 到 65535 之间的端口。
+      invalid_attempts: "请选择 1 到 %{max} 次尝试。"
+    statuses:
+      ok: 已应答
+      cname: 别名
+      nodata: 无记录
+      nxdomain: 未找到
+      servfail: 服务器故障
+      refused: 已拒绝
+      timeout: 超时
+      error: 错误
+      blocked: 已拦截
+      unresolved: 无地址
+      match: 一致
+      mismatch: 不一致
+      no_answer: 无应答
+      open: 开放
+      closed: 关闭
+      filtered: 被过滤
+    dns:
+      intro: 向公共解析器和该域名的权威名称服务器查询记录，以确认 DNS 更改是否已生效。
+      domain: 域名
+      domain_placeholder: "example.com 或 {{host}}"
+      type: 类型
+      expected: 期望值
+      expected_placeholder: 203.0.113.10
+      expected_hint: 可选。每个解析器会被标记为一致或不一致，方便查看更改的扩散进度。
+      submit: 检查 DNS
+      no_authoritative: 无法确定此域名的权威名称服务器。
+      summary:
+        expected: "%{total} 个解析器中有 %{matched} 个与期望值一致"
+        answered: "%{total} 个解析器中有 %{answered} 个已应答"
+        agree: 所有应答一致。
+        differ: 各解析器的应答不一致，更改可能仍在生效中。
+      groups:
+        authoritative: 权威名称服务器
+        public: 公共解析器
+      columns:
+        resolver: 解析器
+        answer: 应答
+        ttl: TTL
+        latency: 延迟
+        status: 状态
+    ports:
+      intro: 从 Shango 服务器检查主机上哪些 TCP 端口有应答，例如在修改防火墙或部署服务之后。
+      host: 主机
+      host_placeholder: "example.com、203.0.113.10 或 {{host}}"
+      ports: 端口
+      ports_placeholder: "22, 80, 443 或 8000-8010"
+      ports_hint: "数字、范围和 common，以逗号分隔。最多 %{max} 个端口。"
+      submit: 检查端口
+      summary: "%{open} 个开放，%{closed} 个关闭，%{filtered} 个被过滤"
+      all_filtered: 没有任何应答。可能是防火墙丢弃了数据包，或主机已离线。
+      columns:
+        port: 端口
+        service: 常用服务
+        latency: 延迟
+        status: 状态
+    ping:
+      intro: 通过多次向某个端口建立 TCP 连接并计时，检查主机是否有应答。
+      host: 主机
+      host_placeholder: "example.com、203.0.113.10 或 {{host}}"
+      port: 端口
+      attempts: 尝试次数
+      hint: 这是 TCP ping，而非 ICMP。即使连接被拒绝，也能证明主机在线；只有无任何响应才算丢包。
+      submit: 开始 Ping
+      summary: "%{sent} 次中有 %{received} 次应答，丢包率 %{loss}%"
+      latency: "最小 %{min} ms · 平均 %{avg} ms · 最大 %{max} ms"
+      only_refused: 主机有应答，但此端口上没有服务在监听。
+      no_answer: 无应答。主机可能已离线，或防火墙正在丢弃数据包。
+      stopped: "连续 %{count} 次超时后已停止。"

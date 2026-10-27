@@ -1,0 +1,263 @@
+pt-BR:
+  mailing:
+    disabled: O e-mail não está configurado nesta instância.
+  throttling:
+    limited: Tentativas demais. Aguarde um instante e tente novamente.
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} é maior que o limite de %{max} MB."
+              uploads_too_large: Juntos, os arquivos são maiores que o limite de %{max} MB.
+              too_many_uploads: Arquivos demais em uma requisição (máximo de %{max}).
+    attributes:
+      user:
+        first_name: Nome
+        last_name: Sobrenome
+      project:
+        name: Nome
+        icon: Ícone
+  layouts:
+    devise:
+      panel_label: Developer Workspace
+      panel_note: Código aberto
+    app:
+      right_sidebar: Painel lateral
+      close_right_sidebar: Fechar painel lateral
+  components:
+    select:
+      search: Buscar…
+      empty: Nenhum resultado
+    nav_item:
+      soon: Em breve
+    project_switcher:
+      label: Projetos
+      new: Novo projeto
+    settings_nav:
+      label: Seções de configurações
+      groups:
+        account: Minha conta
+        appearance: Aparência
+        project: Projeto
+      items:
+        profile: Perfil
+        preferences: Preferências
+        security: Segurança
+        delete_account: Cancelar conta
+        sidebar: Barra lateral
+        themes: Temas
+        members: Membros
+    tools_nav:
+      label: Navegação do projeto
+      api_client: API Client
+      documentation: Documentação
+      monitoring: Monitoramento
+      servers: Servidores
+      network: Rede
+      logs: Logs
+      ai_assistant: Assistente de IA
+    user_menu:
+      title: Conta
+      settings: Configurações
+      label: Menu da conta
+      sign_out: Sair
+    input:
+      toggle_password: Mostrar ou ocultar senha
+    locale_switcher:
+      label: Idioma
+    zoom_picker:
+      label: Zoom
+      default: Padrão
+    toast:
+      close: Dispensar notificação
+    theme_switcher:
+      label: Tema
+      system: Sistema
+      light: Claro
+      dark: Escuro
+  settings:
+    save_bar:
+      unsaved: Você tem alterações não salvas
+      discard: Descartar
+  projects:
+    new:
+      title: Novo projeto
+      heading_html: Crie seu primeiro projeto
+      name: Nome do projeto
+      name_placeholder: "ex.: Exemplo"
+      icon: Ícone
+      icon_search: Buscar ícones
+      icon_empty: Nenhum ícone encontrado
+      submit: Criar projeto
+    memberships:
+      edit:
+        title: Configurações
+        heading: Barra lateral
+        description: Como coleções, pastas e requisições se comportam na barra lateral do API Client. Isso vale só para você neste projeto.
+        folder_toggle:
+          label: Coleções e pastas
+          hint: Como elas expandem e recolhem na barra lateral do API Client.
+        request_open:
+          label: Requisições
+          hint: Como elas abrem a partir da barra lateral do API Client. Com clique duplo, renomeie-as na própria requisição.
+        collapse_nested_folders:
+          label: Recolher pastas aninhadas
+          hint: Fechar uma coleção ou pasta também fecha as pastas dentro dela.
+        toggle:
+          "true": Sim
+          "false": "Não"
+        modes:
+          click: Clique simples
+          double_click: Clique duplo
+      update:
+        updated: Configurações salvas.
+    themes:
+      edit:
+        title: Temas
+        heading: Temas
+        description: Como o Shango aparece para você neste projeto. Isso vale só para você.
+        color_scheme:
+          label: Esquema de cores
+          hint: Claro, escuro ou seguir o seu sistema operacional.
+        color_schemes:
+          system: Sistema
+          light: Claro
+          dark: Escuro
+        theme:
+          label: Tema
+          hint: As cores de destaque usadas em todo o workspace.
+        themes:
+          default: Argila
+          blue: Azul
+          green: Verde
+          yellow: Amarelo
+          red: Vermelho
+          ocean: Oceano
+          purple: Roxo
+          rose: Rosa
+          orange: Laranja
+          forest: Floresta
+          midnight: Meia-noite
+          nord: Nord
+          dracula: Dracula
+          gruvbox: Gruvbox
+          solarized: Solarized
+          sunset: Pôr do sol
+          coffee: Café
+          cyberpunk: Cyberpunk
+          mono: Mono
+  users:
+    accounts:
+      show:
+        title: Conta
+  devise:
+    sessions:
+      new:
+        title: Entrar
+        heading_html: Bem-vindo de volta
+        email: E-mail
+        email_placeholder: voce@exemplo.com
+        password: Senha
+        password_placeholder: Digite sua senha
+        remember_me: Lembrar de mim
+        forgot_password: Esqueceu sua senha?
+        submit: Entrar
+        no_account: Não tem uma conta?
+        sign_up: Cadastre-se
+        or: Ou
+    registrations:
+      new:
+        title: Criar conta
+        heading_html: Crie sua conta
+        first_name: Nome
+        first_name_placeholder: "ex.: Ada"
+        last_name: Sobrenome
+        last_name_placeholder: "ex.: Lovelace"
+        email: E-mail
+        email_placeholder: voce@exemplo.com
+        password: Senha
+        password_placeholder: Pelo menos %{length} caracteres
+        submit: Criar conta
+        or: Ou
+        sign_in: Entrar
+      edit:
+        title: Configurações
+        profile:
+          heading: Perfil
+          description: Seu nome e o e-mail que você usa para entrar.
+        fields:
+          cancel_hint: Esta ação não pode ser desfeita.
+        preferences:
+          heading: Preferências
+          description: Idioma e zoom da sua conta.
+          locale:
+            label: Idioma
+            hint: O idioma da interface.
+          zoom:
+            label: Zoom
+            hint: Deixe a interface menor ou maior.
+        security:
+          heading: Segurança
+          description: Altere sua senha.
+        delete_account:
+          heading: Cancelar conta
+          description: Exclua sua conta permanentemente.
+        email: E-mail
+        new_password: Nova senha
+        email_placeholder: voce@exemplo.com
+        password_placeholder: Deixe em branco para manter sua senha atual
+        confirm_password_placeholder: Repita sua nova senha
+        confirm_password: Confirmar senha
+        cancel_heading: Cancelar minha conta
+        cancel_account: Cancelar minha conta
+        confirm: Tem certeza?
+        current_password: Senha atual
+        current_password_placeholder: Digite sua senha atual
+      destroy:
+        wrong_password: "A senha está incorreta. Sua conta não foi cancelada."
+        sole_owner: "Você é o único proprietário de %{projects}, que ainda tem outros membros. Cancelar deixaria o projeto sem proprietário."
+    passwords:
+      new:
+        title: Redefinir senha
+        heading_html: Esqueceu sua senha?
+        email: E-mail
+        email_placeholder: voce@exemplo.com
+        submit: Enviar instruções
+        sign_in: Entrar
+        or: Ou
+      edit:
+        title: Alterar senha
+        heading_html: Defina uma nova senha
+        password: Nova senha
+        password_placeholder: Crie uma nova senha (pelo menos %{length} caracteres)
+        password_confirmation: Confirmar senha
+        password_confirmation_placeholder: Repita sua nova senha
+        submit: Alterar senha
+        sign_in: Entrar
+        or: Ou
+    confirmations:
+      new:
+        title: Reenviar confirmação
+        heading_html: Confirme seu e-mail
+        email: E-mail
+        email_placeholder: voce@exemplo.com
+        submit: Reenviar instruções
+    unlocks:
+      new:
+        title: Reenviar desbloqueio
+        heading_html: Desbloqueie sua conta
+        email: E-mail
+        email_placeholder: voce@exemplo.com
+        submit: Reenviar instruções
+    shared:
+      links:
+        sign_in_prompt: Já tem uma conta?
+        sign_in: Entrar
+        no_account: Não tem uma conta?
+        sign_up: Cadastre-se
+        forgot_password: Esqueceu sua senha?
+        confirmation: Não recebeu as instruções de confirmação?
+        unlock: Não recebeu as instruções de desbloqueio?
+        omniauth: Continuar com %{provider}

@@ -1,0 +1,263 @@
+zh-CN:
+  mailing:
+    disabled: 此实例未配置电子邮件。
+  throttling:
+    limited: 尝试次数过多，请稍等片刻后重试。
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} 超过了 %{max} MB 的限制。"
+              uploads_too_large: 文件总大小超过了 %{max} MB 的限制。
+              too_many_uploads: 单个请求中的文件过多（最多 %{max} 个）。
+    attributes:
+      user:
+        first_name: 名
+        last_name: 姓
+      project:
+        name: 名称
+        icon: 图标
+  layouts:
+    devise:
+      panel_label: 开发者工作区
+      panel_note: 开源
+    app:
+      right_sidebar: 侧边面板
+      close_right_sidebar: 关闭侧边面板
+  components:
+    select:
+      search: 搜索…
+      empty: 无结果
+    nav_item:
+      soon: 即将推出
+    project_switcher:
+      label: 项目
+      new: 新建项目
+    settings_nav:
+      label: 设置分区
+      groups:
+        account: 我的账户
+        appearance: 外观
+        project: 项目
+      items:
+        profile: 个人资料
+        preferences: 偏好设置
+        security: 安全
+        delete_account: 注销账户
+        sidebar: 侧边栏
+        themes: 主题
+        members: 成员
+    tools_nav:
+      label: 项目导航
+      api_client: API 客户端
+      documentation: 文档
+      monitoring: 监控
+      servers: 服务器
+      network: 网络
+      logs: 日志
+      ai_assistant: AI 助手
+    user_menu:
+      title: 账户
+      settings: 设置
+      label: 账户菜单
+      sign_out: 退出登录
+    input:
+      toggle_password: 显示或隐藏密码
+    locale_switcher:
+      label: 语言
+    zoom_picker:
+      label: 缩放
+      default: 默认
+    toast:
+      close: 关闭通知
+    theme_switcher:
+      label: 主题
+      system: 跟随系统
+      light: 浅色
+      dark: 深色
+  settings:
+    save_bar:
+      unsaved: 你有未保存的更改
+      discard: 放弃
+  projects:
+    new:
+      title: 新建项目
+      heading_html: 创建你的第一个项目
+      name: 项目名称
+      name_placeholder: 例如：Example
+      icon: 图标
+      icon_search: 搜索图标
+      icon_empty: 未找到图标
+      submit: 创建项目
+    memberships:
+      edit:
+        title: 设置
+        heading: 侧边栏
+        description: API 客户端侧边栏中集合、文件夹和请求的行为方式。仅对你在此项目中的账户生效。
+        folder_toggle:
+          label: 集合和文件夹
+          hint: 它们在 API 客户端侧边栏中的展开和折叠方式。
+        request_open:
+          label: 请求
+          hint: 从 API 客户端侧边栏打开请求的方式。选择双击时，请在请求本身中重命名。
+        collapse_nested_folders:
+          label: 折叠嵌套文件夹
+          hint: 关闭集合或文件夹时，同时关闭其内部的文件夹。
+        toggle:
+          "true": 是
+          "false": "否"
+        modes:
+          click: 单击
+          double_click: 双击
+      update:
+        updated: 设置已保存。
+    themes:
+      edit:
+        title: 主题
+        heading: 主题
+        description: Shango 在此项目中对你的显示效果。仅对你生效。
+        color_scheme:
+          label: 配色方案
+          hint: 浅色、深色，或跟随操作系统。
+        color_schemes:
+          system: 跟随系统
+          light: 浅色
+          dark: 深色
+        theme:
+          label: 主题
+          hint: 工作区中使用的强调色。
+        themes:
+          default: 陶土
+          blue: 蓝色
+          green: 绿色
+          yellow: 黄色
+          red: 红色
+          ocean: 海洋
+          purple: 紫色
+          rose: 玫瑰
+          orange: 橙色
+          forest: 森林
+          midnight: 午夜
+          nord: Nord
+          dracula: Dracula
+          gruvbox: Gruvbox
+          solarized: Solarized
+          sunset: 日落
+          coffee: 咖啡
+          cyberpunk: 赛博朋克
+          mono: 单色
+  users:
+    accounts:
+      show:
+        title: 账户
+  devise:
+    sessions:
+      new:
+        title: 登录
+        heading_html: 欢迎回来
+        email: 邮箱
+        email_placeholder: you@example.com
+        password: 密码
+        password_placeholder: 输入你的密码
+        remember_me: 记住我
+        forgot_password: 忘记密码？
+        submit: 登录
+        no_account: 还没有账户？
+        sign_up: 注册
+        or: 或
+    registrations:
+      new:
+        title: 创建账户
+        heading_html: 创建你的账户
+        first_name: 名
+        first_name_placeholder: 例如：Ada
+        last_name: 姓
+        last_name_placeholder: 例如：Lovelace
+        email: 邮箱
+        email_placeholder: you@example.com
+        password: 密码
+        password_placeholder: 至少 %{length} 个字符
+        submit: 创建账户
+        or: 或
+        sign_in: 登录
+      edit:
+        title: 设置
+        profile:
+          heading: 个人资料
+          description: 你的姓名和用于登录的邮箱。
+        fields:
+          cancel_hint: 此操作无法撤销。
+        preferences:
+          heading: 偏好设置
+          description: 你的账户的语言和缩放。
+          locale:
+            label: 语言
+            hint: 界面使用的语言。
+          zoom:
+            label: 缩放
+            hint: 缩小或放大界面。
+        security:
+          heading: 安全
+          description: 修改你的密码。
+        delete_account:
+          heading: 注销账户
+          description: 永久删除你的账户。
+        email: 邮箱
+        new_password: 新密码
+        email_placeholder: you@example.com
+        password_placeholder: 留空则保持当前密码不变
+        confirm_password_placeholder: 再次输入新密码
+        confirm_password: 确认密码
+        cancel_heading: 注销我的账户
+        cancel_account: 注销我的账户
+        confirm: 确定吗？
+        current_password: 当前密码
+        current_password_placeholder: 输入你的当前密码
+      destroy:
+        wrong_password: "密码不正确，你的账户未被注销。"
+        sole_owner: "你是 %{projects} 的唯一所有者，而该项目仍有其他成员。注销账户会使其没有所有者。"
+    passwords:
+      new:
+        title: 重置密码
+        heading_html: 忘记密码？
+        email: 邮箱
+        email_placeholder: you@example.com
+        submit: 发送说明
+        sign_in: 登录
+        or: 或
+      edit:
+        title: 修改密码
+        heading_html: 设置新密码
+        password: 新密码
+        password_placeholder: 创建新密码（至少 %{length} 个字符）
+        password_confirmation: 确认密码
+        password_confirmation_placeholder: 再次输入新密码
+        submit: 修改密码
+        sign_in: 登录
+        or: 或
+    confirmations:
+      new:
+        title: 重新发送确认邮件
+        heading_html: 确认你的邮箱
+        email: 邮箱
+        email_placeholder: you@example.com
+        submit: 重新发送说明
+    unlocks:
+      new:
+        title: 重新发送解锁邮件
+        heading_html: 解锁你的账户
+        email: 邮箱
+        email_placeholder: you@example.com
+        submit: 重新发送说明
+    shared:
+      links:
+        sign_in_prompt: 已有账户？
+        sign_in: 登录
+        no_account: 还没有账户？
+        sign_up: 注册
+        forgot_password: 忘记密码？
+        confirmation: 没有收到确认说明？
+        unlock: 没有收到解锁说明？
+        omniauth: 使用 %{provider} 继续

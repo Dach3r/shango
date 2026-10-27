@@ -1,0 +1,90 @@
+pt-BR:
+  network:
+    title: Rede
+    tabs:
+      label: Ferramentas de rede
+      dns: DNS
+      ports: Portas
+      ping: Ping
+    errors:
+      blank: Informe um domínio ou host.
+      invalid: "Esse não é um nome de host ou endereço IP válido. Use apenas o nome, sem esquema, caminho ou porta."
+      unresolved_variable: "A variável {{%{name}}} não está definida ou está desativada no ambiente selecionado."
+      secret_variable: "A variável {{%{name}}} é secreta e não pode ser usada como destino de rede."
+      blocked: "Este host não é permitido: %{detail}."
+      unresolved: O nome do host não foi resolvido.
+      invalid_type: Escolha um tipo de registro compatível.
+      blank_ports: Informe pelo menos uma porta.
+      invalid_ports: "\"%{token}\" não é uma porta válida. Use números de 1 a 65535, intervalos como 8000-8010, ou common."
+      too_many_ports: "Verifique no máximo %{max} portas por vez."
+      invalid_port: Informe uma porta entre 1 e 65535.
+      invalid_attempts: "Escolha entre 1 e %{max} tentativas."
+    statuses:
+      ok: Respondeu
+      cname: Alias
+      nodata: Sem registros
+      nxdomain: Não encontrado
+      servfail: Falha do servidor
+      refused: Recusado
+      timeout: Tempo esgotado
+      error: Erro
+      blocked: Bloqueado
+      unresolved: Sem endereço
+      match: Coincide
+      mismatch: Difere
+      no_answer: Sem resposta
+      open: Aberta
+      closed: Fechada
+      filtered: Filtrada
+    dns:
+      intro: Consulte resolvedores públicos e os servidores de nomes autoritativos do domínio para ver se uma alteração de DNS já se propagou.
+      domain: Domínio
+      domain_placeholder: exemplo.com ou {{host}}
+      type: Tipo
+      expected: Valor esperado
+      expected_placeholder: 203.0.113.10
+      expected_hint: Opcional. Cada resolvedor é marcado como coincidente ou não, para você ver até onde a alteração se espalhou.
+      submit: Verificar DNS
+      no_authoritative: Não foi possível determinar os servidores de nomes autoritativos deste domínio.
+      summary:
+        expected: "%{matched} de %{total} resolvedores coincidem com o valor esperado"
+        answered: "%{answered} de %{total} resolvedores responderam"
+        agree: Todas as respostas coincidem.
+        differ: As respostas diferem entre os resolvedores, então a alteração ainda pode estar se propagando.
+      groups:
+        authoritative: Servidores de nomes autoritativos
+        public: Resolvedores públicos
+      columns:
+        resolver: Resolvedor
+        answer: Resposta
+        ttl: TTL
+        latency: Latência
+        status: Status
+    ports:
+      intro: Verifique quais portas TCP respondem em um host a partir do servidor do Shango, por exemplo depois de alterar um firewall ou publicar um serviço.
+      host: Host
+      host_placeholder: exemplo.com, 203.0.113.10 ou {{host}}
+      ports: Portas
+      ports_placeholder: 22, 80, 443 ou 8000-8010
+      ports_hint: "Números, intervalos e common, separados por vírgulas. No máximo %{max} portas."
+      submit: Verificar portas
+      summary: "%{open} abertas, %{closed} fechadas, %{filtered} filtradas"
+      all_filtered: Nada respondeu. Um firewall pode estar descartando os pacotes, ou o host pode estar offline.
+      columns:
+        port: Porta
+        service: Serviço usual
+        latency: Latência
+        status: Status
+    ping:
+      intro: Verifique se um host responde, abrindo conexões TCP a uma porta várias vezes e medindo o tempo.
+      host: Host
+      host_placeholder: exemplo.com, 203.0.113.10 ou {{host}}
+      port: Porta
+      attempts: Tentativas
+      hint: Isto é um ping TCP, não ICMP. Uma conexão recusada ainda prova que o host está online; só o silêncio conta como perda.
+      submit: Iniciar ping
+      summary: "%{received} de %{sent} responderam, %{loss}% de perda"
+      latency: "mín %{min} ms · méd %{avg} ms · máx %{max} ms"
+      only_refused: O host responde, mas nada está escutando nesta porta.
+      no_answer: Sem resposta. O host pode estar offline, ou um firewall pode estar descartando os pacotes.
+      stopped: "Interrompido após %{count} tempos esgotados seguidos."

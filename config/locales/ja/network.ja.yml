@@ -1,0 +1,90 @@
+ja:
+  network:
+    title: ネットワーク
+    tabs:
+      label: ネットワークツール
+      dns: DNS
+      ports: ポート
+      ping: Ping
+    errors:
+      blank: ドメインまたはホストを入力してください。
+      invalid: "ホスト名またはIPアドレスが正しくありません。スキーム、パス、ポートを含めず、名前のみを入力してください。"
+      unresolved_variable: "変数 {{%{name}}} は、選択中の環境で定義されていないか無効になっています。"
+      secret_variable: "変数 {{%{name}}} はシークレットのため、ネットワークの対象として使用できません。"
+      blocked: "このホストは許可されていません: %{detail}。"
+      unresolved: ホスト名を解決できません。
+      invalid_type: 対応しているレコードタイプを選択してください。
+      blank_ports: ポートを1つ以上入力してください。
+      invalid_ports: "「%{token}」は有効なポートではありません。1〜65535の数値、8000-8010 のような範囲、または common を指定してください。"
+      too_many_ports: "一度に確認できるポートは最大 %{max} 個です。"
+      invalid_port: 1〜65535のポートを入力してください。
+      invalid_attempts: "試行回数は1〜%{max}の間で選択してください。"
+    statuses:
+      ok: 応答あり
+      cname: エイリアス
+      nodata: レコードなし
+      nxdomain: 見つかりません
+      servfail: サーバー障害
+      refused: 拒否
+      timeout: タイムアウト
+      error: エラー
+      blocked: ブロック
+      unresolved: アドレスなし
+      match: 一致
+      mismatch: 不一致
+      no_answer: 応答なし
+      open: オープン
+      closed: クローズ
+      filtered: フィルタ済み
+    dns:
+      intro: パブリックリゾルバーとドメインの権威ネームサーバーにレコードを問い合わせて、DNSの変更が反映されたかを確認します。
+      domain: ドメイン
+      domain_placeholder: "example.com または {{host}}"
+      type: タイプ
+      expected: 期待値
+      expected_placeholder: 203.0.113.10
+      expected_hint: 任意です。各リゾルバーが一致しているかどうかが表示され、変更がどこまで広がったかを確認できます。
+      submit: DNSを確認
+      no_authoritative: このドメインの権威ネームサーバーを特定できませんでした。
+      summary:
+        expected: "%{total} 件中 %{matched} 件のリゾルバーが期待値と一致しています"
+        answered: "%{total} 件中 %{answered} 件のリゾルバーが応答しました"
+        agree: すべての応答が一致しています。
+        differ: リゾルバー間で応答が異なります。変更がまだ反映中の可能性があります。
+      groups:
+        authoritative: 権威ネームサーバー
+        public: パブリックリゾルバー
+      columns:
+        resolver: リゾルバー
+        answer: 応答
+        ttl: TTL
+        latency: レイテンシ
+        status: ステータス
+    ports:
+      intro: ファイアウォールの変更やサービスのデプロイ後などに、Shango サーバーからホストのどの TCP ポートが応答するかを確認します。
+      host: ホスト
+      host_placeholder: "example.com、203.0.113.10 または {{host}}"
+      ports: ポート
+      ports_placeholder: "22, 80, 443 または 8000-8010"
+      ports_hint: "数値、範囲、common をカンマ区切りで指定します。最大 %{max} 個まで。"
+      submit: ポートを確認
+      summary: "オープン %{open}、クローズ %{closed}、フィルタ済み %{filtered}"
+      all_filtered: 応答がありませんでした。ファイアウォールがパケットを破棄しているか、ホストがオフラインの可能性があります。
+      columns:
+        port: ポート
+        service: 一般的なサービス
+        latency: レイテンシ
+        status: ステータス
+    ping:
+      intro: ポートへの TCP 接続を複数回開き、その所要時間を測定して、ホストが応答するかを確認します。
+      host: ホスト
+      host_placeholder: "example.com、203.0.113.10 または {{host}}"
+      port: ポート
+      attempts: 試行回数
+      hint: これは ICMP ではなく TCP ping です。接続が拒否されてもホストがオンラインであることは確認できます。無応答の場合のみ損失として扱われます。
+      submit: Ping を開始
+      summary: "%{sent} 回中 %{received} 回応答、損失 %{loss}%"
+      latency: "最小 %{min} ms · 平均 %{avg} ms · 最大 %{max} ms"
+      only_refused: ホストは応答していますが、このポートで待ち受けているものはありません。
+      no_answer: 応答がありません。ホストがオフラインか、ファイアウォールがパケットを破棄している可能性があります。
+      stopped: "%{count} 回連続でタイムアウトしたため停止しました。"

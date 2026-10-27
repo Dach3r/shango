@@ -1,0 +1,526 @@
+ru:
+  activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "Названия переменных должны быть уникальными."
+    attributes:
+      environment:
+        name: Название
+      variable:
+        key: Название
+        value: Значение
+      cookie:
+        name: Название
+        value: Значение
+        domain: Домен
+        path: Путь
+      collection:
+        name: Название
+      folder:
+        name: Название
+      api_request:
+        name: Название
+        url: URL
+  components:
+    confirm_dialog:
+      cancel: Отмена
+      confirm: Удалить
+    modal:
+      cancel: Отмена
+      save: Сохранить
+      close: Закрыть
+    code_editor:
+      environment: Окружение
+      dynamic: Динамические
+      set: Задано
+      empty: Пусто
+      guid: Случайный UUID
+      timestamp: Unix-время в секундах
+      iso_timestamp: Дата ISO 8601
+      random_int: 0 – 999
+      missing: Не определено
+      response: Ответ
+      response_body: Атрибут тела – значение из тела ответа
+      response_raw: Тело целиком – всё тело ответа
+      response_header: Заголовок – значение заголовка ответа
+      response_url: URL запроса – URL исходного запроса
+      response_loading: Загрузка…
+      response_no_response: "Ответа пока нет. Сначала отправьте %{request}."
+      response_no_match: Ничего не подходит под этот фильтр
+      response_unknown: Запрос не найден в этой коллекции
+      response_invalid: Недопустимая ссылка на ответ
+      response_edit_title: Редактировать ссылку на ответ
+      response_function_label: Функция
+      response_function: Ответ – ссылки на значения из ответов других запросов
+      response_attribute: Атрибут
+      response_request: Запрос
+      response_filter_body: Фильтр (JSONPath)
+      response_filter_header: Название заголовка
+      response_trigger: Когда отправлять
+      response_trigger_never: Никогда – не отправлять запрос повторно
+      response_trigger_hint: Запрос повторно не отправляется; сначала отправьте его, чтобы получить свежий ответ.
+      response_preview: Предпросмотр
+      response_refresh: Обновить
+      response_done: Готово
+      response_close: Закрыть
+    key_value_table:
+      add: Добавить строку
+      key: Ключ
+      value: Значение
+      description: Описание
+      enabled: Включено
+      remove: Удалить строку
+      text: Текст
+      file: Файл
+      secret: Секрет
+      secret_saved: Сохранено · оставьте пустым, чтобы не менять
+    environment_switcher:
+      none: Без окружения
+      label: Окружение
+      manage: Управление окружениями
+      manage_title: Окружения
+      cookies: Cookies
+      cookies_title: Cookies
+    request_tabs:
+      label: Открытые запросы
+      close: "Закрыть %{name}"
+      draft_hint: "Черновик, ещё не сохранён"
+      new_draft: Новый черновик запроса
+      actions: "Действия с вкладкой"
+      new_request: "Новый запрос"
+      duplicate: "Дублировать вкладку"
+      close_tab: "Закрыть вкладку"
+      close_left: "Закрыть вкладки слева"
+      close_right: "Закрыть вкладки справа"
+      close_all: "Закрыть все вкладки"
+    request_tree:
+      label: Коллекции
+      title: Коллекции
+      new_collection: Новая коллекция
+      empty: Коллекций пока нет.
+      empty_collection: Пустая коллекция
+      actions: "Действия для %{name}"
+      new_request: Новый запрос
+      new_folder: Новая папка
+      new_subfolder: Новая подпапка
+      history: История запросов
+      history_title: История
+      history_empty: Сохранённых ответов пока нет. Выполните запрос и нажмите «Сохранить ответ», чтобы он появился здесь.
+      drafts: Черновики
+      back: Назад к коллекциям
+      import: Импорт коллекций
+      import_curl: Импорт cURL
+      edit: Изменить
+      rename: Переименовать
+      duplicate: Дублировать
+      delete: Удалить
+      confirm_delete_collection: "Удалить коллекцию «%{name}» со всеми её папками и запросами?"
+      confirm_delete_folder: "Удалить папку «%{name}» со всем содержимым?"
+  projects:
+    cookies:
+      index:
+        title: Cookies
+        intro: "Cookies, которые устанавливают серверы, хранятся для выбранного окружения и отправляются в следующих запросах, так что вход переносится на следующий вызов. Cookies также можно добавлять и редактировать вручную."
+        scope: "Окружение: %{name}"
+        scope_none: Без окружения
+        empty_title: Cookies пока нет
+        empty_hint: Отправьте запрос, в ответ на который устанавливается cookie, и она появится здесь.
+        session: Сессионная
+        expires: "Истекает %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Удалить cookie
+        new: Добавить cookie
+        edit: Изменить cookie
+        clear: Удалить все cookies
+        confirm_clear: "Удалить все cookies, сохранённые для этого окружения?"
+      create:
+        created: Cookie добавлена.
+      update:
+        updated: Cookie сохранена.
+      form:
+        new_title: "Новая cookie"
+        name: "Название"
+        value: "Значение"
+        value_hint: "Хранится в зашифрованном виде, здесь отображается открытым текстом."
+        domain: "Домен"
+        path: "Путь"
+        expires_at: "Истекает"
+        expires_at_hint: "Оставьте пустым для сессионной cookie."
+        host_only: "Только хост (не отправлять поддоменам)"
+        secure: "Secure (только https)"
+        http_only: "HttpOnly"
+    environments:
+      index:
+        title: Окружения
+        intro: Окружения хранят переменные (базовый URL, токены…), на которые ваши запросы ссылаются как {{name}}. Активируйте то, которое должны использовать запросы.
+        new: Новое окружение
+        empty_title: Окружений пока нет
+        empty_hint: Создайте одно (Local, Staging, Production…) и задайте переменные вроде base_url.
+        variables:
+          one: "%{count} переменная"
+          few: "%{count} переменные"
+          many: "%{count} переменных"
+          other: "%{count} переменной"
+        in_use: Используется
+        activate: Активировать
+        actions: Ещё действия
+        edit: Изменить
+        delete: Удалить
+        confirm_delete: "Удалить окружение «%{name}»?"
+      new:
+        title: Новое окружение
+        subtitle: "Дайте ему название и добавьте переменные, на которые ссылаются ваши запросы, например базовый URL или токен."
+        name_hint: "Отображается в списке окружений, например Production, Staging."
+        submit: Создать окружение
+      edit:
+        title: Изменить окружение
+      form:
+        name: Название
+        name_placeholder: например, Production
+        variables: Переменные
+        variables_hint: Ссылайтесь на них в запросах как {{name}}. Секретные значения шифруются и после сохранения больше не показываются.
+        key_placeholder: Переменная
+        value_placeholder: Значение
+  workbench:
+    title: API Client
+    shared:
+      cancel: Отмена
+      save: Сохранить
+    workspaces:
+      show:
+        heading: Создавайте и выполняйте запросы
+        empty: Начните с запроса или создайте коллекцию, чтобы упорядочить запросы и импортировать их из команды cURL.
+        pick: Выберите запрос в боковой панели или создайте новый.
+        new_collection: Новая коллекция
+        new_request: Новый запрос
+    collections:
+      create:
+        created: Коллекция создана.
+      update:
+        updated: Коллекция обновлена.
+      destroy:
+        destroyed: Коллекция удалена.
+      form:
+        new_title: Новая коллекция
+        edit_title: Настройки коллекции
+        name: Название
+        name_placeholder: например, Main API
+        description: Описание
+    folders:
+      create:
+        created: Папка создана.
+      update:
+        updated: Папка обновлена.
+      destroy:
+        destroyed: Папка удалена.
+      form:
+        new_title: Новая папка
+        edit_title: Настройки папки
+        name: Название
+        name_placeholder: например, Authentication
+        auth: Авторизация
+    requests:
+      draft: Черновик
+      draft_name: Новый запрос
+      closures:
+        new:
+          title: "Закрыть этот черновик?"
+          description: "Этот черновик пока не лежит ни в одной коллекции. Сохраните его, чтобы не потерять работу, или отмените."
+          discard: Отменить
+          cancel: Продолжить редактирование
+          save: Сохранить в коллекцию
+      placements:
+        form:
+          title: "Сохранить запрос в…"
+          description: "Выберите, куда сохранить этот запрос. Если закрыть окно, он останется черновиком."
+          destination: Сохранить в
+          keep_draft: Оставить черновиком
+          submit: Сохранить сюда
+      create:
+        created: Запрос создан.
+      update:
+        updated: Запрос сохранён.
+      destroy:
+        destroyed: Запрос удалён.
+      new:
+        default_name: Новый запрос
+      form:
+        title: Новый запрос
+        name: Название
+        method: Метод
+        url: URL
+        submit: Создать запрос
+      name: Название запроса
+      method: HTTP-метод
+      url_placeholder: "https://api.example.com/path или {{base_url}}/path"
+      send: Отправить
+      send_hint: Отправить (Ctrl/Cmd + Enter)
+      cancel: Отмена
+      cancel_hint: Отменить запрос
+      save: Сохранить
+      copy_curl: Копировать cURL
+      more_actions: Ещё действия
+      copied: Скопировано
+      duplicate: Дублировать
+      delete: Удалить
+      confirm_delete: "Удалить запрос «%{name}»?"
+      copy_name: "%{name} (копия)"
+    curl_imports:
+      form:
+        title: Импорт cURL
+        command: Команда cURL
+        hint: "Создаёт запрос в «%{collection}»."
+        submit: Импортировать
+    tabs:
+      label: Разделы запроса
+      params: Параметры
+      authorization: Авторизация
+      headers: Заголовки
+      body: Тело
+      settings: Настройки
+    params:
+      add: Добавить параметр
+      key: Параметр
+    headers:
+      add: Добавить заголовок
+      key: Заголовок
+    body:
+      type: Тип тела
+      none_hint: У этого запроса нет тела.
+      placeholder: Тело запроса. При необходимости используйте {{variables}}.
+      graphql_variables: Переменные (JSON)
+      form_hint: Текстовые строки отправляются как поля; выберите «Файл», чтобы загрузить файл.
+      binary: Файл для отправки как необработанное тело
+      current_file: "Текущий файл: %{name}"
+      types:
+        none: Нет
+        json: JSON
+        text: Текст
+        xml: XML
+        form_urlencoded: Форма (urlencoded)
+        multipart: Форма (multipart)
+        graphql: GraphQL
+        binary: Двоичный файл
+    settings:
+      timeout: Тайм-аут (секунды)
+      timeout_hint: "До %{max} секунд."
+      max_redirects: Макс. число редиректов
+      follow_redirects: Следовать редиректам
+      verify_ssl: Проверять SSL-сертификаты
+      use_cookie_jar: Использовать хранилище cookies (отправлять и сохранять cookies)
+    auth:
+      type: Тип авторизации
+      inherit_hint: Использует авторизацию родительской папки или коллекции.
+      none_hint: С этим запросом учётные данные не отправляются.
+      secret_saved: Сохранено · оставьте пустым, чтобы не менять
+      types:
+        inherit: Наследовать от родителя
+        none: Без авторизации
+        basic: Basic auth
+        bearer: Bearer token
+        api_key: API key
+        jwt_bearer: JWT bearer
+        digest: Digest auth
+        aws_sigv4: AWS Signature v4
+        oauth2: OAuth 2.0
+      fields:
+        username: Имя пользователя
+        password: Пароль
+        token: Токен
+        prefix: Префикс
+        key: Ключ
+        value: Значение
+        add_to: Добавить в
+        algorithm: Алгоритм
+        secret: Секрет или приватный ключ
+        payload: Payload (JSON)
+        headers: Дополнительные заголовки (JSON)
+        query_param: Название query-параметра
+        access_key: Access key
+        secret_key: Secret key
+        session_token: Session token
+        region: Регион
+        service: Сервис
+        grant_type: Grant type
+        token_url: URL access token
+        authorization_url: URL авторизации
+        client_id: Client ID
+        client_secret: Client secret
+        scope: Scope
+        audience: Audience
+        client_authentication: Аутентификация клиента
+      options:
+        add_to:
+          header: Заголовок
+          query: Query-параметр
+        grant_type:
+          client_credentials: Client credentials
+          password: Password
+          authorization_code: Authorization code (PKCE)
+        client_authentication:
+          basic_header: Отправлять в заголовке Basic auth
+          body: Отправлять в теле запроса
+    oauth2:
+      token_present: Access token сохранён.
+      token_missing: Access token пока нет.
+      expires: "истекает %{time}"
+      get_token: Получить новый access token
+      authorize: Авторизоваться в браузере
+      clear_token: Очистить токен
+      redirect_hint: "Зарегистрируйте этот redirect URL у вашего провайдера: %{url}"
+      save_first: Сначала сохраните эти настройки, затем откройте их снова, чтобы получить токен.
+      tokens:
+        create:
+          fetched: Access token сохранён.
+          failed: "Не удалось получить токен: %{error}"
+        destroy:
+          cleared: Токен очищен.
+      callbacks:
+        show:
+          fetched: Access token сохранён.
+          failed: "Не удалось получить токен: %{error}"
+          invalid_state: Ответ авторизации недействителен. Повторите попытку.
+      missing_token_url: Сначала укажите URL токена.
+      missing_authorization_url: Сначала укажите URL авторизации.
+      unsupported_grant: Authorization code grant требует входа через браузер.
+      invalid_response: Эндпоинт токенов не вернул JSON.
+    executions:
+      resize: Изменить размер панели ответа
+      error: Ошибка
+      failure: "Не удалось отправить запрос. Проверьте лог сервера и повторите попытку."
+      running: Отправка запроса…
+      empty_title: Ответа пока нет
+      empty_hint: Нажмите «Отправить» или Ctrl/Cmd + Enter, чтобы выполнить этот запрос.
+      tabs:
+        label: Разделы ответа
+        body: Тело
+        headers: Заголовки
+        cookies: Cookies
+        timing: Время
+        request: Запрос
+        payload: Payload
+        history: История
+      cookies:
+        name: Название
+        value: Значение
+        domain: Домен
+        path: Путь
+        expires: Истекает
+        flags: Флаги
+        session: Сессионная
+        max_age: "%{seconds} с"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
+      timing:
+        total: Всего
+        show: Показать разбивку по времени
+        title: Время ответа
+        phases:
+          dns: DNS-запрос
+          tcp: TCP-рукопожатие
+          tls: TLS-рукопожатие
+          ttfb: Ожидание (TTFB)
+          download: Загрузка
+          process: Обработка
+      time: Время
+      size: Размер
+      redirects:
+        one: "%{count} редирект"
+        few: "%{count} редиректа"
+        many: "%{count} редиректов"
+        other: "%{count} редиректа"
+      no_headers: Заголовков нет.
+      empty_body: У ответа нет тела.
+      binary: "Двоичный или нетекстовый ответ (%{size}, %{type}). Он не отображается."
+      modes:
+        pretty: Форматированный
+        raw: Исходный
+        preview: Предпросмотр
+      copy: Копировать
+      save: Сохранить ответ
+      copied: Скопировано
+      truncated: "Показаны только первые %{limit}."
+      unresolved: "Неопределённые переменные: %{names}. Они отправлены как введены."
+      request_headers: Отправленные заголовки (секреты скрыты)
+      no_payload: Payload не отправлялся.
+      errors:
+        blocked: Заблокировано сетевой политикой
+        invalid_url: Недопустимый URL
+        invalid_request: Не удалось построить запрос
+        timeout: Время ожидания запроса истекло
+        ssl: Ошибка SSL
+        dns: Хост не найден
+        refused: Соединение отклонено
+        connection: Не удалось установить соединение
+        unknown: Непредвиденная ошибка
+        cancelled: Отменено
+    errors:
+      blank_url: Введите URL, чтобы отправить запрос.
+      invalid_url: Недопустимый URL. Поддерживаются только http и https.
+      unresolved_url: "Неопределённые переменные в URL: %{names}. Выберите окружение, в котором они заданы."
+      invalid_graphql_variables: Переменные GraphQL должны быть корректным JSON.
+      missing_binary: Выберите файл для двоичного тела.
+    imports:
+      create:
+        imported: "Импортировано: %{counts}."
+        warnings:
+          one: "%{count} элемент требует внимания: %{details}"
+          few: "%{count} элемента требуют внимания: %{details}"
+          many: "%{count} элементов требуют внимания: %{details}"
+          other: "%{count} элемента требуют внимания: %{details}"
+        counts:
+          collections:
+            one: "%{count} коллекция"
+            few: "%{count} коллекции"
+            many: "%{count} коллекций"
+            other: "%{count} коллекции"
+          folders:
+            one: "%{count} папка"
+            few: "%{count} папки"
+            many: "%{count} папок"
+            other: "%{count} папки"
+          requests:
+            one: "%{count} запрос"
+            few: "%{count} запроса"
+            many: "%{count} запросов"
+            other: "%{count} запроса"
+          environments:
+            one: "%{count} окружение"
+            few: "%{count} окружения"
+            many: "%{count} окружений"
+            other: "%{count} окружения"
+      form:
+        title: Импорт коллекций
+        description: Перенесите коллекции, запросы и окружения из другого API-клиента.
+        submit: Импортировать
+        file: Файл
+        content: Или вставьте содержимое
+        content_placeholder: "Вставьте экспорт в формате JSON или YAML"
+        formats: "Поддерживаются: Postman (коллекция v2 и окружение), Insomnia (v4 JSON, v5 YAML), Bruno (экспорт JSON) и OpenAPI 3 / Swagger 2."
+        apidog: "Apidog: экспортируйте проект как Postman или OpenAPI и импортируйте этот файл."
+      errors:
+        empty: Выберите файл или вставьте его содержимое.
+        too_large: Файл слишком большой (максимум %{max} МБ).
+        invalid_content: Содержимое не является корректным JSON или YAML.
+        unknown_format: "Формат не распознан. Поддерживаются: Postman, Insomnia, Bruno (JSON) и OpenAPI/Swagger."
+        too_complex: В файле слишком много элементов для импорта.
+        nothing_to_import: В файле нечего импортировать.
+        invalid_openapi: В документе OpenAPI нет путей для импорта.
+        failed: "Не удалось импортировать: %{message}"
+      warnings:
+        auth_unsupported: "Тип авторизации «%{type}» не поддерживается; запрос наследует авторизацию."
+        variable_unsupported: "Динамическая переменная {{%{name}}} не поддерживается и оставлена как есть."
+        scripts: "В «%{name}» есть скрипты, они не поддерживаются и были пропущены."
+        file_body: "У «%{name}» тело в виде файла; содержимое файла не импортировано."
+        external_ref: "Внешняя ссылка «%{ref}» не была разрешена."
+        unknown_item: "Элемент типа «%{type}» был пропущен."
+        variable_skipped: "Переменная «%{key}» пропущена, так как её название недопустимо."
+    curl:
+      empty: Вставьте команду curl.
+      missing_url: В команде нет URL.
+      missing_argument: "%{flag} требует значение."

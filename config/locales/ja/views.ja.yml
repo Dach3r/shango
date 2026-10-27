@@ -1,0 +1,263 @@
+ja:
+  mailing:
+    disabled: このインスタンスではメールが設定されていません。
+  throttling:
+    limited: 試行回数が多すぎます。しばらく待ってからもう一度お試しください。
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} は上限の %{max} MB を超えています。"
+              uploads_too_large: ファイルの合計サイズが上限の %{max} MB を超えています。
+              too_many_uploads: 1つのリクエストに含まれるファイルが多すぎます（最大 %{max} 件）。
+    attributes:
+      user:
+        first_name: 名
+        last_name: 姓
+      project:
+        name: 名前
+        icon: アイコン
+  layouts:
+    devise:
+      panel_label: Developer Workspace
+      panel_note: オープンソース
+    app:
+      right_sidebar: サイドパネル
+      close_right_sidebar: サイドパネルを閉じる
+  components:
+    select:
+      search: 検索…
+      empty: 結果がありません
+    nav_item:
+      soon: 近日公開
+    project_switcher:
+      label: プロジェクト
+      new: 新規プロジェクト
+    settings_nav:
+      label: 設定のセクション
+      groups:
+        account: マイアカウント
+        appearance: 外観
+        project: プロジェクト
+      items:
+        profile: プロフィール
+        preferences: 環境設定
+        security: セキュリティ
+        delete_account: アカウントの解約
+        sidebar: サイドバー
+        themes: テーマ
+        members: メンバー
+    tools_nav:
+      label: プロジェクトナビゲーション
+      api_client: API Client
+      documentation: ドキュメント
+      monitoring: モニタリング
+      servers: サーバー
+      network: ネットワーク
+      logs: ログ
+      ai_assistant: AI アシスタント
+    user_menu:
+      title: アカウント
+      settings: 設定
+      label: アカウントメニュー
+      sign_out: ログアウト
+    input:
+      toggle_password: パスワードの表示/非表示を切り替え
+    locale_switcher:
+      label: 言語
+    zoom_picker:
+      label: ズーム
+      default: デフォルト
+    toast:
+      close: 通知を閉じる
+    theme_switcher:
+      label: テーマ
+      system: システム
+      light: ライト
+      dark: ダーク
+  settings:
+    save_bar:
+      unsaved: 保存されていない変更があります
+      discard: 破棄
+  projects:
+    new:
+      title: 新規プロジェクト
+      heading_html: 最初のプロジェクトを作成しましょう
+      name: プロジェクト名
+      name_placeholder: "例: Example"
+      icon: アイコン
+      icon_search: アイコンを検索
+      icon_empty: アイコンが見つかりません
+      submit: プロジェクトを作成
+    memberships:
+      edit:
+        title: 設定
+        heading: サイドバー
+        description: API Client のサイドバーでのコレクション、フォルダ、リクエストの動作を設定します。このプロジェクトでのあなたにのみ適用されます。
+        folder_toggle:
+          label: コレクションとフォルダ
+          hint: API Client のサイドバーでの開閉方法です。
+        request_open:
+          label: リクエスト
+          hint: API Client のサイドバーからの開き方です。ダブルクリックの場合は、リクエスト自体から名前を変更できます。
+        collapse_nested_folders:
+          label: ネストしたフォルダを折りたたむ
+          hint: コレクションやフォルダを閉じると、その中のフォルダも閉じます。
+        toggle:
+          "true": はい
+          "false": いいえ
+        modes:
+          click: シングルクリック
+          double_click: ダブルクリック
+      update:
+        updated: 設定を保存しました。
+    themes:
+      edit:
+        title: テーマ
+        heading: テーマ
+        description: このプロジェクトでの Shango の見た目を設定します。あなたにのみ適用されます。
+        color_scheme:
+          label: カラースキーム
+          hint: ライト、ダーク、またはお使いのOSの設定に合わせます。
+        color_schemes:
+          system: システム
+          light: ライト
+          dark: ダーク
+        theme:
+          label: テーマ
+          hint: ワークスペース全体で使用されるアクセントカラーです。
+        themes:
+          default: クレイ
+          blue: ブルー
+          green: グリーン
+          yellow: イエロー
+          red: レッド
+          ocean: オーシャン
+          purple: パープル
+          rose: ローズ
+          orange: オレンジ
+          forest: フォレスト
+          midnight: ミッドナイト
+          nord: ノルド
+          dracula: ドラキュラ
+          gruvbox: グルーヴボックス
+          solarized: ソラライズド
+          sunset: サンセット
+          coffee: コーヒー
+          cyberpunk: サイバーパンク
+          mono: モノ
+  users:
+    accounts:
+      show:
+        title: アカウント
+  devise:
+    sessions:
+      new:
+        title: ログイン
+        heading_html: おかえりなさい
+        email: メールアドレス
+        email_placeholder: you@example.com
+        password: パスワード
+        password_placeholder: パスワードを入力
+        remember_me: ログイン状態を保持する
+        forgot_password: パスワードをお忘れですか？
+        submit: ログイン
+        no_account: アカウントをお持ちでないですか？
+        sign_up: 新規登録
+        or: または
+    registrations:
+      new:
+        title: アカウント作成
+        heading_html: アカウントを作成
+        first_name: 名
+        first_name_placeholder: "例: Ada"
+        last_name: 姓
+        last_name_placeholder: "例: Lovelace"
+        email: メールアドレス
+        email_placeholder: you@example.com
+        password: パスワード
+        password_placeholder: "%{length} 文字以上"
+        submit: アカウントを作成
+        or: または
+        sign_in: ログイン
+      edit:
+        title: 設定
+        profile:
+          heading: プロフィール
+          description: お名前とログインに使用するメールアドレスです。
+        fields:
+          cancel_hint: この操作は取り消せません。
+        preferences:
+          heading: 環境設定
+          description: アカウントの言語とズームを設定します。
+          locale:
+            label: 言語
+            hint: インターフェースの言語です。
+          zoom:
+            label: ズーム
+            hint: インターフェースを小さく、または大きく表示します。
+        security:
+          heading: セキュリティ
+          description: パスワードを変更します。
+        delete_account:
+          heading: アカウントの解約
+          description: アカウントを完全に削除します。
+        email: メールアドレス
+        new_password: 新しいパスワード
+        email_placeholder: you@example.com
+        password_placeholder: 変更しない場合は空欄のままにしてください
+        confirm_password_placeholder: 新しいパスワードを再入力
+        confirm_password: パスワード（確認）
+        cancel_heading: アカウントを解約
+        cancel_account: アカウントを解約
+        confirm: よろしいですか？
+        current_password: 現在のパスワード
+        current_password_placeholder: 現在のパスワードを入力
+      destroy:
+        wrong_password: "パスワードが正しくありません。アカウントは解約されていません。"
+        sole_owner: "あなたは %{projects} の唯一のオーナーで、他のメンバーがまだ在籍しています。解約するとオーナー不在になります。"
+    passwords:
+      new:
+        title: パスワードのリセット
+        heading_html: パスワードをお忘れですか？
+        email: メールアドレス
+        email_placeholder: you@example.com
+        submit: 手順を送信
+        sign_in: ログイン
+        or: または
+      edit:
+        title: パスワードの変更
+        heading_html: 新しいパスワードを設定
+        password: 新しいパスワード
+        password_placeholder: "新しいパスワードを作成（%{length} 文字以上）"
+        password_confirmation: パスワード（確認）
+        password_confirmation_placeholder: 新しいパスワードを再入力
+        submit: パスワードを変更
+        sign_in: ログイン
+        or: または
+    confirmations:
+      new:
+        title: 確認メールの再送
+        heading_html: メールアドレスを確認
+        email: メールアドレス
+        email_placeholder: you@example.com
+        submit: 手順を再送
+    unlocks:
+      new:
+        title: ロック解除メールの再送
+        heading_html: アカウントのロックを解除
+        email: メールアドレス
+        email_placeholder: you@example.com
+        submit: 手順を再送
+    shared:
+      links:
+        sign_in_prompt: すでにアカウントをお持ちですか？
+        sign_in: ログイン
+        no_account: アカウントをお持ちでないですか？
+        sign_up: 新規登録
+        forgot_password: パスワードをお忘れですか？
+        confirmation: 確認メールが届きませんか？
+        unlock: ロック解除メールが届きませんか？
+        omniauth: "%{provider} で続ける"

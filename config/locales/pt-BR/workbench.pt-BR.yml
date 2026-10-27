@@ -1,0 +1,512 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "Os nomes das variáveis devem ser únicos."
+    attributes:
+      environment:
+        name: Nome
+      variable:
+        key: Nome
+        value: Valor
+      cookie:
+        name: Nome
+        value: Valor
+        domain: Domínio
+        path: Caminho
+      collection:
+        name: Nome
+      folder:
+        name: Nome
+      api_request:
+        name: Nome
+        url: URL
+  components:
+    confirm_dialog:
+      cancel: Cancelar
+      confirm: Excluir
+    modal:
+      cancel: Cancelar
+      save: Salvar
+      close: Fechar
+    code_editor:
+      environment: Ambiente
+      dynamic: Dinâmico
+      set: Definido
+      empty: Vazio
+      guid: UUID aleatório
+      timestamp: Segundos Unix
+      iso_timestamp: Data ISO 8601
+      random_int: 0 – 999
+      missing: Indefinido
+      response: Resposta
+      response_body: "Atributo do corpo – valor do corpo da resposta"
+      response_raw: "Corpo bruto – corpo inteiro da resposta"
+      response_header: "Header – valor de um header da resposta"
+      response_url: "URL da requisição – URL da requisição de origem"
+      response_loading: Carregando…
+      response_no_response: "Ainda sem resposta. Envie %{request} primeiro."
+      response_no_match: Nada corresponde a este filtro
+      response_unknown: Requisição não encontrada nesta coleção
+      response_invalid: Referência de resposta inválida
+      response_edit_title: Editar referência de resposta
+      response_function_label: Função a executar
+      response_function: "Resposta – referencie valores das respostas de outras requisições"
+      response_attribute: Atributo
+      response_request: Requisição
+      response_filter_body: Filtro (JSONPath)
+      response_filter_header: Nome do header
+      response_trigger: Comportamento do gatilho
+      response_trigger_never: "Nunca – nunca reenviar a requisição"
+      response_trigger_hint: A requisição não é enviada de novo; envie-a primeiro para obter uma resposta atualizada.
+      response_preview: Prévia ao vivo
+      response_refresh: Atualizar
+      response_done: Concluir
+      response_close: Fechar
+    key_value_table:
+      add: Adicionar linha
+      key: Chave
+      value: Valor
+      description: Descrição
+      enabled: Ativado
+      remove: Remover linha
+      text: Texto
+      file: Arquivo
+      secret: Secreto
+      secret_saved: "Salvo · deixe em branco para manter"
+    environment_switcher:
+      none: Sem ambiente
+      label: Ambiente
+      manage: Gerenciar ambientes
+      manage_title: Ambientes
+      cookies: Cookies
+      cookies_title: Cookies
+    request_tabs:
+      label: Requisições abertas
+      close: "Fechar %{name}"
+      draft_hint: "Rascunho, ainda não salvo"
+      new_draft: Nova requisição em rascunho
+      actions: "Ações da aba"
+      new_request: "Nova requisição"
+      duplicate: "Duplicar aba"
+      close_tab: "Fechar aba"
+      close_left: "Fechar abas à esquerda"
+      close_right: "Fechar abas à direita"
+      close_all: "Fechar todas as abas"
+    request_tree:
+      label: Coleções
+      title: Coleções
+      new_collection: Nova coleção
+      empty: Nenhuma coleção ainda.
+      empty_collection: Coleção vazia
+      actions: "Ações para %{name}"
+      new_request: Nova requisição
+      new_folder: Nova pasta
+      new_subfolder: Nova subpasta
+      history: Histórico de requisições
+      history_title: Histórico
+      history_empty: Nenhuma resposta salva ainda. Execute uma requisição e clique em Salvar resposta para guardá-la aqui.
+      drafts: Rascunhos
+      back: Voltar às coleções
+      import: Importar coleções
+      import_curl: Importar cURL
+      edit: Editar
+      rename: Renomear
+      duplicate: Duplicar
+      delete: Excluir
+      confirm_delete_collection: "Excluir a coleção “%{name}” com todas as suas pastas e requisições?"
+      confirm_delete_folder: "Excluir a pasta “%{name}” com tudo o que há dentro dela?"
+  projects:
+    cookies:
+      index:
+        title: Cookies
+        intro: "Os cookies definidos pelos servidores são guardados para o ambiente selecionado e reenviados nas requisições seguintes, para que um login continue valendo na próxima chamada. Você também pode adicionar ou editar cookies manualmente."
+        scope: "Ambiente: %{name}"
+        scope_none: Sem ambiente
+        empty_title: Nenhum cookie ainda
+        empty_hint: Envie uma requisição cuja resposta defina um cookie e ele aparecerá aqui.
+        session: Sessão
+        expires: "Expira em %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Excluir cookie
+        new: Adicionar cookie
+        edit: Editar cookie
+        clear: Limpar todos os cookies
+        confirm_clear: "Excluir todos os cookies armazenados para este ambiente?"
+      create:
+        created: Cookie adicionado.
+      update:
+        updated: Cookie salvo.
+      form:
+        new_title: "Novo cookie"
+        name: "Nome"
+        value: "Valor"
+        value_hint: "Armazenado criptografado e exibido aqui em texto simples."
+        domain: "Domínio"
+        path: "Caminho"
+        expires_at: "Expira em"
+        expires_at_hint: "Deixe vazio para um cookie de sessão."
+        host_only: "Somente o host (não enviar para subdomínios)"
+        secure: "Secure (somente https)"
+        http_only: "HttpOnly"
+    environments:
+      index:
+        title: Ambientes
+        intro: Os ambientes guardam as variáveis (URL base, tokens…) que suas requisições referenciam como {{name}}. Ative aquele que suas requisições devem usar.
+        new: Novo ambiente
+        empty_title: Nenhum ambiente ainda
+        empty_hint: Crie um (Local, Staging, Produção…) e defina variáveis como base_url.
+        variables:
+          one: "%{count} variável"
+          other: "%{count} variáveis"
+        in_use: Em uso
+        activate: Ativar
+        actions: Mais ações
+        edit: Editar
+        delete: Excluir
+        confirm_delete: "Excluir o ambiente “%{name}”?"
+      new:
+        title: Novo ambiente
+        subtitle: "Dê um nome e adicione as variáveis que suas requisições referenciam, como uma URL base ou um token."
+        name_hint: "Aparece no seletor de ambiente, ex.: Produção, Staging."
+        submit: Criar ambiente
+      edit:
+        title: Editar ambiente
+      form:
+        name: Nome
+        name_placeholder: "ex.: Produção"
+        variables: Variáveis
+        variables_hint: Referencie-as nas requisições como {{name}}. Valores secretos são criptografados e nunca mais são exibidos depois de salvos.
+        key_placeholder: Variável
+        value_placeholder: Valor
+  workbench:
+    title: API Client
+    shared:
+      cancel: Cancelar
+      save: Salvar
+    workspaces:
+      show:
+        heading: Crie e execute requisições
+        empty: Comece com uma requisição, ou crie uma coleção para organizá-las e importe a partir de um comando cURL.
+        pick: Escolha uma requisição na barra lateral, ou crie uma nova.
+        new_collection: Nova coleção
+        new_request: Nova requisição
+    collections:
+      create:
+        created: Coleção criada.
+      update:
+        updated: Coleção atualizada.
+      destroy:
+        destroyed: Coleção excluída.
+      form:
+        new_title: Nova coleção
+        edit_title: Configurações da coleção
+        name: Nome
+        name_placeholder: "ex.: API principal"
+        description: Descrição
+    folders:
+      create:
+        created: Pasta criada.
+      update:
+        updated: Pasta atualizada.
+      destroy:
+        destroyed: Pasta excluída.
+      form:
+        new_title: Nova pasta
+        edit_title: Configurações da pasta
+        name: Nome
+        name_placeholder: "ex.: Autenticação"
+        auth: Autorização
+    requests:
+      draft: Rascunho
+      draft_name: Nova requisição
+      closures:
+        new:
+          title: "Fechar este rascunho?"
+          description: "Este rascunho ainda não está em nenhuma coleção. Salve para guardar seu trabalho, ou descarte."
+          discard: Descartar
+          cancel: Continuar editando
+          save: Salvar em uma coleção
+      placements:
+        form:
+          title: "Salvar requisição em…"
+          description: "Escolha onde salvar esta requisição. Fechar esta janela a mantém como rascunho."
+          destination: Salvar em
+          keep_draft: Manter como rascunho
+          submit: Salvar aqui
+      create:
+        created: Requisição criada.
+      update:
+        updated: Requisição salva.
+      destroy:
+        destroyed: Requisição excluída.
+      new:
+        default_name: Nova requisição
+      form:
+        title: Nova requisição
+        name: Nome
+        method: Método
+        url: URL
+        submit: Criar requisição
+      name: Nome da requisição
+      method: Método HTTP
+      url_placeholder: "https://api.exemplo.com/caminho ou {{base_url}}/caminho"
+      send: Enviar
+      send_hint: Enviar (Ctrl/Cmd + Enter)
+      cancel: Cancelar
+      cancel_hint: Cancelar a requisição
+      save: Salvar
+      copy_curl: Copiar cURL
+      more_actions: Mais ações
+      copied: Copiado
+      duplicate: Duplicar
+      delete: Excluir
+      confirm_delete: "Excluir a requisição “%{name}”?"
+      copy_name: "%{name} (cópia)"
+    curl_imports:
+      form:
+        title: Importar cURL
+        command: Comando cURL
+        hint: "Cria uma requisição em “%{collection}”."
+        submit: Importar
+    tabs:
+      label: Seções da requisição
+      params: Params
+      authorization: Autorização
+      headers: Headers
+      body: Body
+      settings: Configurações
+    params:
+      add: Adicionar parâmetro
+      key: Parâmetro
+    headers:
+      add: Adicionar header
+      key: Header
+    body:
+      type: Tipo de body
+      none_hint: Esta requisição não tem body.
+      placeholder: Body da requisição. Use {{variables}} onde precisar.
+      graphql_variables: Variáveis (JSON)
+      form_hint: As linhas de texto são enviadas como campos; escolha Arquivo para enviar um arquivo.
+      binary: Arquivo a enviar como body bruto
+      current_file: "Arquivo atual: %{name}"
+      types:
+        none: Nenhum
+        json: JSON
+        text: Texto
+        xml: XML
+        form_urlencoded: Formulário (urlencoded)
+        multipart: Formulário (multipart)
+        graphql: GraphQL
+        binary: Arquivo binário
+    settings:
+      timeout: Timeout (segundos)
+      timeout_hint: "Até %{max} segundos."
+      max_redirects: Máximo de redirecionamentos
+      follow_redirects: Seguir redirecionamentos
+      verify_ssl: Verificar certificados SSL
+      use_cookie_jar: Usar o cookie jar (enviar e salvar cookies)
+    auth:
+      type: Tipo de autenticação
+      inherit_hint: Usa a autorização da pasta ou coleção pai.
+      none_hint: Nenhuma credencial é enviada com esta requisição.
+      secret_saved: "Salvo · deixe em branco para manter"
+      types:
+        inherit: Herdar do pai
+        none: Sem autenticação
+        basic: Basic auth
+        bearer: Bearer token
+        api_key: API key
+        jwt_bearer: JWT bearer
+        digest: Digest auth
+        aws_sigv4: AWS Signature v4
+        oauth2: OAuth 2.0
+      fields:
+        username: Usuário
+        password: Senha
+        token: Token
+        prefix: Prefixo
+        key: Chave
+        value: Valor
+        add_to: Adicionar em
+        algorithm: Algoritmo
+        secret: Segredo ou chave privada
+        payload: Payload (JSON)
+        headers: Headers extras (JSON)
+        query_param: Nome do parâmetro de query
+        access_key: Access key
+        secret_key: Secret key
+        session_token: Session token
+        region: Região
+        service: Serviço
+        grant_type: Grant type
+        token_url: URL do access token
+        authorization_url: URL de autorização
+        client_id: Client ID
+        client_secret: Client secret
+        scope: Scope
+        audience: Audience
+        client_authentication: Autenticação do client
+      options:
+        add_to:
+          header: Header
+          query: Parâmetro de query
+        grant_type:
+          client_credentials: Client credentials
+          password: Password
+          authorization_code: Authorization code (PKCE)
+        client_authentication:
+          basic_header: Enviar como header Basic auth
+          body: Enviar no body da requisição
+    oauth2:
+      token_present: Access token salvo.
+      token_missing: Ainda sem access token.
+      expires: "expira %{time}"
+      get_token: Obter novo access token
+      authorize: Autorizar no navegador
+      clear_token: Limpar token
+      redirect_hint: "Registre esta URL de redirecionamento no seu provedor: %{url}"
+      save_first: Salve estas configurações primeiro e depois reabra-as para obter um token.
+      tokens:
+        create:
+          fetched: Access token salvo.
+          failed: "Não foi possível obter um token: %{error}"
+        destroy:
+          cleared: Token limpo.
+      callbacks:
+        show:
+          fetched: Access token salvo.
+          failed: "Não foi possível obter um token: %{error}"
+          invalid_state: A resposta de autorização não era válida. Tente novamente.
+      missing_token_url: Defina primeiro uma URL de token.
+      missing_authorization_url: Defina primeiro uma URL de autorização.
+      unsupported_grant: O grant authorization code precisa do fluxo pelo navegador.
+      invalid_response: O endpoint de token não retornou JSON.
+    executions:
+      resize: Redimensionar o painel de resposta
+      error: Erro
+      failure: "Não foi possível enviar a requisição. Verifique o log do servidor e tente novamente."
+      running: Enviando requisição…
+      empty_title: Ainda sem resposta
+      empty_hint: Clique em Enviar ou pressione Ctrl/Cmd + Enter para executar esta requisição.
+      tabs:
+        label: Seções da resposta
+        body: Body
+        headers: Headers
+        cookies: Cookies
+        timing: Tempo
+        request: Requisição
+        payload: Payload
+        history: Histórico
+      cookies:
+        name: Nome
+        value: Valor
+        domain: Domínio
+        path: Caminho
+        expires: Expira
+        flags: Flags
+        session: Sessão
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
+      timing:
+        total: Total
+        show: Mostrar detalhamento do tempo
+        title: Tempo de resposta
+        phases:
+          dns: Resolução DNS
+          tcp: Handshake TCP
+          tls: Handshake TLS
+          ttfb: Espera (TTFB)
+          download: Download
+          process: Processamento
+      time: Tempo
+      size: Tamanho
+      redirects:
+        one: "%{count} redirecionamento"
+        other: "%{count} redirecionamentos"
+      no_headers: Sem headers.
+      empty_body: A resposta não tem body.
+      binary: "Resposta binária ou não textual (%{size}, %{type}). Ela não é exibida."
+      modes:
+        pretty: Formatado
+        raw: Bruto
+        preview: Prévia
+      copy: Copiar
+      save: Salvar resposta
+      copied: Copiado
+      truncated: "Somente os primeiros %{limit} são exibidos."
+      unresolved: "Variáveis indefinidas: %{names}. Elas foram enviadas como digitadas."
+      request_headers: Headers enviados (segredos ocultos)
+      no_payload: Nenhum payload enviado.
+      errors:
+        blocked: Bloqueado pela política de rede
+        invalid_url: URL inválida
+        invalid_request: Não foi possível montar a requisição
+        timeout: A requisição excedeu o tempo limite
+        ssl: Erro de SSL
+        dns: Host não encontrado
+        refused: Conexão recusada
+        connection: Falha na conexão
+        unknown: Erro inesperado
+        cancelled: Cancelada
+    errors:
+      blank_url: Informe uma URL para enviar a requisição.
+      invalid_url: A URL não é válida. Somente http e https são compatíveis.
+      unresolved_url: "Variáveis indefinidas na URL: %{names}. Escolha um ambiente que as defina."
+      invalid_graphql_variables: As variáveis do GraphQL devem ser um JSON válido.
+      missing_binary: Escolha um arquivo para o body binário.
+    imports:
+      create:
+        imported: "Importado: %{counts}."
+        warnings:
+          one: "1 item precisa de atenção: %{details}"
+          other: "%{count} itens precisam de atenção: %{details}"
+        counts:
+          collections:
+            one: "%{count} coleção"
+            other: "%{count} coleções"
+          folders:
+            one: "%{count} pasta"
+            other: "%{count} pastas"
+          requests:
+            one: "%{count} requisição"
+            other: "%{count} requisições"
+          environments:
+            one: "%{count} ambiente"
+            other: "%{count} ambientes"
+      form:
+        title: Importar coleções
+        description: Traga coleções, requisições e ambientes de outro API client.
+        submit: Importar
+        file: Arquivo
+        content: Ou cole o conteúdo
+        content_placeholder: "Cole uma exportação em JSON ou YAML"
+        formats: "Compatíveis: Postman (collection v2 e environment), Insomnia (JSON v4, YAML v5), Bruno (exportação JSON) e OpenAPI 3 / Swagger 2."
+        apidog: "Apidog: exporte seu projeto como Postman ou OpenAPI e importe esse arquivo."
+      errors:
+        empty: Escolha um arquivo ou cole o conteúdo dele.
+        too_large: O arquivo é grande demais (máximo de %{max} MB).
+        invalid_content: O conteúdo não é um JSON ou YAML válido.
+        unknown_format: "Formato não reconhecido. Compatíveis: Postman, Insomnia, Bruno (JSON) e OpenAPI/Swagger."
+        too_complex: O arquivo tem itens demais para importar.
+        nothing_to_import: O arquivo não tem nada para importar.
+        invalid_openapi: O documento OpenAPI não tem paths para importar.
+        failed: "Falha na importação: %{message}"
+      warnings:
+        auth_unsupported: "O tipo de autorização “%{type}” não é compatível; a requisição herda do pai."
+        variable_unsupported: "A variável dinâmica {{%{name}}} não é compatível e foi mantida como digitada."
+        scripts: "“%{name}” tem scripts, que não são compatíveis e foram ignorados."
+        file_body: "“%{name}” tem um body de arquivo; o conteúdo do arquivo não foi importado."
+        external_ref: "A referência externa “%{ref}” não foi resolvida."
+        unknown_item: "Um item do tipo “%{type}” foi ignorado."
+        variable_skipped: "A variável “%{key}” foi ignorada porque o nome dela não é válido."
+    curl:
+      empty: Cole um comando curl.
+      missing_url: O comando não tem URL.
+      missing_argument: "%{flag} precisa de um valor."

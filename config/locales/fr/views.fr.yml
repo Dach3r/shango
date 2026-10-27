@@ -1,0 +1,263 @@
+fr:
+  mailing:
+    disabled: "L'e-mail n'est pas configuré sur cette instance."
+  throttling:
+    limited: "Trop de tentatives. Patientez un instant et réessayez."
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} dépasse la limite de %{max} Mo."
+              uploads_too_large: "Les fichiers dépassent ensemble la limite de %{max} Mo."
+              too_many_uploads: "Trop de fichiers dans une même requête (maximum %{max})."
+    attributes:
+      user:
+        first_name: "Prénom"
+        last_name: "Nom"
+      project:
+        name: "Nom"
+        icon: "Icône"
+  layouts:
+    devise:
+      panel_label: "Developer Workspace"
+      panel_note: "Open source"
+    app:
+      right_sidebar: "Panneau latéral"
+      close_right_sidebar: "Fermer le panneau latéral"
+  components:
+    select:
+      search: "Rechercher…"
+      empty: "Aucun résultat"
+    nav_item:
+      soon: "Bientôt"
+    project_switcher:
+      label: "Projets"
+      new: "Nouveau projet"
+    settings_nav:
+      label: "Sections des paramètres"
+      groups:
+        account: "Mon compte"
+        appearance: "Apparence"
+        project: "Projet"
+      items:
+        profile: "Profil"
+        preferences: "Préférences"
+        security: "Sécurité"
+        delete_account: "Supprimer le compte"
+        sidebar: "Barre latérale"
+        themes: "Thèmes"
+        members: "Membres"
+    tools_nav:
+      label: "Navigation du projet"
+      api_client: "API Client"
+      documentation: "Documentation"
+      monitoring: "Supervision"
+      servers: "Serveurs"
+      network: "Réseau"
+      logs: "Journaux"
+      ai_assistant: "Assistant IA"
+    user_menu:
+      title: "Compte"
+      settings: "Paramètres"
+      label: "Menu du compte"
+      sign_out: "Se déconnecter"
+    input:
+      toggle_password: "Afficher ou masquer le mot de passe"
+    locale_switcher:
+      label: "Langue"
+    zoom_picker:
+      label: "Zoom"
+      default: "Par défaut"
+    toast:
+      close: "Fermer la notification"
+    theme_switcher:
+      label: "Thème"
+      system: "Système"
+      light: "Clair"
+      dark: "Sombre"
+  settings:
+    save_bar:
+      unsaved: "Vous avez des modifications non enregistrées"
+      discard: "Abandonner"
+  projects:
+    new:
+      title: "Nouveau projet"
+      heading_html: "Créez votre premier projet"
+      name: "Nom du projet"
+      name_placeholder: "ex. Example"
+      icon: "Icône"
+      icon_search: "Rechercher des icônes"
+      icon_empty: "Aucune icône trouvée"
+      submit: "Créer le projet"
+    memberships:
+      edit:
+        title: "Paramètres"
+        heading: "Barre latérale"
+        description: "Comportement des collections, dossiers et requêtes dans la barre latérale de l'API Client. Cela ne s'applique qu'à vous dans ce projet."
+        folder_toggle:
+          label: "Collections et dossiers"
+          hint: "Comment ils se déplient et se replient dans la barre latérale de l'API Client."
+        request_open:
+          label: "Requêtes"
+          hint: "Comment elles s'ouvrent depuis la barre latérale de l'API Client. Avec le double clic, renommez-les depuis la requête elle-même."
+        collapse_nested_folders:
+          label: "Replier les dossiers imbriqués"
+          hint: "Fermer une collection ou un dossier ferme aussi les dossiers qu'il contient."
+        toggle:
+          "true": "Oui"
+          "false": "Non"
+        modes:
+          click: "Clic simple"
+          double_click: "Double clic"
+      update:
+        updated: "Paramètres enregistrés."
+    themes:
+      edit:
+        title: "Thèmes"
+        heading: "Thèmes"
+        description: "L'apparence de Shango pour vous dans ce projet. Cela ne s'applique qu'à vous."
+        color_scheme:
+          label: "Mode de couleur"
+          hint: "Clair, sombre, ou selon votre système d'exploitation."
+        color_schemes:
+          system: "Système"
+          light: "Clair"
+          dark: "Sombre"
+        theme:
+          label: "Thème"
+          hint: "Les couleurs d'accent utilisées dans tout l'espace de travail."
+        themes:
+          default: "Argile"
+          blue: "Bleu"
+          green: "Vert"
+          yellow: "Jaune"
+          red: "Rouge"
+          ocean: "Océan"
+          purple: "Violet"
+          rose: "Rose"
+          orange: "Orange"
+          forest: "Forêt"
+          midnight: "Minuit"
+          nord: "Nord"
+          dracula: "Dracula"
+          gruvbox: "Gruvbox"
+          solarized: "Solarized"
+          sunset: "Coucher de soleil"
+          coffee: "Café"
+          cyberpunk: "Cyberpunk"
+          mono: "Mono"
+  users:
+    accounts:
+      show:
+        title: "Compte"
+  devise:
+    sessions:
+      new:
+        title: "Connexion"
+        heading_html: "Bon retour"
+        email: "E-mail"
+        email_placeholder: "vous@example.com"
+        password: "Mot de passe"
+        password_placeholder: "Saisissez votre mot de passe"
+        remember_me: "Se souvenir de moi"
+        forgot_password: "Mot de passe oublié ?"
+        submit: "Se connecter"
+        no_account: "Vous n'avez pas de compte ?"
+        sign_up: "S'inscrire"
+        or: "Ou"
+    registrations:
+      new:
+        title: "Créer un compte"
+        heading_html: "Créez votre compte"
+        first_name: "Prénom"
+        first_name_placeholder: "ex. Ada"
+        last_name: "Nom"
+        last_name_placeholder: "ex. Lovelace"
+        email: "E-mail"
+        email_placeholder: "vous@example.com"
+        password: "Mot de passe"
+        password_placeholder: "Au moins %{length} caractères"
+        submit: "Créer le compte"
+        or: "Ou"
+        sign_in: "Se connecter"
+      edit:
+        title: "Paramètres"
+        profile:
+          heading: "Profil"
+          description: "Votre nom et l'e-mail que vous utilisez pour vous connecter."
+        fields:
+          cancel_hint: "Cette action est irréversible."
+        preferences:
+          heading: "Préférences"
+          description: "Langue et zoom de votre compte."
+          locale:
+            label: "Langue"
+            hint: "La langue de l'interface."
+          zoom:
+            label: "Zoom"
+            hint: "Réduisez ou agrandissez l'interface."
+        security:
+          heading: "Sécurité"
+          description: "Changez votre mot de passe."
+        delete_account:
+          heading: "Supprimer le compte"
+          description: "Supprimez définitivement votre compte."
+        email: "E-mail"
+        new_password: "Nouveau mot de passe"
+        email_placeholder: "vous@example.com"
+        password_placeholder: "Laissez vide pour conserver votre mot de passe actuel"
+        confirm_password_placeholder: "Répétez votre nouveau mot de passe"
+        confirm_password: "Confirmer le mot de passe"
+        cancel_heading: "Supprimer mon compte"
+        cancel_account: "Supprimer mon compte"
+        confirm: "Êtes-vous sûr ?"
+        current_password: "Mot de passe actuel"
+        current_password_placeholder: "Saisissez votre mot de passe actuel"
+      destroy:
+        wrong_password: "Le mot de passe est incorrect. Votre compte n'a pas été supprimé."
+        sole_owner: "Vous êtes le seul propriétaire de %{projects}, qui compte encore d'autres membres. La suppression le laisserait sans propriétaire."
+    passwords:
+      new:
+        title: "Réinitialiser le mot de passe"
+        heading_html: "Mot de passe oublié ?"
+        email: "E-mail"
+        email_placeholder: "vous@example.com"
+        submit: "Envoyer les instructions"
+        sign_in: "Se connecter"
+        or: "Ou"
+      edit:
+        title: "Changer le mot de passe"
+        heading_html: "Définissez un nouveau mot de passe"
+        password: "Nouveau mot de passe"
+        password_placeholder: "Créez un nouveau mot de passe (au moins %{length} caractères)"
+        password_confirmation: "Confirmer le mot de passe"
+        password_confirmation_placeholder: "Répétez votre nouveau mot de passe"
+        submit: "Changer le mot de passe"
+        sign_in: "Se connecter"
+        or: "Ou"
+    confirmations:
+      new:
+        title: "Renvoyer la confirmation"
+        heading_html: "Confirmez votre e-mail"
+        email: "E-mail"
+        email_placeholder: "vous@example.com"
+        submit: "Renvoyer les instructions"
+    unlocks:
+      new:
+        title: "Renvoyer le déblocage"
+        heading_html: "Débloquez votre compte"
+        email: "E-mail"
+        email_placeholder: "vous@example.com"
+        submit: "Renvoyer les instructions"
+    shared:
+      links:
+        sign_in_prompt: "Vous avez déjà un compte ?"
+        sign_in: "Se connecter"
+        no_account: "Vous n'avez pas de compte ?"
+        sign_up: "S'inscrire"
+        forgot_password: "Mot de passe oublié ?"
+        confirmation: "Vous n'avez pas reçu les instructions de confirmation ?"
+        unlock: "Vous n'avez pas reçu les instructions de déblocage ?"
+        omniauth: "Continuer avec %{provider}"
