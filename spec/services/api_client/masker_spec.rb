@@ -15,6 +15,21 @@ RSpec.describe ApiClient::Masker do
     end
   end
 
+  describe "encoded secrets" do
+    subject(:masker) { described_class.new(["p@ss word/1", "tok?en=="]) }
+
+    it "masks base64, url-safe base64 and percent-encoded forms", :aggregate_failures do
+      secret = "p@ss word/1"
+      text = [Base64.strict_encode64(secret), Base64.urlsafe_encode64(secret, padding: false), CGI.escape(secret), ERB::Util.url_encode(secret)].join(" | ")
+
+      expect(masker.string(text)).to eq(Array.new(4) { described_class::MASK }.join(" | "))
+    end
+
+    it "still masks the plain secret" do
+      expect(masker.string("echo tok?en== done")).to eq("echo #{described_class::MASK} done")
+    end
+  end
+
   describe "#request_headers" do
     it "hides sensitive headers and masks other values" do
       result = masker.request_headers([["Authorization", "Bearer secret"], ["X-Other", "secret"]])

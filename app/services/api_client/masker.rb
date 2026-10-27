@@ -6,7 +6,8 @@ module ApiClient
     SENSITIVE_HEADERS = %w[authorization proxy-authorization x-api-key x-auth-token cookie].freeze
 
     def initialize(secrets)
-      @secrets = secrets.map(&:to_s).select { |secret| secret.length >= MIN_SECRET_LENGTH }.uniq.sort_by { |secret| -secret.length }
+      known = secrets.map(&:to_s).select { |secret| secret.length >= MIN_SECRET_LENGTH }.uniq
+      @secrets = known.flat_map { |secret| [secret, *encodings(secret)] }.uniq.sort_by { |secret| -secret.length }
     end
 
     def string(text)
@@ -24,6 +25,13 @@ module ApiClient
 
     def response_headers(pairs)
       pairs.map { |name, value| [name, string(value)] }
+    end
+
+    private
+
+    # Servers echo credentials back encoded (Basic auth, query strings, form bodies), so those forms are masked too.
+    def encodings(secret)
+      [Base64.strict_encode64(secret), Base64.urlsafe_encode64(secret, padding: false), CGI.escape(secret), ERB::Util.url_encode(secret)]
     end
   end
 end
