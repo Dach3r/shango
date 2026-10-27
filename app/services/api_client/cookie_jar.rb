@@ -2,7 +2,7 @@ module ApiClient
   # Per project and environment cookie store: remembers the cookies servers set (Set-Cookie) and replays the matching
   # ones on later requests, so session based flows (sign in, then call an endpoint that needs the session) work.
   class CookieJar
-    MAX_VALUE_LENGTH = 4096
+    MAX_VALUE_LENGTH = Cookie::MAX_VALUE_LENGTH
 
     def initialize(project:, environment: nil)
       @project = project
@@ -77,8 +77,7 @@ module ApiClient
     end
 
     def trim
-      excess = scope.count - Cookie::MAX_PER_JAR
-      scope.order(:updated_at).limit(excess).destroy_all if excess.positive?
+      Cookie.trim(@project, @environment)
     end
   end
 end

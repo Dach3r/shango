@@ -6,6 +6,11 @@ es:
       variable:
         key: Nombre
         value: Valor
+      cookie:
+        name: Nombre
+        value: Valor
+        domain: Dominio
+        path: Ruta
       collection:
         name: Nombre
       folder:
@@ -112,7 +117,7 @@ es:
     cookies:
       index:
         title: Cookies
-        intro: "Las cookies que fijan los servidores se guardan por entorno y se reenvían en las solicitudes siguientes, así un inicio de sesión se mantiene en la próxima llamada. Los valores nunca se muestran."
+        intro: "Las cookies que fijan los servidores se guardan para el entorno seleccionado y se reenvían en las siguientes requests, así un inicio de sesión sirve para la siguiente llamada. También puedes agregar o editar cookies a mano."
         scope: "Entorno: %{name}"
         scope_none: Sin entorno
         empty_title: Aún no hay cookies
@@ -122,8 +127,26 @@ es:
         secure: Secure
         http_only: HttpOnly
         delete: Eliminar cookie
+        new: Agregar cookie
+        edit: Editar cookie
         clear: Borrar todas las cookies
         confirm_clear: "¿Eliminar todas las cookies guardadas para este entorno?"
+      create:
+        created: Cookie agregada.
+      update:
+        updated: Cookie guardada.
+      form:
+        new_title: "Nueva cookie"
+        name: "Nombre"
+        value: "Valor"
+        value_hint: "Se guarda cifrada y se muestra aquí en texto plano."
+        domain: "Dominio"
+        path: "Ruta"
+        expires_at: "Expira"
+        expires_at_hint: "Déjalo vacío para una cookie de sesión."
+        host_only: "Solo este host (no enviar a subdominios)"
+        secure: "Secure (solo https)"
+        http_only: "HttpOnly"
     environments:
       index:
         title: Entornos

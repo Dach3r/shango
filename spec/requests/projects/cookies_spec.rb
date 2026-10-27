@@ -44,6 +44,82 @@ RSpec.describe "Cookies" do
     end
   end
 
+  describe "GET /cookies/new" do
+    it "renders the form in the side panel" do
+      get new_cookie_path, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response.body).to include(I18n.t("projects.cookies.form.new_title"), "cookie[name]")
+    end
+
+    it "redirects to the workbench outside the side panel" do
+      get new_cookie_path
+
+      expect(response).to redirect_to(workbench_root_path)
+    end
+  end
+
+  describe "POST /cookies" do
+    let(:params) { { cookie: { name: "sid", value: "abc", domain: "API.example.com", path: "/", expires_at: "", host_only: "1", secure: "1", http_only: "0" } } }
+
+    it "adds a cookie to the jar of the selected environment", :aggregate_failures do
+      membership.update!(current_environment: environment)
+
+      expect { post cookies_path, params: }.to change(Cookie, :count).by(1)
+      expect(response).to redirect_to(cookies_path)
+      expect(Cookie.last).to have_attributes(project:, environment:, name: "sid", value: "abc", domain: "api.example.com", secure: true, http_only: false, expires_at: nil)
+    end
+
+    it "renders the form again when the cookie is invalid", :aggregate_failures do
+      expect { post cookies_path, params: { cookie: { name: "", domain: "x.test" } }, headers: { "Turbo-Frame" => "right_sidebar" } }.not_to change(Cookie, :count)
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("cookie[name]")
+    end
+  end
+
+  describe "GET /cookies/:id/edit" do
+    it "shows the value of the cookie in plain text", :aggregate_failures do
+      cookie = create(:cookie, project:, name: "_session", value: "topsecret")
+      get edit_cookie_path(cookie), headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response.body).to include("_session", "topsecret")
+    end
+
+    it "does not open cookies of other projects" do
+      get edit_cookie_path(create(:cookie)), headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "PATCH /cookies/:id" do
+    it "updates the cookie", :aggregate_failures do
+      cookie = create(:cookie, project:, value: "old")
+
+      patch cookie_path(cookie), params: { cookie: { value: "new", path: "/v1" } }
+
+      expect(response).to redirect_to(cookies_path)
+      expect(cookie.reload).to have_attributes(value: "new", path: "/v1")
+    end
+
+    it "renders the form again when the cookie is invalid", :aggregate_failures do
+      cookie = create(:cookie, project:)
+
+      patch cookie_path(cookie), params: { cookie: { path: "no_slash" } }, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(cookie.reload.path).to eq("/")
+    end
+
+    it "does not touch cookies of other projects", :aggregate_failures do
+      foreign = create(:cookie, value: "keep")
+
+      patch cookie_path(foreign), params: { cookie: { value: "hacked" } }
+
+      expect(response).to have_http_status(:not_found)
+      expect(foreign.reload.value).to eq("keep")
+    end
+  end
+
   describe "DELETE /cookies/:id" do
     it "deletes the cookie" do
       cookie = create(:cookie, project:)

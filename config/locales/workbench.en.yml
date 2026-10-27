@@ -6,6 +6,11 @@ en:
       variable:
         key: Name
         value: Value
+      cookie:
+        name: Name
+        value: Value
+        domain: Domain
+        path: Path
       collection:
         name: Name
       folder:
@@ -112,7 +117,7 @@ en:
     cookies:
       index:
         title: Cookies
-        intro: "Cookies servers set are kept for the selected environment and sent back on later requests, so a sign in carries over to the next call. Values are never shown."
+        intro: "Cookies servers set are kept for the selected environment and sent back on later requests, so a sign in carries over to the next call. You can also add or edit cookies by hand."
         scope: "Environment: %{name}"
         scope_none: No environment
         empty_title: No cookies yet
@@ -122,8 +127,26 @@ en:
         secure: Secure
         http_only: HttpOnly
         delete: Delete cookie
+        new: Add cookie
+        edit: Edit cookie
         clear: Clear all cookies
         confirm_clear: "Delete every cookie stored for this environment?"
+      create:
+        created: Cookie added.
+      update:
+        updated: Cookie saved.
+      form:
+        new_title: "New cookie"
+        name: "Name"
+        value: "Value"
+        value_hint: "Stored encrypted and shown here in plain text."
+        domain: "Domain"
+        path: "Path"
+        expires_at: "Expires"
+        expires_at_hint: "Leave empty for a session cookie."
+        host_only: "Host only (do not send to subdomains)"
+        secure: "Secure (https only)"
+        http_only: "HttpOnly"
     environments:
       index:
         title: Environments

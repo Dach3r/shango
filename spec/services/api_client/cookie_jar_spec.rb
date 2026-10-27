@@ -15,6 +15,13 @@ RSpec.describe ApiClient::CookieJar do
       expect(Cookie.last).to have_attributes(domain: "api.example.com", path: "/", host_only: true, secure: true, http_only: true, expires_at: nil)
     end
 
+    it "stores cookies of hosts with unusual names", :aggregate_failures do
+      jar.store("https://my_api.internal/", "a=1; Path=/")
+      jar.store("http://[::1]:3000/", "b=2; Path=/")
+
+      expect(Cookie.pluck(:name, :domain)).to contain_exactly(["a", "my_api.internal"], ["b", "[::1]"])
+    end
+
     it "does nothing without a Set-Cookie header" do
       jar.store(url, nil)
 
