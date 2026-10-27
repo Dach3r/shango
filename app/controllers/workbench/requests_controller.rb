@@ -6,7 +6,7 @@ module Workbench
     before_action :set_api_request, only: %i[show update destroy]
 
     def show
-      ApiClient::Tabs::Open.call(api_request: @api_request, user: current_user)
+      ApiClient::Tabs::Open.call(api_request: @api_request, user: current_user) unless prefetch?
       @execution = @api_request.request_executions.recent.first
     end
 
@@ -37,6 +37,11 @@ module Workbench
     end
 
     private
+
+    # Browser speculative loads must not open tabs: showing the request is a side effect only a real visit should have.
+    def prefetch?
+      [request.headers["Sec-Purpose"], request.headers["X-Sec-Purpose"]].any? { |purpose| purpose.to_s.include?("prefetch") }
+    end
 
     # Saving a draft asks where it should go; the edits are already persisted, so closing the modal keeps it as a draft.
     def render_placement

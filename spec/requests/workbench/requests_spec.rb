@@ -30,6 +30,15 @@ RSpec.describe "Workbench requests" do
       expect(response).to have_http_status(:ok)
     end
 
+    it "opens a tab for the request" do
+      expect { get workbench_request_path(api_request) }.to change(RequestTab, :count).by(1)
+    end
+
+    it "does not open a tab on a prefetch", :aggregate_failures do
+      expect { get workbench_request_path(api_request), headers: { "Sec-Purpose" => "prefetch" } }.not_to change(RequestTab, :count)
+      expect { get workbench_request_path(api_request), headers: { "X-Sec-Purpose" => "prefetch" } }.not_to change(RequestTab, :count)
+    end
+
     it "does not find requests of other projects" do
       get workbench_request_path(foreign_request)
 
