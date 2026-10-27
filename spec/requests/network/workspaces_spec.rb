@@ -61,7 +61,7 @@ RSpec.describe "Network workspace" do
 
     it "is linked from the project tools" do
       sign_in_with_project
-      get account_path
+      get account_path, headers: { "Turbo-Frame" => "right_sidebar" }
 
       expect(response.body).to include(network_root_path)
     end
