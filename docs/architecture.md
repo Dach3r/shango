@@ -139,13 +139,13 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 - Controllers for the feature live in `Workbench::` and `Projects::` modules; logic is in `app/services` (`ApiClient::` namespace) (`Serviceable` + `Result`).
 - **Network Tools** (DNS checker, port check, TCP ping): `Network::` controllers and services, page at `/network` (*Network* entry in the account panel's tools list), no tables and no new gems. See [`network-tools.md`](network-tools.md).
 - Gems added: `faraday`, `faraday-multipart`, `jwt`, `aws-sigv4`, `net-http-digest_auth`.
-- Tests: RSpec (`spec/`) with FactoryBot, shoulda-matchers, WebMock and ViewComponent test helpers. Run `bundle exec rspec`; SimpleCov enforces 100% line and branch coverage over `app/` (report in `coverage/`, git-ignored). Layout: `spec/models`, `spec/services`, `spec/components`, `spec/requests` (controllers and views), `spec/support`, `spec/factories`. Set `PARTIAL_RUN=1` to run a subset without the minimum check, and `COVERAGE_DIR` to redirect the report. JavaScript (Stimulus) is not covered.
+- Tests: RSpec (`spec/`) with FactoryBot, shoulda-matchers, WebMock and ViewComponent test helpers. Run `bundle exec rspec`; SimpleCov enforces 100% line and branch coverage over `app/` (report in `coverage/`, git-ignored). Layout: `spec/models`, `spec/services`, `spec/components`, `spec/requests` (controllers and views), `spec/support`, `spec/factories`. Set `PARTIAL_RUN=1` to run a subset without the minimum check, and `COVERAGE_DIR` to redirect the report. JavaScript (Stimulus) is not covered by coverage. Browser system specs live in `spec/system` (Capybara with Cuprite, needs Chrome; configured in `spec/support/system.rb`) and are excluded from CI.
 
 Update this section as features land.
 
 ## 10. Open technical questions
 
-- JavaScript tests (Stimulus controllers) and system/browser specs are not set up.
+- JavaScript unit tests (Stimulus controllers) are not set up; system specs are only a smoke test.
 - Scheduler design for monitors and check-result retention policy.
 - Team model: sharing, roles, and permissions within a project (affects authorization design).
 - Log ingestion: pull over SSH, push via agent/webhook, or integrations.
