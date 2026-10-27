@@ -11,6 +11,7 @@ RSpec.describe NavItem::Component, type: :component do
     render_inline(described_class.new(label: "Home", icon: "home", href: "/"))
 
     expect(page).to have_css("a.text-body:not([aria-current])")
+    expect(page).to have_css("a[data-turbo-frame=_top]")
   end
 
   it "renders a disabled entry flagged as soon", :aggregate_failures do

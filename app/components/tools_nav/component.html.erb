@@ -1,4 +1,4 @@
-<nav data-turbo-frame="_top" aria-label="<%= t("components.tools_nav.label") %>">
+<nav aria-label="<%= t("components.tools_nav.label") %>">
   <ul>
     <% items.each do |item| %>
       <li class="flex border-b border-line last:border-b-0"><%= render NavItem::Component.new(**item, orientation: :menu) %></li>
