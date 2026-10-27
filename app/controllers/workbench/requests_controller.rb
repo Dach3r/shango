@@ -7,7 +7,7 @@ module Workbench
 
     def show
       ApiClient::Tabs::Open.call(api_request: @api_request, user: current_user) unless prefetch?
-      @execution = @api_request.request_executions.recent.first
+      @execution = RequestExecution.latest_for(@api_request, current_user)
       restore_stash
     end
 
@@ -29,7 +29,7 @@ module Workbench
       return render_placement if result.success? && @api_request.draft? && params[:place].present?
       return redirect_to(workbench_request_path(@api_request), status: :see_other) if result.success?
 
-      @execution = @api_request.request_executions.recent.first
+      @execution = RequestExecution.latest_for(@api_request, current_user)
       render :show, status: :unprocessable_entity
     end
 

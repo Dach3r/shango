@@ -36,6 +36,15 @@ RSpec.describe "Workbench requests" do
       expect(response).to have_http_status(:ok)
     end
 
+    it "shows the last unsaved response when coming back to the tab", :aggregate_failures do
+      allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+      build(:request_execution, api_request:, project:, id: SecureRandom.uuid, user:, created_at: Time.current, response_body: "unsaved-body").stash
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include("unsaved-body")
+      expect(RequestExecution.where(api_request:)).not_to exist
+    end
+
     it "opens a tab for the request" do
       expect { get workbench_request_path(api_request) }.to change(RequestTab, :count).by(1)
     end
