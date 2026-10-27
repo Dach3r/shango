@@ -3,29 +3,39 @@
   <%= render "network/shared/error", result: result %>
 <% else %>
   <% summary = result.data[:summary] %>
-  <div class="border border-line">
-    <div class="border-b border-line bg-card px-4 py-3 text-sm text-ink">
+  <% detail = t("network.ping.summary", received: summary[:received], sent: summary[:sent], loss: summary[:loss]) %>
+  <% tone = summary[:received] == summary[:sent] ? "ok" : (summary[:received].zero? ? "bad" : "warn") %>
+  <%= render "network/shared/history_entry", label: "#{result.data[:host]}:#{result.data[:port]}", detail:, tone: %>
+
+  <div class="border border-line bg-card">
+    <div class="border-b border-line px-5 py-3">
       <p class="font-mono text-xs uppercase tracking-wide text-faint"><%= result.data[:host] %> · <%= result.data[:address] %>:<%= result.data[:port] %></p>
-      <p class="mt-1 font-semibold"><%= t("network.ping.summary", received: summary[:received], sent: summary[:sent], loss: summary[:loss]) %></p>
-      <% if summary[:received].positive? %>
-        <p class="mt-0.5 font-mono text-xs text-muted"><%= t("network.ping.latency", min: summary[:min], avg: summary[:avg], max: summary[:max]) %></p>
-        <% if summary[:open].zero? %>
-          <p class="mt-0.5 text-muted"><%= t("network.ping.only_refused") %></p>
-        <% end %>
-      <% else %>
-        <p class="mt-0.5 text-muted"><%= t("network.ping.no_answer") %></p>
+      <p class="mt-1 text-sm font-semibold text-ink"><%= detail %></p>
+      <% if summary[:received].positive? && summary[:open].zero? %>
+        <p class="mt-0.5 text-sm text-muted"><%= t("network.ping.only_refused") %></p>
+      <% elsif summary[:received].zero? %>
+        <p class="mt-0.5 text-sm text-muted"><%= t("network.ping.no_answer") %></p>
       <% end %>
       <% if summary[:stopped] %>
-        <p class="mt-0.5 text-muted"><%= t("network.ping.stopped", count: Network::Pings::Run::MAX_CONSECUTIVE_TIMEOUTS) %></p>
+        <p class="mt-0.5 text-sm text-muted"><%= t("network.ping.stopped", count: Network::Pings::Run::MAX_CONSECUTIVE_TIMEOUTS) %></p>
       <% end %>
     </div>
 
+    <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4">
+      <% { min: summary[:min] && "#{summary[:min]} ms", avg: summary[:avg] && "#{summary[:avg]} ms", max: summary[:max] && "#{summary[:max]} ms", loss: "#{summary[:loss]}%" }.each do |key, value| %>
+        <div class="flex flex-col gap-2 border-r border-line px-5 py-3 last:border-r-0">
+          <dt class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.results.#{key}") %></dt>
+          <dd class="font-mono text-lg text-ink"><%= value || "—" %></dd>
+        </div>
+      <% end %>
+    </dl>
+
     <ol class="text-sm">
       <% result.data[:attempts].each_with_index do |attempt, index| %>
-        <li class="flex items-center gap-4 border-b border-line px-4 py-2.5 last:border-b-0">
+        <li class="flex items-center gap-4 border-b border-line px-5 py-2.5 last:border-b-0">
           <span class="w-6 font-mono text-xs text-faint"><%= index + 1 %></span>
-          <span class="w-24"><%= render NetworkStatus::Component.new(status: attempt.status) %></span>
-          <span class="font-mono text-xs text-muted"><%= "#{attempt.ms} ms" if attempt.status != :filtered %></span>
+          <span class="flex-1"><%= render NetworkStatus::Component.new(status: attempt.status) %></span>
+          <span class="font-mono text-xs text-muted"><%= attempt.status == :filtered ? "—" : "#{attempt.ms} ms" %></span>
         </li>
       <% end %>
     </ol>

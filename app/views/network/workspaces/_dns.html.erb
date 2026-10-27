@@ -1,0 +1,20 @@
+<div class="flex h-full flex-col-reverse lg:flex-row" data-controller="network-history" data-network-history-key-value="dns">
+  <%= render "network/workspaces/history", tool: "dns" %>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <div class="border-b border-line px-6 py-4">
+      <%= form_with scope: :dns_check, url: network_dns_checks_path, data: { network_history_target: "form" }, class: "flex flex-wrap items-end gap-2.5" do |form| %>
+        <%= form.label :domain, t("network.dns.domain"), class: "sr-only" %>
+        <%= form.text_field :domain, required: true, autofocus: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+        <%= render Select::Component.new(name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: "A", id: "dns_check_type", label: t("network.dns.type"), class: "w-24 font-mono") %>
+        <%= form.label :expected, t("network.dns.expected"), class: "sr-only" %>
+        <%= form.text_field :expected, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.expected_placeholder"), title: t("network.dns.expected"), class: field_classes("min-w-36 flex-[1_1_9rem] font-mono") %>
+        <%= form.button type: :submit, class: button_classes(:primary) do %>
+          <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
+        <% end %>
+      <% end %>
+      <p class="mt-3 text-xs text-faint"><%= t("network.dns.intro") %> <%= t("network.dns.expected_hint") %></p>
+    </div>
+    <div id="dns_result" data-network-history-target="result" class="p-6 empty:hidden" aria-live="polite"></div>
+  </div>
+</div>

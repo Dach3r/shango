@@ -84,7 +84,27 @@ es:
       hint: Es un ping TCP, no ICMP. Una conexión rechazada igual prueba que el host está en línea; solo el silencio cuenta como pérdida.
       submit: Iniciar ping
       summary: "%{received} de %{sent} respondieron, %{loss}% de pérdida"
-      latency: "mín %{min} ms · prom %{avg} ms · máx %{max} ms"
       only_refused: El host responde, pero nada escucha en este puerto.
       no_answer: Sin respuesta. El host puede estar apagado o un firewall puede estar descartando los paquetes.
       stopped: "Detenido tras %{count} tiempos de espera seguidos."
+    history:
+      dns: "Comprobaciones DNS"
+      ports: "Comprobaciones de puertos"
+      ping: "Pings TCP"
+      empty: "Aún no hay comprobaciones."
+      note: "El historial se guarda solo en este navegador."
+      clear: "Borrar"
+    limits:
+      title: "Límites"
+      about: "Acerca de"
+      attempts: "Intentos"
+      timeout: "Tiempo límite"
+      rate: "Frecuencia"
+      rate_value: "%{count} ejecuciones / %{seconds} s"
+    results:
+      propagation: "Propagación"
+      target: "Destino"
+      min: "Mín"
+      avg: "Prom"
+      max: "Máx"
+      loss: "Pérdida"

@@ -37,13 +37,14 @@ The UI labels the third tool **TCP ping**, never plain "ping", so nobody mistake
 ## 3. User experience
 
 - New project tool **Network** in `ToolsNav` (icon `radar`), live as soon as the first tool ships; it is rendered disabled with a *Soon* badge before that, like the other unbuilt tools.
-- One page, `/network`, with three tabs: *DNS*, *Ports*, *Ping* (`TabBar::Component` with the `tabs` Stimulus controller; the last tab is remembered per browser session, default `dns`). Each tab is a compact form plus a result area.
+- One page, `/network`, in three panes: an icon rail with the tools *DNS*, *Ports*, *Ping* (`NetworkRail::Component` driving the `tabs` Stimulus controller; the last tool is remembered per browser session, default `dns`), a history list of that tool and the main area. The main area is a one-row form bar (fields have screen-reader labels only; the intro and hints sit under the bar) above the result. Below the `lg` breakpoint the rail turns into a top bar and the history goes under the main area.
+- **History** is browser-only: `network_history_controller` keeps the last 15 runs per tool in `localStorage` (`network:history:<tool>`), deduplicated by form values, with a clear button. Each result partial announces a finished run with a hidden `[data-history-entry]` (label, detail, tone `ok`/`warn`/`bad`, rendered by `network/shared/_history_entry`); failed runs are not recorded. Clicking an entry refills the form without running it. Nothing is stored on the server.
 - Submitting posts to the tool's endpoint and the result replaces the result area as a Turbo Stream (same pattern as running a request in the API Client). The submit button uses the standard loading state. Results are not stored, so a reload shows an empty form.
 - The host/domain field accepts `{{variables}}` resolved from the member's selected environment (`ApiClient::VariableResolver`), the same way request URLs do. The resolved value is shown with the result.
-- DNS tab fields: domain, record type (`A`, `AAAA`, `CNAME`, `MX`, `TXT`, `NS`, `SOA`, `CAA`), optional expected value. Result: summary line (`7 of 9 resolvers match`), then a table with one row per resolver (name, IP, answer(s), TTL, latency, status). Authoritative nameservers are listed in their own group because they are the source of truth: if they still return the old value, the change was never published.
-- Ports tab fields: host, ports (`22,80,443` and/or ranges like `8000-8010`, or the preset *Common*). Result: table of ports with status and service name, open ones first, plus counts.
-- Ping tab fields: host, port (default `443`), attempts (default 4, max 10). Result: one line per attempt and the summary.
-- Line design, all text through i18n (`en` and `es`), colors from palette tokens. Statuses use `StatusBadge::Component`.
+- DNS tab fields: domain, record type (`A`, `AAAA`, `CNAME`, `MX`, `TXT`, `NS`, `SOA`, `CAA`), optional expected value. Result: a propagation card (percentage of resolvers that match the expected value, or that answered when there is none, with a bar and the summary line, e.g. `7 of 9 resolvers match`), then a hairline grid with one cell per resolver (name, IP, answer(s), TTL, latency, status). Authoritative nameservers are listed in their own group because they are the source of truth: if they still return the old value, the change was never published.
+- Ports tab fields: host, ports (`22,80,443` and/or ranges like `8000-8010`, or the preset *Common*). Result: a verdict strip (target, open, filtered and closed counts), then one row per port with service, status and a latency bar, open ones first.
+- Ping tab fields: host, port (default `443`), attempts (default 4, max 10). Result: summary, min/avg/max/loss figures and one line per attempt. A side column explains that it is a TCP ping and lists the limits (attempts, timeout, rate limit).
+- Line design, all text through i18n (`en` and `es`), colors from palette tokens. Statuses use `NetworkStatus::Component` (dot plus mono label).
 
 ## 4. Architecture
 
@@ -91,7 +92,7 @@ The DNS client speaks the protocol itself instead of using `Resolv::DNS#getresou
 
 Models: **none in v1.** There is no persistence, so no migration and no project-owned table. Project scoping still applies through `current_project` (the environment used for variable resolution is `current_membership.current_environment`, which belongs to the project) and through audit logging (§6).
 
-UI: views under `app/views/network/` (a page with the tabs, one result partial per tool, shared `error` and `throttled` partials) and `NetworkStatus::Component`, the badge for statuses (`open`, `timeout`, `mismatch`…, labels in `network.statuses`). `ToolsNav::ITEMS` has `{ key: :network, icon: "radar", path: :network_root_path }`. Locale files: `config/locales/en/network.en.yml` and `config/locales/es/network.es.yml`, plus `components.tools_nav.network` in `views.en.yml` / `views.es.yml` (same folders).
+UI: views under `app/views/network/` (a page with the rail and one panel partial per tool, a shared `history` partial, one result partial per tool, shared `error`, `throttled` and `history_entry` partials) and `NetworkStatus::Component`, the badge for statuses (`open`, `timeout`, `mismatch`…, labels in `network.statuses`). `ToolsNav::ITEMS` has `{ key: :network, icon: "radar", path: :network_root_path }`. Locale files: `config/locales/en/network.en.yml` and `config/locales/es/network.es.yml`, plus `components.tools_nav.network` in `views.en.yml` / `views.es.yml` (same folders).
 
 ### Execution model
 
@@ -175,7 +176,7 @@ Verification: RSpec at 100% line and branch coverage, rubocop and brakeman clean
 ## 10. Open questions
 
 - **Ownership verification** for port checks on public hosts (§6). Default proposed: none in v1.
-- **History / saved checks.** If users want to compare a check over time, add a `network_checks` table (project-owned, one row per run, `kind` string enum with a `CHECK` constraint, JSON result). Decide after v1 is used.
+- **Saved checks.** History is browser-only (§3). If users want to compare a check over time, add a `network_checks` table (project-owned, one row per run, `kind` string enum with a `CHECK` constraint, JSON result). Decide after v1 is used.
 - **Link with Monitoring** (phase 3): a port or TCP check as a monitor type, reusing the same probe classes.
 - **Link with AI** (phase 4): expose the tools as read-only tools to the assistant, with the same limits and policy.
 - **ICMP ping** through the system `ping` binary, only if there is demand; needs `CAP_NET_RAW` or `net.ipv4.ping_group_range` in containers.

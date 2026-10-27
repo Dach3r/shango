@@ -84,7 +84,27 @@ ja:
       hint: これは ICMP ではなく TCP ping です。接続が拒否されてもホストがオンラインであることは確認できます。無応答の場合のみ損失として扱われます。
       submit: Ping を開始
       summary: "%{sent} 回中 %{received} 回応答、損失 %{loss}%"
-      latency: "最小 %{min} ms · 平均 %{avg} ms · 最大 %{max} ms"
       only_refused: ホストは応答していますが、このポートで待ち受けているものはありません。
       no_answer: 応答がありません。ホストがオフラインか、ファイアウォールがパケットを破棄している可能性があります。
       stopped: "%{count} 回連続でタイムアウトしたため停止しました。"
+    history:
+      dns: "DNS チェック"
+      ports: "ポートチェック"
+      ping: "TCP ping"
+      empty: "まだチェックしていません。"
+      note: "履歴はこのブラウザにのみ保存されます。"
+      clear: "消去"
+    limits:
+      title: "制限"
+      about: "概要"
+      attempts: "試行回数"
+      timeout: "タイムアウト"
+      rate: "レート"
+      rate_value: "%{count} 回 / %{seconds} 秒"
+    results:
+      propagation: "浸透状況"
+      target: "対象"
+      min: "最小"
+      avg: "平均"
+      max: "最大"
+      loss: "損失"

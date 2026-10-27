@@ -32,7 +32,8 @@ RSpec.describe "Network DNS checks" do
     expect(response).to have_http_status(:ok)
     expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("dns_result", "ns1.example.net", "Google", "203.0.113.10", I18n.t("network.dns.groups.authoritative"))
-    expect(response.body).to include(I18n.t("network.dns.summary.expected", matched: 2, total: 2))
+    expect(response.body).to include(I18n.t("network.dns.summary.expected", matched: 2, total: 2), "100%")
+    expect(response.body).to include('data-tone="ok"')
   end
 
   it "shows rows that did not answer and a note when the nameservers are unknown", :aggregate_failures do
@@ -42,13 +43,14 @@ RSpec.describe "Network DNS checks" do
 
     expect(response.body).to include(I18n.t("network.statuses.timeout"), I18n.t("network.dns.no_authoritative"))
     expect(response.body).not_to include(I18n.t("network.dns.summary.agree"))
+    expect(response.body).to include('data-tone="bad"', "0%")
   end
 
   it "shows alias answers and differing results", :aggregate_failures do
     allow(Network::Dns::Query).to receive(:call).and_return(answer(:cname, "target.example.net"), answer(:ok, "203.0.113.10"))
     create_check
 
-    expect(response.body).to include("→ target.example.net", I18n.t("network.dns.summary.differ"))
+    expect(response.body).to include("→ target.example.net", I18n.t("network.dns.summary.differ"), 'data-tone="warn"')
   end
 
   it "resolves variables from the selected environment", :aggregate_failures do

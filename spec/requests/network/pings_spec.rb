@@ -30,14 +30,15 @@ RSpec.describe "Network pings" do
     expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("ping_result", "203.0.113.9:443", "12 ms", I18n.t("network.statuses.open"))
     expect(response.body).to include(I18n.t("network.ping.summary", received: 3, sent: 3, loss: 0))
-    expect(response.body).to include(I18n.t("network.ping.latency", min: 12, avg: 12, max: 12))
+    expect(response.body).to include(I18n.t("network.results.min"), I18n.t("network.results.loss"))
+    expect(response.body).to include('data-label="example.com:443"', 'data-tone="ok"')
   end
 
   it "says when only refusals came back", :aggregate_failures do
     allow(Network::Tcp::Probe).to receive(:call).and_return(attempt(:closed))
     create_ping
 
-    expect(response.body).to include(I18n.t("network.ping.only_refused"))
+    expect(response.body).to include(I18n.t("network.ping.only_refused"), 'data-tone="ok"')
   end
 
   it "explains silence and early stops", :aggregate_failures do
@@ -46,6 +47,7 @@ RSpec.describe "Network pings" do
 
     expect(response.body).to include(I18n.t("network.ping.no_answer"), I18n.t("network.ping.stopped", count: 5))
     expect(response.body).not_to include("2000 ms")
+    expect(response.body).to include('data-tone="bad"')
   end
 
   it "answers 422 with the error for invalid input", :aggregate_failures do

@@ -84,7 +84,27 @@ zh-CN:
       hint: 这是 TCP ping，而非 ICMP。即使连接被拒绝，也能证明主机在线；只有无任何响应才算丢包。
       submit: 开始 Ping
       summary: "%{sent} 次中有 %{received} 次应答，丢包率 %{loss}%"
-      latency: "最小 %{min} ms · 平均 %{avg} ms · 最大 %{max} ms"
       only_refused: 主机有应答，但此端口上没有服务在监听。
       no_answer: 无应答。主机可能已离线，或防火墙正在丢弃数据包。
       stopped: "连续 %{count} 次超时后已停止。"
+    history:
+      dns: "DNS 检查"
+      ports: "端口检查"
+      ping: "TCP ping"
+      empty: "尚未检查任何内容。"
+      note: "历史记录仅保存在此浏览器中。"
+      clear: "清除"
+    limits:
+      title: "限制"
+      about: "简介"
+      attempts: "尝试次数"
+      timeout: "超时"
+      rate: "频率"
+      rate_value: "%{count} 次 / %{seconds} 秒"
+    results:
+      propagation: "传播进度"
+      target: "目标"
+      min: "最小"
+      avg: "平均"
+      max: "最大"
+      loss: "丢包"

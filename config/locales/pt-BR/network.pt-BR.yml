@@ -84,7 +84,27 @@ pt-BR:
       hint: Isto é um ping TCP, não ICMP. Uma conexão recusada ainda prova que o host está online; só o silêncio conta como perda.
       submit: Iniciar ping
       summary: "%{received} de %{sent} responderam, %{loss}% de perda"
-      latency: "mín %{min} ms · méd %{avg} ms · máx %{max} ms"
       only_refused: O host responde, mas nada está escutando nesta porta.
       no_answer: Sem resposta. O host pode estar offline, ou um firewall pode estar descartando os pacotes.
       stopped: "Interrompido após %{count} tempos esgotados seguidos."
+    history:
+      dns: "Verificações de DNS"
+      ports: "Verificações de portas"
+      ping: "Pings TCP"
+      empty: "Nada verificado ainda."
+      note: "O histórico fica salvo apenas neste navegador."
+      clear: "Limpar"
+    limits:
+      title: "Limites"
+      about: "Sobre"
+      attempts: "Tentativas"
+      timeout: "Tempo limite"
+      rate: "Taxa"
+      rate_value: "%{count} execuções / %{seconds} s"
+    results:
+      propagation: "Propagação"
+      target: "Destino"
+      min: "Mín"
+      avg: "Méd"
+      max: "Máx"
+      loss: "Perda"

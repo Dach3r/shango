@@ -1,83 +1,25 @@
 <% content_for :title, "#{t("network.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<% content_for :heading, t("network.title") %>
+<% content_for :main_class, "flex min-h-0 flex-1" %>
 
 <% tabs = [
-     { name: "dns", label: t("network.tabs.dns") },
-     { name: "ports", label: t("network.tabs.ports") },
-     { name: "ping", label: t("network.tabs.ping") }
+     { name: "dns", label: t("network.tabs.dns"), icon: "search" },
+     { name: "ports", label: t("network.tabs.ports"), icon: "radar" },
+     { name: "ping", label: t("network.tabs.ping"), icon: "activity" }
    ] %>
 
-<div class="mx-auto max-w-3xl border border-line bg-card" data-controller="tabs" data-tabs-active-value="dns" data-tabs-key-value="network-tools">
-  <%= render TabBar::Component.new(items: tabs, label: t("network.tabs.label")) %>
+<div class="flex min-w-0 flex-1 flex-col lg:flex-row" data-controller="tabs" data-tabs-active-value="dns" data-tabs-key-value="network-tools">
+  <h1 class="sr-only"><%= t("network.title") %></h1>
+  <%= render NetworkRail::Component.new(items: tabs, label: t("network.tabs.label")) %>
 
-  <div data-tabs-target="panel" data-name="dns" class="p-4">
-    <p class="mb-4 text-sm text-muted"><%= t("network.dns.intro") %></p>
-    <%= form_with scope: :dns_check, url: network_dns_checks_path, class: "grid gap-4 sm:grid-cols-[1fr_auto]" do |form| %>
-      <div>
-        <%= form.label :domain, t("network.dns.domain"), class: label_classes %>
-        <%= form.text_field :domain, required: true, autofocus: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: field_classes("font-mono") %>
-      </div>
-      <div class="sm:w-32">
-        <%= form.label :type, t("network.dns.type"), class: label_classes %>
-        <%= render Select::Component.new(name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: "A", id: "dns_check_type", label: t("network.dns.type")) %>
-      </div>
-      <div class="sm:col-span-2">
-        <%= form.label :expected, t("network.dns.expected"), class: label_classes %>
-        <%= form.text_field :expected, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.expected_placeholder"), class: field_classes("font-mono") %>
-        <p class="mt-1 text-xs text-faint"><%= t("network.dns.expected_hint") %></p>
-      </div>
-      <div class="sm:col-span-2">
-        <%= form.button type: :submit, class: button_classes(:primary) do %>
-          <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
-        <% end %>
-      </div>
-    <% end %>
-    <div id="dns_result" class="mt-6 empty:hidden" aria-live="polite"></div>
-  </div>
-
-  <div data-tabs-target="panel" data-name="ports" class="p-4" hidden>
-    <p class="mb-4 text-sm text-muted"><%= t("network.ports.intro") %></p>
-    <%= form_with scope: :port_check, url: network_port_checks_path, class: "grid gap-4" do |form| %>
-      <div>
-        <%= form.label :host, t("network.ports.host"), class: label_classes %>
-        <%= form.text_field :host, required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.host_placeholder"), class: field_classes("font-mono") %>
-      </div>
-      <div>
-        <%= form.label :ports, t("network.ports.ports"), class: label_classes %>
-        <%= form.text_field :ports, value: "common", required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.ports_placeholder"), class: field_classes("font-mono") %>
-        <p class="mt-1 text-xs text-faint"><%= t("network.ports.ports_hint", max: Network::PortChecks::PortSpec::MAX_PORTS) %></p>
-      </div>
-      <div>
-        <%= form.button type: :submit, class: button_classes(:primary) do %>
-          <%= lucide_icon "radar", class: "size-4" %><%= t("network.ports.submit") %>
-        <% end %>
-      </div>
-    <% end %>
-    <div id="ports_result" class="mt-6 empty:hidden" aria-live="polite"></div>
-  </div>
-
-  <div data-tabs-target="panel" data-name="ping" class="p-4" hidden>
-    <p class="mb-4 text-sm text-muted"><%= t("network.ping.intro") %></p>
-    <%= form_with scope: :ping, url: network_pings_path, class: "grid gap-4 sm:grid-cols-[1fr_6rem_6rem]" do |form| %>
-      <div>
-        <%= form.label :host, t("network.ping.host"), class: label_classes %>
-        <%= form.text_field :host, required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: field_classes("font-mono") %>
-      </div>
-      <div>
-        <%= form.label :port, t("network.ping.port"), class: label_classes %>
-        <%= form.number_field :port, value: Network::Pings::Run::DEFAULT_PORT, min: 1, max: 65_535, required: true, class: field_classes("font-mono") %>
-      </div>
-      <div>
-        <%= form.label :attempts, t("network.ping.attempts"), class: label_classes %>
-        <%= form.number_field :attempts, value: Network::Pings::Run::DEFAULT_ATTEMPTS, min: 1, max: Network::Pings::Run::MAX_ATTEMPTS, required: true, class: field_classes("font-mono") %>
-      </div>
-      <div class="sm:col-span-3">
-        <p class="mb-4 text-xs text-faint"><%= t("network.ping.hint") %></p>
-        <%= form.button type: :submit, class: button_classes(:primary) do %>
-          <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
-        <% end %>
-      </div>
-    <% end %>
-    <div id="ping_result" class="mt-6 empty:hidden" aria-live="polite"></div>
+  <div class="min-w-0 flex-1">
+    <div data-tabs-target="panel" data-name="dns" class="h-full">
+      <%= render "network/workspaces/dns" %>
+    </div>
+    <div data-tabs-target="panel" data-name="ports" class="h-full" hidden>
+      <%= render "network/workspaces/ports" %>
+    </div>
+    <div data-tabs-target="panel" data-name="ping" class="h-full" hidden>
+      <%= render "network/workspaces/ping" %>
+    </div>
   </div>
 </div>

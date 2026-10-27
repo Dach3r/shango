@@ -29,14 +29,14 @@ RSpec.describe "Network port checks" do
     expect(response).to have_http_status(:ok)
     expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("ports_result", "203.0.113.9", "ssh", I18n.t("network.statuses.open"), I18n.t("network.statuses.closed"), "7 ms")
-    expect(response.body).to include(I18n.t("network.ports.summary", open: 1, closed: 1, filtered: 0))
+    expect(response.body).to include(I18n.t("network.ports.summary", open: 1, closed: 1, filtered: 0), 'data-tone="ok"')
   end
 
   it "explains when nothing answered", :aggregate_failures do
     allow(Network::Tcp::Probe).to receive(:call).and_return(attempt(:filtered))
     create_check
 
-    expect(response.body).to include(I18n.t("network.ports.all_filtered"))
+    expect(response.body).to include(I18n.t("network.ports.all_filtered"), 'data-tone="warn"')
     expect(response.body).not_to include("7 ms")
   end
 

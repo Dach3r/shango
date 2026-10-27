@@ -1,0 +1,8 @@
+<div role="tablist" aria-orientation="vertical" aria-label="<%= @label %>" class="flex shrink-0 gap-1 overflow-x-auto border-b border-line lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0 lg:pt-5">
+  <% @items.each do |item| %>
+    <button type="button" role="tab" class="<%= TAB %>" title="<%= item[:label] %>" aria-label="<%= item[:label] %>"
+            data-tabs-target="tab" data-name="<%= item[:name] %>" data-action="tabs#select" data-tabs-name-param="<%= item[:name] %>">
+      <%= lucide_icon item[:icon], class: "size-4" %>
+    </button>
+  <% end %>
+</div>

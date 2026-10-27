@@ -84,7 +84,27 @@ de:
       hint: Das ist ein TCP-Ping, kein ICMP. Eine abgelehnte Verbindung beweist trotzdem, dass der Host online ist; nur Stille zählt als Verlust.
       submit: Ping starten
       summary: "%{received} von %{sent} beantwortet, %{loss}% Verlust"
-      latency: "min %{min} ms · Ø %{avg} ms · max %{max} ms"
       only_refused: Der Host antwortet, aber auf diesem Port lauscht nichts.
       no_answer: Keine Antwort. Der Host ist möglicherweise offline, oder eine Firewall verwirft die Pakete.
       stopped: "Nach %{count} Zeitüberschreitungen in Folge gestoppt."
+    history:
+      dns: "DNS-Prüfungen"
+      ports: "Port-Prüfungen"
+      ping: "TCP-Pings"
+      empty: "Noch nichts geprüft."
+      note: "Der Verlauf wird nur in diesem Browser gespeichert."
+      clear: "Leeren"
+    limits:
+      title: "Limits"
+      about: "Info"
+      attempts: "Versuche"
+      timeout: "Zeitlimit"
+      rate: "Rate"
+      rate_value: "%{count} Läufe / %{seconds} s"
+    results:
+      propagation: "Verbreitung"
+      target: "Ziel"
+      min: "Min"
+      avg: "Ø"
+      max: "Max"
+      loss: "Verlust"
