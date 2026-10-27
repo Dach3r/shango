@@ -11,7 +11,7 @@ Consult when you need context:
 - `docs/product.md` — product vision, audience, principles, concepts, roadmap (product owner / manager view). Read before any feature work.
 - `docs/architecture.md` — stack, domain model, subsystems, security, conventions, open technical questions. Read before technical or architectural decisions.
 - `docs/api-client.md` — API Client (collections, requests, environments, auth strategies, execution, security, CodeMirror vendoring). Read before touching that feature.
-- `docs/network-tools.md` — Network Tools (DNS checker, port check, TCP ping): design, limits, security, implementation plan. Designed, not built yet. Read before touching that feature; never add nmap (license, see that doc §2).
+- `docs/network-tools.md` — Network Tools (DNS checker, port check, TCP ping): design, limits, security, how it was built. Read before touching that feature; never add nmap (license, see that doc §2).
 
 Add new docs under `docs/` and reference them here.
 

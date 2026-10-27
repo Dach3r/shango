@@ -1,6 +1,6 @@
 # Shango — Network Tools
 
-> Design and implementation plan for the Network Tools feature (DNS checker, port check, TCP ping). **Status: designed, not built.** Nothing here exists in the code yet; check the repo for the real state. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
+> Design and reference for the Network Tools feature (DNS checker, port check, TCP ping). **Status: built** (DNS checker, port check, TCP ping). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
 
 ## 1. Why
 
@@ -109,7 +109,7 @@ DNS and port probes run on short-lived threads through `Network::Parallel.map(it
 | Port probe timeout | 1.5 s | Long enough for most internet RTTs |
 | Port probe concurrency | 20 | Worst case 100 ports ÷ 20 × 1.5 s ≈ 7.5 s |
 | Ping attempts | 1–10, default 4 | |
-| Ping probe timeout | 2 s | Worst case 10 × 2 s = 20 s: attempts run sequentially, so cap total at 10 s by stopping after 5 consecutive timeouts |
+| Ping probe timeout | 2 s | Attempts run one after another; the run stops after 5 timeouts in a row, so a dead host costs at most 10 s |
 | Hosts per run | 1 | No sweeping |
 | Rate limit | 20 runs per minute per user, all three tools combined | Abuse protection (`throttle :network` in `Network::BaseController`) |
 
@@ -123,7 +123,7 @@ This feature makes the Shango server open connections to hosts the user names, s
 2. **DNS checker is not an SSRF vector** because it only sends queries to the fixed public resolvers and to the authoritative nameservers listed in the domain's own `NS` records. Authoritative nameserver IPs go through the same `SsrfPolicy` check, otherwise a domain whose NS record points at `127.0.0.1` or `169.254.169.254` would make Shango send UDP packets inside the network.
 3. **No user-supplied resolvers, no CIDR, one host per run, port cap** (§5), connect-only probes (no payloads, no banners), so the tools cannot be used to exploit services, only to check reachability.
 4. **Rate limit** per user (§5).
-5. **Audit log**: each port check and ping logs one line (`user_id`, `project_id`, resolved host, port count or port). No secrets are involved; environment variable values used to build the host are logged only as the resolved host, and if the variable is a secret the run is rejected (secret variables are not allowed in network targets).
+5. **Audit log**: every port check and ping, refused ones included, logs one line: `[network] port_check user=<id> project=<id> input="<what was typed>" outcome=<ok or the error> host=<resolved host> ports=<count>` (`port=<n>` for pings). The typed input is cut to 100 characters and written with `inspect`, so newlines cannot forge log lines. Secret variables are rejected before anything runs, so no secret value can reach the log.
 6. **Project scope**: variables are resolved from the member's current environment of the current project only.
 7. **No public exposure**: all endpoints sit behind `authenticate_user!`.
 
@@ -157,21 +157,20 @@ RSpec, 100% line and branch coverage like the rest of the app.
 - **Components**: `ToolsNav` live entry, result component, status badges.
 - Never run a real scan or DNS query in specs. A manual check against `localhost` and a public DNS name is part of the PR checklist.
 
-## 9. Implementation plan
+## 9. How it was built
 
-Each step is one logical commit with its specs and its docs update (per `CLAUDE.md`), run `bundle exec rubocop` on touched files first. Suggested commit subjects use the project's gitmoji convention.
+One logical commit per step, each with its specs and docs:
 
-1. `📝 docs(network): ...` — this document, linked from `CLAUDE.md`, `product.md` (§9 capability, §14 roadmap note) and `architecture.md` (§6 subsystem, §7 security).
-2. `♻️ refactor(network): ...` — move `SsrfPolicy` to `Network::SsrfPolicy`, no behavior change, specs move with it. **Done.**
-3. `✨ feat(network): ...` — foundation: routes, `BaseController` with rate limit, workspace page with tabs, `Network::Target`, `ToolsNav` entry (live), locale files, specs. The tabs of tools not yet built render a *Soon* badge.
-4. `✨ feat(network): ...` — DNS checker (`Dns::Resolvers`, `Dns::Query`, `DnsChecks::Run`, controller, tab, specs).
-5. `✨ feat(network): ...` — port check (`PortSpec`, `Services`, `Tcp::Probe`, `PortChecks::Run`, controller, tab, specs).
-6. `✨ feat(network): ...` — TCP ping (`Pings::Run`, controller, tab, specs).
-7. `📝 docs(network): ...` — flip this document from *designed* to *built*, update `architecture.md` §9 snapshot, and add a short *Network Tools* paragraph to the user-facing docs.
+1. `📝 docs(network)` — this design, linked from `CLAUDE.md`, `product.md` and `architecture.md`.
+2. `♻️ refactor(network)` — `SsrfPolicy` moved to `Network::SsrfPolicy`, no behavior change.
+3. `✨ feat(network)` — `Network::Target` and `Network::Destination`; the *Network* entry in `ToolsNav` (disabled with a *Soon* badge until step 4).
+4. `✨ feat(network)` — DNS checker: `Parallel`, `Dns::Transport`, `Dns::Query`, `Dns::Resolvers`, `DnsChecks::Run`, the page with its tabs, `BaseController` throttling, `NetworkStatus::Component`, entry made live.
+5. `✨ feat(network)` — port check: `PortSpec`, `Services`, `Tcp::Probe`, `PortChecks::Run`, audit logging.
+6. `✨ feat(network)` — TCP ping: `Pings::Run`.
 
-Order matters: the DNS checker comes first because it is the most useful and the safest (no connections to user-chosen hosts). Steps 5 and 6 only start after the SSRF policy is shared (step 2).
+The DNS checker came first because it is the most useful and the safest (no connections to hosts the user names). Port check and ping only started after the guard was shared (step 2).
 
-Definition of done for the feature: all three tools usable from the UI in `en` and `es`, specs at 100% coverage, rubocop and brakeman clean, behavior verified manually in the running app, docs updated.
+Verification: RSpec at 100% line and branch coverage, rubocop and brakeman clean, and a manual run in the app with real DNS and TCP (DNS table for `example.com` and for a mid-change domain with an expected value, port table, ping, a blackhole address that stops after five timeouts in about ten seconds, and invalid input).
 
 ## 10. Open questions
 
