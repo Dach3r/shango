@@ -49,26 +49,26 @@ RSpec.describe ApiClient::Connection do
     end
 
     it "checks the host without the brackets of an IPv6 literal", :aggregate_failures do
-      allow(ApiClient::SsrfPolicy).to receive(:check!).and_return(nil)
+      allow(Network::SsrfPolicy).to receive(:check!).and_return(nil)
 
       described_class.build(url: "http://[2606:4700::1111]:8080/x", timeout: 5)
 
-      expect(ApiClient::SsrfPolicy).to have_received(:check!).with("2606:4700::1111")
+      expect(Network::SsrfPolicy).to have_received(:check!).with("2606:4700::1111")
     end
 
     it "checks the host and not the userinfo of the url", :aggregate_failures do
-      allow(ApiClient::SsrfPolicy).to receive(:check!).and_return(nil)
+      allow(Network::SsrfPolicy).to receive(:check!).and_return(nil)
 
       described_class.build(url: "http://example.com@evil.test/", timeout: 5)
 
-      expect(ApiClient::SsrfPolicy).to have_received(:check!).with("evil.test")
+      expect(Network::SsrfPolicy).to have_received(:check!).with("evil.test")
     end
 
     it "blocks private literals when the policy is on", :aggregate_failures do
       stub_const("ENV", ENV.to_h.merge("SHANGO_BLOCK_PRIVATE_NETWORKS" => "true"))
 
       ["http://127.0.0.1/", "http://[::1]/", "http://[::ffff:127.0.0.1]/", "http://169.254.169.254/latest", "http://2130706433/", "http://user:pw@10.0.0.1/"].each do |url|
-        expect { described_class.build(url:, timeout: 5) }.to raise_error(ApiClient::SsrfPolicy::Blocked), url
+        expect { described_class.build(url:, timeout: 5) }.to raise_error(Network::SsrfPolicy::Blocked), url
       end
     end
 
