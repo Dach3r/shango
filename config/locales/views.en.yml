@@ -55,6 +55,7 @@ en:
       documentation: Documentation
       monitoring: Monitoring
       servers: Servers
+      network: Network
       logs: Logs
       ai_assistant: AI Assistant
     user_menu:

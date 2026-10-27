@@ -55,6 +55,7 @@ es:
       documentation: Documentación
       monitoring: Monitoreo
       servers: Servidores
+      network: Red
       logs: Logs
       ai_assistant: Asistente IA
     user_menu:
