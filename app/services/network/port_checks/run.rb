@@ -22,7 +22,10 @@ module Network
         target = Target.call(raw: @host, environment: @environment)
         return target if target.failure?
 
-        ports = PortSpec.call(raw: @ports)
+        raw_ports = Variables.call(raw: @ports, environment: @environment)
+        return raw_ports if raw_ports.failure?
+
+        ports = PortSpec.call(raw: raw_ports.record)
         return ports if ports.failure?
 
         destination = Destination.call(host: target.record)

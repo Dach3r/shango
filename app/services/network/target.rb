@@ -1,6 +1,6 @@
 module Network
-  # Turns what the user typed into a host: resolves `{{variables}}` from the selected environment and validates it.
-  # Secret variables are refused so their values never end up in results or logs.
+  # Turns what the user typed into a host: resolves `{{variables}}` from the selected environment (Network::Variables)
+  # and validates it.
   class Target
     include Serviceable
 
@@ -15,20 +15,14 @@ module Network
     private
 
     def perform
-      variables = @environment ? @environment.variables.select(&:enabled) : []
-      resolver = ApiClient::VariableResolver.new(variables.reject(&:secret).to_h { |variable| [variable.key, variable.value.to_s] })
-      host = resolver.resolve(@raw).strip.downcase.delete_suffix(".")
+      resolved = Variables.call(raw: @raw, environment: @environment)
+      return resolved if resolved.failure?
 
-      return failure_for_variable(resolver.unresolved.first, variables) if resolver.unresolved.any?
+      host = resolved.record.strip.downcase.delete_suffix(".")
       return Result.failure(error: :blank) if host.empty?
       return Result.failure(error: :invalid) unless valid?(host)
 
       Result.success(host)
-    end
-
-    def failure_for_variable(name, variables)
-      secret = variables.any? { |variable| variable.secret && variable.key == name }
-      Result.failure(error: secret ? :secret_variable : :unresolved_variable, name:)
     end
 
     def valid?(host)

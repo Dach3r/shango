@@ -26,10 +26,16 @@ module Network
         target = Target.call(raw: @host, environment: @environment)
         return target if target.failure?
 
-        port = number(@port, DEFAULT_PORT)
+        raw_port = Variables.call(raw: @port, environment: @environment)
+        return raw_port if raw_port.failure?
+
+        raw_attempts = Variables.call(raw: @attempts, environment: @environment)
+        return raw_attempts if raw_attempts.failure?
+
+        port = number(raw_port.record, DEFAULT_PORT)
         return Result.failure(error: :invalid_port) unless PortChecks::PortSpec::VALID.cover?(port)
 
-        count = number(@attempts, DEFAULT_ATTEMPTS)
+        count = number(raw_attempts.record, DEFAULT_ATTEMPTS)
         return Result.failure(error: :invalid_attempts, max: MAX_ATTEMPTS) unless (1..MAX_ATTEMPTS).cover?(count)
 
         destination = Destination.call(host: target.record)

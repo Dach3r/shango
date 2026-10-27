@@ -25,6 +25,10 @@ module Network
         target = Target.call(raw: @domain, environment: @environment)
         return target if target.failure?
 
+        expected = Variables.call(raw: @expected, environment: @environment)
+        return expected if expected.failure?
+
+        @expected = expected.record.strip
         host = target.record
         resolvers = Dns::Resolvers.authoritative(host) + Dns::Resolvers::PUBLIC
         rows = Parallel.map(resolvers, limit: CONCURRENCY) { |resolver| check(resolver, host) }

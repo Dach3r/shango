@@ -25,6 +25,22 @@ RSpec.describe Network::Pings::Run do
     expect(Network::Tcp::Probe).to have_received(:call).with(ip: "203.0.113.9", port: 443, timeout: described_class::TIMEOUT).exactly(4).times
   end
 
+  it "reads the port and the attempts from variables", :aggregate_failures do
+    environment = create(:environment)
+    create(:variable, environment:, key: "port", value: "8443")
+    create(:variable, environment:, key: "tries", value: "2")
+    stub_probes(attempt(:open))
+    result = run(port: "{{port}}", attempts: "{{tries}}", environment:)
+
+    expect(result.data).to include(port: 8443)
+    expect(result.data[:attempts].size).to eq(2)
+  end
+
+  it "names an undefined variable in the port or the attempts", :aggregate_failures do
+    expect(run(port: "{{nope}}")).to have_attributes(error: :unresolved_variable, data: { name: "nope" })
+    expect(run(attempts: "{{nope}}")).to have_attributes(error: :unresolved_variable, data: { name: "nope" })
+  end
+
   it "summarizes latency and loss", :aggregate_failures do
     stub_probes(attempt(:open, 10), attempt(:open, 30), attempt(:filtered, 2000), attempt(:open, 20))
 

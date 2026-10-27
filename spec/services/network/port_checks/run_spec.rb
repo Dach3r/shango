@@ -51,6 +51,16 @@ RSpec.describe Network::PortChecks::Run do
     expect(run.data[:counts]).to eq(open: 2, closed: 0, filtered: 1)
   end
 
+  it "reads the ports from a variable and names an undefined one", :aggregate_failures do
+    environment = create(:environment)
+    create(:variable, environment:, key: "ports", value: "22,80")
+    allow(Network::Destination).to receive(:call).and_return(Result.success("203.0.113.9"))
+    allow(Network::Tcp::Probe).to receive(:call).and_return(Network::Tcp::Probe::Attempt.new(status: :open, ms: 5))
+
+    expect(described_class.call(host: "example.com", ports: "{{ports}}", environment:).data[:rows].map(&:port)).to eq([22, 80])
+    expect(described_class.call(host: "example.com", ports: "{{nope}}", environment:)).to have_attributes(error: :unresolved_variable)
+  end
+
   it "resolves {{variables}} from the environment", :aggregate_failures do
     environment = create(:environment)
     create(:variable, environment:, key: "host", value: "api.example.com")
