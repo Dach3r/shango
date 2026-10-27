@@ -6,8 +6,9 @@ class Select::Component < ApplicationComponent
 
   # options: [[label, value], ...]. Search shows by default once there are more than SEARCH_THRESHOLD options.
   # dock: true opens the menu as a side panel pinned to the right edge of the nearest positioned ancestor, below its tab bar.
+  # dock_top is the offset class of the panel below the top edge (the height of the bar that stays visible above it).
   # input_data goes on the hidden input (it dispatches `change`); class sizes the control like any field (`w-28`, `font-mono`).
-  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, dock: false, input_data: {}, **html)
+  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, dock: false, dock_top: "top-[2.375rem]", input_data: {}, **html)
     @name = name
     @options = options
     @value = value.to_s
@@ -16,6 +17,7 @@ class Select::Component < ApplicationComponent
     @searchable = searchable
     @disabled = disabled
     @dock = dock
+    @dock_top = dock_top
     @input_data = input_data
     @class = html[:class]
   end
@@ -39,7 +41,7 @@ class Select::Component < ApplicationComponent
   end
 
   def wrapper_classes
-    class_names(("relative" unless @dock), ("w-full" unless @class.to_s.match?(/(\A|\s)(w-|flex-|min-w-)/)), @class.to_s.split.grep(/\A(w-|flex-|min-w-|max-w-|shrink-)/))
+    class_names((@dock ? "static!" : "relative"), ("w-full" unless @class.to_s.match?(/(\A|\s)(w-|flex-|min-w-)/)), @class.to_s.split.grep(/\A(w-|flex-|min-w-|max-w-|shrink-)/))
   end
 
   def trigger_classes
@@ -47,7 +49,7 @@ class Select::Component < ApplicationComponent
   end
 
   def menu_classes
-    return "absolute right-0 top-[2.375rem] bottom-0 z-30 w-56 overflow-y-auto border-l border-line bg-card p-1" if @dock
+    return "absolute right-0 #{@dock_top} bottom-0 z-30 w-56 overflow-y-auto border-l border-line bg-card p-1" if @dock
 
     "absolute left-0 top-full z-30 mt-1.5 w-max min-w-full max-w-80 border border-line bg-card p-1"
   end

@@ -6,8 +6,8 @@
     <% port = input.fetch("port", Network::Pings::Run::DEFAULT_PORT).to_s %>
     <% port_options = Network::Services::NAMES.map { |number, name| ["#{number} · #{name}", number] } %>
     <% port_options.unshift([port, port]) unless Network::Services::NAMES.key?(port.to_i) && port == port.to_i.to_s %>
-    <%= render Select::Component.new(name: "ping[port]", options: port_options, value: port, id: "ping_port", label: t("network.ping.port"), searchable: false, class: "w-44 font-mono") %>
-    <%= render Select::Component.new(name: "ping[attempts]", options: (1..Network::Pings::Run::MAX_ATTEMPTS).map { |count| [t("network.ping.attempts_option", count:), count] }, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), id: "ping_attempts", label: t("network.ping.attempts"), searchable: false, class: "w-36 font-mono") %>
+    <%= render Select::Component.new(name: "ping[port]", options: port_options, value: port, id: "ping_port", label: t("network.ping.port"), searchable: false, dock: true, dock_top: "top-14", class: "w-44 font-mono") %>
+    <%= render Select::Component.new(name: "ping[attempts]", options: (1..Network::Pings::Run::MAX_ATTEMPTS).map { |count| [t("network.ping.attempts_option", count:), count] }, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), id: "ping_attempts", label: t("network.ping.attempts"), searchable: false, dock: true, dock_top: "top-14", class: "w-36 font-mono") %>
     <%= form.button type: :submit, class: button_classes(:primary) do %>
       <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
     <% end %>
