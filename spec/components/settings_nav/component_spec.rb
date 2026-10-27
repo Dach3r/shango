@@ -21,6 +21,7 @@ RSpec.describe SettingsNav::Component, type: :component do
 
     expect(page).to have_css("a[aria-current=page][href='/membership/settings']", text: I18n.t("components.settings_nav.items.sidebar"))
     expect(page).to have_css("span[aria-disabled=true]", text: I18n.t("components.settings_nav.items.members"))
+    expect(page).to have_css("li.border-b span", text: I18n.t("components.nav_item.soon"))
   end
 
   it "highlights the profile tab by default", :aggregate_failures do
