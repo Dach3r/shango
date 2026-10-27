@@ -18,8 +18,12 @@ module Users
       blocked.any?
     end
 
+    def requests_by_project
+      @requests_by_project ||= ApiRequest.where(project_id: doomed.map(&:id)).group(:project_id).count
+    end
+
     def requests_count
-      @requests_count ||= ApiRequest.where(project_id: doomed.map(&:id)).count
+      requests_by_project.values.sum
     end
 
     def shared_count

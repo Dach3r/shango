@@ -11,6 +11,7 @@ RSpec.describe Users::AccountImpact do
     create_list(:api_request, 2, collection: create(:collection, project:), project:)
 
     expect(impact.doomed).to eq([project])
+    expect(impact.requests_by_project).to eq(project.id => 2)
     expect(impact.requests_count).to eq(2)
     expect(impact).not_to be_blocked
   end
