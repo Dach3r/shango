@@ -19,7 +19,7 @@
       </div>
     <% end %>
 
-    <ul role="listbox" tabindex="-1" data-select-target="list" data-action="keydown->select#navigate" class="max-h-60 overflow-y-auto">
+    <ul role="listbox" tabindex="-1" data-select-target="list" data-action="keydown->select#navigate" class="<%= list_classes %>">
       <% @options.each do |label, value| %>
         <li role="presentation">
           <button type="button" role="option" tabindex="-1" data-select-target="option" data-value="<%= value %>" data-label="<%= label %>"

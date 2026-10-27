@@ -5,9 +5,9 @@ class Select::Component < ApplicationComponent
   OPTION = "flex w-full cursor-pointer items-center gap-2 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink aria-selected:text-ink data-[active]:bg-field data-[active]:text-ink focus-visible:outline-none"
 
   # options: [[label, value], ...]. Search shows by default once there are more than SEARCH_THRESHOLD options.
-  # align: :right anchors the menu to the trigger's right edge, for controls at the end of a row.
+  # dock: true opens the menu as a side panel pinned to the right edge of the nearest positioned ancestor, below its tab bar.
   # input_data goes on the hidden input (it dispatches `change`); class sizes the control like any field (`w-28`, `font-mono`).
-  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, align: :left, input_data: {}, **html)
+  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, dock: false, input_data: {}, **html)
     @name = name
     @options = options
     @value = value.to_s
@@ -15,7 +15,7 @@ class Select::Component < ApplicationComponent
     @label = label
     @searchable = searchable
     @disabled = disabled
-    @align = align
+    @dock = dock
     @input_data = input_data
     @class = html[:class]
   end
@@ -39,7 +39,7 @@ class Select::Component < ApplicationComponent
   end
 
   def wrapper_classes
-    class_names("relative", ("w-full" unless @class.to_s.match?(/(\A|\s)(w-|flex-|min-w-)/)), @class.to_s.split.grep(/\A(w-|flex-|min-w-|max-w-|shrink-)/))
+    class_names(("relative" unless @dock), ("w-full" unless @class.to_s.match?(/(\A|\s)(w-|flex-|min-w-)/)), @class.to_s.split.grep(/\A(w-|flex-|min-w-|max-w-|shrink-)/))
   end
 
   def trigger_classes
@@ -47,7 +47,13 @@ class Select::Component < ApplicationComponent
   end
 
   def menu_classes
-    class_names("absolute top-full z-30 mt-1.5 w-max min-w-full max-w-80 border border-line bg-card p-1", (@align == :right ? "right-0" : "left-0"))
+    return "absolute right-0 top-[2.375rem] bottom-0 z-30 w-56 overflow-y-auto border-l border-line bg-card p-1" if @dock
+
+    "absolute left-0 top-full z-30 mt-1.5 w-max min-w-full max-w-80 border border-line bg-card p-1"
+  end
+
+  def list_classes
+    class_names("overflow-y-auto", ("max-h-60" unless @dock))
   end
 
   def option_classes
