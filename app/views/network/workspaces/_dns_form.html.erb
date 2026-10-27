@@ -1,6 +1,6 @@
 <%# Form bar of the DNS tool. Render with `input:` (what was typed before, string keys; empty for a fresh form). %>
 <%= tag.div id: "dns_form", class: "shrink-0 border-b border-line px-6 py-4", data: variable_autocomplete_data do %>
-  <%= form_with scope: :dns_check, url: network_dns_checks_path, class: "flex flex-wrap items-end gap-2.5" do |form| %>
+  <%= form_with scope: :dns_check, url: network_dns_checks_path, class: "flex items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10" do |form| %>
     <%= form.label :domain, t("network.dns.domain"), class: "sr-only" %>
     <%= form.text_field :domain, value: input["domain"], required: true, autofocus: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
     <%= render Select::Component.new(name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: input.fetch("type", "A"), id: "dns_check_type", label: t("network.dns.type"), class: "w-24 font-mono") %>
