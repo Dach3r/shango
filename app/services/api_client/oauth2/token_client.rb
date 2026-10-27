@@ -74,7 +74,7 @@ module ApiClient
           "expires_at" => (body["expires_in"].present? ? Time.current + body["expires_in"].to_i : nil)&.iso8601
         }.compact
 
-        @owner.update!(auth_config: @owner.auth_config.except(*TOKEN_KEYS).merge(tokens))
+        @owner.with_lock { @owner.update!(auth_config: @owner.auth_config.except(*TOKEN_KEYS).merge(tokens)) }
         tokens
       end
     end

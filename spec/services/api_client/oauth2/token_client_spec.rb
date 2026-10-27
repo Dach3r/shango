@@ -23,6 +23,14 @@ RSpec.describe ApiClient::Oauth2::TokenClient do
       end
     end
 
+    it "does not clobber concurrent edits of the owner's settings", :aggregate_failures do
+      Collection.find(owner.id).update!(auth_config: owner.auth_config.merge("scope" => "changed-elsewhere"))
+
+      client.fetch
+
+      expect(owner.reload.auth_config).to include("access_token" => "tok", "scope" => "changed-elsewhere")
+    end
+
     it "sends credentials in the body when configured" do
       client = described_class.new(config: config.merge("client_authentication" => "body", "client_secret" => ""), owner:)
       client.fetch
