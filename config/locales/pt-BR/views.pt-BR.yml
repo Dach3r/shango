@@ -129,6 +129,12 @@ pt-BR:
         theme:
           label: Tema
           hint: As cores de destaque usadas em todo o workspace.
+        groups:
+          accents: "Destaques"
+          styles: "Estilos"
+        groups_hint:
+          accents: "Mesmas superfícies, muda apenas a cor de destaque."
+          styles: "Paletas completas que também mudam fundos e bordas."
         themes:
           default: Argila
           blue: Azul

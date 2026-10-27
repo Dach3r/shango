@@ -129,6 +129,12 @@ de:
         theme:
           label: Theme
           hint: Die Akzentfarben im gesamten Workspace.
+        groups:
+          accents: "Akzente"
+          styles: "Stile"
+        groups_hint:
+          accents: "Gleiche Oberflächen, nur die Akzentfarbe ändert sich."
+          styles: "Komplette Paletten, die auch Hintergründe und Rahmen ändern."
         themes:
           default: Clay
           blue: Blau

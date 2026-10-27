@@ -22,15 +22,28 @@
         </div>
       </fieldset>
 
-      <fieldset class="px-5 py-5 sm:px-7">
-        <legend class="float-left w-full text-sm font-semibold text-ink"><%= t("projects.themes.edit.theme.label") %></legend>
-        <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.theme.hint") %></p>
-
-        <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          <% Membership::THEMES.each_key do |theme| %>
-            <%= render ThemePreview::Component.new(form:, theme:) %>
-          <% end %>
+      <% groups = { accents: Membership::ACCENT_THEMES, styles: Membership::STYLE_THEMES } %>
+      <% active_group = groups.key(groups.values.find { |themes| themes.include?(@membership.theme) }) %>
+      <fieldset class="py-5" data-controller="tabs" data-tabs-active-value="<%= active_group %>">
+        <div class="px-5 sm:px-7">
+          <legend class="float-left w-full text-sm font-semibold text-ink"><%= t("projects.themes.edit.theme.label") %></legend>
+          <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.theme.hint") %></p>
         </div>
+
+        <div class="mt-4 px-3 sm:px-5">
+          <%= render TabBar::Component.new(items: groups.keys.map { |group| { name: group.to_s, label: t("projects.themes.edit.groups.#{group}") } }, label: t("projects.themes.edit.theme.label")) %>
+        </div>
+
+        <% groups.each do |group, themes| %>
+          <div data-tabs-target="panel" data-name="<%= group %>" class="mt-4 px-5 sm:px-7" hidden>
+            <p class="mb-4 text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.groups_hint.#{group}") %></p>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <% themes.each do |theme| %>
+                <%= render ThemePreview::Component.new(form:, theme:) %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
       </fieldset>
     </div>
   <% end %>

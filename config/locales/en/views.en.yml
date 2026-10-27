@@ -129,6 +129,12 @@ en:
         theme:
           label: Theme
           hint: The accent colors used across the workspace.
+        groups:
+          accents: "Accents"
+          styles: "Styles"
+        groups_hint:
+          accents: "Same surfaces, only the accent color changes."
+          styles: "Full palettes that also change backgrounds and borders."
         themes:
           default: Clay
           blue: Blue

@@ -12,6 +12,22 @@ RSpec.describe "Themes" do
       expect(response.body).to include(I18n.t("components.settings_nav.items.themes"))
       Membership::THEMES.each_key { |theme| expect(response.body).to include(%(data-palette="#{theme}")) }
     end
+
+    it "splits accent-only themes from full styles into tabs", :aggregate_failures do
+      get edit_theme_path
+
+      expect(response.body).to include(I18n.t("projects.themes.edit.groups.accents"), I18n.t("projects.themes.edit.groups.styles"))
+      expect(response.body).to include(%(data-tabs-active-value="accents"))
+      expect(Membership::ACCENT_THEMES & Membership::STYLE_THEMES).to be_empty
+    end
+
+    it "opens the tab of the saved theme" do
+      membership.update!(theme: "nord")
+
+      get edit_theme_path
+
+      expect(response.body).to include(%(data-tabs-active-value="styles"))
+    end
   end
 
   describe "PATCH /theme" do

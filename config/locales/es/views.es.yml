@@ -129,6 +129,12 @@ es:
         theme:
           label: Tema
           hint: Los colores de acento usados en todo el espacio de trabajo.
+        groups:
+          accents: "Acentos"
+          styles: "Estilos"
+        groups_hint:
+          accents: "Mismas superficies, solo cambia el color de acento."
+          styles: "Paletas completas que también cambian fondos y bordes."
         themes:
           default: Arcilla
           blue: Azul

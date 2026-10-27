@@ -129,6 +129,12 @@ fr:
         theme:
           label: "Thème"
           hint: "Les couleurs d'accent utilisées dans tout l'espace de travail."
+        groups:
+          accents: "Accents"
+          styles: "Styles"
+        groups_hint:
+          accents: "Mêmes surfaces, seule la couleur d'accent change."
+          styles: "Palettes complètes qui changent aussi les fonds et les bordures."
         themes:
           default: "Argile"
           blue: "Bleu"

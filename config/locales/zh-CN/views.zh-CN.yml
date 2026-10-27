@@ -129,6 +129,12 @@ zh-CN:
         theme:
           label: 主题
           hint: 工作区中使用的强调色。
+        groups:
+          accents: "强调色"
+          styles: "风格"
+        groups_hint:
+          accents: "界面底色不变，仅更换强调色。"
+          styles: "完整配色，同时更改背景和边框。"
         themes:
           default: 陶土
           blue: 蓝色
