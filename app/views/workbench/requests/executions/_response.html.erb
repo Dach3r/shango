@@ -57,7 +57,7 @@
 
       <% if timing.present? %>
         <div data-tabs-target="panel" data-name="timing" hidden>
-          <%= render "workbench/requests/executions/headers", headers: timing.to_h { |row| [t("workbench.executions.timing.phases.#{row[:phase]}"), format_timing(row[:milliseconds])] }.merge(t("workbench.executions.timing.total") => format_duration(execution.duration_ms)), bleed: true, empty: "" %>
+          <%= render "workbench/requests/executions/headers", headers: timing.to_h { |row| [t("workbench.executions.timing.phases.#{row[:phase]}"), format_timing(row[:milliseconds])] }.merge(t("workbench.executions.timing.total") => format_duration(execution.duration_ms)), bleed: true, total: true, empty: "" %>
         </div>
       <% end %>
 
