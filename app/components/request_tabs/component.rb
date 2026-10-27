@@ -23,13 +23,7 @@ class RequestTabs::Component < ApplicationComponent
     api_request.id == @current_request_id
   end
 
-  def close_classes(api_request)
-    api_request.draft? ? DRAFT_CLOSE : CLOSE
-  end
-
-  def close_icon(api_request)
-    return lucide_icon("x", class: "size-3") unless api_request.draft?
-
+  def draft_close_icon
     safe_join([
       tag.span(class: "size-2 rounded-full bg-muted group-hover:hidden group-focus-within:hidden", title: t("components.request_tabs.draft_hint")),
       lucide_icon("x", class: "hidden size-3 group-hover:block group-focus-within:block")
