@@ -71,7 +71,7 @@ Existing, to be followed:
 - Stimulus controllers in `app/javascript/controllers/`, named `<name>_controller.js`. Third-party JS is vendored in `vendor/javascript` and pinned in `config/importmap.rb` (see [`api-client.md`](api-client.md) §7 for CodeMirror).
 - **UI is "line design"**: square corners (no `rounded-*` except `rounded-full` on dots and spinners), 1px `border-line` hairlines instead of fills and shadows, hairline `ring-1` focus, active nav marked by a left accent border and tabs by an underline, mono uppercase for section labels. Colors always come from palette tokens.
 - Compact form controls for editor-style screens come from `ControlsHelper`; internal lookups inside ViewComponents call `I18n.t` in `initialize` (`t` only works while rendering).
-- Translations live in `config/locales/*.{en,es}.yml`; every new key needs both languages. Inside a `render layout: ... do` block use absolute keys (lazy `t(".key")` resolves against the layout partial).
+- Translations live in `config/locales/<locale>/<name>.<locale>.yml` (e.g. `config/locales/es/views.es.yml`, loaded through a recursive glob in `config/application.rb`); every new key needs both languages. Inside a `render layout: ... do` block use absolute keys (lazy `t(".key")` resolves against the layout partial).
 - Tailwind with a `brand-*` color palette.
 - Lint with rubocop (`rubocop-kode`); security checks with brakeman and bundler-audit.
 

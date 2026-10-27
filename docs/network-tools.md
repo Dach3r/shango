@@ -91,7 +91,7 @@ The DNS client speaks the protocol itself instead of using `Resolv::DNS#getresou
 
 Models: **none in v1.** There is no persistence, so no migration and no project-owned table. Project scoping still applies through `current_project` (the environment used for variable resolution is `current_membership.current_environment`, which belongs to the project) and through audit logging (§6).
 
-UI: views under `app/views/network/` (a page with the tabs, one result partial per tool, shared `error` and `throttled` partials) and `NetworkStatus::Component`, the badge for statuses (`open`, `timeout`, `mismatch`…, labels in `network.statuses`). `ToolsNav::ITEMS` has `{ key: :network, icon: "radar", path: :network_root_path }`. Locale files: `config/locales/network.en.yml` and `network.es.yml`, plus `components.tools_nav.network` in `views.en.yml` / `views.es.yml`.
+UI: views under `app/views/network/` (a page with the tabs, one result partial per tool, shared `error` and `throttled` partials) and `NetworkStatus::Component`, the badge for statuses (`open`, `timeout`, `mismatch`…, labels in `network.statuses`). `ToolsNav::ITEMS` has `{ key: :network, icon: "radar", path: :network_root_path }`. Locale files: `config/locales/en/network.en.yml` and `config/locales/es/network.es.yml`, plus `components.tools_nav.network` in `views.en.yml` / `views.es.yml` (same folders).
 
 ### Execution model
 

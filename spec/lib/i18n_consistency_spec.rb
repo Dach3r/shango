@@ -9,7 +9,7 @@ RSpec.describe "Locale files" do
   end
 
   def load_locale(name, locale)
-    flatten(YAML.load_file(Rails.root.join("config/locales/#{name}.#{locale}.yml")).fetch(locale.to_s)).to_h
+    flatten(YAML.load_file(Rails.root.join("config/locales/#{locale}/#{name}.#{locale}.yml")).fetch(locale.to_s)).to_h
   end
 
   def placeholders(value)
