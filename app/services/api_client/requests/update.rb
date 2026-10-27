@@ -9,7 +9,7 @@ module ApiClient
 
       def initialize(api_request:, attributes:, uploads: {}, binary_upload: nil)
         @api_request = api_request
-        @attributes = attributes.to_h.symbolize_keys
+        @attributes = attributes
         @uploads = uploads
         @binary_upload = binary_upload
       end
@@ -17,8 +17,7 @@ module ApiClient
       private
 
       def perform
-        @api_request.assign_attributes(@attributes.slice(*Create::ATTRIBUTES))
-        Auth::Assign.call(record: @api_request, auth_type: @attributes[:auth_type], auth_config: @attributes[:auth_config].to_h)
+        Assign.call(api_request: @api_request, attributes: @attributes)
         return Result.failure(@api_request) unless uploads_within_limits?
 
         AttachUploads.call(api_request: @api_request, uploads: @uploads, binary_upload: @binary_upload)
