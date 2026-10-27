@@ -34,4 +34,13 @@ RSpec.describe MethodBadge::Component, type: :component do
   it "exposes the short label and classes of every method" do
     expect(described_class.presets["DELETE"]).to eq(label: "DEL", classes: "#{described_class::BASE} text-danger")
   end
+
+  it "falls back to muted for unknown or blank methods and escapes them", :aggregate_failures do
+    render_inline(described_class.new(method: "<b>"))
+    expect(page).to have_css("span.text-muted", text: "<B>")
+    expect(page).not_to have_css("b")
+
+    render_inline(described_class.new(method: nil, short: true))
+    expect(page).to have_css("span.text-muted")
+  end
 end

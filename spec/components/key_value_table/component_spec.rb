@@ -29,4 +29,18 @@ RSpec.describe KeyValueTable::Component, type: :component do
     render_inline(described_class.new(name: "environment[variables]", rows: [], variant: :variables))
     expect(page).to have_css("[data-always-row=false] [data-key-value-table-target=body] [data-key-value-table-target=row]", count: 0)
   end
+
+  it "escapes hostile keys and values inside attributes", :aggregate_failures do
+    hostile = [{ "key" => "\"><script>alert(1)</script>", "value" => "'><img src=x onerror=alert(1)>" }]
+    render_inline(described_class.new(name: "api_request[headers]", rows: hostile))
+
+    expect(page).not_to have_css("script, img", visible: :all)
+    expect(page).to have_css("input[name='api_request[headers][0][key]'][value='\"><script>alert(1)</script>']")
+  end
+
+  it "renders with no rows at all" do
+    render_inline(described_class.new(name: "api_request[headers]", rows: []))
+
+    expect(page).to have_css("[data-controller=key-value-table]")
+  end
 end
