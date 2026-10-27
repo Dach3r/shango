@@ -54,4 +54,35 @@ RSpec.describe ApiClient::Auth::Assign do
       expect(result.auth_config).to eq("token_url" => "https://t2", "access_token" => "at")
     end
   end
+
+  describe "border cases" do
+      it "never keeps stored secrets of another strategy", :aggregate_failures do
+        collection.update!(auth_type: "bearer", auth_config: { "token" => "t" })
+        result = described_class.call(record: collection, auth_type: "basic", auth_config: { "username" => "u" })
+
+        expect(result.auth_config).to eq("username" => "u")
+      end
+
+      it "does not keep OAuth tokens when switching strategy", :aggregate_failures do
+        collection.update!(auth_type: "oauth2", auth_config: { "token_url" => "https://t", "access_token" => "at", "refresh_token" => "rt" })
+        result = described_class.call(record: collection, auth_type: "bearer", auth_config: { "token" => "t" })
+
+        expect(result.auth_config).to eq("token" => "t")
+      end
+
+      it "does not let submitted params overwrite managed tokens" do
+        collection.update!(auth_type: "oauth2", auth_config: { "token_url" => "https://t", "access_token" => "at" })
+        result = described_class.call(record: collection, auth_type: "oauth2", auth_config: { "token_url" => "https://t", "access_token" => "forged" })
+
+        expect(result.auth_config["access_token"]).to eq("at")
+      end
+
+      it "stores non-string values as strings" do
+        expect(described_class.call(record: collection, auth_type: "basic", auth_config: { "username" => 123 }).auth_config).to eq("username" => "123")
+      end
+
+      it "is invalid for an unknown type" do
+        expect(described_class.call(record: collection, auth_type: "kerberos", auth_config: {})).not_to be_valid
+      end
+    end
 end

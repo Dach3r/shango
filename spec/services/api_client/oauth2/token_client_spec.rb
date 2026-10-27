@@ -130,4 +130,43 @@ RSpec.describe ApiClient::Oauth2::TokenClient do
       expect(a_request(:post, token_url).with(body: /grant_type=authorization_code&code=c&redirect_uri=.+&code_verifier=v/)).to have_been_made
     end
   end
+
+  describe "unexpected token responses" do
+    ["[]", "null", "5", '"x"', "", '{"access_token":""}', '{"error":{"code":1}}'].each do |body|
+      it "fails without raising anything else for #{body.inspect}" do
+        stub_request(:post, token_url).to_return(status: 200, body:)
+
+        expect { client.fetch }.to raise_error(described_class::Failed)
+      end
+    end
+
+    it "does not follow redirects of the token endpoint", :aggregate_failures do
+      stub_request(:post, token_url).to_return(status: 302, headers: { "Location" => "http://169.254.169.254/" })
+
+      expect { client.fetch }.to raise_error(described_class::Failed, /HTTP 302/)
+      expect(a_request(:any, "http://169.254.169.254/")).not_to have_been_made
+    end
+
+    it "stores an already expired token when expires_in is negative" do
+      stub_request(:post, token_url).to_return(status: 200, body: { access_token: "tok", expires_in: -5 }.to_json)
+      client.fetch
+
+      expect(Time.zone.parse(owner.reload.auth_config["expires_at"])).to be < Time.current
+    end
+
+    it "never leaves the client secret in the failure message" do
+      stub_request(:post, token_url).to_return(status: 401, body: { error: "invalid_client" }.to_json)
+
+      expect { client.fetch }.to raise_error(described_class::Failed) { |error| expect(error.message).not_to include("secret") }
+    end
+
+    it "keeps the stored tokens when a refresh fails for an interactive grant", :aggregate_failures do
+      owner.update!(auth_config: config.merge("grant_type" => "authorization_code", "access_token" => "old", "refresh_token" => "ref"))
+      stub_request(:post, token_url).to_return(status: 400, body: { error: "invalid_grant" }.to_json)
+      refreshing = described_class.new(config: owner.auth_config, owner:)
+
+      expect { refreshing.refresh_or_fetch }.to raise_error(described_class::Failed)
+      expect(owner.reload.auth_config).to include("access_token" => "old", "refresh_token" => "ref")
+    end
+  end
 end

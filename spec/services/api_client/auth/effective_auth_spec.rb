@@ -33,4 +33,40 @@ RSpec.describe ApiClient::Auth::EffectiveAuth do
       expect(described_class.call(api_request:).owner).to eq(collection)
     end
   end
+
+  describe "chains" do
+      it "uses the nearest non-inheriting ancestor, not the farthest" do
+        parent.update!(auth_type: "basic", auth_config: { "username" => "p" })
+        folder.update!(auth_type: "bearer", auth_config: { "token" => "f" })
+
+        expect(described_class.call(api_request:).owner).to eq(folder)
+      end
+
+      it "skips inheriting folders up to a grandparent" do
+        grand = create(:folder, collection:, auth_type: "api_key", auth_config: { "key" => "k", "value" => "v" })
+        parent.update!(parent: grand)
+
+        expect(described_class.call(api_request:).owner).to eq(grand)
+      end
+
+      it "treats none as an explicit stop" do
+        parent.update!(auth_type: "none")
+
+        expect(described_class.call(api_request:)).to have_attributes(type: "none", owner: parent)
+      end
+
+      it "resolves to none for a draft without a collection" do
+        draft = create(:api_request, collection: nil, project: collection.project, user: create(:user), auth_type: "inherit")
+
+        expect(described_class.call(api_request: draft)).to have_attributes(type: "none", owner: nil)
+      end
+
+      it "follows a deep folder nesting" do
+        parent.update!(auth_type: "basic", auth_config: { "username" => "p" })
+        leaf = Array.new(8).inject(parent) { |node, _| create(:folder, collection:, parent: node, auth_type: "inherit") }
+        deep = create(:api_request, collection:, folder: leaf, auth_type: "inherit")
+
+        expect(described_class.call(api_request: deep).owner).to eq(parent)
+      end
+    end
 end

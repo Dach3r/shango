@@ -39,4 +39,35 @@ RSpec.describe ApiClient::Curl::Exporter do
   it "renders binary bodies from the preview" do
     expect(export(body: body(preview: "[binary]"))).to include("--data-binary '@file'")
   end
+
+  describe "shell escaping" do
+      it "keeps newlines, double quotes, dollars and backticks inside single quotes" do
+        curl = export(body: body(raw: "a\nb'c\"$x`y`\\"))
+
+        expect(curl).to include("--data-raw 'a\nb'\\''c\"$x`y`\\'")
+      end
+
+      it "escapes quotes in headers and urls", :aggregate_failures do
+        curl = export(url: "https://a.test/?q='x'", headers: { "X-A" => "it's" })
+
+        expect(curl).to include("'https://a.test/?q='\\''x'\\'''", "-H 'X-A: it'\\''s'")
+      end
+
+      it "keeps unicode" do
+        expect(export(body: body(raw: "héllo ✓"))).to include("'héllo ✓'")
+      end
+
+      it "renders empty form values and skips empty raw bodies", :aggregate_failures do
+        expect(export(body: body(form: [["a", nil]]))).to include("-F 'a='")
+        expect(export(body: body(raw: ""))).not_to include("--data")
+      end
+
+      it "round-trips through the parser", :aggregate_failures do
+        curl = export(http_method: "POST", body: body(raw: '{"a":"it\'s"}'), headers: { "X-A" => "it's" })
+        parsed = ApiClient::Curl::Parser.call(command: curl).record
+
+        expect(parsed).to include(http_method: "POST", body: '{"a":"it\'s"}')
+        expect(parsed[:headers]).to contain_exactly(include("key" => "X-A", "value" => "it's"))
+      end
+    end
 end

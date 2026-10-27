@@ -69,4 +69,26 @@ RSpec.describe ApiClient::Imports::Bruno do
     expect(result[:collections].first[:requests].first[:auth_config]).to include("add_to" => "header")
     expect(result[:environments]).to eq([])
   end
+
+  describe "malformed input" do
+      def tree_for(data)
+        described_class.call(data:).record
+      end
+
+      it "survives missing, non-array and non-object items", :aggregate_failures do
+        expect(tree_for("name" => "x")[:collections].first[:requests]).to eq([])
+        expect(tree_for("name" => "x", "items" => "x")[:collections].first[:requests]).to eq([])
+        expect { tree_for("name" => "x", "items" => [{ "type" => "folder", "name" => "f", "items" => ["x"] }]) }.not_to raise_error
+      end
+
+      it "tolerates requests without a request object and non-numeric seq", :aggregate_failures do
+        items = [{ "type" => "http-request", "name" => "r", "seq" => "a" }, { "type" => "http-request", "name" => "s", "seq" => nil, "request" => "x" }]
+
+        expect(tree_for("name" => "x", "items" => items)[:collections].first[:requests].size).to eq(2)
+      end
+
+      it "ignores environments with non-object variables" do
+        expect(tree_for("name" => "x", "environments" => [{ "name" => "e", "variables" => ["x"] }])[:environments].first[:variables]).to eq([])
+      end
+    end
 end

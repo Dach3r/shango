@@ -79,4 +79,38 @@ RSpec.describe ApiClient::Auth::JwtBearer do
   it "requires a secret" do
     expect { described_class.new({}).apply(request) }.to raise_error(ApiClient::Auth::ConfigurationError)
   end
+
+  describe "odd inputs" do
+      it "keeps unicode payloads" do
+        described_class.new(config.merge("payload" => '{"n":"é✓"}')).apply(request)
+
+        expect(JWT.decode(token_from(request), "s3cret", true, algorithm: "HS256").first).to eq("n" => "é✓")
+      end
+
+      it "rejects non-object headers" do
+        expect { described_class.new(config.merge("headers" => "[1]")).apply(request) }.to raise_error(ApiClient::Auth::ConfigurationError, "JWT headers must be a JSON object")
+      end
+
+      it "keeps the existing query and fragment when adding the token" do
+        request.url = "https://a.test/x?a=1#f"
+        described_class.new(config.merge("add_to" => "query")).apply(request)
+
+        expect(request.url).to match(%r{\Ahttps://a.test/x\?a=1&token=.+#f\z})
+      end
+
+      it "reports mismatched key types and public keys", :aggregate_failures do
+        rsa = OpenSSL::PKey::RSA.generate(2048).to_pem
+        ec = OpenSSL::PKey::EC.generate("prime256v1")
+        cases = [["ES256", rsa], ["RS256", ec.to_pem], ["ES384", ec.to_pem], ["ES256", ec.public_to_pem]]
+
+        cases.each do |algorithm, secret|
+          expect { described_class.new(config.merge("algorithm" => algorithm, "secret" => secret)).apply(request) }
+            .to raise_error(ApiClient::Auth::ConfigurationError, /Could not sign JWT/)
+        end
+      end
+
+      it "treats the secret as sensitive" do
+        expect(described_class.new(config).secrets).to eq(["s3cret"])
+      end
+    end
 end

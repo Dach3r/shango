@@ -59,6 +59,7 @@ module ApiClient
 
       def parse(response)
         body = JSON.parse(response.body.to_s)
+        raise Failed, "HTTP #{response.status}: #{I18n.t("workbench.oauth2.invalid_response")}" unless body.is_a?(Hash)
         return body if response.success? && body["access_token"].present?
 
         raise Failed, [body["error"], body["error_description"]].compact.join(": ").presence || "HTTP #{response.status}"

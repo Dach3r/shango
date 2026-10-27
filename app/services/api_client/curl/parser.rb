@@ -40,7 +40,7 @@ module ApiClient
         raise Invalid, I18n.t("workbench.curl.missing_url") if @url.blank?
 
         Result.success(attributes)
-      rescue Invalid, ArgumentError => error
+      rescue Invalid, ArgumentError, FloatDomainError => error
         Result.failure(error: error.message)
       end
 
@@ -131,7 +131,7 @@ module ApiClient
           headers:, query_params: query_rows(url), body_type:, body:, body_form: form_rows, auth_type: "inherit", auth_config: {},
           settings: { "verify_ssl" => !@insecure, "follow_redirects" => @location, "timeout" => @timeout || ApiRequest::DEFAULT_SETTINGS["timeout"] }
         }
-        attributes.merge!(auth_type: "basic", auth_config: { "username" => @user.split(":", 2).first, "password" => @user.split(":", 2).last }) if @user
+        attributes.merge!(auth_type: "basic", auth_config: { "username" => @user.partition(":").first, "password" => @user.partition(":").last }) if @user
         attributes
       end
 

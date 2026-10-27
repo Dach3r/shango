@@ -111,4 +111,27 @@ RSpec.describe ApiClient::Imports::Postman do
       ] }])
     end
   end
+
+  describe "malformed input" do
+      def tree_for(item, extra = {})
+        described_class.call(data: { "info" => { "name" => "C" }, "item" => [item] }.merge(extra)).record
+      end
+
+      it "survives requests given as strings, nil or with odd members", :aggregate_failures do
+        expect(tree_for({ "name" => "a", "request" => "http://x" })[:collections].first[:requests].first[:url]).to eq("http://x")
+        expect(tree_for({ "request" => nil })[:collections].first[:requests].first[:name]).to eq("Untitled request")
+        expect { tree_for({ "name" => "a", "request" => { "header" => ["a: b"], "url" => { "query" => ["x"] } } }) }.not_to raise_error
+        expect { tree_for({ "name" => "a", "request" => { "url" => 5, "method" => 5 } }) }.not_to raise_error
+      end
+
+      it "keeps duplicate and unnamed items" do
+        tree = described_class.call(data: { "info" => {}, "item" => [{ "name" => "r", "request" => {} }, { "name" => "r", "request" => {} }] }).record
+
+        expect(tree[:collections].first[:requests].size).to eq(2)
+      end
+
+      it "does not trust variables that are not objects" do
+        expect(described_class.call(data: { "values" => ["x"], "name" => "e" }).record[:environments].first[:variables]).to eq([])
+      end
+    end
 end

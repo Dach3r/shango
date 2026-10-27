@@ -136,4 +136,40 @@ RSpec.describe ApiClient::Auth::Oauth2 do
       expect(strategy.secrets).to contain_exactly("cs", "at")
     end
   end
+
+  describe "border cases" do
+      it "sends no refresh request when the token has no expiry", :aggregate_failures do
+        config.delete("expires_at")
+        strategy.apply(request)
+
+        expect(ApiClient::Oauth2::TokenClient).not_to have_received(:new)
+        expect(request.headers["Authorization"]).to eq("Bearer tok")
+      end
+
+      it "treats a token expiring within the leeway as expired" do
+        config["expires_at"] = 10.seconds.from_now.iso8601
+        allow(token_client).to receive(:refresh_or_fetch).and_return("access_token" => "fresh")
+        strategy.apply(request)
+
+        expect(request.headers["Authorization"]).to eq("Bearer fresh")
+      end
+
+      it "does not refresh interactive grants without a refresh token", :aggregate_failures do
+        config.merge!("grant_type" => "authorization_code", "expires_at" => 1.minute.ago.iso8601)
+        strategy.apply(request)
+
+        expect(ApiClient::Oauth2::TokenClient).not_to have_received(:new)
+      end
+
+      it "url-encodes tokens added to the query" do
+        config.merge!("add_to" => "query", "access_token" => "a b&c")
+        strategy.apply(request)
+
+        expect(request.url).to eq("https://a.test/x?access_token=a+b%26c")
+      end
+
+      it "does not list blank managed tokens as secrets" do
+        expect(described_class.new({ "access_token" => "", "refresh_token" => nil }).secrets).to eq([])
+      end
+    end
 end
