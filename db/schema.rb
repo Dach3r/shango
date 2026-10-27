@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_192207) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_193602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -66,6 +66,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_192207) do
     t.uuid "user_id"
     t.index ["collection_id"], name: "index_api_requests_on_collection_id"
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
+    t.index ["project_id", "collection_id", "folder_id", "position"], name: "index_api_requests_on_tree_order"
+    t.index ["project_id", "user_id"], name: "index_api_requests_on_drafts", where: "(collection_id IS NULL)"
     t.index ["project_id"], name: "index_api_requests_on_project_id"
     t.index ["user_id"], name: "index_api_requests_on_user_id"
     t.check_constraint "body_type::text = ANY (ARRAY['none'::character varying::text, 'json'::character varying::text, 'text'::character varying::text, 'xml'::character varying::text, 'form_urlencoded'::character varying::text, 'multipart'::character varying::text, 'graphql'::character varying::text, 'binary'::character varying::text])", name: "api_requests_body_type_check"
@@ -166,6 +168,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_192207) do
     t.index ["api_request_id", "created_at"], name: "index_request_executions_on_api_request_id_and_created_at"
     t.index ["api_request_id"], name: "index_request_executions_on_api_request_id"
     t.index ["environment_id"], name: "index_request_executions_on_environment_id"
+    t.index ["project_id", "user_id", "created_at"], name: "index_request_executions_on_project_user_and_created_at"
     t.index ["project_id"], name: "index_request_executions_on_project_id"
     t.index ["user_id"], name: "index_request_executions_on_user_id"
   end

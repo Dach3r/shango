@@ -24,6 +24,19 @@ RSpec.describe ApiClient::Tree::Load do
     expect(branches.last.root_folders).to eq([])
   end
 
+  it "runs a fixed number of queries however big the project is", :aggregate_failures do
+    described_class.call(project:)
+    baseline = count_queries { described_class.call(project:).each { |branch| branch.requests_in } }
+    3.times do
+      branch_collection = create(:collection, project:)
+      branch_folder = create(:folder, collection: branch_collection)
+      create_list(:api_request, 3, collection: branch_collection, folder: branch_folder, project:)
+    end
+
+    expect(baseline).to be <= 3
+    expect(count_queries { described_class.call(project:).each { |branch| branch.requests_in } }).to eq(baseline)
+  end
+
   it "ignores other projects" do
     create(:collection)
 
