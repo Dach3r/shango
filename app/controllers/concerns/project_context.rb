@@ -2,7 +2,7 @@ module ProjectContext
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_membership, :current_project, :current_environment
+    helper_method :current_membership, :current_project, :current_environment, :available_projects, :project_environments
   end
 
   private
@@ -15,8 +15,7 @@ module ProjectContext
   def current_membership
     return @current_membership if defined?(@current_membership)
 
-    memberships = current_user.available_memberships.includes(:project)
-    @current_membership = memberships.find_by(id: current_user.current_membership_id) || memberships.order("memberships.created_at").first
+    @current_membership = usable_memberships.find { |membership| membership.id == current_user.current_membership_id } || usable_memberships.min_by(&:created_at)
     current_user.update_column(:current_membership_id, @current_membership&.id) if @current_membership&.id != current_user.current_membership_id
     @current_membership
   end
@@ -29,6 +28,20 @@ module ProjectContext
   def current_environment
     return @current_environment if defined?(@current_environment)
 
-    @current_environment = current_membership&.current_environment
+    @current_environment = project_environments.find { |environment| environment.id == current_membership.current_environment_id }
+  end
+
+  # Projects the user can switch to, by name.
+  def available_projects
+    usable_memberships.map(&:project)
+  end
+
+  def project_environments
+    @project_environments ||= current_project ? current_project.environments.ordered.to_a : []
+  end
+
+  # Every active membership with its project, in one query.
+  def usable_memberships
+    @usable_memberships ||= current_user.available_memberships.includes(:project).merge(Project.order(:name)).to_a
   end
 end
