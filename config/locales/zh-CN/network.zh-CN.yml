@@ -73,9 +73,8 @@ zh-CN:
       host: 主机
       host_placeholder: "example.com、203.0.113.10 或 {{host}}"
       port: 端口
-      port_placeholder: "443"
       attempts: 尝试次数
-      attempts_placeholder: "4"
+      attempts_option: "尝试次数: %{count}"
       hint: 这是 TCP ping，而非 ICMP。即使连接被拒绝，也能证明主机在线；只有无任何响应才算丢包。
       submit: 开始 Ping
       summary: "%{sent} 次中有 %{received} 次应答，丢包率 %{loss}%"
