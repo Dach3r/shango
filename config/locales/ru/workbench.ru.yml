@@ -88,6 +88,7 @@ ru:
       label: Открытые запросы
       close: "Закрыть %{name}"
       draft_hint: "Черновик, ещё не сохранён"
+      unsaved_hint: "Несохранённые изменения"
       new_draft: Новый черновик запроса
       actions: "Действия с вкладкой"
       new_request: "Новый запрос"
@@ -259,6 +260,8 @@ ru:
       url_placeholder: "https://api.example.com/path или {{base_url}}/path"
       send: Отправить
       send_hint: Отправить (Ctrl/Cmd + Enter)
+      unsaved_notice: "У вас есть несохранённые изменения"
+      discard_changes: "Отменить изменения"
       cancel: Отмена
       cancel_hint: Отменить запрос
       save: Сохранить

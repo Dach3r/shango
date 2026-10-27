@@ -88,6 +88,7 @@ zh-CN:
       label: 已打开的请求
       close: "关闭 %{name}"
       draft_hint: "草稿，尚未保存"
+      unsaved_hint: "未保存的更改"
       new_draft: 新建草稿请求
       actions: "标签页操作"
       new_request: "新建请求"
@@ -256,6 +257,8 @@ zh-CN:
       url_placeholder: "https://api.example.com/path 或 {{base_url}}/path"
       send: 发送
       send_hint: 发送（Ctrl/Cmd + Enter）
+      unsaved_notice: "你有未保存的更改"
+      discard_changes: "放弃更改"
       cancel: 取消
       cancel_hint: 取消请求
       save: 保存

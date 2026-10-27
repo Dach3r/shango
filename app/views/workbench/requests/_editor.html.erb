@@ -8,12 +8,20 @@
 ] %>
 
 <%= form_with model: api_request, scope: :api_request, url: workbench_request_path(api_request), method: :patch, id: "request_form", multipart: true,
-              class: "flex min-h-0 flex-1 flex-col", data: variable_autocomplete_data(controller: "request-url").merge(request_form_target: "form") do |form| %>
+              class: "flex min-h-0 flex-1 flex-col", data: variable_autocomplete_data(controller: "request-url request-stash").merge(request_form_target: "form", request_stash_url_value: workbench_request_stash_path(api_request),
+                                                                                                    action: "input->request-stash#schedule change->request-stash#schedule key-value-table:change->request-stash#schedule request-form:run->request-stash#stop submit->request-stash#stop turbo:before-visit@document->request-stash#leave pagehide@window->request-stash#leave") do |form| %>
   <%= render ResponseReferenceModal::Component.new(responses: editor_responses) %>
   <%= hidden_field_tag "place", 1, id: nil if api_request.draft? %>
   <% if api_request.errors.any? %>
     <div role="alert" class="mx-4 mt-3 border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
       <%= api_request.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+
+  <% if @unsaved %>
+    <div role="status" class="mx-4 mt-3 flex items-center justify-between gap-3 border border-line bg-ink/[0.05] px-4 py-2 text-xs text-muted">
+      <span><%= t("workbench.requests.unsaved_notice") %></span>
+      <%= link_to t("workbench.requests.discard_changes"), workbench_request_stash_path(api_request), data: { turbo_method: :delete }, class: "cursor-pointer text-ink underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %>
     </div>
   <% end %>
 

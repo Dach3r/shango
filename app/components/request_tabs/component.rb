@@ -7,10 +7,12 @@ class RequestTabs::Component < ApplicationComponent
 
   ITEM = "#{RequestTree::Menu::Component::ITEM} disabled:cursor-not-allowed disabled:text-faint disabled:hover:bg-transparent disabled:hover:text-faint"
 
-  # requests: the ones the user has open as tabs; current_request_id highlights the one being edited.
-  def initialize(requests:, current_request_id: nil)
+  # requests: the ones the user has open as tabs; current_request_id highlights the one being edited;
+  # unsaved_ids marks the saved requests whose edits are kept but not saved.
+  def initialize(requests:, current_request_id: nil, unsaved_ids: [])
     @requests = requests
     @current_request_id = current_request_id
+    @unsaved_ids = unsaved_ids
   end
 
   private
@@ -23,9 +25,13 @@ class RequestTabs::Component < ApplicationComponent
     api_request.id == @current_request_id
   end
 
-  def draft_close_icon
+  def unsaved?(api_request)
+    @unsaved_ids.include?(api_request.id)
+  end
+
+  def draft_close_icon(hint = t("components.request_tabs.draft_hint"))
     safe_join([
-      tag.span(class: "size-2 rounded-full bg-muted group-hover:hidden group-focus-within:hidden", title: t("components.request_tabs.draft_hint")),
+      tag.span(class: "size-2 rounded-full bg-muted group-hover:hidden group-focus-within:hidden", title: hint),
       lucide_icon("x", class: "hidden size-3 group-hover:block group-focus-within:block")
     ])
   end

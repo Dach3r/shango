@@ -29,6 +29,15 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_link(I18n.t("components.request_tabs.close", name: "First"), href: "/workbench/requests/#{first.id}/closure/new")
   end
 
+  it "marks a saved tab that keeps unsaved edits", :aggregate_failures do
+    saved = create(:api_request, project:, name: "Saved")
+    other = create(:api_request, project:, name: "Other")
+
+    render_inline(described_class.new(requests: [saved, other], unsaved_ids: [saved.id]))
+
+    expect(page).to have_css("[title='#{I18n.t("components.request_tabs.unsaved_hint")}']", count: 1)
+  end
+
   it "wires the close shortcut to each tab's close control", :aggregate_failures do
     saved = create(:api_request, project:, name: "Saved")
 

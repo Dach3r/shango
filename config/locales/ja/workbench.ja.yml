@@ -88,6 +88,7 @@ ja:
       label: 開いているリクエスト
       close: "%{name} を閉じる"
       draft_hint: "下書き（未保存）"
+      unsaved_hint: "未保存の変更"
       new_draft: 新しい下書きリクエスト
       actions: "タブの操作"
       new_request: "新規リクエスト"
@@ -256,6 +257,8 @@ ja:
       url_placeholder: "https://api.example.com/path または {{base_url}}/path"
       send: 送信
       send_hint: 送信 (Ctrl/Cmd + Enter)
+      unsaved_notice: "未保存の変更があります"
+      discard_changes: "変更を破棄"
       cancel: キャンセル
       cancel_hint: リクエストをキャンセル
       save: 保存

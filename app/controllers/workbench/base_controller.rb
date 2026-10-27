@@ -1,7 +1,7 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :workspace_history, :open_requests, :editor_variables, :editor_variables_url, :editor_responses, :editor_responses_url
+    helper_method :workspace_tree, :workspace_history, :open_requests, :unsaved_request_ids, :editor_variables, :editor_variables_url, :editor_responses, :editor_responses_url
 
     private
 
@@ -15,6 +15,11 @@ module Workbench
 
     def open_requests
       @open_requests ||= ApiClient::Tabs::Load.call(project: current_project, user: current_user)
+    end
+
+    # Open tabs whose edits are kept unsaved (see ApiClient::Requests::Stash).
+    def unsaved_request_ids
+      @unsaved_request_ids ||= ApiClient::Requests::Stash.ids(requests: open_requests, user: current_user)
     end
 
     # Enabled variables of the selected environment, offered as autocomplete and highlighted in the editors.

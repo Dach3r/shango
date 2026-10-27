@@ -23,6 +23,7 @@ module ApiClient
           saved = Update.call(api_request: @api_request, attributes: @attributes, uploads: @uploads, binary_upload: @binary_upload)
           return saved if saved.failure?
 
+          Stash.clear(api_request: @api_request, user: @user)
           @api_request.reload
         end
 

@@ -88,6 +88,7 @@ es:
       label: Solicitudes abiertas
       close: "Cerrar %{name}"
       draft_hint: "Borrador, aún sin guardar"
+      unsaved_hint: "Cambios sin guardar"
       new_draft: Nueva solicitud en borrador
       actions: "Acciones de la pestaña"
       new_request: "Nueva solicitud"
@@ -257,6 +258,8 @@ es:
       url_placeholder: "https://api.ejemplo.com/ruta o {{base_url}}/ruta"
       send: Enviar
       send_hint: Enviar (Ctrl/Cmd + Enter)
+      unsaved_notice: "Tienes cambios sin guardar"
+      discard_changes: "Descartar cambios"
       cancel: Cancelar
       cancel_hint: Cancelar la solicitud
       save: Guardar

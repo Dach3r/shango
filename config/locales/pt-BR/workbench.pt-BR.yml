@@ -88,6 +88,7 @@ pt-BR:
       label: Requisições abertas
       close: "Fechar %{name}"
       draft_hint: "Rascunho, ainda não salvo"
+      unsaved_hint: "Alterações não salvas"
       new_draft: Nova requisição em rascunho
       actions: "Ações da aba"
       new_request: "Nova requisição"
@@ -257,6 +258,8 @@ pt-BR:
       url_placeholder: "https://api.exemplo.com/caminho ou {{base_url}}/caminho"
       send: Enviar
       send_hint: Enviar (Ctrl/Cmd + Enter)
+      unsaved_notice: "Você tem alterações não salvas"
+      discard_changes: "Descartar alterações"
       cancel: Cancelar
       cancel_hint: Cancelar a requisição
       save: Salvar

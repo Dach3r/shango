@@ -10,6 +10,15 @@ RSpec.describe ApiClient::Tabs::CloseMany do
     api_request
   end
 
+  it "forgets the unsaved edits of the closed tabs" do
+    allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+    open_tab(saved)
+    ApiClient::Requests::Stash.write(api_request: saved, user:, attributes: { url: "https://edited.test" })
+    described_class.call(api_requests: [saved], user:)
+
+    expect(ApiClient::Requests::Stash.read(api_request: saved, user:)).to be_nil
+  end
+
   it "closes saved tabs without deleting the requests", :aggregate_failures do
     open_tab(saved)
 

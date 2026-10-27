@@ -17,6 +17,7 @@ export default class extends Controller {
     if (this.running) return;
 
     this.running = true;
+    this.formTarget.dispatchEvent(new CustomEvent("request-form:run"));
     this.abortController = new AbortController();
     this.setBusy(true);
     const body = new FormData(this.formTarget);

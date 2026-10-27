@@ -16,6 +16,7 @@ module ApiClient
         discarded.each(&:destroy)
         saved = others.reject(&:draft?)
         RequestTab.where(user: @user, api_request_id: saved.map(&:id)).destroy_all
+        saved.each { |api_request| Requests::Stash.clear(api_request:, user: @user) }
         Result.success(@api_requests)
       end
     end

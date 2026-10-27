@@ -13,6 +13,7 @@ module ApiClient
 
       def perform
         RequestTab.where(user: @user, api_request: @api_request).destroy_all
+        Requests::Stash.clear(api_request: @api_request, user: @user)
         Result.success(@api_request)
       end
     end

@@ -7,7 +7,7 @@
   </aside>
 
   <%= tag.section class: "flex min-h-0 min-w-0 flex-1 flex-col", data: local_assigns[:section_data] do %>
-    <%= render RequestTabs::Component.new(requests: open_requests, current_request_id: @api_request&.id) do %><%= yield :request_actions if content_for?(:request_actions) %><% end %>
+    <%= render RequestTabs::Component.new(requests: open_requests, current_request_id: @api_request&.id, unsaved_ids: unsaved_request_ids) do %><%= yield :request_actions if content_for?(:request_actions) %><% end %>
     <%= yield %>
   <% end %>
 </div>

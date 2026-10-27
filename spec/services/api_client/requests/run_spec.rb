@@ -24,6 +24,14 @@ RSpec.describe ApiClient::Requests::Run do
     )
   end
 
+  it "forgets the unsaved edits once it saves them", :aggregate_failures do
+    stub_request(:get, "https://api.example.com/other").to_return(status: 200)
+    ApiClient::Requests::Stash.write(api_request:, user:, attributes: { url: "https://api.example.com/other" })
+    described_class.call(api_request:, environment:, user:, attributes: { url: "https://api.example.com/other" })
+
+    expect(ApiClient::Requests::Stash.read(api_request:, user:)).to be_nil
+  end
+
   describe "in async mode" do
     include ActiveJob::TestHelper
 

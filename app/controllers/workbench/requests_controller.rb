@@ -8,6 +8,7 @@ module Workbench
     def show
       ApiClient::Tabs::Open.call(api_request: @api_request, user: current_user) unless prefetch?
       @execution = @api_request.request_executions.recent.first
+      restore_stash
     end
 
     def new
@@ -24,6 +25,7 @@ module Workbench
 
     def update
       result = ApiClient::Requests::Update.call(api_request: @api_request, attributes: request_attributes, uploads: request_uploads, binary_upload:)
+      clear_stash if result.success?
       return render_placement if result.success? && @api_request.draft? && params[:place].present?
       return redirect_to(workbench_request_path(@api_request), status: :see_other) if result.success?
 
@@ -33,10 +35,24 @@ module Workbench
 
     def destroy
       ApiClient::Requests::Destroy.call(api_request: @api_request)
+      clear_stash
       redirect_to workbench_root_path, status: :see_other
     end
 
     private
+
+    def clear_stash
+      ApiClient::Requests::Stash.clear(api_request: @api_request, user: current_user)
+    end
+
+    # Puts the unsaved edits kept for this tab back on the (unsaved) record.
+    def restore_stash
+      stash = ApiClient::Requests::Stash.read(api_request: @api_request, user: current_user)
+      return unless stash
+
+      ApiClient::Requests::Assign.call(api_request: @api_request, attributes: stash)
+      @unsaved = true
+    end
 
     # Browser speculative loads must not open tabs: showing the request is a side effect only a real visit should have.
     def prefetch?

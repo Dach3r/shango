@@ -88,6 +88,7 @@ de:
       label: Offene Anfragen
       close: "%{name} schließen"
       draft_hint: "Entwurf, noch nicht gespeichert"
+      unsaved_hint: "Nicht gespeicherte Änderungen"
       new_draft: Neue Entwurfsanfrage
       actions: "Tab-Aktionen"
       new_request: "Neue Anfrage"
@@ -257,6 +258,8 @@ de:
       url_placeholder: "https://api.example.com/path oder {{base_url}}/path"
       send: Senden
       send_hint: Senden (Strg/Cmd + Enter)
+      unsaved_notice: "Du hast nicht gespeicherte Änderungen"
+      discard_changes: "Änderungen verwerfen"
       cancel: Abbrechen
       cancel_hint: Anfrage abbrechen
       save: Speichern

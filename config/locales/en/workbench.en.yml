@@ -88,6 +88,7 @@ en:
       label: Open requests
       close: "Close %{name}"
       draft_hint: "Draft, not saved yet"
+      unsaved_hint: "Unsaved changes"
       new_draft: New draft request
       actions: "Tab actions"
       new_request: "New request"
@@ -257,6 +258,8 @@ en:
       url_placeholder: "https://api.example.com/path or {{base_url}}/path"
       send: Send
       send_hint: Send (Ctrl/Cmd + Enter)
+      unsaved_notice: "You have unsaved changes"
+      discard_changes: "Discard changes"
       cancel: Cancel
       cancel_hint: Cancel the request
       save: Save

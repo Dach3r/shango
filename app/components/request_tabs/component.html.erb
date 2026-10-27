@@ -17,8 +17,12 @@
             <%= draft_close_icon %>
           <% end %>
         <% else %>
-          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{CLOSE} cursor-pointer", data: { request_tab_close: true } do %>
-            <%= lucide_icon "x", class: "size-3" %>
+          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{unsaved?(api_request) ? DRAFT_CLOSE : CLOSE} cursor-pointer", data: { request_tab_close: true } do %>
+            <% if unsaved?(api_request) %>
+              <%= draft_close_icon(t("components.request_tabs.unsaved_hint")) %>
+            <% else %>
+              <%= lucide_icon "x", class: "size-3" %>
+            <% end %>
           <% end %>
         <% end %>
         <div class="absolute">
