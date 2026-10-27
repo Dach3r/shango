@@ -9,6 +9,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :require_project, only: %i[edit update]
   before_action :set_tab, only: %i[edit update]
 
+  def destroy
+    result = Users::Destroy.call(user: resource, password: params[:current_password])
+    return redirect_to(edit_user_registration_path(tab: "delete_account"), alert: destroy_failure(result), status: :see_other) if result.failure?
+
+    sign_out
+    set_flash_message! :notice, :destroyed
+    redirect_to after_sign_out_path_for(resource_name), status: :see_other
+  end
+
   protected
 
   def after_sign_up_path_for(_resource)
@@ -27,6 +36,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   private
+
+  def destroy_failure(result)
+    t("devise.registrations.destroy.#{result.error}", projects: result.data[:projects]&.to_sentence)
+  end
 
   def set_tab
     @tab = params[:tab].presence_in(TABS) || TABS.first

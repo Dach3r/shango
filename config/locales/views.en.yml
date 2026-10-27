@@ -212,6 +212,11 @@ en:
         cancel_heading: Cancel my account
         cancel_account: Cancel my account
         confirm: Are you sure?
+        current_password: Current password
+        current_password_placeholder: Enter your current password
+      destroy:
+        wrong_password: "The password is incorrect. Your account was not cancelled."
+        sole_owner: "You are the only owner of %{projects}, which still has other members. Cancelling would leave it without an owner."
     passwords:
       new:
         title: Reset password

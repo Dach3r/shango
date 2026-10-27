@@ -159,6 +159,45 @@ RSpec.describe "Authentication" do
     end
   end
 
+  describe "cancel account" do
+    let(:user) { create(:user) }
+
+    before { sign_in_with_project(user) }
+
+    it "deletes the account with the right password and signs out", :aggregate_failures do
+      expect { delete user_registration_path, params: { current_password: "password123" } }.to change(User, :count).by(-1)
+      expect(response).to redirect_to(new_user_session_path)
+
+      get new_project_path
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it "keeps the account with a wrong password", :aggregate_failures do
+      expect { delete user_registration_path, params: { current_password: "wrong" } }.not_to change(User, :count)
+      expect(response).to redirect_to(edit_user_registration_path(tab: "delete_account"))
+      expect(flash[:alert]).to eq(I18n.t("devise.registrations.destroy.wrong_password"))
+    end
+
+    it "keeps the account without a password" do
+      expect { delete user_registration_path }.not_to change(User, :count)
+    end
+
+    it "blocks leaving a shared project without an owner", :aggregate_failures do
+      project = user.memberships.first.project
+      user.memberships.first.update!(role: "owner")
+      create(:membership, project:)
+
+      expect { delete user_registration_path, params: { current_password: "password123" } }.not_to change(User, :count)
+      expect(flash[:alert]).to eq(I18n.t("devise.registrations.destroy.sole_owner", projects: project.name))
+    end
+
+    it "asks for the current password on the cancel tab" do
+      get edit_user_registration_path(tab: "delete_account")
+
+      expect(response.body).to include(%(name="current_password"))
+    end
+  end
+
   describe "sign up edge cases" do
     def sign_up(overrides = {})
       post user_registration_path, params: { user: user_params.merge(overrides) }

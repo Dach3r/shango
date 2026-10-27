@@ -212,6 +212,11 @@ es:
         cancel_heading: Cancelar mi cuenta
         cancel_account: Cancelar mi cuenta
         confirm: ¿Estás seguro?
+        current_password: Contraseña actual
+        current_password_placeholder: Ingresa tu contraseña actual
+      destroy:
+        wrong_password: "La contraseña es incorrecta. Tu cuenta no fue cancelada."
+        sole_owner: "Eres el único propietario de %{projects}, que todavía tiene otros miembros. Cancelar tu cuenta lo dejaría sin propietario."
     passwords:
       new:
         title: Recuperar contraseña

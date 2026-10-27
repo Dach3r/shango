@@ -61,12 +61,15 @@
           <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("devise.registrations.edit.fields.cancel_hint") %></p>
         </div>
 
-        <div class="md:justify-self-end">
-          <%= button_to registration_path(resource_name), method: :delete, data: { turbo_confirm: t("devise.registrations.edit.confirm") },
-                        class: button_classes(:danger) do %>
+        <%= form_with url: registration_path(resource_name), method: :delete, class: "grid gap-3 md:justify-self-end md:w-full", data: { turbo_confirm: t("devise.registrations.edit.confirm") } do %>
+          <div>
+            <%= label_tag :current_password, t("devise.registrations.edit.current_password"), class: label_classes %>
+            <%= password_field_tag :current_password, nil, autocomplete: "current-password", required: true, placeholder: t("devise.registrations.edit.current_password_placeholder"), class: field_classes %>
+          </div>
+          <%= button_tag type: :submit, class: button_classes(:danger) do %>
             <%= lucide_icon "user-x", class: "size-4 shrink-0" %><%= t("devise.registrations.edit.cancel_account") %>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </div>
   <% end %>
