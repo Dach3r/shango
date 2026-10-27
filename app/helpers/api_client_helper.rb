@@ -5,6 +5,14 @@ module ApiClientHelper
   MIN_TIMING_WIDTH = 1.0
   BODY_LANGUAGES = { /json/ => "json", /xml/ => "xml", /html/ => "html", /javascript/ => "javascript" }.freeze
 
+  # Names of the path to an open request: its collection (or "Draft") and the folders down to it.
+  def request_breadcrumb(api_request, branches)
+    return [t("workbench.requests.draft")] if api_request.draft?
+
+    branch = branches.find { |item| item.collection.id == api_request.collection_id }
+    [branch.collection.name, *branch.folder_path(api_request.folder_id).map(&:name)]
+  end
+
   # Select options for saving a draft: every collection and folder as "collection:<id>" / "folder:<id>".
   def destination_options(branches)
     branches.flat_map do |branch|

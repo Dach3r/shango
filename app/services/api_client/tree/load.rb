@@ -16,8 +16,34 @@ module ApiClient
         def requests_in(folder = nil)
           requests[folder&.id].to_a
         end
+
+        def all_requests
+          requests.values.flatten
+        end
+
+        def folder(id)
+          folder_index[id]
+        end
+
+        # Folders from the collection root down to the folder with this id (itself included).
+        def folder_path(id)
+          path = []
+          node = folder(id)
+          while node && path.exclude?(node)
+            path.unshift(node)
+            node = folder(node.parent_id)
+          end
+          path
+        end
+
+        private
+
+        def folder_index
+          @folder_index ||= folders.values.flatten.index_by(&:id)
+        end
       end
 
+      FOLDER_COLUMNS = %i[id collection_id parent_id name position created_at].freeze
       REQUEST_COLUMNS = %i[id name http_method collection_id folder_id position created_at project_id].freeze
 
       def initialize(project:)
@@ -27,7 +53,7 @@ module ApiClient
       private
 
       def perform
-        folders = @project.folders.order(:position, :created_at).group_by(&:collection_id)
+        folders = @project.folders.select(*FOLDER_COLUMNS).order(:position, :created_at).group_by(&:collection_id)
         requests = @project.api_requests.select(*REQUEST_COLUMNS).order(:position, :created_at).group_by(&:collection_id)
 
         @project.collections.ordered.map do |collection|

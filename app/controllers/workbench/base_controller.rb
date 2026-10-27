@@ -1,7 +1,9 @@
 module Workbench
   # Shared behavior for the API Client feature: sidebar tree and modal form errors.
   class BaseController < AuthenticatedController
-    helper_method :workspace_tree, :workspace_history, :open_requests, :unsaved_request_ids, :editor_variables, :editor_variables_url, :editor_responses, :editor_responses_url
+    include VariableAutocomplete
+
+    helper_method :workspace_tree, :workspace_history, :open_requests, :unsaved_request_ids, :editor_variables_url
 
     private
 
@@ -22,27 +24,22 @@ module Workbench
       @unsaved_request_ids ||= ApiClient::Requests::Stash.ids(requests: open_requests, user: current_user)
     end
 
-    # Enabled variables of the selected environment, offered as autocomplete and highlighted in the editors.
-    # Secret values are masked, so they never reach the browser.
-    def editor_variables
-      return [] unless current_environment
-
-      current_environment.variables.select(&:enabled).map do |variable|
-        { name: variable.key, set: variable.value.present?, value: variable.masked_value, secret: variable.secret, url: environment_variable_path(current_environment, variable) }
-      end
-    end
-
     # Where the editors create a variable that is not defined yet.
     def editor_variables_url
       environment_variables_path(current_environment) if current_environment
     end
 
     # Other requests of the open request's collection, offered as `{{response.…}}` sources (drafts have none).
+    # Read from the sidebar tree, which already holds them.
     def editor_responses
       return [] unless editor_responses_url
 
-      current_project.api_requests.where(collection_id: @api_request.collection_id).where.not(id: @api_request.id).includes(:folder).order(:name).map do |sibling|
-        { id: sibling.id, name: sibling.name, method: sibling.http_method, folder: sibling.folder&.name }
+      @editor_responses ||= begin
+        branch = workspace_tree.find { |item| item.collection.id == @api_request.collection_id }
+        siblings = branch.all_requests.reject { |sibling| sibling.id == @api_request.id }
+        siblings.sort_by { |sibling| [sibling.name.downcase, sibling.name] }.map do |sibling|
+          { id: sibling.id, name: sibling.name, method: sibling.http_method, folder: branch.folder(sibling.folder_id)&.name }
+        end
       end
     end
 

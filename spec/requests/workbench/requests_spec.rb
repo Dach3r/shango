@@ -23,6 +23,46 @@ RSpec.describe "Workbench requests" do
       expect(response.body).to include(api_request.name)
     end
 
+    it "shows the collection and folder path of the request", :aggregate_failures do
+      nested = create(:folder, collection:, parent: folder, name: "Deep")
+      get workbench_request_path(create(:api_request, collection:, folder: nested, name: "Deep request"))
+
+      expect(response.body.scan(%r{<span class="shrink-0 truncate">([^<]*)</span>}).flatten).to eq([collection.name, folder.name, "Deep"])
+    end
+
+    it "offers the other requests of the collection as response references, sorted by name", :aggregate_failures do
+      create(:api_request, collection:, folder:, name: "beta", http_method: "POST")
+      create(:api_request, collection:, name: "Alpha")
+      create(:api_request, collection: foreign_collection, name: "Foreign")
+
+      get workbench_request_path(api_request)
+
+      references = response.body[/data-code-editor-responses-value="([^"]*)"/, 1]
+      expect(JSON.parse(CGI.unescapeHTML(references)).map { |row| row.values_at("name", "method", "folder") }).to eq([["Alpha", "GET", nil], ["beta", "POST", folder.name]])
+    end
+
+    it "loads the environment variables once however many editors ask for them" do
+      environment = create(:environment, project:)
+      membership.update!(current_environment: environment)
+      create_list(:variable, 3, environment:)
+      get workbench_request_path(api_request)
+
+      queries = []
+      subscriber = ->(*, payload) { queries << payload[:sql] if payload[:sql].include?('FROM "variables"') }
+      ActiveSupport::Notifications.subscribed(subscriber, "sql.active_record") { get workbench_request_path(api_request) }
+
+      expect(queries.size).to eq(1)
+    end
+
+    it "preloads the code editor only on the request page", :aggregate_failures do
+      get workbench_root_path
+      expect(response.body).to include("importmap")
+      expect(response.body).not_to match(%r{<link rel="modulepreload" href="[^"]*codemirror})
+
+      get workbench_request_path(api_request)
+      expect(response.body).to match(%r{<link rel="modulepreload" href="[^"]*codemirror})
+    end
+
     it "offers the cookie jar switch in the settings", :aggregate_failures do
       get workbench_request_path(api_request)
 

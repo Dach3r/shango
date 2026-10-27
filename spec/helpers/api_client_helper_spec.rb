@@ -148,6 +148,25 @@ RSpec.describe ApiClientHelper do
     end
   end
 
+  describe "#request_breadcrumb" do
+    let(:project) { create(:project) }
+    let(:collection) { create(:collection, project:, name: "Docs") }
+    let(:parent) { create(:folder, collection:, name: "Users") }
+    let(:folder) { create(:folder, collection:, parent:, name: "Admin") }
+    let(:branches) { ApiClient::Tree::Load.call(project:) }
+
+    it "lists the collection and every folder down to the request", :aggregate_failures do
+      expect(helper.request_breadcrumb(create(:api_request, collection:, folder:), branches)).to eq(%w[Docs Users Admin])
+      expect(helper.request_breadcrumb(create(:api_request, collection:), branches)).to eq(%w[Docs])
+    end
+
+    it "names drafts" do
+      draft = create(:api_request, project:, collection: nil, user: create(:user))
+
+      expect(helper.request_breadcrumb(draft, branches)).to eq([I18n.t("workbench.requests.draft")])
+    end
+  end
+
   describe "#variable_autocomplete_data" do
     before do
       helper.define_singleton_method(:editor_variables) { [{ name: "token", set: true, value: "abc" }] }

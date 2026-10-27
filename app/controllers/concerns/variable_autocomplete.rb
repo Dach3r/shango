@@ -10,10 +10,11 @@ module VariableAutocomplete
 
   private
 
+  # Memoized: every editor and autocomplete input of a page asks for it.
   def editor_variables
     return [] unless current_environment
 
-    current_environment.variables.select(&:enabled).map do |variable|
+    @editor_variables ||= current_environment.variables.where(enabled: true).map do |variable|
       { name: variable.key, set: variable.value.present?, value: variable.masked_value, secret: variable.secret, url: environment_variable_path(current_environment, variable) }
     end
   end
