@@ -1,0 +1,17 @@
+.git/
+.github/
+/.bundle
+/.env*
+!/.env.example
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+/coverage
+/spec
+/docs
+/public/assets
+/node_modules
+Dockerfile
