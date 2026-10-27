@@ -22,9 +22,12 @@ module ApiClient
     Attempt = Struct.new(:status, :status_text, :headers, :body, :size, :truncated, keyword_init: true)
     TooLarge = Class.new(StandardError)
     DeadlineExceeded = Class.new(StandardError)
+    Cancelled = Class.new(StandardError)
 
-    def initialize(built:)
+    # `cancelled` is polled between chunks and hops so a user can stop a run that is already in flight.
+    def initialize(built:, cancelled: nil)
       @built = built
+      @cancelled = cancelled
     end
 
     private
@@ -91,6 +94,7 @@ module ApiClient
     end
 
     def check_deadline!
+      raise Cancelled, "Cancelled" if @cancelled&.call
       raise DeadlineExceeded, "The request exceeded the maximum duration of #{MAX_DURATION} seconds" if monotonic_now >= @deadline
     end
 
@@ -153,6 +157,7 @@ module ApiClient
       when SsrfPolicy::Blocked then ["blocked", error.message]
       when Connection::InvalidUrl then ["invalid_url", error.message]
       when Faraday::TimeoutError, DeadlineExceeded then ["timeout", error.message]
+      when Cancelled then ["cancelled", error.message]
       when Faraday::SSLError then ["ssl", error.message]
       when Faraday::ConnectionFailed then connection_failure(error)
       when SocketError then ["dns", error.message]

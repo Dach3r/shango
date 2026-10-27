@@ -2,6 +2,7 @@ require_relative "boot"
 require_relative "../lib/shango/mailing"
 require_relative "../lib/shango/encryption_keys"
 require_relative "../lib/shango/storage"
+require_relative "../lib/shango/execution_mode"
 
 require "rails"
 # Pick the frameworks you want:

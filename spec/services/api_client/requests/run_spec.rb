@@ -24,6 +24,41 @@ RSpec.describe ApiClient::Requests::Run do
     )
   end
 
+  describe "in async mode" do
+    include ActiveJob::TestHelper
+
+    before { stub_const("ENV", ENV.to_h.merge("SHANGO_EXECUTION_MODE" => "async")) }
+
+    it "queues the send and returns the run id", :aggregate_failures do
+      run_id = nil
+
+      expect { run_id = result.data[:run_id] }.to have_enqueued_job(RunRequestJob).with(user.id, api_request.id, environment.id, a_kind_of(String))
+      expect(result).to be_success
+      expect(result.record).to be_nil
+      expect(ApiClient::Executions::RunState.read(run_id)).to include("state" => "running", "user_id" => user.id, "uploaded" => false)
+      expect(a_request(:get, api_request.url)).not_to have_been_made
+    end
+
+    it "flags uploads so the page refreshes with the result", :aggregate_failures do
+      upload = Rack::Test::UploadedFile.new(StringIO.new("data"), "text/plain", original_filename: "a.txt")
+      api_request.update!(body_type: "binary")
+      queued = described_class.call(api_request:, environment:, user:, attributes: { body_type: "binary" }, binary_upload: upload)
+
+      expect(ApiClient::Executions::RunState.read(queued.data[:run_id])).to include("uploaded" => true)
+    end
+
+    it "queues without an environment" do
+      expect { described_class.call(api_request:, environment: nil, user:) }.to have_enqueued_job(RunRequestJob).with(user.id, api_request.id, nil, a_kind_of(String))
+    end
+
+    it "still reports invalid edits right away", :aggregate_failures do
+      queued = described_class.call(api_request:, environment:, user:, attributes: { name: "" })
+
+      expect(queued).to be_failure
+      expect(RunRequestJob).not_to have_been_enqueued
+    end
+  end
+
   it "lets a later request in the collection use the unsaved response", :aggregate_failures do
     stub_request(:get, api_request.url).to_return(status: 200, body: '{"id":638}', headers: { "Content-Type" => "application/json" })
     described_class.call(api_request:, environment:, user:)
@@ -96,9 +131,9 @@ RSpec.describe ApiClient::Requests::Run do
   end
 
   it "flags bodies cut at the read limit", :aggregate_failures do
-    stub_request(:get, api_request.url).to_return(status: 200, body: "a" * (described_class::BODY_LIMIT + 10), headers: { "Content-Type" => "text/plain" })
+    stub_request(:get, api_request.url).to_return(status: 200, body: "a" * (ApiClient::Requests::Dispatch::BODY_LIMIT + 10), headers: { "Content-Type" => "text/plain" })
 
-    expect(execution.response_body.bytesize).to eq(described_class::BODY_LIMIT)
+    expect(execution.response_body.bytesize).to eq(ApiClient::Requests::Dispatch::BODY_LIMIT)
     expect(execution.body_truncated).to be(true)
   end
 

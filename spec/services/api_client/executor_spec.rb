@@ -242,6 +242,14 @@ RSpec.describe ApiClient::Executor do
       expect(ApiClient::Connection).to have_received(:build).with(hash_including(timeout: 2))
     end
 
+    it "stops when cancelled", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, body: "hello")
+
+      reply = described_class.call(built:, cancelled: -> { true })
+
+      expect(reply).to have_attributes(error_kind: "cancelled", error_message: "Cancelled")
+    end
+
     it "reports ssl errors" do
       fail_with(Faraday::SSLError.new("bad cert"))
 
