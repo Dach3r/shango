@@ -438,6 +438,11 @@ zh-CN:
         pretty: 格式化
         raw: 原始
         preview: 预览
+      search:
+        label: "在响应中搜索"
+        placeholder: "搜索"
+        previous: "上一个匹配"
+        next: "下一个匹配"
       copy: 复制
       save: 保存响应
       copied: 已复制

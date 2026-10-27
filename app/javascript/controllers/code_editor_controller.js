@@ -8,6 +8,8 @@ import {
   referenceStatus,
 } from "lib/response_reference";
 
+const SEARCH_LIMIT = 10000;
+
 export default class extends Controller {
   static targets = ["input", "mount"];
   static values = {
@@ -68,6 +70,30 @@ export default class extends Controller {
     this.view.dispatch({
       changes: { from: 0, to: this.view.state.doc.length, insert: text },
     });
+  }
+
+  // Highlights every match of `text` (case-insensitive) and, with `direction`, moves to the next or previous one.
+  // Returns how many matches there are (capped) and the 1-based index of the selected one (0 when none is selected).
+  search(text, direction) {
+    if (!this.view) return { total: 0, current: 0 };
+
+    const { SearchQuery, setSearchQuery, findNext, findPrevious } = this.cm;
+    const query = new SearchQuery({ search: text });
+    this.view.dispatch({ effects: setSearchQuery.of(query) });
+    if (!query.valid) return { total: 0, current: 0 };
+
+    if (direction === "next") findNext(this.view);
+    if (direction === "previous") findPrevious(this.view);
+
+    const { from } = this.view.state.selection.main;
+    let total = 0;
+    let current = 0;
+    for (const match of query.getCursor(this.view.state)) {
+      total += 1;
+      if (match.from === from) current = total;
+      if (total >= SEARCH_LIMIT) break;
+    }
+    return { total, current };
   }
 
   // Another editor saved a variable: keep this one's highlighting and hover cards in sync.
@@ -687,6 +713,9 @@ export default class extends Controller {
       },
       ".cm-searchMatch": {
         backgroundColor: "color-mix(in oklab, var(--accent) 22%, transparent)",
+      },
+      ".cm-searchMatch.cm-searchMatch-selected": {
+        backgroundColor: "color-mix(in oklab, var(--accent) 50%, transparent)",
       },
       ".cm-placeholder": { color: "var(--faint)" },
     };

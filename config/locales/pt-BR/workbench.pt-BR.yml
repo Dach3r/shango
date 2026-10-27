@@ -440,6 +440,11 @@ pt-BR:
         pretty: Formatado
         raw: Bruto
         preview: Prévia
+      search:
+        label: "Buscar na resposta"
+        placeholder: "Buscar"
+        previous: "Correspondência anterior"
+        next: "Próxima correspondência"
       copy: Copiar
       save: Salvar resposta
       copied: Copiado

@@ -440,6 +440,11 @@ hi:
         pretty: "Pretty"
         raw: "Raw"
         preview: "Preview"
+      search:
+        label: "रिस्पॉन्स में खोजें"
+        placeholder: "खोजें"
+        previous: "पिछला मिलान"
+        next: "अगला मिलान"
       copy: "कॉपी करें"
       save: "रिस्पॉन्स सहेजें"
       copied: "कॉपी हो गया"

@@ -440,6 +440,11 @@ fr:
         pretty: "Formaté"
         raw: "Brut"
         preview: "Aperçu"
+      search:
+        label: "Rechercher dans la réponse"
+        placeholder: "Rechercher"
+        previous: "Résultat précédent"
+        next: "Résultat suivant"
       copy: "Copier"
       save: "Enregistrer la réponse"
       copied: "Copié"

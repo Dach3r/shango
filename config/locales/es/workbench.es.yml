@@ -440,6 +440,11 @@ es:
         pretty: Formateado
         raw: Crudo
         preview: Vista previa
+      search:
+        label: "Buscar en la respuesta"
+        placeholder: "Buscar"
+        previous: "Coincidencia anterior"
+        next: "Coincidencia siguiente"
       copy: Copiar
       save: Guardar respuesta
       copied: Copiado

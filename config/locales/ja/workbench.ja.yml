@@ -438,6 +438,11 @@ ja:
         pretty: 整形
         raw: Raw
         preview: プレビュー
+      search:
+        label: "レスポンス内を検索"
+        placeholder: "検索"
+        previous: "前の一致"
+        next: "次の一致"
       copy: コピー
       save: レスポンスを保存
       copied: コピーしました

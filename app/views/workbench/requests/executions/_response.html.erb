@@ -9,6 +9,7 @@
   <% history = api_request.request_executions.recent.limit(RequestExecution::KEEP_PER_REQUEST).select(:id, :status, :status_text, :error_kind, :duration_ms, :created_at, :http_method) %>
   <% timing = timing_rows(execution) unless execution.error? %>
   <% cookies = response_cookies(execution) %>
+  <% searchable = !execution.error? && !execution.body_omitted && execution.response_body.present? %>
   <% tabs = [
     { name: "body", label: t("workbench.executions.tabs.body") },
     { name: "headers", label: t("workbench.executions.tabs.headers"), count: execution.response_headers.size },
@@ -46,7 +47,24 @@
       <% end %>
     </div>
 
-    <%= render TabBar::Component.new(items: tabs, label: t("workbench.executions.tabs.label")) %>
+    <%= render TabBar::Component.new(items: tabs, label: t("workbench.executions.tabs.label")) do %>
+      <% if searchable %>
+        <div data-tabs-target="panel" data-name="body" data-controller="response-search" data-empty="true" class="group/search flex h-full items-center gap-1 px-2">
+          <label class="flex items-center gap-1.5 border border-line bg-field/40 px-2 py-1 text-xs text-muted focus-within:border-accent/60">
+            <%= lucide_icon "search", class: "size-3.5 shrink-0 text-faint" %>
+            <input type="search" data-response-search-target="input" data-action="input->response-search#input keydown->response-search#keydown" placeholder="<%= t("workbench.executions.search.placeholder") %>" aria-label="<%= t("workbench.executions.search.label") %>" autocomplete="off" spellcheck="false"
+                   class="w-40 min-w-0 bg-transparent text-ink placeholder:text-faint focus:outline-none [&::-webkit-search-cancel-button]:hidden">
+            <span data-response-search-target="count" class="min-w-6 text-right font-mono tabular-nums text-faint empty:hidden"></span>
+          </label>
+          <div class="flex group-data-[empty=true]/search:hidden">
+            <% { previous: "chevron-up", next: "chevron-down" }.each do |action, icon| %>
+              <button type="button" data-action="response-search#<%= action %>" title="<%= t("workbench.executions.search.#{action}") %>" aria-label="<%= t("workbench.executions.search.#{action}") %>"
+                      class="flex size-6 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"><%= lucide_icon icon, class: "size-3.5" %></button>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
 
     <div class="min-h-0 flex-1 overflow-y-auto">
       <div data-tabs-target="panel" data-name="body" class="h-full">

@@ -116,6 +116,17 @@ RSpec.describe "Workbench request executions" do
       expect(response).to have_http_status(:ok)
     end
 
+    it "offers searching the body only when there is one to search" do
+      with_body = create(:request_execution, api_request:, project:, response_body: '{"a":1}')
+      without_body = create(:request_execution, api_request:, project:, response_body: "")
+
+      get workbench_request_execution_path(api_request, with_body)
+      expect(response.body).to include('data-controller="response-search"')
+
+      get workbench_request_execution_path(api_request, without_body)
+      expect(response.body).not_to include('data-controller="response-search"')
+    end
+
     it "does not find executions of other requests" do
       execution = create(:request_execution, api_request: foreign_request)
       get workbench_request_execution_path(api_request, execution)

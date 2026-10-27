@@ -440,6 +440,11 @@ de:
         pretty: Formatiert
         raw: Roh
         preview: Vorschau
+      search:
+        label: "In der Antwort suchen"
+        placeholder: "Suchen"
+        previous: "Vorheriger Treffer"
+        next: "Nächster Treffer"
       copy: Kopieren
       save: Antwort speichern
       copied: Kopiert
