@@ -408,6 +408,16 @@ input:-webkit-autofill:focus {
   box-shadow: 0 0 0 1000px var(--field-focus) inset, 0 0 0 0.25rem color-mix(in srgb, var(--solid) 45%, transparent);
 }
 
+/* App chrome is not selectable; editable fields and code editors stay selectable. */
+.app-shell input,
+.app-shell textarea,
+.app-shell [contenteditable],
+.app-shell .cm-editor,
+.app-shell .selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 /* Code editors (CodeMirror): show the plain textarea until the editor has mounted. */
 .code-editor [data-code-editor-target="mount"] {
   display: none;
