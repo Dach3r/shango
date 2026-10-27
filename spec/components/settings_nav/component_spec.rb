@@ -12,7 +12,7 @@ RSpec.describe SettingsNav::Component, type: :component do
     render_nav
 
     expect(page).to have_css("h2", text: I18n.t("components.settings_nav.groups.account"))
-    expect(page).to have_css("h2", text: I18n.t("components.settings_nav.groups.membership", project: "Alpha"))
+    expect(page).to have_css("h2", text: I18n.t("components.settings_nav.groups.appearance"))
     expect(page).to have_css("h2", text: I18n.t("components.settings_nav.groups.project"))
   end
 

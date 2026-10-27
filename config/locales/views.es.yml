@@ -39,7 +39,7 @@ es:
       label: Secciones de configuración
       groups:
         account: Mi cuenta
-        membership: "%{project} · mi membresía"
+        appearance: Apariencia
         project: Proyecto
       items:
         profile: Perfil
