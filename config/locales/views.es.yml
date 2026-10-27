@@ -4,6 +4,14 @@ es:
   throttling:
     limited: Demasiados intentos. Espera un momento e inténtalo de nuevo.
   activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} supera el límite de %{max} MB."
+              uploads_too_large: Los archivos juntos superan el límite de %{max} MB.
+              too_many_uploads: Demasiados archivos en una solicitud (máximo %{max}).
     attributes:
       user:
         first_name: Nombre
