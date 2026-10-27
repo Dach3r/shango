@@ -32,7 +32,7 @@ RSpec.describe ApiClient::Connection do
     end
 
     it "pins the resolved address" do
-      allow(ApiClient::SsrfPolicy).to receive(:check!).and_return("93.184.216.34")
+      allow(Network::SsrfPolicy).to receive(:check!).and_return("93.184.216.34")
       stub_request(:get, "https://a.test/").to_return(status: 200)
 
       expect(described_class.build(url: "https://a.test", timeout: 5).get("https://a.test/").status).to eq(200)

@@ -69,6 +69,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :network do
+    root to: "workspaces#show"
+
+    resources :dns_checks, only: :create
+    resources :port_checks, only: :create
+    resources :pings, only: :create
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
   get "ready", to: "health#show"
 end

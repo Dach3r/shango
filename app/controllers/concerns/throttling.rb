@@ -5,7 +5,7 @@ module Throttling
 
   LIMITS = {
     executions: [60, 1.minute], oauth: [20, 1.minute], imports: [10, 10.minutes],
-    sign_in: [10, 1.minute], sign_up: [10, 1.hour], password_reset: [5, 1.hour]
+    sign_in: [10, 1.minute], sign_up: [10, 1.hour], password_reset: [5, 1.hour], network: [20, 1.minute]
   }.freeze
 
   # [count, window] for a named limit, honoring the environment override when it is well formed.

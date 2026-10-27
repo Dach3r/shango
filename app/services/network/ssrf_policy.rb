@@ -1,4 +1,4 @@
-module ApiClient
+module Network
   # Outbound request guard. Blocking private addresses is on by default in production and off elsewhere;
   # SHANGO_BLOCK_PRIVATE_NETWORKS=true|false overrides it, so self-hosted installs that legitimately call
   # internal services opt out explicitly.

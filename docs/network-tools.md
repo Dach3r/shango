@@ -1,6 +1,6 @@
 # Shango — Network Tools
 
-> Design and implementation plan for the Network Tools feature (DNS checker, port check, TCP ping). **Status: designed, not built.** Nothing here exists in the code yet; check the repo for the real state. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
+> Design and reference for the Network Tools feature (DNS checker, port check, TCP ping). **Status: built** (DNS checker, port check, TCP ping). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
 
 ## 1. Why
 
@@ -37,7 +37,7 @@ The UI labels the third tool **TCP ping**, never plain "ping", so nobody mistake
 ## 3. User experience
 
 - New project tool **Network** in `ToolsNav` (icon `radar`), live as soon as the first tool ships; it is rendered disabled with a *Soon* badge before that, like the other unbuilt tools.
-- One page, `/network`, with three tabs: *DNS*, *Ports*, *Ping* (`TabBar::Component`, tab kept in `?tab=`, default `dns`). Each tab is a compact form plus a result area.
+- One page, `/network`, with three tabs: *DNS*, *Ports*, *Ping* (`TabBar::Component` with the `tabs` Stimulus controller; the last tab is remembered per browser session, default `dns`). Each tab is a compact form plus a result area.
 - Submitting posts to the tool's endpoint and the result replaces the result area as a Turbo Stream (same pattern as running a request in the API Client). The submit button uses the standard loading state. Results are not stored, so a reload shows an empty form.
 - The host/domain field accepts `{{variables}}` resolved from the member's selected environment (`ApiClient::VariableResolver`), the same way request URLs do. The resolved value is shown with the result.
 - DNS tab fields: domain, record type (`A`, `AAAA`, `CNAME`, `MX`, `TXT`, `NS`, `SOA`, `CAA`), optional expected value. Result: summary line (`7 of 9 resolvers match`), then a table with one row per resolver (name, IP, answer(s), TTL, latency, status). Authoritative nameservers are listed in their own group because they are the source of truth: if they still return the old value, the change was never published.
@@ -67,31 +67,37 @@ end
 | `POST /network/port_checks` | `Network::PortChecksController#create` | Run port check |
 | `POST /network/pings` | `Network::PingsController#create` | Run TCP ping |
 
-Each `create` action: scope to `current_project`, declare strong params, call the service, respond with a Turbo Stream (HTML fallback renders the page). Controllers use Rails' built-in `rate_limit` (backed by Solid Cache) so no gem is needed.
+Each `create` action: scope to `current_project`, declare strong params, call the service, respond with a Turbo Stream (the forms are Turbo forms; there is no HTML fallback). `Network::BaseController` throttles every POST per user with the `Throttling` concern (`throttle :network`, 20 per minute, override with `SHANGO_RATE_LIMIT_NETWORK=<count>/<seconds>`), and answers `429` as a Turbo Stream into the tool's result area. Each controller defines `result_target`.
 
 ### Services (`app/services/network/`, `Serviceable` + `Result`)
 
 | Class | Responsibility |
 |-------|----------------|
-| `Network::Target` | Plain class. Resolves `{{variables}}` against the environment, validates the host (hostname per RFC 1035 or IP literal; no scheme, path, port or whitespace), returns the normalized host or an error. Shared by the three tools. |
-| `Network::DnsChecks::Run` | Validates the domain and record type, builds the resolver list, queries in parallel, evaluates the expected value, returns a `Result` whose `data` has the per-resolver rows and the summary. |
-| `Network::Dns::Resolvers` | Static list of public resolvers (Google `8.8.8.8`, Cloudflare `1.1.1.1`, Quad9 `9.9.9.9`, OpenDNS `208.67.222.222`, and a few more) and the lookup of the domain's authoritative nameservers (`NS` query, then `A`/`AAAA` of each). |
-| `Network::Dns::Query` | One `Resolv::DNS` query against one nameserver with a hard timeout; returns normalized answers (type-specific string, TTL) or an error symbol (`:timeout`, `:servfail`, `:nxdomain`, `:refused`). |
-| `Network::PortChecks::Run` | Parses the port spec, enforces limits, applies the SSRF policy, probes with a bounded thread pool, returns rows sorted by port. |
-| `Network::PortChecks::PortSpec` | Parses `22,80,8000-8010` into a sorted unique integer list; rejects invalid or too many ports. |
+| `Network::Target` | Resolves `{{variables}}` against the selected environment (disabled variables are invisible, secret ones are refused), validates the host (hostname per RFC 1035 with `_` allowed, or IP literal; no scheme, path, port or whitespace) and returns the normalized host or an error. Shared by the three tools. |
+| `Network::Destination` | Applies `Network::SsrfPolicy` to a host and returns the address probes connect to (`:blocked` / `:unresolved` errors). Used by port check and TCP ping. |
+| `Network::Parallel` | `map(items, limit:)`: bounded threads, ordered results. |
+| `Network::DnsChecks::Run` | Validates the record type and domain, builds the resolver list (authoritative first, then public), queries in parallel, evaluates the expected value, returns a `Result` whose `data` has the rows and the summary (`total`, `answered`, `matched`, `agree`). |
+| `Network::Dns::Resolvers` | The fixed list of eight public resolvers (Google, Cloudflare, Quad9, OpenDNS, Verisign, AdGuard, CleanBrowsing, Lumen) and `authoritative(domain)`: walks up the labels until an `NS` answer is found (a subdomain has no NS records of its own), then looks up `A`, else `AAAA`, of each nameserver. Nameservers without address keep a nil `ip`. |
+| `Network::Dns::Query` | One question to one nameserver. Always returns an `Answer` (`status`, `answers`, `ttl` = lowest TTL, `ms`); failures are statuses: `ok`, `cname` (only an alias came back), `nodata`, `nxdomain`, `servfail`, `refused`, `timeout`, `error`. Builds and decodes the message with `Resolv::DNS::Message`. |
+| `Network::Dns::Transport` | The raw exchange: UDP first (connected socket, so replies from other sources are ignored), TCP with the 2-byte length frame when the reply is truncated. Raises `TimedOut` / `Failed`. |
+| `Network::Dns::Row` | One table line (`name`, `ip`, `group`, `status`, `answers`, `ttl`, `ms`, `match`). |
+| `Network::PortChecks::Run` | Parses the port spec, enforces limits, applies the SSRF policy, probes with bounded threads, returns rows sorted open first. |
+| `Network::PortChecks::PortSpec` | Parses `22,80,8000-8010` and the `common` preset into a sorted unique integer list; rejects invalid or too many ports. |
 | `Network::Pings::Run` | Applies the SSRF policy, performs N sequential probes, computes min/avg/max/loss. |
 | `Network::Tcp::Probe` | One TCP connect with timeout, returns `{ status: :open/:closed/:filtered, ms: }`. Connects to the pinned IP. Closes the socket immediately; never sends or reads data. |
 | `Network::Services` | Static port → service name table (`22 ssh`, `80 http`, `443 https`, `5432 postgresql`…). |
 
+The DNS client speaks the protocol itself instead of using `Resolv::DNS#getresources` because that method swallows every error, so a timeout, an `NXDOMAIN` and an empty answer would look the same, and the propagation table needs to tell them apart. DNS does not use EDNS, so large answers (long `TXT` sets) arrive truncated over UDP and are fetched again over TCP.
+
 Models: **none in v1.** There is no persistence, so no migration and no project-owned table. Project scoping still applies through `current_project` (the environment used for variable resolution is `current_membership.current_environment`, which belongs to the project) and through audit logging (§6).
 
-UI: `Network::` views under `app/views/network/`, with a ViewComponent for the shared result rows if it is reused three times (`NetworkResult::Component`), `ToolsNav::ITEMS` gets `{ key: :network, icon: "radar", path: :network_root_path }`. Locale files: `config/locales/network.en.yml` and `network.es.yml`, plus `components.tools_nav.network` in the existing component locale files.
+UI: views under `app/views/network/` (a page with the tabs, one result partial per tool, shared `error` and `throttled` partials) and `NetworkStatus::Component`, the badge for statuses (`open`, `timeout`, `mismatch`…, labels in `network.statuses`). `ToolsNav::ITEMS` has `{ key: :network, icon: "radar", path: :network_root_path }`. Locale files: `config/locales/network.en.yml` and `network.es.yml`, plus `components.tools_nav.network` in `views.en.yml` / `views.es.yml`.
 
 ### Execution model
 
-Everything runs **synchronously inside the web request**, like the API Client, because the caps in §5 bound the worst case to a few seconds and no job/broadcast machinery is needed. The tradeoff: a slow run holds one Puma thread for up to the time in the table below. If the caps are ever raised (for example to scan 1000 ports), move the run to a Solid Queue job that broadcasts the result with Turbo Streams instead of raising the timeout.
+Everything runs **synchronously inside the web request** (unlike API Client requests, which run in a background job because they can take minutes), because the caps in §5 bound the worst case to a few seconds and no job/broadcast machinery is needed. The tradeoff: a slow run holds one Puma thread for up to the time in the table below. If the caps are ever raised (for example to scan 1000 ports), move the run to a Solid Queue job that broadcasts the result with Turbo Streams instead of raising the timeout.
 
-DNS and port probes run in short-lived threads (`Concurrent::FixedThreadPool` ships with Rails through `concurrent-ruby`; plain `Thread` plus `Queue` is fine too). Each thread owns its socket or resolver; nothing is shared except the result collection, which is a `Concurrent::Array` or is filled after `join`.
+DNS and port probes run on short-lived threads through `Network::Parallel.map(items, limit:)`, which keeps results in input order, caps concurrency and re-raises errors on join. Each thread owns its socket; nothing is shared between them.
 
 ## 5. Limits
 
@@ -103,9 +109,9 @@ DNS and port probes run in short-lived threads (`Concurrent::FixedThreadPool` sh
 | Port probe timeout | 1.5 s | Long enough for most internet RTTs |
 | Port probe concurrency | 20 | Worst case 100 ports ÷ 20 × 1.5 s ≈ 7.5 s |
 | Ping attempts | 1–10, default 4 | |
-| Ping probe timeout | 2 s | Worst case 10 × 2 s = 20 s: attempts run sequentially, so cap total at 10 s by stopping after 5 consecutive timeouts |
+| Ping probe timeout | 2 s | Attempts run one after another; the run stops after 5 timeouts in a row, so a dead host costs at most 10 s |
 | Hosts per run | 1 | No sweeping |
-| Rate limit | 20 runs per minute per user, all three tools combined | Abuse protection (`rate_limit` in `Network::BaseController`) |
+| Rate limit | 20 runs per minute per user, all three tools combined | Abuse protection (`throttle :network` in `Network::BaseController`) |
 
 Values are constants in the services; they are not user settings.
 
@@ -113,11 +119,11 @@ Values are constants in the services; they are not user settings.
 
 This feature makes the Shango server open connections to hosts the user names, so it is an SSRF and abuse surface. Rules:
 
-1. **Reuse `ApiClient::SsrfPolicy`** for port check and TCP ping. Same behavior and same switch: blocking private, loopback, link-local and cloud-metadata ranges is on by default in production and controlled by `SHANGO_BLOCK_PRIVATE_NETWORKS` (see [`api-client.md`](api-client.md) §6). The policy returns the address that was checked and the probe connects to **that** address (pinning), so DNS rebinding between check and connect is not possible. When this feature lands, move the class out of the `ApiClient` namespace (for example to `Networking::SsrfPolicy`, or keep it and reference it from `Network::`) in its own `♻️ refactor` commit; do not duplicate it.
+1. **Reuse `Network::SsrfPolicy`** (`app/services/network/ssrf_policy.rb`, shared with the API Client) for port check and TCP ping. Same behavior and same switch: blocking private, loopback, link-local and cloud-metadata ranges is on by default in production and controlled by `SHANGO_BLOCK_PRIVATE_NETWORKS` (see [`api-client.md`](api-client.md) §6). The policy returns the address that was checked and the probe connects to **that** address (pinning), so DNS rebinding between check and connect is not possible. It was moved out of the `ApiClient` namespace for this feature; do not duplicate it.
 2. **DNS checker is not an SSRF vector** because it only sends queries to the fixed public resolvers and to the authoritative nameservers listed in the domain's own `NS` records. Authoritative nameserver IPs go through the same `SsrfPolicy` check, otherwise a domain whose NS record points at `127.0.0.1` or `169.254.169.254` would make Shango send UDP packets inside the network.
 3. **No user-supplied resolvers, no CIDR, one host per run, port cap** (§5), connect-only probes (no payloads, no banners), so the tools cannot be used to exploit services, only to check reachability.
 4. **Rate limit** per user (§5).
-5. **Audit log**: each port check and ping logs one line (`user_id`, `project_id`, resolved host, port count or port). No secrets are involved; environment variable values used to build the host are logged only as the resolved host, and if the variable is a secret the run is rejected (secret variables are not allowed in network targets).
+5. **Audit log**: every port check and ping, refused ones included, logs one line: `[network] port_check user=<id> project=<id> input="<what was typed>" outcome=<ok or the error> host=<resolved host> ports=<count>` (`port=<n>` for pings). The typed input is cut to 100 characters and written with `inspect`, so newlines cannot forge log lines. Secret variables are rejected before anything runs, so no secret value can reach the log.
 6. **Project scope**: variables are resolved from the member's current environment of the current project only.
 7. **No public exposure**: all endpoints sit behind `authenticate_user!`.
 
@@ -151,21 +157,20 @@ RSpec, 100% line and branch coverage like the rest of the app.
 - **Components**: `ToolsNav` live entry, result component, status badges.
 - Never run a real scan or DNS query in specs. A manual check against `localhost` and a public DNS name is part of the PR checklist.
 
-## 9. Implementation plan
+## 9. How it was built
 
-Each step is one logical commit with its specs and its docs update (per `CLAUDE.md`), run `bundle exec rubocop` on touched files first. Suggested commit subjects use the project's gitmoji convention.
+One logical commit per step, each with its specs and docs:
 
-1. `📝 docs(network): ...` — this document, linked from `CLAUDE.md`, `product.md` (§9 capability, §14 roadmap note) and `architecture.md` (§6 subsystem, §7 security).
-2. `♻️ refactor(api_client): ...` — extract `SsrfPolicy` to a shared namespace, no behavior change, specs move with it.
-3. `✨ feat(network): ...` — foundation: routes, `BaseController` with rate limit, workspace page with tabs, `Network::Target`, `ToolsNav` entry (live), locale files, specs. The tabs of tools not yet built render a *Soon* badge.
-4. `✨ feat(network): ...` — DNS checker (`Dns::Resolvers`, `Dns::Query`, `DnsChecks::Run`, controller, tab, specs).
-5. `✨ feat(network): ...` — port check (`PortSpec`, `Services`, `Tcp::Probe`, `PortChecks::Run`, controller, tab, specs).
-6. `✨ feat(network): ...` — TCP ping (`Pings::Run`, controller, tab, specs).
-7. `📝 docs(network): ...` — flip this document from *designed* to *built*, update `architecture.md` §9 snapshot, and add a short *Network Tools* paragraph to the user-facing docs.
+1. `📝 docs(network)` — this design, linked from `CLAUDE.md`, `product.md` and `architecture.md`.
+2. `♻️ refactor(network)` — `SsrfPolicy` moved to `Network::SsrfPolicy`, no behavior change.
+3. `✨ feat(network)` — `Network::Target` and `Network::Destination`; the *Network* entry in `ToolsNav` (disabled with a *Soon* badge until step 4).
+4. `✨ feat(network)` — DNS checker: `Parallel`, `Dns::Transport`, `Dns::Query`, `Dns::Resolvers`, `DnsChecks::Run`, the page with its tabs, `BaseController` throttling, `NetworkStatus::Component`, entry made live.
+5. `✨ feat(network)` — port check: `PortSpec`, `Services`, `Tcp::Probe`, `PortChecks::Run`, audit logging.
+6. `✨ feat(network)` — TCP ping: `Pings::Run`.
 
-Order matters: the DNS checker comes first because it is the most useful and the safest (no connections to user-chosen hosts). Steps 5 and 6 only start after the SSRF policy is shared (step 2).
+The DNS checker came first because it is the most useful and the safest (no connections to hosts the user names). Port check and ping only started after the guard was shared (step 2).
 
-Definition of done for the feature: all three tools usable from the UI in `en` and `es`, specs at 100% coverage, rubocop and brakeman clean, behavior verified manually in the running app, docs updated.
+Verification: RSpec at 100% line and branch coverage, rubocop and brakeman clean, and a manual run in the app with real DNS and TCP (DNS table for `example.com` and for a mid-change domain with an expected value, port table, ping, a blackhole address that stops after five timeouts in about ten seconds, and invalid input).
 
 ## 10. Open questions
 
