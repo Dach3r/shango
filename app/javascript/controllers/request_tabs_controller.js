@@ -38,8 +38,9 @@ export default class extends Controller {
     event.preventDefault();
     for (const tab of this.closingTabs(form)) {
       const { confirmMessage, confirmLabel, requestTabId } = tab.dataset;
-      if (!confirmMessage) continue;
+      if (tab.dataset.dirty === undefined) continue;
       if (await Turbo.config.forms.confirm(confirmMessage, form, undefined, confirmLabel)) continue;
+      if (form.dataset.requestTabsSide === "self") return;
 
       const keep = document.createElement("input");
       Object.assign(keep, { type: "hidden", name: "keep[]", value: requestTabId });
@@ -53,6 +54,7 @@ export default class extends Controller {
     const tabs = [...this.element.querySelectorAll("[data-request-tab]")];
     const side = form.dataset.requestTabsSide;
     if (side === "all") return tabs;
+    if (side === "self") return [form.closest("[data-request-tab]")];
 
     const pivot = tabs.indexOf(form.closest("[data-request-tab]"));
     return side === "left" ? tabs.slice(0, pivot) : tabs.slice(pivot + 1);

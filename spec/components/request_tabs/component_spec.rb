@@ -64,21 +64,29 @@ RSpec.describe RequestTabs::Component, type: :component do
 
     render_inline(described_class.new(requests: [saved, other], unsaved_ids: [saved.id]))
 
-    expect(page).to have_css("form[action='/workbench/requests/#{saved.id}/tab'][data-turbo-confirm='#{message}']")
-    expect(page).to have_no_css("form[action='/workbench/requests/#{other.id}/tab'][data-turbo-confirm]")
-    expect(page).to have_css("[data-request-tab-id='#{saved.id}'][data-confirm-message='#{message}']", visible: :all)
-    expect(page).to have_no_css("[data-request-tab-id='#{other.id}'][data-confirm-message]", visible: :all)
+    expect(page).to have_css("form[action='/workbench/requests/#{saved.id}/tab'][data-action='submit->request-tabs#confirmClose'][data-request-tabs-side=self]")
+    expect(page).to have_css("[data-request-tab-id='#{saved.id}'][data-dirty][data-confirm-message='#{message}']", visible: :all)
+    expect(page).to have_css("[data-request-tab-id='#{other.id}'][data-confirm-message]:not([data-dirty])", visible: :all)
   end
 
-  it "flags drafts with edits but not untouched ones for the bulk close confirmation", :aggregate_failures do
+  it "flags drafts with edits or a stash but not untouched ones for the close confirmation", :aggregate_failures do
     untouched = ApiClient::Requests::CreateDraft.call(project:, user:).record
     edited = ApiClient::Requests::CreateDraft.call(project:, user:).record
     edited.update!(name: "Edited")
 
     render_inline(described_class.new(requests: [untouched, edited.reload]))
 
-    expect(page).to have_css("[data-request-tab-id='#{edited.id}'][data-confirm-message]", visible: :all)
-    expect(page).to have_no_css("[data-request-tab-id='#{untouched.id}'][data-confirm-message]", visible: :all)
+    expect(page).to have_css("[data-request-tab-id='#{edited.id}'][data-dirty]", visible: :all)
+    expect(page).to have_no_css("[data-request-tab-id='#{untouched.id}'][data-dirty]", visible: :all)
+  end
+
+  it "flags an untouched draft that keeps unsaved edits and asks before discarding it", :aggregate_failures do
+    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+
+    render_inline(described_class.new(requests: [draft], unsaved_ids: [draft.id]))
+
+    expect(page).to have_css("[data-request-tab-id='#{draft.id}'][data-dirty]", visible: :all)
+    expect(page).to have_css("form[action='/workbench/requests/#{draft.id}'][data-request-tabs-side=self]")
   end
 
   it "closes untouched drafts without a confirmation", :aggregate_failures do

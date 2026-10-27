@@ -8,7 +8,10 @@ export default class extends Controller {
 
   connect() {
     this.snapshot = this.#serialize();
+    this.initial = this.snapshot;
     this.timer = null;
+    this.tab = this.#currentTab();
+    this.serverDirty = this.tab?.dataset.dirty !== undefined;
   }
 
   disconnect() {
@@ -16,6 +19,7 @@ export default class extends Controller {
   }
 
   schedule() {
+    this.#markDirty(this.serverDirty || this.#serialize() !== this.initial);
     clearTimeout(this.timer);
     this.timer = setTimeout(() => this.#flush(false), DELAY);
   }
@@ -30,6 +34,16 @@ export default class extends Controller {
     clearTimeout(this.timer);
     this.timer = null;
     this.snapshot = this.#serialize();
+    this.#markDirty(false);
+  }
+
+  // The tab asks before closing while the editor holds edits that are not saved.
+  #markDirty(dirty) {
+    this.tab?.toggleAttribute("data-dirty", dirty);
+  }
+
+  #currentTab() {
+    return document.querySelector("[data-request-tab] [aria-current=page]")?.closest("[data-request-tab]");
   }
 
   #flush(keepalive) {

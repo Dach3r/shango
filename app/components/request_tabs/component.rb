@@ -17,6 +17,10 @@ class RequestTabs::Component < ApplicationComponent
 
   private
 
+  def self_close
+    { data: { action: "submit->request-tabs#confirmClose", request_tabs_side: "self" } }
+  end
+
   def side_closable?(index)
     { left: index.positive?, right: index < @requests.size - 1 }
   end
