@@ -77,7 +77,7 @@ RSpec.describe Membership do
   end
 
   describe "database constraints" do
-    %w[folder_toggle request_open color_scheme theme].each do |column|
+    %w[role folder_toggle request_open color_scheme theme].each do |column|
       it "rejects a #{column} outside the CHECK list" do
         expect { described_class.transaction(requires_new: true) { membership.update_column(column, "bogus") } }.to raise_error(ActiveRecord::StatementInvalid, /check/i)
       end

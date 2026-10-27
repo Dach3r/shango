@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_123818) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_131342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -147,6 +147,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_123818) do
     t.check_constraint "color_scheme::text = ANY (ARRAY['system'::character varying, 'light'::character varying, 'dark'::character varying]::text[])", name: "memberships_color_scheme_check"
     t.check_constraint "folder_toggle::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_folder_toggle_check"
     t.check_constraint "request_open::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_request_open_check"
+    t.check_constraint "role::text = ANY (ARRAY['member'::character varying, 'owner'::character varying]::text[])", name: "memberships_role_check"
     t.check_constraint "theme::text = ANY (ARRAY['default'::character varying, 'blue'::character varying, 'green'::character varying, 'yellow'::character varying, 'red'::character varying, 'ocean'::character varying, 'purple'::character varying, 'rose'::character varying, 'orange'::character varying, 'forest'::character varying, 'midnight'::character varying, 'nord'::character varying, 'dracula'::character varying, 'gruvbox'::character varying, 'solarized'::character varying, 'sunset'::character varying, 'coffee'::character varying, 'cyberpunk'::character varying, 'mono'::character varying]::text[])", name: "memberships_theme_check"
   end
 
