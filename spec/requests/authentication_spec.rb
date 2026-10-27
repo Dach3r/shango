@@ -110,7 +110,7 @@ RSpec.describe "Authentication" do
       get edit_user_registration_path(tab: "delete_account")
 
       expect(response.body).to include(%(data-turbo-confirm="#{I18n.t("devise.registrations.edit.confirm")}"))
-      expect(response.body).to include(%(name="confirm_email"))
+      expect(response.body).to include(%(name="acknowledge"))
       expect(response.body).not_to include(%(name="user[password]"))
       expect(response.body).not_to include(%(name="user[email]"))
     end
@@ -119,7 +119,7 @@ RSpec.describe "Authentication" do
       get edit_user_registration_path(tab: "delete_account")
 
       expect(response.body).to include(user.memberships.first.project.name)
-      expect(response.body).not_to include(%(data-type-to-confirm-locked-value="true"))
+      expect(response.body).not_to include(%(data-confirm-gate-locked-value="true"))
     end
 
     it "locks the cancel action while a shared project would lose its owner", :aggregate_failures do
@@ -129,7 +129,7 @@ RSpec.describe "Authentication" do
 
       get edit_user_registration_path(tab: "delete_account")
 
-      expect(response.body).to include(%(data-type-to-confirm-locked-value="true"))
+      expect(response.body).to include(%(data-confirm-gate-locked-value="true"))
       expect(response.body).to include(I18n.t("devise.registrations.edit.danger.blocked_hint"))
     end
 

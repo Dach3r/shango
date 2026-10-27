@@ -22,6 +22,10 @@ module Users
       @requests_count ||= ApiRequest.where(project_id: doomed.map(&:id)).count
     end
 
+    def shared_count
+      @user.memberships.active.count - doomed.size - blocked.size
+    end
+
     private
 
     def owned_projects

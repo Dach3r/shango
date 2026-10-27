@@ -25,6 +25,7 @@ RSpec.describe Users::AccountImpact do
 
     expect(impact.doomed).to be_empty
     expect(impact.blocked).to be_empty
+    expect(impact.shared_count).to eq(2)
   end
 
   it "flags projects where the user is the only owner of other members", :aggregate_failures do
