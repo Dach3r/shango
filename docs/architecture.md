@@ -89,6 +89,10 @@ A scheduler enqueues check jobs per monitor at its interval (Solid Queue recurri
 
 A channel abstraction (email, webhook first; Slack/Discord later) behind a common delivery interface, fed by domain events (incident opened, recovered). Delivery runs in background jobs with retries.
 
+### Network tools
+
+DNS checker, port check and TCP ping, run synchronously in the web request with hard caps (ports, timeouts, concurrency) and no persistence. Built on the Ruby standard library (`Resolv::DNS`, `Socket`); nmap is excluded for license reasons. Targets are checked with the same SSRF policy as the API Client and rate limited per user. Details, limits and implementation plan: [`network-tools.md`](network-tools.md).
+
 ### SSH and terminal
 
 Browser terminal (xterm.js) connected over WebSocket (Action Cable) to a server-side SSH session. Sessions are explicit, authorized per user and server, time-limited, and audited. Private keys are never sent to the browser.
@@ -101,6 +105,7 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 
 - **Secrets** (environment variables, request credentials and OAuth tokens today; SSH keys and AI provider keys later): encrypted at rest with Active Record Encryption, masked in the UI and in stored request/response history, excluded from logs (`filter_parameters`), and never included in AI context without explicit authorization. Keys come from `ACTIVE_RECORD_ENCRYPTION_*` environment variables or, when unset, are derived from `secret_key_base` (see [`api-client.md`](api-client.md) §6).
 - **Outbound requests:** private-network blocking is on by default in production; each operator decides with `SHANGO_BLOCK_PRIVATE_NETWORKS=true|false` (see [`api-client.md`](api-client.md) §6).
+- **Network tools (Target):** port check and TCP ping reuse the outbound-request guard and pin the connection to the checked address; DNS queries only go to fixed public resolvers and to authoritative nameservers that also pass the guard; one host per run, connect-only probes, per-user rate limit, audit log line per run (see [`network-tools.md`](network-tools.md) §6).
 - **Authorization:** all project resources scoped to the current user's projects.
 - **SSH:** no unauthenticated or unscoped connections; session lifetime limits; audit trail.
 - **AI:** read-only by default; confirmation gates for sensitive actions.
