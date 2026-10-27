@@ -4,7 +4,7 @@
 <% tabs = [
      { name: "dns", label: t("network.tabs.dns") },
      { name: "ports", label: t("network.tabs.ports") },
-     { name: "ping", label: t("network.tabs.ping"), disabled: true }
+     { name: "ping", label: t("network.tabs.ping") }
    ] %>
 
 <div class="mx-auto max-w-3xl border border-line bg-card" data-controller="tabs" data-tabs-active-value="dns" data-tabs-key-value="network-tools">
@@ -54,5 +54,30 @@
       </div>
     <% end %>
     <div id="ports_result" class="mt-6 empty:hidden" aria-live="polite"></div>
+  </div>
+
+  <div data-tabs-target="panel" data-name="ping" class="p-4" hidden>
+    <p class="mb-4 text-sm text-muted"><%= t("network.ping.intro") %></p>
+    <%= form_with scope: :ping, url: network_pings_path, class: "grid gap-4 sm:grid-cols-[1fr_6rem_6rem]" do |form| %>
+      <div>
+        <%= form.label :host, t("network.ping.host"), class: label_classes %>
+        <%= form.text_field :host, required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= form.label :port, t("network.ping.port"), class: label_classes %>
+        <%= form.number_field :port, value: Network::Pings::Run::DEFAULT_PORT, min: 1, max: 65_535, required: true, class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= form.label :attempts, t("network.ping.attempts"), class: label_classes %>
+        <%= form.number_field :attempts, value: Network::Pings::Run::DEFAULT_ATTEMPTS, min: 1, max: Network::Pings::Run::MAX_ATTEMPTS, required: true, class: field_classes("font-mono") %>
+      </div>
+      <div class="sm:col-span-3">
+        <p class="mb-4 text-xs text-faint"><%= t("network.ping.hint") %></p>
+        <%= form.button type: :submit, class: button_classes(:primary) do %>
+          <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
+        <% end %>
+      </div>
+    <% end %>
+    <div id="ping_result" class="mt-6 empty:hidden" aria-live="polite"></div>
   </div>
 </div>

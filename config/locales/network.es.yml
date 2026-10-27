@@ -17,6 +17,8 @@ es:
       blank_ports: Ingresa al menos un puerto.
       invalid_ports: "\"%{token}\" no es un puerto válido. Usa números del 1 al 65535, rangos como 8000-8010 o common."
       too_many_ports: "Comprueba como máximo %{max} puertos a la vez."
+      invalid_port: Ingresa un puerto entre 1 y 65535.
+      invalid_attempts: "Elige entre 1 y %{max} intentos."
     statuses:
       ok: Respondió
       cname: Alias
@@ -73,3 +75,16 @@ es:
         service: Servicio habitual
         latency: Latencia
         status: Estado
+    ping:
+      intro: Comprueba si un host responde, abriendo varias conexiones TCP a un puerto y midiendo su tiempo.
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 o {{host}}
+      port: Puerto
+      attempts: Intentos
+      hint: Es un ping TCP, no ICMP. Una conexión rechazada igual prueba que el host está en línea; solo el silencio cuenta como pérdida.
+      submit: Iniciar ping
+      summary: "%{received} de %{sent} respondieron, %{loss}% de pérdida"
+      latency: "mín %{min} ms · prom %{avg} ms · máx %{max} ms"
+      only_refused: El host responde, pero nada escucha en este puerto.
+      no_answer: Sin respuesta. El host puede estar apagado o un firewall puede estar descartando los paquetes.
+      stopped: "Detenido tras %{count} tiempos de espera seguidos."
