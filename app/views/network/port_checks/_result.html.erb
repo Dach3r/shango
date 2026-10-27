@@ -1,0 +1,39 @@
+<%# Outcome of a port check. Render with `result:` (a Result from Network::PortChecks::Run). %>
+<% if result.failure? %>
+  <%= render "network/shared/error", result: result %>
+<% else %>
+  <% counts = result.data[:counts] %>
+  <% rows = result.data[:rows] %>
+  <div class="border border-line">
+    <div class="border-b border-line bg-card px-4 py-3 text-sm text-ink">
+      <p class="font-mono text-xs uppercase tracking-wide text-faint"><%= result.data[:host] %> · <%= result.data[:address] %></p>
+      <p class="mt-1 font-semibold"><%= t("network.ports.summary", open: counts[:open], closed: counts[:closed], filtered: counts[:filtered]) %></p>
+      <% if counts[:filtered] == rows.size %>
+        <p class="mt-0.5 text-muted"><%= t("network.ports.all_filtered") %></p>
+      <% end %>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="sr-only">
+          <tr>
+            <th scope="col"><%= t("network.ports.columns.port") %></th>
+            <th scope="col"><%= t("network.ports.columns.service") %></th>
+            <th scope="col"><%= t("network.ports.columns.latency") %></th>
+            <th scope="col"><%= t("network.ports.columns.status") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rows.each do |row| %>
+            <tr class="border-b border-line last:border-b-0">
+              <td class="px-4 py-2.5 font-mono text-ink"><%= row.port %></td>
+              <td class="px-4 py-2.5 text-muted"><%= row.service || "—" %></td>
+              <td class="px-4 py-2.5 font-mono text-xs whitespace-nowrap text-muted"><%= "#{row.ms} ms" if row.status != :filtered %></td>
+              <td class="px-4 py-2.5"><%= render NetworkStatus::Component.new(status: row.status) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

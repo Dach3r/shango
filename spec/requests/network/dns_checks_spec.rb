@@ -63,21 +63,21 @@ RSpec.describe "Network DNS checks" do
   it "answers 422 with the error for invalid input", :aggregate_failures do
     create_check(domain: "https://example.com")
 
-    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response).to have_http_status(:unprocessable_content)
     expect(response.body).to include(CGI.escapeHTML(I18n.t("network.errors.invalid")))
   end
 
   it "names the variable that is not defined", :aggregate_failures do
     create_check(domain: "{{nope}}")
 
-    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response).to have_http_status(:unprocessable_content)
     expect(response.body).to include("{{nope}}")
   end
 
   it "answers 422 for an unsupported type" do
     create_check(type: "ANY")
 
-    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response).to have_http_status(:unprocessable_content)
   end
 
   it "rejects a request without the form fields" do

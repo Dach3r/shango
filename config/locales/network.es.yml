@@ -14,6 +14,9 @@ es:
       blocked: "Este host no está permitido: %{detail}."
       unresolved: El nombre de host no se resuelve.
       invalid_type: Elige un tipo de registro compatible.
+      blank_ports: Ingresa al menos un puerto.
+      invalid_ports: "\"%{token}\" no es un puerto válido. Usa números del 1 al 65535, rangos como 8000-8010 o common."
+      too_many_ports: "Comprueba como máximo %{max} puertos a la vez."
     statuses:
       ok: Respondió
       cname: Alias
@@ -53,5 +56,20 @@ es:
         resolver: Resolver
         answer: Respuesta
         ttl: TTL
+        latency: Latencia
+        status: Estado
+    ports:
+      intro: Comprueba qué puertos TCP responden en un host desde el servidor de Shango, por ejemplo tras cambiar un firewall o desplegar un servicio.
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 o {{host}}
+      ports: Puertos
+      ports_placeholder: 22, 80, 443 o 8000-8010
+      ports_hint: "Números, rangos y common, separados por comas. Máximo %{max} puertos."
+      submit: Comprobar puertos
+      summary: "%{open} abiertos, %{closed} cerrados, %{filtered} filtrados"
+      all_filtered: Nada respondió. Un firewall puede estar descartando los paquetes, o el host puede estar apagado.
+      columns:
+        port: Puerto
+        service: Servicio habitual
         latency: Latencia
         status: Estado

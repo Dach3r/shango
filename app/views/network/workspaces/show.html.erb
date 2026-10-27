@@ -3,7 +3,7 @@
 
 <% tabs = [
      { name: "dns", label: t("network.tabs.dns") },
-     { name: "ports", label: t("network.tabs.ports"), disabled: true },
+     { name: "ports", label: t("network.tabs.ports") },
      { name: "ping", label: t("network.tabs.ping"), disabled: true }
    ] %>
 
@@ -33,5 +33,26 @@
       </div>
     <% end %>
     <div id="dns_result" class="mt-6 empty:hidden" aria-live="polite"></div>
+  </div>
+
+  <div data-tabs-target="panel" data-name="ports" class="p-4" hidden>
+    <p class="mb-4 text-sm text-muted"><%= t("network.ports.intro") %></p>
+    <%= form_with scope: :port_check, url: network_port_checks_path, class: "grid gap-4" do |form| %>
+      <div>
+        <%= form.label :host, t("network.ports.host"), class: label_classes %>
+        <%= form.text_field :host, required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.host_placeholder"), class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= form.label :ports, t("network.ports.ports"), class: label_classes %>
+        <%= form.text_field :ports, value: "common", required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.ports_placeholder"), class: field_classes("font-mono") %>
+        <p class="mt-1 text-xs text-faint"><%= t("network.ports.ports_hint", max: Network::PortChecks::PortSpec::MAX_PORTS) %></p>
+      </div>
+      <div>
+        <%= form.button type: :submit, class: button_classes(:primary) do %>
+          <%= lucide_icon "radar", class: "size-4" %><%= t("network.ports.submit") %>
+        <% end %>
+      </div>
+    <% end %>
+    <div id="ports_result" class="mt-6 empty:hidden" aria-live="polite"></div>
   </div>
 </div>

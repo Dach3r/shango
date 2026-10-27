@@ -14,6 +14,9 @@ en:
       blocked: "This host is not allowed: %{detail}."
       unresolved: The host name does not resolve.
       invalid_type: Choose a supported record type.
+      blank_ports: Enter at least one port.
+      invalid_ports: "\"%{token}\" is not a valid port. Use numbers from 1 to 65535, ranges like 8000-8010, or common."
+      too_many_ports: "Check at most %{max} ports at a time."
     statuses:
       ok: Answered
       cname: Alias
@@ -53,5 +56,20 @@ en:
         resolver: Resolver
         answer: Answer
         ttl: TTL
+        latency: Latency
+        status: Status
+    ports:
+      intro: Check which TCP ports answer on a host from the Shango server, for example after changing a firewall or deploying a service.
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 or {{host}}
+      ports: Ports
+      ports_placeholder: 22, 80, 443 or 8000-8010
+      ports_hint: "Numbers, ranges and common, separated by commas. At most %{max} ports."
+      submit: Check ports
+      summary: "%{open} open, %{closed} closed, %{filtered} filtered"
+      all_filtered: Nothing answered. A firewall may be dropping the packets, or the host may be offline.
+      columns:
+        port: Port
+        service: Usual service
         latency: Latency
         status: Status
