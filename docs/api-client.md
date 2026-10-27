@@ -93,6 +93,8 @@ Hovering a `{{variable}}` in any editor opens a card with its value as an input:
 
 Uploads (multipart file rows and the binary body) are limited per submission: 10 MB per file (`SHANGO_MAX_UPLOAD_MB`), 25 MB in total (`SHANGO_MAX_UPLOADS_TOTAL_MB`) and 10 files (`SHANGO_MAX_UPLOADS`); beyond that the save fails with a form error and nothing is stored (`Requests::Update`). Also cap request bodies at the proxy (e.g. Thruster `MAX_REQUEST_BODY`) so oversized uploads never reach Rails.
 
+History: saved responses keep at most 256 KB of body (and of request body; `RequestExecution::STORED_BODY_BYTES`, flagged `body_truncated`) and are deleted after 90 days (`SHANGO_HISTORY_RETENTION_DAYS`, `0` keeps them; `PruneRequestExecutionsJob`, daily). The unsaved execution cached for 30 minutes is cut the same way. Masking also covers base64, url-safe base64 and percent-encoded forms of each secret.
+
 Limits: timeout 30 s by default (max 120 s, per request; it is the per-attempt timeout, and the whole execution including redirects and digest retries is also capped at 120 s, `Executor::MAX_DURATION`, so a slow server cannot hold a web thread), at most 10 redirects (`ApiRequest::MAX_REDIRECTS`), 5 MB read limit (the response is cut and flagged; what is read is stored and displayed whole so JSON stays formattable), binary or non-text bodies are not stored.
 
 ## 5. Authentication strategies
