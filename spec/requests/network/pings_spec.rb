@@ -9,6 +9,7 @@ RSpec.describe "Network pings" do
 
   def create_ping(host: "example.com", port: "443", attempts: "3")
     post network_pings_path, params: { ping: { host:, port:, attempts: } }, headers: turbo_headers
+    follow_redirect! if response.location.to_s.include?("/network/checks/")
   end
 
   before do
@@ -23,11 +24,13 @@ RSpec.describe "Network pings" do
     expect(response).to redirect_to(new_user_session_path)
   end
 
-  it "renders each attempt and the summary as a Turbo Stream", :aggregate_failures do
-    create_ping
+  it "saves the run and shows each attempt and the summary at its own address", :aggregate_failures do
+    post network_pings_path, params: { ping: { host: "example.com", port: "443", attempts: "3" } }, headers: turbo_headers
+
+    expect(response).to redirect_to(network_check_path(project.network_checks.last))
+    follow_redirect!
 
     expect(response).to have_http_status(:ok)
-    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("ping_result", "203.0.113.9:443", "12 ms", I18n.t("network.statuses.open"))
     expect(response.body).to include(I18n.t("network.ping.summary", received: 3, sent: 3, loss: 0))
     expect(response.body).to include(I18n.t("network.results.min"), I18n.t("network.results.loss"))
@@ -59,7 +62,16 @@ RSpec.describe "Network pings" do
 
     expect { create_ping(port: "{{port}}", attempts: "{{tries}}") }.to change(project.network_checks.ping, :count).by(1)
     expect(project.network_checks.last.data).to include(port: 8443)
-    expect(response.body).to include("ping_history", "203.0.113.9:8443")
+    expect(response.body).to include("203.0.113.9:8443")
+  end
+
+  it "still shows the result in place when the run cannot be saved", :aggregate_failures do
+    allow(Network::Checks::Record).to receive(:call).and_return(Result.failure(error: :not_saved))
+    create_ping
+
+    expect(response).to have_http_status(:ok)
+    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+    expect(response.body).to include("ping_result")
   end
 
   it "answers 422 with the error for invalid input", :aggregate_failures do

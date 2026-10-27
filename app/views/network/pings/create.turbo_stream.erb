@@ -1,4 +1,1 @@
-<%= turbo_stream.update "ping_result", partial: "network/pings/result", locals: { result: @result, check: @check } %>
-<% if @check %>
-  <%= turbo_stream.update "ping_history", partial: "network/checks/list", locals: { kind: "ping", checks: history_for("ping"), current: @check } %>
-<% end %>
+<%= turbo_stream.update "ping_result", partial: "network/pings/result", locals: { result: @result } %>

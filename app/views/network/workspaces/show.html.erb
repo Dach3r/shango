@@ -1,25 +1,18 @@
+<%# One tool of the Network workspace. Needs `@kind` and, for a saved run on display, `@check` and `@result`. %>
 <% content_for :title, "#{t("network.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :main_class, "flex min-h-0 flex-1" %>
 
-<% tabs = [
+<% tools = [
      { name: "dns", label: t("network.tabs.dns"), icon: "search" },
      { name: "ports", label: t("network.tabs.ports"), icon: "radar" },
      { name: "ping", label: t("network.tabs.ping"), icon: "activity" }
-   ] %>
+   ].map { |tool| tool.merge(path: network_workspace_path(tool[:name])) } %>
 
-<div class="flex min-w-0 flex-1 flex-col lg:h-[calc(100vh-2.5rem)] lg:flex-row" data-controller="tabs" data-tabs-active-value="dns" data-tabs-key-value="network-tools">
+<div class="flex min-w-0 flex-1 flex-col lg:h-[calc(100vh-2.5rem)] lg:flex-row">
   <h1 class="sr-only"><%= t("network.title") %></h1>
-  <%= render NetworkRail::Component.new(items: tabs, label: t("network.tabs.label")) %>
+  <%= render NetworkRail::Component.new(items: tools, current: @kind, label: t("network.tabs.label")) %>
 
   <div class="min-h-0 min-w-0 flex-1">
-    <div data-tabs-target="panel" data-name="dns" class="h-full">
-      <%= render "network/workspaces/dns" %>
-    </div>
-    <div data-tabs-target="panel" data-name="ports" class="h-full" hidden>
-      <%= render "network/workspaces/ports" %>
-    </div>
-    <div data-tabs-target="panel" data-name="ping" class="h-full" hidden>
-      <%= render "network/workspaces/ping" %>
-    </div>
+    <%= render "network/workspaces/#{@kind}", check: @check, result: @result %>
   </div>
 </div>

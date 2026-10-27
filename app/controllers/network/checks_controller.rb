@@ -1,19 +1,17 @@
 module Network
-  # Saved runs of the project: opening one shows its stored result and refills the tool's form; deleting removes it.
+  # Saved runs of the project. Each has its own address that shows the tool with the stored result and what was typed.
   class ChecksController < BaseController
     def show
       @check = current_project.network_checks.find(params[:id])
+      @kind = @check.kind
       @result = Result.success(nil, **@check.data)
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to network_root_path }
-      end
+      render "network/workspaces/show"
     end
 
     def destroy
       check = current_project.network_checks.find(params[:id])
       check.destroy!
-      render turbo_stream: turbo_stream.update("#{check.kind}_history", partial: "network/checks/list", locals: { kind: check.kind, checks: history_for(check.kind), current: nil })
+      redirect_to network_workspace_path(check.kind), status: :see_other
     end
   end
 end

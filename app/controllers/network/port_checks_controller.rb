@@ -5,6 +5,8 @@ module Network
       @result = Network::PortChecks::Run.call(host: attributes[:host], ports: attributes[:ports], environment: current_environment)
       audit(:port_check, @result, attributes[:host], host: @result.data[:host], ports: @result.data[:rows]&.size)
       @check = record_check(:ports, attributes)
+      return redirect_to(network_check_path(@check), status: :see_other) if @check
+
       render status: @result.success? ? :ok : :unprocessable_content
     end
 

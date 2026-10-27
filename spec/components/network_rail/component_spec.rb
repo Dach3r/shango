@@ -1,13 +1,14 @@
 require "rails_helper"
 
 RSpec.describe NetworkRail::Component, type: :component do
-  let(:items) { [{ name: "dns", label: "DNS", icon: "search" }, { name: "ping", label: "Ping", icon: "activity" }] }
+  let(:items) { [{ name: "dns", label: "DNS", icon: "search", path: "/network" }, { name: "ping", label: "Ping", icon: "activity", path: "/network/ping" }] }
 
-  it "renders one icon tab per tool wired to the tabs controller", :aggregate_failures do
-    render_inline(described_class.new(items:, label: "Network tools"))
+  it "renders one icon link per tool and marks the one on display", :aggregate_failures do
+    render_inline(described_class.new(items:, current: "ping", label: "Network tools"))
 
-    expect(page).to have_css("[role=tablist][aria-label='Network tools']")
-    expect(page).to have_css("button[role=tab][data-name=dns][aria-label=DNS][title=DNS][data-action='tabs#select'] svg")
-    expect(page).to have_css("button[role=tab][data-name=ping][data-tabs-name-param=ping]")
+    expect(page).to have_css("nav[aria-label='Network tools']")
+    expect(page).to have_css("a[href='/network'][aria-label=DNS][title=DNS] svg")
+    expect(page).to have_no_css("a[href='/network'][aria-current]")
+    expect(page).to have_css("a[href='/network/ping'][aria-current=page]")
   end
 end

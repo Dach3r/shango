@@ -1,12 +1,13 @@
+<%# Panel of the ping tool. Render with `check:` (the saved run on display, or nil) and `result:` (its stored result). %>
 <% rate_count, rate_window = Throttling.limit(:network) %>
 <div class="flex h-full min-h-0 flex-col-reverse lg:flex-row">
-  <%= render "network/workspaces/history", tool: "ping" %>
+  <%= render "network/workspaces/history", tool: "ping", current: check %>
 
   <div class="flex min-h-0 min-w-0 flex-1 flex-col">
-    <%= render "network/workspaces/ping_form", input: {} %>
+    <%= render "network/workspaces/ping_form", input: check&.input || {} %>
 
     <div class="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-6 xl:flex-row">
-      <div id="ping_result" class="min-w-0 flex-1 empty:hidden" aria-live="polite"></div>
+      <div id="ping_result" class="min-w-0 flex-1 empty:hidden" aria-live="polite"><%= render "network/workspaces/result", kind: "ping", check:, result: %></div>
 
       <aside class="flex w-full shrink-0 flex-col gap-5 xl:order-last xl:w-52">
         <section>

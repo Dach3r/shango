@@ -1,7 +1,7 @@
-<%# History of one tool, saved per project. Render with `tool:` (dns, ports or ping). %>
+<%# History of one tool, saved per project. Render with `tool:` (dns, ports or ping) and `current:` (the saved run on display, or nil). %>
 <aside aria-label="<%= t("network.history.#{tool}") %>" class="flex w-full shrink-0 flex-col border-t border-line lg:min-h-0 lg:w-64 lg:border-t-0 lg:border-r">
-  <div id="<%= tool %>_history" class="flex flex-col lg:min-h-0 lg:flex-1">
-    <%= render "network/checks/list", kind: tool, checks: history_for(tool), current: nil %>
+  <div class="flex flex-col lg:min-h-0 lg:flex-1">
+    <%= render "network/checks/list", kind: tool, checks: history_for(tool), current: %>
   </div>
   <p class="border-t border-line px-5 py-3 text-xs text-faint"><%= t("network.history.note") %></p>
 </aside>

@@ -13,8 +13,21 @@ RSpec.describe "Network workspace" do
       get network_root_path
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include(I18n.t("network.dns.submit"), I18n.t("network.ports.submit"), I18n.t("network.ping.submit"))
-      expect(response.body).to include(I18n.t("network.history.dns"), I18n.t("network.history.ports"), I18n.t("network.history.ping"))
+      expect(response.body).to include(I18n.t("network.dns.submit"), I18n.t("network.history.dns"))
+      expect(response.body).to include(network_workspace_path("ports"), network_workspace_path("ping"))
+      expect(response.body).not_to include(I18n.t("network.ports.submit"))
+    end
+
+    it "renders one page per tool", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("ports")
+
+      expect(response.body).to include(I18n.t("network.ports.submit"), I18n.t("network.history.ports"))
+      expect(response.body).not_to include(I18n.t("network.dns.submit"))
+
+      get network_workspace_path("ping")
+
+      expect(response.body).to include(I18n.t("network.ping.submit"))
     end
 
     it "lists the saved runs of the project, newest first, and not those of other projects", :aggregate_failures do
@@ -39,7 +52,7 @@ RSpec.describe "Network workspace" do
 
     it "shows the ping limits", :aggregate_failures do
       sign_in_with_project
-      get network_root_path
+      get network_workspace_path("ping")
 
       count, window = Throttling.limit(:network)
       expect(response.body).to include(I18n.t("network.limits.rate_value", count:, seconds: window.to_i))

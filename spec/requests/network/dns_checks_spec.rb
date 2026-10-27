@@ -11,6 +11,7 @@ RSpec.describe "Network DNS checks" do
 
   def create_check(domain: "example.com", type: "A", expected: "")
     post network_dns_checks_path, params: { dns_check: { domain:, type:, expected: } }, headers: turbo_headers
+    follow_redirect! if response.location.to_s.include?("/network/checks/")
   end
 
   before do
@@ -26,11 +27,13 @@ RSpec.describe "Network DNS checks" do
     expect(response).to redirect_to(new_user_session_path)
   end
 
-  it "renders the propagation table as a Turbo Stream", :aggregate_failures do
-    create_check(expected: "203.0.113.10")
+  it "saves the run and shows its propagation table at its own address", :aggregate_failures do
+    post network_dns_checks_path, params: { dns_check: { domain: "example.com", type: "A", expected: "203.0.113.10" } }, headers: turbo_headers
+
+    expect(response).to redirect_to(network_check_path(project.network_checks.last))
+    follow_redirect!
 
     expect(response).to have_http_status(:ok)
-    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("dns_result", "ns1.example.net", "Google", "203.0.113.10", I18n.t("network.dns.groups.authoritative"))
     expect(response.body).to include(I18n.t("network.dns.summary.expected", matched: 2, total: 2), "100%")
     expect(project.network_checks.last.outcome).to eq("ok")
@@ -71,12 +74,20 @@ RSpec.describe "Network DNS checks" do
 
     expect { create_check(domain: "{{host}}") }.to change(project.network_checks.dns, :count).by(1)
     expect(project.network_checks.last).to have_attributes(user:, environment:, target: "api.example.com", input: hash_including("domain" => "{{host}}"))
-    expect(response.body).to include("dns_history")
+  end
+
+  it "still shows the result in place when the run cannot be saved", :aggregate_failures do
+    allow(Network::Checks::Record).to receive(:call).and_return(Result.failure(error: :not_saved))
+    create_check
+
+    expect(response).to have_http_status(:ok)
+    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+    expect(response.body).to include("dns_result")
   end
 
   it "does not save failed runs", :aggregate_failures do
     expect { create_check(domain: "https://example.com") }.not_to change(NetworkCheck, :count)
-    expect(response.body).not_to include("dns_history")
+    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
   end
 
   it "resolves variables in the expected value", :aggregate_failures do

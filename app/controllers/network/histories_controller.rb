@@ -6,7 +6,7 @@ module Network
       return head :unprocessable_content unless NetworkCheck.kinds.key?(kind)
 
       current_project.network_checks.where(kind:).delete_all
-      render turbo_stream: turbo_stream.update("#{kind}_history", partial: "network/checks/list", locals: { kind:, checks: history_for(kind), current: nil })
+      redirect_to network_workspace_path(kind), status: :see_other
     end
   end
 end

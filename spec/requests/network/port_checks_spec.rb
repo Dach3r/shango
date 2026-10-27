@@ -9,6 +9,7 @@ RSpec.describe "Network port checks" do
 
   def create_check(host: "example.com", ports: "22, 80")
     post network_port_checks_path, params: { port_check: { host:, ports: } }, headers: turbo_headers
+    follow_redirect! if response.location.to_s.include?("/network/checks/")
   end
 
   before do
@@ -23,11 +24,13 @@ RSpec.describe "Network port checks" do
     expect(response).to redirect_to(new_user_session_path)
   end
 
-  it "renders the port table as a Turbo Stream", :aggregate_failures do
-    create_check
+  it "saves the run and shows its port table at its own address", :aggregate_failures do
+    post network_port_checks_path, params: { port_check: { host: "example.com", ports: "22, 80" } }, headers: turbo_headers
+
+    expect(response).to redirect_to(network_check_path(project.network_checks.last))
+    follow_redirect!
 
     expect(response).to have_http_status(:ok)
-    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("ports_result", "203.0.113.9", "ssh", I18n.t("network.statuses.open"), I18n.t("network.statuses.closed"), "7 ms")
     expect(response.body).to include(I18n.t("network.ports.summary", open: 1, closed: 1, filtered: 0))
     expect(project.network_checks.last.outcome).to eq("ok")
@@ -49,7 +52,15 @@ RSpec.describe "Network port checks" do
 
     expect { create_check(ports: "{{ports}}") }.to change(project.network_checks.ports, :count).by(1)
     expect(project.network_checks.last.input).to include("ports" => "{{ports}}")
-    expect(response.body).to include("ports_history")
+  end
+
+  it "still shows the result in place when the run cannot be saved", :aggregate_failures do
+    allow(Network::Checks::Record).to receive(:call).and_return(Result.failure(error: :not_saved))
+    create_check
+
+    expect(response).to have_http_status(:ok)
+    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+    expect(response.body).to include("ports_result")
   end
 
   it "answers 422 with the error for invalid ports", :aggregate_failures do

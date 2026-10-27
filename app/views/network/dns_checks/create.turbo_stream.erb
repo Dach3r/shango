@@ -1,4 +1,1 @@
-<%= turbo_stream.update "dns_result", partial: "network/dns_checks/result", locals: { result: @result, check: @check } %>
-<% if @check %>
-  <%= turbo_stream.update "dns_history", partial: "network/checks/list", locals: { kind: "dns", checks: history_for("dns"), current: @check } %>
-<% end %>
+<%= turbo_stream.update "dns_result", partial: "network/dns_checks/result", locals: { result: @result } %>
