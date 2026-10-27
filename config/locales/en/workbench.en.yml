@@ -140,6 +140,7 @@ en:
         edit: Edit cookie
         clear: Clear all cookies
         confirm_clear: "Delete every cookie stored for this environment?"
+        confirm_delete: "Delete the cookie %{name}?"
       create:
         created: Cookie added.
       update:

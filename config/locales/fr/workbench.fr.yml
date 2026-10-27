@@ -140,6 +140,7 @@ fr:
         edit: "Modifier le cookie"
         clear: "Supprimer tous les cookies"
         confirm_clear: "Supprimer tous les cookies stockés pour cet environnement ?"
+        confirm_delete: "Supprimer le cookie %{name} ?"
       create:
         created: "Cookie ajouté."
       update:

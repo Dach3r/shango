@@ -90,6 +90,7 @@ es:
       ago: "hace %{time}"
       delete: "Eliminar ejecución"
       confirm_clear: "¿Borrar todo el historial de esta herramienta para el proyecto?"
+      confirm_delete: "¿Eliminar esta ejecución?"
       previous: "Ejecución anterior, hace %{time}: %{detail}"
     limits:
       title: "Límites"

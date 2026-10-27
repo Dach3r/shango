@@ -140,6 +140,7 @@ ru:
         edit: Изменить cookie
         clear: Удалить все cookies
         confirm_clear: "Удалить все cookies, сохранённые для этого окружения?"
+        confirm_delete: "Удалить cookie %{name}?"
       create:
         created: Cookie добавлена.
       update:

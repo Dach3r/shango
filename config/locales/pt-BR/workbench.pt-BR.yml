@@ -140,6 +140,7 @@ pt-BR:
         edit: Editar cookie
         clear: Limpar todos os cookies
         confirm_clear: "Excluir todos os cookies armazenados para este ambiente?"
+        confirm_delete: "Excluir o cookie %{name}?"
       create:
         created: Cookie adicionado.
       update:

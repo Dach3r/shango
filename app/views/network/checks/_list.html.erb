@@ -20,7 +20,7 @@
           </span>
           <span class="truncate text-xs text-faint"><%= t(digest.key, **digest.args) %> · <%= t("network.history.ago", time: time_ago_in_words(check.created_at)) %></span>
         <% end %>
-        <%= button_to network_check_path(check), method: :delete, form_class: "contents", aria: { label: t("network.history.delete") },
+        <%= button_to network_check_path(check), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("network.history.confirm_delete") } }, aria: { label: t("network.history.delete") },
               class: "absolute top-2 right-2 flex size-6 cursor-pointer items-center justify-center text-faint opacity-0 transition group-focus-within:opacity-100 group-hover:opacity-100 hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "x", class: "size-3.5" %><% end %>
       </li>
     <% end %>

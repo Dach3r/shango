@@ -140,6 +140,7 @@ hi:
         edit: "कुकी संपादित करें"
         clear: "सभी कुकीज़ साफ़ करें"
         confirm_clear: "इस एनवायरनमेंट की सभी सहेजी कुकीज़ हटाएँ?"
+        confirm_delete: "कुकी %{name} हटाएँ?"
       create:
         created: "कुकी जोड़ी गई।"
       update:

@@ -140,6 +140,7 @@ zh-CN:
         edit: 编辑 Cookie
         clear: 清除所有 Cookie
         confirm_clear: "删除此环境中存储的所有 Cookie？"
+        confirm_delete: "删除 Cookie %{name}？"
       create:
         created: Cookie 已添加。
       update:

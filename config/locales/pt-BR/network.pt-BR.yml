@@ -90,6 +90,7 @@ pt-BR:
       ago: "há %{time}"
       delete: "Excluir execução"
       confirm_clear: "Excluir todo o histórico desta ferramenta do projeto?"
+      confirm_delete: "Excluir esta execução?"
       previous: "Execução anterior, há %{time}: %{detail}"
     limits:
       title: "Limites"

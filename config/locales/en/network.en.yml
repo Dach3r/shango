@@ -90,6 +90,7 @@ en:
       ago: "%{time} ago"
       delete: "Delete run"
       confirm_clear: "Delete this tool's whole history for the project?"
+      confirm_delete: "Delete this run?"
       previous: "Previous run, %{time} ago: %{detail}"
     limits:
       title: "Limits"

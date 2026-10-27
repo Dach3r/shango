@@ -90,6 +90,7 @@ hi:
       ago: "%{time} पहले"
       delete: "रन हटाएँ"
       confirm_clear: "इस प्रोजेक्ट में इस टूल का पूरा इतिहास हटाएँ?"
+      confirm_delete: "यह रन हटाएँ?"
       previous: "पिछला रन, %{time} पहले: %{detail}"
     limits:
       title: "सीमाएँ"

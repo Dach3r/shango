@@ -25,7 +25,7 @@
             </div>
             <%= link_to edit_cookie_path(cookie), title: t("projects.cookies.index.edit"), aria: { label: t("projects.cookies.index.edit") },
                         class: "flex size-10 shrink-0 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4" %><% end %>
-            <%= button_to cookie_path(cookie), method: :delete, form_class: "contents", title: t("projects.cookies.index.delete"), aria: { label: t("projects.cookies.index.delete") },
+            <%= button_to cookie_path(cookie), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("projects.cookies.index.confirm_delete", name: cookie.name) } }, title: t("projects.cookies.index.delete"), aria: { label: t("projects.cookies.index.delete") },
                           class: "flex size-10 shrink-0 cursor-pointer items-center justify-center text-muted transition hover:bg-danger/10 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "trash-2", class: "size-4" %><% end %>
           </li>
         <% end %>

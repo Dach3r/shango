@@ -90,6 +90,7 @@ ru:
       ago: "%{time} назад"
       delete: "Удалить запуск"
       confirm_clear: "Удалить всю историю этого инструмента для проекта?"
+      confirm_delete: "Удалить этот запуск?"
       previous: "Предыдущий запуск, %{time} назад: %{detail}"
     limits:
       title: "Лимиты"

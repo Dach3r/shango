@@ -90,6 +90,7 @@ zh-CN:
       ago: "%{time}前"
       delete: "删除此次运行"
       confirm_clear: "删除该项目中此工具的全部历史记录？"
+      confirm_delete: "删除此次运行？"
       previous: "上一次运行（%{time}前）：%{detail}"
     limits:
       title: "限制"

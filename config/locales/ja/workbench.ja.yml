@@ -140,6 +140,7 @@ ja:
         edit: Cookie を編集
         clear: すべての Cookie を消去
         confirm_clear: "この環境に保存されているすべての Cookie を削除しますか？"
+        confirm_delete: "Cookie %{name} を削除しますか？"
       create:
         created: Cookie を追加しました。
       update:

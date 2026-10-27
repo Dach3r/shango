@@ -90,6 +90,7 @@ fr:
       ago: "il y a %{time}"
       delete: "Supprimer l'exécution"
       confirm_clear: "Supprimer tout l'historique de cet outil pour le projet ?"
+      confirm_delete: "Supprimer cette exécution ?"
       previous: "Exécution précédente, il y a %{time} : %{detail}"
     limits:
       title: "Limites"

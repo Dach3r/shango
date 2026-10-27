@@ -90,6 +90,7 @@ de:
       ago: "vor %{time}"
       delete: "Lauf löschen"
       confirm_clear: "Den gesamten Verlauf dieses Tools für das Projekt löschen?"
+      confirm_delete: "Diesen Lauf löschen?"
       previous: "Vorheriger Lauf, vor %{time}: %{detail}"
     limits:
       title: "Limits"
