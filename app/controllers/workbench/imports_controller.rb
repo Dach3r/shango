@@ -2,6 +2,8 @@ module Workbench
   class ImportsController < BaseController
     MAX_WARNINGS_SHOWN = 2
 
+    throttle :imports, by: -> { current_user.id }, only: :create
+
     def new
     end
 

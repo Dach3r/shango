@@ -1,4 +1,6 @@
 es:
+  throttling:
+    limited: Demasiados intentos. Espera un momento e inténtalo de nuevo.
   activerecord:
     attributes:
       user:

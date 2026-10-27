@@ -2,6 +2,7 @@ module Workbench
   module Oauth2
     # "Get new access token" for client credentials / password grants, and clearing a stored token.
     class TokensController < Workbench::BaseController
+      throttle :oauth, by: -> { current_user.id }, only: :create
       before_action :set_owner
 
       def create

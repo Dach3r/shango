@@ -5,6 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   layout -> { action_name.in?(%w[edit update]) ? "app" : "devise" }
 
+  throttle :sign_up, only: :create
   before_action :require_project, only: %i[edit update]
   before_action :set_tab, only: %i[edit update]
 

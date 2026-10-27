@@ -2,6 +2,8 @@ module Workbench
   module Oauth2
     # Starts the authorization-code (PKCE) flow by redirecting to the provider.
     class AuthorizationsController < Workbench::BaseController
+      throttle :oauth, by: -> { current_user.id }, only: :create
+
       def create
         owner = ApiClient::Oauth2::FindOwner.call(project: current_project, user: current_user, type: params[:owner_type], id: params[:owner_id])
         result = ApiClient::Oauth2::Authorize.call(owner:, redirect_uri: workbench_oauth2_callback_url, environment: current_environment)
