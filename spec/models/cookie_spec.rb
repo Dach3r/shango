@@ -114,11 +114,65 @@ RSpec.describe Cookie do
       expect(build(:cookie, domain: "example.com", host_only: true).matches?(uri("https://api.example.com/"))).to be(false)
     end
 
+    it "ignores the port and the case of the host", :aggregate_failures do
+      cookie = build(:cookie, domain: "api.example.com", path: "/")
+
+      expect(cookie.matches?(uri("https://API.Example.com:8443/"))).to be(true)
+      expect(cookie.matches?(uri("http://api.example.com:3000/x"))).to be(true)
+    end
+
+    it "does not match look-alike hosts or suffixes", :aggregate_failures do
+      cookie = build(:cookie, domain: "example.com", host_only: false)
+
+      expect(cookie.matches?(uri("https://badexample.com/"))).to be(false)
+      expect(cookie.matches?(uri("https://example.com.evil.test/"))).to be(false)
+      expect(cookie.matches?(uri("https://com/"))).to be(false)
+    end
+
+    it "matches an IPv6 literal host only exactly", :aggregate_failures do
+      cookie = build(:cookie, domain: "[::1]", host_only: true, path: "/")
+
+      expect(cookie.matches?(uri("http://[::1]:3000/"))).to be(true)
+      expect(cookie.matches?(uri("http://[::2]/"))).to be(false)
+    end
+
+    it "does not match a path that only shares a prefix with a trailing slash path" do
+      expect(build(:cookie, path: "/a/").matches?(uri("https://api.example.com/a"))).to be(false)
+    end
+
+    it "treats a query string as no part of the path" do
+      expect(build(:cookie, path: "/a").matches?(uri("https://api.example.com/a?next=/b"))).to be(true)
+    end
+
     it "sends secure cookies over https only", :aggregate_failures do
       cookie = build(:cookie, secure: true)
 
       expect(cookie.matches?(uri("https://api.example.com/"))).to be(true)
       expect(cookie.matches?(uri("http://api.example.com/"))).to be(false)
     end
+  end
+
+  describe "database constraints" do
+    it "rejects duplicates in the same jar even without validations", :aggregate_failures do
+      first = create(:cookie)
+      duplicate = build(:cookie, project: first.project, name: first.name, domain: first.domain, path: first.path)
+
+      expect { duplicate.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it "treats a missing environment as one jar for uniqueness" do
+      first = create(:cookie, environment: nil)
+      duplicate = build(:cookie, project: first.project, environment: nil, name: first.name)
+
+      expect { duplicate.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it "requires domain and name" do
+      expect { build(:cookie, domain: nil).save!(validate: false) }.to raise_error(ActiveRecord::NotNullViolation)
+    end
+  end
+
+  it "keeps unicode values intact" do
+    expect(create(:cookie, value: "ñandú ✓").reload.value).to eq("ñandú ✓")
   end
 end

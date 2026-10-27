@@ -113,4 +113,73 @@ RSpec.describe "Account security" do
       expect(response).to redirect_to(new_user_session_path)
     end
   end
+
+  describe "mail content" do
+    before { enable_mail }
+
+    let(:user) { create(:user, :confirmed) }
+
+    def reset_mail
+      post user_password_path, params: { user: { email: user.email } }
+      ActionMailer::Base.deliveries.last
+    end
+
+    it "sends the reset link to the account", :aggregate_failures do
+      mail = reset_mail
+
+      expect(mail.to).to eq([user.email])
+      expect(mail.body.encoded).to include("reset_password_token=")
+    end
+
+    it "uses the Spanish subject with the locale cookie", :aggregate_failures do
+      cookies[:locale] = "es"
+
+      expect(reset_mail.subject).to eq(I18n.t("devise.mailer.reset_password_instructions.subject", locale: :es))
+      expect(reset_mail.subject).not_to eq(I18n.t("devise.mailer.reset_password_instructions.subject", locale: :en))
+    end
+
+    it "resets the password with the emailed token only once", :aggregate_failures do
+      token = user.send_reset_password_instructions
+      params = { user: { reset_password_token: token, password: "brandnew123", password_confirmation: "brandnew123" } }
+
+      put user_password_path, params: params
+      expect(user.reload.valid_password?("brandnew123")).to be(true)
+
+      put user_password_path, params: params.deep_merge(user: { password: "another1234", password_confirmation: "another1234" })
+      expect(user.reload.valid_password?("another1234")).to be(false)
+    end
+
+    it "rejects an invalid reset token", :aggregate_failures do
+      put user_password_path, params: { user: { reset_password_token: "bogus", password: "brandnew123", password_confirmation: "brandnew123" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(user.reload.valid_password?("brandnew123")).to be(false)
+    end
+
+    it "rejects an expired reset token", :aggregate_failures do
+      token = user.send_reset_password_instructions
+
+      travel_to(User.reset_password_within.from_now + 1.minute) do
+        put user_password_path, params: { user: { reset_password_token: token, password: "brandnew123", password_confirmation: "brandnew123" } }
+      end
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(user.reload.valid_password?("brandnew123")).to be(false)
+    end
+
+    it "does not confirm with a wrong token", :aggregate_failures do
+      unconfirmed = create(:user)
+      get user_confirmation_path(confirmation_token: "bogus")
+
+      expect(unconfirmed.reload.confirmed?).to be(false)
+    end
+
+    it "sends a confirmation mail with the token on sign up", :aggregate_failures do
+      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password123", password_confirmation: "password123" } }
+
+      mail = ActionMailer::Base.deliveries.last
+      expect(mail.to).to eq(["grace@example.com"])
+      expect(mail.body.encoded).to include("confirmation_token=")
+    end
+  end
 end

@@ -112,4 +112,79 @@ RSpec.describe "Throttling" do
       expect(flash[:alert]).to be_blank
     end
   end
+
+  describe "windows and actors" do
+    include ActiveSupport::Testing::TimeHelpers
+
+    let(:credentials) { { user: { email: "nobody@example.com", password: "wrong" } } }
+
+    it "lets the exact limit through and blocks the next attempt", :aggregate_failures do
+      limit(:sign_in, 3)
+      3.times { post user_session_path, params: credentials }
+      expect(response).not_to redirect_to(new_user_session_path)
+
+      post user_session_path, params: credentials
+      expect(response).to redirect_to(new_user_session_path)
+      expect(flash[:alert]).to eq(I18n.t("throttling.limited"))
+    end
+
+    it "counts each IP separately", :aggregate_failures do
+      limit(:sign_in, 1)
+      2.times { post user_session_path, params: credentials, headers: { "REMOTE_ADDR" => "10.0.0.1" } }
+      expect(response).to redirect_to(new_user_session_path)
+
+      post user_session_path, params: credentials, headers: { "REMOTE_ADDR" => "10.0.0.2" }
+      expect(response).not_to redirect_to(new_user_session_path)
+    end
+
+    it "lets requests through again after the window", :aggregate_failures do
+      limit(:sign_in, 1)
+      2.times { post user_session_path, params: credentials }
+      expect(response).to redirect_to(new_user_session_path)
+
+      travel_to(61.seconds.from_now) { post user_session_path, params: credentials }
+      expect(response).not_to redirect_to(new_user_session_path)
+    end
+
+    it "keeps limits independent of each other", :aggregate_failures do
+      limit(:sign_in, 1)
+      2.times { post user_session_path, params: credentials }
+      post user_password_path, params: { user: { email: "nobody@example.com" } }
+
+      expect(flash[:alert]).not_to eq(I18n.t("throttling.limited"))
+    end
+
+    it "does not create an account once the sign up limit is reached", :aggregate_failures do
+      limit(:sign_up, 1)
+      params = { user: { first_name: "A", last_name: "B", password: "password123", password_confirmation: "password123" } }
+      post user_registration_path, params: params.deep_merge(user: { email: "one@example.com" })
+
+      expect { post user_registration_path, params: params.deep_merge(user: { email: "two@example.com" }) }.not_to change(User, :count)
+    end
+
+    it "treats a zero or non numeric override as the default or a hard block", :aggregate_failures do
+      stub_const("ENV", ENV.to_h.merge("SHANGO_RATE_LIMIT_SIGN_IN" => "5/abc"))
+      expect(Throttling.limit(:sign_in)).to eq([10, 1.minute])
+
+      stub_const("ENV", ENV.to_h.merge("SHANGO_RATE_LIMIT_SIGN_IN" => "0/60"))
+      post user_session_path, params: credentials
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it "falls back to the workbench for signed-in users", :aggregate_failures do
+      limit(:imports, 1)
+      sign_in_with_project
+      2.times { post workbench_import_path, params: { content: "" } }
+
+      expect(response).to redirect_to(workbench_root_path)
+    end
+
+    it "does not block when the cache cannot count" do
+      limit(:sign_in, 1)
+      allow(Rails.cache).to receive(:increment).and_return(nil)
+      3.times { post user_session_path, params: credentials }
+
+      expect(response).not_to redirect_to(new_user_session_path)
+    end
+  end
 end

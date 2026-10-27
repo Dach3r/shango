@@ -105,4 +105,69 @@ RSpec.describe User do
       expect(active_membership.project.users).to contain_exactly(saved_user)
     end
   end
+
+  describe "email" do
+    it "is unique ignoring case" do
+      create(:user, email: "grace@example.com")
+
+      expect(build(:user, email: "GRACE@example.com")).not_to be_valid
+    end
+
+    it "is stored downcased and stripped" do
+      expect(create(:user, email: " Grace@Example.COM ").email).to eq("grace@example.com")
+    end
+
+    it "must look like an address", :aggregate_failures do
+      expect(build(:user, email: "nope")).not_to be_valid
+      expect(build(:user, email: "")).not_to be_valid
+    end
+
+    it "is unique at the database level" do
+      create(:user, email: "grace@example.com")
+
+      expect { build(:user, email: "grace@example.com").save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
+
+  describe "password" do
+    it "must be 8 to 128 characters", :aggregate_failures do
+      expect(build(:user, password: "a" * 7, password_confirmation: "a" * 7)).not_to be_valid
+      expect(build(:user, password: "a" * 8, password_confirmation: "a" * 8)).to be_valid
+      expect(build(:user, password: "a" * 129, password_confirmation: "a" * 129)).not_to be_valid
+    end
+
+    it "is stored hashed" do
+      expect(create(:user, password: "password123", password_confirmation: "password123").encrypted_password).not_to include("password123")
+    end
+  end
+
+  describe "names" do
+    it "reject whitespace-only values", :aggregate_failures do
+      expect(build(:user, first_name: "   ")).not_to be_valid
+      expect(build(:user, last_name: "\t")).not_to be_valid
+    end
+
+    it "are required at the database level" do
+      expect { build(:user, first_name: nil).save!(validate: false) }.to raise_error(ActiveRecord::NotNullViolation)
+    end
+  end
+
+  describe "dependents" do
+    it "removes memberships when destroyed but keeps the project", :aggregate_failures do
+      membership = create(:membership)
+
+      membership.user.destroy
+
+      expect(Membership.exists?(membership.id)).to be(false)
+      expect(Project.exists?(membership.project_id)).to be(true)
+    end
+  end
+
+  describe "#available_memberships" do
+    it "excludes memberships of other users" do
+      create(:membership)
+
+      expect(create(:user).available_memberships).to be_empty
+    end
+  end
 end

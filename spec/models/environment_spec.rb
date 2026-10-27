@@ -57,4 +57,56 @@ RSpec.describe Environment do
       expect(membership.reload.current_environment).to be_nil
     end
   end
+
+  describe "name uniqueness" do
+    it "is case insensitive within a project and free across projects", :aggregate_failures do
+      create(:environment, project: environment.project, name: "Prod")
+
+      expect(build(:environment, project: environment.project, name: "PROD")).not_to be_valid
+      expect(build(:environment, name: "Prod")).to be_valid
+    end
+
+    it "rejects whitespace-only names" do
+      expect(build(:environment, name: "  ")).not_to be_valid
+    end
+
+    it "is unique at the database level" do
+      duplicate = build(:environment, project: environment.project, name: environment.name)
+
+      expect { duplicate.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
+
+  describe "nested variables edge cases" do
+    it "rejects a variable with a value but no key" do
+      expect(environment.update(variables_attributes: [{ key: "", value: "x" }])).to be(false)
+    end
+
+    it "rejects a variable with an invalid key and rolls the rename back", :aggregate_failures do
+      environment.update(name: "Renamed", variables_attributes: [{ key: "bad key", value: "x" }])
+
+      expect(environment.reload.name).not_to eq("Renamed")
+    end
+
+    it "does not update variables of another environment", :aggregate_failures do
+      foreign = create(:variable, value: "keep")
+
+      expect { environment.update(variables_attributes: [{ id: foreign.id, value: "x" }]) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(foreign.reload.value).to eq("keep")
+    end
+
+    it "removes variables with _destroy" do
+      variable = create(:variable, environment:)
+
+      expect { environment.update!(variables_attributes: [{ id: variable.id, _destroy: "1" }]) }.to change(environment.variables, :count).by(-1)
+    end
+  end
+
+  describe "#variable_values with unicode" do
+    it "keeps values as they were stored" do
+      create(:variable, environment:, key: "GREETING", value: "ñandú ✓")
+
+      expect(environment.reload.variable_values).to eq("GREETING" => "ñandú ✓")
+    end
+  end
 end

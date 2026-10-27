@@ -59,4 +59,36 @@ RSpec.describe RunRequestJob do
     expect { described_class.perform_now(user.id, api_request.id, nil, run_id) }.not_to raise_error
     expect(state.read(run_id)).to include("state" => "failed")
   end
+
+  it "marks the run failed when the user no longer exists", :aggregate_failures do
+    described_class.perform_now(SecureRandom.uuid, api_request.id, nil, run_id)
+
+    expect(state.read(run_id)).to include("state" => "failed")
+    expect(RequestExecution.pending(run_id)).to be_nil
+  end
+
+  it "marks the run failed when the request was deleted meanwhile", :aggregate_failures do
+    id = api_request.id
+    api_request.destroy
+    described_class.perform_now(user.id, id, nil, run_id)
+
+    expect(state.read(run_id)).to include("state" => "failed")
+  end
+
+  it "runs without an environment when it was deleted meanwhile" do
+    stub_request(:get, api_request.url).to_return(status: 200)
+    id = environment.id
+    environment.destroy
+    described_class.perform_now(user.id, api_request.id, id, run_id)
+
+    expect(state.read(run_id)).to include("state" => "done")
+  end
+
+  it "does not log the request body or secrets when it fails", :aggregate_failures do
+    allow(Rails.logger).to receive(:error)
+    allow(ApiClient::Requests::Dispatch).to receive(:call).and_raise(StandardError, "boom")
+    described_class.perform_now(user.id, api_request.id, nil, run_id)
+
+    expect(Rails.logger).to have_received(:error).with("RunRequestJob #{run_id} failed: StandardError: boom")
+  end
 end

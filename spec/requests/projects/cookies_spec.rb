@@ -154,4 +154,132 @@ RSpec.describe "Cookies" do
       expect(Cookie.all).to contain_exactly(kept)
     end
   end
+
+  describe "invalid input" do
+    let(:base) { { name: "sid", value: "abc", domain: "api.example.com", path: "/" } }
+
+    def invalid_post(overrides)
+      expect { post cookies_path, params: { cookie: base.merge(overrides) }, headers: { "Turbo-Frame" => "right_sidebar" } }.not_to change(Cookie, :count)
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "rejects a blank or whitespace-only name" do
+      invalid_post(name: "   ")
+    end
+
+    it "rejects a blank domain" do
+      invalid_post(domain: " . ")
+    end
+
+    it "rejects domains with spaces or slashes", :aggregate_failures do
+      invalid_post(domain: "api example.com")
+      invalid_post(domain: "api.example.com/v1")
+    end
+
+    it "rejects a relative path" do
+      invalid_post(path: "v1")
+    end
+
+    it "rejects a domain shared with subdomains that is an IP or a single label", :aggregate_failures do
+      invalid_post(domain: "127.0.0.1", host_only: "0")
+      invalid_post(domain: "localhost", host_only: "0")
+    end
+
+    it "rejects a value over the limit" do
+      invalid_post(value: "x" * (Cookie::MAX_VALUE_LENGTH + 1))
+    end
+
+    it "rejects a duplicate in the same jar", :aggregate_failures do
+      create(:cookie, project:, name: "sid", domain: "api.example.com", path: "/")
+
+      invalid_post({})
+    end
+
+    it "allows the same cookie in another jar" do
+      create(:cookie, project:, environment:, name: "sid", domain: "api.example.com", path: "/")
+
+      expect { post cookies_path, params: { cookie: base } }.to change(Cookie, :count).by(1)
+    end
+
+    it "treats an unparseable expiry as a session cookie", :aggregate_failures do
+      post cookies_path, params: { cookie: base.merge(expires_at: "garbage") }
+
+      expect(response).to redirect_to(cookies_path)
+      expect(Cookie.last.expires_at).to be_nil
+    end
+
+    it "keeps a past expiry but hides the cookie from the list", :aggregate_failures do
+      post cookies_path, params: { cookie: base.merge(name: "stale_cookie", expires_at: "2001-01-01T00:00") }
+      get cookies_path, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(Cookie.last.expires_at).to be < Time.current
+      expect(response.body).not_to include("stale_cookie")
+    end
+
+    it "answers 400 without the cookie key" do
+      post cookies_path
+
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe "tampering" do
+    it "ignores project and environment ids on update", :aggregate_failures do
+      cookie = create(:cookie, project:)
+
+      patch cookie_path(cookie), params: { cookie: { value: "z", project_id: create(:project).id, environment_id: environment.id } }
+
+      expect(cookie.reload).to have_attributes(value: "z", project_id: project.id, environment_id: nil)
+    end
+
+    it "ignores a project id on create" do
+      post cookies_path, params: { cookie: { name: "sid", domain: "x.test", path: "/", project_id: create(:project).id } }
+
+      expect(Cookie.last.project).to eq(project)
+    end
+
+    it "rejects renaming onto an existing cookie of the jar", :aggregate_failures do
+      create(:cookie, project:, name: "a")
+      other = create(:cookie, project:, name: "b")
+
+      patch cookie_path(other), params: { cookie: { name: "a" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(other.reload.name).to eq("b")
+    end
+
+    it "does not clear the jar of other projects", :aggregate_failures do
+      foreign = create(:cookie)
+      create(:cookie, project:)
+
+      delete cookie_jar_path
+
+      expect(Cookie.all).to contain_exactly(foreign)
+    end
+
+    it "requires authentication", :aggregate_failures do
+      sign_out user
+      cookie = create(:cookie, project:)
+
+      delete cookie_path(cookie)
+      expect(response).to redirect_to(new_user_session_path)
+      expect(Cookie.exists?(cookie.id)).to be(true)
+    end
+
+    it "keeps jars within the cap when adding", :aggregate_failures do
+      stub_const("Cookie::MAX_PER_JAR", 2)
+      create(:cookie, project:, name: "old", updated_at: 2.days.ago)
+      create(:cookie, project:, name: "mid", updated_at: 1.day.ago)
+
+      post cookies_path, params: { cookie: { name: "new", domain: "x.test", path: "/" } }
+
+      expect(project.cookies.pluck(:name)).to contain_exactly("mid", "new")
+    end
+
+    it "stores the value encrypted" do
+      post cookies_path, params: { cookie: { name: "sid", value: "topsecret", domain: "x.test", path: "/" } }
+
+      expect(Cookie.last.value_before_type_cast).not_to include("topsecret")
+    end
+  end
 end
