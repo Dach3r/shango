@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.describe ControlsHelper do
+  describe "#bar_field_classes" do
+    it "only shifts the background on focus" do
+      expect(helper.bar_field_classes("w-24")).to include(ControlsHelper::BAR_FIELD, "w-24")
+    end
+  end
+
   describe "#field_classes" do
     it "adds full width by default", :aggregate_failures do
       expect(helper.field_classes).to include("w-full", ControlsHelper::FIELD)

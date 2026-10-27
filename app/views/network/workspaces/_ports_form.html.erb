@@ -2,9 +2,9 @@
 <%= tag.div id: "ports_form", class: "shrink-0", data: variable_autocomplete_data do %>
   <%= form_with scope: :port_check, url: network_port_checks_path, class: "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0" do |form| %>
     <%= form.label :host, t("network.ports.host"), class: "sr-only" %>
-    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.host_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.host_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
     <%= form.label :ports, t("network.ports.ports"), class: "sr-only" %>
-    <%= form.text_field :ports, value: input.fetch("ports", "common"), required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.ports_placeholder"), title: t("network.ports.ports"), class: field_classes("min-w-36 flex-[1_1_10rem] font-mono") %>
+    <%= form.text_field :ports, value: input.fetch("ports", "common"), required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.ports_placeholder"), title: t("network.ports.ports"), class: bar_field_classes("min-w-36 flex-[1_1_10rem] font-mono") %>
     <%= form.button type: :submit, class: button_classes(:primary) do %>
       <%= lucide_icon "radar", class: "size-4" %><%= t("network.ports.submit") %>
     <% end %>

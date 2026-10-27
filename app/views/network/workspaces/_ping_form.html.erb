@@ -2,11 +2,11 @@
 <%= tag.div id: "ping_form", class: "shrink-0", data: variable_autocomplete_data do %>
   <%= form_with scope: :ping, url: network_pings_path, class: "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0" do |form| %>
     <%= form.label :host, t("network.ping.host"), class: "sr-only" %>
-    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
     <%= form.label :port, t("network.ping.port"), class: "sr-only" %>
-    <%= form.text_field :port, value: input.fetch("port", Network::Pings::Run::DEFAULT_PORT), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, title: t("network.ping.port"), class: field_classes("w-24 font-mono") %>
+    <%= form.text_field :port, value: input.fetch("port", Network::Pings::Run::DEFAULT_PORT), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, title: t("network.ping.port"), class: bar_field_classes("w-24 font-mono") %>
     <%= form.label :attempts, t("network.ping.attempts"), class: "sr-only" %>
-    <%= form.text_field :attempts, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, title: t("network.ping.attempts"), class: field_classes("w-20 font-mono") %>
+    <%= form.text_field :attempts, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, title: t("network.ping.attempts"), class: bar_field_classes("w-20 font-mono") %>
     <%= form.button type: :submit, class: button_classes(:primary) do %>
       <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
     <% end %>
