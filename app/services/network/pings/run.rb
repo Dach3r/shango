@@ -1,9 +1,5 @@
 module Network
   module Pings
-    # "Is it online?": connects to a TCP port several times in a row and reports latency and loss. It is a TCP ping,
-    # not ICMP (that needs raw sockets). A refused connection still counts as an answer: the host is up, nothing
-    # listens on that port. Stops early after MAX_CONSECUTIVE_TIMEOUTS timeouts in a row so a dead host does not
-    # hold the request for the full run.
     class Run
       include Serviceable
 
@@ -45,7 +41,6 @@ module Network
         Result.success(nil, host: target.record, address: destination.record, port:, attempts:, summary: summarize(attempts, count))
       end
 
-      # Whole numbers only; blank means the default and anything else is returned as nil so validation rejects it.
       def number(value, default)
         text = value.to_s.strip
         return default if text.empty?

@@ -1,4 +1,3 @@
-# Saved network runs older than the retention window are deleted (SHANGO_NETWORK_HISTORY_RETENTION_DAYS, default 90; 0 keeps everything).
 class PruneNetworkChecksJob < ApplicationJob
   queue_as :default
 

@@ -1,7 +1,5 @@
 module Network
   module Checks
-    # Turns the data of a successful run into plain JSON for storage and back into the objects the result views read
-    # (rows, attempts and symbol keys). Long answers are cut so a few huge TXT sets cannot bloat the table.
     module Codec
       MAX_ANSWERS = 10
       MAX_ANSWER_LENGTH = 255

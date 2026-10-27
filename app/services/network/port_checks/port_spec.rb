@@ -1,7 +1,5 @@
 module Network
   module PortChecks
-    # Parses what the user typed into a sorted list of unique ports: numbers, ranges (`8000-8010`) and the
-    # `common` preset, separated by commas or spaces. Fails when a token is invalid or there are too many ports.
     class PortSpec
       include Serviceable
 
@@ -35,7 +33,6 @@ module Network
         Result.failure(error: :too_many_ports, max: MAX_PORTS)
       end
 
-      # The ports a token stands for, or nil when it is not valid.
       def expand(token)
         return COMMON if token == "common"
 

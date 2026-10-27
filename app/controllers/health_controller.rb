@@ -1,4 +1,3 @@
-# Readiness probe: unlike /up (the app booted) it also needs the database to answer.
 class HealthController < ActionController::Base
   def show
     ActiveRecord::Base.connection.select_value("SELECT 1")

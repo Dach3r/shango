@@ -1,7 +1,5 @@
 module Network
   module Checks
-    # What a run boils down to, for the history list and the result header: a label, a tone (`ok`, `warn`, `bad`), the
-    # i18n key and arguments of its one-line summary, and for DNS how far the change has spread (0..100).
     module Digest
       Summary = Data.define(:label, :tone, :key, :args, :progress)
 

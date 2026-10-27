@@ -1,7 +1,5 @@
 module Network
   module Dns
-    # One DNS exchange with one nameserver, as raw bytes: `udp` for the normal case, `tcp` for answers that
-    # come back truncated. Sockets are opened per call and closed before returning.
     class Transport
       class TimedOut < StandardError; end
       class Failed < StandardError; end

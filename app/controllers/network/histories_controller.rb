@@ -1,5 +1,4 @@
 module Network
-  # Clears the project's history of one tool.
   class HistoriesController < BaseController
     def destroy
       kind = params.expect(:kind)

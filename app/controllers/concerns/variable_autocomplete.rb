@@ -1,6 +1,3 @@
-# Data for the `{{variable}}` autocomplete of plain inputs (see ApiClientHelper#variable_autocomplete_data) in screens
-# that have no request open: the enabled variables of the selected environment and no response references.
-# Secret values are masked, so they never reach the browser.
 module VariableAutocomplete
   extend ActiveSupport::Concern
 
@@ -10,7 +7,6 @@ module VariableAutocomplete
 
   private
 
-  # Memoized: every editor and autocomplete input of a page asks for it.
   def editor_variables
     return [] unless current_environment
 

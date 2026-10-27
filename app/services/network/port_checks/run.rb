@@ -1,8 +1,5 @@
 module Network
   module PortChecks
-    # TCP connect check of a few ports on one host, from the Shango server. The host passes the outbound guard and
-    # every probe connects to the address that was approved. Bounded: at most PortSpec::MAX_PORTS ports, CONCURRENCY
-    # probes at once and TIMEOUT per probe, so a run lasts a few seconds at worst.
     class Run
       include Serviceable
 

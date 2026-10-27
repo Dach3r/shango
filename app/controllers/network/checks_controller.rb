@@ -1,5 +1,4 @@
 module Network
-  # Saved runs of the project. Each has its own address that shows the tool with the stored result and what was typed.
   class ChecksController < BaseController
     def show
       @check = current_project.network_checks.find(params[:id])

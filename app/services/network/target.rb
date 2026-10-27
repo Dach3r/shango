@@ -1,6 +1,4 @@
 module Network
-  # Turns what the user typed into a host: resolves `{{variables}}` from the selected environment (Network::Variables)
-  # and validates it.
   class Target
     include Serviceable
 

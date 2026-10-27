@@ -1,6 +1,4 @@
 module Network
-  # Well-known service names for the port check. A static table: probes never read banners, so the name only says
-  # what the port is usually used for, not what is running on it.
   module Services
     NAMES = {
       21 => "ftp", 22 => "ssh", 23 => "telnet", 25 => "smtp", 53 => "dns", 80 => "http", 110 => "pop3", 143 => "imap",

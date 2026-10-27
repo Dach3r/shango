@@ -1,7 +1,5 @@
 module Network
   module Dns
-    # The nameservers a DNS check asks: a fixed list of public resolvers, plus the authoritative nameservers of the
-    # domain (the source of truth: if they still serve the old value, the change was never published).
     module Resolvers
       Resolver = Data.define(:name, :ip, :group)
 
@@ -12,8 +10,6 @@ module Network
       LOOKUP_IP = "1.1.1.1".freeze
       LIMIT = 8
 
-      # Nameservers of the zone that contains `domain` (a subdomain such as www has no NS records of its own, so the
-      # parent names are tried in turn). Nameservers whose address cannot be found keep a nil ip.
       def self.authoritative(domain)
         labels = domain.split(".")
         zone = Array.new([labels.size - 1, 1].max) { |index| labels[index..].join(".") }.lazy.map { |name| ask(name, "NS") }.find { |answer| answer.status == :ok }

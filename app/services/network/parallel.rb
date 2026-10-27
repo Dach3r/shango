@@ -1,6 +1,4 @@
 module Network
-  # Runs a block for every item on a bounded number of threads and returns the results in input order.
-  # Network checks are I/O bound and short, so plain threads are enough; nothing is shared between them.
   module Parallel
     def self.map(items, limit:, &block)
       queue = Queue.new
