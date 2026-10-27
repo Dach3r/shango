@@ -186,6 +186,15 @@ RSpec.describe "Environments" do
     end
   end
 
+  describe "duplicate variable keys" do
+    it "re-renders the form instead of failing on the unique index", :aggregate_failures do
+      params = { environment: { name: "Dup", variables_attributes: { "0" => { key: "HOST", value: "a" }, "1" => { key: "HOST", value: "b" } } } }
+
+      expect { post environments_path, params: }.not_to change(Environment, :count)
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
   describe "names" do
     it "rejects duplicate names ignoring case within a project", :aggregate_failures do
       create(:environment, project:, name: "Staging")

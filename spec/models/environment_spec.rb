@@ -27,6 +27,21 @@ RSpec.describe Environment do
     end
   end
 
+  describe "duplicate variable keys" do
+    it "rejects the same key twice in one submission", :aggregate_failures do
+      environment.assign_attributes(variables_attributes: [{ key: "HOST", value: "a" }, { key: "HOST", value: "b" }])
+
+      expect(environment).not_to be_valid
+      expect(environment.errors.full_messages).to eq([I18n.t("activerecord.errors.models.environment.attributes.base.duplicated_variable_keys")])
+    end
+
+    it "ignores rows marked for destruction" do
+      environment.assign_attributes(variables_attributes: [{ key: "HOST", value: "a", _destroy: "1" }, { key: "HOST", value: "b" }])
+
+      expect(environment).to be_valid
+    end
+  end
+
   describe "#variable_values" do
     it "maps enabled variables to string values", :aggregate_failures do
       create(:variable, environment:, key: "A", value: "1")

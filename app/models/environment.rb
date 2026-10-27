@@ -11,6 +11,8 @@ class Environment < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :project_id, case_sensitive: false }
 
+  validate :variable_keys_unique
+
   scope :ordered, -> { order(:position, :created_at) }
 
   def siblings
@@ -23,5 +25,13 @@ class Environment < ApplicationRecord
 
   def secret_values
     variables.select { |variable| variable.enabled && variable.secret && variable.value.present? }.map(&:value)
+  end
+
+  private
+
+  # The unique index would reject duplicates inside one submission with a 500; the per-row uniqueness check only sees saved rows.
+  def variable_keys_unique
+    keys = variables.reject(&:marked_for_destruction?).filter_map { |variable| variable.key.presence }
+    errors.add(:base, :duplicated_variable_keys) if keys.uniq.size < keys.size
   end
 end

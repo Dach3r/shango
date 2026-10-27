@@ -1,5 +1,11 @@
 es:
   activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "Los nombres de las variables no pueden repetirse."
     attributes:
       environment:
         name: Nombre

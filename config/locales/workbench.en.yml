@@ -1,5 +1,11 @@
 en:
   activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "The variable names must be unique."
     attributes:
       environment:
         name: Name
