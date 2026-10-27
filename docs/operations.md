@@ -10,6 +10,7 @@
 - **TLS:** the app forces SSL and assumes it sits behind a TLS-terminating proxy. Cap request bodies at the proxy as well (e.g. Thruster `MAX_REQUEST_BODY`).
 - **Probes:** `/up` (booted) and `/ready` (booted and the database answers; 503 otherwise).
 - **CI:** `.github/workflows/ci.yml` runs bundler-audit, importmap audit, Brakeman, Rubocop and RSpec (coverage must stay at 100%); `bin/ci` runs the same locally. Dependabot opens weekly gem and Actions updates.
+- **Commit lint:** `.github/workflows/commit_lint.yml` checks every non-merge commit subject of a pull request against `<emoji> <type>(<scope>): <subject>` using `bin/lint_commit_message`. The same script runs locally as the `.githooks/commit-msg` hook, enabled by `bin/setup` (`git config core.hooksPath .githooks`). Mark the `commit-messages` check as required in the branch protection settings to enforce it.
 
 ## 2. Environment reference
 

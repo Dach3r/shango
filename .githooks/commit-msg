@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec "$(git rev-parse --show-toplevel)/bin/lint_commit_message" "$(head -n 1 "$1")"

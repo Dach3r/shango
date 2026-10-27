@@ -41,6 +41,7 @@ Add new docs under `docs/` and reference them here.
   - `📝 docs` documentation · `🔧 chore` config and tooling · `🙈 chore` `.gitignore` · `🔥 chore`/`refactor` remove code or files
   - `🔒 feat`/`fix` security, privacy, encryption · `🛡️ feat`/`fix` abuse protection and rate limits
   - `📦 build` packaging and dependency bumps (`📦 build(deps)`, Dependabot included, never `⬆️`) · `👷 ci` CI workflows · `🚀 ci`/`chore` deploy · `⏪ revert`
+- Format is enforced by `bin/lint_commit_message` (local `commit-msg` hook via `bin/setup`, and the `Commit lint` workflow on PRs); update its emoji list when adding a type here.
 - **Auto-commit**: after every important change (feature, fix, refactor, migration, config/docs update) commit automatically without asking. Stage only files of that change (no `git add -A`, other WIP stays untouched), one logical commit per change, run `bundle exec rubocop` on touched files first. Never push, never amend, never commit `.env` or secrets.
 - Keep code comment density low, match surrounding style.
 - **Tests**: RSpec, `bundle exec rspec`; coverage must stay at 100% (line and branch, enforced by SimpleCov). Every code change ships its specs in the same commit; use factories from `spec/factories`.

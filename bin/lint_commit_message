@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Checks commit subjects against the gitmoji + Conventional Commits format (see CLAUDE.md).
+# Usage: bin/lint_commit_message "<subject>" [...]
+set -u
+
+emojis='✨|🐛|♻️|⚡️|💄|✏️|🌐|🧪|📝|🔧|🙈|🔥|🔒|🛡️|📦|👷|🚀|⏪'
+pattern="^(${emojis}) [a-z0-9]+(\([a-z0-9_]+\))?: .+"
+status=0
+
+for subject in "$@"; do
+  case "$subject" in
+    "Merge "* | "fixup! "* | "squash! "*) continue ;;
+  esac
+  if ! printf '%s\n' "$subject" | grep -Eq "$pattern"; then
+    echo "Invalid commit message: $subject" >&2
+    status=1
+  fi
+done
+
+if [ "$status" -ne 0 ]; then
+  echo "Expected: <emoji> <type>(<scope>): <subject>, e.g. ✨ feat(api_client): add curl import" >&2
+fi
+exit $status

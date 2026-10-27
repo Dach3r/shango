@@ -1,0 +1,19 @@
+name: Commit lint
+
+on:
+  pull_request:
+
+jobs:
+  commit-messages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check commit subjects
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mapfile -t subjects < <(git log --no-merges --format=%s "$BASE_SHA..$HEAD_SHA")
+          bin/lint_commit_message "${subjects[@]}"
