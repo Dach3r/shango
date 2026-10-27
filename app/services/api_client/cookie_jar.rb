@@ -13,7 +13,7 @@ module ApiClient
     # The Cookie header value for this URL, or nil when no stored cookie applies.
     def header(url)
       uri = parse_url(url) or return
-      cookies = scope.live.select { |cookie| cookie.matches?(uri) }
+      cookies = scope.live.where(domain: candidate_domains(uri.host.to_s.downcase)).select { |cookie| cookie.matches?(uri) }
       return if cookies.empty?
 
       cookies.sort_by { |cookie| [-cookie.path.length, cookie.created_at] }.map { |cookie| "#{cookie.name}=#{cookie.value}" }.join("; ")
@@ -35,6 +35,14 @@ module ApiClient
       URI.parse(url)
     rescue URI::InvalidURIError
       nil
+    end
+
+    # Domains a stored cookie can have and still match this host: the host itself and its parent domains (IPs only match themselves).
+    def candidate_domains(host)
+      return [host] if host.match?(Cookie::IP_HOST)
+
+      labels = host.split(".")
+      labels.each_index.map { |index| labels.drop(index).join(".") }
     end
 
     def scope

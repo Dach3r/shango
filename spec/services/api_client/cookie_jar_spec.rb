@@ -15,6 +15,22 @@ RSpec.describe ApiClient::CookieJar do
       expect(Cookie.last).to have_attributes(domain: "api.example.com", path: "/", host_only: true, secure: true, http_only: true, expires_at: nil)
     end
 
+    it "replays cookies shared with subdomains and never loads the ones of other domains", :aggregate_failures do
+      jar.store("https://auth.example.com/", "shared=1; Domain=example.com; Path=/")
+      jar.store("https://other.test/", "foreign=2; Path=/")
+      jar.store("http://127.0.0.1/", "local=3; Path=/")
+      loaded = 0
+      counter = ->(*, payload) { loaded += payload[:record_count] if payload[:class_name] == "Cookie" }
+
+      ActiveSupport::Notifications.subscribed(counter, "instantiation.active_record") do
+        expect(jar.header("https://api.example.com/")).to eq("shared=1")
+      end
+
+      expect(loaded).to eq(1)
+      expect(jar.header("http://127.0.0.1/")).to eq("local=3")
+      expect(jar.header("https://nowhere.test/")).to be_nil
+    end
+
     it "stores cookies of hosts with unusual names", :aggregate_failures do
       jar.store("https://my_api.internal/", "a=1; Path=/")
       jar.store("http://[::1]:3000/", "b=2; Path=/")
