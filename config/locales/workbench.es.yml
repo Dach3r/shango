@@ -71,6 +71,8 @@ es:
       label: Entorno
       manage: Administrar entornos
       manage_title: Entornos
+      cookies: Cookies
+      cookies_title: Cookies
     request_tabs:
       label: Solicitudes abiertas
       close: "Cerrar %{name}"
@@ -107,6 +109,21 @@ es:
       confirm_delete_collection: "¿Eliminar la colección “%{name}” con todas sus carpetas y solicitudes?"
       confirm_delete_folder: "¿Eliminar la carpeta “%{name}” con todo su contenido?"
   projects:
+    cookies:
+      index:
+        title: Cookies
+        intro: "Las cookies que fijan los servidores se guardan por entorno y se reenvían en las solicitudes siguientes, así un inicio de sesión se mantiene en la próxima llamada. Los valores nunca se muestran."
+        scope: "Entorno: %{name}"
+        scope_none: Sin entorno
+        empty_title: Aún no hay cookies
+        empty_hint: Envía una solicitud cuya respuesta fije una cookie y aparecerá aquí.
+        session: Sesión
+        expires: "Expira %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Eliminar cookie
+        clear: Borrar todas las cookies
+        confirm_clear: "¿Eliminar todas las cookies guardadas para este entorno?"
     environments:
       index:
         title: Entornos

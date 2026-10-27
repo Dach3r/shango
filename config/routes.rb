@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       resources :variables, only: %i[create update], module: :environments
     end
     resource :current_environment, only: :update
+    resources :cookies, only: %i[index destroy]
+    resource :cookie_jar, only: :destroy
     resource :membership, only: %i[edit update], path_names: { edit: "settings" }
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }
   end

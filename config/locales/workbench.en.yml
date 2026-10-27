@@ -71,6 +71,8 @@ en:
       label: Environment
       manage: Manage environments
       manage_title: Environments
+      cookies: Cookies
+      cookies_title: Cookies
     request_tabs:
       label: Open requests
       close: "Close %{name}"
@@ -107,6 +109,21 @@ en:
       confirm_delete_collection: "Delete the collection “%{name}” with all its folders and requests?"
       confirm_delete_folder: "Delete the folder “%{name}” with everything inside it?"
   projects:
+    cookies:
+      index:
+        title: Cookies
+        intro: "Cookies servers set are kept for the selected environment and sent back on later requests, so a sign in carries over to the next call. Values are never shown."
+        scope: "Environment: %{name}"
+        scope_none: No environment
+        empty_title: No cookies yet
+        empty_hint: Send a request whose response sets a cookie and it shows up here.
+        session: Session
+        expires: "Expires %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Delete cookie
+        clear: Clear all cookies
+        confirm_clear: "Delete every cookie stored for this environment?"
     environments:
       index:
         title: Environments
