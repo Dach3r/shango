@@ -1,13 +1,15 @@
 <template id="response-reference-template">
-  <%= render Modal::Component.new(title: label("response_edit_title")) do |modal| %>
+  <%= render Modal::Component.new(title: label("response_edit_title"), size: :xl) do |modal| %>
     <div class="space-y-4" data-response-reference="form">
-      <div>
-        <span class="<%= label_classes %>"><%= label("response_function_label") %></span>
-        <%= render Select::Component.new(name: "function", options: [[label("response_function"), "response"]], disabled: true) %>
-      </div>
-      <div>
-        <span class="<%= label_classes %>"><%= label("response_attribute") %></span>
-        <%= render Select::Component.new(name: "attribute", options: attribute_options, label: label("response_attribute")) %>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <span class="<%= label_classes %>"><%= label("response_function_label") %></span>
+          <%= render Select::Component.new(name: "function", options: [[label("response_function"), "response"]], disabled: true) %>
+        </div>
+        <div>
+          <span class="<%= label_classes %>"><%= label("response_attribute") %></span>
+          <%= render Select::Component.new(name: "attribute", options: attribute_options, label: label("response_attribute")) %>
+        </div>
       </div>
       <div>
         <span class="<%= label_classes %>"><%= label("response_request") %></span>
@@ -31,7 +33,7 @@
           </button>
         </div>
         <textarea id="response-reference-preview" readonly data-response-reference="preview"
-                  class="<%= field_classes("min-h-28 resize-y font-mono text-xs") %>"></textarea>
+                  class="<%= field_classes("min-h-40 resize-y font-mono text-xs") %>"></textarea>
       </div>
     </div>
     <% modal.with_footer do %>
