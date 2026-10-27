@@ -37,7 +37,7 @@
                                            input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>
     </div>
     <button type="button" data-request-form-target="send" data-action="request-form#toggle" title="<%= t("workbench.requests.send_hint") %>"
-            class="<%= button_classes(:primary, "group px-4 @xl:min-w-28 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
+            class="<%= button_classes(:primary, "group m-2 px-4 @xl:min-w-28 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
       <span class="contents group-data-[busy=true]:hidden">
         <%= lucide_icon "send", class: "size-4" %>
         <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
