@@ -1,0 +1,57 @@
+en:
+  network:
+    title: Network
+    tabs:
+      label: Network tools
+      dns: DNS
+      ports: Ports
+      ping: Ping
+    errors:
+      blank: Enter a domain or host.
+      invalid: "That is not a valid host name or IP address. Use only the name, without scheme, path or port."
+      unresolved_variable: "The variable {{%{name}}} is not defined or is disabled in the selected environment."
+      secret_variable: "The variable {{%{name}}} is secret and cannot be used as a network target."
+      blocked: "This host is not allowed: %{detail}."
+      unresolved: The host name does not resolve.
+      invalid_type: Choose a supported record type.
+    statuses:
+      ok: Answered
+      cname: Alias
+      nodata: No records
+      nxdomain: Not found
+      servfail: Server failure
+      refused: Refused
+      timeout: Timeout
+      error: Error
+      blocked: Blocked
+      unresolved: No address
+      match: Matches
+      mismatch: Differs
+      no_answer: No answer
+      open: Open
+      closed: Closed
+      filtered: Filtered
+    dns:
+      intro: Ask public resolvers and the domain's authoritative nameservers for a record, to see whether a DNS change has propagated.
+      domain: Domain
+      domain_placeholder: example.com or {{host}}
+      type: Type
+      expected: Expected value
+      expected_placeholder: 203.0.113.10
+      expected_hint: Optional. Each resolver is marked as matching or not, so you can see how far a change has spread.
+      submit: Check DNS
+      no_authoritative: The authoritative nameservers of this domain could not be determined.
+      summary:
+        expected: "%{matched} of %{total} resolvers match the expected value"
+        answered: "%{answered} of %{total} resolvers answered"
+        agree: All answers agree.
+        differ: Answers differ between resolvers, so the change may still be propagating.
+      groups:
+        authoritative: Authoritative nameservers
+        public: Public resolvers
+      columns:
+        resolver: Resolver
+        answer: Answer
+        ttl: TTL
+        latency: Latency
+        status: Status

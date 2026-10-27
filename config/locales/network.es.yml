@@ -1,0 +1,57 @@
+es:
+  network:
+    title: Red
+    tabs:
+      label: Herramientas de red
+      dns: DNS
+      ports: Puertos
+      ping: Ping
+    errors:
+      blank: Ingresa un dominio o host.
+      invalid: "No es un nombre de host ni una dirección IP válidos. Usa solo el nombre, sin esquema, ruta ni puerto."
+      unresolved_variable: "La variable {{%{name}}} no está definida o está deshabilitada en el entorno seleccionado."
+      secret_variable: "La variable {{%{name}}} es secreta y no se puede usar como destino de red."
+      blocked: "Este host no está permitido: %{detail}."
+      unresolved: El nombre de host no se resuelve.
+      invalid_type: Elige un tipo de registro compatible.
+    statuses:
+      ok: Respondió
+      cname: Alias
+      nodata: Sin registros
+      nxdomain: No existe
+      servfail: Fallo del servidor
+      refused: Rechazado
+      timeout: Tiempo agotado
+      error: Error
+      blocked: Bloqueado
+      unresolved: Sin dirección
+      match: Coincide
+      mismatch: Difiere
+      no_answer: Sin respuesta
+      open: Abierto
+      closed: Cerrado
+      filtered: Filtrado
+    dns:
+      intro: Consulta resolvers públicos y los nameservers autoritativos del dominio por un registro, para ver si un cambio de DNS ya se propagó.
+      domain: Dominio
+      domain_placeholder: example.com o {{host}}
+      type: Tipo
+      expected: Valor esperado
+      expected_placeholder: 203.0.113.10
+      expected_hint: Opcional. Cada resolver se marca como coincidente o no, para ver hasta dónde llegó el cambio.
+      submit: Comprobar DNS
+      no_authoritative: No se pudieron determinar los nameservers autoritativos de este dominio.
+      summary:
+        expected: "%{matched} de %{total} resolvers coinciden con el valor esperado"
+        answered: "%{answered} de %{total} resolvers respondieron"
+        agree: Todas las respuestas coinciden.
+        differ: Las respuestas difieren entre resolvers, por lo que el cambio puede seguir propagándose.
+      groups:
+        authoritative: Nameservers autoritativos
+        public: Resolvers públicos
+      columns:
+        resolver: Resolver
+        answer: Respuesta
+        ttl: TTL
+        latency: Latencia
+        status: Estado

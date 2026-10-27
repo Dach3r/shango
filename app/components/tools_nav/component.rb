@@ -5,7 +5,7 @@ class ToolsNav::Component < ApplicationComponent
     { key: :documentation, icon: "book-open" },
     { key: :monitoring, icon: "activity" },
     { key: :servers, icon: "server" },
-    { key: :network, icon: "radar" },
+    { key: :network, icon: "radar", path: :network_root_path },
     { key: :logs, icon: "scroll-text" },
     { key: :ai_assistant, icon: "sparkles" }
   ].freeze

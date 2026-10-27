@@ -1,0 +1,37 @@
+<% content_for :title, "#{t("network.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t("network.title") %>
+
+<% tabs = [
+     { name: "dns", label: t("network.tabs.dns") },
+     { name: "ports", label: t("network.tabs.ports"), disabled: true },
+     { name: "ping", label: t("network.tabs.ping"), disabled: true }
+   ] %>
+
+<div class="mx-auto max-w-3xl border border-line bg-card" data-controller="tabs" data-tabs-active-value="dns" data-tabs-key-value="network-tools">
+  <%= render TabBar::Component.new(items: tabs, label: t("network.tabs.label")) %>
+
+  <div data-tabs-target="panel" data-name="dns" class="p-4">
+    <p class="mb-4 text-sm text-muted"><%= t("network.dns.intro") %></p>
+    <%= form_with scope: :dns_check, url: network_dns_checks_path, class: "grid gap-4 sm:grid-cols-[1fr_auto]" do |form| %>
+      <div>
+        <%= form.label :domain, t("network.dns.domain"), class: label_classes %>
+        <%= form.text_field :domain, required: true, autofocus: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: field_classes("font-mono") %>
+      </div>
+      <div class="sm:w-32">
+        <%= form.label :type, t("network.dns.type"), class: label_classes %>
+        <%= render Select::Component.new(name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: "A", id: "dns_check_type", label: t("network.dns.type")) %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= form.label :expected, t("network.dns.expected"), class: label_classes %>
+        <%= form.text_field :expected, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.expected_placeholder"), class: field_classes("font-mono") %>
+        <p class="mt-1 text-xs text-faint"><%= t("network.dns.expected_hint") %></p>
+      </div>
+      <div class="sm:col-span-2">
+        <%= form.button type: :submit, class: button_classes(:primary) do %>
+          <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
+        <% end %>
+      </div>
+    <% end %>
+    <div id="dns_result" class="mt-6 empty:hidden" aria-live="polite"></div>
+  </div>
+</div>
