@@ -37,13 +37,11 @@ es:
       closed: Cerrado
       filtered: Filtrado
     dns:
-      intro: Consulta resolvers públicos y los nameservers autoritativos del dominio por un registro, para ver si un cambio de DNS ya se propagó.
       domain: Dominio
       domain_placeholder: example.com o {{host}}
       type: Tipo
       expected: Valor esperado
       expected_placeholder: 203.0.113.10
-      expected_hint: Opcional. Cada resolver se marca como coincidente o no, para ver hasta dónde llegó el cambio.
       submit: Comprobar DNS
       no_authoritative: No se pudieron determinar los nameservers autoritativos de este dominio.
       summary:
@@ -61,12 +59,10 @@ es:
         latency: Latencia
         status: Estado
     ports:
-      intro: Comprueba qué puertos TCP responden en un host desde el servidor de Shango, por ejemplo tras cambiar un firewall o desplegar un servicio.
       host: Host
       host_placeholder: example.com, 203.0.113.10 o {{host}}
       ports: Puertos
       ports_placeholder: 22, 80, 443 o 8000-8010
-      ports_hint: "Números, rangos y common, separados por comas. Máximo %{max} puertos."
       submit: Comprobar puertos
       summary: "%{open} abiertos, %{closed} cerrados, %{filtered} filtrados"
       all_filtered: Nada respondió. Un firewall puede estar descartando los paquetes, o el host puede estar apagado.
@@ -76,7 +72,6 @@ es:
         latency: Latencia
         status: Estado
     ping:
-      intro: Comprueba si un host responde, abriendo varias conexiones TCP a un puerto y midiendo su tiempo.
       host: Host
       host_placeholder: example.com, 203.0.113.10 o {{host}}
       port: Puerto
@@ -112,4 +107,3 @@ es:
       avg: "Prom"
       max: "Máx"
       loss: "Pérdida"
-    variables_hint: "Escribe {{ para usar variables del entorno seleccionado."

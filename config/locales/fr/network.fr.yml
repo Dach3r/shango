@@ -37,13 +37,11 @@ fr:
       closed: "Fermé"
       filtered: "Filtré"
     dns:
-      intro: "Interrogez les résolveurs publics et les serveurs de noms faisant autorité du domaine pour un enregistrement, afin de voir si un changement DNS s'est propagé."
       domain: "Domaine"
       domain_placeholder: "example.com ou {{host}}"
       type: "Type"
       expected: "Valeur attendue"
       expected_placeholder: "203.0.113.10"
-      expected_hint: "Facultatif. Chaque résolveur est marqué comme correspondant ou non, pour voir jusqu'où un changement s'est propagé."
       submit: "Vérifier le DNS"
       no_authoritative: "Impossible de déterminer les serveurs de noms faisant autorité pour ce domaine."
       summary:
@@ -61,12 +59,10 @@ fr:
         latency: "Latence"
         status: "Statut"
     ports:
-      intro: "Vérifiez quels ports TCP répondent sur un hôte depuis le serveur Shango, par exemple après une modification de pare-feu ou le déploiement d'un service."
       host: "Hôte"
       host_placeholder: "example.com, 203.0.113.10 ou {{host}}"
       ports: "Ports"
       ports_placeholder: "22, 80, 443 ou 8000-8010"
-      ports_hint: "Nombres, plages et common, séparés par des virgules. %{max} ports au maximum."
       submit: "Vérifier les ports"
       summary: "%{open} ouverts, %{closed} fermés, %{filtered} filtrés"
       all_filtered: "Aucune réponse. Un pare-feu bloque peut-être les paquets, ou l'hôte est hors ligne."
@@ -76,7 +72,6 @@ fr:
         latency: "Latence"
         status: "Statut"
     ping:
-      intro: "Vérifiez si un hôte répond en ouvrant plusieurs connexions TCP vers un port et en mesurant leur durée."
       host: "Hôte"
       host_placeholder: "example.com, 203.0.113.10 ou {{host}}"
       port: "Port"
@@ -112,4 +107,3 @@ fr:
       avg: "Moy"
       max: "Max"
       loss: "Perte"
-    variables_hint: "Tapez {{ pour utiliser les variables de l'environnement sélectionné."

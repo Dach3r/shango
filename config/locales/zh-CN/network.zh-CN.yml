@@ -37,13 +37,11 @@ zh-CN:
       closed: 关闭
       filtered: 被过滤
     dns:
-      intro: 向公共解析器和该域名的权威名称服务器查询记录，以确认 DNS 更改是否已生效。
       domain: 域名
       domain_placeholder: "example.com 或 {{host}}"
       type: 类型
       expected: 期望值
       expected_placeholder: 203.0.113.10
-      expected_hint: 可选。每个解析器会被标记为一致或不一致，方便查看更改的扩散进度。
       submit: 检查 DNS
       no_authoritative: 无法确定此域名的权威名称服务器。
       summary:
@@ -61,12 +59,10 @@ zh-CN:
         latency: 延迟
         status: 状态
     ports:
-      intro: 从 Shango 服务器检查主机上哪些 TCP 端口有应答，例如在修改防火墙或部署服务之后。
       host: 主机
       host_placeholder: "example.com、203.0.113.10 或 {{host}}"
       ports: 端口
       ports_placeholder: "22, 80, 443 或 8000-8010"
-      ports_hint: "数字、范围和 common，以逗号分隔。最多 %{max} 个端口。"
       submit: 检查端口
       summary: "%{open} 个开放，%{closed} 个关闭，%{filtered} 个被过滤"
       all_filtered: 没有任何应答。可能是防火墙丢弃了数据包，或主机已离线。
@@ -76,7 +72,6 @@ zh-CN:
         latency: 延迟
         status: 状态
     ping:
-      intro: 通过多次向某个端口建立 TCP 连接并计时，检查主机是否有应答。
       host: 主机
       host_placeholder: "example.com、203.0.113.10 或 {{host}}"
       port: 端口
@@ -112,4 +107,3 @@ zh-CN:
       avg: "平均"
       max: "最大"
       loss: "丢包"
-    variables_hint: "输入 {{ 以使用所选环境中的变量。"

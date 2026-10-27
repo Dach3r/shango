@@ -47,7 +47,7 @@ RSpec.describe "Network workspace" do
       membership.update!(current_environment: environment)
       get network_root_path
 
-      expect(response.body).to include("variable-autocomplete", "host", I18n.t("network.variables_hint"))
+      expect(response.body).to include("variable-autocomplete", "host")
     end
 
     it "shows the ping limits", :aggregate_failures do

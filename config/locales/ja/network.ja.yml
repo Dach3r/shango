@@ -37,13 +37,11 @@ ja:
       closed: クローズ
       filtered: フィルタ済み
     dns:
-      intro: パブリックリゾルバーとドメインの権威ネームサーバーにレコードを問い合わせて、DNSの変更が反映されたかを確認します。
       domain: ドメイン
       domain_placeholder: "example.com または {{host}}"
       type: タイプ
       expected: 期待値
       expected_placeholder: 203.0.113.10
-      expected_hint: 任意です。各リゾルバーが一致しているかどうかが表示され、変更がどこまで広がったかを確認できます。
       submit: DNSを確認
       no_authoritative: このドメインの権威ネームサーバーを特定できませんでした。
       summary:
@@ -61,12 +59,10 @@ ja:
         latency: レイテンシ
         status: ステータス
     ports:
-      intro: ファイアウォールの変更やサービスのデプロイ後などに、Shango サーバーからホストのどの TCP ポートが応答するかを確認します。
       host: ホスト
       host_placeholder: "example.com、203.0.113.10 または {{host}}"
       ports: ポート
       ports_placeholder: "22, 80, 443 または 8000-8010"
-      ports_hint: "数値、範囲、common をカンマ区切りで指定します。最大 %{max} 個まで。"
       submit: ポートを確認
       summary: "オープン %{open}、クローズ %{closed}、フィルタ済み %{filtered}"
       all_filtered: 応答がありませんでした。ファイアウォールがパケットを破棄しているか、ホストがオフラインの可能性があります。
@@ -76,7 +72,6 @@ ja:
         latency: レイテンシ
         status: ステータス
     ping:
-      intro: ポートへの TCP 接続を複数回開き、その所要時間を測定して、ホストが応答するかを確認します。
       host: ホスト
       host_placeholder: "example.com、203.0.113.10 または {{host}}"
       port: ポート
@@ -112,4 +107,3 @@ ja:
       avg: "平均"
       max: "最大"
       loss: "損失"
-    variables_hint: "{{ と入力すると、選択中の環境の変数を使えます。"
