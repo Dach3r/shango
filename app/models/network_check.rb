@@ -22,6 +22,6 @@ class NetworkCheck < ApplicationRecord
   end
 
   def previous
-    project.network_checks.where(kind:, target:).where(created_at: ...created_at).recent.first
+    project.network_checks.where(user_id:, kind:, target:).where(created_at: ...created_at).recent.first
   end
 end

@@ -36,15 +36,16 @@ RSpec.describe Network::Checks::Record do
 
   it "keeps the newest runs of each tool and leaves the others alone", :aggregate_failures do
     stub_const("NetworkCheck::KEEP_PER_KIND", 2)
-    old = create(:network_check, :ports, project:, created_at: 3.days.ago)
-    middle = create(:network_check, :ports, project:, created_at: 2.days.ago)
-    dns = create(:network_check, project:, created_at: 4.days.ago)
+    old = create(:network_check, :ports, project:, user:, created_at: 3.days.ago)
+    middle = create(:network_check, :ports, project:, user:, created_at: 2.days.ago)
+    dns = create(:network_check, project:, user:, created_at: 4.days.ago)
     other_project = create(:network_check, :ports, created_at: 5.days.ago)
+    teammate = create(:network_check, :ports, project:, created_at: 6.days.ago)
     check = record.record
 
-    expect(NetworkCheck.ports.where(project:)).to contain_exactly(middle, check)
+    expect(NetworkCheck.ports.where(project:, user:)).to contain_exactly(middle, check)
     expect(NetworkCheck.exists?(old.id)).to be(false)
-    expect(NetworkCheck.where(id: [dns.id, other_project.id]).count).to eq(2)
+    expect(NetworkCheck.where(id: [dns.id, other_project.id, teammate.id]).count).to eq(3)
   end
 
   it "does not break the run when the history cannot be saved", :aggregate_failures do

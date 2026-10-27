@@ -85,7 +85,7 @@ fr:
       ports: "Vérifications de ports"
       ping: "Pings TCP"
       empty: "Rien n'a encore été vérifié."
-      note: "Enregistré pour tous les membres du projet."
+      note: "Enregistré uniquement pour vous dans ce projet."
       clear: "Effacer"
       ago: "il y a %{time}"
       delete: "Supprimer l'exécution"

@@ -85,7 +85,7 @@ en:
       ports: "Port checks"
       ping: "TCP pings"
       empty: "Nothing checked yet."
-      note: "Saved for everyone in this project."
+      note: "Saved only for you in this project."
       clear: "Clear"
       ago: "%{time} ago"
       delete: "Delete run"

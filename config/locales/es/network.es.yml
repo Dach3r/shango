@@ -85,7 +85,7 @@ es:
       ports: "Comprobaciones de puertos"
       ping: "Pings TCP"
       empty: "Aún no hay comprobaciones."
-      note: "Guardado para todos los miembros del proyecto."
+      note: "Guardado solo para ti en este proyecto."
       clear: "Borrar"
       ago: "hace %{time}"
       delete: "Eliminar ejecución"

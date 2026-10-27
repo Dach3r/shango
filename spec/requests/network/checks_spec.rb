@@ -23,8 +23,8 @@ RSpec.describe "Network checks" do
     end
 
     it "mentions the previous run of the same target", :aggregate_failures do
-      earlier = create(:network_check, project:, created_at: 2.hours.ago)
-      later = create(:network_check, project:, created_at: 1.hour.ago)
+      earlier = create(:network_check, project:, user:, created_at: 2.hours.ago)
+      later = create(:network_check, project:, user:, created_at: 1.hour.ago)
       get network_check_path(later)
 
       expect(earlier.created_at).to be < later.created_at
@@ -32,12 +32,12 @@ RSpec.describe "Network checks" do
     end
 
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
-      ports = create(:network_check, :ports, project:)
+      ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)
 
       expect(response.body).to include("ports_result", I18n.t("network.ports.columns.service"), I18n.t("network.ports.submit"))
 
-      ping = create(:network_check, :ping, project:)
+      ping = create(:network_check, :ping, project:, user:)
       get network_check_path(ping)
 
       expect(response.body).to include("ping_result", "443", I18n.t("network.ping.submit"))
@@ -45,6 +45,12 @@ RSpec.describe "Network checks" do
 
     it "does not show runs of other projects" do
       get network_check_path(create(:network_check))
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "does not show runs of other members of the project" do
+      get network_check_path(create(:network_check, project:))
 
       expect(response).to have_http_status(:not_found)
     end
@@ -56,6 +62,13 @@ RSpec.describe "Network checks" do
       expect(response).to redirect_to(network_workspace_path("dns"))
     end
 
+    it "does not delete runs of other members of the project", :aggregate_failures do
+      teammate = create(:network_check, project:)
+
+      expect { delete network_check_path(teammate) }.not_to change(NetworkCheck, :count)
+      expect(response).to have_http_status(:not_found)
+    end
+
     it "does not delete runs of other projects", :aggregate_failures do
       foreign = create(:network_check)
 
@@ -65,12 +78,13 @@ RSpec.describe "Network checks" do
   end
 
   describe "DELETE /network/history" do
-    it "clears the history of one tool in the project", :aggregate_failures do
-      ports = create(:network_check, :ports, project:)
+    it "clears only the user's history of one tool in the project", :aggregate_failures do
+      ports = create(:network_check, :ports, project:, user:)
       foreign = create(:network_check)
+      teammate = create(:network_check, project:)
       delete network_history_path(kind: "dns")
 
-      expect(NetworkCheck.where(id: [check.id, foreign.id, ports.id])).to contain_exactly(foreign, ports)
+      expect(NetworkCheck.where(id: [check.id, foreign.id, ports.id, teammate.id])).to contain_exactly(foreign, ports, teammate)
       expect(response).to redirect_to(network_workspace_path("dns"))
     end
 

@@ -1,6 +1,6 @@
 module Network
   module Checks
-    # Saves a successful run to the project's history and trims the oldest runs of that tool beyond
+    # Saves a successful run to the user's history in the project and trims their oldest runs of that tool beyond
     # NetworkCheck::KEEP_PER_KIND. Failed runs (invalid input, blocked targets) are not recorded. `input` is what the user
     # typed, with `{{variables}}` unresolved, so environment values never reach the table.
     class Record
@@ -31,7 +31,7 @@ module Network
       end
 
       def trim
-        scope = @project.network_checks.where(kind: @kind)
+        scope = @project.network_checks.where(user: @user, kind: @kind)
         NetworkCheck.where(id: scope.recent.offset(NetworkCheck::KEEP_PER_KIND).ids).delete_all
       end
     end

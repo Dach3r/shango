@@ -43,6 +43,12 @@ RSpec.describe NetworkCheck do
       expect(first.previous).to be_nil
     end
 
+    it "ignores other users" do
+      create(:network_check, project:, created_at: 3.hours.ago)
+
+      expect(create(:network_check, project:, user: create(:user), created_at: 1.hour.ago).previous).to be_nil
+    end
+
     it "ignores other projects" do
       create(:network_check, created_at: 3.hours.ago)
 

@@ -23,8 +23,12 @@ module Network
       Network::Checks::Record.call(kind:, result: @result, input:, project: current_project, user: current_user, environment: current_environment).record
     end
 
+    def own_checks
+      current_project.network_checks.where(user: current_user)
+    end
+
     def history_for(kind)
-      current_project.network_checks.where(kind:).recent.limit(NetworkCheck::KEEP_PER_KIND)
+      own_checks.where(kind:).recent.limit(NetworkCheck::KEEP_PER_KIND)
     end
   end
 end
