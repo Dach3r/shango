@@ -29,6 +29,15 @@ class RequestTabs::Component < ApplicationComponent
     @unsaved_ids.include?(api_request.id)
   end
 
+  # Closing it would drop edits: unsaved changes of a saved request or a draft that is no longer untouched.
+  def confirm_close?(api_request)
+    unsaved?(api_request) || (api_request.draft? && !api_request.untouched_draft?)
+  end
+
+  def confirm_message(api_request)
+    t("components.request_tabs.confirm_close", name: api_request.name)
+  end
+
   def draft_close_icon(hint = t("components.request_tabs.draft_hint"))
     safe_join([
       tag.span(class: "size-2 rounded-full bg-muted group-hover:hidden group-focus-within:hidden", title: hint),

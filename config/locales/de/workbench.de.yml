@@ -97,6 +97,8 @@ de:
       close_left: "Tabs links schließen"
       close_right: "Tabs rechts schließen"
       close_all: "Alle Tabs schließen"
+      confirm_close: "„%{name}“ ohne Speichern schließen? Die Änderungen gehen verloren."
+      confirm_close_action: "Schließen"
     request_tree:
       label: Sammlungen
       title: Sammlungen

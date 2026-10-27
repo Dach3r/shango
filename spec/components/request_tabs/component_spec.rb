@@ -57,6 +57,30 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_css("form[action='/workbench/requests/#{other.id}/tab']")
   end
 
+  it "asks before closing a saved tab with unsaved edits and flags it for bulk closes", :aggregate_failures do
+    saved = create(:api_request, project:, name: "Saved")
+    other = create(:api_request, project:, name: "Other")
+    message = I18n.t("components.request_tabs.confirm_close", name: "Saved")
+
+    render_inline(described_class.new(requests: [saved, other], unsaved_ids: [saved.id]))
+
+    expect(page).to have_css("form[action='/workbench/requests/#{saved.id}/tab'][data-turbo-confirm='#{message}']")
+    expect(page).to have_no_css("form[action='/workbench/requests/#{other.id}/tab'][data-turbo-confirm]")
+    expect(page).to have_css("[data-request-tab-id='#{saved.id}'][data-confirm-message='#{message}']", visible: :all)
+    expect(page).to have_no_css("[data-request-tab-id='#{other.id}'][data-confirm-message]", visible: :all)
+  end
+
+  it "flags drafts with edits but not untouched ones for the bulk close confirmation", :aggregate_failures do
+    untouched = ApiClient::Requests::CreateDraft.call(project:, user:).record
+    edited = ApiClient::Requests::CreateDraft.call(project:, user:).record
+    edited.update!(name: "Edited")
+
+    render_inline(described_class.new(requests: [untouched, edited.reload]))
+
+    expect(page).to have_css("[data-request-tab-id='#{edited.id}'][data-confirm-message]", visible: :all)
+    expect(page).to have_no_css("[data-request-tab-id='#{untouched.id}'][data-confirm-message]", visible: :all)
+  end
+
   it "closes untouched drafts without a confirmation", :aggregate_failures do
     draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
 

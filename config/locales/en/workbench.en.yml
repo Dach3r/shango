@@ -97,6 +97,8 @@ en:
       close_left: "Close tabs to the left"
       close_right: "Close tabs to the right"
       close_all: "Close all tabs"
+      confirm_close: "Close “%{name}” without saving? Its changes will be lost."
+      confirm_close_action: "Close"
     request_tree:
       label: Collections
       title: Collections

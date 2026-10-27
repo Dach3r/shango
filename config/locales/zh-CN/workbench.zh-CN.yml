@@ -97,6 +97,8 @@ zh-CN:
       close_left: "关闭左侧标签页"
       close_right: "关闭右侧标签页"
       close_all: "关闭所有标签页"
+      confirm_close: "不保存就关闭“%{name}”吗？其更改将丢失。"
+      confirm_close_action: "关闭"
     request_tree:
       label: 集合
       title: 集合

@@ -97,6 +97,8 @@ fr:
       close_left: "Fermer les onglets à gauche"
       close_right: "Fermer les onglets à droite"
       close_all: "Fermer tous les onglets"
+      confirm_close: "Fermer « %{name} » sans enregistrer ? Ses modifications seront perdues."
+      confirm_close_action: "Fermer"
     request_tree:
       label: "Collections"
       title: "Collections"

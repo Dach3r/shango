@@ -1,5 +1,6 @@
 module Workbench
   # Closes several of the user's tabs at once: the ones left or right of a tab, or all of them.
+  # `keep` lists the tabs the user chose not to close.
   class TabsController < BaseController
     def destroy
       ApiClient::Tabs::CloseMany.call(api_requests: closing, user: current_user)
@@ -10,6 +11,10 @@ module Workbench
     private
 
     def closing
+      side_tabs.reject { |tab| Array(params[:keep]).include?(tab.id) }
+    end
+
+    def side_tabs
       tabs = open_requests
       pivot = tabs.index { |tab| tab.id == params[:request_id] }
       return tabs if params[:side] == "all"

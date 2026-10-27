@@ -97,6 +97,8 @@ ru:
       close_left: "Закрыть вкладки слева"
       close_right: "Закрыть вкладки справа"
       close_all: "Закрыть все вкладки"
+      confirm_close: "Закрыть «%{name}» без сохранения? Изменения будут потеряны."
+      confirm_close_action: "Закрыть"
     request_tree:
       label: Коллекции
       title: Коллекции

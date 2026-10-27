@@ -34,14 +34,11 @@ RSpec.describe ApiClient::Tabs::CloseMany do
     expect { described_class.call(api_requests: [draft], user:) }.to change(ApiRequest, :count).by(-1)
   end
 
-  it "keeps drafts with edits open", :aggregate_failures do
+  it "discards drafts with edits too, since the caller confirmed them" do
     draft = open_tab(ApiClient::Requests::CreateDraft.call(project:, user:).record)
     draft.update!(name: "Edited")
 
-    described_class.call(api_requests: [draft.reload], user:)
-
-    expect(draft.reload).to be_persisted
-    expect(RequestTab.where(user:, api_request: draft)).to exist
+    expect { described_class.call(api_requests: [draft.reload], user:) }.to change(ApiRequest, :count).by(-1)
   end
 
   describe "edge cases" do

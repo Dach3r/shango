@@ -97,6 +97,8 @@ ja:
       close_left: "左のタブを閉じる"
       close_right: "右のタブを閉じる"
       close_all: "すべてのタブを閉じる"
+      confirm_close: "「%{name}」を保存せずに閉じますか？変更内容は失われます。"
+      confirm_close_action: "閉じる"
     request_tree:
       label: コレクション
       title: コレクション

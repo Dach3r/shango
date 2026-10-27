@@ -1,7 +1,7 @@
 <div class="flex h-10 shrink-0 items-stretch border-b border-line">
   <nav aria-label="<%= t("components.request_tabs.label") %>" data-controller="request-tabs" data-action="keydown@window->request-tabs#closeCurrent" class="-mb-px flex min-w-0 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <% @requests.each_with_index do |api_request, index| %>
-      <div class="<%= classes(api_request) %>" data-request-tab data-controller="context-menu" data-action="contextmenu->context-menu#open">
+      <div class="<%= classes(api_request) %>" data-request-tab data-request-tab-id="<%= api_request.id %>"<% if confirm_close?(api_request) %> data-confirm-message="<%= confirm_message(api_request) %>" data-confirm-label="<%= t("components.request_tabs.confirm_close_action") %>"<% end %> data-controller="context-menu" data-action="contextmenu->context-menu#open">
         <%= link_to workbench_request_path(api_request), class: "flex min-w-0 items-center gap-2 py-2 pr-2 pl-3 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 ",
                     aria: { current: (api_request.id == @current_request_id ? "page" : nil) } do %>
           <%= render MethodBadge::Component.new(method: api_request.http_method, short: true, request_id: api_request.id) %>
@@ -17,7 +17,7 @@
             <%= draft_close_icon %>
           <% end %>
         <% else %>
-          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", aria: { label: close_label }, title: close_label, class: "#{unsaved?(api_request) ? DRAFT_CLOSE : CLOSE} cursor-pointer", data: { request_tab_close: true } do %>
+          <%= button_to workbench_request_tab_path(api_request, current: (current?(api_request) || nil)), method: :delete, form_class: "contents", form: unsaved?(api_request) ? { data: { turbo_confirm: confirm_message(api_request), confirm_label: t("components.request_tabs.confirm_close_action") } } : {}, aria: { label: close_label }, title: close_label, class: "#{unsaved?(api_request) ? DRAFT_CLOSE : CLOSE} cursor-pointer", data: { request_tab_close: true } do %>
             <% if unsaved?(api_request) %>
               <%= draft_close_icon(t("components.request_tabs.unsaved_hint")) %>
             <% else %>
@@ -32,9 +32,9 @@
             <hr class="my-1 border-line">
             <button type="button" data-action="request-tabs#closeTab" class="<%= ITEM %>"><%= lucide_icon "x", class: "size-4" %><%= t("components.request_tabs.close_tab") %></button>
             <% closable = side_closable?(index) %>
-            <%= button_to workbench_tabs_path(side: "left", request_id: api_request.id, current: @current_request_id), method: :delete, form_class: "contents", disabled: !closable[:left], class: ITEM do %><%= lucide_icon "arrow-left-to-line", class: "size-4" %><%= t("components.request_tabs.close_left") %><% end %>
-            <%= button_to workbench_tabs_path(side: "right", request_id: api_request.id, current: @current_request_id), method: :delete, form_class: "contents", disabled: !closable[:right], class: ITEM do %><%= lucide_icon "arrow-right-to-line", class: "size-4" %><%= t("components.request_tabs.close_right") %><% end %>
-            <%= button_to workbench_tabs_path(side: "all", current: @current_request_id), method: :delete, form_class: "contents", class: ITEM do %><%= lucide_icon "x", class: "size-4" %><%= t("components.request_tabs.close_all") %><% end %>
+            <%= button_to workbench_tabs_path(side: "left", request_id: api_request.id, current: @current_request_id), method: :delete, form_class: "contents", form: { data: { action: "submit->request-tabs#confirmClose", request_tabs_side: "left" } }, disabled: !closable[:left], class: ITEM do %><%= lucide_icon "arrow-left-to-line", class: "size-4" %><%= t("components.request_tabs.close_left") %><% end %>
+            <%= button_to workbench_tabs_path(side: "right", request_id: api_request.id, current: @current_request_id), method: :delete, form_class: "contents", form: { data: { action: "submit->request-tabs#confirmClose", request_tabs_side: "right" } }, disabled: !closable[:right], class: ITEM do %><%= lucide_icon "arrow-right-to-line", class: "size-4" %><%= t("components.request_tabs.close_right") %><% end %>
+            <%= button_to workbench_tabs_path(side: "all", current: @current_request_id), method: :delete, form_class: "contents", form: { data: { action: "submit->request-tabs#confirmClose", request_tabs_side: "all" } }, class: ITEM do %><%= lucide_icon "x", class: "size-4" %><%= t("components.request_tabs.close_all") %><% end %>
           <% end %>
         </div>
       </div>

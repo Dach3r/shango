@@ -97,6 +97,8 @@ hi:
       close_left: "बाईं ओर के टैब बंद करें"
       close_right: "दाईं ओर के टैब बंद करें"
       close_all: "सभी टैब बंद करें"
+      confirm_close: "“%{name}” को सहेजे बिना बंद करें? इसके बदलाव खो जाएंगे।"
+      confirm_close_action: "बंद करें"
     request_tree:
       label: "कलेक्शन"
       title: "कलेक्शन"

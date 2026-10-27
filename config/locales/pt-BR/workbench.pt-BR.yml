@@ -97,6 +97,8 @@ pt-BR:
       close_left: "Fechar abas à esquerda"
       close_right: "Fechar abas à direita"
       close_all: "Fechar todas as abas"
+      confirm_close: "Fechar “%{name}” sem salvar? As alterações serão perdidas."
+      confirm_close_action: "Fechar"
     request_tree:
       label: Coleções
       title: Coleções

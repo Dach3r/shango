@@ -1,6 +1,7 @@
 module ApiClient
   module Tabs
-    # Closes several tabs at once; untouched drafts are discarded and drafts with edits stay open so no work is lost.
+    # Closes several tabs at once; drafts are discarded, saved requests only lose their tab and unsaved edits.
+    # Callers confirm with the user first when edits would be lost.
     class CloseMany
       include Serviceable
 
@@ -12,9 +13,8 @@ module ApiClient
       private
 
       def perform
-        discarded, others = @api_requests.partition(&:untouched_draft?)
-        discarded.each(&:destroy)
-        saved = others.reject(&:draft?)
+        drafts, saved = @api_requests.partition(&:draft?)
+        drafts.each(&:destroy)
         RequestTab.where(user: @user, api_request_id: saved.map(&:id)).destroy_all
         saved.each { |api_request| Requests::Stash.clear(api_request:, user: @user) }
         Result.success(@api_requests)

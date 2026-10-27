@@ -97,6 +97,8 @@ es:
       close_left: "Cerrar pestañas a la izquierda"
       close_right: "Cerrar pestañas a la derecha"
       close_all: "Cerrar todas las pestañas"
+      confirm_close: "¿Cerrar «%{name}» sin guardar? Se perderán sus cambios."
+      confirm_close_action: "Cerrar"
     request_tree:
       label: Colecciones
       title: Colecciones
