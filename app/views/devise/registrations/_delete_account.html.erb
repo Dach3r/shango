@@ -23,7 +23,7 @@
     </section>
   <% end %>
 
-  <div class="grid flex-1 lg:grid-cols-[minmax(0,1fr)_26rem]">
+  <div class="flex flex-1 flex-col">
     <section class="flex flex-col">
       <h2 class="<%= eyebrow %> border-b border-line px-5 py-3 text-muted sm:px-7"><span class="text-faint">01</span> · <%= t("devise.registrations.edit.danger.review") %></h2>
 
@@ -36,7 +36,7 @@
         <% end %>
       </dl>
 
-      <div class="flex-1 px-5 py-6 sm:px-7">
+      <div class="px-5 py-6 sm:px-7">
         <% if impact.doomed.any? %>
           <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <% impact.doomed.each do |project| %>
@@ -55,23 +55,23 @@
       </p>
     </section>
 
-    <%= form_with url: registration_path(resource_name), method: :delete, class: class_names("flex flex-col border-t border-line lg:border-t-0 lg:border-l", "pointer-events-none opacity-50" => impact.blocked?), data: { turbo_confirm: t("devise.registrations.edit.confirm") } do %>
+    <%= form_with url: registration_path(resource_name), method: :delete, class: class_names("flex flex-1 flex-col border-t border-line", "pointer-events-none opacity-50" => impact.blocked?), data: { turbo_confirm: t("devise.registrations.edit.confirm") } do %>
       <h2 class="<%= eyebrow %> border-b border-line px-5 py-3 text-muted sm:px-7"><span class="text-faint">02</span> · <%= t("devise.registrations.edit.danger.ack_title") %></h2>
       <div class="border-b border-line px-5 py-5 sm:px-7">
         <%= render Checkbox::Component.new(name: :acknowledge, label: t("devise.registrations.edit.danger.ack"), label_class: "items-start text-sm leading-relaxed text-ink", data: { confirm_gate_target: "acknowledge", action: "change->confirm-gate#refresh" }) %>
       </div>
 
       <h2 class="<%= eyebrow %> border-b border-line px-5 py-3 text-muted sm:px-7"><span class="text-faint">03</span> · <%= t("devise.registrations.edit.danger.confirm_title") %></h2>
-      <div class="grid flex-1 content-start gap-4 px-5 py-5 sm:px-7">
+      <div class="grid content-start gap-4 px-5 py-5 sm:grid-cols-[minmax(0,28rem)_auto] sm:items-end sm:px-7">
         <div>
           <%= label_tag :current_password, t("devise.registrations.edit.current_password"), class: label_classes %>
           <%= password_field_tag :current_password, nil, autocomplete: "current-password", required: true, placeholder: t("devise.registrations.edit.current_password_placeholder"), class: field_classes, data: { confirm_gate_target: "password", action: "input->confirm-gate#refresh" } %>
         </div>
-        <%= button_tag type: :submit, disabled: true, class: button_classes(:danger_solid, "w-full py-2.5"), data: { confirm_gate_target: "submit" } do %>
+        <%= button_tag type: :submit, disabled: true, class: button_classes(:danger_solid, "py-2.5"), data: { confirm_gate_target: "submit" } do %>
           <%= lucide_icon "user-x", class: "size-4 shrink-0" %><%= t("devise.registrations.edit.cancel_account") %>
         <% end %>
         <% if impact.blocked? %>
-          <p class="text-xs leading-relaxed text-danger"><%= t("devise.registrations.edit.danger.blocked_hint") %></p>
+          <p class="text-xs leading-relaxed text-danger sm:col-span-2"><%= t("devise.registrations.edit.danger.blocked_hint") %></p>
         <% end %>
       </div>
     <% end %>
