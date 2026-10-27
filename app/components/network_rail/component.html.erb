@@ -1,4 +1,4 @@
-<nav aria-label="<%= @label %>" class="flex shrink-0 overflow-x-auto border-b border-line lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
+<nav aria-label="<%= @label %>" class="flex shrink-0 overflow-x-auto border-b border-line lg:flex-col lg:overflow-visible lg:border-b-0">
   <% @items.each do |item| %>
     <%= link_to item[:path], class: LINK, title: item[:label], aria: { label: item[:label], current: (item[:name].to_s == @current ? "page" : nil) } do %>
       <%= lucide_icon item[:icon], class: "size-4" %>
