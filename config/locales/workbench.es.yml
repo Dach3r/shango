@@ -74,6 +74,7 @@ es:
     request_tabs:
       label: Solicitudes abiertas
       close: "Cerrar %{name}"
+      draft_hint: "Borrador, aún sin guardar"
       new_draft: Nueva solicitud en borrador
       actions: "Acciones de la pestaña"
       new_request: "Nueva solicitud"

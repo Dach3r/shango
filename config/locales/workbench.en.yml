@@ -74,6 +74,7 @@ en:
     request_tabs:
       label: Open requests
       close: "Close %{name}"
+      draft_hint: "Draft, not saved yet"
       new_draft: New draft request
       actions: "Tab actions"
       new_request: "New request"
