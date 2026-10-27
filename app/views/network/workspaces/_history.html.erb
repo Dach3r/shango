@@ -1,11 +1,11 @@
 <%# Browser-only history of one tool, driven by network_history_controller. Render with `tool:` (dns, ports or ping). %>
-<aside aria-label="<%= t("network.history.#{tool}") %>" class="flex w-full shrink-0 flex-col border-t border-line lg:w-64 lg:border-t-0 lg:border-r">
+<aside aria-label="<%= t("network.history.#{tool}") %>" class="flex w-full shrink-0 flex-col border-t border-line lg:min-h-0 lg:w-64 lg:border-t-0 lg:border-r">
   <header class="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-line px-5">
     <h2 class="truncate text-sm font-semibold text-ink"><%= t("network.history.#{tool}") %></h2>
     <button type="button" hidden data-network-history-target="clear" data-action="network-history#clear"
             class="cursor-pointer px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide text-faint transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"><%= t("network.history.clear") %></button>
   </header>
-  <ul data-network-history-target="list" class="max-h-72 overflow-y-auto lg:max-h-none lg:flex-1"></ul>
+  <ul data-network-history-target="list" class="max-h-72 overflow-y-auto lg:max-h-none lg:min-h-0 lg:flex-1"></ul>
   <p data-network-history-target="empty" class="px-5 py-4 text-sm text-muted"><%= t("network.history.empty") %></p>
   <p class="mt-auto border-t border-line px-5 py-3 text-xs text-faint"><%= t("network.history.note") %></p>
 
