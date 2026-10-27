@@ -113,7 +113,7 @@ Values are constants in the services; they are not user settings.
 
 This feature makes the Shango server open connections to hosts the user names, so it is an SSRF and abuse surface. Rules:
 
-1. **Reuse `ApiClient::SsrfPolicy`** for port check and TCP ping. Same behavior and same switch: blocking private, loopback, link-local and cloud-metadata ranges is on by default in production and controlled by `SHANGO_BLOCK_PRIVATE_NETWORKS` (see [`api-client.md`](api-client.md) §6). The policy returns the address that was checked and the probe connects to **that** address (pinning), so DNS rebinding between check and connect is not possible. When this feature lands, move the class out of the `ApiClient` namespace (for example to `Networking::SsrfPolicy`, or keep it and reference it from `Network::`) in its own `♻️ refactor` commit; do not duplicate it.
+1. **Reuse `Network::SsrfPolicy`** (`app/services/network/ssrf_policy.rb`, shared with the API Client) for port check and TCP ping. Same behavior and same switch: blocking private, loopback, link-local and cloud-metadata ranges is on by default in production and controlled by `SHANGO_BLOCK_PRIVATE_NETWORKS` (see [`api-client.md`](api-client.md) §6). The policy returns the address that was checked and the probe connects to **that** address (pinning), so DNS rebinding between check and connect is not possible. It was moved out of the `ApiClient` namespace for this feature; do not duplicate it.
 2. **DNS checker is not an SSRF vector** because it only sends queries to the fixed public resolvers and to the authoritative nameservers listed in the domain's own `NS` records. Authoritative nameserver IPs go through the same `SsrfPolicy` check, otherwise a domain whose NS record points at `127.0.0.1` or `169.254.169.254` would make Shango send UDP packets inside the network.
 3. **No user-supplied resolvers, no CIDR, one host per run, port cap** (§5), connect-only probes (no payloads, no banners), so the tools cannot be used to exploit services, only to check reachability.
 4. **Rate limit** per user (§5).
@@ -156,7 +156,7 @@ RSpec, 100% line and branch coverage like the rest of the app.
 Each step is one logical commit with its specs and its docs update (per `CLAUDE.md`), run `bundle exec rubocop` on touched files first. Suggested commit subjects use the project's gitmoji convention.
 
 1. `📝 docs(network): ...` — this document, linked from `CLAUDE.md`, `product.md` (§9 capability, §14 roadmap note) and `architecture.md` (§6 subsystem, §7 security).
-2. `♻️ refactor(api_client): ...` — extract `SsrfPolicy` to a shared namespace, no behavior change, specs move with it.
+2. `♻️ refactor(network): ...` — move `SsrfPolicy` to `Network::SsrfPolicy`, no behavior change, specs move with it. **Done.**
 3. `✨ feat(network): ...` — foundation: routes, `BaseController` with rate limit, workspace page with tabs, `Network::Target`, `ToolsNav` entry (live), locale files, specs. The tabs of tools not yet built render a *Soon* badge.
 4. `✨ feat(network): ...` — DNS checker (`Dns::Resolvers`, `Dns::Query`, `DnsChecks::Run`, controller, tab, specs).
 5. `✨ feat(network): ...` — port check (`PortSpec`, `Services`, `Tcp::Probe`, `PortChecks::Run`, controller, tab, specs).

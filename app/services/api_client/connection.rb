@@ -9,7 +9,7 @@ module ApiClient
       uri = URI.parse(url.to_s)
       raise InvalidUrl, "Only http and https URLs are supported" unless uri.is_a?(URI::HTTP) && uri.host.present?
 
-      pinned_address = timing.measure(:dns) { SsrfPolicy.check!(uri.host) }
+      pinned_address = timing.measure(:dns) { Network::SsrfPolicy.check!(uri.host) }
 
       Faraday.new do |faraday|
         faraday.request :multipart if multipart
