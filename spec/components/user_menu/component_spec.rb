@@ -7,5 +7,6 @@ RSpec.describe UserMenu::Component, type: :component do
 
     expect(page).to have_css("a[href='/account'][data-turbo-frame=right_sidebar][data-action='right-sidebar#toggle']", text: "AL")
     expect(page).to have_css("a[title='Ada Lovelace']")
+    expect(page).to have_css("a svg.lucide-chevron-down")
   end
 end
