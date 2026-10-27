@@ -1,6 +1,6 @@
-<% content_for :main_class, "flex min-h-0 flex-1 px-4 py-8 sm:px-8" %>
+<% content_for :main_class, "flex min-h-0 flex-1" %>
 
-<div class="mx-auto flex w-full max-w-6xl flex-col self-start border border-line bg-card md:min-h-[36rem] md:flex-row">
+<div class="flex w-full flex-1 flex-col bg-card md:flex-row">
   <aside class="shrink-0 border-b border-line md:w-60 md:border-r md:border-b-0">
     <%= render SettingsNav::Component.new(project: current_project) %>
   </aside>
