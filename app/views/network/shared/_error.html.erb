@@ -1,0 +1,4 @@
+<%# A failed run (invalid input, blocked or unresolved target). Render with `result:`. %>
+<div role="alert" class="border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
+  <%= t("network.errors.#{result.error}", **result.data.slice(:name, :detail, :token, :max)) %>
+</div>

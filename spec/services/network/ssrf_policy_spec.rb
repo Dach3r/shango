@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ApiClient::SsrfPolicy do
+RSpec.describe Network::SsrfPolicy do
   def addrinfo(*addresses)
     addresses.map { |address| instance_double(Addrinfo, ip_address: address) }
   end

@@ -477,7 +477,7 @@ RSpec.describe ApiClient::Executor do
     end
 
     it "reports blocked addresses" do
-      allow(ApiClient::SsrfPolicy).to receive(:check!).and_raise(ApiClient::SsrfPolicy::Blocked, "private")
+      allow(Network::SsrfPolicy).to receive(:check!).and_raise(Network::SsrfPolicy::Blocked, "private")
 
       expect(reply).to have_attributes(error_kind: "blocked", error_message: "private")
     end

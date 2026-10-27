@@ -172,7 +172,7 @@ module ApiClient
 
     def classify(error)
       case error
-      when SsrfPolicy::Blocked then ["blocked", error.message]
+      when Network::SsrfPolicy::Blocked then ["blocked", error.message]
       when Connection::InvalidUrl, URI::InvalidURIError then ["invalid_url", error.message]
       when Faraday::TimeoutError, DeadlineExceeded then ["timeout", error.message]
       when Cancelled then ["cancelled", error.message]

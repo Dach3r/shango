@@ -53,7 +53,7 @@ module ApiClient
 
         response = ApiClient::Connection.build(url: @config["token_url"], timeout: TIMEOUT).post(@config["token_url"], URI.encode_www_form(params), headers)
         parse(response)
-      rescue ApiClient::Connection::InvalidUrl, ApiClient::SsrfPolicy::Blocked, Faraday::Error, SocketError => error
+      rescue ApiClient::Connection::InvalidUrl, Network::SsrfPolicy::Blocked, Faraday::Error, SocketError => error
         raise Failed, error.message
       end
 
