@@ -1,24 +1,7 @@
-<%# Browser-only history of one tool, driven by network_history_controller. Render with `tool:` (dns, ports or ping). %>
+<%# History of one tool, saved per project. Render with `tool:` (dns, ports or ping). %>
 <aside aria-label="<%= t("network.history.#{tool}") %>" class="flex w-full shrink-0 flex-col border-t border-line lg:min-h-0 lg:w-64 lg:border-t-0 lg:border-r">
-  <header class="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-line px-5">
-    <h2 class="truncate text-sm font-semibold text-ink"><%= t("network.history.#{tool}") %></h2>
-    <button type="button" hidden data-network-history-target="clear" data-action="network-history#clear"
-            class="cursor-pointer px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide text-faint transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"><%= t("network.history.clear") %></button>
-  </header>
-  <ul data-network-history-target="list" class="max-h-72 overflow-y-auto lg:max-h-none lg:min-h-0 lg:flex-1"></ul>
-  <p data-network-history-target="empty" class="px-5 py-4 text-sm text-muted"><%= t("network.history.empty") %></p>
-  <p class="mt-auto border-t border-line px-5 py-3 text-xs text-faint"><%= t("network.history.note") %></p>
-
-  <template data-network-history-target="template">
-    <li class="border-b border-line">
-      <button type="button" data-action="network-history#restore"
-              class="flex w-full cursor-pointer flex-col gap-1 px-5 py-3 text-left transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 focus-visible:ring-inset">
-        <span class="flex items-center justify-between gap-2">
-          <span data-part="label" class="truncate font-mono text-sm text-ink"></span>
-          <span data-part="dot" aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-faint data-[tone=bad]:bg-danger data-[tone=ok]:bg-emerald-500 data-[tone=warn]:bg-amber-500"></span>
-        </span>
-        <span class="truncate text-xs text-faint"><span data-part="detail"></span> · <span data-part="time"></span></span>
-      </button>
-    </li>
-  </template>
+  <div id="<%= tool %>_history" class="flex flex-col lg:min-h-0 lg:flex-1">
+    <%= render "network/checks/list", kind: tool, checks: history_for(tool), current: nil %>
+  </div>
+  <p class="border-t border-line px-5 py-3 text-xs text-faint"><%= t("network.history.note") %></p>
 </aside>

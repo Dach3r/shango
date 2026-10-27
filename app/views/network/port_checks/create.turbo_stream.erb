@@ -1,1 +1,4 @@
-<%= turbo_stream.update "ports_result", partial: "network/port_checks/result", locals: { result: @result } %>
+<%= turbo_stream.update "ports_result", partial: "network/port_checks/result", locals: { result: @result, check: @check } %>
+<% if @check %>
+  <%= turbo_stream.update "ports_history", partial: "network/checks/list", locals: { kind: "ports", checks: history_for("ports"), current: @check } %>
+<% end %>

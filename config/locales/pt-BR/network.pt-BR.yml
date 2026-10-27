@@ -92,8 +92,12 @@ pt-BR:
       ports: "Verificações de portas"
       ping: "Pings TCP"
       empty: "Nada verificado ainda."
-      note: "O histórico fica salvo apenas neste navegador."
+      note: "Salvo para todos os membros do projeto."
       clear: "Limpar"
+      ago: "há %{time}"
+      delete: "Excluir execução"
+      confirm_clear: "Excluir todo o histórico desta ferramenta do projeto?"
+      previous: "Execução anterior, há %{time}: %{detail}"
     limits:
       title: "Limites"
       about: "Sobre"
@@ -108,3 +112,4 @@ pt-BR:
       avg: "Méd"
       max: "Máx"
       loss: "Perda"
+    variables_hint: "Digite {{ para usar variáveis do ambiente selecionado."

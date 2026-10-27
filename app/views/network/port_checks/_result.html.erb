@@ -5,8 +5,7 @@
   <% counts = result.data[:counts] %>
   <% rows = result.data[:rows] %>
   <% slowest = rows.filter_map { |row| row.ms unless row.status == :filtered }.max.to_f %>
-  <% summary = t("network.ports.summary", open: counts[:open], closed: counts[:closed], filtered: counts[:filtered]) %>
-  <%= render "network/shared/history_entry", label: result.data[:host], detail: summary, tone: counts[:open].positive? ? "ok" : "warn" %>
+  <%= render "network/checks/previous", check: local_assigns[:check] %>
 
   <div class="border border-line bg-card">
     <div class="grid grid-cols-2 sm:grid-cols-[1.5fr_1fr_1fr_1fr]">

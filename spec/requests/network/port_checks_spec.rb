@@ -29,15 +29,27 @@ RSpec.describe "Network port checks" do
     expect(response).to have_http_status(:ok)
     expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("ports_result", "203.0.113.9", "ssh", I18n.t("network.statuses.open"), I18n.t("network.statuses.closed"), "7 ms")
-    expect(response.body).to include(I18n.t("network.ports.summary", open: 1, closed: 1, filtered: 0), 'data-tone="ok"')
+    expect(response.body).to include(I18n.t("network.ports.summary", open: 1, closed: 1, filtered: 0))
+    expect(project.network_checks.last.outcome).to eq("ok")
   end
 
   it "explains when nothing answered", :aggregate_failures do
     allow(Network::Tcp::Probe).to receive(:call).and_return(attempt(:filtered))
     create_check
 
-    expect(response.body).to include(I18n.t("network.ports.all_filtered"), 'data-tone="warn"')
+    expect(response.body).to include(I18n.t("network.ports.all_filtered"))
+    expect(project.network_checks.last.outcome).to eq("warn")
     expect(response.body).not_to include("7 ms")
+  end
+
+  it "saves the run and reads ports from a variable", :aggregate_failures do
+    environment = create(:environment, project:)
+    create(:variable, environment:, key: "ports", value: "22,80")
+    membership.update!(current_environment: environment)
+
+    expect { create_check(ports: "{{ports}}") }.to change(project.network_checks.ports, :count).by(1)
+    expect(project.network_checks.last.input).to include("ports" => "{{ports}}")
+    expect(response.body).to include("ports_history")
   end
 
   it "answers 422 with the error for invalid ports", :aggregate_failures do

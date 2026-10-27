@@ -91,7 +91,7 @@ A channel abstraction (email, webhook first; Slack/Discord later) behind a commo
 
 ### Network tools
 
-DNS checker, port check and TCP ping, run synchronously in the web request with hard caps (ports, timeouts, concurrency) and no persistence. Built on the Ruby standard library (`Resolv::DNS`, `Socket`); nmap is excluded for license reasons. Targets are checked with the same SSRF policy as the API Client and rate limited per user. Details, limits and implementation plan: [`network-tools.md`](network-tools.md).
+DNS checker, port check and TCP ping, run synchronously in the web request with hard caps (ports, timeouts, concurrency). Successful runs are kept as a per-project history (`NetworkCheck`, 50 per tool, 90 days). Built on the Ruby standard library (`Resolv::DNS`, `Socket`); nmap is excluded for license reasons. Targets are checked with the same SSRF policy as the API Client and rate limited per user. Details, limits and implementation plan: [`network-tools.md`](network-tools.md).
 
 ### SSH and terminal
 

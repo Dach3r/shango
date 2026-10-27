@@ -92,8 +92,12 @@ es:
       ports: "Comprobaciones de puertos"
       ping: "Pings TCP"
       empty: "Aún no hay comprobaciones."
-      note: "El historial se guarda solo en este navegador."
+      note: "Guardado para todos los miembros del proyecto."
       clear: "Borrar"
+      ago: "hace %{time}"
+      delete: "Eliminar ejecución"
+      confirm_clear: "¿Borrar todo el historial de esta herramienta para el proyecto?"
+      previous: "Ejecución anterior, hace %{time}: %{detail}"
     limits:
       title: "Límites"
       about: "Acerca de"
@@ -108,3 +112,4 @@ es:
       avg: "Prom"
       max: "Máx"
       loss: "Pérdida"
+    variables_hint: "Escribe {{ para usar variables del entorno seleccionado."

@@ -1,25 +1,12 @@
 <% rate_count, rate_window = Throttling.limit(:network) %>
-<div class="flex h-full min-h-0 flex-col-reverse lg:flex-row" data-controller="network-history" data-network-history-key-value="ping">
+<div class="flex h-full min-h-0 flex-col-reverse lg:flex-row">
   <%= render "network/workspaces/history", tool: "ping" %>
 
   <div class="flex min-h-0 min-w-0 flex-1 flex-col">
-    <div class="shrink-0 border-b border-line px-6 py-4">
-      <%= form_with scope: :ping, url: network_pings_path, data: { network_history_target: "form" }, class: "flex flex-wrap items-end gap-2.5" do |form| %>
-        <%= form.label :host, t("network.ping.host"), class: "sr-only" %>
-        <%= form.text_field :host, required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
-        <%= form.label :port, t("network.ping.port"), class: "sr-only" %>
-        <%= form.number_field :port, value: Network::Pings::Run::DEFAULT_PORT, min: 1, max: 65_535, required: true, title: t("network.ping.port"), class: field_classes("w-24 font-mono") %>
-        <%= form.label :attempts, t("network.ping.attempts"), class: "sr-only" %>
-        <%= form.number_field :attempts, value: Network::Pings::Run::DEFAULT_ATTEMPTS, min: 1, max: Network::Pings::Run::MAX_ATTEMPTS, required: true, title: t("network.ping.attempts"), class: field_classes("w-20 font-mono") %>
-        <%= form.button type: :submit, class: button_classes(:primary) do %>
-          <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
-        <% end %>
-      <% end %>
-      <p class="mt-3 text-xs text-faint"><%= t("network.ping.intro") %></p>
-    </div>
+    <%= render "network/workspaces/ping_form", input: {} %>
 
     <div class="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-6 xl:flex-row">
-      <div id="ping_result" data-network-history-target="result" class="min-w-0 flex-1 empty:hidden" aria-live="polite"></div>
+      <div id="ping_result" class="min-w-0 flex-1 empty:hidden" aria-live="polite"></div>
 
       <aside class="flex w-full shrink-0 flex-col gap-5 xl:order-last xl:w-52">
         <section>

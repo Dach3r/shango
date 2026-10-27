@@ -38,6 +38,7 @@ Optional, with defaults:
 | `SHANGO_STORAGE` | `local` | `s3` for S3-compatible storage (`SHANGO_S3_BUCKET`, `SHANGO_S3_REGION`, optional `SHANGO_S3_ACCESS_KEY_ID`/`SHANGO_S3_SECRET_ACCESS_KEY`/`SHANGO_S3_ENDPOINT`). |
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |
 | `SHANGO_HISTORY_RETENTION_DAYS` | 90 | Saved responses older than this are deleted daily (`0` keeps them). |
+| `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` | 90 | Saved Network Tools runs older than this are deleted daily (`0` keeps them). |
 | `RAILS_MAX_THREADS`, `WEB_CONCURRENCY` | 5, 1 | Puma threads (also the DB pool per process) and worker processes. |
 | `JOB_CONCURRENCY` | 1 | Solid Queue worker processes. |
 
@@ -53,7 +54,7 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 4. Routine upkeep
 
-- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30). They only run while a worker is up.
+- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45). They only run while a worker is up.
 - Rotate encryption keys when someone with access leaves: [`api-client.md`](api-client.md) §6.
 - Keep dependencies current (Dependabot PRs; CI runs `bundler-audit` on every push).
 - Errors go to stdout with a request id (`log_tags`); ship them to your log platform. An error tracker (Sentry or similar) is not bundled; add one if you need alerting.

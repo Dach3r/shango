@@ -9,6 +9,7 @@ class Project < ApplicationRecord
   has_many :folders, through: :collections
   has_many :api_requests, dependent: :destroy
   has_many :request_executions, dependent: :destroy
+  has_many :network_checks, dependent: :destroy
 
   scope :active, -> { where(archived_at: nil) }
 

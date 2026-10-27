@@ -92,8 +92,12 @@ de:
       ports: "Port-Prüfungen"
       ping: "TCP-Pings"
       empty: "Noch nichts geprüft."
-      note: "Der Verlauf wird nur in diesem Browser gespeichert."
+      note: "Für alle Mitglieder des Projekts gespeichert."
       clear: "Leeren"
+      ago: "vor %{time}"
+      delete: "Lauf löschen"
+      confirm_clear: "Den gesamten Verlauf dieses Tools für das Projekt löschen?"
+      previous: "Vorheriger Lauf, vor %{time}: %{detail}"
     limits:
       title: "Limits"
       about: "Info"
@@ -108,3 +112,4 @@ de:
       avg: "Ø"
       max: "Max"
       loss: "Verlust"
+    variables_hint: "Tippe {{, um Variablen der gewählten Umgebung zu verwenden."

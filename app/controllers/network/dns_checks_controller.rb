@@ -3,6 +3,7 @@ module Network
     def create
       attributes = params.expect(dns_check: %i[domain type expected])
       @result = Network::DnsChecks::Run.call(domain: attributes[:domain], type: attributes[:type], expected: attributes[:expected], environment: current_environment)
+      @check = record_check(:dns, attributes)
       render status: @result.success? ? :ok : :unprocessable_content
     end
 

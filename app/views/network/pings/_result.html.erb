@@ -3,9 +3,9 @@
   <%= render "network/shared/error", result: result %>
 <% else %>
   <% summary = result.data[:summary] %>
-  <% detail = t("network.ping.summary", received: summary[:received], sent: summary[:sent], loss: summary[:loss]) %>
-  <% tone = summary[:received] == summary[:sent] ? "ok" : (summary[:received].zero? ? "bad" : "warn") %>
-  <%= render "network/shared/history_entry", label: "#{result.data[:host]}:#{result.data[:port]}", detail:, tone: %>
+  <% digest = Network::Checks::Digest.for(:ping, result.data) %>
+  <% detail = t(digest.key, **digest.args) %>
+  <%= render "network/checks/previous", check: local_assigns[:check] %>
 
   <div class="border border-line bg-card">
     <div class="border-b border-line px-5 py-3">

@@ -1,0 +1,15 @@
+<%# Form bar of the TCP ping. Render with `input:` (what was typed before, string keys; empty for a fresh form). %>
+<%= tag.div id: "ping_form", class: "shrink-0 border-b border-line px-6 py-4", data: variable_autocomplete_data do %>
+  <%= form_with scope: :ping, url: network_pings_path, class: "flex flex-wrap items-end gap-2.5" do |form| %>
+    <%= form.label :host, t("network.ping.host"), class: "sr-only" %>
+    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.label :port, t("network.ping.port"), class: "sr-only" %>
+    <%= form.text_field :port, value: input.fetch("port", Network::Pings::Run::DEFAULT_PORT), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, title: t("network.ping.port"), class: field_classes("w-24 font-mono") %>
+    <%= form.label :attempts, t("network.ping.attempts"), class: "sr-only" %>
+    <%= form.text_field :attempts, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), required: true, inputmode: "numeric", autocomplete: "off", spellcheck: false, title: t("network.ping.attempts"), class: field_classes("w-20 font-mono") %>
+    <%= form.button type: :submit, class: button_classes(:primary) do %>
+      <%= lucide_icon "activity", class: "size-4" %><%= t("network.ping.submit") %>
+    <% end %>
+  <% end %>
+  <p class="mt-3 text-xs text-faint"><%= t("network.ping.intro") %> <%= t("network.variables_hint") %></p>
+<% end %>

@@ -1,0 +1,5 @@
+<%# The run before a saved one against the same target. Render with `check:` (a NetworkCheck, or nil). %>
+<% previous = check&.previous %>
+<% if previous %>
+  <p class="mb-3 text-xs text-faint"><%= t("network.history.previous", time: time_ago_in_words(previous.created_at), detail: t(previous.digest.key, **previous.digest.args)) %></p>
+<% end %>

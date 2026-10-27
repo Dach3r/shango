@@ -19,3 +19,6 @@ production:
   prune_request_executions:
     class: PruneRequestExecutionsJob
     schedule: every day at 3:30am
+  prune_network_checks:
+    class: PruneNetworkChecksJob
+    schedule: every day at 3:45am

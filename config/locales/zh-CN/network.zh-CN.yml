@@ -92,8 +92,12 @@ zh-CN:
       ports: "端口检查"
       ping: "TCP ping"
       empty: "尚未检查任何内容。"
-      note: "历史记录仅保存在此浏览器中。"
+      note: "已为项目的所有成员保存。"
       clear: "清除"
+      ago: "%{time}前"
+      delete: "删除此次运行"
+      confirm_clear: "删除该项目中此工具的全部历史记录？"
+      previous: "上一次运行（%{time}前）：%{detail}"
     limits:
       title: "限制"
       about: "简介"
@@ -108,3 +112,4 @@ zh-CN:
       avg: "平均"
       max: "最大"
       loss: "丢包"
+    variables_hint: "输入 {{ 以使用所选环境中的变量。"

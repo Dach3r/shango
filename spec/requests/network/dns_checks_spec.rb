@@ -33,7 +33,7 @@ RSpec.describe "Network DNS checks" do
     expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     expect(response.body).to include("dns_result", "ns1.example.net", "Google", "203.0.113.10", I18n.t("network.dns.groups.authoritative"))
     expect(response.body).to include(I18n.t("network.dns.summary.expected", matched: 2, total: 2), "100%")
-    expect(response.body).to include('data-tone="ok"')
+    expect(project.network_checks.last.outcome).to eq("ok")
   end
 
   it "shows rows that did not answer and a note when the nameservers are unknown", :aggregate_failures do
@@ -43,14 +43,16 @@ RSpec.describe "Network DNS checks" do
 
     expect(response.body).to include(I18n.t("network.statuses.timeout"), I18n.t("network.dns.no_authoritative"))
     expect(response.body).not_to include(I18n.t("network.dns.summary.agree"))
-    expect(response.body).to include('data-tone="bad"', "0%")
+    expect(project.network_checks.last.outcome).to eq("bad")
+    expect(response.body).to include("0%")
   end
 
   it "shows alias answers and differing results", :aggregate_failures do
     allow(Network::Dns::Query).to receive(:call).and_return(answer(:cname, "target.example.net"), answer(:ok, "203.0.113.10"))
     create_check
 
-    expect(response.body).to include("→ target.example.net", I18n.t("network.dns.summary.differ"), 'data-tone="warn"')
+    expect(response.body).to include("→ target.example.net", I18n.t("network.dns.summary.differ"))
+    expect(project.network_checks.last.outcome).to eq("warn")
   end
 
   it "resolves variables from the selected environment", :aggregate_failures do
@@ -60,6 +62,41 @@ RSpec.describe "Network DNS checks" do
     create_check(domain: "{{host}}")
 
     expect(response.body).to include("api.example.com")
+  end
+
+  it "saves the run to the project's history with what was typed", :aggregate_failures do
+    environment = create(:environment, project:)
+    create(:variable, environment:, key: "host", value: "api.example.com")
+    membership.update!(current_environment: environment)
+
+    expect { create_check(domain: "{{host}}") }.to change(project.network_checks.dns, :count).by(1)
+    expect(project.network_checks.last).to have_attributes(user:, environment:, target: "api.example.com", input: hash_including("domain" => "{{host}}"))
+    expect(response.body).to include("dns_history")
+  end
+
+  it "does not save failed runs", :aggregate_failures do
+    expect { create_check(domain: "https://example.com") }.not_to change(NetworkCheck, :count)
+    expect(response.body).not_to include("dns_history")
+  end
+
+  it "resolves variables in the expected value", :aggregate_failures do
+    environment = create(:environment, project:)
+    create(:variable, environment:, key: "ip", value: "203.0.113.10")
+    membership.update!(current_environment: environment)
+    create_check(expected: "{{ip}}")
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include(I18n.t("network.dns.summary.expected", matched: 2, total: 2))
+  end
+
+  it "refuses secret variables in the expected value", :aggregate_failures do
+    environment = create(:environment, project:)
+    create(:variable, environment:, key: "token", value: "s3cret", secret: true)
+    membership.update!(current_environment: environment)
+    create_check(expected: "{{token}}")
+
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(response.body).not_to include("s3cret")
   end
 
   it "answers 422 with the error for invalid input", :aggregate_failures do

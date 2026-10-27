@@ -92,8 +92,12 @@ en:
       ports: "Port checks"
       ping: "TCP pings"
       empty: "Nothing checked yet."
-      note: "History is kept in this browser only."
+      note: "Saved for everyone in this project."
       clear: "Clear"
+      ago: "%{time} ago"
+      delete: "Delete run"
+      confirm_clear: "Delete this tool's whole history for the project?"
+      previous: "Previous run, %{time} ago: %{detail}"
     limits:
       title: "Limits"
       about: "About"
@@ -108,3 +112,4 @@ en:
       avg: "Avg"
       max: "Max"
       loss: "Loss"
+    variables_hint: "Type {{ to use variables from the selected environment."

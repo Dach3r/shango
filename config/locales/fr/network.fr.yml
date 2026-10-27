@@ -92,8 +92,12 @@ fr:
       ports: "Vérifications de ports"
       ping: "Pings TCP"
       empty: "Rien n'a encore été vérifié."
-      note: "L'historique est conservé uniquement dans ce navigateur."
+      note: "Enregistré pour tous les membres du projet."
       clear: "Effacer"
+      ago: "il y a %{time}"
+      delete: "Supprimer l'exécution"
+      confirm_clear: "Supprimer tout l'historique de cet outil pour le projet ?"
+      previous: "Exécution précédente, il y a %{time} : %{detail}"
     limits:
       title: "Limites"
       about: "À propos"
@@ -108,3 +112,4 @@ fr:
       avg: "Moy"
       max: "Max"
       loss: "Perte"
+    variables_hint: "Tapez {{ pour utiliser les variables de l'environnement sélectionné."

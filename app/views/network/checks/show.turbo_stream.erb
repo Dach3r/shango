@@ -1,0 +1,4 @@
+<% partial = { "dns" => "network/dns_checks/result", "ports" => "network/port_checks/result", "ping" => "network/pings/result" }.fetch(@check.kind) %>
+<%= turbo_stream.update "#{@check.kind}_result", partial:, locals: { result: @result, check: @check } %>
+<%= turbo_stream.replace "#{@check.kind}_form", partial: "network/workspaces/#{@check.kind}_form", locals: { input: @check.input } %>
+<%= turbo_stream.update "#{@check.kind}_history", partial: "network/checks/list", locals: { kind: @check.kind, checks: history_for(@check.kind), current: @check } %>

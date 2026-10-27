@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_131342) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_152718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -151,6 +151,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_131342) do
     t.check_constraint "theme::text = ANY (ARRAY['default'::character varying, 'blue'::character varying, 'green'::character varying, 'yellow'::character varying, 'red'::character varying, 'ocean'::character varying, 'purple'::character varying, 'rose'::character varying, 'orange'::character varying, 'forest'::character varying, 'midnight'::character varying, 'nord'::character varying, 'dracula'::character varying, 'gruvbox'::character varying, 'solarized'::character varying, 'sunset'::character varying, 'coffee'::character varying, 'cyberpunk'::character varying, 'mono'::character varying]::text[])", name: "memberships_theme_check"
   end
 
+  create_table "network_checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "user_id"
+    t.uuid "environment_id"
+    t.string "kind", default: "dns", null: false
+    t.string "target", null: false
+    t.string "outcome", default: "ok", null: false
+    t.jsonb "input", default: {}, null: false
+    t.jsonb "result", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.index ["environment_id"], name: "index_network_checks_on_environment_id"
+    t.index ["project_id", "kind", "created_at"], name: "index_network_checks_on_project_id_and_kind_and_created_at"
+    t.index ["project_id", "kind", "target", "created_at"], name: "index_network_checks_on_project_kind_target_and_created_at"
+    t.index ["user_id"], name: "index_network_checks_on_user_id"
+    t.check_constraint "kind::text = ANY (ARRAY['dns'::character varying, 'ports'::character varying, 'ping'::character varying]::text[])", name: "network_checks_kind_check"
+    t.check_constraint "outcome::text = ANY (ARRAY['ok'::character varying, 'warn'::character varying, 'bad'::character varying]::text[])", name: "network_checks_outcome_check"
+  end
+
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "icon", null: false
@@ -261,6 +279,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_131342) do
   add_foreign_key "memberships", "environments", column: "current_environment_id", on_delete: :nullify
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
+  add_foreign_key "network_checks", "environments", on_delete: :nullify
+  add_foreign_key "network_checks", "projects"
+  add_foreign_key "network_checks", "users", on_delete: :nullify
   add_foreign_key "request_executions", "api_requests"
   add_foreign_key "request_executions", "environments", on_delete: :nullify
   add_foreign_key "request_executions", "projects"

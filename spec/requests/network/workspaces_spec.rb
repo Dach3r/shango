@@ -17,6 +17,26 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(I18n.t("network.history.dns"), I18n.t("network.history.ports"), I18n.t("network.history.ping"))
     end
 
+    it "lists the saved runs of the project, newest first, and not those of other projects", :aggregate_failures do
+      user, project = sign_in_with_project
+      create(:network_check, project:, user:, target: "shango.dev", result: build(:network_check).result.merge("host" => "shango.dev"))
+      create(:network_check, result: build(:network_check).result.merge("host" => "foreign.dev"))
+      get network_root_path
+
+      expect(response.body).to include("shango.dev · A")
+      expect(response.body).not_to include("foreign.dev")
+    end
+
+    it "offers variable autocomplete on the forms", :aggregate_failures do
+      _user, project, membership = sign_in_with_project
+      environment = create(:environment, project:)
+      create(:variable, environment:, key: "host", value: "api.example.com")
+      membership.update!(current_environment: environment)
+      get network_root_path
+
+      expect(response.body).to include("variable-autocomplete", "host", I18n.t("network.variables_hint"))
+    end
+
     it "shows the ping limits", :aggregate_failures do
       sign_in_with_project
       get network_root_path

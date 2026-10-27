@@ -4,12 +4,11 @@
 <% else %>
   <% summary = result.data[:summary] %>
   <% rows = result.data[:rows] %>
-  <% reached = result.data[:expected] ? summary[:matched] : summary[:answered] %>
-  <% percent = summary[:total].zero? ? 0 : (reached * 100.0 / summary[:total]).round %>
-  <% settled = reached == summary[:total] && (result.data[:expected] || summary[:agree]) %>
-  <% tone = settled ? "ok" : (reached.zero? ? "bad" : "warn") %>
-  <% detail = t(result.data[:expected] ? "network.dns.summary.expected" : "network.dns.summary.answered", matched: summary[:matched], answered: summary[:answered], total: summary[:total]) %>
-  <%= render "network/shared/history_entry", label: "#{result.data[:host]} · #{result.data[:type]}", detail:, tone: %>
+  <% digest = Network::Checks::Digest.for(:dns, result.data) %>
+  <% percent = digest.progress %>
+  <% tone = digest.tone %>
+  <% detail = t(digest.key, **digest.args) %>
+  <%= render "network/checks/previous", check: local_assigns[:check] %>
 
   <div class="border border-line bg-card">
     <div class="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-line px-5 py-4">
