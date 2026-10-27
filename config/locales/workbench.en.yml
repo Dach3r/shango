@@ -367,10 +367,12 @@ en:
         label: Response sections
         body: Body
         headers: Headers
+        timing: Timing
         request: Request
         payload: Payload
         history: History
       timing:
+        total: Total
         show: Show timing breakdown
         title: Response time
         phases:

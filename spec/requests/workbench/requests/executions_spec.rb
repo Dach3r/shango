@@ -22,6 +22,7 @@ RSpec.describe "Workbench request executions" do
       post workbench_request_executions_path(api_request), headers: turbo_headers
 
       expect(response.body).to include(I18n.t("workbench.executions.timing.title"), I18n.t("workbench.executions.timing.phases.ttfb"))
+      expect(response.body).to include('data-name="timing"', I18n.t("workbench.executions.timing.total"))
     end
 
     it "offers no save for failed requests", :aggregate_failures do

@@ -367,10 +367,12 @@ es:
         label: Secciones de la respuesta
         body: Cuerpo
         headers: Encabezados
+        timing: Tiempos
         request: Solicitud
         payload: Payload
         history: Historial
       timing:
+        total: Total
         show: Ver desglose de tiempos
         title: Tiempo de respuesta
         phases:
