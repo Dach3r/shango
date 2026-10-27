@@ -79,6 +79,7 @@
   --syn-key: light-dark(#8a3f23, #f0a187);
   --syn-string: light-dark(#2f6f3e, #8fcf9f);
   --syn-number: light-dark(#7a4bb0, #c9a6f2);
+  --syn-variable: light-dark(#1f6a9e, #7cb7e8);
   --syn-keyword: light-dark(#a9502f, #e58a69);
   --syn-comment: light-dark(#8a877b, #6f6d66);
   --dots: light-dark(#c9c3af, #3a3935);
@@ -459,9 +460,10 @@ input:-webkit-autofill:focus {
   border-radius: 0;
   background: color-mix(in oklab, var(--var-color) 16%, transparent);
   color: var(--var-color);
+  font-style: italic;
 }
 
-.cm-var-set { --var-color: var(--syn-string); }
+.cm-var-set { --var-color: var(--syn-variable); }
 .cm-var-empty { --var-color: var(--syn-number); }
 .cm-var-missing { --var-color: var(--danger); text-decoration: underline wavy; }
 
@@ -480,7 +482,7 @@ input:-webkit-autofill:focus {
   background: var(--accent);
 }
 
-.cm-var-dot-set { background: var(--syn-string); }
+.cm-var-dot-set { background: var(--syn-variable); }
 .cm-var-dot-empty { background: var(--syn-number); }
 
 /* The type column only matters for multipart bodies. */
