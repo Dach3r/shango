@@ -10,4 +10,15 @@ RSpec.describe RequestTree::Collection::Component, type: :component do
     expect(page).to have_css("summary span[data-controller=inline-rename][data-inline-rename-param-value=collection]", text: "Docs")
     expect(page).to have_link(I18n.t("components.request_tree.new_folder"), visible: :all)
   end
+
+  it "renders open unless its id is in closed_ids", :aggregate_failures do
+    collection = create(:collection)
+    branch = ApiClient::Tree::Load::Branch.new(collection:, folders: {}, requests: {})
+
+    render_inline(described_class.new(branch:))
+    expect(page).to have_css("details[open]")
+
+    render_inline(described_class.new(branch:, closed_ids: [collection.id.to_s]))
+    expect(page).to have_css("details:not([open])")
+  end
 end

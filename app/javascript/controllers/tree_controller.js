@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
-const STORAGE_KEY = "api-client:tree:closed";
+// Read by the server so a reload renders branches already collapsed.
+const COOKIE = "api_client_tree_closed";
 
 export default class extends Controller {
   static targets = ["branch"];
@@ -16,15 +17,6 @@ export default class extends Controller {
     // Capture phase: runs before the row's own click handling (delayed navigation, rename).
     this.element.addEventListener("click", this.requestClick, true);
     this.element.addEventListener("dblclick", this.requestDoubleClick, true);
-
-    const closed = this.closed();
-    this.restored = new Set();
-    this.branchTargets.forEach((branch) => {
-      if (!closed.includes(branch.dataset.id)) return;
-
-      this.restored.add(branch);
-      branch.open = false;
-    });
   }
 
   disconnect() {
@@ -46,9 +38,8 @@ export default class extends Controller {
 
   toggled(event) {
     const branch = event.currentTarget;
-    const restoring = this.restored.delete(branch);
-    // Closing a branch closes the ones nested inside it (not when restoring saved state on connect).
-    if (!branch.open && !restoring && this.collapseNestedValue)
+    // Closing a branch closes the ones nested inside it.
+    if (!branch.open && this.collapseNestedValue)
       branch
         .querySelectorAll("details[open]")
         .forEach((nested) => (nested.open = false));
@@ -57,11 +48,7 @@ export default class extends Controller {
     branch.open
       ? closed.delete(branch.dataset.id)
       : closed.add(branch.dataset.id);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...closed]));
-    } catch (_) {
-      /* storage unavailable */
-    }
+    document.cookie = `${COOKIE}=${[...closed].join(",")}; path=/; max-age=31536000; samesite=lax`;
   }
 
   // With double click toggling, a plain click on a branch row must not open or close it.
@@ -180,10 +167,14 @@ export default class extends Controller {
   }
 
   closed() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    } catch (_) {
-      return [];
-    }
+    const entry = document.cookie
+      .split("; ")
+      .find((pair) => pair.startsWith(`${COOKIE}=`));
+    return entry
+      ? entry
+          .slice(COOKIE.length + 1)
+          .split(",")
+          .filter(Boolean)
+      : [];
   }
 }

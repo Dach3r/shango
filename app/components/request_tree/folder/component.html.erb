@@ -1,5 +1,5 @@
 <div class="group relative" data-controller="context-menu" data-action="contextmenu->context-menu#open">
-  <details open data-tree-target="branch" data-id="<%= @folder.id %>" data-action="toggle->tree#toggled" class="group/branch">
+  <details <%= "open" unless @closed_ids.include?(@folder.id.to_s) %> data-tree-target="branch" data-id="<%= @folder.id %>" data-action="toggle->tree#toggled" class="group/branch">
     <summary draggable="true" data-drag-kind="folder" data-drag-id="<%= @folder.id %>" data-collection-id="<%= @folder.collection_id %>" data-folder-id="<%= @folder.id %>" data-drop-mode="into"
              data-position-url="<%= workbench_folder_position_path(@folder) %>" data-action="dragstart->tree#dragStart dragend->tree#dragEnd click->tree#summaryClick dblclick->tree#summaryDoubleClick"
              class="flex cursor-pointer list-none items-center gap-2 py-1.5 pr-9 pl-2 text-sm text-body transition hover:bg-field hover:text-ink data-[drop-active=into]:bg-accent/15 focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
@@ -10,7 +10,7 @@
 
     <ul class="ml-3 space-y-0.5 border-l border-line pl-1.5">
       <% @branch.children_of(@folder).each do |child| %>
-        <li><%= render RequestTree::Folder::Component.new(folder: child, branch: @branch, current_request_id: @current_request_id) %></li>
+        <li><%= render RequestTree::Folder::Component.new(folder: child, branch: @branch, current_request_id: @current_request_id, closed_ids: @closed_ids) %></li>
       <% end %>
       <% @branch.requests_in(@folder).each do |api_request| %>
         <%= render RequestTree::Request::Component.new(api_request:, active: api_request.id == @current_request_id) %>

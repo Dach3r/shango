@@ -36,7 +36,7 @@
       <p class="px-2 py-6 text-center text-sm text-muted"><%= t("components.request_tree.empty") %></p>
     <% end %>
     <% @branches.each do |branch| %>
-      <%= render RequestTree::Collection::Component.new(branch:, current_request_id: @current_request_id) %>
+      <%= render RequestTree::Collection::Component.new(branch:, current_request_id: @current_request_id, closed_ids: @closed_ids) %>
     <% end %>
   </div>
   <div data-sidebar-view-target="history" hidden class="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 pb-4">
