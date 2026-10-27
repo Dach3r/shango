@@ -1,12 +1,12 @@
 <% content_for :main_class, "flex min-h-0 flex-1" %>
 
-<div class="flex w-full flex-1 flex-col bg-card md:flex-row">
-  <aside class="shrink-0 border-b border-line md:w-60 md:border-r md:border-b-0">
+<div class="flex w-full flex-1 flex-col bg-card md:h-[calc(100vh-2.5rem)] md:flex-none md:flex-row md:overflow-hidden">
+  <aside class="shrink-0 border-b md:overflow-y-auto border-line md:w-60 md:border-r md:border-b-0">
     <%= render SettingsNav::Component.new(project: current_project) %>
   </aside>
 
-  <section class="flex min-w-0 flex-1 flex-col">
-    <header class="flex items-center gap-4 border-b border-line bg-page px-5 py-4 sm:px-7">
+  <section class="flex min-h-0 min-w-0 flex-1 flex-col">
+    <header class="flex shrink-0 items-center gap-4 border-b border-line bg-page px-5 py-4 sm:px-7">
       <span class="flex size-10 shrink-0 items-center justify-center border border-line bg-card text-muted">
         <%= lucide_icon icon, class: "size-5" %>
       </span>
@@ -16,6 +16,8 @@
       </div>
     </header>
 
-    <%= yield %>
+    <div class="flex min-h-0 flex-1 flex-col md:overflow-y-auto">
+      <%= yield %>
+    </div>
   </section>
 </div>
