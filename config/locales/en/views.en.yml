@@ -132,9 +132,6 @@ en:
         groups:
           accents: "Accents"
           styles: "Styles"
-        groups_hint:
-          accents: "Same surfaces, only the accent color changes."
-          styles: "Full palettes that also change backgrounds and borders."
         themes:
           default: Clay
           blue: Blue

@@ -132,9 +132,6 @@ ja:
         groups:
           accents: "アクセント"
           styles: "スタイル"
-        groups_hint:
-          accents: "背景はそのままで、アクセントカラーだけが変わります。"
-          styles: "背景や罫線も変わる完全なパレットです。"
         themes:
           default: クレイ
           blue: ブルー

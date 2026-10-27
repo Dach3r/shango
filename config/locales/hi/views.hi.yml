@@ -132,9 +132,6 @@ hi:
         groups:
           accents: "एक्सेंट"
           styles: "स्टाइल"
-        groups_hint:
-          accents: "सतहें वही रहती हैं, केवल एक्सेंट रंग बदलता है।"
-          styles: "पूरे पैलेट जो बैकग्राउंड और बॉर्डर भी बदलते हैं।"
         themes:
           default: "Clay"
           blue: "नीला"

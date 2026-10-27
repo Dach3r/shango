@@ -132,9 +132,6 @@ zh-CN:
         groups:
           accents: "强调色"
           styles: "风格"
-        groups_hint:
-          accents: "界面底色不变，仅更换强调色。"
-          styles: "完整配色，同时更改背景和边框。"
         themes:
           default: 陶土
           blue: 蓝色
