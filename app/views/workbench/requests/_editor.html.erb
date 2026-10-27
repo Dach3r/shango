@@ -36,8 +36,9 @@
       <%= render CodeEditor::Component.new(name: "api_request[url]", value: api_request.url, single_line: true, placeholder: t("workbench.requests.url_placeholder"), variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url,
                                            input_data: { request_url_target: "url", action: "input->request-url#urlChanged" }) %>
     </div>
+    <span class="w-px shrink-0 bg-line" aria-hidden="true"></span>
     <button type="button" data-request-form-target="send" data-action="request-form#toggle" title="<%= t("workbench.requests.send_hint") %>"
-            class="<%= button_classes(:primary, "group m-2 px-4 @xl:min-w-28 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
+            class="<%= button_classes(:primary, "group px-4 @xl:min-w-28 data-[busy=true]:bg-danger data-[busy=true]:text-white data-[busy=true]:hover:bg-danger/90 data-[busy=true]:focus-visible:ring-danger/50") %>">
       <span class="contents group-data-[busy=true]:hidden">
         <%= lucide_icon "send", class: "size-4" %>
         <span class="hidden @xl:inline"><%= t("workbench.requests.send") %></span>
