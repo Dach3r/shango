@@ -11,7 +11,7 @@ module Workbench
     def request_attributes
       params.fetch(:api_request, {}).permit(
         *SCALAR_FIELDS,
-        auth_config: {}, settings: %i[timeout follow_redirects max_redirects verify_ssl],
+        auth_config: {}, settings: %i[timeout follow_redirects max_redirects verify_ssl use_cookie_jar],
         query_params: [ROW_FIELDS], headers: [ROW_FIELDS], body_form: [ROW_FIELDS]
       )
     end

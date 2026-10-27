@@ -61,7 +61,7 @@ RSpec.describe ApiRequest do
     it "fills defaults and clamps values", :aggregate_failures do
       api_request.update!(settings: { timeout: 9999, max_redirects: 99, follow_redirects: "false", verify_ssl: false })
 
-      expect(api_request.settings).to eq("timeout" => 120, "follow_redirects" => false, "max_redirects" => 10, "verify_ssl" => false)
+      expect(api_request.settings).to eq("timeout" => 120, "follow_redirects" => false, "max_redirects" => 10, "verify_ssl" => false, "use_cookie_jar" => true)
     end
 
     it "falls back to defaults for non-hash settings" do
@@ -74,7 +74,13 @@ RSpec.describe ApiRequest do
     it "keeps enabled flags true by default" do
       api_request.update!(settings: {})
 
-      expect(api_request.settings).to include("follow_redirects" => true, "verify_ssl" => true)
+      expect(api_request.settings).to include("follow_redirects" => true, "verify_ssl" => true, "use_cookie_jar" => true)
+    end
+
+    it "lets a request opt out of the cookie jar" do
+      api_request.update!(settings: { use_cookie_jar: "0" })
+
+      expect(api_request.setting(:use_cookie_jar)).to be(false)
     end
   end
 

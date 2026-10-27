@@ -23,6 +23,12 @@ RSpec.describe "Workbench requests" do
       expect(response.body).to include(api_request.name)
     end
 
+    it "offers the cookie jar switch in the settings", :aggregate_failures do
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include("api_request[settings][use_cookie_jar]", I18n.t("workbench.settings.use_cookie_jar"))
+    end
+
     it "renders the latest execution" do
       create(:request_execution, api_request:, project:, response_body: "hello-body")
       get workbench_request_path(api_request)
@@ -79,6 +85,12 @@ RSpec.describe "Workbench requests" do
 
       expect(response).to redirect_to(workbench_request_path(api_request))
       expect(api_request.reload.name).to eq("List users")
+    end
+
+    it "saves the cookie jar switch" do
+      patch workbench_request_path(api_request), params: { api_request: { settings: { use_cookie_jar: "0" } } }
+
+      expect(api_request.reload.setting(:use_cookie_jar)).to be(false)
     end
 
     it "stores uploaded files for multipart rows and a binary body", :aggregate_failures do

@@ -10,4 +10,5 @@
   </div>
   <%= render Checkbox::Component.new(name: "api_request[settings][follow_redirects]", checked: api_request.setting(:follow_redirects), label: t("workbench.settings.follow_redirects"), label_class: "text-sm") %>
   <%= render Checkbox::Component.new(name: "api_request[settings][verify_ssl]", checked: api_request.setting(:verify_ssl), label: t("workbench.settings.verify_ssl"), label_class: "text-sm") %>
+  <%= render Checkbox::Component.new(name: "api_request[settings][use_cookie_jar]", checked: api_request.setting(:use_cookie_jar), label: t("workbench.settings.use_cookie_jar"), label_class: "text-sm") %>
 </div>

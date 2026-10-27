@@ -280,6 +280,7 @@ en:
       max_redirects: Max redirects
       follow_redirects: Follow redirects
       verify_ssl: Verify SSL certificates
+      use_cookie_jar: Use the cookie jar (send and save cookies)
     auth:
       type: Auth type
       inherit_hint: Uses the authorization of the parent folder or collection.

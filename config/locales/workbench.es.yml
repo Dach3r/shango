@@ -280,6 +280,7 @@ es:
       max_redirects: Máximo de redirecciones
       follow_redirects: Seguir redirecciones
       verify_ssl: Verificar certificados SSL
+      use_cookie_jar: Usar el cookie jar (enviar y guardar cookies)
     auth:
       type: Tipo de auth
       inherit_hint: Usa la autorización de la carpeta o colección padre.

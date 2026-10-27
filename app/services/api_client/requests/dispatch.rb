@@ -25,7 +25,7 @@ module ApiClient
       end
 
       def execute(built)
-        reply = Executor.call(built:, cancelled: @cancelled, cookie_jar: CookieJar.new(project: @api_request.project, environment: @environment))
+        reply = Executor.call(built:, cancelled: @cancelled, cookie_jar: cookie_jar)
         masker = Masker.new(built.secrets)
         body, omitted = displayable_body(reply, masker)
 
@@ -36,6 +36,10 @@ module ApiClient
           body_omitted: omitted, redirects: reply.redirects.map { |hop| hop.transform_values { |value| value.is_a?(String) ? masker.string(value) : value } },
           unresolved_variables: built.unresolved, timings: reply.timings, set_cookies: reply.set_cookies.map { |line| masker.string(line) }, error_kind: reply.error_kind, error_message: masker.string(reply.error_message)
         )
+      end
+
+      def cookie_jar
+        CookieJar.new(project: @api_request.project, environment: @environment) if @api_request.setting(:use_cookie_jar)
       end
 
       def invalid(built)

@@ -83,6 +83,32 @@ RSpec.describe ApiClient::Requests::Run do
     expect(result.record.set_cookies).to eq(["a=1; Path=/", "echo=#{ApiClient::Masker::MASK}; Path=/"])
   end
 
+  describe "with the cookie jar" do
+    let(:jar) { ApiClient::CookieJar.new(project: api_request.project, environment:) }
+
+    before { jar.store("https://api.example.com/items", "stored=1; Path=/") }
+
+    it "sends the stored cookies and keeps the ones the response sets", :aggregate_failures do
+      stub = stub_request(:get, "https://api.example.com/items").with(headers: { "Cookie" => "stored=1" }).to_return(status: 200, headers: { "Set-Cookie" => "fresh=2; Path=/" })
+
+      result
+
+      expect(stub).to have_been_requested
+      expect(jar.header("https://api.example.com/items")).to eq("stored=1; fresh=2")
+    end
+
+    it "is bypassed when the request turns it off", :aggregate_failures do
+      api_request.update!(settings: { use_cookie_jar: false })
+      stub = stub_request(:get, "https://api.example.com/items").with { |request| !request.headers.key?("Cookie") }.to_return(status: 200, headers: { "Set-Cookie" => "fresh=2; Path=/" })
+
+      result
+
+      expect(stub).to have_been_requested
+      expect(jar.header("https://api.example.com/items")).to eq("stored=1")
+      expect(result.record.set_cookies).to eq(["fresh=2; Path=/"])
+    end
+  end
+
   it "masks secrets in everything stored", :aggregate_failures do
     create(:variable, :secret, environment:, key: "token", value: "supersecret")
     api_request.update!(headers: [{ "key" => "X-Token", "value" => "{{token}}" }, { "key" => "Authorization", "value" => "Bearer abc" }])
