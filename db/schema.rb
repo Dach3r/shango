@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_193602) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_121054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -85,6 +85,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_193602) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_collections_on_project_id"
+  end
+
+  create_table "cookies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "environment_id"
+    t.string "domain", null: false
+    t.string "path", default: "/", null: false
+    t.string "name", null: false
+    t.text "value"
+    t.boolean "host_only", default: true, null: false
+    t.boolean "secure", default: false, null: false
+    t.boolean "http_only", default: false, null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["environment_id"], name: "index_cookies_on_environment_id"
+    t.index ["project_id", "environment_id", "domain", "path", "name"], name: "index_cookies_on_jar_and_identity", unique: true, nulls_not_distinct: true
+    t.index ["project_id"], name: "index_cookies_on_project_id"
   end
 
   create_table "environments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -233,6 +251,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_193602) do
   add_foreign_key "api_requests", "projects"
   add_foreign_key "api_requests", "users", on_delete: :cascade
   add_foreign_key "collections", "projects"
+  add_foreign_key "cookies", "environments"
+  add_foreign_key "cookies", "projects"
   add_foreign_key "environments", "projects"
   add_foreign_key "folders", "collections"
   add_foreign_key "folders", "folders", column: "parent_id"

@@ -4,6 +4,7 @@ class Environment < ApplicationRecord
   belongs_to :project
 
   has_many :variables, -> { order(:position, :created_at) }, dependent: :destroy, inverse_of: :environment
+  has_many :cookies, dependent: :destroy
   has_many :memberships, foreign_key: :current_environment_id, dependent: :nullify, inverse_of: :current_environment
 
   accepts_nested_attributes_for :variables, allow_destroy: true, reject_if: ->(attributes) { attributes[:key].blank? && attributes[:value].blank? }

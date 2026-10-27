@@ -25,7 +25,7 @@ module ApiClient
       end
 
       def execute(built)
-        reply = Executor.call(built:, cancelled: @cancelled)
+        reply = Executor.call(built:, cancelled: @cancelled, cookie_jar: CookieJar.new(project: @api_request.project, environment: @environment))
         masker = Masker.new(built.secrets)
         body, omitted = displayable_body(reply, masker)
 

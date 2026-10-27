@@ -69,6 +69,59 @@ RSpec.describe ApiClient::Executor do
     end
   end
 
+  describe "cookie jar" do
+    let(:project) { create(:project) }
+    let(:jar) { ApiClient::CookieJar.new(project:) }
+    let(:reply) { described_class.call(built:, cookie_jar: jar) }
+
+    it "sends stored cookies and keeps the ones the response sets", :aggregate_failures do
+      jar.store(url, "stored=1; Path=/")
+      stub = stub_request(:get, url).with(headers: { "Cookie" => "stored=1" }).to_return(status: 200, headers: { "Set-Cookie" => "fresh=2; Path=/" })
+
+      expect(reply.sent_headers).to include(["Cookie", "stored=1"])
+      expect(stub).to have_been_requested
+      expect(jar.header(url)).to eq("stored=1; fresh=2")
+    end
+
+    it "lets a typed Cookie header win over stored cookies of the same name", :aggregate_failures do
+      jar.store(url, "a=stored; Path=/")
+      jar.store(url, "b=stored; Path=/")
+      options.merge!(headers: { "cookie" => "a=typed" })
+      stub = stub_request(:get, url).with(headers: { "Cookie" => "a=typed; b=stored" }).to_return(status: 200)
+
+      reply
+
+      expect(stub).to have_been_requested
+    end
+
+    it "keeps the typed header as is when every stored cookie is overridden", :aggregate_failures do
+      jar.store(url, "a=stored; Path=/")
+      options.merge!(headers: { "Cookie" => "a=typed" })
+      stub = stub_request(:get, url).with(headers: { "Cookie" => "a=typed" }).to_return(status: 200)
+
+      reply
+
+      expect(stub).to have_been_requested
+    end
+
+    it "carries cookies through redirects", :aggregate_failures do
+      target = "https://api.example.com/final"
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "/final", "Set-Cookie" => "session=abc; Path=/" })
+      stub = stub_request(:get, target).with(headers: { "Cookie" => "session=abc" }).to_return(status: 200)
+
+      expect(reply.status).to eq(200)
+      expect(stub).to have_been_requested
+    end
+
+    it "does not touch requests when no cookie applies" do
+      stub = stub_request(:get, url).with { |request| !request.headers.key?("Cookie") }.to_return(status: 200)
+
+      reply
+
+      expect(stub).to have_been_requested
+    end
+  end
+
   describe "redirects" do
     let(:target) { "https://api.example.com/final" }
 

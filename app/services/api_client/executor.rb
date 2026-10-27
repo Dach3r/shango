@@ -25,9 +25,11 @@ module ApiClient
     Cancelled = Class.new(StandardError)
 
     # `cancelled` is polled between chunks and hops so a user can stop a run that is already in flight.
-    def initialize(built:, cancelled: nil)
+    # `cookie_jar` (see CookieJar) adds the stored cookies to every hop and keeps the ones each response sets.
+    def initialize(built:, cancelled: nil, cookie_jar: nil)
       @built = built
       @cancelled = cancelled
+      @cookie_jar = cookie_jar
     end
 
     private
@@ -42,6 +44,7 @@ module ApiClient
 
       loop do
         attempt = attempt(state)
+        @cookie_jar&.store(state[:url], attempt.headers["set-cookie"])
 
         if challenge?(attempt) && !digest_tried && (extra = digest_headers(attempt, state))
           digest_tried = true
@@ -63,13 +66,14 @@ module ApiClient
     end
 
     def attempt(state)
+      @sent_headers = with_cookies(state[:headers], state[:url])
       connection = Connection.build(url: state[:url], timeout: attempt_timeout, verify_ssl: @built.verify_ssl, multipart: @built.body.multipart && state[:send_body], timing: @timing)
       buffer = String.new(encoding: Encoding::BINARY)
       seen = {}
       body = state[:send_body] ? @built.body.factory.call : nil
 
       @timing.begin_attempt
-      response = connection.run_request(state[:method].downcase.to_sym, state[:url], body, state[:headers]) do |request|
+      response = connection.run_request(state[:method].downcase.to_sym, state[:url], body, @sent_headers) do |request|
         request.options.on_data = proc do |chunk, total, env|
           check_deadline!
           @timing.first_byte!
@@ -91,6 +95,20 @@ module ApiClient
     rescue TooLarge
       @timing.end_attempt
       Attempt.new(status: seen[:status], status_text: seen[:status_text], headers: seen[:headers] || {}, body: buffer, size: MAX_RESPONSE_BYTES, truncated: true)
+    end
+
+    # Cookies the user typed in a Cookie header win over stored ones with the same name.
+    def with_cookies(headers, url)
+      stored = @cookie_jar&.header(url)
+      return headers unless stored
+
+      key = headers.keys.find { |name| name.to_s.casecmp?("cookie") }
+      typed = key ? headers[key].to_s : nil
+      typed_names = typed.to_s.split(";").map { |pair| pair.split("=", 2).first.to_s.strip }
+      extra = stored.split("; ").reject { |pair| typed_names.include?(pair.split("=", 2).first) }
+      return headers if extra.empty?
+
+      headers.except(key).merge(key || "Cookie" => [typed.presence, *extra].compact.join("; "))
     end
 
     def check_deadline!
@@ -137,7 +155,7 @@ module ApiClient
       Reply.new(
         status: attempt.status, status_text: attempt.status_text.presence || Rack::Utils::HTTP_STATUS_CODES[attempt.status],
         headers: attempt.headers.to_a, body: attempt.body, content_type: attempt.headers["content-type"], duration_ms: duration,
-        size_bytes: attempt.size, truncated: attempt.truncated, redirects:, final_url: state[:url], sent_headers: state[:headers].to_a,
+        size_bytes: attempt.size, truncated: attempt.truncated, redirects:, final_url: state[:url], sent_headers: (@sent_headers || state[:headers]).to_a,
         timings: @timing.to_h(duration)
       )
     end
@@ -147,7 +165,7 @@ module ApiClient
       duration = elapsed_ms(started)
       Reply.new(
         headers: [], body: "", duration_ms: duration, size_bytes: 0, truncated: false, redirects: redirects || [],
-        final_url: state&.dig(:url) || @built.url, sent_headers: (state&.dig(:headers) || @built.headers).to_a, timings: @timing.to_h(duration),
+        final_url: state&.dig(:url) || @built.url, sent_headers: (@sent_headers || @built.headers).to_a, timings: @timing.to_h(duration),
         error_kind: kind, error_message: message
       )
     end
