@@ -1,6 +1,6 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 
-<%= render layout: "settings/shell", locals: { heading: t(".heading"), description: t(".description") } do %>
+<%= render layout: "settings/shell", locals: { icon: "panel-left", heading: t(".heading"), description: t(".description") } do %>
   <%= form_with model: @membership, url: membership_path, method: :patch, class: "flex flex-1 flex-col", data: { controller: "dirty-form", action: "input->dirty-form#refresh change->dirty-form#refresh reset->dirty-form#refresh" } do |form| %>
     <%= render "workbench/shared/errors", record: @membership %>
 

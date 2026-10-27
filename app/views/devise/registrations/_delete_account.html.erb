@@ -24,9 +24,9 @@
       </section>
     <% end %>
 
-    <section class="border-b border-danger/40 bg-card">
-      <h2 class="<%= eyebrow %> flex items-center gap-3 border-b border-danger/40 bg-danger/10 px-5 py-3 text-danger sm:px-7">
-        <span class="flex size-5 items-center justify-center border border-danger/60">1</span><%= t("devise.registrations.edit.danger.review") %>
+    <section class="border-b border-line bg-card">
+      <h2 class="<%= eyebrow %> flex items-center gap-3 border-b border-line bg-page px-5 py-3 text-muted sm:px-7">
+        <span class="flex size-5 items-center justify-center border border-line">1</span><%= t("devise.registrations.edit.danger.review") %>
       </h2>
 
       <dl class="grid grid-cols-3 divide-x divide-line border-b border-line">
@@ -39,11 +39,11 @@
       </dl>
 
       <% if impact.doomed.any? %>
-        <p class="<%= eyebrow %> border-b border-line px-5 py-2.5 text-muted sm:px-7"><%= t("devise.registrations.edit.danger.erased") %></p>
+        <p class="<%= eyebrow %> border-b border-line bg-page px-5 py-2.5 text-muted sm:px-7"><%= t("devise.registrations.edit.danger.erased") %></p>
         <ul class="divide-y divide-line">
           <% impact.doomed.each do |project| %>
             <li class="flex items-center gap-4 px-5 py-3 sm:px-7">
-              <span class="flex size-9 shrink-0 items-center justify-center border border-danger/40 bg-danger/10 text-danger"><%= lucide_icon project.icon, class: "size-4" %></span>
+              <span class="flex size-9 shrink-0 items-center justify-center border border-line bg-page text-muted"><%= lucide_icon project.icon, class: "size-4" %></span>
               <span class="min-w-0 flex-1 truncate text-sm font-semibold text-ink"><%= project.name %></span>
               <span class="shrink-0 text-right">
                 <span class="block text-sm font-semibold tabular-nums text-ink"><%= impact.requests_by_project.fetch(project.id, 0) %></span>
@@ -56,24 +56,24 @@
         <p class="px-5 py-4 text-sm text-muted sm:px-7"><%= t("devise.registrations.edit.danger.no_projects") %></p>
       <% end %>
 
-      <p class="flex items-start gap-3 border-t border-line bg-accent/5 px-5 py-3 text-sm sm:px-7 leading-relaxed text-body">
-        <%= lucide_icon "shield-check", class: "mt-0.5 size-4 shrink-0 text-accent" %><%= t("devise.registrations.edit.danger.kept_body") %>
+      <p class="flex items-start gap-3 border-t border-line px-5 py-3 text-sm sm:px-7 leading-relaxed text-body">
+        <%= lucide_icon "shield-check", class: "mt-0.5 size-4 shrink-0 text-muted" %><%= t("devise.registrations.edit.danger.kept_body") %>
       </p>
     </section>
 
     <%= form_with url: registration_path(resource_name), method: :delete, class: class_names("grid", "pointer-events-none opacity-50" => impact.blocked?), data: { turbo_confirm: t("devise.registrations.edit.confirm") } do %>
-      <section class="border-b border-accent/40 bg-card">
-        <h2 class="<%= eyebrow %> flex items-center gap-3 border-b border-accent/40 bg-accent/10 px-5 py-3 text-accent sm:px-7">
-          <span class="flex size-5 items-center justify-center border border-accent/60">2</span><%= t("devise.registrations.edit.danger.ack_title") %>
+      <section class="border-b border-line bg-card">
+        <h2 class="<%= eyebrow %> flex items-center gap-3 border-b border-line bg-page px-5 py-3 text-muted sm:px-7">
+          <span class="flex size-5 items-center justify-center border border-line">2</span><%= t("devise.registrations.edit.danger.ack_title") %>
         </h2>
         <div class="px-5 py-5 sm:px-7">
           <%= render Checkbox::Component.new(name: :acknowledge, label: t("devise.registrations.edit.danger.ack"), label_class: "items-start text-sm leading-relaxed text-ink", data: { confirm_gate_target: "acknowledge", action: "change->confirm-gate#refresh" }) %>
         </div>
       </section>
 
-      <section class="border-b border-danger bg-card">
-        <h2 class="<%= eyebrow %> flex items-center gap-3 border-b border-danger bg-danger px-5 py-3 text-white sm:px-7">
-          <span class="flex size-5 items-center justify-center border border-white/70">3</span><%= t("devise.registrations.edit.danger.confirm_title") %>
+      <section class="bg-card">
+        <h2 class="<%= eyebrow %> flex items-center gap-3 border-b border-line bg-page px-5 py-3 text-muted sm:px-7">
+          <span class="flex size-5 items-center justify-center border border-line">3</span><%= t("devise.registrations.edit.danger.confirm_title") %>
         </h2>
         <div class="grid content-start gap-4 px-5 py-5 sm:px-7 sm:grid-cols-[minmax(0,28rem)_auto] sm:items-end">
           <div>

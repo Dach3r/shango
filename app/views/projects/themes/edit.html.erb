@@ -1,6 +1,6 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 
-<%= render layout: "settings/shell", locals: { heading: t(".heading"), description: t(".description") } do %>
+<%= render layout: "settings/shell", locals: { icon: "palette", heading: t(".heading"), description: t(".description") } do %>
   <%= form_with model: @membership, url: theme_path, method: :patch, data: { controller: "theme-preview" } do |form| %>
     <%= render "workbench/shared/errors", record: @membership %>
 

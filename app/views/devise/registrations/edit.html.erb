@@ -1,7 +1,7 @@
 <% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= render layout: "settings/shell", locals: { heading: t(".#{@tab}.heading"), description: t(".#{@tab}.description") } do %>
+<%= render layout: "settings/shell", locals: { icon: { "profile" => "user", "security" => "shield", "delete_account" => "trash-2", "preferences" => "sliders-horizontal" }.fetch(@tab), heading: t(".#{@tab}.heading"), description: t(".#{@tab}.description") } do %>
   <% if @tab == "preferences" %>
     <div class="divide-y divide-line">
       <% { locale: LocaleSwitcher::Component, zoom: ZoomPicker::Component }.each do |setting, switcher| %>
