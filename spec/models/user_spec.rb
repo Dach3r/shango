@@ -22,6 +22,48 @@ RSpec.describe User do
     end
   end
 
+  describe "email confirmation" do
+    it "does not wait for confirmation without SMTP", :aggregate_failures do
+      created = create(:user)
+
+      expect(created.active_for_authentication?).to be(true)
+      expect(ActionMailer::Base.deliveries).to be_empty
+    end
+
+    it "waits for confirmation when it is enforced", :aggregate_failures do
+      allow(Shango::Mailing).to receive(:confirmation_required?).and_return(true)
+      created = create(:user)
+
+      expect(created.active_for_authentication?).to be(false)
+      expect(ActionMailer::Base.deliveries.last.to).to eq([created.email])
+    end
+
+    it "lets confirmed users in when it is enforced" do
+      allow(Shango::Mailing).to receive(:confirmation_required?).and_return(true)
+
+      expect(create(:user, :confirmed).active_for_authentication?).to be(true)
+    end
+
+    it "postpones email changes only when it is enforced", :aggregate_failures do
+      allow(Shango::Mailing).to receive(:confirmation_required?).and_return(true)
+      confirmed = create(:user, :confirmed)
+      confirmed.update!(email: "new@example.com")
+
+      expect(confirmed.reload).to have_attributes(unconfirmed_email: "new@example.com")
+      expect(confirmed.email).not_to eq("new@example.com")
+    end
+  end
+
+  describe "account locking" do
+    it "locks the account after too many failed attempts", :aggregate_failures do
+      locked = create(:user)
+      User.maximum_attempts.times { locked.valid_for_authentication? { false } }
+
+      expect(locked.reload.access_locked?).to be(true)
+      expect(locked.active_for_authentication?).to be(false)
+    end
+  end
+
   describe "#full_name" do
     it "joins first and last name" do
       expect(user.full_name).to eq("Ada Lovelace")

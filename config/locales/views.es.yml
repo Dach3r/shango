@@ -1,4 +1,6 @@
 es:
+  mailing:
+    disabled: El correo no está configurado en esta instancia.
   throttling:
     limited: Demasiados intentos. Espera un momento e inténtalo de nuevo.
   activerecord:

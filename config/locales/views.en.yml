@@ -1,4 +1,6 @@
 en:
+  mailing:
+    disabled: Email is not configured on this instance.
   throttling:
     limited: Too many attempts. Wait a moment and try again.
   activerecord:
