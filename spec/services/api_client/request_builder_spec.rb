@@ -118,6 +118,41 @@ RSpec.describe ApiClient::RequestBuilder do
     end
   end
 
+  describe "environment scoping" do
+    let(:environment) { create(:environment, project: collection.project) }
+    let(:attributes) { { url: "https://{{host}}/x" } }
+
+    it "does not resolve variables of other environments or projects", :aggregate_failures do
+      create(:variable, environment: create(:environment, project: collection.project), key: "host", value: "sibling.test")
+      create(:variable, environment: create(:environment), key: "host", value: "foreign.test")
+
+      expect(result).to be_failure
+      expect(result.data[:unresolved]).to eq(["host"])
+    end
+
+    it "copes with a blank secret variable", :aggregate_failures do
+      create(:variable, environment:, key: "host", value: "api.test")
+      create(:variable, :secret, environment:, key: "empty", value: "")
+
+      expect(built.url).to eq("https://api.test/x")
+      expect(built.secrets.map(&:to_s)).to all(be_a(String))
+    end
+
+    context "with a variable holding variable syntax" do
+      let(:attributes) { { url: "https://{{host}}/x", headers: [{ "key" => "X-A", "value" => "{{a}}" }] } }
+
+      it "resolves chains across variables of the same environment", :aggregate_failures do
+        create(:variable, environment:, key: "host", value: "{{sub}}.test")
+        create(:variable, environment:, key: "sub", value: "api")
+        create(:variable, environment:, key: "a", value: "{{missing}}")
+
+        expect(built.url).to eq("https://api.test/x")
+        expect(built.headers["X-A"]).to eq("{{missing}}")
+        expect(built.unresolved).to eq(["missing"])
+      end
+    end
+  end
+
   describe "headers" do
     let(:attributes) do
       { headers: [
@@ -215,6 +250,38 @@ RSpec.describe ApiClient::RequestBuilder do
       it "encodes enabled non file rows", :aggregate_failures do
         expect(built.body.preview).to eq("a=1+2")
         expect(built.headers["Content-Type"]).to eq("application/x-www-form-urlencoded")
+      end
+    end
+
+    context "with form_urlencoded special characters" do
+      let(:body_type) { "form_urlencoded" }
+      let(:attributes) do
+        { http_method: "POST", body_type:, body_form: [{ "key" => "q&x", "value" => "a=b&c=d" }, { "key" => "u", "value" => "ñandú 🦤" }, { "key" => "", "value" => "blank key" }] }
+      end
+
+      it "percent encodes keys and values and skips blank keys" do
+        expect(built.body.preview).to eq("q%26x=a%3Db%26c%3Dd&u=%C3%B1and%C3%BA+%F0%9F%A6%A4")
+      end
+    end
+
+    context "with disabled rows holding unknown variables" do
+      let(:attributes) { { headers: [{ "key" => "X-Off", "value" => "{{nope}}", "enabled" => false }] } }
+
+      it "does not report them", :aggregate_failures do
+        expect(built.unresolved).to be_empty
+        expect(built.headers).not_to have_key("X-Off")
+      end
+    end
+
+    context "with json containing variables inside strings" do
+      let(:environment) { create(:environment, project: collection.project) }
+      let(:attributes) { { http_method: "POST", body_type: "json", body: '{"name":"{{who}}","n":{{count}}}' } }
+
+      it "inserts values as text without touching the surrounding json", :aggregate_failures do
+        create(:variable, environment:, key: "who", value: "Ana")
+        create(:variable, environment:, key: "count", value: "3")
+
+        expect(JSON.parse(built.body.preview)).to eq({ "name" => "Ana", "n" => 3 })
       end
     end
 

@@ -3,6 +3,7 @@ module ApiClient
   # ones on later requests, so session based flows (sign in, then call an endpoint that needs the session) work.
   class CookieJar
     MAX_VALUE_LENGTH = Cookie::MAX_VALUE_LENGTH
+    MAX_LIFETIME = 100.years
 
     def initialize(project:, environment: nil)
       @project = project
@@ -69,9 +70,9 @@ module ApiClient
 
     def expiry(attributes)
       max_age = attributes["max-age"]
-      return Time.current + max_age.to_i.seconds if max_age.to_s.match?(/\A-?\d+\z/)
+      return Time.current + [max_age.to_i, MAX_LIFETIME.to_i].min.seconds if max_age.to_s.match?(/\A-?\d+\z/)
 
-      Time.zone.parse(attributes["expires"]) if attributes["expires"].present?
+      [Time.zone.parse(attributes["expires"]), Time.current + MAX_LIFETIME].compact.min if attributes["expires"].present?
     rescue ArgumentError
       nil
     end

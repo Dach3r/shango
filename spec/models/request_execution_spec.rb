@@ -22,7 +22,12 @@ RSpec.describe RequestExecution do
       200 => :success,
       302 => :success,
       404 => :client_error,
-      500 => :server_error
+      100 => :success,
+      399 => :success,
+      400 => :client_error,
+      499 => :client_error,
+      500 => :server_error,
+      599 => :server_error
     }.each do |status, expected|
       it "maps #{status} to #{expected}" do
         execution.status = status
@@ -52,6 +57,30 @@ RSpec.describe RequestExecution do
       expect(restored.request_body.bytesize).to be <= described_class::STORED_BODY_BYTES
       expect(restored.body_truncated).to be(true)
       expect(execution.response_body).to eq(big)
+    end
+
+    it "never cuts a multibyte character in half", :aggregate_failures do
+      big = "€" * (described_class::STORED_BODY_BYTES / 3 + 10)
+      execution = build(:request_execution, id: SecureRandom.uuid, response_body: big)
+      execution.stash
+
+      restored = described_class.pending(execution.id)
+      expect(restored.response_body).to be_valid_encoding
+      expect(restored.response_body).to eq("€" * (described_class::STORED_BODY_BYTES / 3))
+    end
+
+    it "does not flag the response as truncated when only the request body was cut", :aggregate_failures do
+      execution = build(:request_execution, id: SecureRandom.uuid, request_body: "a" * (described_class::STORED_BODY_BYTES + 1), response_body: "ok", body_truncated: false)
+      execution.stash
+
+      expect(described_class.pending(execution.id)).to have_attributes(body_truncated: false, response_body: "ok")
+    end
+
+    it "keeps a body of exactly the limit whole" do
+      execution = build(:request_execution, id: SecureRandom.uuid, response_body: "a" * described_class::STORED_BODY_BYTES, body_truncated: false)
+      execution.stash
+
+      expect(described_class.pending(execution.id)).to have_attributes(body_truncated: false)
     end
 
     it "keeps small bodies and the truncation flag as they are", :aggregate_failures do
@@ -87,8 +116,36 @@ RSpec.describe RequestExecution do
       expect(described_class.latest_for(api_request, user)).to eq(latest)
     end
 
+    it "does not show a stashed run to another user", :aggregate_failures do
+      build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+
+      expect(described_class.latest_for(api_request, create(:user))).to be_nil
+    end
+
+    it "does not mix up the stashed runs of different requests" do
+      build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+
+      expect(described_class.latest_for(create(:api_request), user)).to be_nil
+    end
+
+    it "falls back to the saved run once the stashed one expired" do
+      saved = create(:request_execution, api_request:, user:)
+      build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+      Rails.cache.clear
+
+      expect(described_class.latest_for(api_request, user)).to eq(saved)
+    end
+
     it "is nil without any response" do
       expect(described_class.latest_for(api_request, user)).to be_nil
+    end
+  end
+
+  describe "#status_class without a status" do
+    it "is a server error when there is neither a status nor an error" do
+      execution.status = nil
+
+      expect(execution.status_class).to eq(:server_error)
     end
   end
 

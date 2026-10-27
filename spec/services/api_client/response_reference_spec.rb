@@ -75,6 +75,46 @@ RSpec.describe ApiClient::ResponseReference do
       expect(call).to have_attributes(error: :no_match)
     end
 
+    it "reads falsy and null JSON values", :aggregate_failures do
+      source.request_executions.destroy_all
+      create(:request_execution, api_request: source, user:, response_body: '{"off":false,"zero":0,"empty":"","nothing":null}')
+
+      expect(call("response.body.#{source.id}.$.off").record).to eq("false")
+      expect(call("response.body.#{source.id}.$.zero").record).to eq("0")
+      expect(call("response.body.#{source.id}.$.empty").record).to eq("")
+      expect(call("response.body.#{source.id}.$.nothing")).to have_attributes(error: :no_match)
+    end
+
+    it "fails with no match for an invalid JSONPath instead of raising", :aggregate_failures do
+      expect(call("response.body.#{source.id}.$[?(")).to have_attributes(failure?: true, error: :no_match)
+      expect(call("response.body.#{source.id}.$..[")).to have_attributes(failure?: true)
+    end
+
+    it "fails for a body that is a JSON scalar or null", :aggregate_failures do
+      source.request_executions.destroy_all
+      create(:request_execution, api_request: source, user:, response_body: "null")
+
+      expect(call).to have_attributes(failure?: true, error: :no_match)
+    end
+
+    it "accepts upper case request ids" do
+      expect(call("response.body.#{source.id.upcase}.$.id").record).to eq("638")
+    end
+
+    it "keeps newlines and unicode of the raw body", :aggregate_failures do
+      source.request_executions.destroy_all
+      create(:request_execution, api_request: source, user:, response_body: "línea 1\nlínea 2 🦤")
+
+      expect(call("response.raw.#{source.id}").record).to eq("línea 1\nlínea 2 🦤")
+    end
+
+    it "does not reach requests of another project", :aggregate_failures do
+      foreign = create(:api_request, collection: create(:collection))
+      create(:request_execution, api_request: foreign, user:, response_body: '{"id":1}')
+
+      expect(call("response.body.#{foreign.id}.$.id")).to have_attributes(failure?: true, error: :unknown_request)
+    end
+
     it "fails on an invalid reference", :aggregate_failures do
       expect(call("response.body")).to have_attributes(failure?: true, error: :invalid)
     end

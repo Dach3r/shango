@@ -58,6 +58,53 @@ RSpec.describe ApiClient::Executor do
     end
   end
 
+  describe "response bodies" do
+    it "returns an empty body as an empty string", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 204)
+
+      expect(reply).to have_attributes(status: 204, body: "", size_bytes: 0, truncated: false)
+    end
+
+    it "keeps binary bodies byte for byte", :aggregate_failures do
+      payload = (0..255).map(&:chr).join.b
+      stub_request(:get, url).to_return(status: 200, body: payload, headers: { "Content-Type" => "application/octet-stream" })
+
+      expect(reply.body).to eq(payload)
+      expect(reply.size_bytes).to eq(256)
+    end
+
+    it "keeps bodies that are not valid UTF-8 untouched" do
+      stub_request(:get, url).to_return(status: 200, body: "caf\xE9".b)
+
+      expect(reply.body.bytes).to eq("caf\xE9".b.bytes)
+    end
+
+    it "does not truncate a body of exactly the limit", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, body: "a" * described_class::MAX_RESPONSE_BYTES)
+
+      expect(reply).to have_attributes(truncated: false, size_bytes: described_class::MAX_RESPONSE_BYTES)
+    end
+
+    it "reads responses without a status text or with an unknown status code", :aggregate_failures do
+      stub_request(:get, url).to_return(status: [599, ""])
+
+      expect(reply).to have_attributes(status: 599, status_text: nil, error_kind: nil)
+    end
+
+    it "returns error statuses as responses, not errors", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 503, body: "down")
+
+      expect(reply).to have_attributes(status: 503, status_text: "Service Unavailable", body: "down", error_kind: nil)
+    end
+
+    it "returns no body for a HEAD request" do
+      options.merge!(http_method: "HEAD")
+      stub_request(:head, url).to_return(status: 200, headers: { "Content-Length" => "10" })
+
+      expect(reply).to have_attributes(status: 200, body: "")
+    end
+  end
+
   describe "large responses" do
     it "truncates bodies over the limit", :aggregate_failures do
       stub_request(:get, url).to_return(status: 200, body: "a" * (described_class::MAX_RESPONSE_BYTES + 10))
@@ -210,6 +257,99 @@ RSpec.describe ApiClient::Executor do
       expect(reply.status).to eq(302)
     end
 
+    it "drops credentials on a redirect to another scheme or port", :aggregate_failures do
+      options.merge!(headers: { "Authorization" => "Bearer abc", "X-Api-Key" => "k", "Proxy-Authorization" => "p" })
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "http://api.example.com/final" })
+      stub_request(:get, "http://api.example.com/final").with { |request| request.headers.keys.none? { |name| %w[Authorization X-Api-Key Proxy-Authorization].include?(name) } }.to_return(status: 302, headers: { "Location" => "http://api.example.com:8080/x" })
+      stub = stub_request(:get, "http://api.example.com:8080/x").with { |request| !request.headers.key?("Authorization") }.to_return(status: 200)
+
+      expect(reply.status).to eq(200)
+      expect(stub).to have_been_requested
+    end
+
+    it "treats a protocol relative location as another origin", :aggregate_failures do
+      options.merge!(headers: { "Authorization" => "Bearer abc" })
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "//evil.test/steal" })
+      stub = stub_request(:get, "https://evil.test/steal").with { |request| !request.headers.key?("Authorization") }.to_return(status: 200)
+
+      expect(reply.status).to eq(200)
+      expect(stub).to have_been_requested
+    end
+
+    it "does not send the cookies of one host to the host it redirects to", :aggregate_failures do
+      jar = ApiClient::CookieJar.new(project: create(:project))
+      jar.store(url, "session=abc; Path=/")
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "https://other.example.com/x" })
+      stub = stub_request(:get, "https://other.example.com/x").with { |request| !request.headers.key?("Cookie") }.to_return(status: 200)
+
+      expect(described_class.call(built:, cookie_jar: jar).status).to eq(200)
+      expect(stub).to have_been_requested
+    end
+
+    it "follows 301 and 302 of a PUT without changing the method", :aggregate_failures do
+      options.merge!(http_method: "PUT", body: ApiClient::RequestBuilder::Body.new(factory: -> { "x" }, multipart: false))
+      stub_request(:put, url).to_return(status: 301, headers: { "Location" => target })
+      stub = stub_request(:put, target).with(body: "x").to_return(status: 200)
+
+      expect(reply.status).to eq(200)
+      expect(stub).to have_been_requested
+    end
+
+    it "follows a chain of redirects up to the maximum and records each hop", :aggregate_failures do
+      options.merge!(max_redirects: 3)
+      (0..2).each { |i| stub_request(:get, "#{url}#{i.positive? ? i : ""}").to_return(status: 302, headers: { "Location" => "#{url}#{i + 1}" }) }
+      stub_request(:get, "#{url}3").to_return(status: 200, body: "done")
+
+      expect(reply).to have_attributes(status: 200, body: "done", final_url: "#{url}3")
+      expect(reply.redirects.map { |hop| hop["status"] }).to eq([302, 302, 302])
+    end
+
+    it "stops a redirect loop at the maximum", :aggregate_failures do
+      options.merge!(max_redirects: 4)
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => target })
+      stub_request(:get, target).to_return(status: 302, headers: { "Location" => url })
+
+      expect(reply).to have_attributes(status: 302, error_kind: nil)
+      expect(reply.redirects.size).to eq(4)
+    end
+
+    it "does not follow when the maximum is zero" do
+      options.merge!(max_redirects: 0)
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => target })
+
+      expect(reply).to have_attributes(status: 302, redirects: [])
+    end
+
+    it "does not follow 300, 304 or 305", :aggregate_failures do
+      [300, 304, 305].each do |status|
+        stub_request(:get, url).to_return(status:, headers: { "Location" => target })
+
+        expect(described_class.call(built:)).to have_attributes(status:, redirects: [])
+      end
+    end
+
+    it "reports a location that is not a valid url", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "http://[bad" })
+
+      expect(reply).to have_attributes(error_kind: "invalid_url", status: nil, final_url: url)
+    end
+
+    it "refuses to be redirected to other schemes", :aggregate_failures do
+      ["file:///etc/passwd", "gopher://internal.test/", "ftp://x.test/f"].each do |location|
+        stub_request(:get, url).to_return(status: 302, headers: { "Location" => location })
+
+        expect(described_class.call(built:)).to have_attributes(error_kind: "invalid_url", final_url: location)
+      end
+    end
+
+    it "resolves dot segments and query only locations", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "../up?x=1" })
+      stub = stub_request(:get, "https://api.example.com/up?x=1").to_return(status: 200)
+
+      expect(reply.final_url).to eq("https://api.example.com/up?x=1")
+      expect(stub).to have_been_requested
+    end
+
     it "stops after the maximum number of redirects", :aggregate_failures do
       options.merge!(max_redirects: 1)
       stub_request(:get, url).to_return(status: 302, headers: { "Location" => target })
@@ -217,6 +357,71 @@ RSpec.describe ApiClient::Executor do
 
       expect(reply.status).to eq(302)
       expect(reply.redirects.size).to eq(1)
+    end
+  end
+
+  describe "private network policy" do
+    def resolve_hosts(map)
+      allow(Addrinfo).to receive(:getaddrinfo) { |host| Array(map.fetch(host) { Addrinfo.ip(host.delete("[]")).ip_address }).map { |ip| instance_double(Addrinfo, ip_address: ip) } }
+    end
+
+    before { stub_const("ENV", ENV.to_h.merge("SHANGO_BLOCK_PRIVATE_NETWORKS" => "true")) }
+
+    it "blocks a redirect to a private host without requesting it", :aggregate_failures do
+      resolve_hosts("api.example.com" => "93.184.216.34", "internal.test" => "10.0.0.5")
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "http://internal.test/admin" })
+      internal = stub_request(:get, "http://internal.test/admin")
+
+      expect(reply).to have_attributes(error_kind: "blocked", redirects: [include("status" => 302)], final_url: "http://internal.test/admin")
+      expect(internal).not_to have_been_requested
+    end
+
+    it "blocks a redirect to a loopback or metadata literal", :aggregate_failures do
+      resolve_hosts("api.example.com" => "93.184.216.34")
+      ["http://127.0.0.1:3000/", "http://[::1]/", "http://169.254.169.254/latest/meta-data/", "http://2130706433/"].each do |location|
+        stub_request(:get, url).to_return(status: 301, headers: { "Location" => location })
+
+        expect(described_class.call(built:)).to have_attributes(error_kind: "blocked", final_url: location)
+      end
+    end
+
+    it "blocks a host that resolves to both a public and a private address" do
+      resolve_hosts("api.example.com" => ["93.184.216.34", "192.168.0.10"])
+
+      expect(reply.error_kind).to eq("blocked")
+    end
+
+    it "checks the address again on every hop", :aggregate_failures do
+      calls = 0
+      allow(Addrinfo).to receive(:getaddrinfo) do |host|
+        calls += 1
+        ip = host == "api.example.com" && calls > 1 ? "127.0.0.1" : "93.184.216.34"
+        [instance_double(Addrinfo, ip_address: ip)]
+      end
+      stub_request(:get, url).to_return(status: 302, headers: { "Location" => "/next" })
+      next_stub = stub_request(:get, "https://api.example.com/next")
+
+      expect(reply.error_kind).to eq("blocked")
+      expect(next_stub).not_to have_been_requested
+    end
+
+    it "lets public hosts through", :aggregate_failures do
+      resolve_hosts("api.example.com" => "93.184.216.34")
+      stub_request(:get, url).to_return(status: 200, body: "ok")
+
+      expect(reply).to have_attributes(status: 200, error_kind: nil)
+    end
+
+    it "blocks userinfo tricks that hide a private host", :aggregate_failures do
+      options.merge!(url: "http://api.example.com@127.0.0.1/")
+
+      expect(reply).to have_attributes(error_kind: "blocked", status: nil)
+    end
+
+    it "reports unresolvable hosts as dns failures" do
+      allow(Addrinfo).to receive(:getaddrinfo).and_raise(Socket::ResolutionError, "no such host")
+
+      expect(reply.error_kind).to eq("dns")
     end
   end
 
@@ -342,6 +547,14 @@ RSpec.describe ApiClient::Executor do
       fail_with(Faraday::ConnectionFailed.new("down"))
 
       expect(reply).to have_attributes(error_kind: "connection", error_message: "down")
+    end
+
+    it "does not send headers with line breaks in them", :aggregate_failures do
+      options.merge!(headers: { "X-Evil" => "a\r\nX-Injected: 1" })
+      stub = stub_request(:get, url)
+
+      expect(reply).to have_attributes(error_kind: "unknown", status: nil)
+      expect(stub).not_to have_been_requested
     end
 
     it "reports unknown errors" do

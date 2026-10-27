@@ -11,9 +11,9 @@ module ApiClient
     end
 
     def string(text)
-      return text if text.blank?
+      return text if text.nil? || text.to_s.empty?
 
-      @secrets.reduce(text.to_s) { |masked, secret| masked.gsub(secret, MASK) }
+      @secrets.reduce(utf8(text.to_s)) { |masked, secret| masked.gsub(secret, MASK) }
     end
 
     # Header pairs as sent: sensitive header names are hidden entirely.
@@ -28,6 +28,12 @@ module ApiClient
     end
 
     private
+
+    # Header values arrive as raw bytes (binary encoding); matching them against UTF-8 secrets needs the same encoding.
+    def utf8(text)
+      text = text.dup.force_encoding(Encoding::UTF_8) unless text.encoding == Encoding::UTF_8
+      text.valid_encoding? ? text : text.scrub
+    end
 
     # Servers echo credentials back encoded (Basic auth, query strings, form bodies), so those forms are masked too.
     def encodings(secret)

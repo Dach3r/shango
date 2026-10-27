@@ -120,6 +120,77 @@ RSpec.describe ApiClient::Requests::Run do
     expect(execution.redirects).to contain_exactly(include("status" => 302, "to" => "https://api.example.com/next?t=#{ApiClient::Masker::MASK}"))
   end
 
+  describe "secret masking edge cases" do
+    let(:mask) { ApiClient::Masker::MASK }
+
+    before { create(:variable, :secret, environment:, key: "token", value: "supersecret") }
+
+    it "masks the secret in the url, the request body and the error message", :aggregate_failures do
+      api_request.update!(http_method: "POST", url: "https://api.example.com/items?t={{token}}", body_type: "json", body: '{"k":"{{token}}"}')
+      stub_request(:post, "https://api.example.com/items?t=supersecret").to_raise(Faraday::ConnectionFailed.new(IOError.new("failed for supersecret")))
+
+      expect(execution).to have_attributes(url: "https://api.example.com/items?t=#{mask}", request_body: %({"k":"#{mask}"}), error_message: "failed for #{mask}")
+    end
+
+    it "masks the secret in response headers, set cookies and the body", :aggregate_failures do
+      stub_request(:get, api_request.url).to_return(status: 200, body: "supersecret", headers: { "X-Echo" => "supersecret", "Set-Cookie" => "s=supersecret", "Content-Type" => "text/plain" })
+
+      expect(execution.response_headers).to include(["x-echo", mask])
+      expect(execution.set_cookies).to eq(["s=#{mask}"])
+      expect(execution.response_body).to eq(mask)
+    end
+
+    it "masks the secret echoed back url encoded or in Basic form", :aggregate_failures do
+      stub_request(:get, api_request.url).to_return(status: 200, body: "#{CGI.escape("supersecret")} #{Base64.strict_encode64("user:supersecret")} #{Base64.strict_encode64("supersecret")}", headers: { "Content-Type" => "text/plain" })
+
+      expect(execution.response_body).not_to include("supersecret")
+      expect(execution.response_body).to include(mask)
+    end
+
+    it "never keeps the secret in the stashed or saved copies", :aggregate_failures do
+      stub_request(:get, api_request.url).to_return(status: 200, body: "supersecret", headers: { "Content-Type" => "text/plain" })
+
+      pending = RequestExecution.pending(execution.id)
+
+      expect(pending.attributes.values.map(&:to_s).join).not_to include("supersecret")
+    end
+
+    it "masks a non ASCII secret even when headers carry raw bytes", :aggregate_failures do
+      create(:variable, :secret, environment:, key: "clave", value: "contraseña")
+      stub_request(:get, api_request.url).to_return(status: 200, body: "ok", headers: { "X-Name" => "café contraseña".b })
+
+      expect(execution.error_kind).to be_nil
+      expect(execution.response_headers).to include(["x-name", "café #{mask}"])
+    end
+  end
+
+  it "does not send cookies stored by another project", :aggregate_failures do
+    ApiClient::CookieJar.new(project: create(:project)).store("https://api.example.com/items", "other=1; Path=/")
+    stub = stub_request(:get, "https://api.example.com/items").with { |request| !request.headers.key?("Cookie") }.to_return(status: 200)
+
+    result
+
+    expect(stub).to have_been_requested
+  end
+
+  it "survives a server sending an absurd cookie lifetime", :aggregate_failures do
+    stub_request(:get, "https://api.example.com/items").to_return(status: 200, headers: { "Set-Cookie" => "a=1; Path=/; Max-Age=99999999999999999999" })
+
+    expect(execution).to have_attributes(status: 200, error_kind: nil)
+  end
+
+  it "stores text bodies with a byte order mark and unicode intact", :aggregate_failures do
+    stub_request(:get, api_request.url).to_return(status: 200, body: "\uFEFF{\"name\":\"ñandú 🦤\"}", headers: { "Content-Type" => "application/json; charset=utf-8" })
+
+    expect(execution.response_body).to eq("\uFEFF{\"name\":\"ñandú 🦤\"}")
+  end
+
+  it "treats structured syntax suffix and charset parameters as text", :aggregate_failures do
+    stub_request(:get, api_request.url).to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/problem+json; charset=utf-8" })
+
+    expect(execution).to have_attributes(response_body: "{}", body_omitted: false)
+  end
+
   it "stores a blank body" do
     stub_request(:get, api_request.url).to_return(status: 204)
 

@@ -69,7 +69,7 @@ module ApiClient
       return if body.blank?
 
       matches = JsonPath.new(filter).on(JSON.parse(body))
-      value = matches.one? ? matches.first : matches.presence
+      value = matches.size == 1 ? matches.first : matches.presence
       value.is_a?(String) || value.nil? ? value : value.to_json
     rescue JSON::ParserError, ArgumentError
       nil

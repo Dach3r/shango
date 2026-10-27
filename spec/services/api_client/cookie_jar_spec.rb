@@ -154,5 +154,119 @@ RSpec.describe ApiClient::CookieJar do
       expect(Cookie.count).to eq(0)
       expect(jar.header("http://bad host/")).to be_nil
     end
+
+    it "stores a cookie with an empty value and sends it back", :aggregate_failures do
+      jar.store(url, "a=; Path=/")
+
+      expect(Cookie.find_by(name: "a").value).to eq("")
+      expect(jar.header(url)).to eq("a=")
+    end
+
+    it "caps absurd lifetimes instead of overflowing the column", :aggregate_failures do
+      jar.store(url, "a=1; Path=/; Max-Age=99999999999999999999")
+      jar.store(url, "b=1; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT")
+
+      expect(Cookie.pluck(:name, :expires_at).map(&:last)).to all(be_within(1.day).of(described_class::MAX_LIFETIME.from_now))
+      expect(jar.header(url)).to eq("a=1; b=1")
+    end
+
+    it "treats a negative Max-Age as an expiry, whatever Expires says", :aggregate_failures do
+      jar.store(url, "a=1; Path=/")
+      jar.store(url, "a=2; Path=/; Max-Age=-1; Expires=Fri, 31 Dec 2037 23:59:59 GMT")
+
+      expect(Cookie.count).to eq(0)
+    end
+
+    it "ignores a non numeric Max-Age and falls back to Expires" do
+      jar.store(url, "a=1; Path=/; Max-Age=soon; Expires=Wed, 21 Oct 2037 07:28:00 GMT")
+
+      expect(Cookie.find_by(name: "a").expires_at).to eq(Time.utc(2037, 10, 21, 7, 28))
+    end
+
+    it "does not send host only cookies to subdomains", :aggregate_failures do
+      jar.store("https://example.com/", "a=1; Path=/")
+
+      expect(jar.header("https://example.com/")).to eq("a=1")
+      expect(jar.header("https://www.example.com/")).to be_nil
+    end
+
+    it "does not send domain cookies to look-alike hosts", :aggregate_failures do
+      jar.store("https://www.example.com/", "a=1; Path=/; Domain=example.com")
+
+      expect(jar.header("https://evilexample.com/")).to be_nil
+      expect(jar.header("https://example.com.evil.test/")).to be_nil
+      expect(jar.header("https://example.com/")).to eq("a=1")
+    end
+
+    it "matches the Domain attribute case insensitively" do
+      jar.store("https://www.example.com/", "a=1; Path=/; DOMAIN=.EXAMPLE.com")
+
+      expect(jar.header("https://API.Example.com/")).to eq("a=1")
+    end
+
+    it "matches paths on segment boundaries", :aggregate_failures do
+      jar.store(url, "a=1; Path=/v1")
+
+      expect(jar.header("https://api.example.com/v1")).to eq("a=1")
+      expect(jar.header("https://api.example.com/v1/users")).to eq("a=1")
+      expect(jar.header("https://api.example.com/v10")).to be_nil
+      expect(jar.header("https://api.example.com/")).to be_nil
+    end
+
+    it "ignores the query string when matching paths" do
+      jar.store(url, "a=1; Path=/v1")
+
+      expect(jar.header("https://api.example.com/v1?x=/other")).to eq("a=1")
+    end
+
+    it "keeps cookies of the same name apart by path and domain", :aggregate_failures do
+      jar.store(url, "a=root; Path=/")
+      jar.store(url, "a=deep; Path=/v1")
+      jar.store("https://other.example.com/", "a=other; Path=/")
+
+      expect(Cookie.count).to eq(3)
+      expect(jar.header(url)).to eq("a=deep; a=root")
+    end
+
+    it "treats names as case sensitive" do
+      jar.store(url, "A=1; Path=/")
+      jar.store(url, "a=2; Path=/")
+
+      expect(Cookie.count).to eq(2)
+    end
+
+    it "stores the first cookie even when a later one in the same header is rejected", :aggregate_failures do
+      jar.store(url, "a=1; Path=/, b=2; Domain=other.com, c=3; Path=/")
+
+      expect(Cookie.pluck(:name)).to contain_exactly("a", "c")
+    end
+
+    it "stores unicode values and keeps secrets encrypted at rest", :aggregate_failures do
+      jar.store(url, "a=café; Path=/")
+
+      expect(jar.header(url)).to eq("a=café")
+      expect(Cookie.connection.select_value("SELECT value FROM cookies WHERE name = 'a'")).not_to include("caf")
+    end
+
+    it "sends nothing for an invalid url or a url without a host", :aggregate_failures do
+      jar.store(url, "a=1; Path=/")
+
+      expect(jar.header("not a url")).to be_nil
+      expect(jar.header("/relative")).to be_nil
+    end
+
+    it "removes the stored cookie when the server expires it with a past date", :aggregate_failures do
+      jar.store(url, "a=1; Path=/")
+      jar.store(url, "a=gone; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+
+      expect(Cookie.count).to eq(0)
+    end
+
+    it "does not touch cookies of other projects when expiring", :aggregate_failures do
+      other = create(:cookie, project: create(:project), expires_at: 1.minute.ago)
+      jar.store(url, "a=1; Path=/")
+
+      expect(Cookie.exists?(other.id)).to be(true)
+    end
   end
 end
