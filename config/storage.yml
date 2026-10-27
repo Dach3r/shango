@@ -6,6 +6,21 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+# SHANGO_STORAGE=s3. Credentials are optional: without them the AWS SDK falls back to its default chain (instance role, etc.).
+# SHANGO_S3_ENDPOINT points at an S3-compatible store such as MinIO or R2.
+s3:
+  service: S3
+  region: <%= ENV.fetch("SHANGO_S3_REGION", "us-east-1") %>
+  bucket: <%= ENV["SHANGO_S3_BUCKET"] %>
+<% if ENV["SHANGO_S3_ACCESS_KEY_ID"].present? %>
+  access_key_id: <%= ENV["SHANGO_S3_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["SHANGO_S3_SECRET_ACCESS_KEY"] %>
+<% end %>
+<% if ENV["SHANGO_S3_ENDPOINT"].present? %>
+  endpoint: <%= ENV["SHANGO_S3_ENDPOINT"] %>
+  force_path_style: true
+<% end %>
+
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
 #   service: S3

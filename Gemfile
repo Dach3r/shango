@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "aws-sdk-s3", "~> 1.0", require: false
 gem "aws-sigv4", "~> 1.12"
 gem "bootsnap", require: false
 gem "devise"

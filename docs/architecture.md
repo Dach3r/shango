@@ -117,6 +117,7 @@ A provider-agnostic adapter layer (commercial providers, user-configured models,
 
 ## 8. Deployment
 
+- **File storage:** uploads (request bodies) use Active Storage; `SHANGO_STORAGE=local` (default, the `storage/` directory, single app server only) or `SHANGO_STORAGE=s3` with `SHANGO_S3_BUCKET`, `SHANGO_S3_REGION`, optional `SHANGO_S3_ACCESS_KEY_ID`/`SHANGO_S3_SECRET_ACCESS_KEY` (otherwise the AWS SDK credential chain, e.g. an instance role) and `SHANGO_S3_ENDPOINT` for S3-compatible stores such as MinIO or R2. `PurgeOrphanedBlobsJob` (recurring, daily) purges blobs unattached for more than 2 days.
 - **Self-hosted (primary):** run web + Solid Queue against a PostgreSQL instance. The repo ships `Procfile.dev` for local development (`web`, `css`) and uses Thruster/Puma for production.
 - **Cloud (future):** may require connectors, tunnels, or agents to reach private networks. Not designed yet; do not build for it now.
 
