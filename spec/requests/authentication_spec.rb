@@ -84,6 +84,13 @@ RSpec.describe "Authentication" do
       expect(response.body).to include(I18n.t("components.settings_nav.items.sidebar"))
     end
 
+    it "wires the profile form to the unsaved changes bar", :aggregate_failures do
+      get edit_user_registration_path
+
+      expect(response.body).to include('data-controller="dirty-form"')
+      expect(response.body).to include(I18n.t("settings.save_bar.unsaved"))
+    end
+
     it "renders the preferences tab with the language switcher", :aggregate_failures do
       get edit_user_registration_path(tab: "preferences")
 

@@ -76,6 +76,10 @@ en:
       system: System
       light: Light
       dark: Dark
+  settings:
+    save_bar:
+      unsaved: You have unsaved changes
+      discard: Discard
   projects:
     new:
       title: New project

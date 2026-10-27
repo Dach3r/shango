@@ -76,6 +76,10 @@ es:
       system: Sistema
       light: Claro
       dark: Oscuro
+  settings:
+    save_bar:
+      unsaved: Tienes cambios sin guardar
+      discard: Descartar
   projects:
     new:
       title: Nuevo proyecto

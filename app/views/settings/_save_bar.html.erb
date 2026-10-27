@@ -1,0 +1,15 @@
+<div class="mt-auto flex flex-wrap items-center justify-end gap-3 border-t border-line bg-page px-5 py-3 sm:px-7">
+  <p hidden role="status" data-dirty-form-target="notice" class="mr-auto flex items-center gap-2 text-sm text-ink [&[hidden]]:hidden">
+    <span class="size-2 rounded-full bg-accent" aria-hidden="true"></span>
+    <%= t("settings.save_bar.unsaved") %>
+  </p>
+
+  <%= button_tag type: :reset, hidden: true, data: { dirty_form_target: "discard" }, class: button_classes(:secondary, "h-10 [&[hidden]]:hidden") do %>
+    <%= t("settings.save_bar.discard") %>
+  <% end %>
+
+  <%= button_tag type: :submit, class: button_classes(:primary, "h-10 px-5") do %>
+    <%= lucide_icon "save", class: "size-4 shrink-0", "aria-hidden": true %>
+    <%= t("workbench.shared.save") %>
+  <% end %>
+</div>

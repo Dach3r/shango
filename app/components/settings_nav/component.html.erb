@@ -1,8 +1,8 @@
-<nav aria-label="<%= t("components.settings_nav.label") %>" class="space-y-6">
+<nav aria-label="<%= t("components.settings_nav.label") %>">
   <% groups.each do |group| %>
     <div>
-      <h2 class="mb-2 truncate px-3 text-[0.6875rem] font-semibold tracking-wider text-muted uppercase"><%= group[:label] %></h2>
-      <ul class="space-y-1">
+      <h2 class="truncate border-b border-line bg-page px-4 py-2.5 font-mono text-[0.625rem] font-semibold tracking-wider text-muted uppercase"><%= group[:label] %></h2>
+      <ul>
         <% group[:items].each do |item| %>
           <li><%= render NavItem::Component.new(**item) %></li>
         <% end %>

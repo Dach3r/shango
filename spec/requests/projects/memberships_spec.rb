@@ -11,6 +11,14 @@ RSpec.describe "Memberships" do
       expect(response.body).to include(I18n.t("projects.memberships.edit.request_open.label"))
       expect(response.body).to include(I18n.t("components.settings_nav.items.sidebar"))
     end
+
+    it "wires the form to the unsaved changes bar", :aggregate_failures do
+      get edit_membership_path
+
+      expect(response.body).to include('data-controller="dirty-form"')
+      expect(response.body).to include(I18n.t("settings.save_bar.unsaved"))
+      expect(response.body).to include(I18n.t("settings.save_bar.discard"))
+    end
   end
 
   describe "PATCH /membership" do
