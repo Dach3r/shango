@@ -73,7 +73,9 @@ ja:
       host: ホスト
       host_placeholder: "example.com、203.0.113.10 または {{host}}"
       port: ポート
+      port_placeholder: "443"
       attempts: 試行回数
+      attempts_placeholder: "4"
       hint: これは ICMP ではなく TCP ping です。接続が拒否されてもホストがオンラインであることは確認できます。無応答の場合のみ損失として扱われます。
       submit: Ping を開始
       summary: "%{sent} 回中 %{received} 回応答、損失 %{loss}%"

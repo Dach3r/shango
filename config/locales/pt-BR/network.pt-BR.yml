@@ -73,7 +73,9 @@ pt-BR:
       host: Host
       host_placeholder: exemplo.com, 203.0.113.10 ou {{host}}
       port: Porta
+      port_placeholder: "443"
       attempts: Tentativas
+      attempts_placeholder: "4"
       hint: Isto é um ping TCP, não ICMP. Uma conexão recusada ainda prova que o host está online; só o silêncio conta como perda.
       submit: Iniciar ping
       summary: "%{received} de %{sent} responderam, %{loss}% de perda"

@@ -73,7 +73,9 @@ de:
       host: Host
       host_placeholder: example.com, 203.0.113.10 oder {{host}}
       port: Port
+      port_placeholder: "443"
       attempts: Versuche
+      attempts_placeholder: "4"
       hint: Das ist ein TCP-Ping, kein ICMP. Eine abgelehnte Verbindung beweist trotzdem, dass der Host online ist; nur Stille zählt als Verlust.
       submit: Ping starten
       summary: "%{received} von %{sent} beantwortet, %{loss}% Verlust"

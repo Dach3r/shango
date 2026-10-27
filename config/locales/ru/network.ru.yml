@@ -73,7 +73,9 @@ ru:
       host: Хост
       host_placeholder: example.com, 203.0.113.10 или {{host}}
       port: Порт
+      port_placeholder: "443"
       attempts: Попытки
+      attempts_placeholder: "4"
       hint: Это TCP ping, а не ICMP. Отклонённое соединение всё равно доказывает, что хост онлайн; потерей считается только молчание.
       submit: Запустить ping
       summary: "Ответили %{received} из %{sent}, потери %{loss}%"
