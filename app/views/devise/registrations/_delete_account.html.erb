@@ -1,0 +1,94 @@
+<% impact = Users::AccountImpact.new(resource) %>
+
+<div class="flex flex-1 flex-col">
+  <div class="h-2 border-b border-danger/40 bg-[repeating-linear-gradient(135deg,transparent_0_0.5rem,color-mix(in_srgb,var(--color-danger)_28%,transparent)_0.5rem_0.625rem)]" aria-hidden="true"></div>
+
+  <div class="flex items-start gap-4 border-b border-line px-5 py-6 sm:px-7">
+    <span class="flex size-10 shrink-0 items-center justify-center border border-danger/40 text-danger"><%= lucide_icon "triangle-alert", class: "size-5" %></span>
+    <div class="min-w-0">
+      <p class="font-mono text-[0.6875rem] font-semibold uppercase tracking-widest text-danger"><%= t("devise.registrations.edit.danger.eyebrow") %></p>
+      <p class="mt-1 text-sm leading-relaxed text-ink"><%= t("devise.registrations.edit.danger.warning") %></p>
+    </div>
+  </div>
+
+  <div class="grid flex-1 xl:grid-cols-[minmax(0,1fr)_26rem]">
+    <div class="divide-y divide-line">
+      <section class="px-5 py-6 sm:px-7">
+        <h2 class="flex items-center gap-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-widest text-muted">
+          <%= lucide_icon "flame", class: "size-3.5 text-danger" %><%= t("devise.registrations.edit.danger.erased") %>
+        </h2>
+
+        <ul class="mt-4 divide-y divide-line border border-line">
+          <li class="flex items-center gap-3 px-4 py-3">
+            <%= lucide_icon "user-round", class: "size-4 shrink-0 text-muted" %>
+            <div class="min-w-0">
+              <p class="truncate text-sm font-medium text-ink"><%= resource.email %></p>
+              <p class="text-xs text-muted"><%= t("devise.registrations.edit.danger.erased_account") %></p>
+            </div>
+          </li>
+
+          <% impact.doomed.each do |project| %>
+            <li class="flex items-center gap-3 px-4 py-3">
+              <%= lucide_icon project.icon, class: "size-4 shrink-0 text-muted" %>
+              <p class="min-w-0 flex-1 truncate text-sm font-medium text-ink"><%= project.name %></p>
+              <span class="shrink-0 font-mono text-[0.6875rem] uppercase tracking-widest text-danger"><%= t("devise.registrations.edit.danger.project_tag") %></span>
+            </li>
+          <% end %>
+        </ul>
+
+        <p class="mt-3 text-xs leading-relaxed text-muted">
+          <%= impact.doomed.any? ? t("devise.registrations.edit.danger.erased_projects", count: impact.requests_count) : t("devise.registrations.edit.danger.no_projects") %>
+        </p>
+      </section>
+
+      <section class="px-5 py-6 sm:px-7">
+        <h2 class="flex items-center gap-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-widest text-muted">
+          <%= lucide_icon "shield-check", class: "size-3.5 text-accent" %><%= t("devise.registrations.edit.danger.kept") %>
+        </h2>
+        <p class="mt-3 text-xs leading-relaxed text-muted"><%= t("devise.registrations.edit.danger.kept_body") %></p>
+      </section>
+
+      <% if impact.blocked? %>
+        <section class="border-l-2 border-danger px-5 py-6 sm:px-7">
+          <h2 class="flex items-center gap-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-widest text-danger">
+            <%= lucide_icon "lock", class: "size-3.5" %><%= t("devise.registrations.edit.danger.blocked") %>
+          </h2>
+          <p class="mt-3 text-xs leading-relaxed text-muted"><%= t("devise.registrations.edit.danger.blocked_body") %></p>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            <% impact.blocked.each do |project| %>
+              <li class="inline-flex items-center gap-2 border border-danger/40 px-2.5 py-1 text-xs font-medium text-ink"><%= lucide_icon project.icon, class: "size-3.5 text-danger" %><%= project.name %></li>
+            <% end %>
+          </ul>
+        </section>
+      <% end %>
+    </div>
+
+    <%= form_with url: registration_path(resource_name), method: :delete, class: "grid content-start gap-5 border-t border-line px-5 py-6 sm:px-7 xl:border-t-0 xl:border-l", data: { controller: "type-to-confirm", type_to_confirm_phrase_value: resource.email, type_to_confirm_locked_value: impact.blocked?, turbo_confirm: t("devise.registrations.edit.confirm") } do %>
+      <h2 class="font-mono text-[0.6875rem] font-semibold uppercase tracking-widest text-muted"><%= t("devise.registrations.edit.danger.confirm") %></h2>
+
+      <div>
+        <%= label_tag :confirm_email, class: label_classes do %>
+          <%= t("devise.registrations.edit.danger.type_email") %>
+          <code class="ml-1 border border-line px-1.5 py-0.5 font-mono text-xs text-ink"><%= resource.email %></code>
+        <% end %>
+        <div class="relative">
+          <%= text_field_tag :confirm_email, nil, autocomplete: "off", autocapitalize: "off", spellcheck: false, placeholder: resource.email, class: field_classes("pr-9"), data: { type_to_confirm_target: "input", action: "input->type-to-confirm#refresh" } %>
+          <%= lucide_icon "check", class: "pointer-events-none absolute inset-y-0 right-3 my-auto size-4 text-accent opacity-0 transition", data: { type_to_confirm_target: "check" } %>
+        </div>
+      </div>
+
+      <div>
+        <%= label_tag :current_password, t("devise.registrations.edit.current_password"), class: label_classes %>
+        <%= password_field_tag :current_password, nil, autocomplete: "current-password", required: true, placeholder: t("devise.registrations.edit.current_password_placeholder"), class: field_classes %>
+      </div>
+
+      <%= button_tag type: :submit, disabled: impact.blocked?, class: button_classes(:danger_solid, "w-full"), data: { type_to_confirm_target: "submit" } do %>
+        <%= lucide_icon "user-x", class: "size-4 shrink-0" %><%= t("devise.registrations.edit.cancel_account") %>
+      <% end %>
+
+      <% if impact.blocked? %>
+        <p class="text-xs leading-relaxed text-danger"><%= t("devise.registrations.edit.danger.blocked_hint") %></p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

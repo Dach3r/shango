@@ -110,8 +110,36 @@ RSpec.describe "Authentication" do
       get edit_user_registration_path(tab: "delete_account")
 
       expect(response.body).to include(%(data-turbo-confirm="#{I18n.t("devise.registrations.edit.confirm")}"))
+      expect(response.body).to include(%(name="confirm_email"))
       expect(response.body).not_to include(%(name="user[password]"))
       expect(response.body).not_to include(%(name="user[email]"))
+    end
+
+    it "lists the projects the cancellation erases", :aggregate_failures do
+      get edit_user_registration_path(tab: "delete_account")
+
+      expect(response.body).to include(user.memberships.first.project.name)
+      expect(response.body).not_to include(%(data-type-to-confirm-locked-value="true"))
+    end
+
+    it "locks the cancel action while a shared project would lose its owner", :aggregate_failures do
+      project = user.memberships.first.project
+      user.memberships.first.update!(role: "owner")
+      create(:membership, project:)
+
+      get edit_user_registration_path(tab: "delete_account")
+
+      expect(response.body).to include(%(data-type-to-confirm-locked-value="true"))
+      expect(response.body).to include(I18n.t("devise.registrations.edit.danger.blocked_hint"))
+    end
+
+    it "says so when no project would be erased" do
+      user.memberships.first.update!(role: "member")
+      create(:membership, :owner, project: user.memberships.first.project)
+
+      get edit_user_registration_path(tab: "delete_account")
+
+      expect(response.body).to include(I18n.t("devise.registrations.edit.danger.no_projects"))
     end
 
     it "falls back to the profile tab on an unknown tab" do

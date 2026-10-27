@@ -188,8 +188,6 @@ de:
         profile:
           heading: Profil
           description: Dein Name und die E-Mail-Adresse, mit der du dich anmeldest.
-        fields:
-          cancel_hint: Diese Aktion kann nicht rückgängig gemacht werden.
         preferences:
           heading: Präferenzen
           description: Sprache und Zoom für dein Konto.
@@ -211,7 +209,21 @@ de:
         password_placeholder: Leer lassen, um das aktuelle Passwort zu behalten
         confirm_password_placeholder: Wiederhole dein neues Passwort
         confirm_password: Passwort bestätigen
-        cancel_heading: Mein Konto kündigen
+        danger:
+          eyebrow: "Gefahrenzone"
+          warning: "Dein Konto und alles, was daran hängt, wird gelöscht. Das lässt sich weder rückgängig machen noch wiederherstellen."
+          erased: "Wird gelöscht"
+          erased_account: "Dein Profil, deine Zugangsdaten und Sitzungen"
+          project_tag: "Projekt"
+          erased_projects: "Anfragen in diesen Projekten: %{count}. Sie werden mit ihnen gelöscht."
+          no_projects: "Keines deiner Projekte wird gelöscht."
+          kept: "Bleibt erhalten"
+          kept_body: "Projekte, die du mit anderen teilst, bleiben für sie bestehen. Du wirst nur als Mitglied entfernt."
+          blocked: "Braucht deine Aufmerksamkeit"
+          blocked_body: "Du bist der einzige Eigentümer dieser Projekte und sie haben noch andere Mitglieder. Übertrage zuerst das Eigentum."
+          blocked_hint: "Löse die Projekte oben, um fortzufahren."
+          confirm: "Kündigung bestätigen"
+          type_email: "Gib zur Bestätigung deine E-Mail ein"
         cancel_account: Mein Konto kündigen
         confirm: Bist du sicher?
         current_password: Aktuelles Passwort

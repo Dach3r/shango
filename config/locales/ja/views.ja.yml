@@ -188,8 +188,6 @@ ja:
         profile:
           heading: プロフィール
           description: お名前とログインに使用するメールアドレスです。
-        fields:
-          cancel_hint: この操作は取り消せません。
         preferences:
           heading: 環境設定
           description: アカウントの言語とズームを設定します。
@@ -211,7 +209,21 @@ ja:
         password_placeholder: 変更しない場合は空欄のままにしてください
         confirm_password_placeholder: 新しいパスワードを再入力
         confirm_password: パスワード（確認）
-        cancel_heading: アカウントを解約
+        danger:
+          eyebrow: "危険ゾーン"
+          warning: "アカウントと、それに紐づくすべてのデータが削除されます。元に戻すことも復元することもできません。"
+          erased: "削除されるもの"
+          erased_account: "プロフィール、認証情報、セッション"
+          project_tag: "プロジェクト"
+          erased_projects: "これらのプロジェクト内のリクエスト数：%{count}。プロジェクトとともに削除されます。"
+          no_projects: "削除されるプロジェクトはありません。"
+          kept: "そのまま残るもの"
+          kept_body: "他の人と共有しているプロジェクトは、その人たちのために残ります。メンバーから外れるだけです。"
+          blocked: "対応が必要です"
+          blocked_body: "あなたはこれらのプロジェクトの唯一のオーナーで、他のメンバーがまだいます。先にオーナー権限を譲渡してください。"
+          blocked_hint: "続けるには上のプロジェクトを解決してください。"
+          confirm: "解約の確認"
+          type_email: "確認のためメールアドレスを入力"
         cancel_account: アカウントを解約
         confirm: よろしいですか？
         current_password: 現在のパスワード

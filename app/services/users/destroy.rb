@@ -13,27 +13,17 @@ module Users
 
     def perform
       return Result.failure(@user, error: :wrong_password) unless @user.valid_password?(@password.to_s)
-
-      blocked = owned_projects.select { |project| others?(project) && !co_owned?(project) }
-      return Result.failure(@user, error: :sole_owner, projects: blocked.map(&:name)) if blocked.any?
+      return Result.failure(@user, error: :sole_owner, projects: impact.blocked.map(&:name)) if impact.blocked?
 
       User.transaction do
-        owned_projects.reject { |project| others?(project) }.each(&:destroy!)
+        impact.doomed.each(&:destroy!)
         @user.destroy!
       end
       Result.success(@user)
     end
 
-    def owned_projects
-      @owned_projects ||= Project.where(id: @user.memberships.active.owner.select(:project_id)).to_a
-    end
-
-    def others?(project)
-      project.memberships.active.where.not(user_id: @user.id).exists?
-    end
-
-    def co_owned?(project)
-      project.memberships.active.owner.where.not(user_id: @user.id).exists?
+    def impact
+      @impact ||= AccountImpact.new(@user)
     end
   end
 end

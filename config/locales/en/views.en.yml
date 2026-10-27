@@ -188,8 +188,6 @@ en:
         profile:
           heading: Profile
           description: Your name and the email you use to sign in.
-        fields:
-          cancel_hint: This action cannot be undone.
         preferences:
           heading: Preferences
           description: Language and zoom for your account.
@@ -211,7 +209,21 @@ en:
         password_placeholder: Leave blank to keep your current password
         confirm_password_placeholder: Repeat your new password
         confirm_password: Confirm password
-        cancel_heading: Cancel my account
+        danger:
+          eyebrow: "Danger zone"
+          warning: "Your account and everything tied to it will be erased. There is no undo and no recovery."
+          erased: "Will be erased"
+          erased_account: "Your profile, credentials and sessions"
+          project_tag: "Project"
+          erased_projects: "Requests inside these projects: %{count}. They are deleted along with them."
+          no_projects: "None of your projects will be deleted."
+          kept: "Stays intact"
+          kept_body: "Projects you share with other people stay for them. You are only removed as a member."
+          blocked: "Needs your attention"
+          blocked_body: "You are the only owner of these projects and they still have other members. Hand over ownership first."
+          blocked_hint: "Resolve the projects above to continue."
+          confirm: "Confirm cancellation"
+          type_email: "Type your email to confirm"
         cancel_account: Cancel my account
         confirm: Are you sure?
         current_password: Current password

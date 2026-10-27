@@ -188,8 +188,6 @@ fr:
         profile:
           heading: "Profil"
           description: "Votre nom et l'e-mail que vous utilisez pour vous connecter."
-        fields:
-          cancel_hint: "Cette action est irréversible."
         preferences:
           heading: "Préférences"
           description: "Langue et zoom de votre compte."
@@ -211,7 +209,21 @@ fr:
         password_placeholder: "Laissez vide pour conserver votre mot de passe actuel"
         confirm_password_placeholder: "Répétez votre nouveau mot de passe"
         confirm_password: "Confirmer le mot de passe"
-        cancel_heading: "Supprimer mon compte"
+        danger:
+          eyebrow: "Zone de danger"
+          warning: "Votre compte et tout ce qui y est lié seront supprimés. Impossible d'annuler ou de récupérer."
+          erased: "Sera supprimé"
+          erased_account: "Votre profil, vos identifiants et vos sessions"
+          project_tag: "Projet"
+          erased_projects: "Requêtes dans ces projets : %{count}. Elles sont supprimées avec eux."
+          no_projects: "Aucun de vos projets ne sera supprimé."
+          kept: "Reste intact"
+          kept_body: "Les projets que vous partagez avec d'autres personnes leur restent. Vous êtes seulement retiré des membres."
+          blocked: "Demande votre attention"
+          blocked_body: "Vous êtes le seul propriétaire de ces projets et ils ont encore d'autres membres. Transférez d'abord la propriété."
+          blocked_hint: "Réglez les projets ci-dessus pour continuer."
+          confirm: "Confirmer la résiliation"
+          type_email: "Saisissez votre e-mail pour confirmer"
         cancel_account: "Supprimer mon compte"
         confirm: "Êtes-vous sûr ?"
         current_password: "Mot de passe actuel"

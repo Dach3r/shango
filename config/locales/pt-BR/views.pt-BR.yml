@@ -188,8 +188,6 @@ pt-BR:
         profile:
           heading: Perfil
           description: Seu nome e o e-mail que você usa para entrar.
-        fields:
-          cancel_hint: Esta ação não pode ser desfeita.
         preferences:
           heading: Preferências
           description: Idioma e zoom da sua conta.
@@ -211,7 +209,21 @@ pt-BR:
         password_placeholder: Deixe em branco para manter sua senha atual
         confirm_password_placeholder: Repita sua nova senha
         confirm_password: Confirmar senha
-        cancel_heading: Cancelar minha conta
+        danger:
+          eyebrow: "Zona de perigo"
+          warning: "Sua conta e tudo o que está ligado a ela serão apagados. Não há como desfazer nem recuperar."
+          erased: "Será apagado"
+          erased_account: "Seu perfil, credenciais e sessões"
+          project_tag: "Projeto"
+          erased_projects: "Solicitações dentro desses projetos: %{count}. Elas são excluídas junto com eles."
+          no_projects: "Nenhum dos seus projetos será excluído."
+          kept: "Permanece intacto"
+          kept_body: "Os projetos que você compartilha com outras pessoas continuam existindo para elas. Você apenas deixa de ser membro."
+          blocked: "Precisa da sua atenção"
+          blocked_body: "Você é o único proprietário destes projetos e eles ainda têm outros membros. Transfira a propriedade primeiro."
+          blocked_hint: "Resolva os projetos acima para continuar."
+          confirm: "Confirme o cancelamento"
+          type_email: "Digite seu e-mail para confirmar"
         cancel_account: Cancelar minha conta
         confirm: Tem certeza?
         current_password: Senha atual
