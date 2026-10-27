@@ -41,4 +41,60 @@ RSpec.describe "Workbench tabs" do
 
     expect(open_ids.size).to eq(3)
   end
+
+  describe "edge cases" do
+    it "only closes the tabs of the current user", :aggregate_failures do
+      other_tab = create(:request_tab, api_request: second)
+      delete workbench_tabs_path(side: "all")
+
+      expect(open_ids).to be_empty
+      expect(RequestTab.where(id: other_tab.id)).to exist
+    end
+
+    it "does not touch tabs of other projects for a foreign pivot", :aggregate_failures do
+      foreign_tab = create(:request_tab, api_request: foreign_request)
+      delete workbench_tabs_path(side: "right", request_id: foreign_request.id)
+
+      expect(RequestTab.where(id: foreign_tab.id)).to exist
+      expect(open_ids.size).to eq(3)
+    end
+
+    it "closes nothing without a side or a pivot", :aggregate_failures do
+      delete workbench_tabs_path
+      delete workbench_tabs_path(side: "right")
+
+      expect(open_ids.size).to eq(3)
+    end
+
+    it "closes nothing to the left of the first tab and nothing to the right of the last", :aggregate_failures do
+      delete workbench_tabs_path(side: "left", request_id: api_request.id)
+      delete workbench_tabs_path(side: "right", request_id: third.id)
+
+      expect(open_ids.size).to eq(3)
+    end
+
+    it "falls back to the last tab when current is unknown or foreign", :aggregate_failures do
+      delete workbench_tabs_path(side: "left", request_id: second.id, current: foreign_request.id)
+
+      expect(response).to redirect_to(workbench_request_path(third))
+    end
+
+    it "discards untouched drafts but keeps edited ones when closing all", :aggregate_failures do
+      untouched = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      edited = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      edited.update!(name: "Edited")
+
+      delete workbench_tabs_path(side: "all")
+
+      expect(ApiRequest.where(id: untouched.id)).not_to exist
+      expect(ApiRequest.where(id: edited.id)).to exist
+    end
+
+    it "requires authentication" do
+      sign_out user
+      delete workbench_tabs_path(side: "all")
+
+      expect(response).to redirect_to(new_user_session_path)
+    end
+  end
 end

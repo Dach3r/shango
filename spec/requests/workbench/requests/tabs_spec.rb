@@ -41,4 +41,60 @@ RSpec.describe "Workbench request tabs" do
 
     expect(response).to have_http_status(:not_found)
   end
+
+  describe "edge cases" do
+    it "keeps a single tab when a request is opened repeatedly" do
+      3.times { get workbench_request_path(api_request) }
+
+      expect(RequestTab.where(user:, api_request:).count).to eq(1)
+    end
+
+    it "closing a tab that is not open is harmless", :aggregate_failures do
+      delete workbench_request_tab_path(api_request)
+      delete workbench_request_tab_path(api_request)
+
+      expect(response).to redirect_to(workbench_root_path)
+      expect(api_request.reload).to be_persisted
+    end
+
+    it "only closes the tab of the current user", :aggregate_failures do
+      other_user_tab = create(:request_tab, api_request:)
+      delete workbench_request_tab_path(api_request)
+
+      expect(RequestTab.where(id: other_user_tab.id)).to exist
+      expect(RequestTab.where(user:, api_request:)).not_to exist
+    end
+
+    it "does not close tabs of other users' drafts", :aggregate_failures do
+      draft = ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record
+      delete workbench_request_tab_path(draft)
+
+      expect(response).to have_http_status(:not_found)
+      expect(RequestTab.where(api_request: draft)).to exist
+    end
+
+    it "keeps an edited draft when its tab is closed", :aggregate_failures do
+      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      draft.update!(name: "Edited")
+      delete workbench_request_tab_path(draft)
+
+      expect(draft.reload).to be_persisted
+      expect(RequestTab.where(user:, api_request: draft)).not_to exist
+    end
+
+    it "redirects to the last remaining tab when the current one is closed and others stay", :aggregate_failures do
+      third = create(:api_request, collection:)
+      get workbench_request_path(third)
+      delete workbench_request_tab_path(other_request, current: other_request.id)
+
+      expect(response).to redirect_to(workbench_request_path(third))
+    end
+
+    it "requires authentication" do
+      sign_out user
+      delete workbench_request_tab_path(api_request)
+
+      expect(response).to redirect_to(new_user_session_path)
+    end
+  end
 end

@@ -134,4 +134,45 @@ RSpec.describe ApiRequest do
       expect(inside.siblings).to contain_exactly(inside)
     end
   end
+
+  describe "edge cases" do
+    it "rejects a folder id that points nowhere" do
+      expect(build(:api_request, folder_id: SecureRandom.uuid)).not_to be_valid
+    end
+
+    it "rejects a folder when the request is a draft" do
+      draft = build(:api_request, collection: nil, project: create(:project), user: create(:user), folder: create(:folder))
+
+      expect(draft).not_to be_valid
+    end
+
+    it "rejects a draft without an owner" do
+      expect(build(:api_request, collection: nil, project: create(:project))).not_to be_valid
+    end
+
+    it "is visible to its owner only while it is a draft", :aggregate_failures do
+      owner = create(:user)
+      draft = create(:api_request, collection: nil, project: create(:project), user: owner)
+
+      expect(described_class.visible_to(owner)).to include(draft)
+      expect(described_class.visible_to(create(:user))).not_to include(draft)
+    end
+
+    it "orders drafts per owner", :aggregate_failures do
+      project = create(:project)
+      owner = create(:user)
+      create(:api_request, collection: nil, project:, user: create(:user))
+      first = create(:api_request, collection: nil, project:, user: owner)
+      second = create(:api_request, collection: nil, project:, user: owner)
+
+      expect([first.position, second.position]).to eq([1, 2])
+    end
+
+    it "survives garbage rows and settings", :aggregate_failures do
+      request = create(:api_request, headers: nil, query_params: nil, settings: "x")
+
+      expect(request.headers).to eq([])
+      expect(request.settings).to eq(described_class::DEFAULT_SETTINGS)
+    end
+  end
 end

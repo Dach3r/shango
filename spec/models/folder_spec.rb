@@ -64,4 +64,35 @@ RSpec.describe Folder do
       expect(child.reload.ancestors).to contain_exactly(folder, child)
     end
   end
+
+  describe "edge cases" do
+    it "rejects a parent id that points nowhere" do
+      expect(build(:folder, collection: folder.collection, parent_id: SecureRandom.uuid)).not_to be_valid
+    end
+
+    it "rejects a parent from another collection" do
+      expect(build(:folder, collection: folder.collection, parent: create(:folder))).not_to be_valid
+    end
+
+    it "destroys nested folders and requests", :aggregate_failures do
+      child = create(:folder, collection: folder.collection, parent: folder)
+      request = create(:api_request, collection: folder.collection, folder: child)
+      folder.destroy
+
+      expect(Folder.where(id: child.id)).not_to exist
+      expect(ApiRequest.where(id: request.id)).not_to exist
+    end
+
+    it "numbers siblings per parent", :aggregate_failures do
+      second_root = create(:folder, collection: folder.collection)
+      child = create(:folder, collection: folder.collection, parent: folder)
+
+      expect(second_root.position).to be > folder.position
+      expect(child.position).to eq(1)
+    end
+
+    it "keeps an explicit position on create" do
+      expect(create(:folder, collection: folder.collection, position: 9).position).to eq(9)
+    end
+  end
 end

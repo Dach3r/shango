@@ -90,7 +90,7 @@ class ApiRequest < ApplicationRecord
   end
 
   def folder_belongs_to_collection
-    errors.add(:folder, :invalid) if folder && folder.collection_id != collection_id
+    errors.add(:folder, :invalid) if folder_id && folder&.collection_id != collection_id
   end
 
   def draft_has_owner

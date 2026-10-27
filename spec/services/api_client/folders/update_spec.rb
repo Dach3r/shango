@@ -13,4 +13,18 @@ RSpec.describe ApiClient::Folders::Update do
   it "fails when the folder is invalid" do
     expect(described_class.call(folder:, attributes: { name: "" })).to be_failure
   end
+
+  describe "edge cases" do
+    it "ignores parent and collection changes", :aggregate_failures do
+      other = create(:folder)
+      described_class.call(folder:, attributes: { name: "New", parent_id: other.id, collection_id: other.collection_id })
+
+      expect(folder.reload).to have_attributes(name: "New", parent_id: nil)
+      expect(folder.collection_id).not_to eq(other.collection_id)
+    end
+
+    it "fails for a blank name" do
+      expect(described_class.call(folder:, attributes: { name: " " })).to be_failure
+    end
+  end
 end

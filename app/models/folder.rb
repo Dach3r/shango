@@ -38,7 +38,7 @@ class Folder < ApplicationRecord
   private
 
   def parent_belongs_to_collection
-    errors.add(:parent, :invalid) if parent && parent.collection_id != collection_id
+    errors.add(:parent, :invalid) if parent_id && parent&.collection_id != collection_id
   end
 
   def parent_is_not_self_or_descendant
