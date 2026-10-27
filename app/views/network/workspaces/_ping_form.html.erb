@@ -1,6 +1,6 @@
 <%# Form bar of the TCP ping. Render with `input:` (what was typed before, string keys; empty for a fresh form). %>
 <%= tag.div id: "ping_form", class: "shrink-0", data: variable_autocomplete_data do %>
-  <%= form_with scope: :ping, url: network_pings_path, class: "flex items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&_:is(input,button)]:border-t-0 [&>label:first-child+*]:border-l-0" do |form| %>
+  <%= form_with scope: :ping, url: network_pings_path, class: "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0" do |form| %>
     <%= form.label :host, t("network.ping.host"), class: "sr-only" %>
     <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ping.host_placeholder"), class: field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
     <%= form.label :port, t("network.ping.port"), class: "sr-only" %>
