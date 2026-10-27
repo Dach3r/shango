@@ -69,6 +69,20 @@ RSpec.describe ApiClient::Executor do
     end
   end
 
+  describe "response cookies" do
+    it "lists each Set-Cookie of the final response", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, headers: { "Set-Cookie" => ["a=1; Path=/", "b=2; Path=/"] })
+
+      expect(reply.set_cookies).to eq(["a=1; Path=/", "b=2; Path=/"])
+    end
+
+    it "has none when the request fails" do
+      stub_request(:get, url).to_raise(Errno::ECONNREFUSED)
+
+      expect(reply.set_cookies).to eq([])
+    end
+  end
+
   describe "cookie jar" do
     let(:project) { create(:project) }
     let(:jar) { ApiClient::CookieJar.new(project:) }

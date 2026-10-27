@@ -12,7 +12,7 @@ module ApiClient
 
     Reply = Struct.new(
       :status, :status_text, :headers, :body, :content_type, :duration_ms, :size_bytes, :truncated,
-      :redirects, :final_url, :sent_headers, :timings, :error_kind, :error_message, keyword_init: true
+      :redirects, :final_url, :sent_headers, :timings, :set_cookies, :error_kind, :error_message, keyword_init: true
     ) do
       def error?
         error_kind.present?
@@ -156,7 +156,7 @@ module ApiClient
         status: attempt.status, status_text: attempt.status_text.presence || Rack::Utils::HTTP_STATUS_CODES[attempt.status],
         headers: attempt.headers.to_a, body: attempt.body, content_type: attempt.headers["content-type"], duration_ms: duration,
         size_bytes: attempt.size, truncated: attempt.truncated, redirects:, final_url: state[:url], sent_headers: (@sent_headers || state[:headers]).to_a,
-        timings: @timing.to_h(duration)
+        timings: @timing.to_h(duration), set_cookies: SetCookie.split(attempt.headers["set-cookie"])
       )
     end
 
@@ -165,7 +165,7 @@ module ApiClient
       duration = elapsed_ms(started)
       Reply.new(
         headers: [], body: "", duration_ms: duration, size_bytes: 0, truncated: false, redirects: redirects || [],
-        final_url: state&.dig(:url) || @built.url, sent_headers: (@sent_headers || @built.headers).to_a, timings: @timing.to_h(duration),
+        final_url: state&.dig(:url) || @built.url, sent_headers: (@sent_headers || @built.headers).to_a, timings: @timing.to_h(duration), set_cookies: [],
         error_kind: kind, error_message: message
       )
     end

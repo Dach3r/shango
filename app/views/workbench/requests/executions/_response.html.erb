@@ -8,9 +8,11 @@
 <% else %>
   <% history = api_request.request_executions.recent.limit(RequestExecution::KEEP_PER_REQUEST).select(:id, :status, :status_text, :error_kind, :duration_ms, :created_at, :http_method) %>
   <% timing = timing_rows(execution) unless execution.error? %>
+  <% cookies = response_cookies(execution) %>
   <% tabs = [
     { name: "body", label: t("workbench.executions.tabs.body") },
     { name: "headers", label: t("workbench.executions.tabs.headers"), count: execution.response_headers.size },
+    ({ name: "cookies", label: t("workbench.executions.tabs.cookies"), count: cookies.size } if cookies.any?),
     ({ name: "timing", label: t("workbench.executions.tabs.timing") } if timing.present?),
     { name: "request", label: t("workbench.executions.tabs.request"), dot: execution.unresolved_variables.any? },
     { name: "payload", label: t("workbench.executions.tabs.payload") },
@@ -54,6 +56,12 @@
       <div data-tabs-target="panel" data-name="headers" hidden>
         <%= render "workbench/requests/executions/headers", headers: execution.response_headers, bleed: true, empty: t("workbench.executions.no_headers") %>
       </div>
+
+      <% if cookies.any? %>
+        <div data-tabs-target="panel" data-name="cookies" hidden>
+          <%= render "workbench/requests/executions/cookies", cookies: %>
+        </div>
+      <% end %>
 
       <% if timing.present? %>
         <div data-tabs-target="panel" data-name="timing" hidden>

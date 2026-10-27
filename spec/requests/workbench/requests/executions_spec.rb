@@ -25,6 +25,22 @@ RSpec.describe "Workbench request executions" do
       expect(response.body).to include('data-name="timing"', I18n.t("workbench.executions.timing.total"))
     end
 
+    it "lists the cookies the response set in their own tab", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, headers: { "Set-Cookie" => ["_session=abc; Path=/; Secure; HttpOnly", "theme=dark; Max-Age=60", "last=1; Expires=Wed, 21 Oct 2037 07:28:00 GMT"] })
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).to include('data-name="cookies"', "_session", "abc", "Secure, HttpOnly", "60 s", "Wed, 21 Oct 2037 07:28:00 GMT", I18n.t("workbench.executions.cookies.session"))
+    end
+
+    it "shows no cookies tab when the response sets none" do
+      stub_request(:get, url).to_return(status: 200)
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).not_to include('data-name="cookies"')
+    end
+
     it "offers no save for failed requests", :aggregate_failures do
       stub_request(:get, url).to_raise(Errno::ECONNREFUSED)
 

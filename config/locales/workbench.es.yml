@@ -367,10 +367,23 @@ es:
         label: Secciones de la respuesta
         body: Cuerpo
         headers: Encabezados
+        cookies: Cookies
         timing: Tiempos
         request: Solicitud
         payload: Payload
         history: Historial
+      cookies:
+        name: Nombre
+        value: Valor
+        domain: Dominio
+        path: Ruta
+        expires: Expira
+        flags: Atributos
+        session: Sesión
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
       timing:
         total: Total
         show: Ver desglose de tiempos

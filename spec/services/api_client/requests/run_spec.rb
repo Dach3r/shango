@@ -76,6 +76,13 @@ RSpec.describe ApiClient::Requests::Run do
     expect(result.record.timings.keys).to include("ttfb", "download")
   end
 
+  it "stores each cookie the response sets, masked", :aggregate_failures do
+    create(:variable, :secret, environment:, key: "token", value: "supersecret")
+    stub_request(:get, "https://api.example.com/items").to_return(status: 200, headers: { "Set-Cookie" => ["a=1; Path=/", "echo=supersecret; Path=/"] })
+
+    expect(result.record.set_cookies).to eq(["a=1; Path=/", "echo=#{ApiClient::Masker::MASK}; Path=/"])
+  end
+
   it "masks secrets in everything stored", :aggregate_failures do
     create(:variable, :secret, environment:, key: "token", value: "supersecret")
     api_request.update!(headers: [{ "key" => "X-Token", "value" => "{{token}}" }, { "key" => "Authorization", "value" => "Bearer abc" }])

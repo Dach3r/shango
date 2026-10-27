@@ -44,6 +44,11 @@ module ApiClientHelper
     end
   end
 
+  # The cookies a response set, parsed from the stored Set-Cookie lines.
+  def response_cookies(execution)
+    execution.set_cookies.filter_map { |line| ApiClient::SetCookie.parse(line) }
+  end
+
   def format_size(bytes)
     number_to_human_size(bytes.to_i, precision: 3, significant: false)
   end

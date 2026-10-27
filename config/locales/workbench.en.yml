@@ -367,10 +367,23 @@ en:
         label: Response sections
         body: Body
         headers: Headers
+        cookies: Cookies
         timing: Timing
         request: Request
         payload: Payload
         history: History
+      cookies:
+        name: Name
+        value: Value
+        domain: Domain
+        path: Path
+        expires: Expires
+        flags: Flags
+        session: Session
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
       timing:
         total: Total
         show: Show timing breakdown

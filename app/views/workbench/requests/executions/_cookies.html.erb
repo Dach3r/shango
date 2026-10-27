@@ -1,0 +1,26 @@
+<table class="w-full table-fixed border-collapse text-xs">
+  <thead>
+    <tr class="border-b border-line text-left text-muted">
+      <th scope="col" class="w-1/5 py-2 pl-4 pr-3 font-medium"><%= t("workbench.executions.cookies.name") %></th>
+      <th scope="col" class="px-3 py-2 font-medium"><%= t("workbench.executions.cookies.value") %></th>
+      <th scope="col" class="w-1/5 px-3 py-2 font-medium"><%= t("workbench.executions.cookies.domain") %></th>
+      <th scope="col" class="w-1/12 px-3 py-2 font-medium"><%= t("workbench.executions.cookies.path") %></th>
+      <th scope="col" class="w-1/6 px-3 py-2 font-medium"><%= t("workbench.executions.cookies.expires") %></th>
+      <th scope="col" class="w-1/6 px-3 py-2 font-medium"><%= t("workbench.executions.cookies.flags") %></th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-line">
+    <% cookies.each do |cookie| %>
+      <% attributes = cookie.attributes %>
+      <% flags = %w[secure httponly].select { |flag| attributes.key?(flag) }.map { |flag| t("workbench.executions.cookies.flag_names.#{flag}") } %>
+      <tr class="transition hover:bg-field/60">
+        <th scope="row" class="py-2 pl-4 pr-3 text-left align-top font-mono font-medium break-all text-ink"><%= cookie.name %></th>
+        <td class="px-3 py-2 align-top font-mono break-all text-body"><%= cookie.value %></td>
+        <td class="px-3 py-2 align-top font-mono break-all text-body"><%= attributes["domain"].presence || "—" %></td>
+        <td class="px-3 py-2 align-top font-mono break-all text-body"><%= attributes["path"].presence || "—" %></td>
+        <td class="px-3 py-2 align-top break-words text-body"><%= attributes["expires"].presence || (attributes["max-age"].present? ? t("workbench.executions.cookies.max_age", seconds: attributes["max-age"]) : t("workbench.executions.cookies.session")) %></td>
+        <td class="px-3 py-2 align-top text-body"><%= flags.join(", ").presence || "—" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
