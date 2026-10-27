@@ -47,4 +47,27 @@ RSpec.describe "Themes" do
       expect(response.body).to include(%(data-theme="light" data-palette="green"))
     end
   end
+
+  describe "tampered params" do
+    it "rejects unknown values without raising", :aggregate_failures do
+      patch theme_path, params: { membership: { color_scheme: "neon", theme: "ocean" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(membership.reload).to be_color_scheme_system
+      expect(membership).to be_theme_default
+    end
+
+    it "ignores attributes that are not theme settings", :aggregate_failures do
+      patch theme_path, params: { membership: { theme: "red", role: "owner", user_id: create(:user).id } }
+
+      expect(response).to redirect_to(edit_theme_path)
+      expect(membership.reload).to have_attributes(theme: "red", user_id: context[0].id)
+    end
+
+    it "answers 400 without the membership key" do
+      patch theme_path
+
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end

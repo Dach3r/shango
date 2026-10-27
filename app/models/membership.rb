@@ -8,10 +8,10 @@ class Membership < ApplicationRecord
   THEMES = %w[default blue green yellow red ocean purple rose orange forest midnight nord dracula gruvbox solarized sunset coffee cyberpunk mono].to_h { |theme| [theme.to_sym, theme] }.freeze
 
   enum :role, { member: "member", owner: "owner" }, default: "member"
-  enum :folder_toggle, CLICK_MODES, default: "double_click", prefix: true
-  enum :request_open, CLICK_MODES, default: "click", prefix: true
-  enum :color_scheme, COLOR_SCHEMES, default: "system", prefix: true
-  enum :theme, THEMES, default: "default", prefix: true
+  enum :folder_toggle, CLICK_MODES, default: "double_click", prefix: true, validate: true
+  enum :request_open, CLICK_MODES, default: "click", prefix: true, validate: true
+  enum :color_scheme, COLOR_SCHEMES, default: "system", prefix: true, validate: true
+  enum :theme, THEMES, default: "default", prefix: true, validate: true
 
   scope :active, -> { where(revoked_at: nil) }
 
