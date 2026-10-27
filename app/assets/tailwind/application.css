@@ -463,6 +463,12 @@ input:-webkit-autofill:focus {
   font-style: italic;
 }
 
+/* Inside a JSON string the syntax highlighter colors its own span; the variable color must win over it. */
+.cm-var,
+.cm-var * {
+  color: var(--var-color) !important;
+}
+
 .cm-var-set { --var-color: var(--syn-variable); }
 .cm-var-empty { --var-color: var(--syn-number); }
 .cm-var-missing { --var-color: var(--danger); text-decoration: underline wavy; }
