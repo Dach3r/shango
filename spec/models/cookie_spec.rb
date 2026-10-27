@@ -9,6 +9,7 @@ RSpec.describe Cookie do
     it "requires an absolute path", :aggregate_failures do
       expect(build(:cookie, path: "items")).not_to be_valid
       expect(build(:cookie, path: "/items")).to be_valid
+      expect(build(:cookie, path: "/items\nx")).not_to be_valid
     end
 
     it "rejects domains with spaces or slashes", :aggregate_failures do

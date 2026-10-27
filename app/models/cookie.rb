@@ -12,7 +12,7 @@ class Cookie < ApplicationRecord
   validates :name, :domain, :path, presence: true
   validates :value, length: { maximum: MAX_VALUE_LENGTH }
   validates :domain, format: { with: DOMAIN_FORMAT }, allow_blank: true
-  validates :path, format: { with: %r{\A/} }, allow_blank: true
+  validates :path, format: { with: %r{\A/[^\r\n]*\z} }, allow_blank: true
   validates :name, uniqueness: { scope: %i[project_id environment_id domain path] }
   validate :domain_scope
 
