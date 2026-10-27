@@ -57,6 +57,15 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_no_link(href: "/workbench/requests/#{draft.id}/closure/new")
   end
 
+  it "marks drafts with a dot and leaves saved requests without one", :aggregate_failures do
+    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+    saved = create(:api_request, collection: create(:collection, project:))
+
+    render_inline(described_class.new(requests: [draft, saved]))
+
+    expect(page).to have_css("[title='#{I18n.t("components.request_tabs.draft_hint")}']", count: 1)
+  end
+
   it "renders a context menu per tab with the close options disabled at the edges", :aggregate_failures do
     first = create(:api_request, project:, name: "First")
     last = create(:api_request, project:, name: "Last")

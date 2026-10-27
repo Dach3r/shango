@@ -13,7 +13,8 @@ module ApiClient
       private
 
       def perform
-        @api_request.assign_attributes(collection: @collection, folder: @folder, user: nil, position: 0)
+        @api_request.assign_attributes(collection: @collection, folder: @folder, user: nil)
+        @api_request.position = @api_request.siblings.where.not(id: @api_request.id).maximum(:position).to_i + 1
         return Result.failure(@api_request) unless @api_request.save
 
         Result.success(@api_request)

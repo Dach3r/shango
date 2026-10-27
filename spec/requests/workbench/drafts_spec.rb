@@ -90,4 +90,60 @@ RSpec.describe "Workbench drafts" do
       expect(response).to have_http_status(:unprocessable_content)
     end
   end
+
+  describe "edge cases" do
+    it "requires authentication", :aggregate_failures do
+      sign_out user
+
+      expect { post workbench_drafts_path }.not_to change(ApiRequest, :count)
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it "gives each draft its own tab and owner", :aggregate_failures do
+      2.times { post workbench_drafts_path }
+
+      expect(project.api_requests.drafts.pluck(:user_id).uniq).to eq([user.id])
+      expect(RequestTab.where(user:).count).to eq(2)
+    end
+
+    it "does not offer placing drafts of other users" do
+      other = ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record
+      get new_workbench_request_placement_path(other)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "does not place into folders of other projects", :aggregate_failures do
+      patch workbench_request_placement_path(draft), params: { destination: "folder:#{foreign_folder.id}" }
+
+      expect(response).to have_http_status(:not_found)
+      expect(draft.reload).to be_draft
+    end
+
+    it "does not place without a destination" do
+      patch workbench_request_placement_path(draft)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "does not place saved requests" do
+      patch workbench_request_placement_path(api_request), params: { destination: "collection:#{collection.id}" }
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "places the draft last among the siblings of its destination", :aggregate_failures do
+      existing = create(:api_request, collection:)
+      patch workbench_request_placement_path(draft), params: { destination: "collection:#{collection.id}" }
+
+      expect(draft.reload.position).to be > existing.position
+    end
+
+    it "does not let another user update a draft, even with place", :aggregate_failures do
+      other = ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record
+      patch workbench_request_path(other), params: { place: 1, api_request: { name: "Hacked" } }, headers: turbo_headers
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

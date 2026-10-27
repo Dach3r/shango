@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
+  config.mailer_sender = Shango::Mailing.sender
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -161,6 +161,13 @@ Devise.setup do |config|
   # the notification is sent to the original email when the change is requested,
   # not when the unconfirmed email is confirmed.
   config.reconfirmable = true
+  config.paranoid = true
+  config.lock_strategy = :failed_attempts
+  config.unlock_strategy = Shango::Mailing.enabled? ? :both : :time
+  config.maximum_attempts = ENV.fetch("SHANGO_MAX_SIGN_IN_ATTEMPTS", 10).to_i
+  config.unlock_in = 30.minutes
+  config.last_attempt_warning = true
+  config.timeout_in = ENV.fetch("SHANGO_SESSION_TIMEOUT_HOURS", 12).to_i.hours
 
   # Defines which key will be used when confirming an account
   # config.confirmation_keys = [:email]

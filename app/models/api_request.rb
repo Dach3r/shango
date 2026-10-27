@@ -4,8 +4,9 @@ class ApiRequest < ApplicationRecord
 
   METHODS = %w[GET POST PUT PATCH DELETE HEAD OPTIONS].freeze
   BODY_TYPES = %w[none json text xml form_urlencoded multipart graphql binary].freeze
-  DEFAULT_SETTINGS = { "timeout" => 30, "follow_redirects" => true, "max_redirects" => 5, "verify_ssl" => true }.freeze
+  DEFAULT_SETTINGS = { "timeout" => 30, "follow_redirects" => true, "max_redirects" => 5, "verify_ssl" => true, "use_cookie_jar" => true }.freeze
   MAX_TIMEOUT = 120
+  MAX_REDIRECTS = 10
   BODY_FORM_EXTRA = %w[type attachment_id upload_token].freeze
 
   belongs_to :project
@@ -82,13 +83,14 @@ class ApiRequest < ApplicationRecord
     self.settings = {
       "timeout" => raw.fetch("timeout", DEFAULT_SETTINGS["timeout"]).to_i.clamp(1, MAX_TIMEOUT),
       "follow_redirects" => ActiveModel::Type::Boolean.new.cast(raw.fetch("follow_redirects", true)) != false,
-      "max_redirects" => raw.fetch("max_redirects", DEFAULT_SETTINGS["max_redirects"]).to_i.clamp(0, 20),
-      "verify_ssl" => ActiveModel::Type::Boolean.new.cast(raw.fetch("verify_ssl", true)) != false
+      "max_redirects" => raw.fetch("max_redirects", DEFAULT_SETTINGS["max_redirects"]).to_i.clamp(0, MAX_REDIRECTS),
+      "verify_ssl" => ActiveModel::Type::Boolean.new.cast(raw.fetch("verify_ssl", true)) != false,
+      "use_cookie_jar" => ActiveModel::Type::Boolean.new.cast(raw.fetch("use_cookie_jar", true)) != false
     }
   end
 
   def folder_belongs_to_collection
-    errors.add(:folder, :invalid) if folder && folder.collection_id != collection_id
+    errors.add(:folder, :invalid) if folder_id && folder&.collection_id != collection_id
   end
 
   def draft_has_owner

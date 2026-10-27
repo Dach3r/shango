@@ -1,0 +1,49 @@
+<%= form_with model: @cookie, url: @cookie.new_record? ? cookies_path : cookie_path(@cookie), scope: :cookie, class: "flex min-h-full flex-col" do |form| %>
+  <div class="mb-5 flex items-center gap-2">
+    <%= link_to cookies_path, aria: { label: t("workbench.shared.cancel") }, class: "-ml-2 flex size-8 shrink-0 items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "arrow-left", class: "size-4" %><% end %>
+    <h3 class="truncate text-sm font-semibold text-ink"><%= @cookie.new_record? ? t("projects.cookies.form.new_title") : @cookie.name_was %></h3>
+  </div>
+
+  <div class="flex-1 space-y-5">
+    <%= render "workbench/shared/errors", record: @cookie %>
+
+    <div>
+      <%= form.label :name, t("projects.cookies.form.name"), class: label_classes %>
+      <%= form.text_field :name, autofocus: true, autocomplete: "off", spellcheck: false, class: field_classes("font-mono") %>
+    </div>
+
+    <div>
+      <%= form.label :value, t("projects.cookies.form.value"), class: label_classes %>
+      <%= form.text_area :value, rows: 3, autocomplete: "off", spellcheck: false, class: field_classes("font-mono") %>
+      <p class="mt-1 text-xs text-faint"><%= t("projects.cookies.form.value_hint") %></p>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :domain, t("projects.cookies.form.domain"), class: label_classes %>
+        <%= form.text_field :domain, autocomplete: "off", spellcheck: false, placeholder: "api.example.com", class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= form.label :path, t("projects.cookies.form.path"), class: label_classes %>
+        <%= form.text_field :path, autocomplete: "off", spellcheck: false, placeholder: "/", class: field_classes("font-mono") %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :expires_at, t("projects.cookies.form.expires_at"), class: label_classes %>
+      <%= form.datetime_local_field :expires_at, class: field_classes %>
+      <p class="mt-1 text-xs text-faint"><%= t("projects.cookies.form.expires_at_hint") %></p>
+    </div>
+
+    <div class="space-y-3">
+      <%= render Checkbox::Component.new(form:, attribute: :host_only, label: t("projects.cookies.form.host_only"), label_class: "text-sm") %>
+      <%= render Checkbox::Component.new(form:, attribute: :secure, label: t("projects.cookies.form.secure"), label_class: "text-sm") %>
+      <%= render Checkbox::Component.new(form:, attribute: :http_only, label: t("projects.cookies.form.http_only"), label_class: "text-sm") %>
+    </div>
+  </div>
+
+  <div class="sticky -bottom-4 -mx-4 -mb-4 mt-6 flex justify-end gap-2 border-t border-line bg-card px-4 py-3">
+    <%= link_to cookies_path, class: button_classes(:ghost) do %><%= lucide_icon "x", class: "size-4 shrink-0" %><%= t("workbench.shared.cancel") %><% end %>
+    <%= form.button type: :submit, class: button_classes(:primary) do %><%= lucide_icon "save", class: "size-4 shrink-0" %><%= t("workbench.shared.save") %><% end %>
+  </div>
+<% end %>

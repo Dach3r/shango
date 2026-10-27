@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       resources :variables, only: %i[create update], module: :environments
     end
     resource :current_environment, only: :update
+    resources :cookies, except: :show
+    resource :cookie_jar, only: :destroy
     resource :membership, only: %i[edit update], path_names: { edit: "settings" }
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }
   end
@@ -46,6 +48,8 @@ Rails.application.routes.draw do
     resources :requests, only: %i[show update destroy] do
       scope module: :requests do
         resources :executions, only: %i[create show] do
+          resource :result, only: :show, module: :executions
+          resource :cancellation, only: :create, module: :executions
           resources :saves, only: :create, module: :executions
         end
         resource :closure, only: :new
@@ -66,4 +70,5 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+  get "ready", to: "health#show"
 end

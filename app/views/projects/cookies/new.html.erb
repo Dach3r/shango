@@ -1,0 +1,6 @@
+<% content_for :title, "#{t("projects.cookies.index.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t("projects.cookies.index.title") %>
+
+<%= render layout: "projects/environments/panel" do %>
+  <%= render "projects/cookies/form" %>
+<% end %>

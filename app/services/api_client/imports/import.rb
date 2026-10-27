@@ -31,10 +31,17 @@ module ApiClient
         format = Detector.call(data:)
         return format if format.failure?
 
-        imported = IMPORTERS.fetch(format.record).call(data:)
+        imported = import(format.record, data)
         return imported if imported.failure?
 
         persist(imported.record)
+      end
+
+      # Valid JSON/YAML with the wrong shape (a string where an object is expected) must not crash the request.
+      def import(format, data)
+        IMPORTERS.fetch(format).call(data:)
+      rescue TypeError, NoMethodError
+        Result.failure(error: I18n.t("workbench.imports.errors.invalid_content"))
       end
 
       def parse
@@ -43,7 +50,7 @@ module ApiClient
       rescue JSON::ParserError
         begin
           YAML.safe_load(text, permitted_classes: [], aliases: false)
-        rescue Psych::Exception
+        rescue Psych::Exception, SystemStackError
           nil
         end
       end

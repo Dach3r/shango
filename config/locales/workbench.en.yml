@@ -1,11 +1,22 @@
 en:
   activerecord:
+    errors:
+      models:
+        environment:
+          attributes:
+            base:
+              duplicated_variable_keys: "The variable names must be unique."
     attributes:
       environment:
         name: Name
       variable:
         key: Name
         value: Value
+      cookie:
+        name: Name
+        value: Value
+        domain: Domain
+        path: Path
       collection:
         name: Name
       folder:
@@ -71,9 +82,12 @@ en:
       label: Environment
       manage: Manage environments
       manage_title: Environments
+      cookies: Cookies
+      cookies_title: Cookies
     request_tabs:
       label: Open requests
       close: "Close %{name}"
+      draft_hint: "Draft, not saved yet"
       new_draft: New draft request
       actions: "Tab actions"
       new_request: "New request"
@@ -106,6 +120,39 @@ en:
       confirm_delete_collection: "Delete the collection “%{name}” with all its folders and requests?"
       confirm_delete_folder: "Delete the folder “%{name}” with everything inside it?"
   projects:
+    cookies:
+      index:
+        title: Cookies
+        intro: "Cookies servers set are kept for the selected environment and sent back on later requests, so a sign in carries over to the next call. You can also add or edit cookies by hand."
+        scope: "Environment: %{name}"
+        scope_none: No environment
+        empty_title: No cookies yet
+        empty_hint: Send a request whose response sets a cookie and it shows up here.
+        session: Session
+        expires: "Expires %{date}"
+        secure: Secure
+        http_only: HttpOnly
+        delete: Delete cookie
+        new: Add cookie
+        edit: Edit cookie
+        clear: Clear all cookies
+        confirm_clear: "Delete every cookie stored for this environment?"
+      create:
+        created: Cookie added.
+      update:
+        updated: Cookie saved.
+      form:
+        new_title: "New cookie"
+        name: "Name"
+        value: "Value"
+        value_hint: "Stored encrypted and shown here in plain text."
+        domain: "Domain"
+        path: "Path"
+        expires_at: "Expires"
+        expires_at_hint: "Leave empty for a session cookie."
+        host_only: "Host only (do not send to subdomains)"
+        secure: "Secure (https only)"
+        http_only: "HttpOnly"
     environments:
       index:
         title: Environments
@@ -262,6 +309,7 @@ en:
       max_redirects: Max redirects
       follow_redirects: Follow redirects
       verify_ssl: Verify SSL certificates
+      use_cookie_jar: Use the cookie jar (send and save cookies)
     auth:
       type: Auth type
       inherit_hint: Uses the authorization of the parent folder or collection.
@@ -342,16 +390,32 @@ en:
       resize: Resize the response panel
       error: Error
       failure: "The request could not be sent. Check the server log and try again."
+      running: Sending request…
       empty_title: No response yet
       empty_hint: Press Send or Ctrl/Cmd + Enter to run this request.
       tabs:
         label: Response sections
         body: Body
         headers: Headers
+        cookies: Cookies
+        timing: Timing
         request: Request
         payload: Payload
         history: History
+      cookies:
+        name: Name
+        value: Value
+        domain: Domain
+        path: Path
+        expires: Expires
+        flags: Flags
+        session: Session
+        max_age: "%{seconds} s"
+        flag_names:
+          secure: Secure
+          httponly: HttpOnly
       timing:
+        total: Total
         show: Show timing breakdown
         title: Response time
         phases:
@@ -390,6 +454,7 @@ en:
         refused: Connection refused
         connection: Connection failed
         unknown: Unexpected error
+        cancelled: Cancelled
     errors:
       blank_url: Enter a URL to send the request.
       invalid_url: The URL is not valid. Only http and https are supported.

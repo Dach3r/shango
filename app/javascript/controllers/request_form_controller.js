@@ -1,5 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
+const POLL_INTERVAL = 500;
+const POLL_TIMEOUT = 180000;
+
 export default class extends Controller {
   static targets = ["form", "send", "failure"];
   static values = {
@@ -31,24 +34,76 @@ export default class extends Controller {
         credentials: "same-origin",
         signal: this.abortController.signal,
       });
-      const text = await response.text();
-      if (response.headers.get("Content-Type")?.includes("turbo-stream")) {
-        window.Turbo.renderStreamMessage(text);
-      } else {
-        this.showFailure();
+      const queued = response.status === 202 && response.headers.get("X-Execution-Id");
+      if (await this.render(response)) {
+        if (queued) await this.poll(queued);
       }
     } catch (error) {
       if (error.name !== "AbortError") this.showFailure();
     } finally {
       this.running = false;
       this.abortController = null;
+      this.executionId = null;
       this.setBusy(false);
     }
+  }
+
+  // Renders a Turbo Stream response; anything else is a failure. Returns whether it was a stream.
+  async render(response) {
+    const text = await response.text();
+    if (response.headers.get("Content-Type")?.includes("turbo-stream")) {
+      window.Turbo.renderStreamMessage(text);
+      return true;
+    }
+
+    this.showFailure();
+    return false;
+  }
+
+  // A queued run executes in a worker: ask for its result until it is ready (202 means still running).
+  async poll(id) {
+    this.executionId = id;
+    const resultUrl = `${this.runUrlValue}/${id}/result`;
+    const deadline = Date.now() + POLL_TIMEOUT;
+
+    while (Date.now() < deadline) {
+      await this.sleep(POLL_INTERVAL);
+      const response = await fetch(resultUrl, {
+        headers: { Accept: "text/vnd.turbo-stream.html" },
+        credentials: "same-origin",
+        signal: this.abortController.signal,
+      });
+      if (response.status === 202) continue;
+      if (response.status === 204) return;
+
+      await this.render(response);
+      return;
+    }
+
+    this.showFailure();
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  cancelQueued() {
+    if (!this.executionId) return;
+
+    fetch(`${this.runUrlValue}/${this.executionId}/cancellation`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")
+          ?.content,
+      },
+      credentials: "same-origin",
+    });
   }
 
   toggle(event) {
     if (this.running) {
       event.preventDefault();
+      this.cancelQueued();
       this.abortController.abort();
     } else {
       this.run(event);

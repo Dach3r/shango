@@ -31,4 +31,13 @@ RSpec.describe RequestTree::Request::Component, type: :component do
     expect(page).to have_css("form[action='/workbench/requests/#{api_request.id}/duplication'] svg", visible: :all)
     expect(page).to have_css("form[action='/workbench/requests/#{api_request.id}'] button.\\!text-danger svg", visible: :all)
   end
+
+  it "escapes hostile names in the markup and the action labels", :aggregate_failures do
+    hostile = create(:api_request, name: "<img src=x onerror=alert(1)>\"'")
+    render_inline(described_class.new(api_request: hostile))
+
+    expect(page).not_to have_css("img[src=x]", visible: :all)
+    expect(page).to have_css("span[data-controller=inline-rename]", text: "<img src=x onerror=alert(1)>\"'")
+    expect(page.native.to_html).not_to include("<img src=x")
+  end
 end

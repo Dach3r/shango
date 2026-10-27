@@ -66,4 +66,63 @@ RSpec.describe "Environment variables" do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "edge cases" do
+    it "masks secret values in the response", :aggregate_failures do
+      create(:variable, :secret, environment:, key: "TOKEN", value: "old")
+      post environment_variables_path(environment), params: { variable: { key: "TOKEN", value: "new-secret" } }
+
+      expect(response.parsed_body).to include("secret" => true, "value" => ApiClient::Masker::MASK)
+      expect(response.body).not_to include("new-secret")
+    end
+
+    it "overwrites an existing key instead of duplicating it and re-enables it", :aggregate_failures do
+      create(:variable, environment:, key: "HOST", value: "old", enabled: false)
+
+      expect { post environment_variables_path(environment), params: { variable: { key: "HOST", value: "new" } } }.not_to change(Variable, :count)
+      expect(environment.variables.find_by!(key: "HOST")).to have_attributes(value: "new", enabled: true)
+    end
+
+    it "rejects a blank key" do
+      post environment_variables_path(environment), params: { variable: { key: "", value: "x" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "stores unicode and very long values", :aggregate_failures do
+      value = "ñandú ✓ " * 5_000
+      post environment_variables_path(environment), params: { variable: { key: "BIG", value: } }
+
+      expect(response).to have_http_status(:created)
+      expect(environment.variables.find_by!(key: "BIG").value).to eq(value)
+    end
+
+    it "answers 400 without the variable key when creating" do
+      post environment_variables_path(environment)
+
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it "answers 400 without the variable key when updating" do
+      patch environment_variable_path(environment, create(:variable, environment:))
+
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it "does not update a variable through another environment of the same project" do
+      variable = create(:variable, value: "keep")
+      patch environment_variable_path(environment, variable), params: { variable: { value: "x" } }
+
+      expect(response).to have_http_status(:not_found)
+      expect(variable.reload.value).to eq("keep")
+    end
+
+    it "requires authentication", :aggregate_failures do
+      sign_out context[0]
+      post environment_variables_path(environment), params: { variable: { key: "A", value: "1" } }
+
+      expect(response).to redirect_to(new_user_session_path)
+      expect(Variable.count).to eq(0)
+    end
+  end
 end

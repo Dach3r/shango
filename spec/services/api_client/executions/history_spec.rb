@@ -10,6 +10,14 @@ RSpec.describe ApiClient::Executions::History do
     create(:request_execution, api_request:, user:, **attributes)
   end
 
+  it "runs a fixed number of queries however many executions there are", :aggregate_failures do
+    execution_for(create(:api_request, project:, collection: first))
+    few = count_queries { described_class.call(project:, user:).each { |group| group.executions.each { |execution| execution.api_request.name } } }
+    4.times { execution_for(create(:api_request, project:, collection: [first, second].sample)) }
+
+    expect(count_queries { described_class.call(project:, user:).each { |group| group.executions.each { |execution| execution.api_request.name } } }).to eq(few)
+  end
+
   it "groups executions by collection, newest first, with drafts last", :aggregate_failures do
     draft = create(:api_request, project:, collection: nil, user:)
     older = execution_for(create(:api_request, project:, collection: second), created_at: 2.days.ago)

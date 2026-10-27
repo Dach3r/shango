@@ -24,7 +24,7 @@ export default class extends Controller {
     this.menuTarget.hidden = false;
     this.triggerTarget.setAttribute("aria-expanded", "true");
     if (this.hasSearchTarget) this.searchTarget.value = "";
-    this.filter();
+    this.filter({ activateFirst: false });
     this.activate(
       this.optionTargets.find(
         (option) => option.getAttribute("aria-selected") === "true",
@@ -83,7 +83,7 @@ export default class extends Controller {
     });
   }
 
-  filter() {
+  filter({ activateFirst = true } = {}) {
     const query = this.hasSearchTarget
       ? this.searchTarget.value.trim().toLowerCase()
       : "";
@@ -94,7 +94,7 @@ export default class extends Controller {
         .includes(query);
     });
     this.emptyTarget.hidden = this.visibleOptions.length > 0;
-    this.activate(this.visibleOptions[0]);
+    if (activateFirst) this.activate(this.visibleOptions[0]);
   }
 
   navigate(event) {

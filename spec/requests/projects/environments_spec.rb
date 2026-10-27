@@ -139,4 +139,181 @@ RSpec.describe "Environments" do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "authorization and tampering" do
+    it "does not update environments of other projects", :aggregate_failures do
+      patch environment_path(foreign_environment), params: { environment: { name: "Hacked" } }
+
+      expect(response).to have_http_status(:not_found)
+      expect(foreign_environment.reload.name).not_to eq("Hacked")
+    end
+
+    it "does not destroy environments of other projects", :aggregate_failures do
+      foreign_environment
+
+      expect { delete environment_path(foreign_environment) }.not_to change(Environment, :count)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "does not touch variables of other projects through nested attributes", :aggregate_failures do
+      foreign_variable = create(:variable, value: "keep")
+
+      patch environment_path(environment), params: { environment: { variables_attributes: { "0" => { id: foreign_variable.id, key: foreign_variable.key, value: "hacked" } } } }
+
+      expect(response).to have_http_status(:not_found)
+      expect(foreign_variable.reload.value).to eq("keep")
+    end
+
+    it "ignores a project id in the params", :aggregate_failures do
+      post environments_path, params: { environment: { name: "Staging", project_id: foreign_environment.project_id } }
+
+      expect(Environment.find_by!(name: "Staging").project).to eq(project)
+    end
+
+    it "requires authentication", :aggregate_failures do
+      sign_out user
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      expect(response).to redirect_to(new_user_session_path)
+
+      patch current_environment_path, params: { environment_id: environment.id }
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it "answers 400 without the environment key" do
+      post environments_path
+
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe "duplicate variable keys" do
+    it "re-renders the form instead of failing on the unique index", :aggregate_failures do
+      params = { environment: { name: "Dup", variables_attributes: { "0" => { key: "HOST", value: "a" }, "1" => { key: "HOST", value: "b" } } } }
+
+      expect { post environments_path, params: }.not_to change(Environment, :count)
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
+  describe "names" do
+    it "rejects duplicate names ignoring case within a project", :aggregate_failures do
+      create(:environment, project:, name: "Staging")
+
+      expect { post environments_path, params: { environment: { name: "STAGING" } } }.not_to change(Environment, :count)
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "allows the same name in different projects" do
+      create(:environment, name: "Staging")
+
+      expect { post environments_path, params: { environment: { name: "Staging" } } }.to change(project.environments, :count).by(1)
+    end
+
+    it "rejects a rename that collides with a sibling" do
+      create(:environment, project:, name: "Prod")
+      patch environment_path(environment), params: { environment: { name: "prod" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "keeps unicode names" do
+      post environments_path, params: { environment: { name: "Producción ✓" } }
+
+      expect(project.environments.pluck(:name)).to include("Producción ✓")
+    end
+  end
+
+  describe "variables in the form" do
+    it "stores secret variables encrypted and never renders their value back", :aggregate_failures do
+      post environments_path, params: { environment: { name: "Staging", variables_attributes: { "0" => { key: "TOKEN", value: "s3cr3t-value", secret: "1", enabled: "1" } } } }
+      variable = Variable.find_by!(key: "TOKEN")
+
+      expect(variable.value_before_type_cast).not_to include("s3cr3t-value")
+      get edit_environment_path(variable.environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      expect(response.body).not_to include("s3cr3t-value")
+    end
+
+    it "does not render a secret value in the edit form" do
+      create(:variable, :secret, environment:, key: "TOKEN", value: "s3cr3t-value")
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response.body).not_to include("s3cr3t-value")
+    end
+
+    it "keeps a secret value when the form submits it blank", :aggregate_failures do
+      variable = create(:variable, :secret, environment:, key: "TOKEN", value: "s3cr3t-value")
+
+      patch environment_path(environment), params: { environment: { variables_attributes: { "0" => { id: variable.id, key: "TOKEN", value: "", secret: "1" } } } }
+
+      expect(response).to redirect_to(environments_path)
+      expect(variable.reload.value).to eq("s3cr3t-value")
+    end
+
+    it "removes a variable marked for destruction" do
+      variable = create(:variable, environment:)
+
+      expect { patch environment_path(environment), params: { environment: { variables_attributes: { "0" => { id: variable.id, _destroy: "1" } } } } }.to change(environment.variables, :count).by(-1)
+    end
+
+    it "rejects an invalid variable key and keeps the environment unchanged", :aggregate_failures do
+      patch environment_path(environment), params: { environment: { name: "Renamed", variables_attributes: { "0" => { key: "bad key", value: "x" } } } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(environment.reload.name).not_to eq("Renamed")
+    end
+
+    it "rejects a key that already exists in the environment", :aggregate_failures do
+      create(:variable, environment:, key: "HOST")
+      patch environment_path(environment), params: { environment: { variables_attributes: { "0" => { key: "HOST", value: "x" } } } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "ignores fully blank rows and rejects rows with a value but no key", :aggregate_failures do
+      patch environment_path(environment), params: { environment: { variables_attributes: { "0" => { key: "", value: "" } } } }
+      expect(response).to redirect_to(environments_path)
+
+      patch environment_path(environment), params: { environment: { variables_attributes: { "0" => { key: "", value: "x" } } } }
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "stores very long unicode values", :aggregate_failures do
+      value = "ñandú ✓ " * 5_000
+      post environments_path, params: { environment: { name: "Big", variables_attributes: { "0" => { key: "BIG", value: } } } }
+
+      expect(Variable.find_by!(key: "BIG").value).to eq(value)
+    end
+  end
+
+  describe "destroying" do
+    it "removes variables and cookies of the environment and clears selections", :aggregate_failures do
+      create(:variable, environment:)
+      create(:cookie, project:, environment:)
+      membership.update!(current_environment: environment)
+
+      delete environment_path(environment)
+
+      expect(Variable.count).to eq(0)
+      expect(Cookie.count).to eq(0)
+      expect(membership.reload.current_environment_id).to be_nil
+      get workbench_root_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "PATCH /current_environment edge cases" do
+    it "answers 404 for an id that does not exist" do
+      patch current_environment_path, params: { environment_id: SecureRandom.uuid }
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "only changes the signed-in user's selection", :aggregate_failures do
+      other = create(:membership, project:)
+      patch current_environment_path, params: { environment_id: environment.id }
+
+      expect(other.reload.current_environment_id).to be_nil
+    end
+  end
 end

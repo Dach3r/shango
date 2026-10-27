@@ -11,6 +11,14 @@ RSpec.describe "Memberships" do
       expect(response.body).to include(I18n.t("projects.memberships.edit.request_open.label"))
       expect(response.body).to include(I18n.t("components.settings_nav.items.sidebar"))
     end
+
+    it "wires the form to the unsaved changes bar", :aggregate_failures do
+      get edit_membership_path
+
+      expect(response.body).to include('data-controller="dirty-form"')
+      expect(response.body).to include(I18n.t("settings.save_bar.unsaved"))
+      expect(response.body).to include(I18n.t("settings.save_bar.discard"))
+    end
   end
 
   describe "PATCH /membership" do
@@ -40,6 +48,30 @@ RSpec.describe "Memberships" do
       other = create(:membership)
 
       expect { patch membership_path, params: { membership: { folder_toggle: "click" } } }.not_to(change { other.reload.folder_toggle })
+    end
+  end
+
+  describe "tampered params" do
+    it "rejects unknown values without raising", :aggregate_failures do
+      patch membership_path, params: { membership: { folder_toggle: "triple_click" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(membership.reload).to be_folder_toggle_double_click
+    end
+
+    it "does not let a member escalate their role or move to another project", :aggregate_failures do
+      membership.update!(role: "member")
+      foreign_project = create(:project)
+
+      patch membership_path, params: { membership: { folder_toggle: "click", role: "owner", project_id: foreign_project.id, revoked_at: "" } }
+
+      expect(membership.reload).to have_attributes(role: "member", project_id: context[1].id)
+    end
+
+    it "does not accept a current environment of another project" do
+      patch membership_path, params: { membership: { folder_toggle: "click", current_environment_id: create(:environment).id } }
+
+      expect(membership.reload.current_environment_id).to be_nil
     end
   end
 end

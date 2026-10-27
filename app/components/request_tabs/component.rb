@@ -3,6 +3,8 @@ class RequestTabs::Component < ApplicationComponent
 
   CLOSE = "mr-2 flex size-5 shrink-0 items-center justify-center text-muted opacity-0 transition hover:bg-ink/10 hover:text-ink focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 group-hover:opacity-100"
 
+  DRAFT_CLOSE = CLOSE.sub("opacity-0 ", "")
+
   ITEM = "#{RequestTree::Menu::Component::ITEM} disabled:cursor-not-allowed disabled:text-faint disabled:hover:bg-transparent disabled:hover:text-faint"
 
   # requests: the ones the user has open as tabs; current_request_id highlights the one being edited.
@@ -19,6 +21,13 @@ class RequestTabs::Component < ApplicationComponent
 
   def current?(api_request)
     api_request.id == @current_request_id
+  end
+
+  def draft_close_icon
+    safe_join([
+      tag.span(class: "size-2 rounded-full bg-muted group-hover:hidden group-focus-within:hidden", title: t("components.request_tabs.draft_hint")),
+      lucide_icon("x", class: "hidden size-3 group-hover:block group-focus-within:block")
+    ])
   end
 
   def classes(api_request)

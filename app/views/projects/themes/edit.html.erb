@@ -4,8 +4,8 @@
   <%= form_with model: @membership, url: theme_path, method: :patch, data: { controller: "theme-preview" } do |form| %>
     <%= render "workbench/shared/errors", record: @membership %>
 
-    <div class="divide-y divide-line overflow-hidden border border-line bg-card">
-      <fieldset class="grid gap-4 p-5 md:grid-cols-[1fr_21rem] md:items-center md:gap-8">
+    <div class="divide-y divide-line">
+      <fieldset class="grid gap-4 px-5 py-5 sm:px-7 md:grid-cols-[1fr_21rem] md:items-center md:gap-8">
         <div class="min-w-0">
           <legend class="float-left w-full text-sm font-semibold text-ink"><%= t("projects.themes.edit.color_scheme.label") %></legend>
           <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.color_scheme.hint") %></p>
@@ -22,7 +22,7 @@
         </div>
       </fieldset>
 
-      <fieldset class="p-5">
+      <fieldset class="px-5 py-5 sm:px-7">
         <legend class="float-left w-full text-sm font-semibold text-ink"><%= t("projects.themes.edit.theme.label") %></legend>
         <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.theme.hint") %></p>
 

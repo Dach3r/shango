@@ -206,9 +206,13 @@ Help detect, investigate, and resolve problems. Sources: HTTP monitors, failed r
 7. It suggests diagnostic steps.
 8. The user decides which actions to run.
 
+### Network Tools
+
+Quick network checks from the project workspace, for the moments when a developer is configuring a server: a **DNS checker** (does a record match what I expect on public resolvers and on the authoritative nameservers, i.e. has it propagated), a **port check** (which ports are reachable from the outside) and a **TCP ping** (is the host online). Targets can use environment variables such as `{{host}}`. Results are shown on screen and not stored. Designed, not built; see [`network-tools.md`](network-tools.md). It does not use nmap (license incompatible with AGPL-3.0).
+
 ### Future tools
 
-Possible additions over time: API Testing, Webhook Inspector, Mock Servers, API Contract Diff, SSL Certificate Inspector, DNS Tools, Database Explorer, Log Explorer, CI/CD Inspector, GitHub Integration, Deployment Inspector, Performance Monitoring, Status Pages, Security Analyzer, JSON Formatter, JWT Decoder, Base64 Encoder/Decoder, UUID Generator, Regex Tester, Timestamp Converter, and other web developer utilities.
+Possible additions over time: API Testing, Webhook Inspector, Mock Servers, API Contract Diff, SSL Certificate Inspector, Database Explorer, Log Explorer, CI/CD Inspector, GitHub Integration, Deployment Inspector, Performance Monitoring, Status Pages, Security Analyzer, JSON Formatter, JWT Decoder, Base64 Encoder/Decoder, UUID Generator, Regex Tester, Timestamp Converter, and other web developer utilities.
 
 This list is **not a commitment**. Each tool must justify its usefulness and its integration with the rest of Shango.
 
@@ -277,6 +281,8 @@ Indicative order; may change as we learn. Each phase must deliver usable, verifi
 | 4 | AI Assistant | Configurable providers, contextual chat, error analysis, authorized query tools | A user can investigate an incident with AI using their own provider key |
 | 5 | Server Management | Servers, SSH, integrated terminal, assisted diagnosis | A user can open a protected SSH session from a project |
 | 6 | Developer Operations | Logs, webhooks, GitHub, CI/CD, additional tools | Logs and external events feed incidents and investigations |
+
+Network Tools (§9) belongs to no phase on purpose: it depends only on Foundation and Environments, so it can ship whenever it is prioritized. Proposed, pending product owner confirmation.
 
 ## 15. Open product questions
 

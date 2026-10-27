@@ -122,4 +122,31 @@ RSpec.describe ApiClient::Imports::Openapi do
       expect(tree[:environments].first[:variables].first[:value]).to eq("https://h.test")
     end
   end
+
+  describe "malformed input" do
+      def result_for(data)
+        described_class.call(data: { "openapi" => "3.0.0" }.merge(data))
+      end
+
+      it "fails when paths or servers are not what they should be", :aggregate_failures do
+        expect(result_for("paths" => "x")).to be_failure
+        expect(result_for("servers" => "x", "paths" => {})).to be_failure
+        expect(result_for("servers" => ["x"], "paths" => {})).to be_failure
+      end
+
+      it "survives odd path items, operations, tags and parameters", :aggregate_failures do
+        expect(result_for("paths" => { "/a" => "x" })).to be_success
+        expect(result_for("paths" => { "/a" => { "get" => "x" } })).to be_success
+        expect(result_for("paths" => { "/a" => { "get" => { "tags" => [1, nil, "x"] }, "post" => { "tags" => "x" } } })).to be_success
+        expect(result_for("paths" => { "/a" => { "get" => { "parameters" => ["x", { "$ref" => "#/nope" }] } } })).to be_success
+      end
+
+      it "does not loop on self-referencing schemas", :aggregate_failures do
+        body = { "content" => { "application/json" => { "schema" => { "$ref" => "#/components/schemas/A" } } } }
+        schemas = { "A" => { "type" => "object", "properties" => { "a" => { "$ref" => "#/components/schemas/A" } } }, "B" => { "$ref" => "#/components/schemas/B" } }
+
+        expect(result_for("paths" => { "/a" => { "post" => { "requestBody" => body } } }, "components" => { "schemas" => schemas })).to be_success
+        expect(result_for("paths" => { "/a" => { "post" => { "requestBody" => { "content" => { "application/json" => { "schema" => { "$ref" => "#/components/schemas/B" } } } } } } }, "components" => { "schemas" => schemas })).to be_success
+      end
+    end
 end

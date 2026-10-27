@@ -21,4 +21,13 @@ RSpec.describe RequestTree::Collection::Component, type: :component do
     render_inline(described_class.new(branch:, closed_ids: [collection.id.to_s]))
     expect(page).to have_css("details:not([open])")
   end
+
+  it "escapes hostile collection names", :aggregate_failures do
+    collection = create(:collection, name: "<script>alert(1)</script>")
+    branch = ApiClient::Tree::Load::Branch.new(collection:, folders: {}, requests: {})
+    render_inline(described_class.new(branch:))
+
+    expect(page).not_to have_css("script", visible: :all)
+    expect(page).to have_css("summary", text: "<script>alert(1)</script>")
+  end
 end

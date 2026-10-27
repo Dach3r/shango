@@ -137,4 +137,80 @@ RSpec.describe "Workbench OAuth2" do
       expect(flash[:alert]).to be_present
     end
   end
+
+  describe "callback hardening" do
+    def start_flow
+      post workbench_oauth2_authorization_path, params: { owner_type: "Collection", owner_id: code_collection.id }
+      Rack::Utils.parse_query(URI.parse(response.location).query)["state"]
+    end
+
+    it "accepts a state only once", :aggregate_failures do
+      stub_request(:post, token_url).to_return(status: 200, body: { access_token: "tok" }.to_json)
+      state = start_flow
+      get workbench_oauth2_callback_path, params: { code: "abc", state: }
+      get workbench_oauth2_callback_path, params: { code: "abc", state: }
+
+      expect(flash[:alert]).to eq(I18n.t("workbench.oauth2.callbacks.show.invalid_state"))
+      expect(a_request(:post, token_url)).to have_been_made.once
+    end
+
+    it "drops the flow after a mismatching state", :aggregate_failures do
+      stub_request(:post, token_url).to_return(status: 200, body: { access_token: "tok" }.to_json)
+      state = start_flow
+      get workbench_oauth2_callback_path, params: { code: "abc", state: "forged" }
+      get workbench_oauth2_callback_path, params: { code: "abc", state: }
+
+      expect(flash[:alert]).to eq(I18n.t("workbench.oauth2.callbacks.show.invalid_state"))
+      expect(code_collection.reload.auth_config).not_to have_key("access_token")
+    end
+
+    it "rejects a provider error redirect without a code", :aggregate_failures do
+      state = start_flow
+      get workbench_oauth2_callback_path, params: { error: "access_denied", state: }
+
+      expect(flash[:alert]).to be_present
+      expect(a_request(:post, token_url)).not_to have_been_made
+    end
+
+    it "rejects array-shaped state params" do
+      start_flow
+      get workbench_oauth2_callback_path, params: { code: "abc", state: ["x"] }
+
+      expect(flash[:alert]).to be_present
+    end
+
+    it "answers not found when the owner stopped using oauth2 during the flow" do
+      state = start_flow
+      code_collection.update!(auth_type: "none", auth_config: {})
+      get workbench_oauth2_callback_path, params: { code: "abc", state: }
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "answers not found when the owner was deleted during the flow" do
+      state = start_flow
+      code_collection.destroy!
+      get workbench_oauth2_callback_path, params: { code: "abc", state: }
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "does not expose the token endpoint secrets in the flash", :aggregate_failures do
+      stub_request(:post, token_url).to_return(status: 200, body: { access_token: "tok-secret" }.to_json)
+      state = start_flow
+      get workbench_oauth2_callback_path, params: { code: "abc", state: }
+
+      expect(flash.to_h.to_s).not_to include("tok-secret", "secret")
+    end
+  end
+
+  describe "token endpoint with request owners" do
+    it "does not let a user fetch a token for a request hidden from them", :aggregate_failures do
+      other_user = create(:user)
+      hidden = create(:api_request, project:, collection: nil, user: other_user, auth_type: "oauth2", auth_config: oauth_config)
+      post workbench_oauth2_token_path, params: { owner_type: "ApiRequest", owner_id: hidden.id }
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

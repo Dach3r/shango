@@ -62,4 +62,31 @@ RSpec.describe Membership do
       expect(described_class.active).to contain_exactly(membership)
     end
   end
+
+  describe "invalid values" do
+    it "adds validation errors instead of raising", :aggregate_failures do
+      membership.assign_attributes(folder_toggle: "x", request_open: "x", color_scheme: "x", theme: "x")
+
+      expect(membership).not_to be_valid
+      expect(membership.errors.attribute_names).to include(:folder_toggle, :request_open, :color_scheme, :theme)
+    end
+
+    it "rejects an unknown role" do
+      expect { build(:membership, role: "admin") }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "database constraints" do
+    %w[role folder_toggle request_open color_scheme theme].each do |column|
+      it "rejects a #{column} outside the CHECK list" do
+        expect { described_class.transaction(requires_new: true) { membership.update_column(column, "bogus") } }.to raise_error(ActiveRecord::StatementInvalid, /check/i)
+      end
+    end
+
+    it "rejects two active memberships of the same user in a project at the DB level" do
+      duplicate = build(:membership, user: membership.user, project: membership.project)
+
+      expect { duplicate.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
 end

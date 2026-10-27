@@ -121,4 +121,29 @@ RSpec.describe ApiClient::Imports::Insomnia do
       expect(result.record[:environments]).to eq([])
     end
   end
+
+  describe "malformed input" do
+      def tree_for(data)
+        described_class.call(data:).record
+      end
+
+      it "survives missing, non-array and non-object resources", :aggregate_failures do
+        expect { tree_for("_type" => "export") }.not_to raise_error
+        expect { tree_for("_type" => "export", "resources" => "x") }.not_to raise_error
+        expect { tree_for("_type" => "export", "resources" => ["x", nil]) }.not_to raise_error
+      end
+
+      it "does not loop on cyclic or self-referencing parents", :aggregate_failures do
+        groups = [{ "_id" => "a", "_type" => "request_group", "parentId" => "b", "name" => "a" }, { "_id" => "b", "_type" => "request_group", "parentId" => "a", "name" => "b" }]
+
+        expect { tree_for("_type" => "export", "resources" => groups) }.not_to raise_error
+        expect { tree_for("_type" => "export", "resources" => [{ "_id" => "a", "_type" => "request_group", "parentId" => "a", "name" => "a" }]) }.not_to raise_error
+      end
+
+      it "accepts unknown v5 versions and missing collections", :aggregate_failures do
+        expect(tree_for("type" => "collection.insomnia.rest/9.9", "name" => "x", "collection" => [{ "name" => "r", "url" => "http://x", "method" => "GET" }])[:collections]).to be_present
+        expect { tree_for("type" => "collection.insomnia.rest/5.0", "name" => "x") }.not_to raise_error
+        expect { tree_for("type" => "collection.insomnia.rest/5.0", "name" => "x", "collection" => ["x"]) }.not_to raise_error
+      end
+    end
 end

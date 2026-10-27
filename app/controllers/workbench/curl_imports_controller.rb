@@ -1,5 +1,6 @@
 module Workbench
   class CurlImportsController < BaseController
+    throttle :imports, by: -> { current_user.id }, only: :create
     before_action :set_collection
 
     def new

@@ -1,6 +1,7 @@
 class RequestExecution < ApplicationRecord
   KEEP_PER_REQUEST = 50
   PENDING_TTL = 30.minutes
+  STORED_BODY_BYTES = 256.kilobytes
 
   belongs_to :project
   belongs_to :api_request
@@ -29,9 +30,23 @@ class RequestExecution < ApplicationRecord
 
   # Keeps an unsaved execution available for a while so it can be saved later without re-sending the request.
   def stash
-    Rails.cache.write(self.class.pending_key(id), attributes, expires_in: PENDING_TTL)
+    Rails.cache.write(self.class.pending_key(id), storable_attributes, expires_in: PENDING_TTL)
     Rails.cache.write(self.class.latest_key(api_request_id, user_id), id, expires_in: PENDING_TTL)
     self
+  end
+
+  # What survives in the cache and history: bodies are cut to STORED_BODY_BYTES (the panel shows the full response
+  # once, straight from the run) so a few large responses cannot fill the database or the shared cache.
+  def storable_attributes
+    stored = attributes.dup
+    %w[response_body request_body].each do |name|
+      value = stored[name]
+      next unless value.is_a?(String) && value.bytesize > STORED_BODY_BYTES
+
+      stored[name] = value.byteslice(0, STORED_BODY_BYTES).scrub("")
+      stored["body_truncated"] = true if name == "response_body"
+    end
+    stored
   end
 
   def error?

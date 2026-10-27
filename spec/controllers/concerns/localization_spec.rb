@@ -31,4 +31,16 @@ RSpec.describe Localization do
       expect(I18n.locale).to eq(:en)
     end
   end
+
+  describe "edge cases" do
+    it "rejects blank, padded and cased variants", :aggregate_failures do
+      [nil, "", " es", "ES", "es-CL", ["es"], { es: 1 }].each do |value|
+        expect(described_class.supported(value)).to be_nil, value.inspect
+      end
+    end
+
+    it "falls back to English for a tampered cookie", type: :controller do
+      expect(described_class.from_cookie("../../etc/passwd")).to eq(:en)
+    end
+  end
 end

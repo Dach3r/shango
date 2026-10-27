@@ -136,4 +136,71 @@ RSpec.describe ApiClient::Curl::Parser do
   it "ignores unknown flags" do
     expect(attrs("curl -s https://x.test")[:url]).to eq("https://x.test")
   end
+
+  describe "border cases" do
+      it "treats nil as an empty command" do
+        expect(described_class.call(command: nil).error).to eq(I18n.t("workbench.curl.empty"))
+      end
+
+      it "fails on a bare curl" do
+        expect(parse("curl").error).to eq(I18n.t("workbench.curl.empty"))
+      end
+
+      it "unescapes double-quoted JSON bodies" do
+        expect(attrs('curl -d "{\"a\":\"b\"}" https://x.test')).to include(body_type: "json", body: '{"a":"b"}')
+      end
+
+      it "keeps shell substitutions as literal text", :aggregate_failures do
+        expect(attrs("curl https://x.test/$(whoami)")[:url]).to eq("https://x.test/$(whoami)")
+        expect(attrs("curl 'https://x.test/`id`'")[:url]).to eq("https://x.test/`id`")
+      end
+
+      it "joins CRLF line continuations" do
+        expect(attrs("curl https://x.test \\\r\n -H 'A: b'")[:headers]).to contain_exactly(include("key" => "A", "value" => "b"))
+      end
+
+      it "keeps colons inside header values" do
+        expect(attrs("curl -H 'Authorization: Bearer a:b' https://x.test")[:headers]).to contain_exactly(include("value" => "Bearer a:b"))
+      end
+
+      it "merges repeated -d flags into one form" do
+        form = attrs("curl -d a=1 -d b=2 https://x.test")[:body_form]
+
+        expect(form.map { |row| [row["key"], row["value"]] }).to eq([%w[a 1], %w[b 2]])
+      end
+
+      it "keeps duplicate form keys and decodes plus and percent escapes", :aggregate_failures do
+        expect(attrs("curl -d 'a=1&a=2' https://x.test")[:body_form].pluck("value")).to eq(%w[1 2])
+        expect(attrs("curl -d 'a=b+c&d=%41' https://x.test")[:body_form].pluck("value")).to eq(["b c", "A"])
+      end
+
+      it "keeps unicode bodies" do
+        expect(attrs("curl -d 'name=José ñ' https://x.test")).to include(body: "name=José ñ")
+      end
+
+      it "lets multipart win over -d" do
+        expect(attrs("curl -F a=b -d c=d https://x.test")).to include(body_type: "multipart", body_form: [include("key" => "a")])
+      end
+
+      it "encodes --data-urlencode data moved to the query by -G" do
+        expect(attrs("curl -G --data-urlencode 'q=a b&c' https://x.test")[:url]).to eq("https://x.test?q=a+b%26c")
+      end
+
+      it "reads a -u without password as an empty password", :aggregate_failures do
+        expect(attrs("curl -u me https://x.test")[:auth_config]).to eq("username" => "me", "password" => "")
+        expect(attrs("curl -u '' https://x.test")[:auth_config]).to eq("username" => "", "password" => "")
+      end
+
+      it "fails instead of raising on an infinite --max-time" do
+        expect(parse("curl -m 1e999 https://x.test")).to be_failure
+      end
+
+      it "keeps only the first URL when --next is used" do
+        expect(attrs("curl https://a.test --next https://b.test")[:url]).to eq("https://a.test")
+      end
+
+      it "keeps the file reference of -F fields with options" do
+        expect(attrs("curl -F 'f=@a.png;type=image/png' https://x.test")[:body_form]).to contain_exactly(include("type" => "file", "value" => "a.png;type=image/png"))
+      end
+    end
 end

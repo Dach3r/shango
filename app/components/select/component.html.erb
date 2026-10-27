@@ -8,8 +8,8 @@
     <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>
   </button>
 
-  <div data-select-target="menu" hidden
-       class="absolute left-0 top-full z-30 mt-1.5 w-max min-w-full max-w-80 border border-line bg-card p-1">
+  <div data-select-target="menu" <%= "data-dock" if @dock %> hidden
+       class="<%= menu_classes %>">
     <% if searchable? %>
       <div class="relative p-0.5 pb-1">
         <%= lucide_icon "search", class: "pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-[calc(50%+1px)] text-faint" %>
@@ -19,7 +19,7 @@
       </div>
     <% end %>
 
-    <ul role="listbox" tabindex="-1" data-select-target="list" data-action="keydown->select#navigate" class="max-h-60 overflow-y-auto">
+    <ul role="listbox" tabindex="-1" data-select-target="list" data-action="keydown->select#navigate" class="<%= list_classes %>">
       <% @options.each do |label, value| %>
         <li role="presentation">
           <button type="button" role="option" tabindex="-1" data-select-target="option" data-value="<%= value %>" data-label="<%= label %>"

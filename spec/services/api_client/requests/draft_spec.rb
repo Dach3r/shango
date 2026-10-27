@@ -76,4 +76,23 @@ RSpec.describe "Draft requests" do
       expect(described_class.call(api_request: draft)).to have_attributes(type: "none", owner: nil)
     end
   end
+
+  describe ApiClient::Requests::Place, "ordering" do
+    it "puts the draft last among the siblings of its destination", :aggregate_failures do
+      existing = create(:api_request, collection:)
+      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+
+      described_class.call(api_request: draft, collection:)
+
+      expect(draft.reload.position).to be > existing.position
+    end
+
+    it "numbers drafts placed into an empty folder from one" do
+      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+
+      described_class.call(api_request: draft, collection:, folder: create(:folder, collection:))
+
+      expect(draft.reload.position).to eq(1)
+    end
+  end
 end

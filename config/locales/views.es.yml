@@ -1,5 +1,17 @@
 es:
+  mailing:
+    disabled: El correo no está configurado en esta instancia.
+  throttling:
+    limited: Demasiados intentos. Espera un momento e inténtalo de nuevo.
   activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              upload_too_large: "%{name} supera el límite de %{max} MB."
+              uploads_too_large: Los archivos juntos superan el límite de %{max} MB.
+              too_many_uploads: Demasiados archivos en una solicitud (máximo %{max}).
     attributes:
       user:
         first_name: Nombre
@@ -64,6 +76,10 @@ es:
       system: Sistema
       light: Claro
       dark: Oscuro
+  settings:
+    save_bar:
+      unsaved: Tienes cambios sin guardar
+      discard: Descartar
   projects:
     new:
       title: Nuevo proyecto
@@ -196,6 +212,11 @@ es:
         cancel_heading: Cancelar mi cuenta
         cancel_account: Cancelar mi cuenta
         confirm: ¿Estás seguro?
+        current_password: Contraseña actual
+        current_password_placeholder: Ingresa tu contraseña actual
+      destroy:
+        wrong_password: "La contraseña es incorrecta. Tu cuenta no fue cancelada."
+        sole_owner: "Eres el único propietario de %{projects}, que todavía tiene otros miembros. Cancelar tu cuenta lo dejaría sin propietario."
     passwords:
       new:
         title: Recuperar contraseña

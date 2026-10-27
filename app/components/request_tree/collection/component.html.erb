@@ -1,7 +1,7 @@
 <div class="group relative" data-controller="context-menu" data-action="contextmenu->context-menu#open">
   <details <%= "open" unless @closed_ids.include?(collection.id.to_s) %> data-tree-target="branch" data-id="<%= collection.id %>" data-action="toggle->tree#toggled" class="group/branch">
     <summary data-action="click->tree#summaryClick dblclick->tree#summaryDoubleClick" data-drop-mode="into" data-collection-id="<%= collection.id %>" data-folder-id=""
-             class="flex cursor-pointer list-none items-center gap-2 py-1.5 pr-9 pl-2 text-sm font-medium text-ink transition hover:bg-field data-[drop-active=into]:bg-accent/15 focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
+             class="flex cursor-pointer list-none items-center gap-2 py-1.5 pr-9 pl-2 text-[0.8125rem] font-medium text-ink transition hover:bg-field data-[drop-active=into]:bg-accent/15 focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
       <%= lucide_icon "chevron-right", data: { tree_arrow: true }, class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
       <%= lucide_icon "folder-open", class: "size-4 shrink-0 text-accent" %>
       <span data-controller="inline-rename" data-inline-rename-url-value="<%= workbench_collection_path(collection) %>" data-inline-rename-param-value="collection" data-action="dblclick->inline-rename#edit" class="min-w-0 flex-1 truncate"><%= collection.name %></span>

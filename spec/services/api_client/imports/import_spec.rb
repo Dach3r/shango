@@ -47,6 +47,26 @@ RSpec.describe ApiClient::Imports::Import do
       expect(run("{\"openapi\": \"3.0.0\", \"paths\": {}}").error).to eq(I18n.t("workbench.imports.errors.invalid_openapi"))
     end
 
+    it "fails cleanly on valid JSON with the wrong shape", :aggregate_failures do
+      wrong = [
+        { info: { name: "C" }, item: [{ name: "r", event: ["x"], request: { url: "x" } }] },
+        { info: { name: "C" }, auth: { type: "basic", basic: { a: 1 } }, item: [] },
+        { openapi: "3.0.0", info: "x", paths: { "/a" => { get: {} } } },
+        { name: "b", root: "x", items: [] }
+      ]
+
+      wrong.each { |data| expect(run(data.to_json).error).to eq(I18n.t("workbench.imports.errors.invalid_content")) }
+    end
+
+    it "rejects YAML nested deep enough to overflow the parser" do
+      expect(run(("[" * 20_000) + ("]" * 20_000)).error).to eq(I18n.t("workbench.imports.errors.invalid_content"))
+    end
+
+    it "ignores a leading BOM and fails on empty objects", :aggregate_failures do
+      expect(run("\uFEFF#{{ info: { name: "C" }, item: [] }.to_json}")).to be_success
+      expect(run("{}").error).to eq(I18n.t("workbench.imports.errors.unknown_format"))
+    end
+
     it "reports an empty result" do
       allow(ApiClient::Imports::Postman).to receive(:call).and_return(Result.success({ collections: [], environments: [], warnings: [] }))
       expect(run(fixture("postman_environment.json")).error).to eq(I18n.t("workbench.imports.errors.nothing_to_import"))

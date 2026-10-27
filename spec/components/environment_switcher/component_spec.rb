@@ -30,4 +30,12 @@ RSpec.describe EnvironmentSwitcher::Component, type: :component do
       expect(page).to have_css("li svg.text-accent", count: 1, visible: :all)
     end
   end
+
+  it "escapes hostile environment names", :aggregate_failures do
+    hostile = create(:environment, project:, name: "<script>alert(1)</script>")
+    render_inline(described_class.new(environments: [hostile], current_environment: hostile))
+
+    expect(page).not_to have_css("script", visible: :all)
+    expect(page).to have_css("button[aria-haspopup]", text: "<script>alert(1)</script>")
+  end
 end

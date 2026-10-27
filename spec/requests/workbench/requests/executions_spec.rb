@@ -22,6 +22,23 @@ RSpec.describe "Workbench request executions" do
       post workbench_request_executions_path(api_request), headers: turbo_headers
 
       expect(response.body).to include(I18n.t("workbench.executions.timing.title"), I18n.t("workbench.executions.timing.phases.ttfb"))
+      expect(response.body).to include('data-name="timing"', I18n.t("workbench.executions.timing.total"))
+    end
+
+    it "lists the cookies the response set in their own tab", :aggregate_failures do
+      stub_request(:get, url).to_return(status: 200, headers: { "Set-Cookie" => ["_session=abc; Path=/; Secure; HttpOnly", "theme=dark; Max-Age=60", "last=1; Expires=Wed, 21 Oct 2037 07:28:00 GMT"] })
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).to include('data-name="cookies"', "_session", "abc", "Secure, HttpOnly", "60 s", "Wed, 21 Oct 2037 07:28:00 GMT", I18n.t("workbench.executions.cookies.session"))
+    end
+
+    it "shows no cookies tab when the response sets none" do
+      stub_request(:get, url).to_return(status: 200)
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).not_to include('data-name="cookies"')
     end
 
     it "offers no save for failed requests", :aggregate_failures do
@@ -104,6 +121,127 @@ RSpec.describe "Workbench request executions" do
       get workbench_request_execution_path(api_request, execution)
 
       expect(response).to have_http_status(:not_found)
+    end
+  end
+end
+
+RSpec.describe "Workbench queued executions" do
+  include_context "with workbench project"
+
+  let(:state) { ApiClient::Executions::RunState }
+  let(:run_id) { SecureRandom.uuid }
+  let(:uploaded) { false }
+
+  before do
+    allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+    stub_const("ENV", ENV.to_h.merge("SHANGO_EXECUTION_MODE" => "async"))
+  end
+
+  describe "POST /workbench/requests/:request_id/executions" do
+    it "queues the send and answers with the running panel", :aggregate_failures do
+      expect { post workbench_request_executions_path(api_request), headers: turbo_headers }.to have_enqueued_job(RunRequestJob)
+
+      expect(response).to have_http_status(:accepted)
+      expect(response.headers["X-Execution-Id"]).to match(/\A\h{8}-/)
+      expect(response.body).to include("response_panel", I18n.t("workbench.executions.running"))
+      expect(state.read(response.headers["X-Execution-Id"])).to include("user_id" => user.id, "api_request_id" => api_request.id)
+    end
+
+    it "still saves pending edits and reports invalid ones", :aggregate_failures do
+      post workbench_request_executions_path(api_request), params: { api_request: { name: "" } }, headers: turbo_headers
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(RunRequestJob).not_to have_been_enqueued
+    end
+  end
+
+  describe "GET /workbench/requests/:request_id/executions/:execution_id/result" do
+    def start(**options)
+      state.start(run_id, user_id: user.id, api_request_id: api_request.id, **options)
+    end
+
+    it "says 202 while the run is going", :aggregate_failures do
+      start
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+
+      expect(response).to have_http_status(:accepted)
+      expect(response.body).to be_blank
+    end
+
+    it "streams the response panel once done", :aggregate_failures do
+      start
+      build(:request_execution, id: run_id, api_request:, project:, user:, created_at: Time.current, status: 200, response_body: "hi").stash
+      state.finish(run_id, "done")
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("response_panel", I18n.t("workbench.executions.save"))
+      expect(response.body).not_to include('action="refresh"')
+    end
+
+    it "refreshes the page when the run uploaded files", :aggregate_failures do
+      start(uploaded: true)
+      build(:request_execution, id: run_id, api_request:, project:, user:, created_at: Time.current).stash
+      state.finish(run_id, "done")
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+
+      expect(response.body).to include('action="refresh"')
+    end
+
+    it "is gone when the response expired" do
+      start
+      state.finish(run_id, "done")
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+
+      expect(response).to have_http_status(:gone)
+    end
+
+    it "has nothing to show for cancelled runs" do
+      start
+      state.finish(run_id, "cancelled")
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it "reports failed runs" do
+      start
+      state.finish(run_id, "failed")
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "is not found for unknown runs, other requests or other users", :aggregate_failures do
+      get workbench_request_execution_result_path(api_request, SecureRandom.uuid), headers: turbo_headers
+      expect(response).to have_http_status(:not_found)
+
+      state.start(run_id, user_id: create(:user).id, api_request_id: api_request.id)
+      get workbench_request_execution_result_path(api_request, run_id), headers: turbo_headers
+      expect(response).to have_http_status(:not_found)
+
+      state.start(run_id, user_id: user.id, api_request_id: api_request.id)
+      get workbench_request_execution_result_path(create(:api_request, collection:), run_id), headers: turbo_headers
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "POST /workbench/requests/:request_id/executions/:execution_id/cancellation" do
+    it "asks the worker to stop", :aggregate_failures do
+      state.start(run_id, user_id: user.id, api_request_id: api_request.id)
+      post workbench_request_execution_cancellation_path(api_request, run_id)
+
+      expect(response).to have_http_status(:no_content)
+      expect(state.cancelled?(run_id)).to be(true)
+    end
+
+    it "does not cancel runs of other users", :aggregate_failures do
+      state.start(run_id, user_id: create(:user).id, api_request_id: api_request.id)
+      post workbench_request_execution_cancellation_path(api_request, run_id)
+
+      expect(response).to have_http_status(:not_found)
+      expect(state.cancelled?(run_id)).to be(false)
     end
   end
 end

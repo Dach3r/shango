@@ -33,4 +33,32 @@ RSpec.describe ApiClient::Auth::Digest do
       end
     end
   end
+
+  describe "odd inputs" do
+      it "keeps special characters of credentials" do
+        header = described_class.new({ "username" => "a b@c:d", "password" => "p w/é" }).respond_to_challenge(response, request)["Authorization"]
+
+        expect(header).to include('username="a b@c:d"')
+      end
+
+      it "signs the path with its query string in the original order" do
+        request.url = "https://a.test/x?b=2&a=1"
+
+        expect(strategy.respond_to_challenge(response, request)["Authorization"]).to include('uri="/x?b=2&a=1"')
+      end
+
+      it "ignores responses without a challenge header" do
+        expect(strategy.respond_to_challenge(instance_double(Faraday::Response, headers: {}), request)).to be_nil
+      end
+
+      it "answers challenges without qop" do
+        response = instance_double(Faraday::Response, headers: { "www-authenticate" => 'Digest realm="r", nonce="abc"' })
+
+        expect(strategy.respond_to_challenge(response, request)["Authorization"]).not_to include("qop=")
+      end
+
+      it "answers with an empty password" do
+        expect(described_class.new({ "username" => "ada" }).respond_to_challenge(response, request)["Authorization"]).to start_with("Digest")
+      end
+    end
 end

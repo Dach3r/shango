@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_131342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -66,6 +66,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
     t.uuid "user_id"
     t.index ["collection_id"], name: "index_api_requests_on_collection_id"
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
+    t.index ["project_id", "collection_id", "folder_id", "position"], name: "index_api_requests_on_tree_order"
+    t.index ["project_id", "user_id"], name: "index_api_requests_on_drafts", where: "(collection_id IS NULL)"
     t.index ["project_id"], name: "index_api_requests_on_project_id"
     t.index ["user_id"], name: "index_api_requests_on_user_id"
     t.check_constraint "body_type::text = ANY (ARRAY['none'::character varying::text, 'json'::character varying::text, 'text'::character varying::text, 'xml'::character varying::text, 'form_urlencoded'::character varying::text, 'multipart'::character varying::text, 'graphql'::character varying::text, 'binary'::character varying::text])", name: "api_requests_body_type_check"
@@ -83,6 +85,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_collections_on_project_id"
+  end
+
+  create_table "cookies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "environment_id"
+    t.string "domain", null: false
+    t.string "path", default: "/", null: false
+    t.string "name", null: false
+    t.text "value"
+    t.boolean "host_only", default: true, null: false
+    t.boolean "secure", default: false, null: false
+    t.boolean "http_only", default: false, null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["environment_id"], name: "index_cookies_on_environment_id"
+    t.index ["project_id", "environment_id", "domain", "path", "name"], name: "index_cookies_on_jar_and_identity", unique: true, nulls_not_distinct: true
+    t.index ["project_id"], name: "index_cookies_on_project_id"
   end
 
   create_table "environments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -127,6 +147,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
     t.check_constraint "color_scheme::text = ANY (ARRAY['system'::character varying, 'light'::character varying, 'dark'::character varying]::text[])", name: "memberships_color_scheme_check"
     t.check_constraint "folder_toggle::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_folder_toggle_check"
     t.check_constraint "request_open::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_request_open_check"
+    t.check_constraint "role::text = ANY (ARRAY['member'::character varying, 'owner'::character varying]::text[])", name: "memberships_role_check"
     t.check_constraint "theme::text = ANY (ARRAY['default'::character varying, 'blue'::character varying, 'green'::character varying, 'yellow'::character varying, 'red'::character varying, 'ocean'::character varying, 'purple'::character varying, 'rose'::character varying, 'orange'::character varying, 'forest'::character varying, 'midnight'::character varying, 'nord'::character varying, 'dracula'::character varying, 'gruvbox'::character varying, 'solarized'::character varying, 'sunset'::character varying, 'coffee'::character varying, 'cyberpunk'::character varying, 'mono'::character varying]::text[])", name: "memberships_theme_check"
   end
 
@@ -163,9 +184,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
     t.text "error_message"
     t.datetime "created_at", null: false
     t.jsonb "timings", default: {}, null: false
+    t.jsonb "set_cookies", default: [], null: false
     t.index ["api_request_id", "created_at"], name: "index_request_executions_on_api_request_id_and_created_at"
     t.index ["api_request_id"], name: "index_request_executions_on_api_request_id"
     t.index ["environment_id"], name: "index_request_executions_on_environment_id"
+    t.index ["project_id", "user_id", "created_at"], name: "index_request_executions_on_project_user_and_created_at"
     t.index ["project_id"], name: "index_request_executions_on_project_id"
     t.index ["user_id"], name: "index_request_executions_on_user_id"
   end
@@ -230,6 +253,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_184207) do
   add_foreign_key "api_requests", "projects"
   add_foreign_key "api_requests", "users", on_delete: :cascade
   add_foreign_key "collections", "projects"
+  add_foreign_key "cookies", "environments"
+  add_foreign_key "cookies", "projects"
   add_foreign_key "environments", "projects"
   add_foreign_key "folders", "collections"
   add_foreign_key "folders", "folders", column: "parent_id"

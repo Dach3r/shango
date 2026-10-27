@@ -1,4 +1,5 @@
-<div role="tablist" aria-label="<%= @label %>" class="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-line px-2">
+<% if content? %><div class="flex shrink-0"><% end %>
+<div role="tablist" aria-label="<%= @label %>" class="flex <%= content? ? "min-w-0" : "shrink-0" %> items-center gap-1 overflow-x-auto border-b border-line px-2">
   <% @items.each do |item| %>
     <button type="button" role="tab" class="<%= TAB %>" data-tabs-target="tab" data-name="<%= item[:name] %>"
             data-action="tabs#select" data-tabs-name-param="<%= item[:name] %>" <%= "disabled" if item[:disabled] %>>
@@ -15,3 +16,7 @@
     </button>
   <% end %>
 </div>
+<% if content? %>
+  <div class="flex min-w-0 grow items-center justify-end border-b border-line"><%= content %></div>
+</div>
+<% end %>
