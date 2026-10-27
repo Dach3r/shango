@@ -8,7 +8,7 @@
     <%= lucide_icon "chevron-down", class: "size-4 shrink-0 text-muted" %>
   </button>
 
-  <div data-select-target="menu" hidden
+  <div data-select-target="menu" <%= "data-dock" if @dock %> hidden
        class="<%= menu_classes %>">
     <% if searchable? %>
       <div class="relative p-0.5 pb-1">

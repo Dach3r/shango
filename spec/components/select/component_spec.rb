@@ -25,7 +25,7 @@ RSpec.describe Select::Component, type: :component do
     expect(page).to have_css("[data-controller=select].relative", visible: :all)
 
     render_inline(described_class.new(name: "n", options:, dock: true))
-    expect(page).to have_css("[data-select-target=menu].right-0.bottom-0", visible: :all)
+    expect(page).to have_css("[data-select-target=menu][data-dock].right-0.bottom-0", visible: :all)
     expect(page).to have_no_css("[data-controller=select].relative", visible: :all)
   end
 
