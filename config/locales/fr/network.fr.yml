@@ -38,10 +38,8 @@ fr:
       filtered: "Filtré"
     dns:
       domain: "Domaine"
-      domain_placeholder: "example.com ou {{host}}"
+      domain_placeholder: example.com 203.0.113.10
       type: "Type"
-      expected: "Valeur attendue"
-      expected_placeholder: "203.0.113.10"
       submit: "Vérifier le DNS"
       no_authoritative: "Impossible de déterminer les serveurs de noms faisant autorité pour ce domaine."
       summary:

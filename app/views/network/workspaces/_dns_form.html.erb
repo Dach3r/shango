@@ -2,10 +2,8 @@
 <%= tag.div id: "dns_form", class: "shrink-0", data: variable_autocomplete_data do %>
   <%= form_with scope: :dns_check, url: network_dns_checks_path, class: "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0" do |form| %>
     <%= form.label :domain, t("network.dns.domain"), class: "sr-only" %>
-    <%= form.text_field :domain, value: input["domain"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.text_field :domain, value: input.values_at("domain", "expected").compact_blank.join(" "), required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: bar_field_classes("min-w-48 flex-1 font-mono") %>
     <%= render Select::Component.new(name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: input.fetch("type", "A"), id: "dns_check_type", label: t("network.dns.type"), class: "w-24 font-mono") %>
-    <%= form.label :expected, t("network.dns.expected"), class: "sr-only" %>
-    <%= form.text_field :expected, value: input["expected"], autocomplete: "off", spellcheck: false, placeholder: t("network.dns.expected_placeholder"), title: t("network.dns.expected"), class: bar_field_classes("min-w-36 flex-[1_1_9rem] font-mono") %>
     <%= form.button type: :submit, class: button_classes(:primary) do %>
       <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
     <% end %>

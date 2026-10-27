@@ -38,10 +38,8 @@ zh-CN:
       filtered: 被过滤
     dns:
       domain: 域名
-      domain_placeholder: "example.com 或 {{host}}"
+      domain_placeholder: example.com 203.0.113.10
       type: 类型
-      expected: 期望值
-      expected_placeholder: 203.0.113.10
       submit: 检查 DNS
       no_authoritative: 无法确定此域名的权威名称服务器。
       summary:

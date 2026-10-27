@@ -9,8 +9,8 @@ RSpec.describe "Network DNS checks" do
     Network::Dns::Query::Answer.new(status:, answers:, ttl: 60, ms: 12)
   end
 
-  def create_check(domain: "example.com", type: "A", expected: "")
-    post network_dns_checks_path, params: { dns_check: { domain:, type:, expected: } }, headers: turbo_headers
+  def create_check(domain: "example.com", type: "A")
+    post network_dns_checks_path, params: { dns_check: { domain:, type: } }, headers: turbo_headers
     follow_redirect! if response.location.to_s.include?("/network/checks/")
   end
 
@@ -28,7 +28,7 @@ RSpec.describe "Network DNS checks" do
   end
 
   it "saves the run and shows its propagation table at its own address", :aggregate_failures do
-    post network_dns_checks_path, params: { dns_check: { domain: "example.com", type: "A", expected: "203.0.113.10" } }, headers: turbo_headers
+    post network_dns_checks_path, params: { dns_check: { domain: "example.com 203.0.113.10", type: "A" } }, headers: turbo_headers
 
     expect(response).to redirect_to(network_check_path(project.network_checks.last))
     follow_redirect!
@@ -94,7 +94,7 @@ RSpec.describe "Network DNS checks" do
     environment = create(:environment, project:)
     create(:variable, environment:, key: "ip", value: "203.0.113.10")
     membership.update!(current_environment: environment)
-    create_check(expected: "{{ip}}")
+    create_check(domain: "example.com {{ip}}")
 
     expect(response).to have_http_status(:ok)
     expect(response.body).to include(I18n.t("network.dns.summary.expected", matched: 2, total: 2))
@@ -104,7 +104,7 @@ RSpec.describe "Network DNS checks" do
     environment = create(:environment, project:)
     create(:variable, environment:, key: "token", value: "s3cret", secret: true)
     membership.update!(current_environment: environment)
-    create_check(expected: "{{token}}")
+    create_check(domain: "example.com {{token}}")
 
     expect(response).to have_http_status(:unprocessable_content)
     expect(response.body).not_to include("s3cret")

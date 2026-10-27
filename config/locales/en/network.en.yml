@@ -38,10 +38,8 @@ en:
       filtered: Filtered
     dns:
       domain: Domain
-      domain_placeholder: example.com or {{host}}
+      domain_placeholder: example.com 203.0.113.10
       type: Type
-      expected: Expected value
-      expected_placeholder: 203.0.113.10
       submit: Check DNS
       no_authoritative: The authoritative nameservers of this domain could not be determined.
       summary:

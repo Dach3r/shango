@@ -38,10 +38,8 @@ ru:
       filtered: Фильтруется
     dns:
       domain: Домен
-      domain_placeholder: example.com или {{host}}
+      domain_placeholder: example.com 203.0.113.10
       type: Тип
-      expected: Ожидаемое значение
-      expected_placeholder: 203.0.113.10
       submit: Проверить DNS
       no_authoritative: Не удалось определить авторитетные серверы имён этого домена.
       summary:

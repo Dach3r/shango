@@ -38,10 +38,8 @@ ja:
       filtered: フィルタ済み
     dns:
       domain: ドメイン
-      domain_placeholder: "example.com または {{host}}"
+      domain_placeholder: example.com 203.0.113.10
       type: タイプ
-      expected: 期待値
-      expected_placeholder: 203.0.113.10
       submit: DNSを確認
       no_authoritative: このドメインの権威ネームサーバーを特定できませんでした。
       summary:
