@@ -85,7 +85,6 @@ zh-CN:
       ports: "端口检查"
       ping: "TCP ping"
       empty: "尚未检查任何内容。"
-      note: "仅为你在此项目中保存。"
       clear: "清除"
       ago: "%{time}前"
       delete: "删除此次运行"

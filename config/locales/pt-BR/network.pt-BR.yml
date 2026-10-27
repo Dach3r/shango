@@ -85,7 +85,6 @@ pt-BR:
       ports: "Verificações de portas"
       ping: "Pings TCP"
       empty: "Nada verificado ainda."
-      note: "Salvo apenas para você neste projeto."
       clear: "Limpar"
       ago: "há %{time}"
       delete: "Excluir execução"

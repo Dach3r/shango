@@ -85,7 +85,6 @@ de:
       ports: "Port-Prüfungen"
       ping: "TCP-Pings"
       empty: "Noch nichts geprüft."
-      note: "Nur für dich in diesem Projekt gespeichert."
       clear: "Leeren"
       ago: "vor %{time}"
       delete: "Lauf löschen"
