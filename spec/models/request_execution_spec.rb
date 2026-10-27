@@ -42,6 +42,25 @@ RSpec.describe RequestExecution do
       expect(described_class.pending(execution.id)).to have_attributes(id: execution.id, url: "https://api.example.com/a")
     end
 
+    it "cuts oversized bodies before stashing them", :aggregate_failures do
+      big = "é" * (described_class::STORED_BODY_BYTES / 2 + 100)
+      execution = build(:request_execution, id: SecureRandom.uuid, response_body: big, request_body: big, body_truncated: false)
+      execution.stash
+
+      restored = described_class.pending(execution.id)
+      expect(restored.response_body.bytesize).to be <= described_class::STORED_BODY_BYTES
+      expect(restored.request_body.bytesize).to be <= described_class::STORED_BODY_BYTES
+      expect(restored.body_truncated).to be(true)
+      expect(execution.response_body).to eq(big)
+    end
+
+    it "keeps small bodies and the truncation flag as they are", :aggregate_failures do
+      execution = build(:request_execution, id: SecureRandom.uuid, response_body: "ok", request_body: nil, body_truncated: false)
+      execution.stash
+
+      expect(described_class.pending(execution.id)).to have_attributes(response_body: "ok", request_body: nil, body_truncated: false)
+    end
+
     it "is nil for unknown ids" do
       expect(described_class.pending(SecureRandom.uuid)).to be_nil
     end
