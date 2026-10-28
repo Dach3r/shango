@@ -24,7 +24,7 @@ class ApiRequestPolicy < ApplicationPolicy
   end
 
   def duplicate?
-    !record.draft? && create?
+    create?
   end
 
   private

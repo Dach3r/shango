@@ -50,8 +50,9 @@ RSpec.describe ApiRequestPolicy, type: :policy do
       expect(policy).to be_destroy
     end
 
-    it "cannot be duplicated before it is saved" do
-      expect(described_class.new(member, draft)).not_to be_duplicate
+    it "can be duplicated by its author but not by anyone else", :aggregate_failures do
+      expect(described_class.new(member, draft)).to be_duplicate
+      expect(described_class.new(owner, draft)).not_to be_duplicate
     end
 
     it "is private to its author, owners included", :aggregate_failures do

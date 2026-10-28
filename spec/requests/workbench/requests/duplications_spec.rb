@@ -29,9 +29,14 @@ RSpec.describe "Workbench request duplications" do
     expect(copy.position).to be > original.position
   end
 
-  it "does not duplicate a draft that is not saved yet", :aggregate_failures do
-    expect { post workbench_request_duplication_path(draft) }.not_to change(ApiRequest, :count)
-    expect(response).to have_http_status(:forbidden).or have_http_status(:redirect)
+  it "duplicates a draft into another draft tab without saving a request", :aggregate_failures do
+    draft
+    expect { post workbench_request_duplication_path(draft) }.to change(RequestDraft, :count).by(1)
+    expect(ApiRequest.count).to eq(0)
+
+    copy = user.request_drafts.order(:created_at).last
+    expect(response).to redirect_to(workbench_request_path(copy.id))
+    expect(copy.name).to eq(I18n.t("workbench.requests.copy_name", name: draft.name))
   end
 
   it "requires authentication" do
