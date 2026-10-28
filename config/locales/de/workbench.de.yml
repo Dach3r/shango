@@ -75,6 +75,7 @@ de:
       remove: Zeile entfernen
       text: Text
       file: Datei
+      type: Typ
       secret: Geheim
       secret_saved: "Gespeichert · leer lassen zum Beibehalten"
     environment_switcher:

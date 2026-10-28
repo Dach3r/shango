@@ -19,6 +19,10 @@ class KeyValueTable::Row::Component < ApplicationComponent
     variant == :pairs
   end
 
+  def columnar?
+    pairs? || variant == :form_data
+  end
+
   def cell_classes(extra)
     field_classes("!border-transparent !bg-transparent hover:!bg-field focus:!bg-field-focus h-9 !py-0 #{extra}")
   end

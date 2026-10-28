@@ -75,6 +75,7 @@ fr:
       remove: "Supprimer la ligne"
       text: "Texte"
       file: "Fichier"
+      type: Type
       secret: "Secret"
       secret_saved: "Enregistré · laissez vide pour conserver"
     environment_switcher:

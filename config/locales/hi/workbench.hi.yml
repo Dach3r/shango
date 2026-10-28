@@ -75,6 +75,7 @@ hi:
       remove: "पंक्ति हटाएँ"
       text: "टेक्स्ट"
       file: "फ़ाइल"
+      type: प्रकार
       secret: "सीक्रेट"
       secret_saved: "सहेजा गया · रखने के लिए खाली छोड़ें"
     environment_switcher:

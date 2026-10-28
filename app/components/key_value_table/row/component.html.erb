@@ -1,15 +1,15 @@
-<div data-key-value-table-target="row" class="<%= class_names("group flex items-center", "gap-2 px-3": !pairs?, "relative items-stretch divide-x divide-line": pairs?, "py-1": !pairs? && variant != :variables, "flex-wrap gap-y-1 py-2": variant == :variables) %>">
+<div data-key-value-table-target="row" class="<%= class_names("group flex items-center", "gap-2 px-3": !columnar?, "relative items-stretch divide-x divide-line": columnar?, "py-1": !columnar? && variant != :variables, "flex-wrap gap-y-1 py-2": variant == :variables) %>">
   <% if persisted? %>
     <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
     <%= hidden_field_tag field_name("_destroy"), "0", id: nil, data: { destroy: true } %>
   <% end %>
 
-  <% unless pairs? %>
+  <% unless columnar? %>
     <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
                                        aria: { label: t("components.key_value_table.enabled") }) %>
   <% end %>
 
-  <% if pairs? %>
+  <% if columnar? %>
     <div class="flex w-10 shrink-0 items-center justify-center">
       <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { field: "enabled", action: "change->key-value-table#input" },
                                          aria: { label: t("components.key_value_table.enabled") }) %>
@@ -26,16 +26,18 @@
   <% if variant == :form_data %>
     <%= hidden_field_tag field_name("upload_token"), upload_token, id: nil %>
     <%= hidden_field_tag field_name("attachment_id"), row["attachment_id"], id: nil if row["attachment_id"].present? %>
-    <%= render Select::Component.new(name: field_name("type"), options: type_options, value: row["type"] || "text",
-                                     input_data: { role: "type", action: "change->key-value-table#typeChanged" }, class: "w-24 shrink-0 !px-2") %>
-    <div data-role="text" class="min-w-0 flex-1" <%= "hidden" if file? %>>
+    <div data-role="type" class="w-32 shrink-0 px-2 py-1">
+      <%= render Select::Component.new(name: field_name("type"), options: type_options, value: row["type"] || "text",
+                                       input_data: { action: "change->key-value-table#typeChanged" }, class: "!border-transparent !bg-transparent hover:!bg-field h-9 !py-0 text-xs") %>
+    </div>
+    <div data-role="text" class="min-w-0 flex-[1.4] px-2 py-1" <%= "hidden" if file? %>>
       <%= text_field_tag field_name("value"), row["value"], id: nil, placeholder: @value_placeholder, autocomplete: "off", disabled: file?,
                          data: { field: "value", action: "input->key-value-table#input" }, class: cell_classes("font-mono text-xs") %>
     </div>
-    <div data-role="file" class="min-w-0 flex-1" <%= "hidden" unless file? %>>
+    <div data-role="file" class="min-w-0 flex-[1.4] px-2 py-1" <%= "hidden" unless file? %>>
       <%= hidden_field_tag field_name("value"), row["value"], id: nil, disabled: !file? %>
       <%= file_field_tag upload_name, id: nil, disabled: !file?, data: { action: "change->key-value-table#input" },
-                         class: field_classes("text-xs file:mr-3 file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
+                         class: cell_classes("pt-1.5 file:mr-3 file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
       <% if file? && row["value"].present? %>
         <p class="mt-1 truncate text-xs text-muted"><%= row["value"] %></p>
       <% end %>
@@ -64,7 +66,7 @@
                                        data: { action: "change->key-value-table#syncMask" }) %>
   <% end %>
 
-  <% if pairs? %>
+  <% if columnar? %>
     <div class="absolute inset-y-0 right-1 flex items-center">
       <button type="button" data-action="key-value-table#remove" aria-label="<%= t("components.key_value_table.remove") %>"
               class="[.group:only-child_&]:invisible flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint opacity-0 transition hover:bg-field group-hover:opacity-100 focus-visible:opacity-100 max-lg:opacity-100 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">

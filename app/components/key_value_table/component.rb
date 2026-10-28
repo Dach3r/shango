@@ -21,6 +21,10 @@ class KeyValueTable::Component < ApplicationComponent
     @variant == :pairs
   end
 
+  def form_data?
+    @variant == :form_data
+  end
+
   def wrapper_data
     { controller: "key-value-table", always_row: pairs? }.merge(@data)
   end

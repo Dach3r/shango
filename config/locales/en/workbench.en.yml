@@ -75,6 +75,7 @@ en:
       remove: Remove row
       text: Text
       file: File
+      type: Type
       secret: Secret
       secret_saved: Saved · leave blank to keep
     environment_switcher:

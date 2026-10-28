@@ -75,6 +75,7 @@ pt-BR:
       remove: Remover linha
       text: Texto
       file: Arquivo
+      type: Tipo
       secret: Secreto
       secret_saved: "Salvo · deixe em branco para manter"
     environment_switcher:

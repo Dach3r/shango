@@ -75,6 +75,7 @@ ru:
       remove: Удалить строку
       text: Текст
       file: Файл
+      type: Тип
       secret: Секрет
       secret_saved: Сохранено · оставьте пустым, чтобы не менять
     environment_switcher:

@@ -75,6 +75,7 @@ es:
       remove: Quitar fila
       text: Texto
       file: Archivo
+      type: Tipo
       secret: Secreto
       secret_saved: Guardado · deja vacío para conservar
     environment_switcher:

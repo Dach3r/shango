@@ -1,11 +1,20 @@
 <%= tag.div data: wrapper_data do %>
-  <div class="overflow-hidden border border-r-0 border-line">
+  <div class="<%= class_names("border border-r-0 border-line", "overflow-hidden": !form_data?) %>">
     <% if pairs? %>
       <div class="flex h-11 items-stretch divide-x divide-line border-b border-line bg-ink/[0.03] text-xs font-medium uppercase tracking-wide text-muted">
         <span class="h-full w-10 shrink-0"></span>
         <span class="min-w-0 flex flex-1 items-center px-2"><span class="block px-3"><%= @key_placeholder %></span></span>
         <span class="min-w-0 flex flex-[1.4] items-center px-2"><span class="block px-3"><%= @value_placeholder %></span></span>
         <span class="hidden min-w-0 flex-1 items-center px-2 lg:flex"><span class="block px-3"><%= t("components.key_value_table.description") %></span></span>
+      </div>
+    <% end %>
+
+    <% if form_data? %>
+      <div class="flex h-11 items-stretch divide-x divide-line border-b border-line bg-ink/[0.03] text-xs font-medium uppercase tracking-wide text-muted">
+        <span class="h-full w-10 shrink-0"></span>
+        <span class="min-w-0 flex flex-1 items-center px-2"><span class="block px-3"><%= @key_placeholder %></span></span>
+        <span data-role="type" class="flex w-32 shrink-0 items-center px-2"><span class="block px-3"><%= t("components.key_value_table.type") %></span></span>
+        <span class="min-w-0 flex flex-[1.4] items-center px-2"><span class="block px-3"><%= @value_placeholder %></span></span>
       </div>
     <% end %>
 
@@ -20,7 +29,7 @@
     </template>
   </div>
 
-  <div class="<%= class_names("flex", "px-3 py-3": pairs?, "pt-3": !pairs?) %>">
+  <div class="<%= class_names("flex", "px-3 py-3": pairs? || form_data?, "pt-3": !(pairs? || form_data?)) %>">
     <button type="button" data-action="key-value-table#add"
             class="inline-flex cursor-pointer items-center gap-1.5 px-2 py-1 text-xs font-medium text-muted transition hover:bg-accent/10 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
       <%= lucide_icon "plus", class: "size-3.5" %>
