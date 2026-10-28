@@ -1,6 +1,7 @@
 hi:
   network:
     title: "नेटवर्क"
+    new_check: "नई जाँच"
     tabs:
       label: "नेटवर्क टूल"
       dns: "DNS"

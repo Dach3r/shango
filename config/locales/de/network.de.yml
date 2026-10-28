@@ -1,6 +1,7 @@
 de:
   network:
     title: Netzwerk
+    new_check: Neue Prüfung
     tabs:
       label: Netzwerk-Tools
       dns: DNS
