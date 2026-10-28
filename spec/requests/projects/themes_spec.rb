@@ -128,7 +128,7 @@ RSpec.describe "Themes" do
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(membership.reload).to be_color_scheme_system
-      expect(membership).to be_theme_default
+      expect(membership).to be_theme_mono
     end
 
     it "ignores attributes that are not theme settings", :aggregate_failures do

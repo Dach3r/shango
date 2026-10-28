@@ -15,9 +15,9 @@ RSpec.describe Membership do
 
   it { is_expected.to define_enum_for(:theme).with_values(Membership::THEMES).with_prefix.backed_by_column_of_type(:string) }
 
-  it "follows the OS color scheme with the default theme by default", :aggregate_failures do
+  it "follows the OS color scheme with the mono theme by default", :aggregate_failures do
     expect(membership).to be_color_scheme_system
-    expect(membership).to be_theme_default
+    expect(membership).to be_theme_mono
   end
 
   it "opens requests on single click by default" do

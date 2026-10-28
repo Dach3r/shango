@@ -25,7 +25,7 @@ module Theming
   end
 
   def current_palette
-    theme_membership&.theme || Membership::THEMES.fetch(:default)
+    theme_membership&.theme || Membership::THEMES.fetch(:mono)
   end
 
   def theme_membership

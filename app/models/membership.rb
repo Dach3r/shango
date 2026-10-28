@@ -16,7 +16,7 @@ class Membership < ApplicationRecord
   enum :folder_toggle, CLICK_MODES, default: "double_click", prefix: true, validate: true
   enum :request_open, CLICK_MODES, default: "click", prefix: true, validate: true
   enum :color_scheme, COLOR_SCHEMES, default: "system", prefix: true, validate: true
-  enum :theme, THEMES, default: "default", prefix: true, validate: true
+  enum :theme, THEMES, default: "mono", prefix: true, validate: true
 
   scope :active, -> { where(revoked_at: nil) }
 

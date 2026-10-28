@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_223651) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_011249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -173,7 +173,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_223651) do
     t.string "folder_toggle", default: "double_click", null: false
     t.string "request_open", default: "click", null: false
     t.string "color_scheme", default: "system", null: false
-    t.string "theme", default: "default", null: false
+    t.string "theme", default: "mono", null: false
     t.boolean "collapse_nested_folders", default: true, null: false
     t.index ["current_environment_id"], name: "index_memberships_on_current_environment_id"
     t.index ["project_id"], name: "index_memberships_on_project_id"
@@ -182,7 +182,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_223651) do
     t.check_constraint "folder_toggle::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_folder_toggle_check"
     t.check_constraint "request_open::text = ANY (ARRAY['click'::character varying, 'double_click'::character varying]::text[])", name: "memberships_request_open_check"
     t.check_constraint "role::text = ANY (ARRAY['member'::character varying, 'owner'::character varying]::text[])", name: "memberships_role_check"
-    t.check_constraint "theme::text = ANY (ARRAY['default'::character varying, 'blue'::character varying, 'green'::character varying, 'yellow'::character varying, 'red'::character varying, 'ocean'::character varying]::text[])", name: "memberships_theme_check"
+    t.check_constraint "theme::text = ANY (ARRAY['default'::character varying, 'blue'::character varying, 'green'::character varying, 'yellow'::character varying, 'red'::character varying, 'ocean'::character varying, 'purple'::character varying, 'rose'::character varying, 'orange'::character varying, 'forest'::character varying, 'midnight'::character varying, 'nord'::character varying, 'dracula'::character varying, 'gruvbox'::character varying, 'solarized'::character varying, 'sunset'::character varying, 'coffee'::character varying, 'cyberpunk'::character varying, 'mono'::character varying, 'graphite'::character varying, 'vulkanite'::character varying, 'virginia_tech'::character varying, 'vague'::character varying, 'van_gogh'::character varying, 'vault'::character varying, 'winslow'::character varying, 'unit_eva_001'::character varying, 'turner'::character varying, 'waveform_dark'::character varying, 'terminus'::character varying, 'synctax'::character varying, 'starsend'::character varying, 'spectrum'::character varying, 'saule'::character varying, 'santa_fe'::character varying, 'robzee84'::character varying, 'rose_pine_moon'::character varying, 'roadster_dark'::character varying, 'red_pill'::character varying, 'periphery'::character varying, 'outpost'::character varying, 'neptune'::character varying, 'alberta'::character varying, 'arc_blueberry'::character varying, 'astral'::character varying, 'azure_glow'::character varying, 'bauhaus'::character varying, 'black_sand'::character varying]::text[])", name: "memberships_theme_check"
   end
 
   create_table "network_checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
