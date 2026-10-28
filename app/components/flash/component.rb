@@ -1,9 +1,9 @@
 class Flash::Component < ApplicationComponent
   KINDS = {
-    notice: { icon: "circle-check", role: "status", tone: "bg-solid" },
-    alert: { icon: "circle-alert", role: "alert", tone: "bg-danger" }
+    notice: { icon: "circle-check", role: "status", tone: "bg-solid", glyph: "border-solid" },
+    alert: { icon: "circle-alert", role: "alert", tone: "bg-danger", glyph: "border-danger" }
   }.freeze
-  BASE = "pointer-events-auto relative w-full text-sm text-on-solid transition duration-300 ease-out starting:-translate-y-full data-[state=closed]:-translate-y-full"
+  BASE = "pointer-events-auto relative w-full border-b border-line bg-card text-sm text-ink transition duration-300 ease-out starting:-translate-y-full data-[state=closed]:-translate-y-full"
 
   def initialize(message:, kind: :notice, **options)
     @message = message
@@ -18,6 +18,6 @@ class Flash::Component < ApplicationComponent
   end
 
   def classes
-    class_names(BASE, config[:tone], @options[:class])
+    class_names(BASE, config[:glyph], @options[:class])
   end
 end
