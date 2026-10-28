@@ -16,11 +16,10 @@
     </div>
   </div>
 
-  <div data-body-type-target="panel" data-types="form_urlencoded multipart" class="p-4" hidden>
-    <p class="mb-3 text-xs text-muted"><%= t(api_request.draft? ? "workbench.body.form_hint_draft" : "workbench.body.form_hint") %></p>
+  <div data-body-type-target="panel" data-types="form_urlencoded multipart" class="[&>div>div:first-child]:border-x-0 [&>div>div:first-child]:border-t-0" hidden>
     <%= render KeyValueTable::Component.new(name: "api_request[body_form]", rows: api_request.body_form, variant: :form_data, files: !api_request.draft?) %>
     <% if api_request.draft? %>
-      <p class="mt-3 text-xs text-muted"><%= t("workbench.body.save_first") %></p>
+      <p class="px-4 pb-3 text-xs text-muted"><%= t("workbench.body.save_first") %></p>
     <% end %>
   </div>
 

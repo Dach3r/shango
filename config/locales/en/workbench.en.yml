@@ -308,8 +308,6 @@ en:
       none_hint: This request has no body.
       placeholder: Request body. Use {{variables}} where needed.
       graphql_variables: Variables (JSON)
-      form_hint: Text rows are sent as fields; choose File to upload a file.
-      form_hint_draft: "Text rows are sent as fields."
       binary: File to send as the raw body
       current_file: "Current file: %{name}"
       save_first: "Save this request to a collection first to attach files."

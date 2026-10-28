@@ -307,8 +307,6 @@ ja:
       none_hint: このリクエストにはボディがありません。
       placeholder: "リクエストボディ。必要に応じて {{variables}} を使用できます。"
       graphql_variables: 変数 (JSON)
-      form_hint: テキスト行はフィールドとして送信されます。ファイルをアップロードするには「ファイル」を選択してください。
-      form_hint_draft: "テキスト行はフィールドとして送信されます。"
       binary: そのままボディとして送信するファイル
       current_file: "現在のファイル: %{name}"
       save_first: "ファイルを添付するには、先にこのリクエストをコレクションに保存してください。"
