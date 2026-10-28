@@ -511,6 +511,19 @@ en:
           shango:
             name: Shango
             hint: "Lossless JSON for moving the collection between Shango projects."
+      progress:
+        title: "Exporting collection"
+        description: "Preparing “%{collection}”…"
+      status:
+        states:
+          queued: "Waiting in the queue…"
+          running: "Building the file…"
+          done: "Export ready"
+        download: "Download"
+        retention: "The file stays available for %{minutes} minutes."
+        expired: "This export expired. Start a new one."
+        errors:
+          unexpected: "The export failed. Try again."
       errors:
         unknown_format: Choose one of the available formats.
     imports:

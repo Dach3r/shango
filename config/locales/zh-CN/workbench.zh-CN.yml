@@ -509,6 +509,19 @@ zh-CN:
           shango:
             name: Shango
             hint: "无损 JSON，用于在 Shango 项目之间迁移集合。"
+      progress:
+        title: "正在导出集合"
+        description: "正在准备“%{collection}”…"
+      status:
+        states:
+          queued: "正在队列中等待…"
+          running: "正在生成文件…"
+          done: "导出完成"
+        download: "下载"
+        retention: "文件将保留 %{minutes} 分钟。"
+        expired: "此导出已过期，请重新开始。"
+        errors:
+          unexpected: "导出失败，请重试。"
       errors:
         unknown_format: "请选择一种可用的格式。"
     imports:

@@ -16,4 +16,17 @@ RSpec.describe ApiClient::Exports::Tree do
     expect(tree.requests_in(nested)).to eq([inside])
     expect(tree.requests_in(second)).to eq([])
   end
+
+  it "reports the requests it hands out to the progress", :aggregate_failures do
+    collection = create(:collection)
+    create_list(:api_request, 2, collection:)
+    progress = instance_double(ApiClient::Exports::Progress, advance: nil)
+    tree = described_class.new(collection, progress:)
+
+    tree.requests_in
+    tree.requests_in(create(:folder, collection:))
+
+    expect(progress).to have_received(:advance).with(2)
+    expect(progress).to have_received(:advance).with(0)
+  end
 end

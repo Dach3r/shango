@@ -10,11 +10,11 @@ module ApiClient
       IGNORED_HEADERS = %w[content-type accept authorization].freeze
       PLACEHOLDER = /\{\{\s*([^{}$]+?)\s*\}\}/
 
-      def initialize(collection:, environments:, credentials:)
+      def initialize(collection:, environments:, credentials:, progress: nil)
         @collection = collection
         @environments = environments
         @credentials = credentials
-        @tree = Tree.new(collection)
+        @tree = Tree.new(collection, progress:)
         @paths = {}
         @servers = []
         @schemes = {}

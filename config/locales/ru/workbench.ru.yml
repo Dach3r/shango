@@ -515,6 +515,19 @@ ru:
           shango:
             name: Shango
             hint: "JSON без потерь для переноса коллекции между проектами Shango."
+      progress:
+        title: "Экспорт коллекции"
+        description: "Подготовка «%{collection}»…"
+      status:
+        states:
+          queued: "Ожидание в очереди…"
+          running: "Создание файла…"
+          done: "Экспорт готов"
+        download: "Скачать"
+        retention: "Файл будет доступен %{minutes} мин."
+        expired: "Срок действия экспорта истёк. Запустите новый."
+        errors:
+          unexpected: "Не удалось выполнить экспорт. Попробуйте ещё раз."
       errors:
         unknown_format: "Выберите один из доступных форматов."
     imports:

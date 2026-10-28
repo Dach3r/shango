@@ -41,7 +41,11 @@ Rails.application.routes.draw do
       resources :folders, only: %i[new create]
       resources :requests, only: %i[new create]
       resource :curl_import, only: %i[new create]
-      resource :export, only: %i[new create]
+      resources :exports, only: %i[new create]
+    end
+
+    resources :exports, only: :show do
+      resource :download, only: :show, module: :exports
     end
 
     resource :import, only: %i[new create]

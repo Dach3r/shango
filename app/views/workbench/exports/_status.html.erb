@@ -1,0 +1,22 @@
+<% if export.failed? %>
+  <div role="alert" class="border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= t(".errors.#{export.error}") %></div>
+<% elsif export.expired? %>
+  <p class="border border-line bg-field px-4 py-3 text-sm text-muted"><%= t(".expired") %></p>
+<% else %>
+  <div <%= tag.attributes(export.active? ? { data: { controller: "poll", poll_url_value: workbench_export_path(export) } } : {}) %> class="space-y-3">
+    <div class="flex items-baseline justify-between gap-3 text-sm">
+      <span class="text-ink"><%= t(".states.#{export.status}") %></span>
+      <span class="font-mono text-xs text-muted"><%= export.progress %>%</span>
+    </div>
+    <div class="h-1.5 bg-line" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<%= export.progress %>">
+      <div class="h-full bg-accent transition-[width] duration-300" style="width: <%= export.progress %>%"></div>
+    </div>
+    <% if export.done? %>
+      <div class="flex items-center justify-between gap-3 pt-1">
+        <p class="min-w-0 truncate font-mono text-xs text-muted"><%= export.filename %></p>
+        <%= link_to workbench_export_download_path(export), data: { turbo: false }, class: button_classes(:primary) do %><%= lucide_icon "download", class: "size-4 shrink-0" %><%= t(".download") %><% end %>
+      </div>
+      <p class="text-xs text-faint"><%= t(".retention", minutes: CollectionExport.retention.in_minutes.to_i) %></p>
+    <% end %>
+  </div>
+<% end %>

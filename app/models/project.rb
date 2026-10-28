@@ -11,6 +11,7 @@ class Project < ApplicationRecord
   has_many :request_executions, dependent: :destroy
   has_many :request_drafts, dependent: :delete_all
   has_many :network_checks, dependent: :destroy
+  has_many :collection_exports, dependent: :delete_all
   has_many :invitations, dependent: :destroy
   has_many :audit_events, dependent: :destroy
 

@@ -509,6 +509,19 @@ ja:
           shango:
             name: Shango
             hint: "Shango プロジェクト間でコレクションを移すためのロスレス JSON。"
+      progress:
+        title: "コレクションをエクスポート中"
+        description: "「%{collection}」を準備しています…"
+      status:
+        states:
+          queued: "キューで待機中…"
+          running: "ファイルを作成中…"
+          done: "エクスポート完了"
+        download: "ダウンロード"
+        retention: "ファイルは %{minutes} 分間利用できます。"
+        expired: "このエクスポートは期限切れです。新しく開始してください。"
+        errors:
+          unexpected: "エクスポートに失敗しました。もう一度お試しください。"
       errors:
         unknown_format: "利用可能な形式のいずれかを選択してください。"
     imports:

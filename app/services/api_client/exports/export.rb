@@ -10,11 +10,12 @@ module ApiClient
       FORMATS = EXPORTERS.keys.freeze
       JSON_TYPE = "application/json".freeze
 
-      def initialize(collection:, format:, include_environments: false, include_credentials: false)
+      def initialize(collection:, format:, include_environments: false, include_credentials: false, on_progress: nil)
         @collection = collection
         @format = format.to_s.to_sym
         @include_environments = include_environments
         @include_credentials = include_credentials
+        @on_progress = on_progress
       end
 
       private
@@ -22,7 +23,9 @@ module ApiClient
       def perform
         return Result.failure(error: I18n.t("workbench.exports.errors.unknown_format")) unless FORMATS.include?(@format)
 
-        built = EXPORTERS.fetch(@format).call(collection: @collection, environments:, credentials: Credentials.new(include: @include_credentials))
+        progress = Progress.new(total: @collection.api_requests.count, &@on_progress)
+        built = EXPORTERS.fetch(@format).call(collection: @collection, environments:, credentials: Credentials.new(include: @include_credentials), progress:)
+        progress.update(Progress::BUILD_SHARE + 5)
         @format == :postman ? deliver_postman(built.data) : file("#{@format}.json", built.data[:document])
       end
 

@@ -511,6 +511,19 @@ hi:
           shango:
             name: Shango
             hint: "Shango प्रोजेक्ट के बीच कलेक्शन ले जाने के लिए बिना नुकसान वाला JSON।"
+      progress:
+        title: "कलेक्शन एक्सपोर्ट हो रहा है"
+        description: "“%{collection}” तैयार किया जा रहा है…"
+      status:
+        states:
+          queued: "कतार में इंतज़ार…"
+          running: "फ़ाइल बनाई जा रही है…"
+          done: "एक्सपोर्ट तैयार है"
+        download: "डाउनलोड करें"
+        retention: "फ़ाइल %{minutes} मिनट तक उपलब्ध रहेगी।"
+        expired: "यह एक्सपोर्ट समाप्त हो गया। नया शुरू करें।"
+        errors:
+          unexpected: "एक्सपोर्ट विफल रहा। फिर से कोशिश करें।"
       errors:
         unknown_format: "उपलब्ध फ़ॉर्मैट में से एक चुनें।"
     imports:

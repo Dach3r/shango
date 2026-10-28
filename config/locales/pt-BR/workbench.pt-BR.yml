@@ -511,6 +511,19 @@ pt-BR:
           shango:
             name: Shango
             hint: "JSON sem perdas para mover a coleção entre projetos do Shango."
+      progress:
+        title: "Exportando coleção"
+        description: "Preparando “%{collection}”…"
+      status:
+        states:
+          queued: "Aguardando na fila…"
+          running: "Gerando o arquivo…"
+          done: "Exportação pronta"
+        download: "Baixar"
+        retention: "O arquivo ficará disponível por %{minutes} minutos."
+        expired: "Esta exportação expirou. Inicie uma nova."
+        errors:
+          unexpected: "A exportação falhou. Tente novamente."
       errors:
         unknown_format: "Escolha um dos formatos disponíveis."
     imports:

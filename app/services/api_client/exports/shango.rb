@@ -6,11 +6,11 @@ module ApiClient
 
       VERSION = 1
 
-      def initialize(collection:, environments:, credentials:)
+      def initialize(collection:, environments:, credentials:, progress: nil)
         @collection = collection
         @environments = environments
         @credentials = credentials
-        @tree = Tree.new(collection)
+        @tree = Tree.new(collection, progress:)
       end
 
       private

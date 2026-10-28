@@ -25,3 +25,6 @@ production:
   prune_request_drafts:
     class: PruneRequestDraftsJob
     schedule: every day at 4am
+  prune_collection_exports:
+    class: PruneCollectionExportsJob
+    schedule: every hour at minute 20

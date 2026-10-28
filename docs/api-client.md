@@ -61,7 +61,7 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   requests/executions/saves_controller.rb  # POST = save a run's response to history
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb
-  exports_controller.rb              # GET new (modal), POST create (download) /workbench/collections/:id/export
+  exports_controller.rb              # GET new (modal), POST create (queues), GET show (progress frame) / exports/downloads_controller.rb (file)
   imports_controller.rb              # GET/POST /workbench/import (collections, folders, requests, environments)
   oauth2/{tokens,authorizations,callbacks}_controller.rb
 app/controllers/projects/            # project-level tools
@@ -75,7 +75,7 @@ app/services/api_client/
   oauth2/                            # token client + services
   curl/{parser,exporter}.rb
   imports/                           # detector, one importer per format, support helpers, Import (persist)
-  exports/                           # one exporter per format, Export (entry point), Credentials, Tree, Zip
+  exports/                           # one exporter per format, Export (entry point), Enqueue, Progress, Credentials, Tree, Zip
   request_builder.rb executor.rb connection.rb timing.rb ssrf_policy.rb variable_resolver.rb masker.rb
 app/services/projects/environments/  # Create, Update, Destroy, Select, UpdateVariable
 app/services/result.rb
@@ -177,7 +177,7 @@ Fixtures for each format live in `spec/fixtures/files/imports/`. The Shango form
 
 ### 9.1 Exporting a collection
 
-*Export* sits in the collection's menu (`GET /workbench/collections/:id/export/new`, `POST` downloads the file; `Workbench::ExportsController`, `ApiClient::Exports::Export`). Any member of the project can export what they can open (`CollectionPolicy#export?`, same as showing it); it changes no state. Throttled by `SHANGO_RATE_LIMIT_EXPORTS` (default 20/600).
+*Export* sits in the collection's menu (`GET /workbench/collections/:id/exports/new`). Any member of the project can export what they can open (`CollectionPolicy#export?`, same as showing it). The export is **queued, never built in the request**: `POST /workbench/collections/:id/exports` (`Workbench::ExportsController`, `ApiClient::Exports::Enqueue`, throttled by `SHANGO_RATE_LIMIT_EXPORTS`, default 20/600) records a `CollectionExport` row (`queued`, `running`, `done`, `failed`; `progress` 0-100) and enqueues `ExportCollectionJob` (`exports` queue, one at a time per member). The modal swaps to a progress bar: the `poll` Stimulus controller reloads the `export_progress` turbo-frame (`GET /workbench/exports/:id`) every second until the export is done, failed or expired, then shows *Download* (`GET /workbench/exports/:id/download`). Progress is real: `Exports::Tree` reports every folder's requests to `Exports::Progress` (0-90 %), `Export` adds serializing (95 %) and the job stores the file (100 %). Only the member who asked can see and download an export (`CollectionExportPolicy`); the file is stored base64-encoded in an encrypted column (it may hold credentials) and deleted `SHANGO_EXPORT_RETENTION_MINUTES` (default 60) after it finishes. Unexpected errors mark it `failed` with a generic message (the details go to the log).
 
 | Format | File | Notes |
 |---|---|---|
@@ -186,7 +186,7 @@ Fixtures for each format live in `spec/fixtures/files/imports/`. The Shango form
 | OpenAPI 3.0 | `<name>.openapi.json` | A contract draft: operations by method and path (the first request wins), folders as tags, parameters and body examples, security schemes (basic, digest, bearer, API key; inherited auth is resolved). Never carries credentials or environments; the server URL is read from the base URL variable |
 | Shango | `<name>.shango.json` | Lossless: settings, descriptions, nested folders and auth at every level |
 
-Options: *include environments* (all of the project's, ignored by OpenAPI) and *include credentials and secrets* (both off by default). Without credentials, secret auth fields and secret variable values are exported empty (the field stays) and OAuth tokens are left out (`Exports::Credentials`); with them the file holds them in clear text, which the form warns about. Not exported: JWT bearer auth in Postman and Insomnia (no equivalent), binary body files and uploaded files (only their names), response history, drafts, scripts. Environment files and secrets only go out through the download response; nothing is stored.
+Options: *include environments* (all of the project's, ignored by OpenAPI) and *include credentials and secrets* (both off by default). Without credentials, secret auth fields and secret variable values are exported empty (the field stays) and OAuth tokens are left out (`Exports::Credentials`); with them the file holds them in clear text, which the form warns about. Not exported: JWT bearer auth in Postman and Insomnia (no equivalent), binary body files and uploaded files (only their names), response history, drafts, scripts. The generated file is kept only until it expires (see above).
 
 ## 10. Open questions
 

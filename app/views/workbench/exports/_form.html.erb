@@ -1,5 +1,8 @@
 <%= render Modal::Component.new(icon: "download", title: t(".title"), description: t(".description", collection: @collection.name), size: :lg, form: "export_form", submit: t(".submit"), submit_icon: "download") do %>
-  <%= form_with url: workbench_collection_export_path(@collection), method: :post, id: "export_form", data: { turbo: false }, class: "space-y-5" do %>
+  <%= form_with url: workbench_collection_exports_path(@collection), method: :post, id: "export_form", data: { turbo_frame: "modal" }, class: "space-y-5" do %>
+    <% if @error.present? %>
+      <div role="alert" class="border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= @error %></div>
+    <% end %>
     <fieldset>
       <legend class="<%= label_classes %>"><%= t(".format") %></legend>
       <div class="mt-1 grid gap-2">

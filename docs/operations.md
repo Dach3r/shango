@@ -40,6 +40,7 @@ Optional, with defaults:
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |
 | `SHANGO_HISTORY_RETENTION_DAYS` | 90 | Saved responses older than this are deleted daily (`0` keeps them). |
 | `SHANGO_DRAFT_RETENTION_DAYS` | 30 | Request drafts (unsaved editor state) untouched for this long are deleted daily (`0` keeps them). |
+| `SHANGO_EXPORT_RETENTION_MINUTES` | 60 | Finished collection exports (the file, encrypted in `collection_exports`) are deleted this many minutes after they finish (1 to 1440); `PruneCollectionExportsJob` sweeps hourly. Exports are built by `ExportCollectionJob` on the `exports` queue, so a Solid Queue worker must be running. |
 | `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` | 90 | Saved Network Tools runs older than this are deleted daily (`0` keeps them). |
 | `RAILS_MAX_THREADS`, `WEB_CONCURRENCY` | 5, 1 | Puma threads (also the DB pool per process) and worker processes. |
 | `JOB_CONCURRENCY` | 1 | Solid Queue worker processes. |

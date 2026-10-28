@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_153047) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_155412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -82,6 +82,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_153047) do
     t.index ["project_id", "created_at"], name: "index_audit_events_on_project_id_and_created_at"
     t.index ["target_id"], name: "index_audit_events_on_target_id"
     t.check_constraint "kind::text = ANY (ARRAY['member_invited'::character varying::text, 'invitation_accepted'::character varying::text, 'invitation_revoked'::character varying::text, 'role_changed'::character varying::text, 'member_revoked'::character varying::text, 'member_left'::character varying::text, 'ownership_transferred'::character varying::text])", name: "audit_events_kind_check"
+  end
+
+  create_table "collection_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "collection_id", null: false
+    t.uuid "user_id", null: false
+    t.string "export_format", null: false
+    t.boolean "include_environments", default: false, null: false
+    t.boolean "include_credentials", default: false, null: false
+    t.string "status", default: "queued", null: false
+    t.integer "progress", default: 0, null: false
+    t.string "error"
+    t.string "filename"
+    t.string "content_type"
+    t.text "content"
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id"], name: "index_collection_exports_on_collection_id"
+    t.index ["expires_at"], name: "index_collection_exports_on_expires_at"
+    t.index ["project_id"], name: "index_collection_exports_on_project_id"
+    t.index ["user_id"], name: "index_collection_exports_on_user_id"
+    t.check_constraint "export_format::text = ANY (ARRAY['postman'::character varying, 'insomnia'::character varying, 'openapi'::character varying, 'shango'::character varying]::text[])", name: "collection_exports_export_format_check"
+    t.check_constraint "status::text = ANY (ARRAY['queued'::character varying, 'running'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "collection_exports_status_check"
   end
 
   create_table "collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -342,6 +366,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_153047) do
   add_foreign_key "audit_events", "projects"
   add_foreign_key "audit_events", "users", column: "actor_id", on_delete: :nullify
   add_foreign_key "audit_events", "users", column: "target_id", on_delete: :nullify
+  add_foreign_key "collection_exports", "collections", on_delete: :cascade
+  add_foreign_key "collection_exports", "projects", on_delete: :cascade
+  add_foreign_key "collection_exports", "users", on_delete: :cascade
   add_foreign_key "collections", "projects"
   add_foreign_key "collections", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "cookies", "environments"

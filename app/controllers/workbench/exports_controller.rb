@@ -1,7 +1,8 @@
 module Workbench
-  # Downloads a collection in another API client's format. Any member of the project may export what they can open.
+  # Exports a collection in another API client's format. The file is built by a job (ExportCollectionJob) while the
+  # modal polls `show` for the progress; any member of the project may export what they can open.
   class ExportsController < BaseController
-    before_action :set_collection
+    before_action :set_collection, only: %i[new create]
 
     throttle :exports, by: -> { current_user.id }, only: :create
 
@@ -9,12 +10,20 @@ module Workbench
     end
 
     def create
-      result = ApiClient::Exports::Export.call(
-        collection: @collection, format: params[:format_name], include_environments: flag(:include_environments), include_credentials: flag(:include_credentials)
+      result = ApiClient::Exports::Enqueue.call(
+        collection: @collection, user: current_user, format: params[:format_name], include_environments: flag(:include_environments), include_credentials: flag(:include_credentials)
       )
-      return redirect_to(workbench_root_path, alert: result.error, status: :see_other) if result.failure?
+      if result.failure?
+        @error = result.error
+        return render(:new, status: :unprocessable_content)
+      end
 
-      send_data result.data[:content], filename: result.data[:filename], type: result.data[:content_type], disposition: "attachment"
+      @export = result.record
+    end
+
+    def show
+      @export = current_project.collection_exports.where(user: current_user).find(params[:id])
+      authorize @export
     end
 
     private

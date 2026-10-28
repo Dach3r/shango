@@ -1,0 +1,3 @@
+<%= render Modal::Component.new(icon: "download", title: t(".title"), description: t(".description", collection: export.collection.name), size: :md) do %>
+  <%= turbo_frame_tag "export_progress" do %><%= render "workbench/exports/status", export: export %><% end %>
+<% end %>
