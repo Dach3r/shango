@@ -5,6 +5,10 @@ module Projects
     def index
       authorize current_project, :use?
       @members = current_project.memberships.active.includes(:user).sort_by { |member| [member.user.full_name.downcase, member.created_at] }
+      return unless policy(current_project).manage_members?
+
+      @invitations = current_project.invitations.open.order(created_at: :desc)
+      @invitation_link = session.delete(:invitation_link)
     end
 
     def update

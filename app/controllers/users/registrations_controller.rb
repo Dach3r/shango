@@ -20,8 +20,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
 
+  # An invitation link that sent the visitor to sign up comes first; everyone else starts by creating a project.
   def after_sign_up_path_for(_resource)
-    new_project_path
+    stored_location_for(:user) || new_project_path
   end
 
   def after_update_path_for(_resource)

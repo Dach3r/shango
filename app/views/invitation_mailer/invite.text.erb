@@ -1,0 +1,8 @@
+<%= t(".greeting") %>
+
+<%= @inviter ? t(".body_by", inviter: @inviter.full_name, project: @project.name) : t(".body", project: @project.name) %>
+
+<%= @url %>
+
+<%= t(".expires", date: l(@expires_at.to_date, format: :long)) %>
+<%= t(".ignore") %>

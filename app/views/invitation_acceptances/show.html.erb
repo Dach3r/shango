@@ -1,0 +1,19 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t(".heading") %>
+
+<% if @state == :ready %>
+  <div class="space-y-6 text-center">
+    <p class="text-base text-body"><%= t(".body", project: @invitation.project.name, role: t(".roles.#{@invitation.role}")) %></p>
+    <%= button_to t(".join"), invitation_acceptance_path, method: :post, params: { token: params[:token] }, form_class: "contents", class: button_classes(:primary, "h-12 w-full px-5") %>
+  </div>
+<% elsif @state == :wrong_account %>
+  <div class="space-y-6 text-center">
+    <p role="alert" class="text-base text-body"><%= t(".wrong_account", email: current_user.email) %></p>
+    <%= button_to t(".sign_out"), destroy_user_session_path, method: :delete, form_class: "contents", class: button_classes(:secondary, "h-12 w-full px-5") %>
+  </div>
+<% else %>
+  <div class="space-y-6 text-center">
+    <p role="alert" class="text-base text-body"><%= t(".invalid") %></p>
+    <%= link_to t(".home"), root_path, class: button_classes(:secondary, "h-12 w-full px-5") %>
+  </div>
+<% end %>

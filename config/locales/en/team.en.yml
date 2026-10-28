@@ -36,6 +36,20 @@ en:
           select: New owner
           submit: Transfer ownership
           confirm: Transfer ownership of this project? You will no longer be an owner.
+        invitations:
+          title: Invite people
+          hint: They get a link to join this project. It works once, for the email address you enter, and expires after 7 days.
+          email: Email
+          email_placeholder: name@example.com
+          role: Role
+          submit: Send invitation
+          pending: Pending invitations
+          expires: Expires %{date}
+          expired: Expired
+          revoke: Revoke
+          confirm_revoke: Revoke the invitation for %{email}? Its link stops working.
+          link_title: Invitation link
+          link_hint: Copy it now, it is not shown again. Anyone with it can join, as long as they sign in with the invited email.
       update:
         updated: "%{name}'s role was updated."
         failed:
@@ -52,3 +66,40 @@ en:
       create:
         transferred: "%{name} is now an owner and you are a member."
         invalid: Ownership could not be transferred to that member.
+    invitations:
+      create:
+        sent: Invitation sent to %{email}.
+        created: Invitation created for %{email}. Email is not available, so share the link yourself.
+        failed:
+          invalid: Enter a valid email address and a role.
+          already_member: That person is already a member of this project.
+          duplicate: An invitation for that email is already being created. Try again.
+      destroy:
+        revoked: The invitation for %{email} was revoked.
+  invitation_acceptances:
+    show:
+      title: Join a project
+      heading: Join a project
+      body: You were invited to join %{project} as %{role}.
+      roles:
+        owner: an owner
+        member: a member
+      join: Join project
+      wrong_account: This invitation was sent to another email address. You are signed in as %{email}.
+      sign_out: Sign out
+      invalid: This invitation is not valid anymore. Ask the project owner for a new one.
+      home: Go to Shango
+    create:
+      joined: You joined %{project}.
+      failed:
+        unavailable: This invitation is not valid anymore. Ask the project owner for a new one.
+        wrong_account: This invitation was sent to another email address.
+  invitation_mailer:
+    invite:
+      subject: You are invited to join %{project} on Shango
+      greeting: Hello,
+      body_by: "%{inviter} invited you to join %{project} on Shango."
+      body: You are invited to join %{project} on Shango.
+      cta: Join the project
+      expires: The invitation works once and expires on %{date}.
+      ignore: If you did not expect this invitation, you can ignore this email.

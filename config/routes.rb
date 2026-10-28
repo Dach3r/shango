@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :projects, only: %i[new create]
   resource :current_project, only: :update
   resource :preferences, only: :update
+  resource :invitation_acceptance, only: %i[show create]
   resource :account, only: :show, module: :users
 
   scope module: :projects do
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
     resources :members, only: %i[index update destroy]
     resource :leave, only: :create
     resource :ownership_transfer, only: :create
+    resources :invitations, only: %i[create destroy]
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }
   end
 
