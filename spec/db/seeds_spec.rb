@@ -39,53 +39,28 @@ RSpec.describe "db/seeds" do
   end
 
   describe "development/performance_account" do
-    let(:sizes) do
-      { "SEED_PROJECTS" => "3", "SEED_COLLECTIONS" => "2", "SEED_FOLDERS" => "6", "SEED_REQUESTS" => "8", "SEED_ENVIRONMENTS" => "2", "SEED_VARIABLES" => "4",
-        "SEED_EXECUTIONS" => "5", "SEED_COOKIES" => "4", "SEED_DRAFTS" => "3", "SEED_TABS" => "4", "SEED_TEAMMATES" => "1" }
-    end
-    let(:user) { User.find_by!(email: "perf@shango.test") }
+    let(:user) { User.find_by!(email: "dev@shango.test") }
 
     def seed(**extra)
       Object.send(:remove_const, :Seeds) if defined?(Seeds)
-      stub_const("ENV", ENV.to_h.merge(sizes, extra.transform_keys(&:to_s)))
+      stub_const("ENV", ENV.to_h.merge(extra.transform_keys(&:to_s)))
       allow($stdout).to receive(:puts)
       load account_file
     end
 
     after { Object.send(:remove_const, :Seeds) if defined?(Seeds) }
 
-    it "builds a confirmed account with data in every area", :aggregate_failures do
-      seed
-
-      expect(user).to be_confirmed
-      expect(user.valid_password?("password123")).to be(true)
-      expect(user.available_memberships.count).to eq(3)
-      expect(user.current_membership.project).to be_present
-      expect(Project.count).to eq(3)
-      expect(Collection.count).to eq(6)
-      expect(Folder.count).to eq(36)
-      expect(ApiRequest.where.not(collection_id: nil).count).to eq(48)
-      expect(ApiRequest.drafts.where(user:).count).to eq(9)
-      expect(RequestExecution.count).to eq(240)
-      expect(Environment.count).to eq(6)
-      expect(Variable.count).to eq(24)
-      expect(Cookie.count).to eq(12)
-      expect(NetworkCheck.count).to eq(3 * 3 * NetworkCheck::KEEP_PER_KIND)
-      expect(RequestTab.where(user:).count).to eq(6)
-    end
-
-    it "creates rows the app can read back", :aggregate_failures do
+    it "builds a confirmed account with the Restful-Booker project imported", :aggregate_failures do
       seed
       project = user.current_membership.project
 
-      expect(Variable.where.not(value: nil).all? { |variable| variable.value.present? }).to be(true)
-      expect(Variable.where(secret: true)).to be_any
-      expect(ApiRequest.where(auth_type: "bearer").first.auth_config).to include("token")
-      expect(NetworkCheck.all.map { |check| check.digest.tone }).to all(be_in(%w[ok warn bad]))
-      expect(NetworkCheck.all.map(&:outcome)).to eq(NetworkCheck.all.map { |check| check.digest.tone })
-      expect(ApiClient::Tree::Load.call(project:).size).to eq(2)
-      expect(ApiClient::Tabs::Load.call(project:, user:).size).to eq(6)
-      expect(ApiClient::Executions::History.call(project:, user:)).to be_present
+      expect(user).to be_confirmed
+      expect(user.valid_password?("password123")).to be(true)
+      expect(project.name).to eq("Restful Booker")
+      expect(user.available_memberships.count).to eq(1)
+      expect(project.collections.pluck(:name)).to eq(["restful-booker API"])
+      expect(project.api_requests.where.not(collection_id: nil)).to be_any
+      expect(project.environments.flat_map { |environment| environment.variables.map(&:key) }).to include("baseUrl")
     end
 
     it "keeps an existing account untouched", :aggregate_failures do
@@ -96,18 +71,17 @@ RSpec.describe "db/seeds" do
     it "rebuilds the account when asked to", :aggregate_failures do
       seed
       old_ids = Project.ids
-      seed(SEED_RESET: "1", SEED_PROJECTS: "2")
-
-      expect(Project.count).to eq(2)
-      expect(Project.ids & old_ids).to be_empty
-      expect(User.where("email LIKE '%@shango.test'").count).to eq(2)
-      expect(RequestExecution.count).to eq(160)
-    end
-
-    it "works without teammates" do
-      seed(SEED_TEAMMATES: "0")
+      seed(SEED_RESET: "1")
 
       expect(User.count).to eq(1)
+      expect(Project.count).to eq(1)
+      expect(Project.ids & old_ids).to be_empty
+    end
+
+    it "fails loudly when an import fails" do
+      allow(ApiClient::Imports::Import).to receive(:call).and_return(Result.failure(error: "boom"))
+
+      expect { seed }.to raise_error("boom")
     end
   end
 end
