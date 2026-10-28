@@ -43,12 +43,15 @@ module Seeds
       user.save!
 
       project = Project.create_with_owner(user, name: PROJECT_NAME, icon: "rocket")
-      user.update!(current_membership_id: user.memberships.find_by!(project:).id)
+      membership = user.memberships.find_by!(project:)
+      user.update!(current_membership_id: membership.id)
 
       %w[collection environment].each do |kind|
         result = ApiClient::Imports::Import.call(project:, creator: user, content: FIXTURES.join("restful_booker.postman_#{kind}.json").read)
         raise result.error if result.failure?
       end
+
+      membership.update!(current_environment: project.environments.first)
     end
   end
 end

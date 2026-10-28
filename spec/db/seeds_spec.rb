@@ -61,6 +61,7 @@ RSpec.describe "db/seeds" do
       expect(project.collections.pluck(:name)).to eq(["restful-booker API"])
       expect(project.api_requests.where.not(collection_id: nil)).to be_any
       expect(project.environments.flat_map { |environment| environment.variables.map(&:key) }).to include("baseUrl")
+      expect(user.current_membership.current_environment).to eq(project.environments.first)
     end
 
     it "keeps an existing account untouched", :aggregate_failures do
