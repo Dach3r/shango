@@ -22,6 +22,14 @@ RSpec.describe CodeEditor::Component, type: :component do
     end
   end
 
+  context "with data overriding a default key" do
+    it "lets the caller's value win" do
+      render_inline(described_class.new(data: { controller: "code-editor other" }))
+
+      expect(page).to have_css("div.code-editor[data-controller='code-editor other']")
+    end
+  end
+
   context "with a variables url" do
     it "passes it to the controller" do
       render_inline(described_class.new(variables_url: "/environments/1/variables"))
