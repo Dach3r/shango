@@ -94,12 +94,7 @@ hi:
       confirm_delete: "यह रन हटाएँ?"
       previous: "पिछला रन, %{time} पहले: %{detail}"
     limits:
-      title: "सीमाएँ"
       about: "परिचय"
-      attempts: "प्रयास"
-      timeout: "टाइमआउट"
-      rate: "दर"
-      rate_value: "%{count} रन / %{seconds} सेकंड"
     results:
       propagation: "प्रसार"
       target: "लक्ष्य"

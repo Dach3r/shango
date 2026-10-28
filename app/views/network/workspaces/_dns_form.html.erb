@@ -4,13 +4,13 @@
   <%= network_bar scope: :dns_check, url: network_dns_checks_path, readonly: readonly do |form| %>
     <%= form.label :domain, t("network.dns.domain"), class: "sr-only" %>
     <%= form.text_field :domain, readonly:, value: input.values_at("domain", "expected").compact_blank.join(" "), required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.dns.domain_placeholder"), class: bar_field_classes("min-w-48 flex-1 font-mono") %>
-    <%= render Select::Component.new(disabled: readonly, name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: input.fetch("type", "A"), id: "dns_check_type", label: t("network.dns.type"), class: "w-24 font-mono disabled:cursor-default disabled:opacity-100 disabled:[&_svg]:hidden") %>
+    <%= render Select::Component.new(disabled: readonly, name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: input.fetch("type", "A"), id: "dns_check_type", label: t("network.dns.type"), dock: true, dock_top: "top-14", dock_width: "lg:w-[calc(22rem-1px)] w-56", class: "w-44 font-mono aria-expanded:bg-ink/[0.08]! disabled:cursor-default disabled:opacity-100 disabled:[&_svg]:hidden") %>
     <% if readonly %>
-      <%= link_to network_workspace_path("dns"), class: button_classes(:primary) do %>
+      <%= link_to network_workspace_path("dns"), class: button_classes(:primary, "w-44 shrink-0") do %>
         <%= lucide_icon "plus", class: "size-4" %><%= t("network.new_check") %>
       <% end %>
     <% else %>
-      <%= form.button type: :submit, class: button_classes(:primary) do %>
+      <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
         <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
       <% end %>
     <% end %>

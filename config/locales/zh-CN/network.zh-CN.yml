@@ -94,12 +94,7 @@ zh-CN:
       confirm_delete: "删除此次运行？"
       previous: "上一次运行（%{time}前）：%{detail}"
     limits:
-      title: "限制"
       about: "简介"
-      attempts: "尝试次数"
-      timeout: "超时"
-      rate: "频率"
-      rate_value: "%{count} 次 / %{seconds} 秒"
     results:
       propagation: "传播进度"
       target: "目标"

@@ -4,6 +4,11 @@
 
   <div class="flex min-h-0 min-w-0 flex-1 flex-col">
     <%= render "network/workspaces/ports_form", input: check&.input || {} %>
-    <div id="ports_result" class="min-h-0 flex-1 overflow-y-auto p-6 empty:hidden" aria-live="polite"><%= render "network/workspaces/result", kind: "ports", check:, result: %></div>
+
+    <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <div id="ports_result" class="min-h-0 min-w-0 flex-1 overflow-y-auto p-6 empty:hidden lg:empty:block" aria-live="polite"><%= render "network/workspaces/result", kind: "ports", check:, result: %></div>
+
+      <%= render "network/workspaces/aside", width: "lg:w-[22rem]", hint: t("network.ports.hint"), statuses: %i[open closed filtered] %>
+    </div>
   </div>
 </div>

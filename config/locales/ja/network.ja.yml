@@ -94,12 +94,7 @@ ja:
       confirm_delete: "この実行を削除しますか？"
       previous: "前回の実行（%{time}前）: %{detail}"
     limits:
-      title: "制限"
       about: "概要"
-      attempts: "試行回数"
-      timeout: "タイムアウト"
-      rate: "レート"
-      rate_value: "%{count} 回 / %{seconds} 秒"
     results:
       propagation: "浸透状況"
       target: "対象"

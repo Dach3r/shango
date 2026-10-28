@@ -39,6 +39,7 @@ es:
       filtered: Filtrado
     dns:
       domain: Dominio
+      hint: "Las respuestas DNS vienen de los nameservers autoritativos y de varios resolvers públicos, para saber si un cambio ya se propagó."
       domain_placeholder: example.com 203.0.113.10
       type: Tipo
       submit: Comprobar DNS
@@ -62,7 +63,15 @@ es:
       host_placeholder: example.com, 203.0.113.10 o {{host}}
       ports: Puertos
       ports_placeholder: 22, 80, 443 o 8000-8010
+      preset: Preajuste de puertos
+      presets:
+        common: Comunes
+        web: "Web (%{ports})"
+        mail: "Correo (%{ports})"
+        database: "Bases de datos (%{ports})"
+        custom: Personalizado
       submit: Comprobar puertos
+      hint: "La comprobación de puertos intenta una conexión TCP a cada puerto, para ver qué expone un host y qué oculta un firewall. Elige un preajuste o escribe puertos separados por coma, con rangos como 8000-8010."
       summary: "%{open} abiertos, %{closed} cerrados, %{filtered} filtrados"
       all_filtered: Nada respondió. Un firewall puede estar descartando los paquetes, o el host puede estar apagado.
       columns:
@@ -82,6 +91,16 @@ es:
       only_refused: El host responde, pero nada escucha en este puerto.
       no_answer: Sin respuesta. El host puede estar apagado o un firewall puede estar descartando los paquetes.
       stopped: "Detenido tras %{count} tiempos de espera seguidos."
+    empty:
+      dns:
+        title: "Aún no hay nada que mostrar"
+        hint: "Ingresa un dominio y comprueba sus registros DNS."
+      ports:
+        title: "Aún no hay nada que mostrar"
+        hint: "Ingresa un host y los puertos a comprobar."
+      ping:
+        title: "Aún no hay nada que mostrar"
+        hint: "Ingresa un host e inicia un ping TCP."
     history:
       dns: "Comprobaciones DNS"
       ports: "Comprobaciones de puertos"
@@ -93,13 +112,19 @@ es:
       confirm_clear: "¿Borrar todo el historial de esta herramienta para el proyecto?"
       confirm_delete: "¿Eliminar esta ejecución?"
       previous: "Ejecución anterior, hace %{time}: %{detail}"
+    guide:
+      title: "Cómo leer los resultados"
+      ok: "El servidor respondió con registros."
+      cname: "Solo llegó un alias; el destino tiene los registros."
+      nodata: "El nombre existe pero no tiene registros de este tipo."
+      nxdomain: "El nombre no existe."
+      servfail: "El resolver no pudo obtener respuesta de la zona."
+      timeout: "El servidor no respondió a tiempo."
+      open: "Un servicio aceptó la conexión."
+      closed: "El host respondió, pero nada escucha en este puerto."
+      filtered: "Sin respuesta. Un firewall puede estar descartando los paquetes."
     limits:
-      title: "Límites"
       about: "Acerca de"
-      attempts: "Intentos"
-      timeout: "Tiempo límite"
-      rate: "Frecuencia"
-      rate_value: "%{count} ejecuciones / %{seconds} s"
     results:
       propagation: "Propagación"
       target: "Destino"

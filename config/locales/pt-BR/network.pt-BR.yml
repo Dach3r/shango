@@ -94,12 +94,7 @@ pt-BR:
       confirm_delete: "Excluir esta execução?"
       previous: "Execução anterior, há %{time}: %{detail}"
     limits:
-      title: "Limites"
       about: "Sobre"
-      attempts: "Tentativas"
-      timeout: "Tempo limite"
-      rate: "Taxa"
-      rate_value: "%{count} execuções / %{seconds} s"
     results:
       propagation: "Propagação"
       target: "Destino"

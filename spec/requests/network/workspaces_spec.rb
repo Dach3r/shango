@@ -22,7 +22,7 @@ RSpec.describe "Network workspace" do
       sign_in_with_project
       get network_workspace_path("ports")
 
-      expect(response.body).to include(I18n.t("network.ports.submit"), I18n.t("network.history.ports"))
+      expect(response.body).to include(I18n.t("network.ports.submit"), I18n.t("network.history.ports"), I18n.t("network.ports.presets.custom"))
       expect(response.body).not_to include(I18n.t("network.dns.submit"))
 
       get network_workspace_path("ping")
@@ -48,15 +48,6 @@ RSpec.describe "Network workspace" do
       get network_root_path
 
       expect(response.body).to include("variable-autocomplete", "host")
-    end
-
-    it "shows the ping limits", :aggregate_failures do
-      sign_in_with_project
-      get network_workspace_path("ping")
-
-      count, window = Throttling.limit(:network)
-      expect(response.body).to include(I18n.t("network.limits.rate_value", count:, seconds: window.to_i))
-      expect(response.body).to include("1–#{Network::Pings::Run::MAX_ATTEMPTS}")
     end
 
     it "is linked from the project tools" do

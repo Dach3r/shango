@@ -94,12 +94,7 @@ ru:
       confirm_delete: "Удалить этот запуск?"
       previous: "Предыдущий запуск, %{time} назад: %{detail}"
     limits:
-      title: "Лимиты"
       about: "Описание"
-      attempts: "Попытки"
-      timeout: "Тайм-аут"
-      rate: "Частота"
-      rate_value: "%{count} запусков / %{seconds} с"
     results:
       propagation: "Распространение"
       target: "Цель"

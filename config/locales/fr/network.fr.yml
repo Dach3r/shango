@@ -94,12 +94,7 @@ fr:
       confirm_delete: "Supprimer cette exécution ?"
       previous: "Exécution précédente, il y a %{time} : %{detail}"
     limits:
-      title: "Limites"
       about: "À propos"
-      attempts: "Tentatives"
-      timeout: "Délai d'attente"
-      rate: "Débit"
-      rate_value: "%{count} exécutions / %{seconds} s"
     results:
       propagation: "Propagation"
       target: "Cible"

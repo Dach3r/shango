@@ -39,6 +39,7 @@ en:
       filtered: Filtered
     dns:
       domain: Domain
+      hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated."
       domain_placeholder: example.com 203.0.113.10
       type: Type
       submit: Check DNS
@@ -62,7 +63,15 @@ en:
       host_placeholder: example.com, 203.0.113.10 or {{host}}
       ports: Ports
       ports_placeholder: 22, 80, 443 or 8000-8010
+      preset: Port preset
+      presets:
+        common: Common
+        web: "Web (%{ports})"
+        mail: "Mail (%{ports})"
+        database: "Databases (%{ports})"
+        custom: Custom
       submit: Check ports
+      hint: "A port check tries a TCP connection to each port, so you can see what a host exposes and what a firewall hides. Pick a preset or type ports separated by commas, with ranges like 8000-8010."
       summary: "%{open} open, %{closed} closed, %{filtered} filtered"
       all_filtered: Nothing answered. A firewall may be dropping the packets, or the host may be offline.
       columns:
@@ -82,6 +91,16 @@ en:
       only_refused: The host answers, but nothing is listening on this port.
       no_answer: No answer. The host may be offline, or a firewall may be dropping the packets.
       stopped: "Stopped after %{count} timeouts in a row."
+    empty:
+      dns:
+        title: "Nothing to show yet"
+        hint: "Enter a domain and check its DNS records."
+      ports:
+        title: "Nothing to show yet"
+        hint: "Enter a host and the ports to check."
+      ping:
+        title: "Nothing to show yet"
+        hint: "Enter a host and start a TCP ping."
     history:
       dns: "DNS checks"
       ports: "Port checks"
@@ -93,13 +112,19 @@ en:
       confirm_clear: "Delete this tool's whole history for the project?"
       confirm_delete: "Delete this run?"
       previous: "Previous run, %{time} ago: %{detail}"
+    guide:
+      title: "Reading the results"
+      ok: "The server answered with records."
+      cname: "Only an alias came back; the target holds the records."
+      nodata: "The name exists but has no record of this type."
+      nxdomain: "The name does not exist."
+      servfail: "The resolver failed to get an answer from the zone."
+      timeout: "The server did not reply in time."
+      open: "A service accepted the connection."
+      closed: "The host answered, but nothing listens on this port."
+      filtered: "No answer. A firewall may be dropping the packets."
     limits:
-      title: "Limits"
       about: "About"
-      attempts: "Attempts"
-      timeout: "Timeout"
-      rate: "Rate"
-      rate_value: "%{count} runs / %{seconds} s"
     results:
       propagation: "Propagation"
       target: "Target"

@@ -94,12 +94,7 @@ de:
       confirm_delete: "Diesen Lauf löschen?"
       previous: "Vorheriger Lauf, vor %{time}: %{detail}"
     limits:
-      title: "Limits"
       about: "Info"
-      attempts: "Versuche"
-      timeout: "Zeitlimit"
-      rate: "Rate"
-      rate_value: "%{count} Läufe / %{seconds} s"
     results:
       propagation: "Verbreitung"
       target: "Ziel"
