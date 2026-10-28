@@ -144,6 +144,8 @@ npx esbuild entry.js --bundle --format=esm --minify --target=es2022 --outfile=co
 cp codemirror.js ../vendor/javascript/codemirror.js
 ```
 
+GraphQL bodies are highlighted with a small `StreamLanguage` tokenizer defined in `code_editor_controller.js` (operations, `$variables`, directives, types, strings, numbers, comments); no extra package is bundled.
+
 Current build: codemirror 6.0.2, @codemirror/state 6.7.6, @codemirror/view 6.43.15. Verified with Turbo Drive back/forward (no duplicated editors), Turbo Stream replacement and light/dark themes.
 
 ## 8. Development notes

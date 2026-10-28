@@ -3,7 +3,7 @@
 
   <div data-body-type-target="panel" data-types="json text xml graphql" class="min-h-0 flex-1" hidden>
     <div class="h-full bg-field p-1">
-      <%= render CodeEditor::Component.new(name: "api_request[body]", value: api_request.body, language: (api_request.body_type == "json" ? "json" : (api_request.body_type == "xml" ? "xml" : "text")),
+      <%= render CodeEditor::Component.new(name: "api_request[body]", value: api_request.body, language: (api_request.body_type == "json" ? "json" : (api_request.body_type == "xml" ? "xml" : (api_request.body_type == "graphql" ? "graphql" : "text"))),
                                            variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url, placeholder: t("workbench.body.placeholder"), class: "h-full",
                                            data: { action: "body-type:language@window->code-editor#changeLanguage" }) %>
     </div>

@@ -9,6 +9,40 @@ import {
 } from "lib/response_reference";
 
 const SEARCH_LIMIT = 10000;
+const GRAPHQL_KEYWORDS = /^(query|mutation|subscription|fragment|on|schema|type|interface|union|enum|input|scalar|directive|extend|implements|repeatable)\b/;
+
+// Minimal GraphQL tokenizer: enough to color operations, variables, strings, numbers and comments.
+const graphqlTokenizer = {
+  name: "graphql",
+  startState: () => ({ block: false }),
+  token(stream, state) {
+    if (state.block) {
+      if (stream.match(/^.*?"""/)) state.block = false;
+      else stream.skipToEnd();
+      return "string";
+    }
+    if (stream.eatSpace()) return null;
+    if (stream.match('"""')) {
+      state.block = true;
+      return "string";
+    }
+    if (stream.match(/^"(?:[^"\\]|\\.)*"?/)) return "string";
+    if (stream.eat("#")) {
+      stream.skipToEnd();
+      return "comment";
+    }
+    if (stream.match(/^-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/)) return "number";
+    if (stream.match(/^\$[_A-Za-z][_0-9A-Za-z]*/)) return "variableName";
+    if (stream.match(/^@[_A-Za-z][_0-9A-Za-z]*/)) return "keyword";
+    if (stream.match(/^(true|false|null)\b/)) return "atom";
+    if (stream.match(GRAPHQL_KEYWORDS)) return "keyword";
+    if (stream.match(/^[A-Z][_0-9A-Za-z]*/)) return "typeName";
+    if (stream.match(/^[_A-Za-z][_0-9A-Za-z]*/)) return "propertyName";
+    if (stream.match("...")) return "punctuation";
+    stream.next();
+    return "punctuation";
+  },
+};
 
 export default class extends Controller {
   static targets = ["input", "mount"];
@@ -222,6 +256,8 @@ export default class extends Controller {
         return cm.html();
       case "javascript":
         return cm.javascript();
+      case "graphql":
+        return cm.StreamLanguage.define(graphqlTokenizer);
       default:
         return [];
     }
@@ -572,7 +608,8 @@ export default class extends Controller {
     return HighlightStyle.define([
       { tag: [t.propertyName, t.attributeName], color: "var(--syn-key)" },
       { tag: [t.string, t.special(t.string)], color: "var(--syn-string)" },
-      { tag: [t.number, t.bool, t.null], color: "var(--syn-number)" },
+      { tag: [t.number, t.bool, t.null, t.atom, t.variableName], color: "var(--syn-number)" },
+      { tag: t.typeName, color: "var(--syn-key)" },
       {
         tag: [t.keyword, t.tagName, t.operatorKeyword],
         color: "var(--syn-keyword)",

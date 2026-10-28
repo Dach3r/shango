@@ -32,6 +32,21 @@ RSpec.describe "Workbench editor", :system do
     end
   end
 
+  describe "GraphQL body" do
+    let(:graphql_request) do
+      create(:api_request, collection:, name: "Characters", http_method: "POST", body_type: "graphql", body: "query ($page: Int) {\n  characters(page: $page) { id }\n}")
+    end
+
+    it "highlights the query syntax" do
+      visit workbench_request_path(graphql_request)
+      click_on "Body"
+
+      keyword = find("#request_form .cm-content span", text: "query", match: :first)
+      color = "getComputedStyle(this).color"
+      expect(keyword.evaluate_script(color)).not_to eq(find("#request_form .cm-content", match: :first).evaluate_script(color))
+    end
+  end
+
   describe "URL preview" do
     before do
       build(:request_execution, id: SecureRandom.uuid, api_request:, user:, created_at: Time.current, http_method: "POST", response_body: %({"token":"abc123"}), response_headers: []).stash

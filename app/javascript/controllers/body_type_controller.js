@@ -4,7 +4,7 @@ const EDITOR_LANGUAGE = {
   json: "json",
   xml: "xml",
   text: "text",
-  graphql: "text",
+  graphql: "graphql",
 };
 
 export default class extends Controller {
