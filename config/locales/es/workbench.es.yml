@@ -441,6 +441,7 @@ es:
         one: "%{count} redirección"
         other: "%{count} redirecciones"
       no_headers: Sin headers.
+      copy_url: Copiar URL
       empty_body: La respuesta no tiene body.
       binary: "Respuesta binaria o no textual (%{size}, %{type}). No se muestra."
       modes:

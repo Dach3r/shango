@@ -445,6 +445,7 @@ ru:
         many: "%{count} редиректов"
         other: "%{count} редиректа"
       no_headers: Заголовков нет.
+      copy_url: Копировать URL
       empty_body: У ответа нет тела.
       binary: "Двоичный или нетекстовый ответ (%{size}, %{type}). Он не отображается."
       modes:

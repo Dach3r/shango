@@ -441,6 +441,7 @@ fr:
         one: "%{count} redirection"
         other: "%{count} redirections"
       no_headers: "Aucun en-tête."
+      copy_url: Copier l'URL
       empty_body: "La réponse n'a pas de corps."
       binary: "Réponse binaire ou non textuelle (%{size}, %{type}). Elle n'est pas affichée."
       modes:

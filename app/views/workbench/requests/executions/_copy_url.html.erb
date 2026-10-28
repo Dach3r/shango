@@ -1,0 +1,4 @@
+<button type="button" class="mt-px shrink-0 cursor-pointer text-faint opacity-40 transition-opacity hover:text-ink group-hover:opacity-100 focus-visible:opacity-100" title="<%= t("workbench.executions.copy_url") %>" aria-label="<%= t("workbench.executions.copy_url") %>" data-action="clipboard#copy">
+  <%= lucide_icon "copy", class: "size-3.5", data: { clipboard_target: "copy" } %>
+  <%= lucide_icon "check", class: "hidden size-3.5 text-ink", data: { clipboard_target: "done" } %>
+</button>

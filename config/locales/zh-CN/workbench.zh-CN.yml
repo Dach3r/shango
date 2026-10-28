@@ -439,6 +439,7 @@ zh-CN:
       redirects:
         other: "%{count} 次重定向"
       no_headers: 没有 Header。
+      copy_url: 复制 URL
       empty_body: 响应没有 Body。
       binary: "二进制或非文本响应（%{size}，%{type}），不予显示。"
       modes:

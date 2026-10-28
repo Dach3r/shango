@@ -439,6 +439,7 @@ ja:
       redirects:
         other: "%{count} 件のリダイレクト"
       no_headers: ヘッダーはありません。
+      copy_url: URLをコピー
       empty_body: レスポンスにボディがありません。
       binary: "バイナリまたはテキスト以外のレスポンスです（%{size}、%{type}）。表示されません。"
       modes:

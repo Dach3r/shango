@@ -441,6 +441,7 @@ de:
         one: "%{count} Weiterleitung"
         other: "%{count} Weiterleitungen"
       no_headers: Keine Headers.
+      copy_url: URL kopieren
       empty_body: Die Antwort hat keinen Body.
       binary: "Binäre oder nicht-textuelle Antwort (%{size}, %{type}). Sie wird nicht angezeigt."
       modes:

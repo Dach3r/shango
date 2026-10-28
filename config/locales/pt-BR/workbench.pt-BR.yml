@@ -441,6 +441,7 @@ pt-BR:
         one: "%{count} redirecionamento"
         other: "%{count} redirecionamentos"
       no_headers: Sem headers.
+      copy_url: Copiar URL
       empty_body: A resposta não tem body.
       binary: "Resposta binária ou não textual (%{size}, %{type}). Ela não é exibida."
       modes:
