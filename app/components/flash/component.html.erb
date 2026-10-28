@@ -1,15 +1,12 @@
-<% delay = @kind == :alert ? 8000 : 5000 %>
-<div role="<%= config[:role] %>" data-controller="flash" data-flash-delay-value="<%= delay %>"
+<div role="<%= config[:role] %>" data-controller="flash" data-flash-delay-value="<%= @kind == :alert ? 8000 : 5000 %>"
      data-action="mouseenter->flash#pause mouseleave->flash#resume focusin->flash#pause focusout->flash#resume"
      class="<%= classes %>">
-  <div class="flex items-start gap-3 py-3 pr-2 pl-3">
-    <%= lucide_icon config[:icon], class: "mt-px size-4 shrink-0 #{config[:tone]}", "aria-hidden": true %>
+  <div class="mx-auto flex w-full max-w-3xl items-center gap-3 py-3 pr-3 pl-4">
+    <%= lucide_icon config[:icon], class: "size-5 shrink-0", "aria-hidden": true %>
     <p class="min-w-0 flex-1 leading-snug"><%= @message %></p>
     <button type="button" data-action="flash#close" aria-label="<%= t("components.flash.close") %>"
-            class="flex size-5 shrink-0 cursor-pointer items-center justify-center text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
-      <%= lucide_icon "x", class: "size-3.5" %>
+            class="flex size-7 shrink-0 cursor-pointer items-center justify-center opacity-70 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-on-solid/50">
+      <%= lucide_icon "x", class: "size-4" %>
     </button>
   </div>
-  <span aria-hidden="true" style="--flash-delay: <%= delay %>ms"
-        class="flash-progress absolute inset-x-0 bottom-0 h-px origin-left <%= config[:bar] %> group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]"></span>
 </div>
