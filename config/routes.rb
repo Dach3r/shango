@@ -55,6 +55,7 @@ Rails.application.routes.draw do
         resource :closure, only: :new
         resource :tab, only: :destroy
         resource :stash, only: %i[update destroy]
+        resource :settings, only: :update
         resource :duplication, only: :create
         resource :position, only: :update
         resource :placement, only: %i[new update]

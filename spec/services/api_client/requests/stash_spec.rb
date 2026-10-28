@@ -15,6 +15,12 @@ RSpec.describe ApiClient::Requests::Stash do
     expect(described_class.read(api_request: create(:api_request), user:)).to be_nil
   end
 
+  it "never keeps settings, which are saved as they change" do
+    described_class.write(api_request:, user:, attributes: attributes.merge(settings: { timeout: "5" }))
+
+    expect(described_class.read(api_request:, user:)).not_to have_key("settings")
+  end
+
   it "does not store the payload in plain text" do
     described_class.write(api_request:, user:, attributes:)
 

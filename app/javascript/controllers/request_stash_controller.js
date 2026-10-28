@@ -79,6 +79,8 @@ export default class extends Controller {
     for (const [name, value] of [...body]) if (value instanceof File) body.delete(name);
     body.delete("_method");
     body.delete("place");
+    // Settings are autosaved by their own controller.
+    for (const name of [...body.keys()]) if (name.startsWith("api_request[settings]")) body.delete(name);
     return body;
   }
 

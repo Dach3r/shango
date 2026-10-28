@@ -17,7 +17,7 @@ module ApiClient
 
         def read(api_request:, user:)
           payload = Rails.cache.read(key(api_request.id, user.id))
-          JSON.parse(encryptor.decrypt_and_verify(payload)) if payload
+          JSON.parse(encryptor.decrypt_and_verify(payload)).except("settings") if payload
         rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature, JSON::ParserError
           nil
         end
@@ -35,7 +35,7 @@ module ApiClient
         private
 
         def sanitize(attributes)
-          data = attributes.to_h.deep_stringify_keys
+          data = attributes.to_h.deep_stringify_keys.except("settings")
           data["auth_config"] = data["auth_config"].to_h.except(*secret_fields(data["auth_type"]))
           data
         end
