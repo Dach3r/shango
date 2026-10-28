@@ -7,4 +7,9 @@ class ProjectPolicy < ApplicationPolicy
   def import?
     use?
   end
+
+  # Inviting people, handing the project over and reading its activity are owner-only.
+  def manage_members?
+    use? && membership.owner?
+  end
 end

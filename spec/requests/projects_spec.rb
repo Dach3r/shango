@@ -118,6 +118,7 @@ RSpec.describe "Projects" do
     end
 
     it "ignores a revoked current membership" do
+      create(:membership, :owner, project:)
       membership.revoke!
       get workbench_root_path
 

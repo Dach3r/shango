@@ -11,7 +11,7 @@ class SettingsNav::Component < ApplicationComponent
       { key: :themes, icon: "palette", path: :edit_theme_path, controllers: "projects/themes" },
       { key: :sidebar, icon: "panel-left", path: :edit_membership_path, controllers: "projects/memberships" }
     ] },
-    { key: :project, items: [{ key: :members, icon: "users" }] }
+    { key: :project, items: [{ key: :members, icon: "users", path: :members_path, controllers: "projects/members" }] }
   ].freeze
 
   def initialize(project:)

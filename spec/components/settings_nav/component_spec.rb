@@ -20,8 +20,13 @@ RSpec.describe SettingsNav::Component, type: :component do
     render_nav
 
     expect(page).to have_css("a[aria-current=page][href='/membership/settings']", text: I18n.t("components.settings_nav.items.sidebar"))
-    expect(page).to have_css("span[aria-disabled=true]", text: I18n.t("components.settings_nav.items.members"))
-    expect(page).to have_css("li.border-b span", text: I18n.t("components.nav_item.soon"))
+    expect(page).to have_link(I18n.t("components.settings_nav.items.members"), href: "/members")
+  end
+
+  it "highlights the members section on its controller" do
+    render_nav(controller_path: "projects/members", url: "/members")
+
+    expect(page).to have_css("a[aria-current=page][href='/members']", text: I18n.t("components.settings_nav.items.members"))
   end
 
   it "highlights the profile tab by default", :aggregate_failures do

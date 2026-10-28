@@ -1,6 +1,54 @@
 en:
   authorization:
     forbidden: You are not allowed to do that in this project.
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: A project needs at least one owner.
   team:
     read_only:
       request: You can send this request but only its creator or an owner can change it.
+  projects:
+    members:
+      index:
+        title: Members
+        heading: Members
+        description: People with access to %{project}.
+        members:
+          one: "%{count} member"
+          other: "%{count} members"
+        you: (you)
+        roles:
+          owner: Owner
+          member: Member
+        make_owner: Make owner
+        make_member: Make member
+        remove: Remove
+        confirm_remove: Remove %{name} from this project? They lose access right away.
+        leave: Leave project
+        confirm_leave: Leave %{project}? You lose access to it.
+        transfer:
+          title: Transfer ownership
+          hint: The person you choose becomes an owner and you step down to member.
+          select: New owner
+          submit: Transfer ownership
+          confirm: Transfer ownership of this project? You will no longer be an owner.
+      update:
+        updated: "%{name}'s role was updated."
+        failed:
+          last_owner: A project needs at least one owner.
+          invalid_role: That role does not exist.
+      destroy:
+        revoked: "%{name} was removed from the project."
+        failed: A project needs at least one owner.
+    leaves:
+      create:
+        left: You left %{project}.
+        last_owner: You are the only owner. Hand over ownership before leaving.
+    ownership_transfers:
+      create:
+        transferred: "%{name} is now an owner and you are a member."
+        invalid: Ownership could not be transferred to that member.

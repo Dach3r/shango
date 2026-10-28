@@ -24,6 +24,9 @@ Rails.application.routes.draw do
     resources :cookies, except: :show
     resource :cookie_jar, only: :destroy
     resource :membership, only: %i[edit update], path_names: { edit: "settings" }
+    resources :members, only: %i[index update destroy]
+    resource :leave, only: :create
+    resource :ownership_transfer, only: :create
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }
   end
 

@@ -1,0 +1,45 @@
+<% content_for :title, "#{t("projects.members.index.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+
+<% owner = current_membership.owner? %>
+<%= render layout: "settings/shell", locals: { icon: "users", heading: t("projects.members.index.heading"), description: t("projects.members.index.description", project: current_project.name) } do %>
+  <div class="divide-y divide-line">
+    <section aria-labelledby="members_title">
+      <h2 id="members_title" class="px-5 pt-5 text-sm font-semibold text-ink sm:px-7"><%= t("projects.members.index.members", count: @members.size) %></h2>
+      <ul class="mt-3 divide-y divide-line border-y border-line">
+        <% @members.each do |member| %>
+          <% mine = member.id == current_membership.id %>
+          <li class="flex flex-wrap items-center gap-3 px-5 py-3 sm:px-7">
+            <span class="flex size-9 shrink-0 items-center justify-center border border-line bg-field text-xs font-semibold text-muted" aria-hidden="true"><%= member.user.initials %></span>
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-sm font-medium text-ink">
+                <%= member.user.full_name %>
+                <% if mine %><span class="ml-1 text-xs font-normal text-muted"><%= t("projects.members.index.you") %></span><% end %>
+              </p>
+              <p class="truncate text-xs text-muted"><%= member.user.email %></p>
+            </div>
+            <span class="inline-flex items-center border border-line px-2 py-0.5 text-xs font-medium text-body"><%= t("projects.members.index.roles.#{member.role}") %></span>
+            <div class="flex items-center gap-2">
+              <% if mine %>
+                <%= button_to t("projects.members.index.leave"), leave_path, method: :post, form_class: "contents", class: button_classes(:secondary, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.confirm_leave", project: current_project.name) } } %>
+              <% elsif owner %>
+                <%= button_to member.owner? ? t("projects.members.index.make_member") : t("projects.members.index.make_owner"), member_path(member), method: :patch, params: { member: { role: member.owner? ? "member" : "owner" } }, form_class: "contents", class: button_classes(:secondary, "h-9 px-3 text-xs") %>
+                <%= button_to t("projects.members.index.remove"), member_path(member), method: :delete, form_class: "contents", class: button_classes(:danger, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.confirm_remove", name: member.user.full_name) } } %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+
+    <% if owner && @members.size > 1 %>
+      <section aria-labelledby="transfer_title" class="px-5 py-5 sm:px-7">
+        <h2 id="transfer_title" class="text-sm font-semibold text-ink"><%= t("projects.members.index.transfer.title") %></h2>
+        <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("projects.members.index.transfer.hint") %></p>
+        <%= form_with url: ownership_transfer_path, method: :post, class: "mt-3 flex flex-wrap items-end gap-3", data: { turbo_confirm: t("projects.members.index.transfer.confirm") } do %>
+          <%= render Select::Component.new(name: "member_id", label: t("projects.members.index.transfer.select"), options: @members.reject { |member| member.id == current_membership.id }.map { |member| [member.user.full_name, member.id] }, class: "w-64") %>
+          <%= button_tag t("projects.members.index.transfer.submit"), type: :submit, class: button_classes(:secondary, "h-10 px-4") %>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+<% end %>

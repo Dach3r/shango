@@ -134,8 +134,8 @@ RSpec.describe "Authentication" do
     end
 
     it "says so when no project would be erased" do
-      user.memberships.first.update!(role: "member")
       create(:membership, :owner, project: user.memberships.first.project)
+      user.memberships.first.update!(role: "member")
 
       get edit_user_registration_path(tab: "delete_account")
 

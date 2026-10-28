@@ -60,6 +60,7 @@ RSpec.describe "Memberships" do
     end
 
     it "does not let a member escalate their role or move to another project", :aggregate_failures do
+      create(:membership, :owner, project: context[1])
       membership.update!(role: "member")
       foreign_project = create(:project)
 

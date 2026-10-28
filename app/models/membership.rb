@@ -18,6 +18,7 @@ class Membership < ApplicationRecord
   scope :active, -> { where(revoked_at: nil) }
 
   validates :user_id, uniqueness: { scope: :project_id, conditions: -> { active } }
+  validate :project_keeps_an_owner, on: :update
 
   def active?
     revoked_at.nil?
@@ -25,5 +26,16 @@ class Membership < ApplicationRecord
 
   def revoke!
     update!(revoked_at: Time.current)
+  end
+
+  private
+
+  # A project always keeps at least one active owner: the last one can neither lose the role nor leave.
+  def project_keeps_an_owner
+    return unless role_in_database == "owner" && revoked_at_in_database.nil?
+    return unless !owner? || revoked_at.present?
+    return if project.memberships.active.owner.where.not(id:).exists?
+
+    errors.add(:base, :last_owner)
   end
 end
