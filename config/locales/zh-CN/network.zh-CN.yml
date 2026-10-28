@@ -39,6 +39,7 @@ zh-CN:
       filtered: 被过滤
     dns:
       domain: 域名
+      hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。"
       domain_placeholder: example.com 203.0.113.10
       type: 类型
       submit: 检查 DNS
@@ -62,7 +63,15 @@ zh-CN:
       host_placeholder: "example.com、203.0.113.10 或 {{host}}"
       ports: 端口
       ports_placeholder: "22, 80, 443 或 8000-8010"
+      preset: "端口预设"
+      presets:
+        common: "常用"
+        web: "Web (%{ports})"
+        mail: "邮件 (%{ports})"
+        database: "数据库 (%{ports})"
+        custom: "自定义"
       submit: 检查端口
+      hint: "端口检查会对每个端口尝试 TCP 连接，让你看到主机暴露了什么、防火墙隐藏了什么。选择预设，或用逗号分隔输入端口，也可以使用 8000-8010 这样的范围。"
       summary: "%{open} 个开放，%{closed} 个关闭，%{filtered} 个被过滤"
       all_filtered: 没有任何应答。可能是防火墙丢弃了数据包，或主机已离线。
       columns:
@@ -82,6 +91,16 @@ zh-CN:
       only_refused: 主机有应答，但此端口上没有服务在监听。
       no_answer: 无应答。主机可能已离线，或防火墙正在丢弃数据包。
       stopped: "连续 %{count} 次超时后已停止。"
+    empty:
+      dns:
+        title: "暂无内容可显示"
+        hint: "输入域名并检查其 DNS 记录。"
+      ports:
+        title: "暂无内容可显示"
+        hint: "输入主机和要检查的端口。"
+      ping:
+        title: "暂无内容可显示"
+        hint: "输入主机并开始 TCP ping。"
     history:
       dns: "DNS 检查"
       ports: "端口检查"
@@ -93,6 +112,17 @@ zh-CN:
       confirm_clear: "删除该项目中此工具的全部历史记录？"
       confirm_delete: "删除此次运行？"
       previous: "上一次运行（%{time}前）：%{detail}"
+    guide:
+      title: "如何解读结果"
+      ok: "服务器返回了记录。"
+      cname: "只返回了别名；记录在目标上。"
+      nodata: "该名称存在，但没有此类型的记录。"
+      nxdomain: "该名称不存在。"
+      servfail: "解析器未能从该区域获得响应。"
+      timeout: "服务器未在时限内响应。"
+      open: "有服务接受了连接。"
+      closed: "主机有响应，但此端口上没有任何服务在监听。"
+      filtered: "无响应。防火墙可能正在丢弃数据包。"
     limits:
       about: "简介"
     results:

@@ -39,6 +39,7 @@ de:
       filtered: Gefiltert
     dns:
       domain: Domain
+      hint: "DNS-Antworten kommen von den autoritativen Nameservern und mehreren öffentlichen Resolvern, damit du siehst, ob sich eine Änderung verbreitet hat."
       domain_placeholder: example.com 203.0.113.10
       type: Typ
       submit: DNS prüfen
@@ -62,7 +63,15 @@ de:
       host_placeholder: example.com, 203.0.113.10 oder {{host}}
       ports: Ports
       ports_placeholder: 22, 80, 443 oder 8000-8010
+      preset: "Port-Voreinstellung"
+      presets:
+        common: "Häufig"
+        web: "Web (%{ports})"
+        mail: "E-Mail (%{ports})"
+        database: "Datenbanken (%{ports})"
+        custom: "Benutzerdefiniert"
       submit: Ports prüfen
+      hint: "Die Port-Prüfung versucht eine TCP-Verbindung zu jedem Port, damit du siehst, was ein Host offenlegt und was eine Firewall verbirgt. Wähle eine Voreinstellung oder gib Ports durch Kommas getrennt ein, mit Bereichen wie 8000-8010."
       summary: "%{open} offen, %{closed} geschlossen, %{filtered} gefiltert"
       all_filtered: Nichts hat geantwortet. Eine Firewall verwirft möglicherweise die Pakete, oder der Host ist offline.
       columns:
@@ -82,6 +91,16 @@ de:
       only_refused: Der Host antwortet, aber auf diesem Port lauscht nichts.
       no_answer: Keine Antwort. Der Host ist möglicherweise offline, oder eine Firewall verwirft die Pakete.
       stopped: "Nach %{count} Zeitüberschreitungen in Folge gestoppt."
+    empty:
+      dns:
+        title: "Noch nichts anzuzeigen"
+        hint: "Gib eine Domain ein und prüfe ihre DNS-Einträge."
+      ports:
+        title: "Noch nichts anzuzeigen"
+        hint: "Gib einen Host und die zu prüfenden Ports ein."
+      ping:
+        title: "Noch nichts anzuzeigen"
+        hint: "Gib einen Host ein und starte einen TCP-Ping."
     history:
       dns: "DNS-Prüfungen"
       ports: "Port-Prüfungen"
@@ -93,6 +112,17 @@ de:
       confirm_clear: "Den gesamten Verlauf dieses Tools für das Projekt löschen?"
       confirm_delete: "Diesen Lauf löschen?"
       previous: "Vorheriger Lauf, vor %{time}: %{detail}"
+    guide:
+      title: "Ergebnisse lesen"
+      ok: "Der Server hat mit Einträgen geantwortet."
+      cname: "Es kam nur ein Alias zurück; das Ziel enthält die Einträge."
+      nodata: "Der Name existiert, hat aber keinen Eintrag dieses Typs."
+      nxdomain: "Der Name existiert nicht."
+      servfail: "Der Resolver hat keine Antwort aus der Zone erhalten."
+      timeout: "Der Server hat nicht rechtzeitig geantwortet."
+      open: "Ein Dienst hat die Verbindung angenommen."
+      closed: "Der Host hat geantwortet, aber an diesem Port lauscht nichts."
+      filtered: "Keine Antwort. Eine Firewall verwirft möglicherweise die Pakete."
     limits:
       about: "Info"
     results:

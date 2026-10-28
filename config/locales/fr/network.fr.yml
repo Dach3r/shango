@@ -39,6 +39,7 @@ fr:
       filtered: "Filtré"
     dns:
       domain: "Domaine"
+      hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée."
       domain_placeholder: example.com 203.0.113.10
       type: "Type"
       submit: "Vérifier le DNS"
@@ -62,7 +63,15 @@ fr:
       host_placeholder: "example.com, 203.0.113.10 ou {{host}}"
       ports: "Ports"
       ports_placeholder: "22, 80, 443 ou 8000-8010"
+      preset: "Préréglage de ports"
+      presets:
+        common: "Courants"
+        web: "Web (%{ports})"
+        mail: "Messagerie (%{ports})"
+        database: "Bases de données (%{ports})"
+        custom: "Personnalisé"
       submit: "Vérifier les ports"
+      hint: "La vérification de ports tente une connexion TCP vers chaque port, pour voir ce qu'un hôte expose et ce qu'un pare-feu masque. Choisissez un préréglage ou saisissez des ports séparés par des virgules, avec des plages comme 8000-8010."
       summary: "%{open} ouverts, %{closed} fermés, %{filtered} filtrés"
       all_filtered: "Aucune réponse. Un pare-feu bloque peut-être les paquets, ou l'hôte est hors ligne."
       columns:
@@ -82,6 +91,16 @@ fr:
       only_refused: "L'hôte répond, mais rien n'écoute sur ce port."
       no_answer: "Aucune réponse. L'hôte est peut-être hors ligne, ou un pare-feu bloque les paquets."
       stopped: "Arrêté après %{count} délais dépassés consécutifs."
+    empty:
+      dns:
+        title: "Rien à afficher pour l'instant"
+        hint: "Saisissez un domaine et vérifiez ses enregistrements DNS."
+      ports:
+        title: "Rien à afficher pour l'instant"
+        hint: "Saisissez un hôte et les ports à vérifier."
+      ping:
+        title: "Rien à afficher pour l'instant"
+        hint: "Saisissez un hôte et lancez un ping TCP."
     history:
       dns: "Vérifications DNS"
       ports: "Vérifications de ports"
@@ -93,6 +112,17 @@ fr:
       confirm_clear: "Supprimer tout l'historique de cet outil pour le projet ?"
       confirm_delete: "Supprimer cette exécution ?"
       previous: "Exécution précédente, il y a %{time} : %{detail}"
+    guide:
+      title: "Lire les résultats"
+      ok: "Le serveur a répondu avec des enregistrements."
+      cname: "Seul un alias est revenu ; la cible contient les enregistrements."
+      nodata: "Le nom existe mais n'a aucun enregistrement de ce type."
+      nxdomain: "Le nom n'existe pas."
+      servfail: "Le résolveur n'a pas obtenu de réponse de la zone."
+      timeout: "Le serveur n'a pas répondu à temps."
+      open: "Un service a accepté la connexion."
+      closed: "L'hôte a répondu, mais rien n'écoute sur ce port."
+      filtered: "Aucune réponse. Un pare-feu abandonne peut-être les paquets."
     limits:
       about: "À propos"
     results:

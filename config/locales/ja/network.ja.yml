@@ -39,6 +39,7 @@ ja:
       filtered: フィルタ済み
     dns:
       domain: ドメイン
+      hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。"
       domain_placeholder: example.com 203.0.113.10
       type: タイプ
       submit: DNSを確認
@@ -62,7 +63,15 @@ ja:
       host_placeholder: "example.com、203.0.113.10 または {{host}}"
       ports: ポート
       ports_placeholder: "22, 80, 443 または 8000-8010"
+      preset: "ポートのプリセット"
+      presets:
+        common: "よく使うもの"
+        web: "Web (%{ports})"
+        mail: "メール (%{ports})"
+        database: "データベース (%{ports})"
+        custom: "カスタム"
       submit: ポートを確認
+      hint: "ポートチェックは各ポートへ TCP 接続を試み、ホストが公開しているものとファイアウォールが隠しているものを確認できます。プリセットを選ぶか、8000-8010 のような範囲を含め、ポートをカンマ区切りで入力してください。"
       summary: "オープン %{open}、クローズ %{closed}、フィルタ済み %{filtered}"
       all_filtered: 応答がありませんでした。ファイアウォールがパケットを破棄しているか、ホストがオフラインの可能性があります。
       columns:
@@ -82,6 +91,16 @@ ja:
       only_refused: ホストは応答していますが、このポートで待ち受けているものはありません。
       no_answer: 応答がありません。ホストがオフラインか、ファイアウォールがパケットを破棄している可能性があります。
       stopped: "%{count} 回連続でタイムアウトしたため停止しました。"
+    empty:
+      dns:
+        title: "表示する内容はまだありません"
+        hint: "ドメインを入力して DNS レコードを確認します。"
+      ports:
+        title: "表示する内容はまだありません"
+        hint: "ホストと確認するポートを入力します。"
+      ping:
+        title: "表示する内容はまだありません"
+        hint: "ホストを入力して TCP ping を開始します。"
     history:
       dns: "DNS チェック"
       ports: "ポートチェック"
@@ -93,6 +112,17 @@ ja:
       confirm_clear: "このツールのプロジェクトの履歴をすべて削除しますか？"
       confirm_delete: "この実行を削除しますか？"
       previous: "前回の実行（%{time}前）: %{detail}"
+    guide:
+      title: "結果の見方"
+      ok: "サーバーがレコードを返しました。"
+      cname: "エイリアスのみが返されました。レコードは参照先にあります。"
+      nodata: "名前は存在しますが、この種類のレコードはありません。"
+      nxdomain: "名前が存在しません。"
+      servfail: "リゾルバーがゾーンから応答を得られませんでした。"
+      timeout: "サーバーが時間内に応答しませんでした。"
+      open: "サービスが接続を受け付けました。"
+      closed: "ホストは応答しましたが、このポートで待ち受けているものはありません。"
+      filtered: "応答なし。ファイアウォールがパケットを破棄している可能性があります。"
     limits:
       about: "概要"
     results:

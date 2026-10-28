@@ -39,6 +39,7 @@ pt-BR:
       filtered: Filtrada
     dns:
       domain: Domínio
+      hint: "As respostas DNS vêm dos nameservers autoritativos e de vários resolvedores públicos, para saber se uma mudança já se propagou."
       domain_placeholder: exemplo.com 203.0.113.10
       type: Tipo
       submit: Verificar DNS
@@ -62,7 +63,15 @@ pt-BR:
       host_placeholder: exemplo.com, 203.0.113.10 ou {{host}}
       ports: Portas
       ports_placeholder: 22, 80, 443 ou 8000-8010
+      preset: "Predefinição de portas"
+      presets:
+        common: "Comuns"
+        web: "Web (%{ports})"
+        mail: "E-mail (%{ports})"
+        database: "Bancos de dados (%{ports})"
+        custom: "Personalizado"
       submit: Verificar portas
+      hint: "A verificação de portas tenta uma conexão TCP em cada porta, para ver o que um host expõe e o que um firewall esconde. Escolha uma predefinição ou digite portas separadas por vírgula, com intervalos como 8000-8010."
       summary: "%{open} abertas, %{closed} fechadas, %{filtered} filtradas"
       all_filtered: Nada respondeu. Um firewall pode estar descartando os pacotes, ou o host pode estar offline.
       columns:
@@ -82,6 +91,16 @@ pt-BR:
       only_refused: O host responde, mas nada está escutando nesta porta.
       no_answer: Sem resposta. O host pode estar offline, ou um firewall pode estar descartando os pacotes.
       stopped: "Interrompido após %{count} tempos esgotados seguidos."
+    empty:
+      dns:
+        title: "Ainda não há nada para mostrar"
+        hint: "Informe um domínio e verifique seus registros DNS."
+      ports:
+        title: "Ainda não há nada para mostrar"
+        hint: "Informe um host e as portas a verificar."
+      ping:
+        title: "Ainda não há nada para mostrar"
+        hint: "Informe um host e inicie um ping TCP."
     history:
       dns: "Verificações de DNS"
       ports: "Verificações de portas"
@@ -93,6 +112,17 @@ pt-BR:
       confirm_clear: "Excluir todo o histórico desta ferramenta do projeto?"
       confirm_delete: "Excluir esta execução?"
       previous: "Execução anterior, há %{time}: %{detail}"
+    guide:
+      title: "Como ler os resultados"
+      ok: "O servidor respondeu com registros."
+      cname: "Só voltou um alias; o destino tem os registros."
+      nodata: "O nome existe, mas não tem registros deste tipo."
+      nxdomain: "O nome não existe."
+      servfail: "O resolvedor não conseguiu obter resposta da zona."
+      timeout: "O servidor não respondeu a tempo."
+      open: "Um serviço aceitou a conexão."
+      closed: "O host respondeu, mas nada escuta nesta porta."
+      filtered: "Sem resposta. Um firewall pode estar descartando os pacotes."
     limits:
       about: "Sobre"
     results:
