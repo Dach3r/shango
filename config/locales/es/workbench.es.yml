@@ -313,9 +313,13 @@ es:
       timeout: Timeout (segundos)
       timeout_hint: "Hasta %{max} segundos."
       max_redirects: Máximo de redirecciones
+      max_redirects_hint: "Se detiene tras esta cantidad de saltos."
       follow_redirects: Seguir redirecciones
+      follow_redirects_hint: "Seguir respuestas 3xx automáticamente."
       verify_ssl: Verificar certificados SSL
+      verify_ssl_hint: "Rechaza certificados vencidos o no confiables. Desactívalo solo en servidores locales."
       use_cookie_jar: Usar el cookie jar (enviar y guardar cookies)
+      use_cookie_jar_hint: "Envía las cookies guardadas y guarda las que defina el servidor."
     auth:
       type: Tipo de auth
       inherit_hint: Usa la autorización de la carpeta o colección padre.

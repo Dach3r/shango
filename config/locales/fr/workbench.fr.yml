@@ -313,9 +313,13 @@ fr:
       timeout: "Délai d'expiration (secondes)"
       timeout_hint: "Jusqu'à %{max} secondes."
       max_redirects: "Redirections max."
+      max_redirects_hint: "S'arrête après ce nombre de redirections."
       follow_redirects: "Suivre les redirections"
+      follow_redirects_hint: "Suivre automatiquement les réponses 3xx."
       verify_ssl: "Vérifier les certificats SSL"
+      verify_ssl_hint: "Rejette les certificats expirés ou non fiables. À désactiver uniquement pour les serveurs locaux."
       use_cookie_jar: "Utiliser le gestionnaire de cookies (envoyer et enregistrer les cookies)"
+      use_cookie_jar_hint: "Envoie les cookies enregistrés et enregistre ceux définis par le serveur."
     auth:
       type: "Type d'authentification"
       inherit_hint: "Utilise l'autorisation du dossier ou de la collection parent."

@@ -312,9 +312,13 @@ ja:
       timeout: タイムアウト（秒）
       timeout_hint: "最大 %{max} 秒です。"
       max_redirects: 最大リダイレクト数
+      max_redirects_hint: "この回数でリダイレクトを打ち切ります。"
       follow_redirects: リダイレクトに従う
+      follow_redirects_hint: "3xx レスポンスを自動的にたどります。"
       verify_ssl: SSL 証明書を検証する
+      verify_ssl_hint: "期限切れや信頼できない証明書を拒否します。ローカルサーバーでのみ無効にしてください。"
       use_cookie_jar: "Cookie ジャーを使用する（Cookie の送信と保存）"
+      use_cookie_jar_hint: "保存済みの Cookie を送信し、サーバーが設定したものを保存します。"
     auth:
       type: 認証タイプ
       inherit_hint: 親フォルダまたはコレクションの認可を使用します。

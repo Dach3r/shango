@@ -313,9 +313,13 @@ en:
       timeout: Timeout (seconds)
       timeout_hint: "Up to %{max} seconds."
       max_redirects: Max redirects
+      max_redirects_hint: "Stop after this many hops."
       follow_redirects: Follow redirects
+      follow_redirects_hint: "Follow 3xx responses automatically."
       verify_ssl: Verify SSL certificates
+      verify_ssl_hint: "Reject expired or untrusted certificates. Turn off only for local servers."
       use_cookie_jar: Use the cookie jar (send and save cookies)
+      use_cookie_jar_hint: "Send stored cookies and save the ones the server sets."
     auth:
       type: Auth type
       inherit_hint: Uses the authorization of the parent folder or collection.

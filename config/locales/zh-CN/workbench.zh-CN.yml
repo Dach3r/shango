@@ -312,9 +312,13 @@ zh-CN:
       timeout: 超时（秒）
       timeout_hint: "最多 %{max} 秒。"
       max_redirects: 最大重定向次数
+      max_redirects_hint: "达到此跳转次数后停止。"
       follow_redirects: 跟随重定向
+      follow_redirects_hint: "自动跟随 3xx 响应。"
       verify_ssl: 验证 SSL 证书
+      verify_ssl_hint: "拒绝过期或不受信任的证书。仅在本地服务器上关闭。"
       use_cookie_jar: 使用 Cookie 罐（发送并保存 Cookie）
+      use_cookie_jar_hint: "发送已保存的 Cookie，并保存服务器设置的 Cookie。"
     auth:
       type: 认证类型
       inherit_hint: 使用上级文件夹或集合的授权。
