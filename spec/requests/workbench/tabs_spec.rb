@@ -80,23 +80,24 @@ RSpec.describe "Workbench tabs" do
     end
 
     it "discards drafts when closing all", :aggregate_failures do
-      untouched = ApiClient::Requests::CreateDraft.call(project:, user:).record
-      edited = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      untouched = ApiClient::Drafts::Create.call(project:, user:).record
+      edited = ApiClient::Drafts::Create.call(project:, user:).record
       edited.update!(name: "Edited")
 
       delete workbench_tabs_path(side: "all")
 
-      expect(ApiRequest.where(id: [untouched.id, edited.id])).not_to exist
+      expect(RequestDraft.where(id: [untouched.id, edited.id])).not_to exist
     end
 
     it "keeps the tabs the user declined to close", :aggregate_failures do
-      edited = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      edited = ApiClient::Drafts::Create.call(project:, user:).record
       edited.update!(name: "Edited")
 
       delete workbench_tabs_path(side: "all", keep: [edited.id, second.id], current: edited.id)
 
-      expect(open_ids).to contain_exactly(second.id, edited.id)
-      expect(ApiRequest.where(id: edited.id)).to exist
+      expect(open_ids.compact).to contain_exactly(second.id)
+      expect(RequestTab.where(user:, request_draft: edited)).to exist
+      expect(RequestDraft.where(id: edited.id)).to exist
       expect(response).to redirect_to(workbench_request_path(edited))
     end
 

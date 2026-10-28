@@ -7,7 +7,7 @@ module Workbench
       private
 
       def set_api_request
-        @api_request = current_project.api_requests.visible_to(current_user).find(params[:request_id])
+        @api_request = ApiClient::Drafts::Resolve.call(project: current_project, user: current_user, id: params[:request_id])
         authorize @api_request, :show?
       end
     end

@@ -47,8 +47,8 @@
       <details open class="group/branch">
         <summary class="flex cursor-pointer list-none items-center gap-2 py-1.5 pr-2 pl-2 text-sm font-medium text-ink transition hover:bg-field focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
           <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
-          <%= lucide_icon group.collection ? "folder-open" : "file-pen-line", class: "size-4 shrink-0 text-accent" %>
-          <span class="min-w-0 flex-1 truncate"><%= group.collection ? group.collection.name : t("components.request_tree.drafts") %></span>
+          <%= lucide_icon "folder-open", class: "size-4 shrink-0 text-accent" %>
+          <span class="min-w-0 flex-1 truncate"><%= group.collection.name %></span>
         </summary>
         <ul class="ml-3 space-y-0.5 border-l border-line pl-1.5">
           <% group.executions.each do |execution| %>

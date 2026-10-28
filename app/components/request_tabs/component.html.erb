@@ -21,7 +21,7 @@
             <% if unsaved?(api_request) %>
               <%= draft_close_icon(t("components.request_tabs.unsaved_hint")) %>
             <% else %>
-              <%= lucide_icon "x", class: "size-3" %>
+              <%= lucide_icon "x", class: "pointer-events-none size-3" %>
             <% end %>
           <% end %>
         <% end %>

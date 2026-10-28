@@ -16,9 +16,7 @@ RSpec.describe "Workbench request duplications" do
   end
 
   it "does not duplicate drafts of other users", :aggregate_failures do
-    other = ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record
-
-    expect { post workbench_request_duplication_path(other) }.not_to change(ApiRequest, :count)
+    expect { post workbench_request_duplication_path(other_draft) }.not_to change(ApiRequest, :count)
     expect(response).to have_http_status(:not_found)
   end
 
@@ -31,11 +29,9 @@ RSpec.describe "Workbench request duplications" do
     expect(copy.position).to be > original.position
   end
 
-  it "duplicates drafts as drafts of the same user", :aggregate_failures do
-    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
-    post workbench_request_duplication_path(draft)
-
-    expect(ApiRequest.order(:created_at).last).to have_attributes(collection_id: nil, user:)
+  it "does not duplicate a draft that is not saved yet", :aggregate_failures do
+    expect { post workbench_request_duplication_path(draft) }.not_to change(ApiRequest, :count)
+    expect(response).to have_http_status(:forbidden).or have_http_status(:redirect)
   end
 
   it "requires authentication" do

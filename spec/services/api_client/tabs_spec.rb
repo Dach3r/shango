@@ -35,9 +35,9 @@ RSpec.describe "ApiClient tabs" do
     end
 
     it "includes drafts" do
-      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      draft = ApiClient::Drafts::Create.call(project:, user:).record
 
-      expect(described_class.call(project:, user:)).to eq([draft])
+      expect(described_class.call(project:, user:).map(&:id)).to eq([draft.id])
     end
   end
 end

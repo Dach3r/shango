@@ -7,14 +7,6 @@ module RequestFormHelper
     [branch.collection.name, *branch.folder_path(api_request.folder_id).map(&:name)]
   end
 
-  # Select options for saving a draft: every collection and folder as "collection:<id>" / "folder:<id>".
-  def destination_options(branches)
-    branches.flat_map do |branch|
-      collection = branch.collection
-      [[collection.name, "collection:#{collection.id}"], *folder_destinations(branch, nil, collection.name)]
-    end
-  end
-
   # URL split into the pieces the request tab styles separately.
   def url_parts(url)
     url.to_s.match(%r{\A(?<scheme>[a-z][a-z0-9+.-]*://)?(?<host>[^/?#]*)(?<path>[^?#]*)(?<query>\?[^#]*)?(?<fragment>#.*)?\z}im).named_captures.symbolize_keys
@@ -49,14 +41,5 @@ module RequestFormHelper
 
   def method_options
     ApiRequest::METHODS.map { |method| [method, method] }
-  end
-
-  private
-
-  def folder_destinations(branch, parent, path)
-    (parent ? branch.children_of(parent) : branch.root_folders).flat_map do |folder|
-      label = "#{path} / #{folder.name}"
-      [[label, "folder:#{folder.id}"], *folder_destinations(branch, folder, label)]
-    end
   end
 end

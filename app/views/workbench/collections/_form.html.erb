@@ -1,10 +1,19 @@
 <% collection = local_assigns.fetch(:collection) { @collection } %>
 <% draft = local_assigns.fetch(:draft) { @draft } %>
-<%= render Modal::Component.new(icon: "library", title: collection.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "collection_form", submit: t("workbench.shared.save"), submit_icon: "save") do %>
+<% placement = local_assigns.fetch(:placement) { @placement } %>
+<%= render Modal::Component.new(icon: "library", title: collection.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "collection_form", submit: t("workbench.shared.save"), submit_icon: "save") do |modal| %>
+  <% if placement && draft %>
+    <% modal.with_footer do %>
+      <%= link_to new_workbench_request_placement_path(draft, request_name: @request_name), class: button_classes(:ghost) do %><%= lucide_icon "arrow-left", class: "size-4 shrink-0" %><%= t(".back") %><% end %>
+      <%= tag.button type: "submit", form: "collection_form", class: button_classes(:primary) do %><%= lucide_icon "save", class: "size-4 shrink-0" %><%= t("workbench.shared.save") %><% end %>
+    <% end %>
+  <% end %>
   <%= form_with model: collection, scope: :collection, url: (collection.persisted? ? workbench_collection_path(collection) : workbench_collections_path),
-                id: "collection_form", data: { turbo_frame: "_top" }, class: "space-y-5" do |form| %>
+                id: "collection_form", data: { turbo_frame: (placement && draft ? "modal" : "_top") }, class: "space-y-5" do |form| %>
     <%= render "workbench/shared/errors", record: collection %>
     <%= hidden_field_tag :draft_id, draft.id if draft %>
+    <%= hidden_field_tag :placement, 1 if placement && draft %>
+    <%= hidden_field_tag :request_name, @request_name if placement && draft %>
 
     <%= render Input::Component.new(form: form, attribute: :name, label: t(".name"), icon: "library", placeholder: t(".name_placeholder"), autofocus: true, autocomplete: "off") %>
     <%= render Input::Component.new(form: form, attribute: :description, label: t(".description"), type: :text_area, rows: 2) %>

@@ -1,6 +1,5 @@
 class RequestExecution < ApplicationRecord
   KEEP_PER_REQUEST = 50
-  PENDING_TTL = 30.minutes
   STORED_BODY_BYTES = 256.kilobytes
 
   belongs_to :project
@@ -10,33 +9,30 @@ class RequestExecution < ApplicationRecord
 
   scope :recent, -> { order(created_at: :desc) }
 
+  # The unsaved run with this id, if it is still the user's latest one for its request.
   def self.pending(id)
-    attributes = Rails.cache.read(pending_key(id))
-    new(attributes) if attributes
+    LatestExecution.find_by(execution_id: id)&.execution
   end
 
-  def self.pending_key(id)
-    "request_execution/pending/#{id}"
+  # The user's unsaved latest run of a request, which lives only while its tab is open.
+  def self.unsaved_for(api_request, user)
+    key = api_request.persisted? ? { api_request_id: api_request.id } : { request_draft_id: api_request.id }
+    LatestExecution.find_by(user_id: user.id, **key)&.execution
   end
 
-  def self.latest_key(api_request_id, user_id)
-    "request_execution/latest/#{api_request_id}/#{user_id}"
-  end
-
-  # The last response the user got for a request: the freshest unsaved run still cached, else the newest saved one.
+  # The last response the user got for a request: the unsaved latest run, else the newest saved one.
   def self.latest_for(api_request, user)
-    pending(Rails.cache.read(latest_key(api_request.id, user.id))) || api_request.request_executions.where(user_id: user.id).recent.first
+    unsaved_for(api_request, user) || api_request.request_executions.where(user_id: user.id).recent.first
   end
 
-  # Keeps an unsaved execution available for a while so it can be saved later without re-sending the request.
+  # Keeps an unsaved execution as the latest one of its request until it is saved to history or replaced by the next run.
   def stash
-    Rails.cache.write(self.class.pending_key(id), storable_attributes, expires_in: PENDING_TTL)
-    Rails.cache.write(self.class.latest_key(api_request_id, user_id), id, expires_in: PENDING_TTL)
+    LatestExecution.keep(self)
     self
   end
 
-  # What survives in the cache and history: bodies are cut to STORED_BODY_BYTES (the panel shows the full response
-  # once, straight from the run) so a few large responses cannot fill the database or the shared cache.
+  # What survives in the latest run and history: bodies are cut to STORED_BODY_BYTES (the panel shows the full response
+  # once, straight from the run) so a few large responses cannot fill the database.
   def storable_attributes
     stored = attributes.dup
     %w[response_body request_body].each do |name|

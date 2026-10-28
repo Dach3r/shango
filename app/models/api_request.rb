@@ -9,13 +9,16 @@ class ApiRequest < ApplicationRecord
   MAX_REDIRECTS = 10
   BODY_FORM_EXTRA = %w[type attachment_id upload_token].freeze
 
+  attr_accessor :draft_owner_id
+
   belongs_to :project
   belongs_to :collection, optional: true
   belongs_to :folder, optional: true
-  belongs_to :user, optional: true
 
   has_many :request_executions, dependent: :destroy
   has_many :request_tabs, dependent: :destroy
+  has_many :request_drafts, dependent: :delete_all
+  has_many :latest_executions, dependent: :delete_all
 
   has_many_attached :body_files
   has_one_attached :binary_body
@@ -29,10 +32,6 @@ class ApiRequest < ApplicationRecord
   validates :body_type, inclusion: { in: BODY_TYPES }
 
   validate :folder_belongs_to_collection
-  validate :draft_has_owner
-
-  scope :drafts, -> { where(collection_id: nil) }
-  scope :visible_to, ->(user) { where.not(collection_id: nil).or(where(user_id: user.id)) }
 
   def query_params=(rows)
     super(self.class.clean_rows(rows))
@@ -46,16 +45,21 @@ class ApiRequest < ApplicationRecord
     super(self.class.clean_rows(rows, extra: BODY_FORM_EXTRA))
   end
 
+  # A request that is not saved yet lives in a RequestDraft and is rebuilt in memory from it (see Drafts::Build).
   def draft?
     collection_id.nil?
   end
 
   def untouched_draft?
-    draft? && updated_at == created_at && !body_files.attached? && !binary_body.attached?
+    draft? && updated_at == created_at
+  end
+
+  def to_param
+    persisted? ? super : id
   end
 
   def siblings
-    draft? ? project.api_requests.drafts.where(user_id:) : collection.api_requests.where(folder_id:)
+    collection.api_requests.where(folder_id:)
   end
 
   def allowed_auth_types
@@ -91,10 +95,6 @@ class ApiRequest < ApplicationRecord
 
   def folder_belongs_to_collection
     errors.add(:folder, :invalid) if folder_id && folder&.collection_id != collection_id
-  end
-
-  def draft_has_owner
-    errors.add(:user, :blank) if draft? && user_id.blank?
   end
 
   class << self

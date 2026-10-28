@@ -48,8 +48,6 @@ RSpec.describe "Workbench request response references" do
     end
 
     it "is empty for a draft", :aggregate_failures do
-      draft = create(:api_request, collection: nil, user:, project:)
-
       get workbench_request_path(draft)
 
       expect(response.body).to include("data-code-editor-responses-value=\"[]\"")

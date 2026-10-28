@@ -50,7 +50,7 @@ class RequestTabs::Component < ApplicationComponent
   def draft_close_icon(hint = t("components.request_tabs.draft_hint"))
     safe_join([
       tag.span(class: "size-2 rounded-full bg-muted group-hover:hidden group-focus-within:hidden", title: hint),
-      lucide_icon("x", class: "hidden size-3 group-hover:block group-focus-within:block")
+      lucide_icon("x", class: "pointer-events-none hidden size-3 group-hover:block group-focus-within:block")
     ])
   end
 

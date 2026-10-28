@@ -12,6 +12,7 @@ zh-CN:
               upload_too_large: "%{name} 超过了 %{max} MB 的限制。"
               uploads_too_large: 文件总大小超过了 %{max} MB 的限制。
               too_many_uploads: 单个请求中的文件过多（最多 %{max} 个）。
+              draft_too_large: "此请求过大，无法保存为草稿。"
     attributes:
       user:
         first_name: 名
@@ -72,7 +73,7 @@ zh-CN:
     zoom_picker:
       label: 缩放
       default: 默认
-    toast:
+    flash:
       close: 关闭通知
     theme_switcher:
       label: 主题

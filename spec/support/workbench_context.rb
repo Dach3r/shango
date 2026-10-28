@@ -9,5 +9,7 @@ RSpec.shared_context "with workbench project" do
   let(:foreign_collection) { create(:collection) }
   let(:foreign_folder) { create(:folder, collection: foreign_collection) }
   let(:foreign_request) { create(:api_request, collection: foreign_collection) }
+  let(:draft) { ApiClient::Drafts::Create.call(project:, user:).record }
+  let(:other_draft) { create(:request_draft, project:, user: create(:user)) }
   let(:turbo_headers) { { "Accept" => "text/vnd.turbo-stream.html, text/html" } }
 end

@@ -1,4 +1,4 @@
-# Sends an API Client request outside the web thread. The outcome is stashed as a pending RequestExecution and the
+# Sends an API Client request outside the web thread. The outcome is kept as the user's latest RequestExecution (see LatestExecution) and the
 # run state flips to done; the browser polls Workbench::Requests::Executions::ResultsController for it.
 class RunRequestJob < ApplicationJob
   queue_as :executions
@@ -10,9 +10,10 @@ class RunRequestJob < ApplicationJob
     state = ApiClient::Executions::RunState
     return state.finish(run_id, "cancelled") if state.cancelled?(run_id)
 
-    api_request = ApiRequest.find(api_request_id)
+    user = User.find(user_id)
+    api_request = ApiClient::Drafts::Resolve.call(user:, id: api_request_id)
     execution = ApiClient::Requests::Dispatch.call(
-      api_request:, environment: Environment.find_by(id: environment_id), user: User.find(user_id), id: run_id, cancelled: -> { state.cancelled?(run_id) }
+      api_request:, environment: Environment.find_by(id: environment_id), user:, id: run_id, cancelled: -> { state.cancelled?(run_id) }
     ).record
     state.finish(run_id, execution.error_kind == "cancelled" ? "cancelled" : "done")
   rescue StandardError => error

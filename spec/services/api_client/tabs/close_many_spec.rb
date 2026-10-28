@@ -10,13 +10,15 @@ RSpec.describe ApiClient::Tabs::CloseMany do
     api_request
   end
 
-  it "forgets the unsaved edits of the closed tabs" do
-    allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
-    open_tab(saved)
-    ApiClient::Requests::Stash.write(api_request: saved, user:, attributes: { url: "https://edited.test" })
-    described_class.call(api_requests: [saved], user:)
+  def open_draft
+    ApiClient::Drafts::Build.call(draft: ApiClient::Drafts::Create.call(project:, user:).record)
+  end
 
-    expect(ApiClient::Requests::Stash.read(api_request: saved, user:)).to be_nil
+  it "forgets the pending edits of the closed tabs" do
+    open_tab(saved)
+    create(:request_draft, :for_request, user:, api_request: saved, project:)
+
+    expect { described_class.call(api_requests: [saved], user:) }.to change(RequestDraft, :count).by(-1)
   end
 
   it "closes saved tabs without deleting the requests", :aggregate_failures do
@@ -29,16 +31,16 @@ RSpec.describe ApiClient::Tabs::CloseMany do
   end
 
   it "discards untouched drafts" do
-    draft = open_tab(ApiClient::Requests::CreateDraft.call(project:, user:).record)
+    draft = open_draft
 
-    expect { described_class.call(api_requests: [draft], user:) }.to change(ApiRequest, :count).by(-1)
+    expect { described_class.call(api_requests: [draft], user:) }.to change(RequestDraft, :count).by(-1)
   end
 
   it "discards drafts with edits too, since the caller confirmed them" do
-    draft = open_tab(ApiClient::Requests::CreateDraft.call(project:, user:).record)
-    draft.update!(name: "Edited")
+    draft = open_draft
+    ApiClient::Drafts::Save.call(api_request: draft, user:, attributes: { name: "Edited" })
 
-    expect { described_class.call(api_requests: [draft.reload], user:) }.to change(ApiRequest, :count).by(-1)
+    expect { described_class.call(api_requests: [draft], user:) }.to change(RequestDraft, :count).by(-1)
   end
 
   describe "edge cases" do

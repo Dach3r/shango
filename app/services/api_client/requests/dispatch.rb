@@ -1,7 +1,7 @@
 module ApiClient
   module Requests
-    # Builds and sends a saved request and returns the (unsaved, secrets masked) RequestExecution, kept briefly in the
-    # cache until the user saves it (see Executions::Save). Runs inline or inside RunRequestJob.
+    # Builds and sends a saved request and returns the (unsaved, secrets masked) RequestExecution, kept as the user's
+    # latest response (see LatestExecution) until the user saves it (see Executions::Save). Runs inline or inside RunRequestJob.
     class Dispatch
       include Serviceable
 

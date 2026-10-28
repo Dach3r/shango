@@ -38,10 +38,11 @@ RSpec.describe RequestExecution do
   end
 
   describe "pending executions" do
-    before { allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new) }
+    let(:user) { create(:user) }
+    let(:api_request) { create(:api_request) }
 
     it "restores a stashed execution by id", :aggregate_failures do
-      execution = build(:request_execution, id: SecureRandom.uuid, url: "https://api.example.com/a")
+      execution = build(:request_execution, user:, api_request:, id: SecureRandom.uuid, url: "https://api.example.com/a")
 
       expect(execution.stash).to eq(execution)
       expect(described_class.pending(execution.id)).to have_attributes(id: execution.id, url: "https://api.example.com/a")
@@ -49,7 +50,7 @@ RSpec.describe RequestExecution do
 
     it "cuts oversized bodies before stashing them", :aggregate_failures do
       big = "é" * (described_class::STORED_BODY_BYTES / 2 + 100)
-      execution = build(:request_execution, id: SecureRandom.uuid, response_body: big, request_body: big, body_truncated: false)
+      execution = build(:request_execution, user:, api_request:, id: SecureRandom.uuid, response_body: big, request_body: big, body_truncated: false)
       execution.stash
 
       restored = described_class.pending(execution.id)
@@ -61,7 +62,7 @@ RSpec.describe RequestExecution do
 
     it "never cuts a multibyte character in half", :aggregate_failures do
       big = "€" * (described_class::STORED_BODY_BYTES / 3 + 10)
-      execution = build(:request_execution, id: SecureRandom.uuid, response_body: big)
+      execution = build(:request_execution, user:, api_request:, id: SecureRandom.uuid, response_body: big)
       execution.stash
 
       restored = described_class.pending(execution.id)
@@ -70,21 +71,21 @@ RSpec.describe RequestExecution do
     end
 
     it "does not flag the response as truncated when only the request body was cut", :aggregate_failures do
-      execution = build(:request_execution, id: SecureRandom.uuid, request_body: "a" * (described_class::STORED_BODY_BYTES + 1), response_body: "ok", body_truncated: false)
+      execution = build(:request_execution, user:, api_request:, id: SecureRandom.uuid, request_body: "a" * (described_class::STORED_BODY_BYTES + 1), response_body: "ok", body_truncated: false)
       execution.stash
 
       expect(described_class.pending(execution.id)).to have_attributes(body_truncated: false, response_body: "ok")
     end
 
     it "keeps a body of exactly the limit whole" do
-      execution = build(:request_execution, id: SecureRandom.uuid, response_body: "a" * described_class::STORED_BODY_BYTES, body_truncated: false)
+      execution = build(:request_execution, user:, api_request:, id: SecureRandom.uuid, response_body: "a" * described_class::STORED_BODY_BYTES, body_truncated: false)
       execution.stash
 
       expect(described_class.pending(execution.id)).to have_attributes(body_truncated: false)
     end
 
     it "keeps small bodies and the truncation flag as they are", :aggregate_failures do
-      execution = build(:request_execution, id: SecureRandom.uuid, response_body: "ok", request_body: nil, body_truncated: false)
+      execution = build(:request_execution, user:, api_request:, id: SecureRandom.uuid, response_body: "ok", request_body: nil, body_truncated: false)
       execution.stash
 
       expect(described_class.pending(execution.id)).to have_attributes(response_body: "ok", request_body: nil, body_truncated: false)
@@ -95,11 +96,22 @@ RSpec.describe RequestExecution do
     end
   end
 
-  describe ".latest_for" do
+  describe ".unsaved_for" do
     let(:user) { create(:user) }
     let(:api_request) { create(:api_request) }
 
-    before { allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new) }
+    it "ignores saved runs", :aggregate_failures do
+      create(:request_execution, api_request:, user:)
+      expect(described_class.unsaved_for(api_request, user)).to be_nil
+
+      stashed = build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+      expect(described_class.unsaved_for(api_request, user).id).to eq(stashed.id)
+    end
+  end
+
+  describe ".latest_for" do
+    let(:user) { create(:user) }
+    let(:api_request) { create(:api_request) }
 
     it "prefers the freshest stashed run over the saved ones", :aggregate_failures do
       create(:request_execution, api_request:, user:, url: "https://api.example.com/saved")
@@ -128,12 +140,29 @@ RSpec.describe RequestExecution do
       expect(described_class.latest_for(create(:api_request), user)).to be_nil
     end
 
-    it "falls back to the saved run once the stashed one expired" do
-      saved = create(:request_execution, api_request:, user:)
-      build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+    it "keeps only the newest stashed run of a request", :aggregate_failures do
+      first = build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+      second = build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+
+      expect(described_class.latest_for(api_request, user).id).to eq(second.id)
+      expect(described_class.pending(first.id)).to be_nil
+      expect(LatestExecution.count).to eq(1)
+    end
+
+    it "survives a cache wipe" do
+      stashed = build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
       Rails.cache.clear
 
-      expect(described_class.latest_for(api_request, user)).to eq(saved)
+      expect(described_class.latest_for(api_request, user).id).to eq(stashed.id)
+    end
+
+    it "shows the stashed run of a request that is still a draft", :aggregate_failures do
+      draft = create(:request_draft, user:)
+      unsaved = ApiClient::Drafts::Build.call(draft:)
+      stashed = build(:request_execution, id: SecureRandom.uuid, api_request: unsaved, project: draft.project, user:, url: "https://api.example.com/draft").stash
+
+      expect(described_class.latest_for(unsaved, user)).to have_attributes(id: stashed.id, api_request_id: draft.id, url: "https://api.example.com/draft")
+      expect(LatestExecution.last).to have_attributes(request_draft_id: draft.id, api_request_id: nil)
     end
 
     it "is nil without any response" do

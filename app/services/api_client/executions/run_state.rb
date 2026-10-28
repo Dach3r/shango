@@ -1,7 +1,7 @@
 module ApiClient
   module Executions
     # Bookkeeping for a run that executes in the background: the browser polls it, and can ask to cancel it. Lives in
-    # the shared cache for a few minutes; the response itself is the pending RequestExecution stashed by Requests::Dispatch.
+    # the shared cache for a few minutes; the response itself is the latest RequestExecution kept by Requests::Dispatch.
     module RunState
       TTL = 5.minutes
 

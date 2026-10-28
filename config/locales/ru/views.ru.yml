@@ -12,6 +12,7 @@ ru:
               upload_too_large: "%{name} превышает лимит в %{max} МБ."
               uploads_too_large: Суммарный размер файлов превышает лимит в %{max} МБ.
               too_many_uploads: "Слишком много файлов в одном запросе (максимум %{max})."
+              draft_too_large: "Этот запрос слишком большой, чтобы сохранить его как черновик."
     attributes:
       user:
         first_name: Имя
@@ -72,7 +73,7 @@ ru:
     zoom_picker:
       label: Масштаб
       default: По умолчанию
-    toast:
+    flash:
       close: Закрыть уведомление
     theme_switcher:
       label: Тема

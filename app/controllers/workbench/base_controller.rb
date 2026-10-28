@@ -19,9 +19,9 @@ module Workbench
       @open_requests ||= ApiClient::Tabs::Load.call(project: current_project, user: current_user)
     end
 
-    # Open tabs whose edits are kept unsaved (see ApiClient::Requests::Stash).
+    # Open saved requests whose edits are kept as a draft, not saved yet.
     def unsaved_request_ids
-      @unsaved_request_ids ||= ApiClient::Requests::Stash.ids(requests: open_requests, user: current_user)
+      @unsaved_request_ids ||= ApiClient::Drafts::UnsavedIds.call(requests: open_requests, user: current_user)
     end
 
     # Where the editors create a variable that is not defined yet.

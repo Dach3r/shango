@@ -19,7 +19,7 @@ RSpec.describe "Workbench editor saving and variable cards", :system do
 
   describe "saving the request" do
     before do
-      create(:request_execution, api_request:, user:, http_method: "POST", response_body: %({"token":"abc123"}), response_headers: [])
+      build(:request_execution, id: SecureRandom.uuid, api_request:, user:, created_at: Time.current, http_method: "POST", response_body: %({"token":"abc123"}), response_headers: []).stash
       visit workbench_request_path(api_request)
     end
 

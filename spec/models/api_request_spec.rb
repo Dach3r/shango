@@ -87,32 +87,33 @@ RSpec.describe ApiRequest do
   describe "#untouched_draft?" do
     let(:project) { create(:project) }
     let(:user) { create(:user) }
-    let(:draft) { ApiClient::Requests::CreateDraft.call(project:, user:).record }
+    let(:draft) { ApiClient::Drafts::Create.call(project:, user:).record }
 
     it "is true for a draft that was never edited" do
-      expect(draft).to be_untouched_draft
+      expect(ApiClient::Drafts::Build.call(draft:)).to be_untouched_draft
     end
 
     it "is false once the draft changes" do
-      draft.update!(url: "https://example.com")
+      draft.update!(payload: { url: "https://example.com" }.to_json, updated_at: 1.minute.from_now)
 
-      expect(draft).not_to be_untouched_draft
-    end
-
-    it "is false for a draft with an attached file" do
-      draft.binary_body.attach(io: StringIO.new("data"), filename: "a.bin")
-
-      expect(draft).not_to be_untouched_draft
-    end
-
-    it "is false for a draft with body files" do
-      draft.body_files.attach(io: StringIO.new("data"), filename: "a.txt")
-
-      expect(draft).not_to be_untouched_draft
+      expect(ApiClient::Drafts::Build.call(draft:)).not_to be_untouched_draft
     end
 
     it "is false for a saved request" do
       expect(create(:api_request, project:)).not_to be_untouched_draft
+    end
+  end
+
+  describe "#to_param" do
+    it "is the id of a saved request" do
+      expect(api_request.to_param).to eq(api_request.id)
+    end
+
+    it "is the id of a draft that is not saved", :aggregate_failures do
+      draft = ApiClient::Drafts::Build.call(draft: create(:request_draft))
+
+      expect(draft).not_to be_persisted
+      expect(draft.to_param).to eq(draft.id)
     end
   end
 
@@ -140,32 +141,8 @@ RSpec.describe ApiRequest do
       expect(build(:api_request, folder_id: SecureRandom.uuid)).not_to be_valid
     end
 
-    it "rejects a folder when the request is a draft" do
-      draft = build(:api_request, collection: nil, project: create(:project), user: create(:user), folder: create(:folder))
-
-      expect(draft).not_to be_valid
-    end
-
-    it "rejects a draft without an owner" do
-      expect(build(:api_request, collection: nil, project: create(:project))).not_to be_valid
-    end
-
-    it "is visible to its owner only while it is a draft", :aggregate_failures do
-      owner = create(:user)
-      draft = create(:api_request, collection: nil, project: create(:project), user: owner)
-
-      expect(described_class.visible_to(owner)).to include(draft)
-      expect(described_class.visible_to(create(:user))).not_to include(draft)
-    end
-
-    it "orders drafts per owner", :aggregate_failures do
-      project = create(:project)
-      owner = create(:user)
-      create(:api_request, collection: nil, project:, user: create(:user))
-      first = create(:api_request, collection: nil, project:, user: owner)
-      second = create(:api_request, collection: nil, project:, user: owner)
-
-      expect([first.position, second.position]).to eq([1, 2])
+    it "requires a collection at the database level" do
+      expect(described_class.columns_hash["collection_id"].null).to be(false)
     end
 
     it "survives garbage rows and settings", :aggregate_failures do

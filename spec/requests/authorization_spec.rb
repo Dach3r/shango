@@ -106,12 +106,24 @@ RSpec.describe "Authorization" do
     end
 
     it "keeps members from placing a draft into a collection they cannot change", :aggregate_failures do
-      draft = create(:api_request, project:, collection: nil, user: member)
+      draft = create(:request_draft, project:, user: member)
 
-      patch workbench_request_placement_path(draft), params: { destination: "collection:#{collection.id}" }
+      expect { patch workbench_request_placement_path(draft), params: { destination: "collection:#{collection.id}" } }.not_to change(ApiRequest, :count)
 
       expect_forbidden
-      expect(draft.reload.collection_id).to be_nil
+      expect(RequestDraft.where(id: draft.id)).to exist
+    end
+
+    it "keeps collections members cannot change out of the placement dialog", :aggregate_failures do
+      draft = create(:request_draft, project:, user: member)
+      own = create(:collection, project:, creator: member)
+
+      get new_workbench_request_placement_path(draft)
+      expect(response.body).to include(own.name)
+      expect(response.body).not_to include(collection.name)
+
+      get new_workbench_request_placement_path(draft, destination: "collection:#{collection.id}")
+      expect(response.body).not_to include(new_workbench_collection_folder_path(collection).split("?").first)
     end
 
     it "keeps members from dropping a request into a collection they cannot change" do

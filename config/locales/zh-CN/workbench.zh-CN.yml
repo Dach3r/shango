@@ -112,7 +112,6 @@ zh-CN:
       history: 请求历史
       history_title: 历史
       history_empty: 还没有已保存的响应。运行请求并点击“保存响应”，即可在此保留。
-      drafts: 草稿
       back: 返回集合
       import: 导入集合
       import_curl: 导入 cURL
@@ -208,6 +207,7 @@ zh-CN:
       form:
         new_title: 新建集合
         edit_title: 集合设置
+        back: "返回保存"
         name: 名称
         name_placeholder: 例如：Main API
         description: 描述
@@ -220,6 +220,7 @@ zh-CN:
         destroyed: 文件夹已删除。
       form:
         new_title: 新建文件夹
+        back: "返回保存"
         edit_title: 文件夹设置
         name: 名称
         name_placeholder: 例如：Authentication
@@ -240,7 +241,12 @@ zh-CN:
           description: "选择此请求的保存位置。关闭此窗口会将其保留为草稿。"
           destination: 保存到
           keep_draft: 保留为草稿
+          new_collection: "新建集合"
           submit: 保存到此处
+          name: "请求名称"
+          root: "集合"
+          no_folders: "此处没有文件夹。"
+          new_folder: "新建文件夹"
       create:
         created: 请求已创建。
       update:
@@ -262,6 +268,9 @@ zh-CN:
       send_hint: 发送（Ctrl/Cmd + Enter）
       unsaved_notice: "你有未保存的更改"
       discard_changes: "放弃更改"
+      draft_saving: "正在保存…"
+      draft_saved: "草稿已保存"
+      draft_error: "无法保存草稿"
       cancel: 取消
       cancel_hint: 取消请求
       save: 保存

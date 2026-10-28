@@ -12,6 +12,7 @@ en:
               upload_too_large: "%{name} is larger than the %{max} MB limit."
               uploads_too_large: Files together are larger than the %{max} MB limit.
               too_many_uploads: Too many files in one request (maximum %{max}).
+              draft_too_large: "This request is too large to keep as a draft."
     attributes:
       user:
         first_name: First name
@@ -72,7 +73,7 @@ en:
     zoom_picker:
       label: Zoom
       default: Default
-    toast:
+    flash:
       close: Dismiss notification
     theme_switcher:
       label: Theme

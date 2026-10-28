@@ -1,15 +1,18 @@
 module Workbench
   class CollectionsController < BaseController
+    include DraftPlacement
+
     before_action :set_collection, only: %i[edit update destroy]
 
     def new
       @collection = current_project.collections.new
       authorize @collection
+      load_placement
     end
 
     def create
       authorize current_project.collections.new
-      @draft = draft_to_place
+      load_placement
       result = ApiClient::Collections::Create.call(project: current_project, creator: current_user, attributes: collection_attributes)
       return redirect_to(after_create_path(result.record), notice: t(".created"), status: :see_other) if result.success?
 
@@ -39,18 +42,14 @@ module Workbench
       authorize @collection
     end
 
-    def draft_to_place
-      return if params[:draft_id].blank?
-
-      current_project.api_requests.drafts.visible_to(current_user).find(params[:draft_id])
-    end
-
-    # A draft that triggered the creation lands in the new collection right away.
+    # A draft that triggered the creation lands in the new collection right away, unless it came from the placement
+    # modal, which gets the new collection preselected instead.
     def after_create_path(collection)
       return workbench_root_path unless @draft
+      return placement_path("collection:#{collection.id}") if @placement
 
-      ApiClient::Requests::Place.call(api_request: @draft, collection:)
-      workbench_request_path(@draft)
+      saved = ApiClient::Drafts::Commit.call(api_request: @draft, user: current_user, collection:)
+      workbench_request_path(saved.success? ? saved.record : @draft)
     end
 
     def collection_attributes

@@ -12,6 +12,7 @@ hi:
               upload_too_large: "%{name} %{max} MB की सीमा से बड़ी है।"
               uploads_too_large: "फ़ाइलें मिलाकर %{max} MB की सीमा से बड़ी हैं।"
               too_many_uploads: "एक रिक्वेस्ट में बहुत ज़्यादा फ़ाइलें हैं (अधिकतम %{max})।"
+              draft_too_large: "यह अनुरोध ड्रॉफ़्ट के रूप में रखने के लिए बहुत बड़ा है।"
     attributes:
       user:
         first_name: "पहला नाम"
@@ -72,7 +73,7 @@ hi:
     zoom_picker:
       label: "ज़ूम"
       default: "डिफ़ॉल्ट"
-    toast:
+    flash:
       close: "सूचना बंद करें"
     theme_switcher:
       label: "थीम"

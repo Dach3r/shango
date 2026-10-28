@@ -38,8 +38,6 @@ RSpec.describe "Workbench request positions" do
   end
 
   describe "edge cases" do
-    let(:other_draft) { ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record }
-
     it "does not move requests of other projects", :aggregate_failures do
       patch workbench_request_position_path(foreign_request), params: { collection_id: collection.id }
 
@@ -50,6 +48,11 @@ RSpec.describe "Workbench request positions" do
     it "does not move drafts of other users" do
       patch workbench_request_position_path(other_draft), params: { collection_id: collection.id }
 
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "does not move a draft that is not saved yet", :aggregate_failures do
+      expect { patch workbench_request_position_path(draft), params: { collection_id: collection.id } }.not_to change(ApiRequest, :count)
       expect(response).to have_http_status(:not_found)
     end
 

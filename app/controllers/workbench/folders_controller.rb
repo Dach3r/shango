@@ -1,17 +1,21 @@
 module Workbench
   class FoldersController < BaseController
+    include DraftPlacement
+
     before_action :set_collection, only: %i[new create]
     before_action :set_folder, only: %i[edit update destroy]
 
     def new
       @folder = @collection.folders.new(parent_id: params[:parent_id])
       authorize @folder
+      load_placement
     end
 
     def create
       authorize @collection.folders.new
+      load_placement
       result = ApiClient::Folders::Create.call(collection: @collection, attributes: folder_attributes)
-      return redirect_to(workbench_root_path, notice: t(".created"), status: :see_other) if result.success?
+      return redirect_to(after_create_path(result.record), notice: t(".created"), status: :see_other) if result.success?
 
       @folder = result.record
       render_form_errors
@@ -42,6 +46,11 @@ module Workbench
       @folder = current_project.folders.find(params[:id])
       @collection = @folder.collection
       authorize @folder
+    end
+
+    # Saving a draft goes back to its dialog, inside the folder just created.
+    def after_create_path(folder)
+      @draft && @placement ? placement_path("folder:#{folder.id}") : workbench_root_path
     end
 
     def folder_attributes

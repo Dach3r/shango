@@ -8,8 +8,8 @@
 ] %>
 
 <%= form_with model: api_request, scope: :api_request, url: workbench_request_path(api_request), method: :patch, id: "request_form", multipart: true,
-              class: "flex min-h-0 flex-1 flex-col", data: variable_autocomplete_data(controller: "request-url request-stash url-preview").merge(request_form_target: "form", request_stash_url_value: workbench_request_stash_path(api_request), url_preview_variables_value: editor_variables.to_json,
-                                                                                                    action: "input->request-stash#schedule input->url-preview#update change->request-stash#schedule change->url-preview#update url-preview:refresh->url-preview#update variable:saved@window->url-preview#variableSaved variable:created@window->url-preview#variableCreated key-value-table:change->request-stash#schedule request-form:run->request-stash#stop submit->request-stash#stop turbo:before-visit@document->request-stash#leave pagehide@window->request-stash#leave") do |form| %>
+              class: "flex min-h-0 flex-1 flex-col", data: variable_autocomplete_data(controller: "request-url request-draft url-preview").merge(request_form_target: "form", request_draft_url_value: workbench_request_draft_path(api_request), request_draft_saving_value: t("workbench.requests.draft_saving"), request_draft_saved_value: t("workbench.requests.draft_saved"), request_draft_error_value: t("workbench.requests.draft_error"), url_preview_variables_value: editor_variables.to_json,
+                                                                                                    action: "input->request-draft#schedule input->url-preview#update change->request-draft#schedule change->url-preview#update url-preview:refresh->url-preview#update variable:saved@window->url-preview#variableSaved variable:created@window->url-preview#variableCreated key-value-table:change->request-draft#schedule request-form:run->request-draft#stop submit->request-draft#stop turbo:before-visit@document->request-draft#leave pagehide@window->request-draft#leave") do |form| %>
   <%= render ResponseReferenceModal::Component.new(responses: editor_responses) %>
   <%= hidden_field_tag "place", 1, id: nil if api_request.draft? %>
   <% if api_request.errors.any? %>
@@ -25,7 +25,7 @@
   <% if @unsaved %>
     <div role="status" class="mx-4 mt-3 flex items-center justify-between gap-3 border border-line bg-ink/[0.05] px-4 py-2 text-xs text-muted">
       <span><%= t("workbench.requests.unsaved_notice") %></span>
-      <%= link_to t("workbench.requests.discard_changes"), workbench_request_stash_path(api_request), data: { turbo_method: :delete }, class: "cursor-pointer text-ink underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %>
+      <%= link_to t("workbench.requests.discard_changes"), workbench_request_draft_path(api_request), data: { turbo_method: :delete }, class: "cursor-pointer text-ink underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %>
     </div>
   <% end %>
 

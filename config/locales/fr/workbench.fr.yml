@@ -112,7 +112,6 @@ fr:
       history: "Historique des requêtes"
       history_title: "Historique"
       history_empty: "Aucune réponse enregistrée pour l'instant. Exécutez une requête et cliquez sur Enregistrer la réponse pour la conserver ici."
-      drafts: "Brouillons"
       back: "Retour aux collections"
       import: "Importer des collections"
       import_curl: "Importer cURL"
@@ -209,6 +208,7 @@ fr:
       form:
         new_title: "Nouvelle collection"
         edit_title: "Paramètres de la collection"
+        back: "Retour à l'enregistrement"
         name: "Nom"
         name_placeholder: "ex. API principale"
         description: "Description"
@@ -221,6 +221,7 @@ fr:
         destroyed: "Dossier supprimé."
       form:
         new_title: "Nouveau dossier"
+        back: "Retour à l'enregistrement"
         edit_title: "Paramètres du dossier"
         name: "Nom"
         name_placeholder: "ex. Authentification"
@@ -241,7 +242,12 @@ fr:
           description: "Choisissez où enregistrer cette requête. Fermer cette fenêtre la conserve comme brouillon."
           destination: "Enregistrer dans"
           keep_draft: "Garder comme brouillon"
+          new_collection: "Nouvelle collection"
           submit: "Enregistrer ici"
+          name: "Nom de la requête"
+          root: "Collections"
+          no_folders: "Aucun dossier ici."
+          new_folder: "Nouveau dossier"
       create:
         created: "Requête créée."
       update:
@@ -263,6 +269,9 @@ fr:
       send_hint: "Envoyer (Ctrl/Cmd + Entrée)"
       unsaved_notice: "Vous avez des modifications non enregistrées"
       discard_changes: "Annuler les modifications"
+      draft_saving: "Enregistrement…"
+      draft_saved: "Brouillon enregistré"
+      draft_error: "Impossible d'enregistrer le brouillon"
       cancel: "Annuler"
       cancel_hint: "Annuler la requête"
       save: "Enregistrer"

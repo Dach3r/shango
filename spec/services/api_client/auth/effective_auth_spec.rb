@@ -56,7 +56,7 @@ RSpec.describe ApiClient::Auth::EffectiveAuth do
       end
 
       it "resolves to none for a draft without a collection" do
-        draft = create(:api_request, collection: nil, project: collection.project, user: create(:user), auth_type: "inherit")
+        draft = ApiClient::Drafts::Build.call(draft: create(:request_draft, project: collection.project))
 
         expect(described_class.call(api_request: draft)).to have_attributes(type: "none", owner: nil)
       end

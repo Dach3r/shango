@@ -112,7 +112,6 @@ de:
       history: Anfrageverlauf
       history_title: Verlauf
       history_empty: Noch keine gespeicherten Antworten. Führe eine Anfrage aus und klicke auf Antwort speichern, um sie hier zu behalten.
-      drafts: Entwürfe
       back: Zurück zu den Sammlungen
       import: Sammlungen importieren
       import_curl: cURL importieren
@@ -209,6 +208,7 @@ de:
       form:
         new_title: Neue Sammlung
         edit_title: Sammlungseinstellungen
+        back: "Zurück zum Speichern"
         name: Name
         name_placeholder: z. B. Haupt-API
         description: Beschreibung
@@ -221,6 +221,7 @@ de:
         destroyed: Ordner gelöscht.
       form:
         new_title: Neuer Ordner
+        back: "Zurück zum Speichern"
         edit_title: Ordnereinstellungen
         name: Name
         name_placeholder: z. B. Authentifizierung
@@ -241,7 +242,12 @@ de:
           description: "Wähle, wo diese Anfrage gespeichert werden soll. Wenn du dieses Fenster schließt, bleibt sie ein Entwurf."
           destination: Speichern in
           keep_draft: Als Entwurf behalten
+          new_collection: "Neue Sammlung"
           submit: Hier speichern
+          name: "Name der Anfrage"
+          root: "Sammlungen"
+          no_folders: "Hier gibt es keine Ordner."
+          new_folder: "Neuer Ordner"
       create:
         created: Anfrage erstellt.
       update:
@@ -263,6 +269,9 @@ de:
       send_hint: Senden (Strg/Cmd + Enter)
       unsaved_notice: "Du hast nicht gespeicherte Änderungen"
       discard_changes: "Änderungen verwerfen"
+      draft_saving: "Speichern…"
+      draft_saved: "Entwurf gespeichert"
+      draft_error: "Entwurf konnte nicht gespeichert werden"
       cancel: Abbrechen
       cancel_hint: Anfrage abbrechen
       save: Speichern

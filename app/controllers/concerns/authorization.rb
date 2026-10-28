@@ -14,7 +14,7 @@ module Authorization
     current_membership
   end
 
-  # Browser navigations get a toast on the page they came from; background requests (fetch, JSON) get a bare 403.
+  # Browser navigations get a flash message on the page they came from; background requests (fetch, JSON) get a bare 403.
   def forbidden
     return head(:forbidden) unless request.headers["Accept"].to_s.include?("html")
 

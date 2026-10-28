@@ -1,6 +1,6 @@
 module ApiClient
   module Executions
-    # The user's saved executions in a project, newest first and grouped by collection (drafts last).
+    # The user's saved executions in a project, newest first and grouped by collection .
     class History
       include Serviceable
 
@@ -21,13 +21,11 @@ module ApiClient
         groups = @project.collections.ordered.filter_map do |collection|
           Group.new(collection:, executions: by_collection[collection.id]) if by_collection[collection.id]
         end
-        groups << Group.new(collection: nil, executions: by_collection[nil]) if by_collection[nil]
         groups
       end
 
       def executions
-        @project.request_executions.where(user: @user).merge(ApiRequest.visible_to(@user))
-                .joins(:api_request).select(*COLUMNS.map { |column| "request_executions.#{column}" })
+        @project.request_executions.where(user: @user).joins(:api_request).select(*COLUMNS.map { |column| "request_executions.#{column}" })
                 .includes(:environment, :api_request).recent.limit(LIMIT)
       end
     end

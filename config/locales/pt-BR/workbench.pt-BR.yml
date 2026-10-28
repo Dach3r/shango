@@ -112,7 +112,6 @@ pt-BR:
       history: Histórico de requisições
       history_title: Histórico
       history_empty: Nenhuma resposta salva ainda. Execute uma requisição e clique em Salvar resposta para guardá-la aqui.
-      drafts: Rascunhos
       back: Voltar às coleções
       import: Importar coleções
       import_curl: Importar cURL
@@ -209,6 +208,7 @@ pt-BR:
       form:
         new_title: Nova coleção
         edit_title: Configurações da coleção
+        back: "Voltar para salvar"
         name: Nome
         name_placeholder: "ex.: API principal"
         description: Descrição
@@ -221,6 +221,7 @@ pt-BR:
         destroyed: Pasta excluída.
       form:
         new_title: Nova pasta
+        back: "Voltar para salvar"
         edit_title: Configurações da pasta
         name: Nome
         name_placeholder: "ex.: Autenticação"
@@ -241,7 +242,12 @@ pt-BR:
           description: "Escolha onde salvar esta requisição. Fechar esta janela a mantém como rascunho."
           destination: Salvar em
           keep_draft: Manter como rascunho
+          new_collection: "Nova coleção"
           submit: Salvar aqui
+          name: "Nome da requisição"
+          root: "Coleções"
+          no_folders: "Não há pastas aqui."
+          new_folder: "Nova pasta"
       create:
         created: Requisição criada.
       update:
@@ -263,6 +269,9 @@ pt-BR:
       send_hint: Enviar (Ctrl/Cmd + Enter)
       unsaved_notice: "Você tem alterações não salvas"
       discard_changes: "Descartar alterações"
+      draft_saving: "Salvando…"
+      draft_saved: "Rascunho salvo"
+      draft_error: "Não foi possível salvar o rascunho"
       cancel: Cancelar
       cancel_hint: Cancelar a requisição
       save: Salvar

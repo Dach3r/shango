@@ -12,6 +12,7 @@ es:
               upload_too_large: "%{name} supera el límite de %{max} MB."
               uploads_too_large: Los archivos juntos superan el límite de %{max} MB.
               too_many_uploads: Demasiados archivos en una solicitud (máximo %{max}).
+              draft_too_large: "Esta solicitud es demasiado grande para guardarla como borrador."
     attributes:
       user:
         first_name: Nombre
@@ -72,7 +73,7 @@ es:
     zoom_picker:
       label: Zoom
       default: Predeterminado
-    toast:
+    flash:
       close: Cerrar notificación
     theme_switcher:
       label: Tema

@@ -11,10 +11,13 @@ RSpec.describe "Database indexes" do
     expect(connection.index_exists?(:api_requests, %i[project_id collection_id folder_id position])).to be(true)
   end
 
-  it "indexes drafts per user as a partial index", :aggregate_failures do
-    index = connection.indexes(:api_requests).find { |candidate| candidate.name == "index_api_requests_on_drafts" }
+  it "keeps one draft of pending edits per user and request", :aggregate_failures do
+    index = connection.indexes(:request_drafts).find { |candidate| candidate.name == "index_request_drafts_on_user_and_api_request" }
 
-    expect(index.columns).to eq(%w[project_id user_id])
-    expect(index.where).to eq("(collection_id IS NULL)")
+    expect(index).to have_attributes(columns: %w[user_id api_request_id], unique: true, where: "(api_request_id IS NOT NULL)")
+  end
+
+  it "indexes drafts by last update for the purge" do
+    expect(connection.index_exists?(:request_drafts, :updated_at)).to be(true)
   end
 end

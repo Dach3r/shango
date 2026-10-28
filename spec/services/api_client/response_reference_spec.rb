@@ -143,7 +143,7 @@ RSpec.describe ApiClient::ResponseReference do
     end
 
     it "never resolves for a draft", :aggregate_failures do
-      draft = create(:api_request, collection: nil, user:, project:)
+      draft = ApiClient::Drafts::Build.call(draft: create(:request_draft, user:, project:))
 
       expect(call(api_request: draft)).to have_attributes(error: :unknown_request)
     end

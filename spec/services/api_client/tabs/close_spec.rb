@@ -12,12 +12,27 @@ RSpec.describe ApiClient::Tabs::Close do
     expect(api_request.reload).to be_persisted
   end
 
-  it "forgets the unsaved edits of the request" do
-    allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
-    ApiClient::Requests::Stash.write(api_request:, user:, attributes: { url: "https://edited.test" })
-    described_class.call(api_request:, user:)
+  it "forgets the pending edits of the request" do
+    create(:request_draft, :for_request, user:, api_request:, project: api_request.project)
 
-    expect(ApiClient::Requests::Stash.read(api_request:, user:)).to be_nil
+    expect { described_class.call(api_request:, user:) }.to change(RequestDraft, :count).by(-1)
+  end
+
+  it "drops the unsaved response of the request, not those of others", :aggregate_failures do
+    build(:request_execution, id: SecureRandom.uuid, api_request:, user:).stash
+    build(:request_execution, id: SecureRandom.uuid, api_request:, user: create(:user)).stash
+    build(:request_execution, id: SecureRandom.uuid, api_request: create(:api_request), user:).stash
+
+    expect { described_class.call(api_request:, user:) }.to change(LatestExecution, :count).by(-1)
+    expect(RequestExecution.unsaved_for(api_request, user)).to be_nil
+  end
+
+  it "discards a new draft with its tab", :aggregate_failures do
+    project = create(:project)
+    draft = ApiClient::Drafts::Create.call(project:, user:).record
+
+    expect { described_class.call(api_request: ApiClient::Drafts::Build.call(draft:), user:) }.to change(RequestDraft, :count).by(-1)
+    expect(RequestTab.where(user:)).not_to exist
   end
 
   it "is harmless when no tab is open" do

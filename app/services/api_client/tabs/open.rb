@@ -1,6 +1,6 @@
 module ApiClient
   module Tabs
-    # Opens a request as a tab for the user; opening it twice keeps a single tab.
+    # Opens a request (saved, or a new draft) as a tab for the user; opening it twice keeps a single tab.
     class Open
       include Serviceable
 
@@ -12,7 +12,11 @@ module ApiClient
       private
 
       def perform
-        tab = RequestTab.create_or_find_by!(user: @user, api_request: @api_request)
+        tab = if @api_request.persisted?
+          RequestTab.create_or_find_by!(user: @user, api_request: @api_request)
+        else
+          RequestTab.create_or_find_by!(user: @user, request_draft_id: @api_request.id)
+        end
         Result.success(tab)
       end
     end

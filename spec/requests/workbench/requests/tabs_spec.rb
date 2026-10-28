@@ -66,20 +66,18 @@ RSpec.describe "Workbench request tabs" do
     end
 
     it "does not close tabs of other users' drafts", :aggregate_failures do
-      draft = ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record
-      delete workbench_request_tab_path(draft)
+      other_tab = create(:request_tab, user: other_draft.user, api_request: nil, request_draft: other_draft)
+      delete workbench_request_tab_path(other_draft)
 
       expect(response).to have_http_status(:not_found)
-      expect(RequestTab.where(api_request: draft)).to exist
+      expect(RequestTab.where(id: other_tab.id)).to exist
     end
 
-    it "keeps an edited draft when its tab is closed", :aggregate_failures do
-      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
-      draft.update!(name: "Edited")
+    it "discards a new draft when its tab is closed", :aggregate_failures do
       delete workbench_request_tab_path(draft)
 
-      expect(draft.reload).to be_persisted
-      expect(RequestTab.where(user:, api_request: draft)).not_to exist
+      expect(RequestDraft.where(id: draft.id)).not_to exist
+      expect(RequestTab.where(request_draft_id: draft.id)).not_to exist
     end
 
     it "redirects to the last remaining tab when the current one is closed and others stay", :aggregate_failures do

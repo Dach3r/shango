@@ -112,7 +112,6 @@ en:
       history: Request history
       history_title: History
       history_empty: No saved responses yet. Run a request and press Save response to keep it here.
-      drafts: Drafts
       back: Back to collections
       import: Import collections
       import_curl: Import cURL
@@ -209,6 +208,7 @@ en:
       form:
         new_title: New collection
         edit_title: Collection settings
+        back: "Back to save"
         name: Name
         name_placeholder: e.g. Main API
         description: Description
@@ -221,6 +221,7 @@ en:
         destroyed: Folder deleted.
       form:
         new_title: New folder
+        back: "Back to save"
         edit_title: Folder settings
         name: Name
         name_placeholder: e.g. Authentication
@@ -241,7 +242,12 @@ en:
           description: "Choose where to save this request. Closing this window keeps it as a draft."
           destination: Save to
           keep_draft: Keep as draft
+          new_collection: "New collection"
           submit: Save here
+          name: "Request name"
+          root: "Collections"
+          no_folders: "No folders here."
+          new_folder: "New folder"
       create:
         created: Request created.
       update:
@@ -263,6 +269,9 @@ en:
       send_hint: Send (Ctrl/Cmd + Enter)
       unsaved_notice: "You have unsaved changes"
       discard_changes: "Discard changes"
+      draft_saving: "Saving…"
+      draft_saved: "Draft saved"
+      draft_error: "Could not save the draft"
       cancel: Cancel
       cancel_hint: Cancel the request
       save: Save

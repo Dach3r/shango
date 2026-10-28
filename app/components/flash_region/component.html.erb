@@ -1,0 +1,5 @@
+<div id="flash" aria-live="polite" class="pointer-events-none fixed inset-x-0 top-0 z-50 flex flex-col overflow-hidden">
+  <% messages.each do |kind, message| %>
+    <%= render Flash::Component.new(kind: kind, message: message) %>
+  <% end %>
+</div>

@@ -1,16 +1,66 @@
 <% if workspace_tree.empty? %>
   <%= render "workbench/collections/form", collection: current_project.collections.new, draft: @api_request %>
 <% else %>
-<%= render Modal::Component.new(icon: "folder-input", title: t(".title"), description: t(".description")) do |modal| %>
-  <% modal.with_footer do %>
-    <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= lucide_icon "arrow-left", class: "size-4 shrink-0" %><%= t(".keep_draft") %></button>
-    <%= tag.button type: "submit", form: "placement_form", class: button_classes(:primary) do %><%= lucide_icon "folder-down", class: "size-4 shrink-0" %><%= t(".submit") %><% end %>
-  <% end %>
-  <%= form_with url: workbench_request_placement_path(@api_request), method: :patch, id: "placement_form", data: { turbo_frame: "_top" }, class: "space-y-4" do %>
+<% collection = @branch&.collection %>
+<% path = @branch ? @branch.folder_path(@folder&.id) : [] %>
+<% destination = (@folder ? "folder:#{@folder.id}" : "collection:#{collection.id}") if collection %>
+<% entries = @folder ? @branch.children_of(@folder) : (@branch ? @branch.root_folders : workspace_tree.map(&:collection).select { |item| policy(item).update? }) %>
+<%= render Modal::Component.new(icon: "folder-input", title: t(".title"), description: t(".description"), size: :lg) do %>
+<%= turbo_frame_tag "placement", data: { controller: "placement" } do %>
+  <div class="space-y-5">
+    <%= form_with url: workbench_request_placement_path(@api_request), method: :patch, id: "placement_form", data: { turbo_frame: "_top" }, class: "space-y-2" do %>
+      <%= render "workbench/shared/errors", record: @api_request %>
+      <%= label_tag :request_name, t(".name"), class: label_classes %>
+      <%= text_field_tag :request_name, @request_name, required: true, autofocus: true, autocomplete: "off", data: { placement_target: "name" }, class: field_classes %>
+      <%= hidden_field_tag :destination, destination, id: nil if destination %>
+    <% end %>
+
     <div>
-      <label for="destination" class="<%= label_classes %>"><%= t(".destination") %></label>
-      <%= render Select::Component.new(name: "destination", id: "destination", options: destination_options(workspace_tree), searchable: true) %>
+      <nav aria-label="<%= t(".destination") %>" class="mb-2 flex flex-wrap items-baseline gap-x-1.5 text-sm leading-6">
+        <span class="font-semibold text-muted mr-0.5"><%= t(".destination") %></span>
+        <% crumbs = [[t(".root"), nil], *(collection ? [[collection.name, "collection:#{collection.id}"]] : []), *path.map { |folder| [folder.name, "folder:#{folder.id}"] }] %>
+        <% crumbs.each_with_index do |(label, target), index| %>
+          <% if index.positive? %><span class="text-faint">/</span><% end %>
+          <% if index == crumbs.size - 1 %>
+            <span class="font-medium text-ink"><%= label %></span>
+          <% else %>
+            <%= link_to label, new_workbench_request_placement_path(@api_request, destination: target, request_name: @request_name), data: { action: "placement#carry" }, class: "text-muted transition hover:text-ink" %>
+          <% end %>
+        <% end %>
+      </nav>
+      <div data-controller="list-filter" class="border border-line">
+        <div class="relative border-b border-line p-2">
+          <%= lucide_icon "search", class: "pointer-events-none absolute left-5 top-1/2 size-3.5 -translate-y-1/2 text-faint" %>
+          <input type="text" data-list-filter-target="input" data-action="input->list-filter#filter" autocomplete="off" spellcheck="false"
+                 placeholder="<%= t("components.select.search") %>" aria-label="<%= t("components.select.search") %>"
+                 class="w-full border border-line bg-field py-1.5 pr-2 pl-8 text-sm text-ink placeholder:text-faint focus:border-solid focus:outline-none">
+        </div>
+        <ul class="h-64 overflow-y-auto p-1">
+          <% entries.each do |entry| %>
+            <li data-list-filter-target="item">
+              <%= link_to new_workbench_request_placement_path(@api_request, destination: "#{entry.is_a?(Folder) ? "folder" : "collection"}:#{entry.id}", request_name: @request_name),
+                          data: { action: "placement#carry" },
+                          class: "flex items-center gap-2 px-2.5 py-2 text-sm text-body transition hover:bg-field hover:text-ink" do %>
+                <%= lucide_icon entry.is_a?(Folder) ? "folder" : "library", class: "size-4 shrink-0 text-muted" %>
+                <span class="min-w-0 flex-1 truncate"><%= entry.name %></span>
+                <%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-faint" %>
+              <% end %>
+            </li>
+          <% end %>
+          <li data-list-filter-target="empty" <%= "hidden" if entries.any? %> class="px-2.5 py-2 text-sm text-muted"><%= entries.any? ? t("components.select.empty") : t(".no_folders") %></li>
+        </ul>
+      </div>
     </div>
-  <% end %>
+  </div>
+  <footer class="-mx-6 mt-5 -mb-6 flex items-center gap-2 border-t border-line bg-field/60 px-6 py-3.5">
+    <% if collection.nil? %>
+      <%= link_to new_workbench_collection_path(draft_id: @api_request.id, placement: 1, request_name: @request_name), data: { action: "placement#carry", turbo_frame: "modal" }, class: button_classes(:ghost, "mr-auto") do %><%= lucide_icon "plus", class: "size-4 shrink-0" %><%= t(".new_collection") %><% end %>
+    <% elsif policy(collection).update? %>
+      <%= link_to new_workbench_collection_folder_path(collection, parent_id: @folder&.id, draft_id: @api_request.id, placement: 1, request_name: @request_name), data: { action: "placement#carry", turbo_frame: "modal" }, class: button_classes(:ghost, "mr-auto") do %><%= lucide_icon "folder-plus", class: "size-4 shrink-0" %><%= t(".new_folder") %><% end %>
+    <% end %>
+    <button type="button" data-action="dialog#close" class="<%= button_classes(:ghost) %>"><%= lucide_icon "arrow-left", class: "size-4 shrink-0" %><%= t(".keep_draft") %></button>
+    <%= tag.button type: "submit", form: "placement_form", disabled: collection.nil?, class: button_classes(:primary, "disabled:cursor-not-allowed disabled:opacity-50") do %><%= lucide_icon "folder-down", class: "size-4 shrink-0" %><%= t(".submit") %><% end %>
+  </footer>
+<% end %>
 <% end %>
 <% end %>

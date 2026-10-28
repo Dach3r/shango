@@ -10,6 +10,20 @@ RSpec.describe "Workbench folders" do
       expect(response).to have_http_status(:ok)
     end
 
+    it "links back to the placement dialog when opened from it", :aggregate_failures do
+      get new_workbench_collection_folder_path(collection, parent_id: folder.id, draft_id: draft.id, placement: 1, request_name: "Login")
+
+      expect(response.body).to include(new_workbench_request_placement_path(draft, destination: "folder:#{folder.id}", request_name: "Login").gsub("&", "&amp;"))
+      expect(response.body).to include(%(name="placement"), %(name="request_name" id="request_name" value="Login"))
+      expect(response.body).not_to include("folder[auth_type]")
+    end
+
+    it "goes back to the collection when the folder is at its root" do
+      get new_workbench_collection_folder_path(collection, draft_id: draft.id, placement: 1)
+
+      expect(response.body).to include("destination=collection%3A#{collection.id}")
+    end
+
     it "does not find collections of other projects" do
       get new_workbench_collection_folder_path(foreign_collection)
 
@@ -23,6 +37,14 @@ RSpec.describe "Workbench folders" do
 
       expect { post workbench_collection_folders_path(collection), params: }.to change(collection.folders, :count).by(1)
       expect(response).to redirect_to(workbench_root_path)
+    end
+
+    it "returns to the placement dialog inside the new folder", :aggregate_failures do
+      post workbench_collection_folders_path(collection), params: { folder: { name: "Users", parent_id: folder.id }, draft_id: draft.id, placement: 1, request_name: "Login" }
+
+      created = collection.folders.find_by!(name: "Users")
+      expect(response).to redirect_to(new_workbench_request_placement_path(draft, destination: "folder:#{created.id}", request_name: "Login"))
+      expect(created.parent).to eq(folder)
     end
 
     it "re-renders the modal when invalid" do

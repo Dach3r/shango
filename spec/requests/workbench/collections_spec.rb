@@ -9,6 +9,13 @@ RSpec.describe "Workbench collections" do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "links back to the placement modal when opened from it", :aggregate_failures do
+      get new_workbench_collection_path(draft_id: draft.id, placement: 1, request_name: "Login")
+
+      expect(response.body).to include(new_workbench_request_placement_path(draft, request_name: "Login"))
+      expect(response.body).to include(%(name="placement"), %(name="request_name" id="request_name" value="Login"))
+    end
   end
 
   describe "POST /workbench/collections" do
@@ -19,15 +26,32 @@ RSpec.describe "Workbench collections" do
     end
 
     it "saves the originating draft into the new collection", :aggregate_failures do
-      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+      ApiClient::Drafts::Save.call(api_request: ApiClient::Drafts::Build.call(draft:), user:, attributes: { name: "Login", url: "https://api.example.com/login" })
       post workbench_collections_path, params: { collection: { name: "Payments" }, draft_id: draft.id }
 
-      expect(response).to redirect_to(workbench_request_path(draft))
-      expect(draft.reload.collection.name).to eq("Payments")
+      saved = project.api_requests.find_by!(name: "Login")
+      expect(response).to redirect_to(workbench_request_path(saved))
+      expect(saved.collection.name).to eq("Payments")
+      expect(RequestDraft.where(id: draft.id)).not_to exist
+    end
+
+    it "returns to the placement modal with the new collection selected", :aggregate_failures do
+      post workbench_collections_path, params: { collection: { name: "Payments" }, draft_id: draft.id, placement: 1, request_name: "Login" }
+
+      created = project.collections.find_by!(name: "Payments")
+      expect(response).to redirect_to(new_workbench_request_placement_path(draft, destination: "collection:#{created.id}", request_name: "Login"))
+      expect(RequestDraft.where(id: draft.id)).to exist
+    end
+
+    it "keeps the draft open when it cannot be saved into the new collection", :aggregate_failures do
+      allow(ApiClient::Drafts::Commit).to receive(:call).and_return(Result.failure)
+      post workbench_collections_path, params: { collection: { name: "Payments" }, draft_id: draft.id }
+
+      expect(response).to redirect_to(workbench_request_path(draft.id))
+      expect(RequestDraft.where(id: draft.id)).to exist
     end
 
     it "keeps the draft in the form when invalid", :aggregate_failures do
-      draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
       post workbench_collections_path, params: { collection: { name: "" }, draft_id: draft.id }, headers: turbo_headers
 
       expect(response).to have_http_status(:unprocessable_content)
@@ -80,8 +104,6 @@ RSpec.describe "Workbench collections" do
   end
 
   describe "edge cases" do
-    let(:other_draft) { ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record }
-
     it "requires authentication", :aggregate_failures do
       sign_out user
       post workbench_collections_path, params: { collection: { name: "X" } }
@@ -127,7 +149,7 @@ RSpec.describe "Workbench collections" do
     end
 
     it "does not place drafts of other projects" do
-      foreign_draft = ApiClient::Requests::CreateDraft.call(project: foreign_collection.project, user:).record
+      foreign_draft = create(:request_draft, project: foreign_collection.project, user:)
       post workbench_collections_path, params: { collection: { name: "Mine" }, draft_id: foreign_draft.id }
 
       expect(response).to have_http_status(:not_found)

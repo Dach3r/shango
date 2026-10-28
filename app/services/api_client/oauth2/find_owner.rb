@@ -17,9 +17,7 @@ module ApiClient
 
       def perform
         association = OWNERS[@type] or raise ActiveRecord::RecordNotFound
-        scope = @project.public_send(association)
-        scope = scope.visible_to(@user) if association == :api_requests
-        owner = scope.find(@id)
+        owner = @project.public_send(association).find(@id)
         raise ActiveRecord::RecordNotFound unless owner.auth_type == "oauth2"
 
         owner

@@ -12,6 +12,13 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_no_link
   end
 
+  # A tab for a new request: in memory, like the tabs load them (edited ones were saved after being opened).
+  def new_draft(name: nil)
+    draft = ApiClient::Drafts::Create.call(project:, user:).record
+    draft.update!(name:, payload: { name: }.to_json, updated_at: 1.minute.from_now) if name
+    ApiClient::Drafts::Build.call(draft:)
+  end
+
   it "renders the given content after the tabs" do
     render_inline(described_class.new(membership:, requests: [])) { "Actions" }
 
@@ -19,7 +26,7 @@ RSpec.describe RequestTabs::Component, type: :component do
   end
 
   it "renders a tab per request and marks the open one", :aggregate_failures do
-    first = ApiClient::Requests::CreateDraft.call(project:, user:).record.tap { |r| r.update!(name: "First") }
+    first = new_draft(name: "First")
     saved = create(:api_request, project:, name: "Saved")
 
     render_inline(described_class.new(membership:, requests: [first, saved], current_request_id: saved.id))
@@ -70,19 +77,18 @@ RSpec.describe RequestTabs::Component, type: :component do
     expect(page).to have_css("[data-request-tab-id='#{other.id}'][data-confirm-message]:not([data-dirty])", visible: :all)
   end
 
-  it "flags drafts with edits or a stash but not untouched ones for the close confirmation", :aggregate_failures do
-    untouched = ApiClient::Requests::CreateDraft.call(project:, user:).record
-    edited = ApiClient::Requests::CreateDraft.call(project:, user:).record
-    edited.update!(name: "Edited")
+  it "flags drafts with edits but not untouched ones for the close confirmation", :aggregate_failures do
+    untouched = new_draft
+    edited = new_draft(name: "Edited")
 
-    render_inline(described_class.new(membership:, requests: [untouched, edited.reload]))
+    render_inline(described_class.new(membership:, requests: [untouched, edited]))
 
     expect(page).to have_css("[data-request-tab-id='#{edited.id}'][data-dirty]", visible: :all)
     expect(page).to have_no_css("[data-request-tab-id='#{untouched.id}'][data-dirty]", visible: :all)
   end
 
   it "flags an untouched draft that keeps unsaved edits and asks before discarding it", :aggregate_failures do
-    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+    draft = new_draft
 
     render_inline(described_class.new(membership:, requests: [draft], unsaved_ids: [draft.id]))
 
@@ -91,7 +97,7 @@ RSpec.describe RequestTabs::Component, type: :component do
   end
 
   it "closes untouched drafts without a confirmation", :aggregate_failures do
-    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+    draft = new_draft
 
     render_inline(described_class.new(membership:, requests: [draft]))
 
@@ -100,7 +106,7 @@ RSpec.describe RequestTabs::Component, type: :component do
   end
 
   it "marks drafts with a dot and leaves saved requests without one", :aggregate_failures do
-    draft = ApiClient::Requests::CreateDraft.call(project:, user:).record
+    draft = new_draft
     saved = create(:api_request, collection: create(:collection, project:))
 
     render_inline(described_class.new(membership:, requests: [draft, saved]))

@@ -35,10 +35,12 @@ export default class extends Controller {
     const form = event.currentTarget;
     if (form.dataset.confirmed) return;
 
+    const dirty = this.closingTabs(form).filter((tab) => tab.dataset.dirty !== undefined);
+    if (dirty.length === 0) return;
+
     event.preventDefault();
-    for (const tab of this.closingTabs(form)) {
+    for (const tab of dirty) {
       const { confirmMessage, confirmLabel, requestTabId } = tab.dataset;
-      if (tab.dataset.dirty === undefined) continue;
       if (await Turbo.config.forms.confirm(confirmMessage, form, undefined, confirmLabel)) continue;
       if (form.dataset.requestTabsSide === "self") return;
 

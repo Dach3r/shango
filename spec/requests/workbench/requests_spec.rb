@@ -82,11 +82,18 @@ RSpec.describe "Workbench requests" do
       expect(response.body).to include("data-dependent-setting-target=\"switch\"", "data-dependent-setting-target=\"input\"", "data-dependent-setting-target=\"mirror\"")
     end
 
-    it "renders the latest execution" do
-      create(:request_execution, api_request:, project:, response_body: "hello-body")
+    it "keeps saved responses out of the body and lists them as history", :aggregate_failures do
+      saved = create(:request_execution, api_request:, project:, user:, response_body: "hello-body")
       get workbench_request_path(api_request)
 
-      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include("hello-body")
+      expect(response.body).to include(workbench_request_execution_path(api_request, saved))
+    end
+
+    it "shows no history list for a request without saved responses" do
+      get workbench_request_path(api_request)
+
+      expect(response.body).not_to include("/executions/")
     end
 
     it "shows the last unsaved response when coming back to the tab", :aggregate_failures do
@@ -207,8 +214,6 @@ RSpec.describe "Workbench requests" do
   end
 
   describe "edge cases" do
-    let(:other_draft) { ApiClient::Requests::CreateDraft.call(project:, user: create(:user)).record }
-
     it "requires authentication", :aggregate_failures do
       sign_out user
       get workbench_request_path(api_request)
@@ -285,7 +290,7 @@ RSpec.describe "Workbench requests" do
 
     it "does not destroy drafts of other users", :aggregate_failures do
       other_draft
-      expect { delete workbench_request_path(other_draft) }.not_to change(ApiRequest, :count)
+      expect { delete workbench_request_path(other_draft) }.not_to change(RequestDraft, :count)
       expect(response).to have_http_status(:not_found)
     end
 

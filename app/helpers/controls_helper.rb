@@ -10,7 +10,7 @@ module ControlsHelper
     danger: "text-danger ring-1 ring-inset ring-danger/40 hover:bg-danger/10 focus-visible:ring-danger/50",
     danger_solid: "bg-danger text-white hover:bg-danger/90 focus-visible:ring-danger/50"
   }.freeze
-  BUTTON_BASE = "inline-flex cursor-pointer items-center justify-center gap-2 px-3 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-60".freeze
+  BUTTON_BASE = "inline-flex cursor-pointer whitespace-nowrap items-center justify-center gap-2 px-3 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-60".freeze
 
   # Fields fill their container unless the caller sets a width (`w-*`) or flex sizing.
   def field_classes(extra = nil)

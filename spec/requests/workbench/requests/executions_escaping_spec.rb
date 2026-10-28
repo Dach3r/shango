@@ -4,7 +4,7 @@ RSpec.describe "Workbench response panel escaping" do
   include_context "with workbench project"
 
   let(:payload) { "<script>alert(1)</script>" }
-  let(:execution) { create(:request_execution, api_request:, project:, user:, **attributes) }
+  let(:execution) { build(:request_execution, id: SecureRandom.uuid, api_request:, project:, user:, created_at: Time.current, **attributes).stash }
   let(:attributes) { {} }
 
   def panel
@@ -15,7 +15,7 @@ RSpec.describe "Workbench response panel escaping" do
 
   it "escapes the response body in the preview iframe and the editor values", :aggregate_failures do
     body = "<html><script>alert(1)</script>\"><img src=x onerror=alert(1)></html>"
-    create(:request_execution, api_request:, project:, user:, content_type: "text/html", response_body: body)
+    build(:request_execution, id: SecureRandom.uuid, api_request:, project:, user:, created_at: Time.current, content_type: "text/html", response_body: body).stash
     get workbench_request_path(api_request)
 
     expect(response.body).not_to include("<script>alert(1)</script>")
@@ -37,21 +37,21 @@ RSpec.describe "Workbench response panel escaping" do
 
   context "when the body is empty, binary or unicode" do
     it "shows the empty body notice" do
-      create(:request_execution, api_request:, project:, user:, response_body: "")
+      build(:request_execution, id: SecureRandom.uuid, api_request:, project:, user:, created_at: Time.current, response_body: "").stash
       get workbench_request_path(api_request)
 
       expect(response.body).to include(I18n.t("workbench.executions.empty_body"))
     end
 
     it "shows the binary notice without a content type", :aggregate_failures do
-      create(:request_execution, api_request:, project:, user:, body_omitted: true, content_type: nil, size_bytes: 10)
+      build(:request_execution, id: SecureRandom.uuid, api_request:, project:, user:, created_at: Time.current, body_omitted: true, content_type: nil, size_bytes: 10).stash
       get workbench_request_path(api_request)
 
       expect(response.body).to include(I18n.t("workbench.executions.binary", size: "10 Bytes", type: "—"))
     end
 
     it "renders unicode bodies" do
-      create(:request_execution, api_request:, project:, user:, response_body: "ñandú 日本語 🚀", content_type: "text/plain")
+      build(:request_execution, id: SecureRandom.uuid, api_request:, project:, user:, created_at: Time.current, response_body: "ñandú 日本語 🚀", content_type: "text/plain").stash
       get workbench_request_path(api_request)
 
       expect(response.body).to include("ñandú 日本語 🚀")

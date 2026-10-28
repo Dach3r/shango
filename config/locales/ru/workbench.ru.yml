@@ -112,7 +112,6 @@ ru:
       history: История запросов
       history_title: История
       history_empty: Сохранённых ответов пока нет. Выполните запрос и нажмите «Сохранить ответ», чтобы он появился здесь.
-      drafts: Черновики
       back: Назад к коллекциям
       import: Импорт коллекций
       import_curl: Импорт cURL
@@ -211,6 +210,7 @@ ru:
       form:
         new_title: Новая коллекция
         edit_title: Настройки коллекции
+        back: "Назад к сохранению"
         name: Название
         name_placeholder: например, Main API
         description: Описание
@@ -223,6 +223,7 @@ ru:
         destroyed: Папка удалена.
       form:
         new_title: Новая папка
+        back: "Назад к сохранению"
         edit_title: Настройки папки
         name: Название
         name_placeholder: например, Authentication
@@ -243,7 +244,12 @@ ru:
           description: "Выберите, куда сохранить этот запрос. Если закрыть окно, он останется черновиком."
           destination: Сохранить в
           keep_draft: Оставить черновиком
+          new_collection: "Новая коллекция"
           submit: Сохранить сюда
+          name: "Название запроса"
+          root: "Коллекции"
+          no_folders: "Здесь нет папок."
+          new_folder: "Новая папка"
       create:
         created: Запрос создан.
       update:
@@ -265,6 +271,9 @@ ru:
       send_hint: Отправить (Ctrl/Cmd + Enter)
       unsaved_notice: "У вас есть несохранённые изменения"
       discard_changes: "Отменить изменения"
+      draft_saving: "Сохранение…"
+      draft_saved: "Черновик сохранён"
+      draft_error: "Не удалось сохранить черновик"
       cancel: Отмена
       cancel_hint: Отменить запрос
       save: Сохранить

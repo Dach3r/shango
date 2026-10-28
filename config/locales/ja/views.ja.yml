@@ -12,6 +12,7 @@ ja:
               upload_too_large: "%{name} は上限の %{max} MB を超えています。"
               uploads_too_large: ファイルの合計サイズが上限の %{max} MB を超えています。
               too_many_uploads: 1つのリクエストに含まれるファイルが多すぎます（最大 %{max} 件）。
+              draft_too_large: "このリクエストは大きすぎて下書きとして保持できません。"
     attributes:
       user:
         first_name: 名
@@ -72,7 +73,7 @@ ja:
     zoom_picker:
       label: ズーム
       default: デフォルト
-    toast:
+    flash:
       close: 通知を閉じる
     theme_switcher:
       label: テーマ

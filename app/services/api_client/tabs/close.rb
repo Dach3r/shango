@@ -1,6 +1,6 @@
 module ApiClient
   module Tabs
-    # Closes the user's tab for a request; the request itself is kept.
+    # Closes the user's tab for a request. A saved request is kept (only its pending edits and unsaved response go); a new draft is discarded.
     class Close
       include Serviceable
 
@@ -12,8 +12,11 @@ module ApiClient
       private
 
       def perform
-        RequestTab.where(user: @user, api_request: @api_request).destroy_all
-        Requests::Stash.clear(api_request: @api_request, user: @user)
+        if @api_request.persisted?
+          RequestTab.where(user: @user, api_request: @api_request).destroy_all
+          LatestExecution.where(user: @user, api_request: @api_request).delete_all
+        end
+        Drafts::Discard.call(api_request: @api_request, user: @user)
         Result.success(@api_request)
       end
     end

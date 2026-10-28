@@ -205,9 +205,9 @@ RSpec.describe "Workbench OAuth2" do
   end
 
   describe "token endpoint with request owners" do
-    it "does not let a user fetch a token for a request hidden from them", :aggregate_failures do
+    it "does not let a user fetch a token for a draft, which is never an owner", :aggregate_failures do
       other_user = create(:user)
-      hidden = create(:api_request, project:, collection: nil, user: other_user, auth_type: "oauth2", auth_config: oauth_config)
+      hidden = create(:request_draft, project:, user: other_user)
       post workbench_oauth2_token_path, params: { owner_type: "ApiRequest", owner_id: hidden.id }
 
       expect(response).to have_http_status(:not_found)

@@ -1,6 +1,6 @@
 module ApiClient
   module Executions
-    # Moves a pending (cached) execution into the request's history and prunes the oldest entries.
+    # Moves the user's latest unsaved execution into the request's history and prunes the oldest entries.
     class Save
       include Serviceable
 
@@ -17,7 +17,7 @@ module ApiClient
         return Result.failure(error: :expired) unless owned?(execution)
 
         execution.save!
-        Rails.cache.delete(RequestExecution.pending_key(@id))
+        LatestExecution.where(execution_id: @id).delete_all
         prune
         Result.success(execution)
       end

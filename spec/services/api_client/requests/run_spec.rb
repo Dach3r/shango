@@ -24,12 +24,42 @@ RSpec.describe ApiClient::Requests::Run do
     )
   end
 
-  it "forgets the unsaved edits once it saves them", :aggregate_failures do
+  it "forgets the pending edits once it saves them" do
     stub_request(:get, "https://api.example.com/other").to_return(status: 200)
-    ApiClient::Requests::Stash.write(api_request:, user:, attributes: { url: "https://api.example.com/other" })
-    described_class.call(api_request:, environment:, user:, attributes: { url: "https://api.example.com/other" })
+    create(:request_draft, :for_request, user:, api_request:, project: api_request.project)
 
-    expect(ApiClient::Requests::Stash.read(api_request:, user:)).to be_nil
+    expect { described_class.call(api_request:, environment:, user:, attributes: { url: "https://api.example.com/other" }) }.to change(RequestDraft, :count).by(-1)
+  end
+
+  describe "for a new draft" do
+    let(:draft) { ApiClient::Drafts::Create.call(project: api_request.project, user:).record }
+    let(:unsaved) { ApiClient::Drafts::Build.call(draft:) }
+
+    it "sends it and keeps the edits as the draft, never saving a request", :aggregate_failures do
+      stub_request(:get, "https://api.example.com/new").to_return(status: 200, body: "ok", headers: { "Content-Type" => "text/plain" })
+      unsaved
+
+      expect do
+        result = described_class.call(api_request: unsaved, environment:, user:, attributes: { url: "https://api.example.com/new" })
+        expect(result.record).to have_attributes(status: 200, url: "https://api.example.com/new")
+      end.not_to change(ApiRequest, :count)
+      expect(draft.reload.data).to include("url" => "https://api.example.com/new")
+    end
+
+    it "fails on invalid edits without saving them", :aggregate_failures do
+      result = described_class.call(api_request: unsaved, environment:, user:, attributes: { name: "" })
+
+      expect(result).to be_failure
+      expect(draft.reload.data).not_to include("name")
+    end
+
+    it "fails when the draft is too large", :aggregate_failures do
+      stub_const("RequestDraft::MAX_BYTES", 10)
+      result = described_class.call(api_request: unsaved, environment:, user:, attributes: { url: "https://api.example.com/new" })
+
+      expect(result).to be_failure
+      expect(result.record.errors.full_messages.join).to include(I18n.t("activerecord.errors.models.api_request.attributes.base.draft_too_large"))
+    end
   end
 
   describe "in async mode" do

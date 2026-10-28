@@ -25,22 +25,17 @@ RSpec.describe RequestTree::Component, type: :component do
     expect(page).to have_css("[data-sidebar-view-target=history]", text: I18n.t("components.request_tree.history_empty"), visible: :all)
   end
 
-  it "lists history grouped by collection and drafts", :aggregate_failures do
+  it "lists history grouped by collection", :aggregate_failures do
     collection = create(:collection, project:, name: "Docs")
     user = create(:user)
     api_request = create(:api_request, collection:, name: "Fetch users")
-    draft = create(:api_request, project:, collection: nil, user:, name: "Scratch")
-    groups = [
-      ApiClient::Executions::History::Group.new(collection:, executions: [create(:request_execution, api_request:, user:, url: "https://api.example.com/users")]),
-      ApiClient::Executions::History::Group.new(collection: nil, executions: [create(:request_execution, api_request: draft, user:)])
-    ]
+    groups = [ApiClient::Executions::History::Group.new(collection:, executions: [create(:request_execution, api_request:, user:, url: "https://api.example.com/users")])]
 
     render_inline(described_class.new(membership:, branches: [], history_groups: groups, folder_toggle: "click", request_open: "click"))
 
     expect(page).to have_link("Fetch users", href: "/workbench/requests/#{api_request.id}", visible: :all)
     expect(page).to have_css("a[title='https://api.example.com/users']", visible: :all)
-    expect(page).to have_css("[data-sidebar-view-target=history]", text: I18n.t("components.request_tree.drafts"), visible: :all)
-    expect(page).to have_link("Scratch", visible: :all)
+    expect(page).to have_css("[data-sidebar-view-target=history]", text: "Docs", visible: :all)
   end
 
   it "renders collections, folders, nested folders and requests", :aggregate_failures do

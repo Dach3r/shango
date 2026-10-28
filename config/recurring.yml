@@ -22,3 +22,6 @@ production:
   prune_network_checks:
     class: PruneNetworkChecksJob
     schedule: every day at 3:45am
+  prune_request_drafts:
+    class: PruneRequestDraftsJob
+    schedule: every day at 4am

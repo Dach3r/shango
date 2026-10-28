@@ -1,6 +1,7 @@
 <%# Request actions. Rendered in the tab bar; the request-form controller wraps the whole workspace section. %>
 <% if policy(api_request).update? %>
-  <div class="flex items-center self-stretch border-l border-line px-3">
+  <div class="flex items-center gap-2 self-stretch border-l border-line px-3">
+    <span id="draft_status" role="status" aria-live="polite" class="text-xs italic text-muted"></span>
     <button type="submit" form="request_form" class="<%= button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs") %>">
       <%= lucide_icon "save", class: "size-3.5" %><%= t("workbench.requests.save") %>
     </button>

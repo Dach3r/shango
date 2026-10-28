@@ -1,9 +1,9 @@
-class Toast::Component < ApplicationComponent
+class Flash::Component < ApplicationComponent
   KINDS = {
-    notice: { icon: "circle-check", role: "status", tone: "text-accent", border: "border-solid" },
+    notice: { icon: "circle-check", role: "status", tone: "text-accent", border: "border-accent/40" },
     alert: { icon: "circle-alert", role: "alert", tone: "text-danger", border: "border-danger" }
   }.freeze
-  BASE = "pointer-events-auto relative flex w-full items-center gap-3 border bg-card py-3 pr-3 pl-4 text-sm transition duration-200 ease-out starting:translate-y-2 starting:opacity-0 data-[state=closed]:translate-y-2 data-[state=closed]:opacity-0"
+  BASE = "pointer-events-auto relative w-full border-b bg-card text-sm transition duration-300 ease-out starting:-translate-y-full data-[state=closed]:-translate-y-full"
 
   def initialize(message:, kind: :notice, **options)
     @message = message

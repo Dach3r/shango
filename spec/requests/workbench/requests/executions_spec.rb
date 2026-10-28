@@ -87,10 +87,11 @@ RSpec.describe "Workbench request executions" do
   describe "POST /workbench/requests/:request_id/executions/:execution_id/saves" do
     let(:pending) { build(:request_execution, id: SecureRandom.uuid, api_request:, project:, user:).stash }
 
-    it "stores the pending response and streams it back", :aggregate_failures do
+    it "stores the pending response and leaves it to the history list", :aggregate_failures do
       expect { post workbench_request_execution_saves_path(api_request, pending.id), headers: turbo_headers }.to change(RequestExecution, :count).by(1)
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("response_panel")
+      expect(response.body).to include("response_panel", workbench_request_execution_path(api_request, pending.id))
+      expect(response.body).not_to include(%(data-name="body"))
       expect(RequestExecution.pending(pending.id)).to be_nil
     end
 

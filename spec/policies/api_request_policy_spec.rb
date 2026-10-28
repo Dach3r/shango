@@ -7,7 +7,7 @@ RSpec.describe ApiRequestPolicy, type: :policy do
   let(:stranger) { member_membership(project:) }
   let(:collection) { create(:collection, project:, creator: member.user) }
   let(:api_request) { create(:api_request, collection:) }
-  let(:draft) { create(:api_request, project:, collection: nil, user: member.user) }
+  let(:draft) { ApiClient::Drafts::Build.call(draft: create(:request_draft, project:, user: member.user)) }
 
   describe "in a collection" do
     it "lets the collection's creator and the owners manage it", :aggregate_failures do
@@ -48,6 +48,10 @@ RSpec.describe ApiRequestPolicy, type: :policy do
       expect(policy).to be_create
       expect(policy).to be_update
       expect(policy).to be_destroy
+    end
+
+    it "cannot be duplicated before it is saved" do
+      expect(described_class.new(member, draft)).not_to be_duplicate
     end
 
     it "is private to its author, owners included", :aggregate_failures do

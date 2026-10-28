@@ -12,6 +12,7 @@ pt-BR:
               upload_too_large: "%{name} é maior que o limite de %{max} MB."
               uploads_too_large: Juntos, os arquivos são maiores que o limite de %{max} MB.
               too_many_uploads: Arquivos demais em uma requisição (máximo de %{max}).
+              draft_too_large: "Esta requisição é grande demais para ser mantida como rascunho."
     attributes:
       user:
         first_name: Nome
@@ -72,7 +73,7 @@ pt-BR:
     zoom_picker:
       label: Zoom
       default: Padrão
-    toast:
+    flash:
       close: Dispensar notificação
     theme_switcher:
       label: Tema

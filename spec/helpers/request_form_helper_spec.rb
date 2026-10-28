@@ -60,7 +60,7 @@ RSpec.describe RequestFormHelper do
     end
 
     it "names drafts" do
-      draft = create(:api_request, project:, collection: nil, user: create(:user))
+      draft = ApiClient::Drafts::Build.call(draft: create(:request_draft, project:))
 
       expect(helper.request_breadcrumb(draft, branches)).to eq([I18n.t("workbench.requests.draft")])
     end

@@ -1,4 +1,4 @@
-# Requests in a collection follow it, so managing them takes managing the collection. Drafts belong to one user.
+# Requests in a collection follow it, so managing them takes managing the collection. A request that is not saved yet is a draft that belongs to one user.
 class ApiRequestPolicy < ApplicationPolicy
   def show?
     same_project? && (!record.draft? || own_draft?)
@@ -24,13 +24,13 @@ class ApiRequestPolicy < ApplicationPolicy
   end
 
   def duplicate?
-    create?
+    !record.draft? && create?
   end
 
   private
 
   def own_draft?
-    record.user_id == membership.user_id
+    record.draft_owner_id == membership.user_id
   end
 
   def collection_policy

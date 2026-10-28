@@ -12,6 +12,7 @@ fr:
               upload_too_large: "%{name} dépasse la limite de %{max} Mo."
               uploads_too_large: "Les fichiers dépassent ensemble la limite de %{max} Mo."
               too_many_uploads: "Trop de fichiers dans une même requête (maximum %{max})."
+              draft_too_large: "Cette requête est trop volumineuse pour être conservée comme brouillon."
     attributes:
       user:
         first_name: "Prénom"
@@ -72,7 +73,7 @@ fr:
     zoom_picker:
       label: "Zoom"
       default: "Par défaut"
-    toast:
+    flash:
       close: "Fermer la notification"
     theme_switcher:
       label: "Thème"

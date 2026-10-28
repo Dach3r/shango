@@ -112,7 +112,6 @@ es:
       history: Historial de solicitudes
       history_title: Historial
       history_empty: Aún no hay respuestas guardadas. Ejecuta una solicitud y pulsa Guardar respuesta para conservarla aquí.
-      drafts: Borradores
       back: Volver a colecciones
       import: Importar colecciones
       import_curl: Importar cURL
@@ -209,6 +208,7 @@ es:
       form:
         new_title: Nueva colección
         edit_title: Configuración de la colección
+        back: "Volver a guardar"
         name: Nombre
         name_placeholder: p. ej. API principal
         description: Descripción
@@ -221,6 +221,7 @@ es:
         destroyed: Carpeta eliminada.
       form:
         new_title: Nueva carpeta
+        back: "Volver a guardar"
         edit_title: Configuración de la carpeta
         name: Nombre
         name_placeholder: p. ej. Autenticación
@@ -241,7 +242,12 @@ es:
           description: "Elige dónde guardar esta solicitud. Si cierras esta ventana se mantiene como borrador."
           destination: Guardar en
           keep_draft: Mantener como borrador
+          new_collection: "Nueva colección"
           submit: Guardar aquí
+          name: "Nombre de la solicitud"
+          root: "Colecciones"
+          no_folders: "No hay carpetas aquí."
+          new_folder: "Nueva carpeta"
       create:
         created: Solicitud creada.
       update:
@@ -263,6 +269,9 @@ es:
       send_hint: Enviar (Ctrl/Cmd + Enter)
       unsaved_notice: "Tienes cambios sin guardar"
       discard_changes: "Descartar cambios"
+      draft_saving: "Guardando…"
+      draft_saved: "Borrador guardado"
+      draft_error: "No se pudo guardar el borrador"
       cancel: Cancelar
       cancel_hint: Cancelar la solicitud
       save: Guardar

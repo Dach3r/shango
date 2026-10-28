@@ -1,0 +1,13 @@
+<%# Saved responses of a request. `current_id` marks the one on display. %>
+<ul class="space-y-0.5">
+  <% history.each do |item| %>
+    <li>
+      <%= link_to workbench_request_execution_path(api_request, item), data: { turbo_frame: "response_panel" },
+                  class: class_names("flex items-center gap-3 px-3 py-2 text-sm transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50", "bg-field" => item.id == current_id) do %>
+        <%= render StatusBadge::Component.new(execution: item) %>
+        <span class="text-xs text-muted"><%= format_duration(item.duration_ms) %></span>
+        <span class="ml-auto text-xs text-muted"><%= l(item.created_at, format: :short) %></span>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

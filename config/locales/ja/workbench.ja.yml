@@ -112,7 +112,6 @@ ja:
       history: リクエスト履歴
       history_title: 履歴
       history_empty: 保存されたレスポンスはまだありません。リクエストを実行し、「レスポンスを保存」を押すとここに保存されます。
-      drafts: 下書き
       back: コレクションに戻る
       import: コレクションをインポート
       import_curl: cURL をインポート
@@ -208,6 +207,7 @@ ja:
       form:
         new_title: 新規コレクション
         edit_title: コレクションの設定
+        back: "保存に戻る"
         name: 名前
         name_placeholder: "例: Main API"
         description: 説明
@@ -220,6 +220,7 @@ ja:
         destroyed: フォルダを削除しました。
       form:
         new_title: 新規フォルダ
+        back: "保存に戻る"
         edit_title: フォルダの設定
         name: 名前
         name_placeholder: "例: Authentication"
@@ -240,7 +241,12 @@ ja:
           description: "このリクエストの保存先を選択してください。このウィンドウを閉じると下書きのままになります。"
           destination: 保存先
           keep_draft: 下書きのままにする
+          new_collection: "新規コレクション"
           submit: ここに保存
+          name: "リクエスト名"
+          root: "コレクション"
+          no_folders: "ここにフォルダはありません。"
+          new_folder: "新規フォルダ"
       create:
         created: リクエストを作成しました。
       update:
@@ -262,6 +268,9 @@ ja:
       send_hint: 送信 (Ctrl/Cmd + Enter)
       unsaved_notice: "未保存の変更があります"
       discard_changes: "変更を破棄"
+      draft_saving: "保存中…"
+      draft_saved: "下書きを保存しました"
+      draft_error: "下書きを保存できませんでした"
       cancel: キャンセル
       cancel_hint: リクエストをキャンセル
       save: 保存

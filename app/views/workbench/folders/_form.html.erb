@@ -1,18 +1,32 @@
-<%= render Modal::Component.new(icon: "folder", title: @folder.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "folder_form", submit: t("workbench.shared.save"), submit_icon: "save") do %>
+<% placing = @placement && @draft %>
+<%= render Modal::Component.new(icon: "folder", title: @folder.persisted? ? t(".edit_title") : t(".new_title"), size: :lg, form: "folder_form", submit: t("workbench.shared.save"), submit_icon: "save") do |modal| %>
+  <% if placing %>
+    <% modal.with_footer do %>
+      <%= link_to new_workbench_request_placement_path(@draft, destination: (@folder.parent_id ? "folder:#{@folder.parent_id}" : "collection:#{@collection.id}"), request_name: @request_name), class: button_classes(:ghost) do %><%= lucide_icon "arrow-left", class: "size-4 shrink-0" %><%= t(".back") %><% end %>
+      <%= tag.button type: "submit", form: "folder_form", class: button_classes(:primary) do %><%= lucide_icon "save", class: "size-4 shrink-0" %><%= t("workbench.shared.save") %><% end %>
+    <% end %>
+  <% end %>
   <%= form_with model: @folder, scope: :folder, url: (@folder.persisted? ? workbench_folder_path(@folder) : workbench_collection_folders_path(@collection)),
-                id: "folder_form", data: variable_autocomplete_data.merge(turbo_frame: "_top"), class: "space-y-5" do |form| %>
+                id: "folder_form", data: variable_autocomplete_data.merge(turbo_frame: (placing ? "modal" : "_top")), class: "space-y-5" do |form| %>
     <%= render "workbench/shared/errors", record: @folder %>
     <%= form.hidden_field :parent_id unless @folder.persisted? %>
+    <% if placing %>
+      <%= hidden_field_tag :draft_id, @draft.id %>
+      <%= hidden_field_tag :placement, 1 %>
+      <%= hidden_field_tag :request_name, @request_name %>
+    <% end %>
 
     <div>
       <%= form.label :name, t(".name"), class: label_classes %>
       <%= form.text_field :name, autofocus: true, autocomplete: "off", placeholder: t(".name_placeholder"), class: field_classes %>
     </div>
 
-    <fieldset class="space-y-3">
-      <legend class="text-sm font-semibold text-ink"><%= t(".auth") %></legend>
-      <%= render AuthFields::Component.new(scope: "folder", record: @folder, inheritable: true) %>
-    </fieldset>
+    <% unless placing %>
+      <fieldset class="space-y-3">
+        <legend class="text-sm font-semibold text-ink"><%= t(".auth") %></legend>
+        <%= render AuthFields::Component.new(scope: "folder", record: @folder, inheritable: true) %>
+      </fieldset>
+    <% end %>
   <% end %>
-  <%= render Oauth2Forms::Component.new(owner: @folder) %>
+  <%= render Oauth2Forms::Component.new(owner: @folder) unless placing %>
 <% end %>

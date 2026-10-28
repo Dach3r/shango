@@ -2,6 +2,8 @@ module Workbench
   module Requests
     # Drag and drop in the sidebar: moves a request to a collection/folder and orders it.
     class PositionsController < BaseController
+      before_action { head :not_found if @api_request.draft? }
+
       def update
         authorize @api_request, :update?
         authorize current_project.collections.find(params[:collection_id].presence || @api_request.collection_id), :update?
