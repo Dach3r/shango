@@ -464,6 +464,7 @@ pt-BR:
         previous: "Correspondência anterior"
         next: "Próxima correspondência"
       copy: Copiar
+      copy_body: Copiar resposta
       save: Salvar resposta
       copied: Copiado
       truncated: "Somente os primeiros %{limit} são exibidos."

@@ -464,6 +464,7 @@ en:
         previous: "Previous match"
         next: "Next match"
       copy: Copy
+      copy_body: Copy response
       save: Save response
       copied: Copied
       truncated: "Only the first %{limit} are shown."

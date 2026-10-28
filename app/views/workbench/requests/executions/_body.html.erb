@@ -23,7 +23,7 @@
       <span data-controller="url-preview-slot" data-url-preview-slot class="ml-auto min-w-0 truncate px-2 font-mono text-xs text-body"></span>
       <button type="button" data-action="response-body#copy" data-copied-label="<%= t("workbench.executions.copied") %>"
               class="flex shrink-0 cursor-pointer items-center gap-1.5 px-2 py-1 text-xs font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
-        <%= lucide_icon "copy", class: "size-3.5" %><span data-label><%= t("workbench.executions.copy") %></span>
+        <%= lucide_icon "copy", class: "size-3.5" %><span data-label><%= t("workbench.executions.copy_body") %></span>
       </button>
     </div>
     <% if execution.body_truncated %>

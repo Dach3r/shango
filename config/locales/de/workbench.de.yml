@@ -464,6 +464,7 @@ de:
         previous: "Vorheriger Treffer"
         next: "Nächster Treffer"
       copy: Kopieren
+      copy_body: Antwort kopieren
       save: Antwort speichern
       copied: Kopiert
       truncated: "Nur die ersten %{limit} werden angezeigt."

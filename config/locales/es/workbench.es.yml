@@ -464,6 +464,7 @@ es:
         previous: "Coincidencia anterior"
         next: "Coincidencia siguiente"
       copy: Copiar
+      copy_body: Copiar respuesta
       save: Guardar respuesta
       copied: Copiado
       truncated: "Solo se muestran los primeros %{limit}."

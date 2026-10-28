@@ -462,6 +462,7 @@ ja:
         previous: "前の一致"
         next: "次の一致"
       copy: コピー
+      copy_body: レスポンスをコピー
       save: レスポンスを保存
       copied: コピーしました
       truncated: "最初の %{limit} のみ表示しています。"

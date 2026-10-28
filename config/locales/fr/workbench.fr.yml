@@ -464,6 +464,7 @@ fr:
         previous: "Résultat précédent"
         next: "Résultat suivant"
       copy: "Copier"
+      copy_body: "Copier la réponse"
       save: "Enregistrer la réponse"
       copied: "Copié"
       truncated: "Seuls les %{limit} premiers sont affichés."
