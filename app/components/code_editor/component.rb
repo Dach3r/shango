@@ -25,8 +25,8 @@ class CodeEditor::Component < ApplicationComponent
     {
       controller: "code-editor", code_editor_language_value: @language, code_editor_readonly_value: @readonly,
       code_editor_single_line_value: @single_line, code_editor_placeholder_value: @placeholder, code_editor_variables_value: @variables.to_json, code_editor_variables_url_value: @variables_url, code_editor_responses_value: @responses.to_json, code_editor_responses_url_value: @responses_url, code_editor_labels_value: labels.to_json,
-      action: "variable:saved@window->code-editor#variableSaved variable:created@window->code-editor#variableCreated"
-    }.merge(@data)
+      action: ["variable:saved@window->code-editor#variableSaved variable:created@window->code-editor#variableCreated", @data[:action]].compact.join(" ")
+    }.merge(@data) { |key, base, extra| key == :action ? base : extra }
   end
 
   def labels

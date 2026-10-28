@@ -12,6 +12,16 @@ RSpec.describe CodeEditor::Component, type: :component do
     end
   end
 
+  context "with extra actions" do
+    it "keeps listening for variable changes", :aggregate_failures do
+      render_inline(described_class.new(data: { action: "body-type:language@window->code-editor#changeLanguage" }))
+
+      action = page.find("div.code-editor")["data-action"]
+      expect(action).to include("variable:saved@window->code-editor#variableSaved", "variable:created@window->code-editor#variableCreated")
+      expect(action).to include("body-type:language@window->code-editor#changeLanguage")
+    end
+  end
+
   context "with a variables url" do
     it "passes it to the controller" do
       render_inline(described_class.new(variables_url: "/environments/1/variables"))
