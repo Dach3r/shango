@@ -60,15 +60,15 @@
 
 :root,
 [data-palette="default"] {
-  --page: light-dark(#f8f6ef, #1a1a19);
-  --card: light-dark(var(--color-paper), #242422);
-  --line: light-dark(#cdc7b3, #413f3b);
-  --faint: light-dark(#9a9482, #5f5d56);
-  --field: light-dark(#faf8f2, #1a1a19);
-  --field-focus: light-dark(var(--color-paper), #1a1a19);
-  --ink: light-dark(var(--color-night-1000), #d6d4ca);
-  --body: light-dark(#3d3d3a, #bab8ae);
-  --muted: light-dark(#66655e, #b0aea5);
+  --page: light-dark(#f4f4f4, #161616);
+  --card: light-dark(var(--color-paper), #1c1c1c);
+  --line: light-dark(#c4c4c4, #3a3a3a);
+  --faint: light-dark(#8f8f8f, #5a5a5a);
+  --field: light-dark(#fafafa, #101010);
+  --field-focus: light-dark(var(--color-paper), #101010);
+  --ink: light-dark(#111111, #f2f2f2);
+  --body: light-dark(#333333, #c8c8c8);
+  --muted: light-dark(#666666, #a0a0a0);
   --accent: light-dark(var(--color-clay-700), var(--color-clay-400));
   --accent-hover: light-dark(var(--color-clay-800), var(--color-clay-300));
   --solid: light-dark(var(--color-clay-600), var(--color-clay-500));
@@ -82,7 +82,7 @@
   --syn-variable: light-dark(#1f6a9e, #7cb7e8);
   --syn-keyword: light-dark(#a9502f, #e58a69);
   --syn-comment: light-dark(#8a877b, #6f6d66);
-  --dots: light-dark(#c9c3af, #3a3935);
+  --dots: light-dark(#c4c4c4, #3a3a3a);
   --glow: light-dark(
     color-mix(in oklab, var(--color-clay-500) 16%, transparent),
     color-mix(in oklab, var(--color-clay-500) 10%, transparent)
@@ -376,16 +376,6 @@
 }
 
 [data-palette="mono"] {
-  --page: light-dark(#f4f4f4, #161616);
-  --card: light-dark(var(--color-paper), #1c1c1c);
-  --line: light-dark(#c4c4c4, #3a3a3a);
-  --faint: light-dark(#8f8f8f, #5a5a5a);
-  --field: light-dark(#fafafa, #101010);
-  --field-focus: light-dark(var(--color-paper), #101010);
-  --dots: light-dark(#c4c4c4, #3a3a3a);
-  --ink: light-dark(#111111, #f2f2f2);
-  --body: light-dark(#333333, #c8c8c8);
-  --muted: light-dark(#666666, #a0a0a0);
   --accent: light-dark(#111111, #ffffff);
   --accent-hover: light-dark(#333333, #dddddd);
   --solid: light-dark(#1a1a1a, #f2f2f2);
