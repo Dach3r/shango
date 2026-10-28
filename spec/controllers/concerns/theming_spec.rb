@@ -31,6 +31,8 @@ RSpec.describe Theming do
 
   describe "membership theme", type: :controller do
     controller(AuthenticatedController) do
+      skip_after_action :verify_authorized
+
       def index
         render plain: "#{current_theme}/#{current_palette}"
       end

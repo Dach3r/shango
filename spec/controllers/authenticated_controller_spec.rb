@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe AuthenticatedController do
   controller do
     skip_before_action :require_project
+    skip_after_action :verify_authorized
 
     def index
       render plain: "ok"

@@ -20,6 +20,7 @@ module Workbench
 
       def set_owner
         @owner = ApiClient::Oauth2::FindOwner.call(project: current_project, user: current_user, type: params[:owner_type], id: params[:owner_id])
+        authorize @owner, :update?
       end
     end
   end

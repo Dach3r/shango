@@ -4,6 +4,7 @@ module Network
 
     helper_method :history_for
 
+    before_action { authorize current_project, :use? }
     throttle :network, by: -> { current_user.id }, if: -> { request.post? }
 
     private

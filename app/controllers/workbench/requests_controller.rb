@@ -6,6 +6,7 @@ module Workbench
     before_action :set_api_request, only: %i[show update destroy]
 
     def show
+      authorize @api_request
       ApiClient::Tabs::Open.call(api_request: @api_request, user: current_user) unless prefetch?
       @execution = RequestExecution.latest_for(@api_request, current_user)
       restore_stash
@@ -13,9 +14,11 @@ module Workbench
 
     def new
       @api_request = @collection.api_requests.new(folder_id: params[:folder_id], name: t(".default_name"))
+      authorize @api_request
     end
 
     def create
+      authorize @collection.api_requests.new
       result = ApiClient::Requests::Create.call(collection: @collection, attributes: request_attributes)
       return redirect_to(workbench_request_path(result.record), status: :see_other) if result.success?
 
@@ -24,6 +27,7 @@ module Workbench
     end
 
     def update
+      authorize @api_request
       result = ApiClient::Requests::Update.call(api_request: @api_request, attributes: request_attributes, uploads: request_uploads, binary_upload:)
       clear_stash if result.success?
       return render_placement if result.success? && @api_request.draft? && params[:place].present?
@@ -34,6 +38,7 @@ module Workbench
     end
 
     def destroy
+      authorize @api_request
       ApiClient::Requests::Destroy.call(api_request: @api_request)
       clear_stash
       redirect_to workbench_root_path, status: :see_other

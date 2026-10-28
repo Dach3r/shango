@@ -6,4 +6,5 @@ class AuthenticatedController < ApplicationController
 
   before_action :authenticate_user!
   before_action :require_project
+  after_action :verify_authorized
 end

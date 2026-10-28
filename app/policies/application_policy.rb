@@ -24,6 +24,14 @@ class ApplicationPolicy
     false
   end
 
+  def new?
+    create?
+  end
+
+  def edit?
+    update?
+  end
+
   def destroy?
     false
   end

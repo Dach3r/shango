@@ -8,6 +8,7 @@ module Workbench
 
       def set_api_request
         @api_request = current_project.api_requests.visible_to(current_user).find(params[:request_id])
+        authorize @api_request, :show?
       end
     end
   end

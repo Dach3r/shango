@@ -3,6 +3,7 @@ module Users
     before_action :require_frame
 
     def show
+      skip_authorization
     end
 
     private

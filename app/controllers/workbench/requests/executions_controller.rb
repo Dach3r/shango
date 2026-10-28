@@ -9,13 +9,12 @@ module Workbench
         @execution = @api_request.request_executions.find(params[:id])
       end
 
-      # Sends the request (saving pending edits first) and streams the response panel back.
+      # Sends the request (saving pending edits first when the member may edit it) and streams the response panel back.
       def create
-        @uploaded = request_uploads.any? || binary_upload.present?
-        result = ApiClient::Requests::Run.call(
-          api_request: @api_request, environment: current_environment, user: current_user,
-          attributes: request_attributes, uploads: request_uploads, binary_upload:
-        )
+        authorize @api_request, :execute?
+        edits = policy(@api_request).update? ? { attributes: request_attributes, uploads: request_uploads, binary_upload: } : { attributes: {}, uploads: {}, binary_upload: nil }
+        @uploaded = edits[:uploads].any? || edits[:binary_upload].present?
+        result = ApiClient::Requests::Run.call(api_request: @api_request, environment: current_environment, user: current_user, **edits)
 
         return render_queued(result.data[:run_id]) if result.success? && result.data[:run_id]
 

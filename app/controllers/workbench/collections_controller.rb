@@ -4,9 +4,11 @@ module Workbench
 
     def new
       @collection = current_project.collections.new
+      authorize @collection
     end
 
     def create
+      authorize current_project.collections.new
       @draft = draft_to_place
       result = ApiClient::Collections::Create.call(project: current_project, creator: current_user, attributes: collection_attributes)
       return redirect_to(after_create_path(result.record), notice: t(".created"), status: :see_other) if result.success?
@@ -34,6 +36,7 @@ module Workbench
 
     def set_collection
       @collection = current_project.collections.find(params[:id])
+      authorize @collection
     end
 
     def draft_to_place

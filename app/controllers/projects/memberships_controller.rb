@@ -2,10 +2,12 @@ module Projects
   class MembershipsController < AuthenticatedController
     def edit
       @membership = current_membership
+      authorize @membership
     end
 
     def update
       @membership = current_membership
+      authorize @membership
       return redirect_to(edit_membership_path, notice: t(".updated"), status: :see_other) if @membership.update(membership_params)
 
       render :edit, status: :unprocessable_entity

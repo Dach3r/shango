@@ -1,5 +1,6 @@
 module Projects
   class CookiesController < AuthenticatedController
+    before_action { authorize current_project, :use? }
     before_action :require_frame, only: %i[index new edit]
     before_action :set_cookie, only: %i[edit update destroy]
 

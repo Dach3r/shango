@@ -18,6 +18,7 @@ module Workbench
 
     def set_collection
       @collection = current_project.collections.find(params[:collection_id])
+      authorize @collection.api_requests.new, :create?
     end
   end
 end

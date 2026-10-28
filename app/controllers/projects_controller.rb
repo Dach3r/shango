@@ -2,6 +2,7 @@ class ProjectsController < AuthenticatedController
   layout "devise", only: %i[new create]
 
   skip_before_action :require_project, only: %i[new create]
+  skip_after_action :verify_authorized
 
   def new
     @project = Project.new(icon: "rocket")

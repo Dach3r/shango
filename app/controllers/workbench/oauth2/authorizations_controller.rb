@@ -6,6 +6,7 @@ module Workbench
 
       def create
         owner = ApiClient::Oauth2::FindOwner.call(project: current_project, user: current_user, type: params[:owner_type], id: params[:owner_id])
+        authorize owner, :update?
         result = ApiClient::Oauth2::Authorize.call(owner:, redirect_uri: workbench_oauth2_callback_url, environment: current_environment)
         return redirect_back_or_to(workbench_root_path, alert: result.error, status: :see_other) if result.failure?
 

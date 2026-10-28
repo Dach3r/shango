@@ -5,9 +5,11 @@ module Workbench
     throttle :imports, by: -> { current_user.id }, only: :create
 
     def new
+      authorize current_project, :import?
     end
 
     def create
+      authorize current_project, :import?
       result = ApiClient::Imports::Import.call(project: current_project, creator: current_user, content: submitted_content)
       return redirect_to(workbench_root_path, notice: summary(result.data), status: :see_other) if result.success?
 

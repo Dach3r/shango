@@ -8,7 +8,9 @@ module Workbench
       end
 
       def update
+        authorize @api_request, :update?
         collection, folder = destination
+        authorize collection, :update?
         result = ApiClient::Requests::Place.call(api_request: @api_request, collection:, folder:)
         return redirect_to(workbench_request_path(@api_request), status: :see_other) if result.success?
 

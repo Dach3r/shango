@@ -4,6 +4,7 @@ module Projects
     class VariablesController < AuthenticatedController
       def create
         environment = current_project.environments.find(params[:environment_id])
+        authorize environment, :update?
         attributes = params.expect(variable: %i[key value])
         result = CreateVariable.call(environment:, key: attributes[:key], value: attributes[:value])
         return head(:unprocessable_entity) unless result.success?
@@ -13,7 +14,9 @@ module Projects
       end
 
       def update
-        variable = current_project.environments.find(params[:environment_id]).variables.find(params[:id])
+        environment = current_project.environments.find(params[:environment_id])
+        authorize environment, :update?
+        variable = environment.variables.find(params[:id])
         result = UpdateVariable.call(variable:, value: params.expect(variable: [:value])[:value])
         return head(:unprocessable_entity) unless result.success?
 

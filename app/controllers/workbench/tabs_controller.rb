@@ -3,6 +3,7 @@ module Workbench
   # `keep` lists the tabs the user chose not to close.
   class TabsController < BaseController
     def destroy
+      authorize current_project, :use?
       ApiClient::Tabs::CloseMany.call(api_requests: closing, user: current_user)
       @open_requests = nil
       redirect_to destination, status: :see_other

@@ -5,9 +5,11 @@ module Workbench
 
     def new
       @folder = @collection.folders.new(parent_id: params[:parent_id])
+      authorize @folder
     end
 
     def create
+      authorize @collection.folders.new
       result = ApiClient::Folders::Create.call(collection: @collection, attributes: folder_attributes)
       return redirect_to(workbench_root_path, notice: t(".created"), status: :see_other) if result.success?
 
@@ -39,6 +41,7 @@ module Workbench
     def set_folder
       @folder = current_project.folders.find(params[:id])
       @collection = @folder.collection
+      authorize @folder
     end
 
     def folder_attributes
