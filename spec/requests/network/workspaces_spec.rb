@@ -30,6 +30,15 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(I18n.t("network.ping.submit"))
     end
 
+    it "opens reverse DNS as the DNS checker with PTR preselected", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("reverse_dns")
+
+      expect(response.body).to include(I18n.t("network.dns.submit"), I18n.t("network.history.dns"), I18n.t("network.dns.ptr_placeholder"))
+      expect(response.body).to include(%(value="PTR"))
+      expect(response.body).to match(/<a(?=[^>]*aria-current="page")[^>]*href="#{network_workspace_path("reverse_dns")}"/)
+    end
+
     it "has no page for an unknown tool" do
       sign_in_with_project
 

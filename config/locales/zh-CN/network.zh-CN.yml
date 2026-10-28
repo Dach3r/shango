@@ -8,6 +8,7 @@ zh-CN:
     tabs:
       label: 网络工具
       dns: DNS
+      reverse_dns: "反向 DNS"
       ports: 端口
       ping: Ping
     errors:
@@ -47,6 +48,7 @@ zh-CN:
       domain: 域名
       hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。 对于 PTR，请输入 IP 地址：检查还会确认每个名称能解析回该地址。"
       domain_placeholder: example.com 203.0.113.10
+      ptr_placeholder: 203.0.113.10 mail.example.com
       type: 类型
       submit: 检查 DNS
       no_authoritative: 无法确定此域名的权威名称服务器。

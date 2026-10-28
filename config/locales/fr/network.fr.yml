@@ -8,6 +8,7 @@ fr:
     tabs:
       label: "Outils réseau"
       dns: "DNS"
+      reverse_dns: "DNS inverse"
       ports: "Ports"
       ping: "Ping"
     errors:
@@ -47,6 +48,7 @@ fr:
       domain: "Domaine"
       hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée. Pour PTR, saisissez une adresse IP : la vérification confirme aussi que chaque nom renvoie vers elle."
       domain_placeholder: example.com 203.0.113.10
+      ptr_placeholder: 203.0.113.10 mail.example.com
       type: "Type"
       submit: "Vérifier le DNS"
       no_authoritative: "Impossible de déterminer les serveurs de noms faisant autorité pour ce domaine."

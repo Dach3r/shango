@@ -8,6 +8,7 @@ ja:
     tabs:
       label: ネットワークツール
       dns: DNS
+      reverse_dns: "逆引き DNS"
       ports: ポート
       ping: Ping
     errors:
@@ -47,6 +48,7 @@ ja:
       domain: ドメイン
       hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。 PTR では IP アドレスを入力してください。各名前が同じ IP に正引きされるかも確認します。"
       domain_placeholder: example.com 203.0.113.10
+      ptr_placeholder: 203.0.113.10 mail.example.com
       type: タイプ
       submit: DNSを確認
       no_authoritative: このドメインの権威ネームサーバーを特定できませんでした。

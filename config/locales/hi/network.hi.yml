@@ -8,6 +8,7 @@ hi:
     tabs:
       label: "नेटवर्क टूल"
       dns: "DNS"
+      reverse_dns: "रिवर्स DNS"
       ports: "पोर्ट"
       ping: "Ping"
     errors:
@@ -47,6 +48,7 @@ hi:
       domain: "डोमेन"
       hint: "DNS उत्तर आधिकारिक नेमसर्वर और कई सार्वजनिक रिज़ॉल्वर से आते हैं, ताकि आप जान सकें कि कोई बदलाव फैल चुका है या नहीं। PTR के लिए IP पता लिखें: जाँच यह भी पुष्टि करती है कि हर नाम वापस उसी IP पर रिज़ॉल्व होता है।"
       domain_placeholder: example.com 203.0.113.10
+      ptr_placeholder: 203.0.113.10 mail.example.com
       type: "टाइप"
       submit: "DNS जाँचें"
       no_authoritative: "इस डोमेन के ऑथोरिटेटिव नेमसर्वर पता नहीं किए जा सके।"

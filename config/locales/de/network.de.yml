@@ -8,6 +8,7 @@ de:
     tabs:
       label: Netzwerk-Tools
       dns: DNS
+      reverse_dns: "Reverse-DNS"
       ports: Ports
       ping: Ping
     errors:
@@ -47,6 +48,7 @@ de:
       domain: Domain
       hint: "DNS-Antworten kommen von den autoritativen Nameservern und mehreren öffentlichen Resolvern, damit du siehst, ob sich eine Änderung verbreitet hat. Für PTR gib eine IP-Adresse ein: die Prüfung bestätigt auch, dass jeder Name wieder auf sie auflöst."
       domain_placeholder: example.com 203.0.113.10
+      ptr_placeholder: 203.0.113.10 mail.example.com
       type: Typ
       submit: DNS prüfen
       no_authoritative: Die autoritativen Nameserver dieser Domain konnten nicht ermittelt werden.
