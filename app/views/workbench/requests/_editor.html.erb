@@ -57,7 +57,7 @@
 
   <div class="group/editor relative flex min-h-0 flex-1 flex-col" data-controller="tabs body-type" data-tabs-active-value="params" data-tabs-key-value="request-editor">
     <%= render TabBar::Component.new(items: tabs, label: t("workbench.tabs.label")) do %>
-      <div data-tabs-target="panel" data-name="body" class="min-w-28 max-w-56 shrink-0" hidden>
+      <div data-tabs-target="panel" data-name="body" class="w-56 shrink-0" hidden>
         <%= render Select::Component.new(name: "api_request[body_type]", options: body_type_options, value: api_request.body_type, id: "api_request_body_type", label: t("workbench.body.type"), class: "border-y-0 border-r-0 focus:border-line! focus:ring-0! focus:bg-field! aria-expanded:bg-ink/[0.08]!", dock: true, searchable: false,
                                          input_data: { body_type_target: "select", action: "change->body-type#change" }) %>
       </div>
