@@ -1,5 +1,7 @@
 # Shango
 
+[![Coverage Status](https://coveralls.io/repos/github/Dach3r/shango/badge.svg?branch=main)](https://coveralls.io/github/Dach3r/shango?branch=main)
+
 **Open source Developer Workspace.** One project-centered place where a web developer's API client, network tools and (on the roadmap) documentation, monitors, servers, logs and AI share the same context.
 
 Shango is a Rails 8.1 monolith (PostgreSQL, Hotwire, Tailwind, ViewComponent, Solid Queue). It is self-hostable, framework-agnostic and licensed under AGPL-3.0.
