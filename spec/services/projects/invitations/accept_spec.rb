@@ -56,4 +56,14 @@ RSpec.describe Projects::Invitations::Accept do
 
     expect(described_class.call(invitation:, user:).error).to eq(:unavailable)
   end
+
+  it "records the acceptance", :aggregate_failures do
+    described_class.call(invitation:, user:)
+
+    expect(AuditEvent.last).to have_attributes(project:, kind: "invitation_accepted", actor: user, target: user, metadata: include("email" => "invitee@example.com", "role" => "owner"))
+  end
+
+  it "records nothing when refused" do
+    expect { described_class.call(invitation:, user: create(:user)) }.not_to change(AuditEvent, :count)
+  end
 end

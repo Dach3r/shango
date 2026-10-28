@@ -25,6 +25,7 @@ module Projects
         Invitation.transaction do
           @project.invitations.open.where(email: invitation.email).update_all(revoked_at: Time.current)
           invitation.save!
+          AuditEvents::Record.call(project: @project, kind: :member_invited, actor: @inviter, email: invitation.email, role: invitation.role)
         end
         Result.success(invitation, delivered: deliver(invitation))
       rescue ActiveRecord::RecordNotUnique

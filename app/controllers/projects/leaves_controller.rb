@@ -3,7 +3,7 @@ module Projects
   class LeavesController < AuthenticatedController
     def create
       authorize current_membership, :leave?
-      result = Members::Revoke.call(membership: current_membership)
+      result = Members::Revoke.call(membership: current_membership, actor: current_user)
       return redirect_to(root_path, notice: t(".left", project: current_project.name), status: :see_other) if result.success?
 
       redirect_to members_path, alert: t(".last_owner"), status: :see_other

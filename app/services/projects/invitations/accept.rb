@@ -20,6 +20,7 @@ module Projects
 
           membership = @user.memberships.active.find_by(project: @invitation.project) || @invitation.project.memberships.create!(user: @user, role: @invitation.role)
           @invitation.update!(accepted_at: Time.current)
+          AuditEvents::Record.call(project: @invitation.project, kind: :invitation_accepted, actor: @user, target: @user, email: @invitation.email, role: @invitation.role)
           Result.success(membership)
         end
       end

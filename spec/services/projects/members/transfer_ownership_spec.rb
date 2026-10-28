@@ -13,6 +13,12 @@ RSpec.describe Projects::Members::TransferOwnership do
     expect(owner.reload).to be_member
   end
 
+  it "records the handover", :aggregate_failures do
+    described_class.call(from: owner, to: member)
+
+    expect(AuditEvent.last).to have_attributes(project:, kind: "ownership_transferred", actor: owner.user, target: member.user)
+  end
+
   it "only lets an owner hand the project over", :aggregate_failures do
     result = described_class.call(from: member, to: owner)
 

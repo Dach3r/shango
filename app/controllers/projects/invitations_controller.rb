@@ -13,7 +13,7 @@ module Projects
 
     def destroy
       invitation = current_project.invitations.open.find(params[:id])
-      Invitations::Revoke.call(invitation:)
+      Invitations::Revoke.call(invitation:, actor: current_user)
       redirect_to members_path, notice: t(".revoked", email: invitation.email), status: :see_other
     end
   end

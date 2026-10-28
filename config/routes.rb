@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     resource :leave, only: :create
     resource :ownership_transfer, only: :create
     resources :invitations, only: %i[create destroy]
+    resources :audit_events, only: :index
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }
   end
 

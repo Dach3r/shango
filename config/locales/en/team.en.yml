@@ -21,6 +21,7 @@ en:
           one: "%{count} member"
           other: "%{count} members"
         you: (you)
+        activity: Activity
         roles:
           owner: Owner
           member: Member
@@ -58,6 +59,24 @@ en:
       destroy:
         revoked: "%{name} was removed from the project."
         failed: A project needs at least one owner.
+    audit_events:
+      index:
+        title: Activity
+        heading: Activity
+        description: Who changed the team of %{project}.
+        empty: Nothing has happened yet.
+        someone: a former member
+        pagination: Pages
+        newer: Newer
+        older: Older
+        kinds:
+          member_invited: "%{actor} invited %{email} as %{role}."
+          invitation_accepted: "%{actor} joined through an invitation."
+          invitation_revoked: "%{actor} revoked the invitation for %{email}."
+          role_changed: "%{actor} changed the role of %{target} from %{from} to %{to}."
+          member_revoked: "%{actor} removed %{target}."
+          member_left: "%{actor} left the project."
+          ownership_transferred: "%{actor} handed the project over to %{target}."
     leaves:
       create:
         left: You left %{project}.

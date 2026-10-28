@@ -1,0 +1,27 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+
+<%= render layout: "settings/shell", locals: { icon: "history", heading: t("projects.audit_events.index.heading"), description: t("projects.audit_events.index.description", project: current_project.name) } do %>
+  <% if @events.empty? %>
+    <p class="px-5 py-8 text-center text-sm text-muted sm:px-7"><%= t("projects.audit_events.index.empty") %></p>
+  <% else %>
+    <ul class="divide-y divide-line border-b border-line">
+      <% @events.each do |event| %>
+        <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-3 sm:px-7">
+          <p class="min-w-0 text-sm text-ink"><%= audit_event_summary(event) %></p>
+          <time datetime="<%= event.created_at.iso8601 %>" class="shrink-0 text-xs text-muted"><%= l(event.created_at, format: :short) %></time>
+        </li>
+      <% end %>
+    </ul>
+
+    <nav aria-label="<%= t("projects.audit_events.index.pagination") %>" class="flex items-center justify-between gap-3 px-5 py-4 sm:px-7">
+      <% if @page > 1 %>
+        <%= link_to t("projects.audit_events.index.newer"), audit_events_path(page: (@page == 2 ? nil : @page - 1)), class: button_classes(:secondary, "h-9 px-3 text-xs") %>
+      <% else %>
+        <span></span>
+      <% end %>
+      <% if @more %>
+        <%= link_to t("projects.audit_events.index.older"), audit_events_path(page: @page + 1), class: button_classes(:secondary, "h-9 px-3 text-xs") %>
+      <% end %>
+    </nav>
+  <% end %>
+<% end %>

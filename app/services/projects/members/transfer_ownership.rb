@@ -18,6 +18,7 @@ module Projects
           @from.project.lock!
           @to.update!(role: :owner)
           @from.update!(role: :member)
+          AuditEvents::Record.call(project: @from.project, kind: :ownership_transferred, actor: @from.user, target: @to.user)
           Result.success(@to)
         end
       end

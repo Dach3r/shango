@@ -4,7 +4,14 @@
 <%= render layout: "settings/shell", locals: { icon: "users", heading: t("projects.members.index.heading"), description: t("projects.members.index.description", project: current_project.name) } do %>
   <div class="divide-y divide-line">
     <section aria-labelledby="members_title">
-      <h2 id="members_title" class="px-5 pt-5 text-sm font-semibold text-ink sm:px-7"><%= t("projects.members.index.members", count: @members.size) %></h2>
+      <div class="flex items-center justify-between gap-3 px-5 pt-5 sm:px-7">
+        <h2 id="members_title" class="text-sm font-semibold text-ink"><%= t("projects.members.index.members", count: @members.size) %></h2>
+        <% if owner %>
+          <%= link_to audit_events_path, class: "inline-flex items-center gap-1.5 text-xs font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+            <%= lucide_icon "history", class: "size-3.5", "aria-hidden": true %><%= t("projects.members.index.activity") %>
+          <% end %>
+        <% end %>
+      </div>
       <ul class="mt-3 divide-y divide-line border-y border-line">
         <% @members.each do |member| %>
           <% mine = member.id == current_membership.id %>

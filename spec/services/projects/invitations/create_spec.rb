@@ -88,4 +88,14 @@ RSpec.describe Projects::Invitations::Create do
 
     expect(call.error).to eq(:duplicate)
   end
+
+  it "records the invitation", :aggregate_failures do
+    call(role: "owner")
+
+    expect(AuditEvent.last).to have_attributes(project:, kind: "member_invited", actor: inviter, metadata: include("email" => "new@example.com", "role" => "owner"))
+  end
+
+  it "records nothing when refused" do
+    expect { call(email: "nope") }.not_to change(AuditEvent, :count)
+  end
 end
