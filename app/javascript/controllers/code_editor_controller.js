@@ -432,6 +432,8 @@ export default class extends Controller {
       if (event.key === "Enter") {
         event.preventDefault();
         input.flush();
+        this.view.dispatch({ effects: this.cm.closeHoverTooltips });
+        this.view.focus();
       }
       if (event.key === "Escape") this.view.focus();
     });
