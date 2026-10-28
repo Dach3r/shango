@@ -1,5 +1,6 @@
 class AuthenticatedController < ApplicationController
   include ProjectContext
+  include Authorization
 
   layout -> { turbo_frame_request? ? "turbo_rails/frame" : "app" }
 
