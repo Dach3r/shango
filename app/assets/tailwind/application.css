@@ -1146,6 +1146,16 @@ dialog.modal[open]::backdrop {
   animation: modal-fade 0.16s ease-out;
 }
 
+.flash-progress {
+  animation: flash-progress var(--flash-delay) linear forwards;
+}
+
+@keyframes flash-progress {
+  to {
+    transform: scaleX(0);
+  }
+}
+
 @keyframes modal-in {
   from { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
 }
