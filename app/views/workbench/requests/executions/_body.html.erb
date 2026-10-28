@@ -12,7 +12,7 @@
   <% raw = execution.response_body %>
   <% html = body_language(execution.content_type) == "html" %>
   <div class="flex h-full min-h-0 flex-col" data-controller="response-body" data-response-body-pretty-value="<%= pretty %>" data-response-body-raw-value="<%= raw unless raw == pretty %>">
-    <div class="flex items-center gap-1 px-3 py-2">
+    <div class="flex items-center gap-1 border-b border-line bg-page py-2 pl-3 pr-2">
       <% modes = %w[pretty raw] + (html ? %w[preview] : []) %>
       <% modes.each do |mode| %>
         <button type="button" data-response-body-target="mode" data-action="response-body#show" data-response-body-mode-param="<%= mode %>" aria-pressed="<%= mode == "pretty" %>"
@@ -20,8 +20,9 @@
           <%= t("workbench.executions.modes.#{mode}") %>
         </button>
       <% end %>
+      <span data-controller="url-preview-slot" data-url-preview-slot class="ml-auto min-w-0 truncate px-2 font-mono text-xs text-body"></span>
       <button type="button" data-action="response-body#copy" data-copied-label="<%= t("workbench.executions.copied") %>"
-              class="ml-auto flex cursor-pointer items-center gap-1.5 px-2 py-1 text-xs font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+              class="flex shrink-0 cursor-pointer items-center gap-1.5 px-2 py-1 text-xs font-medium text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "copy", class: "size-3.5" %><span data-label><%= t("workbench.executions.copy") %></span>
       </button>
     </div>

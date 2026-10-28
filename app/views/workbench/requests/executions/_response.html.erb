@@ -49,7 +49,7 @@
 
     <%= render TabBar::Component.new(items: tabs, label: t("workbench.executions.tabs.label")) do %>
       <% if searchable %>
-        <div data-tabs-target="panel" data-name="body" data-controller="response-search" data-empty="true" class="group/search flex h-full items-center gap-1 px-2">
+        <div data-tabs-target="panel" data-name="body" data-controller="response-search" data-empty="true" class="group/search flex h-full items-center gap-1 pl-2 pr-4">
           <label class="flex items-center gap-1.5 border border-line bg-field/40 px-2 py-1 text-xs text-muted focus-within:border-accent/60">
             <%= lucide_icon "search", class: "size-3.5 shrink-0 text-faint" %>
             <input type="search" data-response-search-target="input" data-action="input->response-search#input keydown->response-search#keydown" placeholder="<%= t("workbench.executions.search.placeholder") %>" aria-label="<%= t("workbench.executions.search.label") %>" autocomplete="off" spellcheck="false"
