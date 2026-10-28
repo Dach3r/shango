@@ -1,5 +1,5 @@
-<%= render Modal::Component.new(icon: "send", title: t(".title"), form: "request_form", submit: t(".submit"), submit_icon: "plus") do %>
-  <%= form_with model: @api_request, scope: :api_request, url: workbench_collection_requests_path(@collection), id: "request_form", data: { turbo_frame: "_top" }, class: "space-y-4" do |form| %>
+<%= render Modal::Component.new(icon: "send", title: t(".title"), form: "new_request_form", submit: t(".submit"), submit_icon: "plus") do %>
+  <%= form_with model: @api_request, scope: :api_request, url: workbench_collection_requests_path(@collection), id: "new_request_form", data: { turbo_frame: "_top" }, class: "space-y-4" do |form| %>
     <%= render "workbench/shared/errors", record: @api_request %>
     <%= form.hidden_field :folder_id %>
 

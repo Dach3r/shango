@@ -113,6 +113,13 @@ RSpec.describe "Workbench requests" do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "does not share its form id with the editor of the open request", :aggregate_failures do
+      get new_workbench_collection_request_path(collection)
+
+      expect(response.body).to include('id="new_request_form"', 'form="new_request_form"')
+      expect(response.body).not_to include('id="request_form"')
+    end
   end
 
   describe "POST /workbench/collections/:collection_id/requests" do
