@@ -12,6 +12,20 @@ RSpec.describe Select::Component, type: :component do
     expect(page).to have_no_css("input[type=text]", visible: :all)
   end
 
+  it "keeps the caller's action on the hidden input next to its own re-render", :aggregate_failures do
+    render_inline(described_class.new(name: "n", options:, input_data: { action: "change->x#y" }))
+
+    expect(page).to have_css("input[data-action='change->x#y change->select#render']", visible: :all)
+  end
+
+  it "marks the options that keep the menu open and renders its content under the list", :aggregate_failures do
+    render_inline(described_class.new(name: "n", options:, keep_open: [2])) { "<p id=extra>More</p>".html_safe }
+
+    expect(page).to have_css("button[data-value='2'][data-keep-open]", visible: :all)
+    expect(page).to have_no_css("button[data-value='1'][data-keep-open]", visible: :all)
+    expect(page).to have_css("[data-select-target=menu] #extra", text: "More", visible: :all)
+  end
+
   it "falls back to the first option and omits the label when none matches", :aggregate_failures do
     render_inline(described_class.new(name: "n", options:, value: "zzz"))
 

@@ -61,8 +61,11 @@ export default class extends Controller {
     this.inputTarget.value = event.currentTarget.dataset.value;
     this.render();
 
-    this.close();
-    this.triggerTarget.focus();
+    if (event.currentTarget.hasAttribute("data-keep-open")) this.activate(event.currentTarget);
+    else {
+      this.close();
+      this.triggerTarget.focus();
+    }
     if (changed)
       this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }));
   }

@@ -1,5 +1,5 @@
 <div class="<%= wrapper_classes %>" data-controller="select" data-action="click@window->select#closeOnOutside keydown.esc->select#closeOnEscape">
-  <%= hidden_field_tag @name, selected_value, id: nil, data: @input_data.merge(select_target: "input") %>
+  <%= hidden_field_tag @name, selected_value, id: nil, data: @input_data.merge(select_target: "input", action: [@input_data[:action], "change->select#render"].compact.join(" ")) %>
 
   <button type="button" id="<%= @id %>" data-select-target="trigger" data-action="select#toggle keydown.down->select#openFromKey:prevent keydown.up->select#openFromKey:prevent"
           aria-haspopup="listbox" aria-expanded="false" <%= "disabled" if @disabled %> <%= tag.attributes(aria: { label: @label }) if @label %>
@@ -22,7 +22,7 @@
     <ul role="listbox" tabindex="-1" data-select-target="list" data-action="keydown->select#navigate" class="<%= list_classes %>">
       <% @options.each do |label, value| %>
         <li role="presentation">
-          <button type="button" role="option" tabindex="-1" data-select-target="option" data-value="<%= value %>" data-label="<%= label %>"
+          <button type="button" role="option" tabindex="-1" data-select-target="option" data-value="<%= value %>" data-label="<%= label %>" <%= "data-keep-open" if @keep_open.include?(value.to_s) %>
                   aria-selected="<%= value.to_s == selected_value %>" data-action="select#choose"
                   class="<%= option_classes %>">
             <span class="min-w-0 flex-1 truncate"><%= label %></span>
@@ -32,5 +32,6 @@
       <% end %>
       <li role="presentation" data-select-target="empty" hidden class="px-2.5 py-2 text-sm text-muted"><%= t("components.select.empty") %></li>
     </ul>
+    <%= content %>
   </div>
 </div>
