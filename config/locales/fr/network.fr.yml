@@ -2,6 +2,9 @@ fr:
   network:
     title: "Réseau"
     new_check: "Nouvelle vérification"
+    groups:
+      connectivity: Connectivité
+      dns: DNS
     tabs:
       label: "Outils réseau"
       dns: "DNS"

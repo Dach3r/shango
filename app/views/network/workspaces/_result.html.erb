@@ -1,11 +1,10 @@
 <%# The stored result of a saved run, or an empty state. Render with `kind:`, `check:` and `result:`. %>
 <% partials = { "dns" => "network/dns_checks/result", "ports" => "network/port_checks/result", "ping" => "network/pings/result" } %>
-<% icons = { "dns" => "search", "ports" => "radar", "ping" => "activity" } %>
 <% if check %>
   <%= render partials.fetch(kind), result:, check: %>
 <% else %>
   <div class="flex min-h-full flex-col items-center justify-center gap-3 py-12 text-center">
-    <%= lucide_icon icons.fetch(kind), class: "size-8 text-faint" %>
+    <%= lucide_icon Network::Tools.find(kind).icon, class: "size-8 text-faint" %>
     <p class="text-sm font-medium text-ink"><%= t("network.empty.#{kind}.title") %></p>
     <p class="max-w-xs text-sm text-muted"><%= t("network.empty.#{kind}.hint") %></p>
   </div>

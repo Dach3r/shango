@@ -30,6 +30,14 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(I18n.t("network.ping.submit"))
     end
 
+    it "has no page for an unknown tool" do
+      sign_in_with_project
+
+      get "/network/nmap"
+
+      expect(response).to have_http_status(:not_found)
+    end
+
     it "lists the saved runs of the project, newest first, and not those of other projects", :aggregate_failures do
       user, project = sign_in_with_project
       create(:network_check, project:, user:, target: "shango.dev", result: build(:network_check).result.merge("host" => "shango.dev"))

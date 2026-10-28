@@ -90,7 +90,7 @@ Rails.application.routes.draw do
     resources :pings, only: :create
     resources :checks, only: %i[show destroy]
     resource :history, only: :destroy
-    get ":kind", to: "workspaces#show", constraints: { kind: /dns|ports|ping/ }, as: :workspace
+    get ":kind", to: "workspaces#show", constraints: { kind: Regexp.union(Network::Tools.names) }, as: :workspace
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

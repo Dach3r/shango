@@ -2,6 +2,9 @@ hi:
   network:
     title: "नेटवर्क"
     new_check: "नई जाँच"
+    groups:
+      connectivity: कनेक्टिविटी
+      dns: DNS
     tabs:
       label: "नेटवर्क टूल"
       dns: "DNS"

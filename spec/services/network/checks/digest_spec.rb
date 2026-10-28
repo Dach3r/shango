@@ -47,4 +47,9 @@ RSpec.describe Network::Checks::Digest do
     expect(ping.call(1).tone).to eq("warn")
     expect(ping.call(0).tone).to eq("bad")
   end
+
+  it "has a digest for every kind and none for unknown ones", :aggregate_failures do
+    expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
+    expect { described_class.for("nmap", {}) }.to raise_error(KeyError)
+  end
 end

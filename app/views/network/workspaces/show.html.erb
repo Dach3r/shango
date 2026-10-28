@@ -2,11 +2,9 @@
 <% content_for :title, "#{t("network.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :main_class, "flex min-h-0 flex-1" %>
 
-<% tools = [
-     { name: "dns", label: t("network.tabs.dns"), icon: "search" },
-     { name: "ports", label: t("network.tabs.ports"), icon: "radar" },
-     { name: "ping", label: t("network.tabs.ping"), icon: "activity" }
-   ].map { |tool| tool.merge(path: network_workspace_path(tool[:name])) } %>
+<% tools = Network::Tools::ALL.map do |tool|
+     { name: tool.name, label: t("network.tabs.#{tool.name}"), icon: tool.icon, group: t("network.groups.#{tool.group}"), path: network_workspace_path(tool.name) }
+   end %>
 
 <div class="flex min-w-0 flex-1 flex-col lg:h-[calc(100vh-2.5rem)] lg:flex-row">
   <h1 class="sr-only"><%= t("network.title") %></h1>
