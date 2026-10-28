@@ -23,7 +23,7 @@
   <% end %>
 
   <% if @unsaved %>
-    <div role="status" class="flex items-center justify-between gap-3 border-b border-amber-500/40 bg-amber-500/15 px-4 py-2 text-xs text-ink">
+    <div role="status" class="flex items-center justify-between gap-3 border-b border-line bg-amber-500/15 px-4 py-2 text-xs text-ink">
       <span><%= t("workbench.requests.unsaved_notice") %></span>
       <%= link_to t("workbench.requests.discard_changes"), workbench_request_draft_path(api_request), data: { turbo_method: :delete }, class: "cursor-pointer text-ink underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %>
     </div>
