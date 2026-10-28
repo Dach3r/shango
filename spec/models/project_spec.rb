@@ -6,6 +6,8 @@ RSpec.describe Project do
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:icon) }
   it { is_expected.to validate_inclusion_of(:icon).in_array(described_class::ICONS) }
+  it { is_expected.to have_many(:invitations).dependent(:destroy) }
+  it { is_expected.to have_many(:audit_events).dependent(:destroy) }
 
   describe ".active" do
     it "excludes archived projects" do

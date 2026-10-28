@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_210836) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_223651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -75,6 +75,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_210836) do
     t.check_constraint "http_method::text = ANY (ARRAY['GET'::character varying::text, 'POST'::character varying::text, 'PUT'::character varying::text, 'PATCH'::character varying::text, 'DELETE'::character varying::text, 'HEAD'::character varying::text, 'OPTIONS'::character varying::text])", name: "api_requests_http_method_check"
   end
 
+  create_table "audit_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "actor_id"
+    t.uuid "target_id"
+    t.string "kind", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.index ["actor_id"], name: "index_audit_events_on_actor_id"
+    t.index ["project_id", "created_at"], name: "index_audit_events_on_project_id_and_created_at"
+    t.index ["target_id"], name: "index_audit_events_on_target_id"
+    t.check_constraint "kind::text = ANY (ARRAY['member_invited'::character varying, 'invitation_accepted'::character varying, 'invitation_revoked'::character varying, 'role_changed'::character varying, 'member_revoked'::character varying, 'member_left'::character varying, 'ownership_transferred'::character varying]::text[])", name: "audit_events_kind_check"
+  end
+
   create_table "collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.string "name", null: false
@@ -130,6 +143,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_210836) do
     t.datetime "updated_at", null: false
     t.index ["collection_id"], name: "index_folders_on_collection_id"
     t.index ["parent_id"], name: "index_folders_on_parent_id"
+  end
+
+  create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "inviter_id"
+    t.string "email", null: false
+    t.string "role", default: "member", null: false
+    t.string "token_digest", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inviter_id"], name: "index_invitations_on_inviter_id"
+    t.index ["project_id", "email"], name: "index_invitations_on_project_id_and_email_pending", unique: true, where: "((accepted_at IS NULL) AND (revoked_at IS NULL))"
+    t.index ["token_digest"], name: "index_invitations_on_token_digest", unique: true
+    t.check_constraint "role::text = ANY (ARRAY['member'::character varying, 'owner'::character varying]::text[])", name: "invitations_role_check"
   end
 
   create_table "memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -274,6 +304,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_210836) do
   add_foreign_key "api_requests", "folders"
   add_foreign_key "api_requests", "projects"
   add_foreign_key "api_requests", "users", on_delete: :cascade
+  add_foreign_key "audit_events", "projects"
+  add_foreign_key "audit_events", "users", column: "actor_id", on_delete: :nullify
+  add_foreign_key "audit_events", "users", column: "target_id", on_delete: :nullify
   add_foreign_key "collections", "projects"
   add_foreign_key "collections", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "cookies", "environments"
@@ -282,6 +315,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_210836) do
   add_foreign_key "environments", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "folders", "collections"
   add_foreign_key "folders", "folders", column: "parent_id"
+  add_foreign_key "invitations", "projects"
+  add_foreign_key "invitations", "users", column: "inviter_id", on_delete: :nullify
   add_foreign_key "memberships", "environments", column: "current_environment_id", on_delete: :nullify
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"

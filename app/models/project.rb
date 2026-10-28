@@ -10,6 +10,8 @@ class Project < ApplicationRecord
   has_many :api_requests, dependent: :destroy
   has_many :request_executions, dependent: :destroy
   has_many :network_checks, dependent: :destroy
+  has_many :invitations, dependent: :destroy
+  has_many :audit_events, dependent: :destroy
 
   scope :active, -> { where(archived_at: nil) }
 
