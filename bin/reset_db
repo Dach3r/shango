@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+require "fileutils"
+
+APP_ROOT = File.expand_path("..", __dir__)
+
+abort "bin/reset_db only runs in development" unless ENV.fetch("RAILS_ENV", "development") == "development"
+
+def system!(*args)
+  system({ "RAILS_ENV" => "development" }, *args, exception: true)
+end
+
+FileUtils.chdir APP_ROOT do
+  puts "== Rebuilding the development database from the schema files =="
+  system! "bin/rails db:drop db:create db:schema:load"
+
+  unless ARGV.include?("--no-seed")
+    puts "\n== Seeding =="
+    system! "bin/rails db:seed"
+  end
+
+  puts "\n== Removing old logs and tempfiles =="
+  system! "bin/rails log:clear tmp:clear"
+end

@@ -256,6 +256,7 @@ A **performance account** exists for development only: `perf@shango.test` / `pas
 | `bin/rails console` | Rails console. |
 | `bin/rails db:migrate` | Run pending migrations. |
 | `bin/rails db:reset` | Drop, recreate and re-seed the development database. |
+| `bin/reset_db` | Rebuild every development database from the schema files and seed (`--no-seed` to skip seeding). |
 | `bin/rails tailwindcss:build` | One-off Tailwind build (needed before running specs on a fresh checkout). |
 | `bin/rails db:encryption:init` | Generate Active Record encryption keys. |
 | `bin/ci` | Run the full local CI suite (see below). |
