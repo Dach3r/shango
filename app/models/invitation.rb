@@ -13,7 +13,7 @@ class Invitation < ApplicationRecord
   before_validation :normalize_email
   before_validation :issue_token, on: :create
 
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, allow_blank: true }
+  validates :email, presence: true, length: { maximum: 254 }, format: { with: URI::MailTo::EMAIL_REGEXP, allow_blank: true }
   validates :expires_at, presence: true
 
   scope :open, -> { where(accepted_at: nil, revoked_at: nil) }

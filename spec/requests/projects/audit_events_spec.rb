@@ -52,6 +52,17 @@ RSpec.describe "Team activity" do
       expect(response.body).to include(%(href="#{audit_events_path}"))
     end
 
+    it "survives hostile page parameters", :aggregate_failures do
+      event
+      ["99999999999999999999", "1e5", "abc", "-3"].each do |page|
+        get audit_events_path(page:)
+        expect(response).to have_http_status(:ok)
+      end
+
+      get "#{audit_events_path}?page[]=2&page[]=3"
+      expect(response).to have_http_status(:ok)
+    end
+
     it "treats invalid pages as the first one" do
       event
       get audit_events_path(page: "-3")

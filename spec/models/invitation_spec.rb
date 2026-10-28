@@ -20,6 +20,11 @@ RSpec.describe Invitation do
     expect(build(:invitation, role: "admin")).not_to be_valid
   end
 
+  it "caps the email length at the address limit", :aggregate_failures do
+    expect(build(:invitation, email: "#{"x" * 242}@example.com")).to be_valid
+    expect(build(:invitation, email: "#{"x" * 243}@example.com")).not_to be_valid
+  end
+
   describe "the token" do
     it "is known only when created and stored as a digest", :aggregate_failures do
       expect(invitation.token).to be_present

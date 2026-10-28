@@ -22,6 +22,15 @@ RSpec.describe "Members" do
       expect(response.body).to include(I18n.t("projects.members.index.make_owner"), I18n.t("projects.members.index.remove"), I18n.t("projects.members.index.transfer.title"))
     end
 
+    it "labels the confirmations after what they do", :aggregate_failures do
+      create(:invitation, project:, email: "pending@example.com")
+      get members_path
+
+      %w[remove leave transfer.submit invitations.revoke].each do |key|
+        expect(response.body).to include(%(data-confirm-label="#{I18n.t("projects.members.index.#{key}")}"))
+      end
+    end
+
     it "shows members only their own leave action", :aggregate_failures do
       sign_in member_membership.user
       member_membership.user.update!(current_membership: member_membership)

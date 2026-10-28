@@ -27,10 +27,10 @@
             <span class="inline-flex items-center border border-line px-2 py-0.5 text-xs font-medium text-body"><%= t("projects.members.index.roles.#{member.role}") %></span>
             <div class="flex items-center gap-2">
               <% if mine %>
-                <%= button_to t("projects.members.index.leave"), leave_path, method: :post, form_class: "contents", class: button_classes(:secondary, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.confirm_leave", project: current_project.name) } } %>
+                <%= button_to t("projects.members.index.leave"), leave_path, method: :post, form_class: "contents", class: button_classes(:secondary, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.confirm_leave", project: current_project.name), confirm_label: t("projects.members.index.leave") } } %>
               <% elsif owner %>
                 <%= button_to member.owner? ? t("projects.members.index.make_member") : t("projects.members.index.make_owner"), member_path(member), method: :patch, params: { member: { role: member.owner? ? "member" : "owner" } }, form_class: "contents", class: button_classes(:secondary, "h-9 px-3 text-xs") %>
-                <%= button_to t("projects.members.index.remove"), member_path(member), method: :delete, form_class: "contents", class: button_classes(:danger, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.confirm_remove", name: member.user.full_name) } } %>
+                <%= button_to t("projects.members.index.remove"), member_path(member), method: :delete, form_class: "contents", class: button_classes(:danger, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.confirm_remove", name: member.user.full_name), confirm_label: t("projects.members.index.remove") } } %>
               <% end %>
             </div>
           </li>
@@ -42,7 +42,7 @@
       <section aria-labelledby="transfer_title" class="px-5 py-5 sm:px-7">
         <h2 id="transfer_title" class="text-sm font-semibold text-ink"><%= t("projects.members.index.transfer.title") %></h2>
         <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("projects.members.index.transfer.hint") %></p>
-        <%= form_with url: ownership_transfer_path, method: :post, class: "mt-3 flex flex-wrap items-end gap-3", data: { turbo_confirm: t("projects.members.index.transfer.confirm") } do %>
+        <%= form_with url: ownership_transfer_path, method: :post, class: "mt-3 flex flex-wrap items-end gap-3", data: { turbo_confirm: t("projects.members.index.transfer.confirm"), confirm_label: t("projects.members.index.transfer.submit") } do %>
           <%= render Select::Component.new(name: "member_id", label: t("projects.members.index.transfer.select"), options: @members.reject { |member| member.id == current_membership.id }.map { |member| [member.user.full_name, member.id] }, class: "w-64") %>
           <%= button_tag t("projects.members.index.transfer.submit"), type: :submit, class: button_classes(:secondary, "h-10 px-4") %>
         <% end %>
@@ -83,7 +83,7 @@
                     <%= invitation.expired? ? t("projects.members.index.invitations.expired") : t("projects.members.index.invitations.expires", date: l(invitation.expires_at.to_date, format: :short)) %>
                   </p>
                 </div>
-                <%= button_to t("projects.members.index.invitations.revoke"), invitation_path(invitation), method: :delete, form_class: "contents", class: button_classes(:danger, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.invitations.confirm_revoke", email: invitation.email) } } %>
+                <%= button_to t("projects.members.index.invitations.revoke"), invitation_path(invitation), method: :delete, form_class: "contents", class: button_classes(:danger, "h-9 px-3 text-xs"), form: { data: { turbo_confirm: t("projects.members.index.invitations.confirm_revoke", email: invitation.email), confirm_label: t("projects.members.index.invitations.revoke") } } %>
               </li>
             <% end %>
           </ul>
