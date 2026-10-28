@@ -12,6 +12,12 @@ export default class extends Controller {
     )
       this.activeValue = remembered;
     this.render();
+    this.rerender = () => this.render();
+    document.addEventListener("turbo:morph", this.rerender);
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.rerender);
   }
 
   select(event) {
