@@ -30,6 +30,15 @@ RSpec.describe Cookie do
       expect(build(:cookie, project: first.project, environment: create(:environment, project: first.project), name: "a")).to be_valid
     end
 
+    it "does not share with subdomains from a public suffix", :aggregate_failures do
+      expect(build(:cookie, domain: "com", host_only: false)).not_to be_valid
+      expect(build(:cookie, domain: "co.uk", host_only: false)).not_to be_valid
+      expect(build(:cookie, domain: "github.io", host_only: false)).not_to be_valid
+      expect(build(:cookie, domain: "foo.co.uk", host_only: false)).to be_valid
+      expect(build(:cookie, domain: "app.github.io", host_only: false)).to be_valid
+      expect(build(:cookie, domain: "co.uk", host_only: true)).to be_valid
+    end
+
     it "only shares with subdomains from a domain with a dot that is not an IP", :aggregate_failures do
       expect(build(:cookie, domain: "localhost", host_only: false)).not_to be_valid
       expect(build(:cookie, domain: "127.0.0.1", host_only: false)).not_to be_valid

@@ -21,6 +21,11 @@ class Cookie < ApplicationRecord
   scope :live, -> { where(expires_at: nil).or(where(expires_at: Time.current..)) }
   scope :expired, -> { where(expires_at: ...Time.current) }
 
+  # A domain a cookie can be shared with subdomains from: not an IP and not a public suffix (com, co.uk, github.io).
+  def self.shareable_domain?(domain)
+    !domain.match?(IP_HOST) && PublicSuffix.valid?(domain)
+  end
+
   # Keeps a jar within MAX_PER_JAR by dropping its least recently updated cookies.
   def self.trim(project, environment)
     jar = for_jar(project, environment)
@@ -34,11 +39,11 @@ class Cookie < ApplicationRecord
 
   private
 
-  # A cookie shared with subdomains needs a registrable-looking domain, never an IP or a single label.
+  # A cookie shared with subdomains needs a registrable domain, never an IP or a public suffix.
   def domain_scope
     return if host_only || domain.blank?
 
-    errors.add(:domain, :invalid) if domain.match?(IP_HOST) || !domain.include?(".")
+    errors.add(:domain, :invalid) unless self.class.shareable_domain?(domain)
   end
 
   def host_matches?(host)

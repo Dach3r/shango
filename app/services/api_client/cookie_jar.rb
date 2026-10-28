@@ -66,7 +66,7 @@ module ApiClient
     end
 
     def domain_allowed?(host, domain)
-      host == domain || (host.end_with?(".#{domain}") && !host.match?(/\A[\d.]+\z|:/) && domain.include?("."))
+      host == domain || (host.end_with?(".#{domain}") && !host.match?(Cookie::IP_HOST) && Cookie.shareable_domain?(domain))
     end
 
     def path_for(uri, attribute)

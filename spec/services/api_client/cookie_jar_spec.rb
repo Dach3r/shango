@@ -114,6 +114,8 @@ RSpec.describe ApiClient::CookieJar do
       jar.store(url, "a=1; Domain=other.com")
       jar.store(url, "b=1; Domain=com")
       jar.store("http://10.0.0.1/", "c=1; Domain=0.0.1")
+      jar.store("https://api.example.co.uk/", "d=1; Domain=co.uk")
+      jar.store("https://me.github.io/", "e=1; Domain=github.io")
 
       expect(Cookie.count).to eq(0)
     end
