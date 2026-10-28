@@ -555,6 +555,8 @@ More in [`docs/architecture.md`](docs/architecture.md) §7. If you find a vulner
 
 ## Contributing
 
+The full guide is in [`CONTRIBUTING.md`](CONTRIBUTING.md). In short:
+
 1. Read [`docs/product.md`](docs/product.md) and [`docs/architecture.md`](docs/architecture.md), and check the real code before assuming a feature exists.
 2. Stay inside the scope of the change; open an issue or ask before significant product or architecture changes.
 3. Branch from `main`, run `bin/setup` once so the commit hooks are active.
@@ -562,7 +564,7 @@ More in [`docs/architecture.md`](docs/architecture.md) §7. If you find a vulner
 5. Run `bin/ci` before opening the pull request.
 6. Follow the commit format described in [Conventions](#conventions).
 
-External contributions require a Contributor License Agreement (CLA) before they can be merged, so the project can keep the option to relicense.
+Opening a pull request means you accept the AGPL-3.0 for your contribution and grant the maintainers the right to relicense it; there is nothing to sign (see [`CONTRIBUTING.md`](CONTRIBUTING.md#license-and-relicensing)).
 
 ## License
 

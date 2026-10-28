@@ -1,0 +1,19 @@
+name: Contribution terms
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  terms-accepted:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the contribution terms checkbox
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if ! grep -Eq '^[[:space:]]*- \[[xX]\] I agree to the \[contribution terms\]' <<< "$PR_BODY"; then
+            echo "::error::Tick the license checkbox in the pull request description to accept the contribution terms (see CONTRIBUTING.md)."
+            exit 1
+          fi

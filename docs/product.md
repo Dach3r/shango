@@ -267,7 +267,7 @@ Shango is licensed under the [GNU Affero General Public License v3.0](../LICENSE
 
 - Anyone can run, modify, and self-host Shango freely.
 - Anyone offering a modified Shango as a network service must publish their changes under the same license, which protects the option of a managed cloud version.
-- Relicensing is possible only for code whose copyright we hold or have been granted the right to relicense. Before accepting the first external contribution, set up a CLA (or equivalent copyright assignment) that allows relicensing. Versions already published keep the license they were released under.
+- Relicensing is possible only for code whose copyright we hold or have been granted the right to relicense. There is no signed CLA: `CONTRIBUTING.md` states that opening a pull request means the contributor accepts the AGPL-3.0 and grants the maintainers a perpetual, irrevocable right to relicense the contribution, keeping their copyright. Contributors are notified of a relicense as a courtesy; their reply is not required. Because the grant is accepted by conduct rather than signature, it is weaker evidence than a signed CLA; revisit this (for example with a CLA bot) if the project grows or a commercial relicense becomes real. Versions already published keep the license they were released under.
 
 ## 14. Roadmap
 
