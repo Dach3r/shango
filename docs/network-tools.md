@@ -144,7 +144,7 @@ Open decision (see §10): require proof of ownership (DNS TXT or file) before po
 | Host does not resolve | Port check / ping: error `unresolved`. DNS: `NXDOMAIN` shown per resolver |
 | One resolver times out | That row shows `timeout`; the others still render; summary counts it as no answer |
 | Expected value empty | No match column, summary shows only how many resolvers answered and whether answers agree with each other |
-| Resolvers disagree | Answers shown per row; summary says `answers differ` (the propagation-in-progress case) |
+| Resolvers disagree | Answers shown per row; summary says `answers differ` (the propagation-in-progress case, or geo/load-balanced DNS); the tone stays `ok` while every resolver answered, `warn` only when some did not (or, with an expected value, some do not match) |
 | `TXT` records longer than 255 bytes | Chunks joined before comparing |
 | Trailing dots, case | Names compared case-insensitively without the trailing dot; `MX` compared as `priority host` |
 | Port spec invalid / above 65535 / more than 100 ports | Form error |

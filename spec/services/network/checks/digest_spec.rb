@@ -23,9 +23,10 @@ RSpec.describe Network::Checks::Digest do
     expect(dns({ total: 4, answered: 0, matched: 0, agree: true })).to have_attributes(tone: "bad", key: "network.dns.summary.answered")
   end
 
-  it "settles a run without expected value when the answers agree, and warns when they differ", :aggregate_failures do
+  it "settles a run without expected value once every resolver answered, even if the answers differ", :aggregate_failures do
     expect(dns({ total: 2, answered: 2, matched: 0, agree: true }).tone).to eq("ok")
-    expect(dns({ total: 2, answered: 2, matched: 0, agree: false }).tone).to eq("warn")
+    expect(dns({ total: 2, answered: 2, matched: 0, agree: false }).tone).to eq("ok")
+    expect(dns({ total: 2, answered: 1, matched: 0, agree: true }).tone).to eq("warn")
   end
 
   it "handles an empty run" do
