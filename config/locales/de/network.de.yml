@@ -9,7 +9,6 @@ de:
     tabs:
       label: Netzwerk-Tools
       dns: DNS
-      reverse_dns: "Reverse-DNS"
       ports: Ports
       ping: Ping
       subnet: "Subnetzrechner"

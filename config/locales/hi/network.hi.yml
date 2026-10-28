@@ -9,7 +9,6 @@ hi:
     tabs:
       label: "नेटवर्क टूल"
       dns: "DNS"
-      reverse_dns: "रिवर्स DNS"
       ports: "पोर्ट"
       ping: "Ping"
       subnet: "सबनेट कैलकुलेटर"

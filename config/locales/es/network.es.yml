@@ -9,7 +9,6 @@ es:
     tabs:
       label: Herramientas de red
       dns: DNS
-      reverse_dns: "DNS inverso"
       ports: Puertos
       ping: Ping
       subnet: "Calculadora de subredes"

@@ -9,7 +9,6 @@ ja:
     tabs:
       label: ネットワークツール
       dns: DNS
-      reverse_dns: "逆引き DNS"
       ports: ポート
       ping: Ping
       subnet: "サブネット計算"

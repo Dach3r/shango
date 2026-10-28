@@ -9,7 +9,6 @@ ru:
     tabs:
       label: Сетевые инструменты
       dns: DNS
-      reverse_dns: "Обратный DNS"
       ports: Порты
       ping: Ping
       subnet: "Калькулятор подсетей"

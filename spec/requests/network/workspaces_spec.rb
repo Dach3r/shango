@@ -30,13 +30,12 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(I18n.t("network.ping.submit"))
     end
 
-    it "opens reverse DNS as the DNS checker with PTR preselected", :aggregate_failures do
+    it "switches the domain placeholder to an IP address when PTR is chosen", :aggregate_failures do
       sign_in_with_project
-      get network_workspace_path("reverse_dns")
+      get network_root_path
 
-      expect(response.body).to include(I18n.t("network.dns.submit"), I18n.t("network.history.dns"), I18n.t("network.dns.ptr_placeholder"))
-      expect(response.body).to include(%(value="PTR"))
-      expect(response.body).to match(/<a(?=[^>]*aria-current="page")[^>]*href="#{network_workspace_path("reverse_dns")}"/)
+      expect(response.body).to include('data-controller="dns-type variable-autocomplete"', 'data-dns-type-target="type"', 'data-dns-type-target="field"')
+      expect(response.body).to include(%(data-dns-type-ptr-value="#{I18n.t("network.dns.ptr_placeholder")}"), %(placeholder="#{I18n.t("network.dns.domain_placeholder")}"))
     end
 
     it "renders the subnet calculator without a history", :aggregate_failures do

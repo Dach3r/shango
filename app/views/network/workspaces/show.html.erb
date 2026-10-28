@@ -11,6 +11,6 @@
   <%= render NetworkRail::Component.new(items: tools, current: @tool.name, label: t("network.tabs.label")) %>
 
   <div class="min-h-0 min-w-0 flex-1">
-    <%= render "network/workspaces/#{@tool.kind}", check: @check, result: @result, tool: @tool %>
+    <%= render "network/workspaces/#{@tool.name}", check: @check, result: @result %>
   </div>
 </div>

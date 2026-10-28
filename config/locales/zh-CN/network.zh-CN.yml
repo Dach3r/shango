@@ -9,7 +9,6 @@ zh-CN:
     tabs:
       label: 网络工具
       dns: DNS
-      reverse_dns: "反向 DNS"
       ports: 端口
       ping: Ping
       subnet: "子网计算器"

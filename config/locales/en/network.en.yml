@@ -9,7 +9,6 @@ en:
     tabs:
       label: Network tools
       dns: DNS
-      reverse_dns: "Reverse DNS"
       ports: Ports
       ping: Ping
       subnet: "Subnet calculator"

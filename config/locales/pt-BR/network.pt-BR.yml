@@ -9,7 +9,6 @@ pt-BR:
     tabs:
       label: Ferramentas de rede
       dns: DNS
-      reverse_dns: "DNS reverso"
       ports: Portas
       ping: Ping
       subnet: "Calculadora de sub-redes"

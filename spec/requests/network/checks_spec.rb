@@ -38,12 +38,11 @@ RSpec.describe "Network checks" do
       expect(response.body).to include(CGI.escapeHTML(I18n.t("network.history.previous", time: "about 2 hours", detail: I18n.t("network.dns.summary.answered", answered: 1, total: 1))))
     end
 
-    it "shows a saved reverse DNS run under its own rail entry", :aggregate_failures do
+    it "shows a saved reverse DNS run in the DNS tool with the IP placeholder" do
       reverse = create(:network_check, project:, user:, target: "8.8.8.8", input: { "domain" => "8.8.8.8", "type" => "PTR" })
       get network_check_path(reverse)
 
-      expect(response.body).to match(/<a(?=[^>]*aria-current="page")[^>]*href="#{network_workspace_path("reverse_dns")}"/)
-      expect(response.body).not_to match(/<a(?=[^>]*aria-current="page")[^>]*href="#{network_workspace_path("dns")}"/)
+      expect(response.body).to include(%(placeholder="#{I18n.t("network.dns.ptr_placeholder")}"))
     end
 
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
@@ -75,13 +74,6 @@ RSpec.describe "Network checks" do
     it "deletes the run and goes back to the tool", :aggregate_failures do
       expect { delete network_check_path(check) }.to change(NetworkCheck, :count).by(-1)
       expect(response).to redirect_to(network_workspace_path("dns"))
-    end
-
-    it "goes back to reverse DNS after deleting one of its runs" do
-      reverse = create(:network_check, project:, user:, input: { "domain" => "8.8.8.8", "type" => "PTR" })
-      delete network_check_path(reverse)
-
-      expect(response).to redirect_to(network_workspace_path("reverse_dns"))
     end
 
     it "does not delete runs of other members of the project", :aggregate_failures do

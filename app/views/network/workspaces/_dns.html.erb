@@ -1,9 +1,9 @@
-<%# Panel of the dns tool. Render with `check:` (the saved run on display, or nil), `result:` (its stored result) and `tool:` (the rail entry on display). %>
+<%# Panel of the dns tool. Render with `check:` (the saved run on display, or nil) and `result:` (its stored result). %>
 <div class="flex h-full min-h-0 flex-col-reverse lg:flex-row">
   <%= render "network/workspaces/history", tool: "dns", current: check %>
 
   <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
-    <%= render "network/workspaces/dns_form", input: check&.input || {}, tool: %>
+    <%= render "network/workspaces/dns_form", input: check&.input || {} %>
 
     <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
       <div id="dns_result" class="min-h-0 min-w-0 flex-1 overflow-y-auto p-6 empty:hidden lg:empty:block" aria-live="polite"><%= render "network/workspaces/result", kind: "dns", check:, result: %></div>
