@@ -1,6 +1,7 @@
 es:
   network:
     title: Red
+    new_check: Nueva comprobación
     tabs:
       label: Herramientas de red
       dns: DNS
