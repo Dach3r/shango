@@ -429,7 +429,10 @@ export default class extends Controller {
     });
     input.addEventListener("change", input.flush);
     input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") input.flush();
+      if (event.key === "Enter") {
+        event.preventDefault();
+        input.flush();
+      }
       if (event.key === "Escape") this.view.focus();
     });
     return input;
