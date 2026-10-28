@@ -4,7 +4,7 @@
 module Seeds
   class DevelopmentAccount
     EMAIL = "dev@shango.test".freeze
-    PASSWORD = "password123".freeze
+    PASSWORD = "password".freeze
     PROJECT_NAME = "Restful Booker".freeze
     FIXTURES = Rails.root.join("db/seeds/development/fixtures")
 

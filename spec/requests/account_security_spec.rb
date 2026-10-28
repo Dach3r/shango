@@ -26,7 +26,7 @@ RSpec.describe "Account security" do
     end
 
     it "lets new accounts sign in without confirming", :aggregate_failures do
-      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password123", password_confirmation: "password123" } }
+      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password", password_confirmation: "password" } }
 
       expect(response).to redirect_to(new_project_path)
       expect(ActionMailer::Base.deliveries).to be_empty
@@ -59,11 +59,11 @@ RSpec.describe "Account security" do
     end
 
     it "requires confirmation before signing in", :aggregate_failures do
-      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password123", password_confirmation: "password123" } }
+      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password", password_confirmation: "password" } }
 
       expect(response).to redirect_to(root_path)
       expect(ActionMailer::Base.deliveries.last.subject).to be_present
-      post user_session_path, params: { user: { email: "grace@example.com", password: "password123" } }
+      post user_session_path, params: { user: { email: "grace@example.com", password: "password" } }
       expect(response).not_to redirect_to(new_project_path)
     end
 
@@ -82,7 +82,7 @@ RSpec.describe "Account security" do
 
     it "does not enforce confirmation when the operator opts out" do
       enable_mail("SHANGO_REQUIRE_EMAIL_CONFIRMATION" => "false")
-      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password123", password_confirmation: "password123" } }
+      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password", password_confirmation: "password" } }
 
       expect(response).to redirect_to(new_project_path)
     end
@@ -94,7 +94,7 @@ RSpec.describe "Account security" do
     it "locks the account after the maximum failed attempts", :aggregate_failures do
       stub_const("ENV", ENV.to_h.merge("SHANGO_RATE_LIMIT_SIGN_IN" => "1000/60"))
       User.maximum_attempts.times { post user_session_path, params: { user: { email: user.email, password: "wrong-password" } } }
-      post user_session_path, params: { user: { email: user.email, password: "password123" } }
+      post user_session_path, params: { user: { email: user.email, password: "password" } }
 
       expect(user.reload.access_locked?).to be(true)
       expect(response).to have_http_status(:unprocessable_content)
@@ -175,7 +175,7 @@ RSpec.describe "Account security" do
     end
 
     it "sends a confirmation mail with the token on sign up", :aggregate_failures do
-      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password123", password_confirmation: "password123" } }
+      post user_registration_path, params: { user: { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password", password_confirmation: "password" } }
 
       mail = ActionMailer::Base.deliveries.last
       expect(mail.to).to eq(["grace@example.com"])

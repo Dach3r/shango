@@ -246,7 +246,7 @@ Open the app, sign up, and create your first project (name and icon). You land i
 
 `bin/rails db:seed` (also run by `db:setup` and `db:prepare` on a fresh database) loads `db/seeds/base/*.seeds.rb` in every environment, then `db/seeds/<environment>/*.seeds.rb` for the current one. Seeds are idempotent.
 
-A **development account** exists for development only: `dev@shango.test` / `password123`, with one project holding the public [Restful-Booker](https://restful-booker.herokuapp.com) API imported from its Postman collection and environment (`db/seeds/development/fixtures`), so the API Client can be tried against live requests. Rebuild it with `SEED_RESET=1 bin/rails db:seed`.
+A **development account** exists for development only: `dev@shango.test` / `password`, with one project holding the public [Restful-Booker](https://restful-booker.herokuapp.com) API imported from its Postman collection and environment (`db/seeds/development/fixtures`), so the API Client can be tried against live requests. Rebuild it with `SEED_RESET=1 bin/rails db:seed`.
 
 ### Useful development commands
 

@@ -183,7 +183,7 @@ RSpec.describe "Throttling" do
 
     it "does not create an account once the sign up limit is reached", :aggregate_failures do
       limit(:sign_up, 1)
-      params = { user: { first_name: "A", last_name: "B", password: "password123", password_confirmation: "password123" } }
+      params = { user: { first_name: "A", last_name: "B", password: "password", password_confirmation: "password" } }
       post user_registration_path, params: params.deep_merge(user: { email: "one@example.com" })
 
       expect { post user_registration_path, params: params.deep_merge(user: { email: "two@example.com" }) }.not_to change(User, :count)

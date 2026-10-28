@@ -137,7 +137,7 @@ RSpec.describe User do
     end
 
     it "is stored hashed" do
-      expect(create(:user, password: "password123", password_confirmation: "password123").encrypted_password).not_to include("password123")
+      expect(create(:user, password: "password", password_confirmation: "password").encrypted_password).not_to include("password")
     end
   end
 

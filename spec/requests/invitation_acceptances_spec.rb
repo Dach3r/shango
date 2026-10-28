@@ -12,7 +12,7 @@ RSpec.describe "Invitation acceptance" do
 
       expect(response).to redirect_to(new_user_session_path)
 
-      post user_session_path, params: { user: { email: user.email, password: "password123" } }
+      post user_session_path, params: { user: { email: user.email, password: "password" } }
       expect(response).to redirect_to("http://www.example.com/invitation_acceptance?token=#{token}")
     end
 
@@ -95,7 +95,7 @@ RSpec.describe "Invitation acceptance" do
   describe "signing up from the link" do
     it "lands on the invitation instead of the new project form", :aggregate_failures do
       get invitation_acceptance_path(token:)
-      post user_registration_path, params: { user: { first_name: "In", last_name: "Vitee", email: "invitee@example.com", password: "password123", password_confirmation: "password123" } }
+      post user_registration_path, params: { user: { first_name: "In", last_name: "Vitee", email: "invitee@example.com", password: "password", password_confirmation: "password" } }
 
       expect(response).to redirect_to("http://www.example.com/invitation_acceptance?token=#{token}")
     end

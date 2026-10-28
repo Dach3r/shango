@@ -55,7 +55,7 @@ RSpec.describe "db/seeds" do
       project = user.current_membership.project
 
       expect(user).to be_confirmed
-      expect(user.valid_password?("password123")).to be(true)
+      expect(user.valid_password?("password")).to be(true)
       expect(project.name).to eq("Restful Booker")
       expect(user.available_memberships.count).to eq(1)
       expect(project.collections.pluck(:name)).to eq(["restful-booker API"])

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Users::Destroy do
   let(:user) { create(:user) }
-  let(:password) { "password123" }
+  let(:password) { "password" }
 
   def call(password: self.password)
     described_class.call(user:, password:)

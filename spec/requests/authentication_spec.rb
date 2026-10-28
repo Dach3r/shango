@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Authentication" do
   let(:user_params) do
-    { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password123", password_confirmation: "password123" }
+    { first_name: "Grace", last_name: "Hopper", email: "grace@example.com", password: "password", password_confirmation: "password" }
   end
 
   describe "guests" do
@@ -193,7 +193,7 @@ RSpec.describe "Authentication" do
     before { sign_in_with_project(user) }
 
     it "deletes the account with the right password and signs out", :aggregate_failures do
-      expect { delete user_registration_path, params: { current_password: "password123" } }.to change(User, :count).by(-1)
+      expect { delete user_registration_path, params: { current_password: "password" } }.to change(User, :count).by(-1)
       expect(response).to redirect_to(new_user_session_path)
 
       get new_project_path
@@ -215,7 +215,7 @@ RSpec.describe "Authentication" do
       user.memberships.first.update!(role: "owner")
       create(:membership, project:)
 
-      expect { delete user_registration_path, params: { current_password: "password123" } }.not_to change(User, :count)
+      expect { delete user_registration_path, params: { current_password: "password" } }.not_to change(User, :count)
       expect(flash[:alert]).to eq(I18n.t("devise.registrations.destroy.sole_owner", projects: project.name))
     end
 
@@ -277,9 +277,9 @@ RSpec.describe "Authentication" do
     end
 
     it "does not reveal the password in the re-rendered form" do
-      sign_up(first_name: "", password: "password123-visible")
+      sign_up(first_name: "", password: "password-visible")
 
-      expect(response.body).not_to include("password123-visible")
+      expect(response.body).not_to include("password-visible")
     end
   end
 
@@ -287,7 +287,7 @@ RSpec.describe "Authentication" do
     let!(:user) { create(:user, email: "grace@example.com") }
 
     it "signs in ignoring email case and spaces", :aggregate_failures do
-      post user_session_path, params: { user: { email: " GRACE@example.com ", password: "password123" } }
+      post user_session_path, params: { user: { email: " GRACE@example.com ", password: "password" } }
 
       expect(response).to redirect_to(root_path)
     end
@@ -329,7 +329,7 @@ RSpec.describe "Authentication" do
       put user_registration_path(tab: "security"), params: { user: { password: "short", password_confirmation: "short" } }
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(user.reload.valid_password?("password123")).to be(true)
+      expect(user.reload.valid_password?("password")).to be(true)
     end
 
     it "does not need the current password to change the profile" do
