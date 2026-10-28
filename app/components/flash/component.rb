@@ -3,7 +3,7 @@ class Flash::Component < ApplicationComponent
     notice: { icon: "circle-check", role: "status", tone: "bg-solid", glyph: "border-solid" },
     alert: { icon: "circle-alert", role: "alert", tone: "bg-danger", glyph: "border-danger" }
   }.freeze
-  BASE = "pointer-events-auto relative w-full border-b border-line bg-card text-sm text-ink transition duration-300 ease-out starting:-translate-y-full data-[state=closed]:-translate-y-full"
+  BASE = "pointer-events-auto relative w-full border-b-2 bg-card shadow-dropdown text-sm text-ink transition duration-300 ease-out starting:-translate-y-full data-[state=closed]:-translate-y-full"
 
   def initialize(message:, kind: :notice, **options)
     @message = message
