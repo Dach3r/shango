@@ -7,8 +7,8 @@
     <% port = input.fetch("port", Network::Pings::Run::DEFAULT_PORT).to_s %>
     <% port_options = Network::Services::NAMES.map { |number, name| ["#{number} · #{name}", number] } %>
     <% port_options.unshift([port, port]) unless Network::Services::NAMES.key?(port.to_i) && port == port.to_i.to_s %>
-    <%= render Select::Component.new(disabled: readonly, name: "ping[port]", options: port_options, value: port, id: "ping_port", label: t("network.ping.port"), searchable: false, dock: true, dock_top: "top-14", class: "w-44 font-mono aria-expanded:bg-ink/[0.08]!") %>
-    <%= render Select::Component.new(disabled: readonly, name: "ping[attempts]", options: (1..Network::Pings::Run::MAX_ATTEMPTS).map { |count| [t("network.ping.attempts_option", count:), count] }, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), id: "ping_attempts", label: t("network.ping.attempts"), searchable: false, dock: true, dock_top: "top-14", class: "w-36 font-mono aria-expanded:bg-ink/[0.08]!") %>
+    <%= render Select::Component.new(disabled: readonly, name: "ping[port]", options: port_options, value: port, id: "ping_port", label: t("network.ping.port"), searchable: false, dock: true, dock_top: "top-14", class: "w-44 font-mono aria-expanded:bg-ink/[0.08]! disabled:cursor-default disabled:opacity-100 disabled:[&_svg]:hidden") %>
+    <%= render Select::Component.new(disabled: readonly, name: "ping[attempts]", options: (1..Network::Pings::Run::MAX_ATTEMPTS).map { |count| [t("network.ping.attempts_option", count:), count] }, value: input.fetch("attempts", Network::Pings::Run::DEFAULT_ATTEMPTS), id: "ping_attempts", label: t("network.ping.attempts"), searchable: false, dock: true, dock_top: "top-14", class: "w-36 font-mono aria-expanded:bg-ink/[0.08]! disabled:cursor-default disabled:opacity-100 disabled:[&_svg]:hidden") %>
     <% if readonly %>
       <%= link_to network_workspace_path("ping"), class: button_classes(:primary) do %>
         <%= lucide_icon "plus", class: "size-4" %><%= t("network.new_check") %>
