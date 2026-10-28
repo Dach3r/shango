@@ -308,6 +308,7 @@ fr:
       placeholder: "Corps de la requête. Utilisez {{variables}} si nécessaire."
       graphql_variables: "Variables (JSON)"
       form_hint: "Les lignes de texte sont envoyées comme champs ; choisissez Fichier pour téléverser un fichier."
+      form_hint_draft: "Les lignes de texte sont envoyées comme champs."
       binary: "Fichier à envoyer comme corps brut"
       current_file: "Fichier actuel : %{name}"
       save_first: "Enregistrez d'abord cette requête dans une collection pour joindre des fichiers."

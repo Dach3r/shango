@@ -307,6 +307,7 @@ zh-CN:
       placeholder: 请求 Body。需要时可使用 {{variables}}。
       graphql_variables: 变量（JSON）
       form_hint: 文本行作为字段发送；选择“文件”可上传文件。
+      form_hint_draft: "文本行作为字段发送。"
       binary: 作为原始 Body 发送的文件
       current_file: "当前文件：%{name}"
       save_first: "请先将此请求保存到集合中，再附加文件。"

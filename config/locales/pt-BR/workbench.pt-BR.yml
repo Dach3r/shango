@@ -308,6 +308,7 @@ pt-BR:
       placeholder: Body da requisição. Use {{variables}} onde precisar.
       graphql_variables: Variáveis (JSON)
       form_hint: As linhas de texto são enviadas como campos; escolha Arquivo para enviar um arquivo.
+      form_hint_draft: "As linhas de texto são enviadas como campos."
       binary: Arquivo a enviar como body bruto
       current_file: "Arquivo atual: %{name}"
       save_first: "Salve primeiro esta requisição em uma coleção para anexar arquivos."

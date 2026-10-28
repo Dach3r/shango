@@ -308,6 +308,7 @@ de:
       placeholder: Anfrage-Body. Verwende bei Bedarf {{variables}}.
       graphql_variables: Variablen (JSON)
       form_hint: Textzeilen werden als Felder gesendet; wähle Datei, um eine Datei hochzuladen.
+      form_hint_draft: "Textzeilen werden als Felder gesendet."
       binary: Datei, die als roher Body gesendet wird
       current_file: "Aktuelle Datei: %{name}"
       save_first: "Speichere diese Anfrage zuerst in einer Sammlung, um Dateien anzuhängen."

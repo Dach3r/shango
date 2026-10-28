@@ -17,7 +17,7 @@
   </div>
 
   <div data-body-type-target="panel" data-types="form_urlencoded multipart" class="p-4" hidden>
-    <p class="mb-3 text-xs text-muted"><%= t("workbench.body.form_hint") %></p>
+    <p class="mb-3 text-xs text-muted"><%= t(api_request.draft? ? "workbench.body.form_hint_draft" : "workbench.body.form_hint") %></p>
     <%= render KeyValueTable::Component.new(name: "api_request[body_form]", rows: api_request.body_form, variant: :form_data, files: !api_request.draft?) %>
     <% if api_request.draft? %>
       <p class="mt-3 text-xs text-muted"><%= t("workbench.body.save_first") %></p>

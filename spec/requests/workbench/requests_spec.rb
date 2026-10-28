@@ -20,10 +20,13 @@ RSpec.describe "Workbench requests" do
       get workbench_request_path(draft.id)
       expect(response.body).to include(I18n.t("workbench.body.save_first"))
       expect(response.body).not_to include("api_request[binary_upload]")
+      expect(response.body).to include(I18n.t("workbench.body.form_hint_draft"))
+      expect(response.body).not_to include(I18n.t("workbench.body.form_hint"))
 
       get workbench_request_path(api_request)
       expect(response.body).not_to include(I18n.t("workbench.body.save_first"))
       expect(response.body).to include("api_request[binary_upload]")
+      expect(response.body).to include(I18n.t("workbench.body.form_hint"))
     end
 
     it "renders the editor", :aggregate_failures do

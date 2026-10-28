@@ -308,6 +308,7 @@ es:
       placeholder: Cuerpo de la solicitud. Usa {{variables}} cuando haga falta.
       graphql_variables: Variables (JSON)
       form_hint: Las filas de texto se envían como campos; elige Archivo para subir un archivo.
+      form_hint_draft: "Las filas de texto se envían como campos."
       binary: Archivo a enviar como body crudo
       current_file: "Archivo actual: %{name}"
       save_first: "Guarda primero esta request en una colección para adjuntar archivos."
