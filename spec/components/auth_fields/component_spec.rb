@@ -63,6 +63,12 @@ RSpec.describe AuthFields::Component, type: :component do
       expect(page.text(:all)).to include(I18n.t("workbench.oauth2.save_first"))
     end
 
+    it "asks to save the request first when it is a new draft" do
+      render_fields(ApiRequest.new(id: 1, auth_type: "oauth2", draft_owner_id: 1), scope: "api_request")
+
+      expect(page.text(:all)).to include(I18n.t("workbench.oauth2.save_request_first"))
+    end
+
     it "shows a missing token state", :aggregate_failures do
       collection.update!(auth_type: "oauth2", auth_config: {})
       render_fields(collection)

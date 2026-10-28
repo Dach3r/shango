@@ -1,13 +1,14 @@
 class KeyValueTable::Row::Component < ApplicationComponent
   include ControlsHelper
 
-  def initialize(name:, row:, index:, variant:, key_placeholder:, value_placeholder:)
+  def initialize(name:, row:, index:, variant:, key_placeholder:, value_placeholder:, files: true)
     @name = name
     @row = row
     @index = index
     @variant = variant
     @key_placeholder = key_placeholder
     @value_placeholder = value_placeholder
+    @files = files
   end
 
   private
@@ -36,6 +37,13 @@ class KeyValueTable::Row::Component < ApplicationComponent
 
   def file?
     row["type"] == "file"
+  end
+
+  # A row that already holds a file keeps the option, so switching it to text stays possible.
+  def type_options
+    options = [[t("components.key_value_table.text"), "text"]]
+    options << [t("components.key_value_table.file"), "file"] if @files || file?
+    options
   end
 
   def persisted?

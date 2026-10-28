@@ -18,15 +18,22 @@
 
   <div data-body-type-target="panel" data-types="form_urlencoded multipart" class="p-4" hidden>
     <p class="mb-3 text-xs text-muted"><%= t("workbench.body.form_hint") %></p>
-    <%= render KeyValueTable::Component.new(name: "api_request[body_form]", rows: api_request.body_form, variant: :form_data) %>
+    <%= render KeyValueTable::Component.new(name: "api_request[body_form]", rows: api_request.body_form, variant: :form_data, files: !api_request.draft?) %>
+    <% if api_request.draft? %>
+      <p class="mt-3 text-xs text-muted"><%= t("workbench.body.save_first") %></p>
+    <% end %>
   </div>
 
   <div data-body-type-target="panel" data-types="binary" class="p-4" hidden>
     <label for="api_request_binary_upload" class="<%= label_classes %>"><%= t("workbench.body.binary") %></label>
+    <% if api_request.draft? %>
+      <p class="text-sm text-muted"><%= t("workbench.body.save_first") %></p>
+    <% else %>
     <%= file_field_tag "api_request[binary_upload]", id: "api_request_binary_upload",
                        class: field_classes("max-w-md text-xs file:mr-3 file:border-0 file:bg-accent/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-accent") %>
     <% if api_request.binary_body.attached? %>
       <p class="mt-2 text-xs text-muted"><%= t("workbench.body.current_file", name: api_request.binary_body.filename) %></p>
+    <% end %>
     <% end %>
   </div>
 </div>

@@ -310,6 +310,7 @@ en:
       form_hint: Text rows are sent as fields; choose File to upload a file.
       binary: File to send as the raw body
       current_file: "Current file: %{name}"
+      save_first: "Save this request to a collection first to attach files."
       types:
         none: None
         json: JSON
@@ -391,6 +392,7 @@ en:
       clear_token: Clear token
       redirect_hint: "Register this redirect URL with your provider: %{url}"
       save_first: Save these settings first, then reopen them to get a token.
+      save_request_first: "Save this request to a collection first, then get a token."
       tokens:
         create:
           fetched: Access token saved.

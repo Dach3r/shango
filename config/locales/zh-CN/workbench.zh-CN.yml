@@ -309,6 +309,7 @@ zh-CN:
       form_hint: 文本行作为字段发送；选择“文件”可上传文件。
       binary: 作为原始 Body 发送的文件
       current_file: "当前文件：%{name}"
+      save_first: "请先将此请求保存到集合中，再附加文件。"
       types:
         none: 无
         json: JSON
@@ -390,6 +391,7 @@ zh-CN:
       clear_token: 清除令牌
       redirect_hint: "请在你的提供方处注册此重定向 URL：%{url}"
       save_first: 请先保存这些设置，再重新打开以获取令牌。
+      save_request_first: "请先将此请求保存到集合中，再获取令牌。"
       tokens:
         create:
           fetched: 访问令牌已保存。

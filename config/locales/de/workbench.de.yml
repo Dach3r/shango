@@ -310,6 +310,7 @@ de:
       form_hint: Textzeilen werden als Felder gesendet; wähle Datei, um eine Datei hochzuladen.
       binary: Datei, die als roher Body gesendet wird
       current_file: "Aktuelle Datei: %{name}"
+      save_first: "Speichere diese Anfrage zuerst in einer Sammlung, um Dateien anzuhängen."
       types:
         none: Keiner
         json: JSON
@@ -391,6 +392,7 @@ de:
       clear_token: Token löschen
       redirect_hint: "Registriere diese Redirect-URL bei deinem Anbieter: %{url}"
       save_first: Speichere zuerst diese Einstellungen und öffne sie dann erneut, um einen Token zu holen.
+      save_request_first: "Speichere diese Anfrage zuerst in einer Sammlung und hole dann einen Token."
       tokens:
         create:
           fetched: Access Token gespeichert.

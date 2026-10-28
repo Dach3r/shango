@@ -310,6 +310,7 @@ fr:
       form_hint: "Les lignes de texte sont envoyées comme champs ; choisissez Fichier pour téléverser un fichier."
       binary: "Fichier à envoyer comme corps brut"
       current_file: "Fichier actuel : %{name}"
+      save_first: "Enregistrez d'abord cette requête dans une collection pour joindre des fichiers."
       types:
         none: "Aucun"
         json: "JSON"
@@ -391,6 +392,7 @@ fr:
       clear_token: "Effacer le jeton"
       redirect_hint: "Enregistrez cette URL de redirection auprès de votre fournisseur : %{url}"
       save_first: "Enregistrez d'abord ces paramètres, puis rouvrez-les pour obtenir un jeton."
+      save_request_first: "Enregistrez d'abord cette requête dans une collection, puis obtenez un jeton."
       tokens:
         create:
           fetched: "Jeton d'accès enregistré."

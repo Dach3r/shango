@@ -16,6 +16,16 @@ RSpec.describe "Workbench requests" do
   end
 
   describe "GET /workbench/requests/:id" do
+    it "tells a new draft to be saved before attaching files, and a saved request does not", :aggregate_failures do
+      get workbench_request_path(draft.id)
+      expect(response.body).to include(I18n.t("workbench.body.save_first"))
+      expect(response.body).not_to include("api_request[binary_upload]")
+
+      get workbench_request_path(api_request)
+      expect(response.body).not_to include(I18n.t("workbench.body.save_first"))
+      expect(response.body).to include("api_request[binary_upload]")
+    end
+
     it "renders the editor", :aggregate_failures do
       get workbench_request_path(api_request)
 

@@ -310,6 +310,7 @@ es:
       form_hint: Las filas de texto se envían como campos; elige Archivo para subir un archivo.
       binary: Archivo a enviar como body crudo
       current_file: "Archivo actual: %{name}"
+      save_first: "Guarda primero esta request en una colección para adjuntar archivos."
       types:
         none: Ninguno
         json: JSON
@@ -391,6 +392,7 @@ es:
       clear_token: Borrar token
       redirect_hint: "Registra esta URL de redirección en tu proveedor: %{url}"
       save_first: Guarda primero esta configuración y vuelve a abrirla para obtener un token.
+      save_request_first: "Guarda primero esta request en una colección y luego obtén un token."
       tokens:
         create:
           fetched: Access token guardado.

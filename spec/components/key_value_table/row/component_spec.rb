@@ -54,6 +54,21 @@ RSpec.describe KeyValueTable::Row::Component, type: :component do
       expect(page).to have_css("input[name^='api_request[body_uploads]['][disabled]", visible: :all)
     end
 
+    it "offers the file type unless files are not allowed", :aggregate_failures do
+      render_row({ "key" => "k" }, variant: :form_data, name: "api_request[body_form]")
+      expect(page).to have_css("[data-role=type]", visible: :all)
+      expect(page.native.to_html).to include(I18n.t("components.key_value_table.file"))
+
+      render_inline(described_class.new(name: "api_request[body_form]", row: { "key" => "k" }, index: 0, variant: :form_data, key_placeholder: "Key", value_placeholder: "Value", files: false))
+      expect(page.native.to_html).not_to include(I18n.t("components.key_value_table.file"))
+    end
+
+    it "keeps the file type for a row that already holds a file", :aggregate_failures do
+      render_inline(described_class.new(name: "api_request[body_form]", row: { "key" => "f", "type" => "file" }, index: 0, variant: :form_data, key_placeholder: "Key", value_placeholder: "Value", files: false))
+
+      expect(page.native.to_html).to include(I18n.t("components.key_value_table.file"))
+    end
+
     it "renders a file row with its attachment and upload token", :aggregate_failures do
       render_row({ "key" => "f", "type" => "file", "value" => "a.png", "attachment_id" => "9", "upload_token" => "tok" }, variant: :form_data, name: "api_request[body_form]")
 

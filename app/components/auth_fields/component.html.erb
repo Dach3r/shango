@@ -58,7 +58,7 @@
                   <%= t("workbench.oauth2.redirect_hint", url: workbench_oauth2_callback_url) %>
                 </p>
               <% else %>
-                <p class="text-sm text-muted"><%= t("workbench.oauth2.save_first") %></p>
+                <p class="text-sm text-muted"><%= t(draft_request? ? "workbench.oauth2.save_request_first" : "workbench.oauth2.save_first") %></p>
               <% end %>
             </div>
           <% end %>

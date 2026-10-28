@@ -57,6 +57,10 @@ class AuthFields::Component < ApplicationComponent
     field.show_when.to_h { |name, values| [name.to_s, values] }.to_json
   end
 
+  def draft_request?
+    @record.respond_to?(:draft?) && @record.draft?
+  end
+
   def oauth2_token_ready?
     @record.persisted? && @record.auth_type == "oauth2"
   end

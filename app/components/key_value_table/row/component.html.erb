@@ -26,7 +26,7 @@
   <% if variant == :form_data %>
     <%= hidden_field_tag field_name("upload_token"), upload_token, id: nil %>
     <%= hidden_field_tag field_name("attachment_id"), row["attachment_id"], id: nil if row["attachment_id"].present? %>
-    <%= render Select::Component.new(name: field_name("type"), options: [[t("components.key_value_table.text"), "text"], [t("components.key_value_table.file"), "file"]], value: row["type"] || "text",
+    <%= render Select::Component.new(name: field_name("type"), options: type_options, value: row["type"] || "text",
                                      input_data: { role: "type", action: "change->key-value-table#typeChanged" }, class: "w-24 shrink-0 !px-2") %>
     <div data-role="text" class="min-w-0 flex-1" <%= "hidden" if file? %>>
       <%= text_field_tag field_name("value"), row["value"], id: nil, placeholder: @value_placeholder, autocomplete: "off", disabled: file?,
