@@ -34,7 +34,7 @@ Optional, with defaults:
 | `SHANGO_REQUIRE_EMAIL_CONFIRMATION` | `true` when SMTP is set | `false` keeps email on without forcing confirmation. Ignored without SMTP. |
 | `SHANGO_MAX_SIGN_IN_ATTEMPTS` | 10 | Failed sign-ins before a 30-minute lock. |
 | `SHANGO_SESSION_TIMEOUT_HOURS` | 12 | Idle time before sign-in is required again. |
-| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `DRAFTS`, `OAUTH`, `IMPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`. |
+| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `DRAFTS`, `OAUTH`, `IMPORTS`, `EXPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`. |
 | `SHANGO_CSP_REPORT_ONLY` | `false` | Report Content Security Policy violations without blocking. |
 | `SHANGO_STORAGE` | `local` | `s3` for S3-compatible storage (`SHANGO_S3_BUCKET`, `SHANGO_S3_REGION`, optional `SHANGO_S3_ACCESS_KEY_ID`/`SHANGO_S3_SECRET_ACCESS_KEY`/`SHANGO_S3_ENDPOINT`). |
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |

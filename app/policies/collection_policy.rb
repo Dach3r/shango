@@ -7,6 +7,10 @@ class CollectionPolicy < ApplicationPolicy
     same_project?
   end
 
+  def export?
+    same_project?
+  end
+
   def update?
     manage?
   end

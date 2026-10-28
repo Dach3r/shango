@@ -115,6 +115,7 @@ fr:
       back: "Retour aux collections"
       import: "Importer des collections"
       import_curl: "Importer cURL"
+      export: "Exporter"
       edit: "Modifier"
       rename: "Renommer"
       duplicate: "Dupliquer"
@@ -486,6 +487,32 @@ fr:
       unresolved_url: "Variables non définies dans l'URL : %{names}. Choisissez un environnement qui les définit."
       invalid_graphql_variables: "Les variables GraphQL doivent être du JSON valide."
       missing_binary: "Choisissez un fichier pour le corps binaire."
+    exports:
+      form:
+        title: "Exporter la collection"
+        description: "Télécharger « %{collection} » pour l’utiliser dans un autre client d’API."
+        submit: "Exporter"
+        format: "Format"
+        include: "Inclure"
+        environments: "Les environnements du projet"
+        environments_hint: "Non utilisés par OpenAPI. Postman télécharge un ZIP avec un fichier par environnement."
+        credentials: "Identifiants et valeurs secrètes"
+        credentials_hint: "Mots de passe, jetons, clés d’API et variables secrètes. Sans cette option, ils sont exportés vides. Toute personne ayant le fichier peut les lire."
+        formats:
+          postman:
+            name: Postman v2.1
+            hint: "JSON de la collection. Importable dans Postman, Insomnia, Bruno et Shango."
+          insomnia:
+            name: Insomnia v4
+            hint: "Export JSON avec les environnements dans le fichier."
+          openapi:
+            name: OpenAPI 3
+            hint: "Brouillon du contrat d’API : opérations, paramètres et exemples. Sans identifiants ni environnements."
+          shango:
+            name: Shango
+            hint: "JSON sans perte pour déplacer la collection entre projets Shango."
+      errors:
+        unknown_format: "Choisissez l’un des formats disponibles."
     imports:
       create:
         imported: "Import terminé : %{counts}."

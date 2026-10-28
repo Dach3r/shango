@@ -115,6 +115,7 @@ en:
       back: Back to collections
       import: Import collections
       import_curl: Import cURL
+      export: Export
       edit: Edit
       rename: Rename
       duplicate: Duplicate
@@ -486,6 +487,32 @@ en:
       unresolved_url: "Undefined variables in the URL: %{names}. Pick an environment that defines them."
       invalid_graphql_variables: GraphQL variables must be valid JSON.
       missing_binary: Choose a file for the binary body.
+    exports:
+      form:
+        title: Export collection
+        description: "Download “%{collection}” to use it in another API client."
+        submit: Export
+        format: Format
+        include: Include
+        environments: The project's environments
+        environments_hint: "Not used by OpenAPI. Postman downloads a ZIP with one file per environment."
+        credentials: Credentials and secret values
+        credentials_hint: "Passwords, tokens, API keys and secret variables. Left out, they are exported empty. Anyone with the file can read them."
+        formats:
+          postman:
+            name: Postman v2.1
+            hint: "Collection JSON. Importable in Postman, Insomnia, Bruno and Shango."
+          insomnia:
+            name: Insomnia v4
+            hint: "JSON export with the environments inside the file."
+          openapi:
+            name: OpenAPI 3
+            hint: "API contract draft: operations, parameters and examples. No credentials or environments."
+          shango:
+            name: Shango
+            hint: "Lossless JSON for moving the collection between Shango projects."
+      errors:
+        unknown_format: Choose one of the available formats.
     imports:
       create:
         imported: "Imported %{counts}."
@@ -512,7 +539,7 @@ en:
         file: File
         content: Or paste the content
         content_placeholder: "Paste a JSON or YAML export"
-        formats: "Supported: Postman (collection v2 and environment), Insomnia (v4 JSON, v5 YAML), Bruno (JSON export) and OpenAPI 3 / Swagger 2."
+        formats: "Supported: Postman (collection v2 and environment), Insomnia (v4 JSON, v5 YAML), Bruno (JSON export), OpenAPI 3 / Swagger 2 and Shango exports."
         apidog: "Apidog: export your project as Postman or OpenAPI and import that file."
       errors:
         empty: Choose a file or paste its content.

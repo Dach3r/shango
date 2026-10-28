@@ -13,12 +13,12 @@
 - Environments with variables (`{{name}}`), a secret flag, and a per-member active environment shown in the status bar. The environments side panel lists them as cards with an "Activate" button (the active one shows "In use") and an actions menu for edit and delete.
 - Run a request, inspect the response (pretty / raw / HTML preview, headers, request details (method and URL with host, path and query styled apart, redirect hops as a chain, sent headers in the same table as the response headers), the payload sent in its own tab (read-only code editor with highlighting and copy), a search box in the response tab bar (Body tab only) that highlights every match in the body editor with a match counter, Enter / Shift+Enter to step and Esc to clear, redirects), per-request history (last 50), plus a global history view in the left sidebar (the history icon swaps the collections list for it, with a back arrow) with the user's saved responses grouped by collection (drafts last, latest 200).
 - Import from a cURL command and copy a request as cURL.
-- Import whole collections and environments from Postman, Insomnia, Bruno and OpenAPI/Swagger exports (see §9).
+- Import whole collections and environments from Postman, Insomnia, Bruno, OpenAPI/Swagger and Shango exports (see §9), and export a collection as Postman, Insomnia, OpenAPI or Shango JSON (see §9.1).
 - Authorization set per request, or per folder and inherited by its requests: No auth, Basic, Bearer, API key, JWT bearer, Digest, AWS Signature v4, OAuth 2.0 (client credentials, password, authorization code with PKCE; automatic refresh).
 - Code editor (CodeMirror 6) with `{{variable}}` autocomplete and highlighting by state: set (green), empty value (amber), undefined (red, wavy underline) and dynamic `$` helpers (accent). The popup shows each variable's value under its name; hovering a `{{variable}}` shows a card with its value (or "Undefined") and its source (Environment or Dynamic). Secret values are masked server-side and never sent.
 - Plain inputs in the request editor (params, headers, form data, authorization fields) and the folder form also detect `{{` and offer the same variables in a dropdown (`variable_autocomplete` controller, enabled through `variable_autocomplete_data`); arrow keys move, Enter/Tab accept, Esc closes. The references are highlighted by state like in the code editor (a mirror layer over the field), and a password field shows its text while it holds a `{{reference}}`.
 
-**Not included (yet)**: pre/post-request scripts and assertions, collection runner, WebSocket/gRPC, import of scripts and of Bruno `.bru` folders or Apidog native files, export of collections, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
+**Not included (yet)**: pre/post-request scripts and assertions, collection runner, WebSocket/gRPC, import of scripts and of Bruno `.bru` folders or Apidog native files, export of environments on their own or of several collections at once, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
 
 ## 2. Domain model
 
@@ -61,6 +61,7 @@ app/controllers/workbench/           # feature module (routes under /workbench)
   requests/executions/saves_controller.rb  # POST = save a run's response to history
   requests/duplications_controller.rb, requests/positions_controller.rb, requests/curl_exports_controller.rb
   curl_imports_controller.rb
+  exports_controller.rb              # GET new (modal), POST create (download) /workbench/collections/:id/export
   imports_controller.rb              # GET/POST /workbench/import (collections, folders, requests, environments)
   oauth2/{tokens,authorizations,callbacks}_controller.rb
 app/controllers/projects/            # project-level tools
@@ -74,6 +75,7 @@ app/services/api_client/
   oauth2/                            # token client + services
   curl/{parser,exporter}.rb
   imports/                           # detector, one importer per format, support helpers, Import (persist)
+  exports/                           # one exporter per format, Export (entry point), Credentials, Tree, Zip
   request_builder.rb executor.rb connection.rb timing.rb ssrf_policy.rb variable_resolver.rb masker.rb
 app/services/projects/environments/  # Create, Update, Destroy, Select, UpdateVariable
 app/services/result.rb
@@ -171,11 +173,24 @@ Mapping rules:
 - Not imported (reported as warnings): scripts, tests, file contents of file bodies, unsupported auth types, external `$ref`s.
 - Limits: 5 MB, 250 000 JSON nodes. Secrets travel through the encrypted models and `content`/`file` params are filtered from logs. Nothing is fetched from the network.
 
-Fixtures for each format live in `spec/fixtures/files/imports/`.
+Fixtures for each format live in `spec/fixtures/files/imports/`. The Shango format (`{ "shango": { "version": 1 }, "collection": {…}, "environments": […] }`, produced by §9.1) is detected by its `shango` key and restores everything, including the collection's own authorization.
+
+### 9.1 Exporting a collection
+
+*Export* sits in the collection's menu (`GET /workbench/collections/:id/export/new`, `POST` downloads the file; `Workbench::ExportsController`, `ApiClient::Exports::Export`). Any member of the project can export what they can open (`CollectionPolicy#export?`, same as showing it); it changes no state. Throttled by `SHANGO_RATE_LIMIT_EXPORTS` (default 20/600).
+
+| Format | File | Notes |
+|---|---|---|
+| Postman v2.1 | `<name>.postman_collection.json` | With environments: a ZIP (`Exports::Zip`, stored entries, no dependency) with the collection and one `*.postman_environment.json` per environment |
+| Insomnia v4 | `<name>.insomnia.json` | Workspace, request groups, requests; environments are sub-environments of a base one (disabled variables are left out); `{{x}}` becomes `{{ _.x }}` |
+| OpenAPI 3.0 | `<name>.openapi.json` | A contract draft: operations by method and path (the first request wins), folders as tags, parameters and body examples, security schemes (basic, digest, bearer, API key; inherited auth is resolved). Never carries credentials or environments; the server URL is read from the base URL variable |
+| Shango | `<name>.shango.json` | Lossless: settings, descriptions, nested folders and auth at every level |
+
+Options: *include environments* (all of the project's, ignored by OpenAPI) and *include credentials and secrets* (both off by default). Without credentials, secret auth fields and secret variable values are exported empty (the field stays) and OAuth tokens are left out (`Exports::Credentials`); with them the file holds them in clear text, which the form warns about. Not exported: JWT bearer auth in Postman and Insomnia (no equivalent), binary body files and uploaded files (only their names), response history, drafts, scripts. Environment files and secrets only go out through the download response; nothing is stored.
 
 ## 10. Open questions
 
 - Team model: who can see or edit shared collections and environments (product open question).
 - Cookie jar: a public suffix list for `Domain` validation (today a heuristic rejects single-label domains).
-- Export of collections, and import of Bruno `.bru` folders / Apidog native files.
+- Import of Bruno `.bru` folders / Apidog native files.
 - Automated tests: the repository has no test framework yet; the feature was verified manually and with throwaway scripts.

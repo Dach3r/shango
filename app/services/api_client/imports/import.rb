@@ -7,7 +7,7 @@ module ApiClient
 
       MAX_BYTES = 5.megabytes
       IMPORTERS = {
-        postman: Postman, postman_environment: Postman, insomnia: Insomnia, bruno: Bruno, openapi: Openapi
+        postman: Postman, postman_environment: Postman, insomnia: Insomnia, bruno: Bruno, openapi: Openapi, shango: Shango
       }.freeze
 
       class Failed < StandardError; end
@@ -74,7 +74,16 @@ module ApiClient
         raise Failed, errors(created) if created.failure?
 
         @counts[:collections] += 1
+        keep_auth(created.record, tree)
         create_children(created.record, tree, nil)
+      end
+
+      # Collections::Create takes no auth; formats that carry the collection's own (Shango) set it afterwards.
+      def keep_auth(collection, tree)
+        return unless tree[:auth_type]
+
+        Auth::Assign.call(record: collection, auth_type: tree[:auth_type], auth_config: tree[:auth_config].to_h)
+        collection.save!
       end
 
       def create_children(collection, tree, parent)

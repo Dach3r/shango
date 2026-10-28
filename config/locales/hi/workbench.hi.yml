@@ -115,6 +115,7 @@ hi:
       back: "कलेक्शन पर वापस"
       import: "कलेक्शन इम्पोर्ट करें"
       import_curl: "cURL इम्पोर्ट करें"
+      export: "एक्सपोर्ट"
       edit: "संपादित करें"
       rename: "नाम बदलें"
       duplicate: "डुप्लिकेट करें"
@@ -486,6 +487,32 @@ hi:
       unresolved_url: "URL में अपरिभाषित वेरिएबल: %{names}। ऐसा एनवायरनमेंट चुनें जो उन्हें परिभाषित करता हो।"
       invalid_graphql_variables: "GraphQL वेरिएबल मान्य JSON होने चाहिए।"
       missing_binary: "बाइनरी बॉडी के लिए फ़ाइल चुनें।"
+    exports:
+      form:
+        title: "कलेक्शन एक्सपोर्ट करें"
+        description: "“%{collection}” को डाउनलोड करें ताकि इसे किसी दूसरे API क्लाइंट में इस्तेमाल किया जा सके।"
+        submit: "एक्सपोर्ट"
+        format: "फ़ॉर्मैट"
+        include: "शामिल करें"
+        environments: "प्रोजेक्ट के एनवायरनमेंट"
+        environments_hint: "OpenAPI इन्हें इस्तेमाल नहीं करता। Postman हर एनवायरनमेंट की एक फ़ाइल के साथ ZIP डाउनलोड करता है।"
+        credentials: "क्रेडेंशियल और गोपनीय मान"
+        credentials_hint: "पासवर्ड, टोकन, API कुंजियाँ और गोपनीय वेरिएबल। शामिल न करने पर वे खाली एक्सपोर्ट होते हैं। फ़ाइल रखने वाला कोई भी उन्हें पढ़ सकता है।"
+        formats:
+          postman:
+            name: Postman v2.1
+            hint: "कलेक्शन का JSON। Postman, Insomnia, Bruno और Shango में इम्पोर्ट किया जा सकता है।"
+          insomnia:
+            name: Insomnia v4
+            hint: "JSON एक्सपोर्ट, एनवायरनमेंट फ़ाइल के अंदर।"
+          openapi:
+            name: OpenAPI 3
+            hint: "API कॉन्ट्रैक्ट का ड्राफ़्ट: ऑपरेशन, पैरामीटर और उदाहरण। क्रेडेंशियल या एनवायरनमेंट नहीं।"
+          shango:
+            name: Shango
+            hint: "Shango प्रोजेक्ट के बीच कलेक्शन ले जाने के लिए बिना नुकसान वाला JSON।"
+      errors:
+        unknown_format: "उपलब्ध फ़ॉर्मैट में से एक चुनें।"
     imports:
       create:
         imported: "%{counts} इम्पोर्ट किए गए।"

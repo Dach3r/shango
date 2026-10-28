@@ -1,0 +1,36 @@
+<%= render Modal::Component.new(icon: "download", title: t(".title"), description: t(".description", collection: @collection.name), size: :lg, form: "export_form", submit: t(".submit"), submit_icon: "download") do %>
+  <%= form_with url: workbench_collection_export_path(@collection), method: :post, id: "export_form", data: { turbo: false }, class: "space-y-5" do %>
+    <fieldset>
+      <legend class="<%= label_classes %>"><%= t(".format") %></legend>
+      <div class="mt-1 grid gap-2">
+        <% ApiClient::Exports::Export::FORMATS.each_with_index do |format, index| %>
+          <label class="flex cursor-pointer items-start gap-3 border border-line px-3 py-2.5 transition hover:bg-field has-[:checked]:border-accent has-[:checked]:bg-accent/10">
+            <%= radio_button_tag :format_name, format, index.zero?, class: "mt-0.5 accent-accent" %>
+            <span class="min-w-0">
+              <span class="block text-sm font-medium text-ink"><%= t(".formats.#{format}.name") %></span>
+              <span class="block text-xs text-muted"><%= t(".formats.#{format}.hint") %></span>
+            </span>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
+
+    <fieldset class="space-y-3">
+      <legend class="<%= label_classes %>"><%= t(".include") %></legend>
+      <label class="flex cursor-pointer items-start gap-3">
+        <%= check_box_tag :include_environments, "1", false, class: "mt-0.5 accent-accent" %>
+        <span class="min-w-0">
+          <span class="block text-sm text-ink"><%= t(".environments") %></span>
+          <span class="block text-xs text-muted"><%= t(".environments_hint") %></span>
+        </span>
+      </label>
+      <label class="flex cursor-pointer items-start gap-3">
+        <%= check_box_tag :include_credentials, "1", false, class: "mt-0.5 accent-accent" %>
+        <span class="min-w-0">
+          <span class="block text-sm text-ink"><%= t(".credentials") %></span>
+          <span class="block text-xs text-muted"><%= t(".credentials_hint") %></span>
+        </span>
+      </label>
+    </fieldset>
+  <% end %>
+<% end %>

@@ -18,7 +18,8 @@ module ApiClient
       def detect
         return unless @data.is_a?(Hash)
 
-        if @data["openapi"] || @data["swagger"] then :openapi
+        if @data["shango"].is_a?(Hash) && @data["collection"].is_a?(Hash) then :shango
+        elsif @data["openapi"] || @data["swagger"] then :openapi
         elsif @data["info"].is_a?(Hash) && @data["item"].is_a?(Array) then :postman
         elsif @data["values"].is_a?(Array) && !@data.key?("info") then :postman_environment
         elsif @data["_type"] == "export" || @data["type"].to_s.start_with?("collection.insomnia.rest") then :insomnia

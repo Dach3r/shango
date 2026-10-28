@@ -115,6 +115,7 @@ zh-CN:
       back: 返回集合
       import: 导入集合
       import_curl: 导入 cURL
+      export: "导出"
       edit: 编辑
       rename: 重命名
       duplicate: 复制
@@ -484,6 +485,32 @@ zh-CN:
       unresolved_url: "URL 中存在未定义的变量：%{names}。请选择定义了这些变量的环境。"
       invalid_graphql_variables: GraphQL 变量必须是有效的 JSON。
       missing_binary: 请为二进制 Body 选择一个文件。
+    exports:
+      form:
+        title: "导出集合"
+        description: "下载“%{collection}”，以便在其他 API 客户端中使用。"
+        submit: "导出"
+        format: "格式"
+        include: "包含"
+        environments: "项目的环境"
+        environments_hint: "OpenAPI 不使用环境。Postman 会下载一个 ZIP，每个环境一个文件。"
+        credentials: "凭据和机密值"
+        credentials_hint: "密码、令牌、API 密钥和机密变量。不包含时将导出为空。拿到文件的人都能读取。"
+        formats:
+          postman:
+            name: Postman v2.1
+            hint: "集合的 JSON。可导入 Postman、Insomnia、Bruno 和 Shango。"
+          insomnia:
+            name: Insomnia v4
+            hint: "JSON 导出，环境包含在文件内。"
+          openapi:
+            name: OpenAPI 3
+            hint: "API 契约草稿：操作、参数和示例。不含凭据和环境。"
+          shango:
+            name: Shango
+            hint: "无损 JSON，用于在 Shango 项目之间迁移集合。"
+      errors:
+        unknown_format: "请选择一种可用的格式。"
     imports:
       create:
         imported: "已导入 %{counts}。"

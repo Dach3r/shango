@@ -12,7 +12,8 @@ RSpec.describe ApiClient::Imports::Detector do
     "postman environment" => [{ "name" => "E", "values" => [] }, :postman_environment],
     "insomnia v4" => [{ "_type" => "export", "resources" => [] }, :insomnia],
     "insomnia v5" => [{ "type" => "collection.insomnia.rest/5.0" }, :insomnia],
-    "bruno" => [{ "name" => "B", "items" => [] }, :bruno]
+    "bruno" => [{ "name" => "B", "items" => [] }, :bruno],
+    "shango" => [{ "shango" => { "version" => 1 }, "collection" => { "name" => "S" } }, :shango]
   }.each do |label, (data, format)|
     it "detects #{label}" do
       expect(detect(data).record).to eq(format)

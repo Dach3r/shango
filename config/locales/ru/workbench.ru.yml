@@ -115,6 +115,7 @@ ru:
       back: Назад к коллекциям
       import: Импорт коллекций
       import_curl: Импорт cURL
+      export: "Экспорт"
       edit: Изменить
       rename: Переименовать
       duplicate: Дублировать
@@ -490,6 +491,32 @@ ru:
       unresolved_url: "Неопределённые переменные в URL: %{names}. Выберите окружение, в котором они заданы."
       invalid_graphql_variables: Переменные GraphQL должны быть корректным JSON.
       missing_binary: Выберите файл для двоичного тела.
+    exports:
+      form:
+        title: "Экспорт коллекции"
+        description: "Скачайте «%{collection}», чтобы использовать её в другом API-клиенте."
+        submit: "Экспортировать"
+        format: "Формат"
+        include: "Включить"
+        environments: "Окружения проекта"
+        environments_hint: "OpenAPI их не использует. Postman скачивает ZIP с отдельным файлом для каждого окружения."
+        credentials: "Учётные данные и секретные значения"
+        credentials_hint: "Пароли, токены, API-ключи и секретные переменные. Без этой опции они экспортируются пустыми. Любой, у кого есть файл, сможет их прочитать."
+        formats:
+          postman:
+            name: Postman v2.1
+            hint: "JSON коллекции. Импортируется в Postman, Insomnia, Bruno и Shango."
+          insomnia:
+            name: Insomnia v4
+            hint: "Экспорт в JSON, окружения внутри файла."
+          openapi:
+            name: OpenAPI 3
+            hint: "Черновик контракта API: операции, параметры и примеры. Без учётных данных и окружений."
+          shango:
+            name: Shango
+            hint: "JSON без потерь для переноса коллекции между проектами Shango."
+      errors:
+        unknown_format: "Выберите один из доступных форматов."
     imports:
       create:
         imported: "Импортировано: %{counts}."

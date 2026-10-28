@@ -15,6 +15,11 @@ RSpec.describe CollectionPolicy, type: :policy do
     expect(policy).to be_new
   end
 
+  it "lets every member of the project export", :aggregate_failures do
+    expect(described_class.new(other_member, record)).to be_export
+    expect(described_class.new(member_membership, record)).not_to be_export
+  end
+
   it "lets the creator change and delete it", :aggregate_failures do
     policy = described_class.new(member, record)
 

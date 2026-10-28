@@ -115,6 +115,7 @@ ja:
       back: コレクションに戻る
       import: コレクションをインポート
       import_curl: cURL をインポート
+      export: "エクスポート"
       edit: 編集
       rename: 名前を変更
       duplicate: 複製
@@ -484,6 +485,32 @@ ja:
       unresolved_url: "URL に未定義の変数があります: %{names}。これらを定義している環境を選択してください。"
       invalid_graphql_variables: GraphQL の変数は有効な JSON である必要があります。
       missing_binary: バイナリボディに使用するファイルを選択してください。
+    exports:
+      form:
+        title: "コレクションをエクスポート"
+        description: "「%{collection}」をダウンロードして、別の API クライアントで使用します。"
+        submit: "エクスポート"
+        format: "形式"
+        include: "含める"
+        environments: "プロジェクトの環境"
+        environments_hint: "OpenAPI では使用されません。Postman は環境ごとに 1 ファイルを含む ZIP をダウンロードします。"
+        credentials: "認証情報と秘密の値"
+        credentials_hint: "パスワード、トークン、API キー、秘密の変数。含めない場合は空でエクスポートされます。ファイルを持つ人は誰でも読めます。"
+        formats:
+          postman:
+            name: Postman v2.1
+            hint: "コレクションの JSON。Postman、Insomnia、Bruno、Shango にインポートできます。"
+          insomnia:
+            name: Insomnia v4
+            hint: "環境をファイル内に含む JSON エクスポート。"
+          openapi:
+            name: OpenAPI 3
+            hint: "API 仕様のドラフト：オペレーション、パラメーター、例。認証情報と環境は含まれません。"
+          shango:
+            name: Shango
+            hint: "Shango プロジェクト間でコレクションを移すためのロスレス JSON。"
+      errors:
+        unknown_format: "利用可能な形式のいずれかを選択してください。"
     imports:
       create:
         imported: "%{counts} をインポートしました。"
