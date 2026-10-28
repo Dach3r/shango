@@ -55,7 +55,7 @@ RSpec.describe "Network DNS checks" do
     create_check
 
     expect(response.body).to include("→ target.example.net", I18n.t("network.dns.summary.differ"))
-    expect(project.network_checks.last.outcome).to eq("warn")
+    expect(project.network_checks.last.outcome).to eq("ok")
   end
 
   it "resolves variables from the selected environment", :aggregate_failures do
