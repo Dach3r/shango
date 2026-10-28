@@ -17,9 +17,16 @@ RSpec.describe "Network checks" do
       get network_check_path(check)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("dns_result", "shango.dev", "v=spf1", "203.0.113.10", I18n.t("network.dns.submit"))
+      expect(response.body).to include("dns_result", "shango.dev", "v=spf1", "203.0.113.10")
       expect(response.body).to include('aria-current="true"', 'aria-current="page"')
       expect(response.body).not_to include(I18n.t("network.ports.submit"))
+    end
+
+    it "renders the saved run read-only, without a form to run it again", :aggregate_failures do
+      get network_check_path(check)
+
+      expect(response.body).not_to include(network_dns_checks_path, I18n.t("network.dns.submit"))
+      expect(response.body).to include(I18n.t("network.new_check"), "readonly")
     end
 
     it "mentions the previous run of the same target", :aggregate_failures do
@@ -35,12 +42,12 @@ RSpec.describe "Network checks" do
       ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)
 
-      expect(response.body).to include("ports_result", I18n.t("network.ports.columns.service"), I18n.t("network.ports.submit"))
+      expect(response.body).to include("ports_result", I18n.t("network.ports.columns.service"), I18n.t("network.new_check"))
 
       ping = create(:network_check, :ping, project:, user:)
       get network_check_path(ping)
 
-      expect(response.body).to include("ping_result", "443", I18n.t("network.ping.submit"))
+      expect(response.body).to include("ping_result", "443", I18n.t("network.new_check"))
     end
 
     it "does not show runs of other projects" do
