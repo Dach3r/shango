@@ -5,12 +5,14 @@ fr:
     groups:
       connectivity: Connectivité
       dns: DNS
+      utilities: "Utilitaires"
     tabs:
       label: "Outils réseau"
       dns: "DNS"
       reverse_dns: "DNS inverse"
       ports: "Ports"
       ping: "Ping"
+      subnet: "Calculateur de sous-réseaux"
     errors:
       blank: "Saisissez un domaine ou un hôte."
       invalid: "Ce n'est pas un nom d'hôte ni une adresse IP valide. Utilisez uniquement le nom, sans schéma, chemin ni port."
@@ -25,6 +27,10 @@ fr:
       too_many_ports: "Vérifiez au maximum %{max} ports à la fois."
       invalid_port: "Saisissez un port entre 1 et 65535."
       invalid_attempts: "Choisissez entre 1 et %{max} tentatives."
+      blank_network: "Saisissez un réseau, par exemple 192.168.1.0/24."
+      invalid_network: "« %{token} » n'est pas un réseau valide. Utilisez une adresse avec un préfixe (192.168.1.0/24, 2001:db8::/48) ou un masque (192.168.1.0 255.255.255.0)."
+      invalid_split: "Découpez en un préfixe de /%{min} à /%{max}."
+      invalid_ip: "« %{token} » n'est pas une adresse IP valide."
     statuses:
       ok: "Répondu"
       cname: "Alias"
@@ -44,6 +50,8 @@ fr:
       open: "Ouvert"
       closed: "Fermé"
       filtered: "Filtré"
+      inside: "Dedans"
+      outside: "Dehors"
     dns:
       domain: "Domaine"
       hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée. Pour PTR, saisissez une adresse IP : la vérification confirme aussi que chaque nom renvoie vers elle."
@@ -102,6 +110,34 @@ fr:
       only_refused: "L'hôte répond, mais rien n'écoute sur ce port."
       no_answer: "Aucune réponse. L'hôte est peut-être hors ligne, ou un pare-feu bloque les paquets."
       stopped: "Arrêté après %{count} délais dépassés consécutifs."
+    subnet:
+      network: "Réseau"
+      network_placeholder: "192.168.1.0/24 ou 2001:db8::/48"
+      split: "Découper en"
+      split_placeholder: /26
+      contains: "Contient l'IP"
+      contains_placeholder: 192.168.1.77
+      submit: "Calculer"
+      hint: "Calcule la plage d'un réseau IPv4 ou IPv6 à partir d'un préfixe ou d'un masque. Peut aussi le découper en préfixes plus longs ou vérifier si une adresse en fait partie. Rien n'est envoyé sur le réseau."
+      family: "IPv%{version}"
+      scopes:
+        public: "Public"
+        private: "Privé"
+        loopback: "Boucle locale"
+        link_local: "Lien local"
+      fields:
+        address: "Adresse"
+        network: "Réseau"
+        netmask: "Masque"
+        wildcard: "Wildcard"
+        broadcast: "Broadcast"
+        first: "Premier hôte"
+        last: "Dernier hôte"
+        size: "Adresses"
+        hosts: "Hôtes utilisables"
+      contains_title: "Vérification d'adresse"
+      split_title: "%{count} sous-réseaux /%{prefix}"
+      split_truncated: "Affichage des %{shown} premiers sur %{count}."
     empty:
       dns:
         title: "Rien à afficher pour l'instant"
@@ -112,6 +148,9 @@ fr:
       ping:
         title: "Rien à afficher pour l'instant"
         hint: "Saisissez un hôte et lancez un ping TCP."
+      subnet:
+        title: "Rien à afficher pour l'instant"
+        hint: "Saisissez un réseau, par exemple 192.168.1.0/24, pour voir sa plage."
     history:
       dns: "Vérifications DNS"
       ports: "Vérifications de ports"
@@ -134,6 +173,8 @@ fr:
       open: "Un service a accepté la connexion."
       closed: "L'hôte a répondu, mais rien n'écoute sur ce port."
       filtered: "Aucune réponse. Un pare-feu abandonne peut-être les paquets."
+      inside: "L'adresse appartient à ce réseau."
+      outside: "L'adresse est hors de ce réseau, ou d'une autre version d'IP."
     limits:
       about: "À propos"
     results:

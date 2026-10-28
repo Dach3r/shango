@@ -5,12 +5,14 @@ zh-CN:
     groups:
       connectivity: 连通性
       dns: DNS
+      utilities: "实用工具"
     tabs:
       label: 网络工具
       dns: DNS
       reverse_dns: "反向 DNS"
       ports: 端口
       ping: Ping
+      subnet: "子网计算器"
     errors:
       blank: 请输入域名或主机。
       invalid: "这不是有效的主机名或 IP 地址。只需填写名称，不要包含协议、路径或端口。"
@@ -25,6 +27,10 @@ zh-CN:
       too_many_ports: "每次最多检查 %{max} 个端口。"
       invalid_port: 请输入 1 到 65535 之间的端口。
       invalid_attempts: "请选择 1 到 %{max} 次尝试。"
+      blank_network: "请输入网络，例如 192.168.1.0/24。"
+      invalid_network: "“%{token}”不是有效的网络。请使用带前缀的地址（192.168.1.0/24、2001:db8::/48）或带掩码的地址（192.168.1.0 255.255.255.0）。"
+      invalid_split: "请拆分为 /%{min} 到 /%{max} 的前缀。"
+      invalid_ip: "“%{token}”不是有效的 IP 地址。"
     statuses:
       ok: 已应答
       cname: 别名
@@ -44,6 +50,8 @@ zh-CN:
       open: 开放
       closed: 关闭
       filtered: 被过滤
+      inside: "在内"
+      outside: "在外"
     dns:
       domain: 域名
       hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。 对于 PTR，请输入 IP 地址：检查还会确认每个名称能解析回该地址。"
@@ -102,6 +110,34 @@ zh-CN:
       only_refused: 主机有应答，但此端口上没有服务在监听。
       no_answer: 无应答。主机可能已离线，或防火墙正在丢弃数据包。
       stopped: "连续 %{count} 次超时后已停止。"
+    subnet:
+      network: "网络"
+      network_placeholder: "192.168.1.0/24 或 2001:db8::/48"
+      split: "拆分为"
+      split_placeholder: /26
+      contains: "包含 IP"
+      contains_placeholder: 192.168.1.77
+      submit: "计算"
+      hint: "根据前缀或掩码计算 IPv4 或 IPv6 网络的范围。还可以拆分为更长的前缀，或检查某个地址是否属于该网络。不会通过网络发送任何内容。"
+      family: "IPv%{version}"
+      scopes:
+        public: "公网"
+        private: "私有"
+        loopback: "环回"
+        link_local: "链路本地"
+      fields:
+        address: "地址"
+        network: "网络"
+        netmask: "子网掩码"
+        wildcard: "通配符掩码"
+        broadcast: "广播地址"
+        first: "首个主机"
+        last: "最后主机"
+        size: "地址数"
+        hosts: "可用主机数"
+      contains_title: "地址检查"
+      split_title: "%{count} 个 /%{prefix} 子网"
+      split_truncated: "显示 %{count} 个中的前 %{shown} 个。"
     empty:
       dns:
         title: "暂无内容可显示"
@@ -112,6 +148,9 @@ zh-CN:
       ping:
         title: "暂无内容可显示"
         hint: "输入主机并开始 TCP ping。"
+      subnet:
+        title: "暂无内容可显示"
+        hint: "输入一个网络（例如 192.168.1.0/24）即可查看其范围。"
     history:
       dns: "DNS 检查"
       ports: "端口检查"
@@ -134,6 +173,8 @@ zh-CN:
       open: "有服务接受了连接。"
       closed: "主机有响应，但此端口上没有任何服务在监听。"
       filtered: "无响应。防火墙可能正在丢弃数据包。"
+      inside: "该地址属于此网络。"
+      outside: "该地址不在此网络内，或属于另一个 IP 版本。"
     limits:
       about: "简介"
     results:

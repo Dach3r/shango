@@ -13,7 +13,8 @@ module Network
       Tool.new(name: "dns", icon: "search", group: "dns"),
       Tool.new(name: "reverse_dns", icon: "arrow-left-right", group: "dns", kind: "dns", defaults: { "type" => "PTR" }),
       Tool.new(name: "ports", icon: "radar", group: "connectivity"),
-      Tool.new(name: "ping", icon: "activity", group: "connectivity")
+      Tool.new(name: "ping", icon: "activity", group: "connectivity"),
+      Tool.new(name: "subnet", icon: "calculator", group: "utilities")
     ].freeze
 
     module_function

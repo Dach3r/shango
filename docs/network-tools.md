@@ -1,6 +1,6 @@
 # Shango — Network Tools
 
-> Design and reference for the Network Tools feature. **Status: built** (DNS checker with reverse DNS, port check, TCP ping); **in progress** (the second wave in §2, built one tool at a time). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
+> Design and reference for the Network Tools feature. **Status: built** (DNS checker with reverse DNS, port check, TCP ping, subnet calculator); **in progress** (the second wave in §2, built one tool at a time). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
 
 ## 1. Why
 
@@ -23,6 +23,7 @@ Fit with the product: this is the *DNS Tools* entry of *Future tools* in `produc
 | **DNS checker** | Queries one record type for a domain against a fixed set of public resolvers and the domain's authoritative nameservers, in parallel. Shows each answer with its TTL, and (when an expected value is given) whether it matches, so the user sees how far a change has propagated. With the `PTR` type it takes an IP, queries its `in-addr.arpa` / `ip6.arpa` name and checks forward-confirmed reverse DNS: each name the PTR points to must resolve (`A` for IPv4, `AAAA` for IPv6) back to the same IP. |
 | **Port check** | TCP connect check of a list or range of ports on one host. Reports `open`, `closed` (connection refused) or `filtered` (timeout), with the service name from a static table for well-known ports. |
 | **TCP ping** | Opens a TCP connection to a host/port several times and reports per-attempt latency plus min/avg/max and loss. Answers "is it online". |
+| **Subnet calculator** | For an IPv4 or IPv6 network typed with a prefix (`192.168.1.0/24`), a mask (`192.168.1.0 255.255.255.0`) or as a bare address: network, mask, wildcard, broadcast, first and last host, address and host counts and the kind of range (public, private, loopback, link-local); optionally the split into a longer prefix and whether an address is inside. Pure computation with `IPAddr`: no network access and no history. |
 
 ### Explicitly out of v1
 
@@ -37,7 +38,6 @@ Planned in this order; each one ships with its service, page, locales, specs and
 
 | Tool | `kind` | What it does |
 |------|--------|--------------|
-| **Subnet calculator** | none | Network, mask, wildcard, broadcast, host range and count for IPv4 and IPv6; split into `/N`; "is this IP in the range". No network access, no history. |
 | **TLS certificate** | `tls` | Handshake against the pinned IP with SNI, direct TLS or STARTTLS (SMTP, IMAP, POP3, chosen explicitly). Subject, issuer, SAN, validity, key, signature, chain, protocol, cipher, ALPN; trust and host match validated by hand so a bad certificate is reported, not an error. |
 | **Email DNS health** | `email` | SPF (recursive lookup count, duplicates, `+all`/`?all`, `ptr`), DKIM (selectors typed after the domain), DMARC (`p`, `sp`, `pct`, `rua`) and MX, as a list of findings with severity. DNS only. |
 | **Lookup** | `lookup` | Domain: RDAP through the IANA bootstrap (registrar, dates, status, nameservers, DNSSEC). IP: RDAP network data plus ASN through `origin.asn.cymru.com`. No personal data, only registrar and abuse contacts. |
@@ -52,7 +52,7 @@ The UI labels the third tool **TCP ping**, never plain "ping", so nobody mistake
 ## 3. User experience
 
 - New project tool **Network** in `ToolsNav` (icon `radar`), live as soon as the first tool ships; it is rendered disabled with a *Soon* badge before that, like the other unbuilt tools.
-- One page per tool, each with its own address: `/network` (DNS, the default), `/network/reverse_dns`, `/network/ports` and `/network/ping`, served by `Network::WorkspacesController#show` (`network_workspace_path(kind)`; only the tool on display is rendered, so a page runs one history query). A saved run lives at `/network/checks/:id` (`Network::ChecksController#show`, same template): reloading or sharing the link shows the same tool with the stored result and what was typed. The page has three panes: an icon rail with the tools (`NetworkRail::Component`, plain links grouped by subject with a hairline between groups, `aria-current="page"` on the tool on display; the tools, their icons and groups come from `Network::Tools`, which also builds the route constraint; a tool can be a preset of another one, like *Reverse DNS*, which is the DNS page with `PTR` preselected and shares its history, and a saved run is shown under the most specific entry whose defaults match what was typed, `Network::Tools.for_run`), the history of that tool and the main area. The main area is a one-row form bar (fields have screen-reader labels only; the intro and hints sit under the bar) above the result. Below the `lg` breakpoint the rail turns into a top bar and the history goes under the main area.
+- One page per tool, each with its own address: `/network` (DNS, the default), `/network/reverse_dns`, `/network/ports`, `/network/ping` and `/network/subnet`, served by `Network::WorkspacesController#show` (`network_workspace_path(kind)`; only the tool on display is rendered, so a page runs one history query). A saved run lives at `/network/checks/:id` (`Network::ChecksController#show`, same template): reloading or sharing the link shows the same tool with the stored result and what was typed. The page has three panes: an icon rail with the tools (`NetworkRail::Component`, plain links grouped by subject with a hairline between groups, `aria-current="page"` on the tool on display; the tools, their icons and groups come from `Network::Tools`, which also builds the route constraint; a tool can be a preset of another one, like *Reverse DNS*, which is the DNS page with `PTR` preselected and shares its history, and a saved run is shown under the most specific entry whose defaults match what was typed, `Network::Tools.for_run`), the history of that tool and the main area. The main area is a one-row form bar (fields have screen-reader labels only; the intro and hints sit under the bar) above the result. Below the `lg` breakpoint the rail turns into a top bar and the history goes under the main area.
 - **History** is saved per user within a project (`NetworkCheck`, table `network_checks`); members never see each other's runs. Every successful run adds a row and answers with a `303` redirect to `/network/checks/:id`, so the address always points at the run on display (the history entry is marked with `aria-current`); failed runs (invalid input, blocked or unresolved targets) are not recorded and still answer with a Turbo Stream that fills the result area. The panel lists the newest runs of the tool (label, one-line summary, how long ago, a dot for `ok`/`warn`/`bad`); the page of a saved run shows its stored result through the same result partials as a live run and notes the previous run against the same target. Each entry has a delete button (`DELETE /network/checks/:id`, back to the tool) and the panel a *Clear* button (`DELETE /network/history?kind=dns`).
 - **Variables in inputs.** Every text input of the tools gets the `{{variable}}` autocomplete and highlighting of the API Client (`variable-autocomplete` Stimulus controller, fed by `VariableAutocomplete#editor_variables`: enabled variables of the selected environment, secrets masked). The server resolves `{{…}}` (and the `{{$…}}` helpers) with `Network::Variables` in host, domain, expected value, ports, ping port and attempts; undefined variables and secret ones are refused with an error naming the variable. Port and attempts of the TCP ping are therefore text inputs (`inputmode=numeric`) validated on the server.
 - Submitting posts to the tool's endpoint and the result replaces the result area as a Turbo Stream (same pattern as running a request in the API Client). The submit button uses the standard loading state. A saved run (`/network/checks/:id`) is read-only: the bar shows what was typed in non-editable fields (no form, no submit button) with a *New check* link back to the empty tool.
@@ -74,6 +74,7 @@ namespace :network do
   resources :dns_checks, only: :create
   resources :port_checks, only: :create
   resources :pings, only: :create
+  resources :subnets, only: :create
 end
 ```
 
@@ -83,6 +84,7 @@ end
 | `POST /network/dns_checks` | `Network::DnsChecksController#create` | Run DNS check |
 | `POST /network/port_checks` | `Network::PortChecksController#create` | Run port check |
 | `POST /network/pings` | `Network::PingsController#create` | Run TCP ping |
+| `POST /network/subnets` | `Network::SubnetsController#create` | Calculate a subnet (not saved, answers in place) |
 
 Each `create` action: scope to `current_project`, declare strong params, call the service, respond with a Turbo Stream (the forms are Turbo forms; there is no HTML fallback). `Network::BaseController` throttles every POST per user with the `Throttling` concern (`throttle :network`, 20 per minute, override with `SHANGO_RATE_LIMIT_NETWORK=<count>/<seconds>`), and answers `429` as a Turbo Stream into the tool's result area. Each controller defines `result_target`.
 
@@ -103,6 +105,7 @@ Each `create` action: scope to `current_project`, declare strong params, call th
 | `Network::PortChecks::PortSpec` | Parses `22,80,8000-8010` and the `common` preset into a sorted unique integer list; rejects invalid or too many ports. |
 | `Network::Pings::Run` | Applies the SSRF policy, performs N sequential probes, computes min/avg/max/loss. |
 | `Network::Tcp::Probe` | One TCP connect with timeout, returns `{ status: :open/:closed/:filtered, ms: }`. Connects to the pinned IP. Closes the socket immediately; never sends or reads data. |
+| `Network::Subnets::Calculate` | Parses the network (prefix, mask or bare address; `{{variables}}` resolved in every field), computes the range with `IPAddr` (IPv4 `/31` and `/32` count every address as a host, RFC 3021; IPv6 has no broadcast or mask), lists at most `MAX_SUBNETS` = 64 subnets of a longer prefix with the full count, and checks membership of an address (another IP version is outside). Errors: `blank_network`, `invalid_network`, `invalid_split`, `invalid_ip`. |
 | `Network::Services` | Static port → service name table (`22 ssh`, `80 http`, `443 https`, `5432 postgresql`…). |
 
 The DNS client speaks the protocol itself instead of using `Resolv::DNS#getresources` because that method swallows every error, so a timeout, an `NXDOMAIN` and an empty answer would look the same, and the propagation table needs to tell them apart. DNS does not use EDNS, so large answers (long `TXT` sets) arrive truncated over UDP and are fetched again over TCP.
@@ -132,7 +135,8 @@ DNS and port probes run on short-lived threads through `Network::Parallel.map(it
 | Ping attempts | 1–10, default 4 | |
 | Ping probe timeout | 2 s | Attempts run one after another; the run stops after 5 timeouts in a row, so a dead host costs at most 10 s |
 | Hosts per run | 1 | No sweeping |
-| Rate limit | 20 runs per minute per user, all three tools combined | Abuse protection (`throttle :network` in `Network::BaseController`) |
+| Subnets listed by the calculator | 64 (the count is always shown in full; above 2^53 it is written as a power of two) | Keeps the page small |
+| Rate limit | 20 runs per minute per user, all tools combined (the subnet calculator included, though it sends nothing) | Abuse protection (`throttle :network` in `Network::BaseController`) |
 | History kept | 50 runs per user, project and tool, 90 days | Bounds the table; `NetworkCheck::KEEP_PER_KIND`, `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` |
 
 Planned limits for the second wave (confirmed per tool when it is built):
@@ -175,6 +179,7 @@ Open decision (see §10): require proof of ownership (DNS TXT or file) before po
 | `TXT` records longer than 255 bytes | Chunks joined before comparing |
 | Trailing dots, case | Names compared case-insensitively without the trailing dot; `MX` compared as `priority host` |
 | `PTR` with a host name instead of an IP | Form error `ptr_needs_ip` |
+| Subnet: non-contiguous mask, prefix above 32/128, split not longer than the network | Form error (`invalid_network`, `invalid_split` with the valid range) |
 | PTR name that does not resolve back to the IP | Row marked `unconfirmed` in the forward-confirmation section; no PTR answer at all shows a note instead |
 | Port spec invalid / above 65535 / more than 100 ports | Form error |
 | IPv6-only host | Works; probes use the resolved address family |

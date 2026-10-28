@@ -39,6 +39,14 @@ RSpec.describe "Network workspace" do
       expect(response.body).to match(/<a(?=[^>]*aria-current="page")[^>]*href="#{network_workspace_path("reverse_dns")}"/)
     end
 
+    it "renders the subnet calculator without a history", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("subnet")
+
+      expect(response.body).to include(I18n.t("network.subnet.submit"), network_subnets_path, I18n.t("network.empty.subnet.hint"), I18n.t("network.groups.utilities"))
+      expect(response.body).not_to include(I18n.t("network.history.clear"))
+    end
+
     it "has no page for an unknown tool" do
       sign_in_with_project
 

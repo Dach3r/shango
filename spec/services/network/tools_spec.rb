@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Network::Tools do
   it "lists the tools in rail order" do
-    expect(described_class.names).to eq(%w[dns reverse_dns ports ping])
+    expect(described_class.names).to eq(%w[dns reverse_dns ports ping subnet])
   end
 
   it "finds a tool by name", :aggregate_failures do

@@ -1,0 +1,14 @@
+<%# Form bar of the subnet calculator: the network, an optional prefix to split it into and an optional address to look for. %>
+<%= tag.div id: "subnet_form", class: "shrink-0", data: variable_autocomplete_data do %>
+  <%= network_bar scope: :subnet, url: network_subnets_path, readonly: false do |form| %>
+    <%= form.label :network, t("network.subnet.network"), class: "sr-only" %>
+    <%= form.text_field :network, required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.network_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.label :split, t("network.subnet.split"), class: "sr-only" %>
+    <%= form.text_field :split, autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.split_placeholder"), title: t("network.subnet.split"), class: bar_field_classes("w-28 shrink-0 font-mono") %>
+    <%= form.label :contains, t("network.subnet.contains"), class: "sr-only" %>
+    <%= form.text_field :contains, autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.contains_placeholder"), title: t("network.subnet.contains"), class: bar_field_classes("min-w-36 flex-1 font-mono") %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "calculator", class: "size-4" %><%= t("network.subnet.submit") %>
+    <% end %>
+  <% end %>
+<% end %>

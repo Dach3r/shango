@@ -5,12 +5,14 @@ es:
     groups:
       connectivity: Conectividad
       dns: DNS
+      utilities: "Utilidades"
     tabs:
       label: Herramientas de red
       dns: DNS
       reverse_dns: "DNS inverso"
       ports: Puertos
       ping: Ping
+      subnet: "Calculadora de subredes"
     errors:
       blank: Ingresa un dominio o host.
       invalid: "No es un nombre de host ni una dirección IP válidos. Usa solo el nombre, sin esquema, ruta ni puerto."
@@ -25,6 +27,10 @@ es:
       too_many_ports: "Comprueba como máximo %{max} puertos a la vez."
       invalid_port: Ingresa un puerto entre 1 y 65535.
       invalid_attempts: "Elige entre 1 y %{max} intentos."
+      blank_network: "Escribe una red, como 192.168.1.0/24."
+      invalid_network: "\"%{token}\" no es una red válida. Usa una dirección con prefijo (192.168.1.0/24, 2001:db8::/48) o con máscara (192.168.1.0 255.255.255.0)."
+      invalid_split: "Divide en un prefijo de /%{min} a /%{max}."
+      invalid_ip: "\"%{token}\" no es una dirección IP válida."
     statuses:
       ok: Respondió
       cname: Alias
@@ -44,6 +50,8 @@ es:
       open: Abierto
       closed: Cerrado
       filtered: Filtrado
+      inside: "Dentro"
+      outside: "Fuera"
     dns:
       domain: Dominio
       hint: "Las respuestas DNS vienen de los nameservers autoritativos y de varios resolvers públicos, para saber si un cambio ya se propagó. Para PTR, escribe una dirección IP: la comprobación también confirma que cada nombre resuelve de vuelta a ella."
@@ -102,6 +110,34 @@ es:
       only_refused: El host responde, pero nada escucha en este puerto.
       no_answer: Sin respuesta. El host puede estar apagado o un firewall puede estar descartando los paquetes.
       stopped: "Detenido tras %{count} tiempos de espera seguidos."
+    subnet:
+      network: "Red"
+      network_placeholder: "192.168.1.0/24 o 2001:db8::/48"
+      split: "Dividir en"
+      split_placeholder: /26
+      contains: "Contiene la IP"
+      contains_placeholder: 192.168.1.77
+      submit: "Calcular"
+      hint: "Calcula el rango de una red IPv4 o IPv6 a partir de un prefijo o una máscara. Opcionalmente la divide en prefijos más largos o comprueba si una dirección pertenece a ella. No se envía nada por la red."
+      family: "IPv%{version}"
+      scopes:
+        public: "Pública"
+        private: "Privada"
+        loopback: "Loopback"
+        link_local: "Enlace local"
+      fields:
+        address: "Dirección"
+        network: "Red"
+        netmask: "Máscara"
+        wildcard: "Wildcard"
+        broadcast: "Broadcast"
+        first: "Primer host"
+        last: "Último host"
+        size: "Direcciones"
+        hosts: "Hosts utilizables"
+      contains_title: "Comprobación de dirección"
+      split_title: "%{count} subredes /%{prefix}"
+      split_truncated: "Se muestran las primeras %{shown} de %{count}."
     empty:
       dns:
         title: "Aún no hay nada que mostrar"
@@ -112,6 +148,9 @@ es:
       ping:
         title: "Aún no hay nada que mostrar"
         hint: "Ingresa un host e inicia un ping TCP."
+      subnet:
+        title: "Aún no hay nada que mostrar"
+        hint: "Escribe una red, como 192.168.1.0/24, para ver su rango."
     history:
       dns: "Comprobaciones DNS"
       ports: "Comprobaciones de puertos"
@@ -134,6 +173,8 @@ es:
       open: "Un servicio aceptó la conexión."
       closed: "El host respondió, pero nada escucha en este puerto."
       filtered: "Sin respuesta. Un firewall puede estar descartando los paquetes."
+      inside: "La dirección pertenece a esta red."
+      outside: "La dirección está fuera de esta red, o es de la otra versión de IP."
     limits:
       about: "Acerca de"
     results:

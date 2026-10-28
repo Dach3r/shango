@@ -5,12 +5,14 @@ en:
     groups:
       connectivity: Connectivity
       dns: DNS
+      utilities: "Utilities"
     tabs:
       label: Network tools
       dns: DNS
       reverse_dns: "Reverse DNS"
       ports: Ports
       ping: Ping
+      subnet: "Subnet calculator"
     errors:
       blank: Enter a domain or host.
       invalid: "That is not a valid host name or IP address. Use only the name, without scheme, path or port."
@@ -25,6 +27,10 @@ en:
       too_many_ports: "Check at most %{max} ports at a time."
       invalid_port: Enter a port between 1 and 65535.
       invalid_attempts: "Choose between 1 and %{max} attempts."
+      blank_network: "Enter a network, such as 192.168.1.0/24."
+      invalid_network: "\"%{token}\" is not a valid network. Use an address with a prefix (192.168.1.0/24, 2001:db8::/48) or with a mask (192.168.1.0 255.255.255.0)."
+      invalid_split: "Split into a prefix from /%{min} to /%{max}."
+      invalid_ip: "\"%{token}\" is not a valid IP address."
     statuses:
       ok: Answered
       cname: Alias
@@ -44,6 +50,8 @@ en:
       open: Open
       closed: Closed
       filtered: Filtered
+      inside: "Inside"
+      outside: "Outside"
     dns:
       domain: Domain
       hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated. For PTR, enter an IP address: the check also confirms that each name resolves back to it."
@@ -102,6 +110,34 @@ en:
       only_refused: The host answers, but nothing is listening on this port.
       no_answer: No answer. The host may be offline, or a firewall may be dropping the packets.
       stopped: "Stopped after %{count} timeouts in a row."
+    subnet:
+      network: "Network"
+      network_placeholder: "192.168.1.0/24 or 2001:db8::/48"
+      split: "Split into"
+      split_placeholder: /26
+      contains: "Contains IP"
+      contains_placeholder: 192.168.1.77
+      submit: "Calculate"
+      hint: "Works out the range of an IPv4 or IPv6 network from a prefix or a mask. Optionally split it into longer prefixes, or check whether an address belongs to it. Nothing is sent over the network."
+      family: "IPv%{version}"
+      scopes:
+        public: "Public"
+        private: "Private"
+        loopback: "Loopback"
+        link_local: "Link-local"
+      fields:
+        address: "Address"
+        network: "Network"
+        netmask: "Netmask"
+        wildcard: "Wildcard"
+        broadcast: "Broadcast"
+        first: "First host"
+        last: "Last host"
+        size: "Addresses"
+        hosts: "Usable hosts"
+      contains_title: "Address check"
+      split_title: "%{count} subnets of /%{prefix}"
+      split_truncated: "Showing the first %{shown} of %{count}."
     empty:
       dns:
         title: "Nothing to show yet"
@@ -112,6 +148,9 @@ en:
       ping:
         title: "Nothing to show yet"
         hint: "Enter a host and start a TCP ping."
+      subnet:
+        title: "Nothing to show yet"
+        hint: "Enter a network, such as 192.168.1.0/24, to see its range."
     history:
       dns: "DNS checks"
       ports: "Port checks"
@@ -134,6 +173,8 @@ en:
       open: "A service accepted the connection."
       closed: "The host answered, but nothing listens on this port."
       filtered: "No answer. A firewall may be dropping the packets."
+      inside: "The address belongs to this network."
+      outside: "The address is outside this network, or is of the other IP version."
     limits:
       about: "About"
     results:

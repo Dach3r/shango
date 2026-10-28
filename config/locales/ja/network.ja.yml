@@ -5,12 +5,14 @@ ja:
     groups:
       connectivity: 接続
       dns: DNS
+      utilities: "ユーティリティ"
     tabs:
       label: ネットワークツール
       dns: DNS
       reverse_dns: "逆引き DNS"
       ports: ポート
       ping: Ping
+      subnet: "サブネット計算"
     errors:
       blank: ドメインまたはホストを入力してください。
       invalid: "ホスト名またはIPアドレスが正しくありません。スキーム、パス、ポートを含めず、名前のみを入力してください。"
@@ -25,6 +27,10 @@ ja:
       too_many_ports: "一度に確認できるポートは最大 %{max} 個です。"
       invalid_port: 1〜65535のポートを入力してください。
       invalid_attempts: "試行回数は1〜%{max}の間で選択してください。"
+      blank_network: "192.168.1.0/24 のようにネットワークを入力してください。"
+      invalid_network: "「%{token}」は有効なネットワークではありません。プレフィックス付きのアドレス (192.168.1.0/24、2001:db8::/48) かマスク付き (192.168.1.0 255.255.255.0) で入力してください。"
+      invalid_split: "/%{min} から /%{max} のプレフィックスで分割してください。"
+      invalid_ip: "「%{token}」は有効な IP アドレスではありません。"
     statuses:
       ok: 応答あり
       cname: エイリアス
@@ -44,6 +50,8 @@ ja:
       open: オープン
       closed: クローズ
       filtered: フィルタ済み
+      inside: "含まれる"
+      outside: "含まれない"
     dns:
       domain: ドメイン
       hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。 PTR では IP アドレスを入力してください。各名前が同じ IP に正引きされるかも確認します。"
@@ -102,6 +110,34 @@ ja:
       only_refused: ホストは応答していますが、このポートで待ち受けているものはありません。
       no_answer: 応答がありません。ホストがオフラインか、ファイアウォールがパケットを破棄している可能性があります。
       stopped: "%{count} 回連続でタイムアウトしたため停止しました。"
+    subnet:
+      network: "ネットワーク"
+      network_placeholder: "192.168.1.0/24 または 2001:db8::/48"
+      split: "分割"
+      split_placeholder: /26
+      contains: "含む IP"
+      contains_placeholder: 192.168.1.77
+      submit: "計算"
+      hint: "プレフィックスまたはマスクから IPv4 / IPv6 ネットワークの範囲を計算します。より長いプレフィックスへの分割や、アドレスが含まれるかの確認もできます。ネットワークには何も送信しません。"
+      family: "IPv%{version}"
+      scopes:
+        public: "パブリック"
+        private: "プライベート"
+        loopback: "ループバック"
+        link_local: "リンクローカル"
+      fields:
+        address: "アドレス"
+        network: "ネットワーク"
+        netmask: "ネットマスク"
+        wildcard: "ワイルドカード"
+        broadcast: "ブロードキャスト"
+        first: "最初のホスト"
+        last: "最後のホスト"
+        size: "アドレス数"
+        hosts: "利用可能なホスト"
+      contains_title: "アドレスの確認"
+      split_title: "/%{prefix} のサブネット %{count} 個"
+      split_truncated: "%{count} 個のうち最初の %{shown} 個を表示しています。"
     empty:
       dns:
         title: "表示する内容はまだありません"
@@ -112,6 +148,9 @@ ja:
       ping:
         title: "表示する内容はまだありません"
         hint: "ホストを入力して TCP ping を開始します。"
+      subnet:
+        title: "表示する内容はまだありません"
+        hint: "192.168.1.0/24 のようにネットワークを入力すると範囲が表示されます。"
     history:
       dns: "DNS チェック"
       ports: "ポートチェック"
@@ -134,6 +173,8 @@ ja:
       open: "サービスが接続を受け付けました。"
       closed: "ホストは応答しましたが、このポートで待ち受けているものはありません。"
       filtered: "応答なし。ファイアウォールがパケットを破棄している可能性があります。"
+      inside: "このアドレスはこのネットワークに属しています。"
+      outside: "このアドレスはネットワーク外か、別の IP バージョンです。"
     limits:
       about: "概要"
     results:

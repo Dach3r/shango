@@ -6,9 +6,9 @@ class NetworkStatus::Component < ApplicationComponent
     neutral: "text-muted"
   }.freeze
   STATUS_TONES = {
-    ok: :success, match: :success, open: :success, confirmed: :success,
+    ok: :success, match: :success, open: :success, confirmed: :success, inside: :success,
     cname: :neutral, closed: :neutral,
-    nodata: :warning, nxdomain: :warning, mismatch: :warning, no_answer: :warning, timeout: :warning, filtered: :warning, unconfirmed: :warning,
+    nodata: :warning, nxdomain: :warning, mismatch: :warning, no_answer: :warning, timeout: :warning, filtered: :warning, unconfirmed: :warning, outside: :warning,
     servfail: :danger, refused: :danger, error: :danger, blocked: :danger, unresolved: :danger
   }.freeze
 
