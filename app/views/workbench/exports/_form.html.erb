@@ -21,10 +21,12 @@
     <fieldset class="space-y-3">
       <legend class="<%= label_classes %>"><%= t(".include") %></legend>
       <% { include_environments: "environments", include_credentials: "credentials" }.each do |name, key| %>
-        <%= render Checkbox::Component.new(name: name, label_class: "!items-start", label: safe_join([
-          tag.span(t(".#{key}"), class: "block text-sm text-ink"),
-          tag.span(t(".#{key}_hint"), class: "block text-xs text-muted")
-        ])) %>
+        <%= render Checkbox::Component.new(name: name, label_class: "!items-start", label: tag.span(class: "block min-w-0") {
+          safe_join([
+            tag.span(t(".#{key}"), class: "block text-sm text-ink"),
+            tag.span(t(".#{key}_hint"), class: "mt-0.5 block text-xs text-muted")
+          ])
+        }) %>
       <% end %>
     </fieldset>
   <% end %>
