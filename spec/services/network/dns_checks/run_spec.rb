@@ -67,6 +67,54 @@ RSpec.describe Network::DnsChecks::Run do
     end
   end
 
+  describe "reverse DNS" do
+    def stub_ptr(name: "dns.google", forward: answer(:ok, "8.8.8.8"))
+      allow(Network::Dns::Query).to receive(:call) { |type:, **| type == "PTR" ? answer(:ok, "#{name}.") : forward }
+    end
+
+    it "asks for the in-addr.arpa name of an IPv4 address and confirms the names it points to", :aggregate_failures do
+      stub_ptr
+      result = described_class.call(domain: "8.8.8.8", type: "ptr")
+
+      expect(result.data).to include(host: "8.8.8.8", type: "PTR", reverse: "8.8.8.8.in-addr.arpa")
+      expect(result.data[:forward]).to eq([{ name: "dns.google", addresses: ["8.8.8.8"], confirmed: true }])
+      expect(Network::Dns::Resolvers).to have_received(:authoritative).with("8.8.8.8.in-addr.arpa")
+      expect(Network::Dns::Query).to have_received(:call).with(hash_including(name: "8.8.8.8.in-addr.arpa", type: "PTR")).exactly(3).times
+    end
+
+    it "asks for the ip6.arpa name of an IPv6 address" do
+      stub_ptr(forward: answer(:ok, "2001:4860:4860::8888"))
+      result = described_class.call(domain: "2001:4860:4860::8888", type: "PTR")
+
+      expect(result.data[:reverse]).to eq("8.8.8.8.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.8.4.0.6.8.4.1.0.0.2.ip6.arpa")
+    end
+
+    it "matches the expected name without the trailing dot" do
+      stub_ptr
+
+      expect(described_class.call(domain: "8.8.8.8", type: "PTR", expected: "dns.google").data[:summary][:matched]).to eq(3)
+    end
+
+    it "has nothing to confirm when no resolver answered" do
+      stub_answers("192.0.2.1" => answer(:nxdomain), "8.8.8.8" => answer(:timeout), "1.1.1.1" => answer(:nxdomain))
+
+      expect(described_class.call(domain: "192.0.2.55", type: "PTR").data[:forward]).to eq([])
+    end
+
+    it "refuses a host name", :aggregate_failures do
+      result = described_class.call(domain: "example.com", type: "PTR")
+
+      expect(result).to be_failure
+      expect(result.error).to eq(:ptr_needs_ip)
+    end
+
+    it "keeps other types free of reverse data" do
+      stub_answers("192.0.2.1" => answer, "8.8.8.8" => answer, "1.1.1.1" => answer)
+
+      expect(run.data.keys).not_to include(:reverse, :forward)
+    end
+  end
+
   describe "rows that are not queried" do
     it "marks nameservers without an address", :aggregate_failures do
       stub_resolvers([Network::Dns::Resolvers::Resolver.new(name: "ns9.example.net", ip: nil, group: :authoritative)])

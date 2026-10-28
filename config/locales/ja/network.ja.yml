@@ -18,6 +18,7 @@ ja:
       blocked: "このホストは許可されていません: %{detail}。"
       unresolved: ホスト名を解決できません。
       invalid_type: 対応しているレコードタイプを選択してください。
+      ptr_needs_ip: "逆引き DNS (PTR) には 203.0.113.10 のような IP アドレスが必要です。"
       blank_ports: ポートを1つ以上入力してください。
       invalid_ports: "「%{token}」は有効なポートではありません。1〜65535の数値、8000-8010 のような範囲、または common を指定してください。"
       too_many_ports: "一度に確認できるポートは最大 %{max} 個です。"
@@ -37,16 +38,21 @@ ja:
       match: 一致
       mismatch: 不一致
       no_answer: 応答なし
+      confirmed: "確認済み"
+      unconfirmed: "未確認"
       open: オープン
       closed: クローズ
       filtered: フィルタ済み
     dns:
       domain: ドメイン
-      hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。"
+      hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。 PTR では IP アドレスを入力してください。各名前が同じ IP に正引きされるかも確認します。"
       domain_placeholder: example.com 203.0.113.10
       type: タイプ
       submit: DNSを確認
       no_authoritative: このドメインの権威ネームサーバーを特定できませんでした。
+      forward:
+        title: "正引き確認付き逆引き DNS"
+        none: "確認する PTR レコードがありません。"
       summary:
         expected: "%{total} 件中 %{matched} 件のリゾルバーが期待値と一致しています"
         answered: "%{total} 件中 %{answered} 件のリゾルバーが応答しました"

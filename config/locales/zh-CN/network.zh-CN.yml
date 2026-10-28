@@ -18,6 +18,7 @@ zh-CN:
       blocked: "不允许使用此主机：%{detail}。"
       unresolved: 无法解析该主机名。
       invalid_type: 请选择受支持的记录类型。
+      ptr_needs_ip: "反向 DNS (PTR) 需要 IP 地址，例如 203.0.113.10。"
       blank_ports: 请至少输入一个端口。
       invalid_ports: "\"%{token}\" 不是有效的端口。请使用 1 到 65535 的数字、形如 8000-8010 的范围，或 common。"
       too_many_ports: "每次最多检查 %{max} 个端口。"
@@ -37,16 +38,21 @@ zh-CN:
       match: 一致
       mismatch: 不一致
       no_answer: 无应答
+      confirmed: "已确认"
+      unconfirmed: "未确认"
       open: 开放
       closed: 关闭
       filtered: 被过滤
     dns:
       domain: 域名
-      hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。"
+      hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。 对于 PTR，请输入 IP 地址：检查还会确认每个名称能解析回该地址。"
       domain_placeholder: example.com 203.0.113.10
       type: 类型
       submit: 检查 DNS
       no_authoritative: 无法确定此域名的权威名称服务器。
+      forward:
+        title: "正向确认的反向 DNS"
+        none: "没有可确认的 PTR 记录。"
       summary:
         expected: "%{total} 个解析器中有 %{matched} 个与期望值一致"
         answered: "%{total} 个解析器中有 %{answered} 个已应答"

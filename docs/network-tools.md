@@ -1,6 +1,6 @@
 # Shango — Network Tools
 
-> Design and reference for the Network Tools feature. **Status: built** (DNS checker, port check, TCP ping); **in progress** (the second wave in §2, built one tool at a time). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
+> Design and reference for the Network Tools feature. **Status: built** (DNS checker with reverse DNS, port check, TCP ping); **in progress** (the second wave in §2, built one tool at a time). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
 
 ## 1. Why
 
@@ -20,7 +20,7 @@ Fit with the product: this is the *DNS Tools* entry of *Future tools* in `produc
 
 | Tool | What it does |
 |------|--------------|
-| **DNS checker** | Queries one record type for a domain against a fixed set of public resolvers and the domain's authoritative nameservers, in parallel. Shows each answer with its TTL, and (when an expected value is given) whether it matches, so the user sees how far a change has propagated. |
+| **DNS checker** | Queries one record type for a domain against a fixed set of public resolvers and the domain's authoritative nameservers, in parallel. Shows each answer with its TTL, and (when an expected value is given) whether it matches, so the user sees how far a change has propagated. With the `PTR` type it takes an IP, queries its `in-addr.arpa` / `ip6.arpa` name and checks forward-confirmed reverse DNS: each name the PTR points to must resolve (`A` for IPv4, `AAAA` for IPv6) back to the same IP. |
 | **Port check** | TCP connect check of a list or range of ports on one host. Reports `open`, `closed` (connection refused) or `filtered` (timeout), with the service name from a static table for well-known ports. |
 | **TCP ping** | Opens a TCP connection to a host/port several times and reports per-attempt latency plus min/avg/max and loss. Answers "is it online". |
 
@@ -37,7 +37,6 @@ Planned in this order; each one ships with its service, page, locales, specs and
 
 | Tool | `kind` | What it does |
 |------|--------|--------------|
-| **Reverse DNS** | `dns` | `PTR` type in the DNS checker: takes an IP, queries `in-addr.arpa` / `ip6.arpa`, and checks forward-confirmed rDNS (the name resolves back to the same IP). |
 | **Subnet calculator** | none | Network, mask, wildcard, broadcast, host range and count for IPv4 and IPv6; split into `/N`; "is this IP in the range". No network access, no history. |
 | **TLS certificate** | `tls` | Handshake against the pinned IP with SNI, direct TLS or STARTTLS (SMTP, IMAP, POP3, chosen explicitly). Subject, issuer, SAN, validity, key, signature, chain, protocol, cipher, ALPN; trust and host match validated by hand so a bad certificate is reported, not an error. |
 | **Email DNS health** | `email` | SPF (recursive lookup count, duplicates, `+all`/`?all`, `ptr`), DKIM (selectors typed after the domain), DMARC (`p`, `sp`, `pct`, `rua`) and MX, as a list of findings with severity. DNS only. |
@@ -94,8 +93,9 @@ Each `create` action: scope to `current_project`, declare strong params, call th
 | `Network::Target` | Resolves `{{variables}}` against the selected environment (disabled variables are invisible, secret ones are refused), validates the host (hostname per RFC 1035 with `_` allowed, or IP literal; no scheme, path, port or whitespace) and returns the normalized host or an error. Shared by the three tools. |
 | `Network::Destination` | Applies `Network::SsrfPolicy` to a host and returns the address probes connect to (`:blocked` / `:unresolved` errors). Used by port check and TCP ping. |
 | `Network::Parallel` | `map(items, limit:)`: bounded threads, ordered results. |
-| `Network::DnsChecks::Run` | Validates the record type and domain, builds the resolver list (authoritative first, then public), queries in parallel, evaluates the expected value, returns a `Result` whose `data` has the rows and the summary (`total`, `answered`, `matched`, `agree`). |
-| `Network::Dns::Resolvers` | The fixed list of eight public resolvers (Google, Cloudflare, Quad9, OpenDNS, Verisign, AdGuard, CleanBrowsing, Lumen) and `authoritative(domain)`: walks up the labels until an `NS` answer is found (a subdomain has no NS records of its own), then looks up `A`, else `AAAA`, of each nameserver. Nameservers without address keep a nil `ip`. |
+| `Network::DnsChecks::Run` | Validates the record type and domain, builds the resolver list (authoritative first, then public), queries in parallel, evaluates the expected value, returns a `Result` whose `data` has the rows and the summary (`total`, `answered`, `matched`, `agree`). For `PTR` it requires an IP (`ptr_needs_ip` otherwise), queries `IPAddr#reverse` and adds `reverse` (the queried name) and `forward` to `data`. |
+| `Network::DnsChecks::ForwardConfirmation` | Forward-confirmed reverse DNS: looks up `A` (IPv4) or `AAAA` (IPv6) of at most 3 names the PTR answers point to, through the lookup resolver, in parallel, and returns `{ name:, addresses:, confirmed: }` per name (addresses compared as `IPAddr`, so IPv6 notation does not matter). |
+| `Network::Dns::Resolvers` | The fixed list of eight public resolvers (Google, Cloudflare, Quad9, OpenDNS, Verisign, AdGuard, CleanBrowsing, Lumen) and `authoritative(domain)`: asks `NS` for the name and every parent (except the TLD) in parallel and keeps the closest one that answers (a subdomain has no NS records of its own; an `ip6.arpa` name has up to 33 labels, so asking one by one took seconds), then looks up `A`, else `AAAA`, of each nameserver. Nameservers without address keep a nil `ip`. |
 | `Network::Dns::Query` | One question to one nameserver. Always returns an `Answer` (`status`, `answers`, `ttl` = lowest TTL, `ms`); failures are statuses: `ok`, `cname` (only an alias came back), `nodata`, `nxdomain`, `servfail`, `refused`, `timeout`, `error`. Builds and decodes the message with `Resolv::DNS::Message`. |
 | `Network::Dns::Transport` | The raw exchange: UDP first (connected socket, so replies from other sources are ignored), TCP with the 2-byte length frame when the reply is truncated. Raises `TimedOut` / `Failed`. |
 | `Network::Dns::Row` | One table line (`name`, `ip`, `group`, `status`, `answers`, `ttl`, `ms`, `match`). |
@@ -124,7 +124,8 @@ DNS and port probes run on short-lived threads through `Network::Parallel.map(it
 | Limit | Value | Why |
 |-------|-------|-----|
 | DNS query timeout (per nameserver) | 3 s | A dead resolver must not stall the table |
-| DNS worst-case run | ≈ 3 s + NS lookup 3 s | Queries are parallel |
+| DNS worst-case run | ≈ 3 s + NS lookup 3 s (+ 3 s forward confirmation for `PTR`) | Queries are parallel |
+| Forward confirmation (`PTR`) | 3 names | One `A`/`AAAA` query per name |
 | Ports per run | 100 | Bounds duration and abuse |
 | Port probe timeout | 1.5 s | Long enough for most internet RTTs |
 | Port probe concurrency | 20 | Worst case 100 ports ÷ 20 × 1.5 s ≈ 7.5 s |
@@ -173,6 +174,8 @@ Open decision (see §10): require proof of ownership (DNS TXT or file) before po
 | Resolvers disagree | Answers shown per row; summary says `answers differ` (the propagation-in-progress case, or geo/load-balanced DNS); the tone stays `ok` while every resolver answered, `warn` only when some did not (or, with an expected value, some do not match) |
 | `TXT` records longer than 255 bytes | Chunks joined before comparing |
 | Trailing dots, case | Names compared case-insensitively without the trailing dot; `MX` compared as `priority host` |
+| `PTR` with a host name instead of an IP | Form error `ptr_needs_ip` |
+| PTR name that does not resolve back to the IP | Row marked `unconfirmed` in the forward-confirmation section; no PTR answer at all shows a note instead |
 | Port spec invalid / above 65535 / more than 100 ports | Form error |
 | IPv6-only host | Works; probes use the resolved address family |
 | All probes time out | Port check: all `filtered`, with a hint that a firewall may drop packets; ping: `100% loss` |

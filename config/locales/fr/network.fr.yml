@@ -18,6 +18,7 @@ fr:
       blocked: "Cet hôte n'est pas autorisé : %{detail}."
       unresolved: "Le nom d'hôte ne se résout pas."
       invalid_type: "Choisissez un type d'enregistrement pris en charge."
+      ptr_needs_ip: "Le DNS inverse (PTR) nécessite une adresse IP, par exemple 203.0.113.10."
       blank_ports: "Saisissez au moins un port."
       invalid_ports: "\"%{token}\" n'est pas un port valide. Utilisez des nombres de 1 à 65535, des plages comme 8000-8010, ou common."
       too_many_ports: "Vérifiez au maximum %{max} ports à la fois."
@@ -37,16 +38,21 @@ fr:
       match: "Correspond"
       mismatch: "Diffère"
       no_answer: "Sans réponse"
+      confirmed: "Confirmé"
+      unconfirmed: "Non confirmé"
       open: "Ouvert"
       closed: "Fermé"
       filtered: "Filtré"
     dns:
       domain: "Domaine"
-      hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée."
+      hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée. Pour PTR, saisissez une adresse IP : la vérification confirme aussi que chaque nom renvoie vers elle."
       domain_placeholder: example.com 203.0.113.10
       type: "Type"
       submit: "Vérifier le DNS"
       no_authoritative: "Impossible de déterminer les serveurs de noms faisant autorité pour ce domaine."
+      forward:
+        title: "DNS inverse confirmé"
+        none: "Aucun enregistrement PTR à confirmer."
       summary:
         expected: "%{matched} résolveurs sur %{total} correspondent à la valeur attendue"
         answered: "%{answered} résolveurs sur %{total} ont répondu"

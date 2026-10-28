@@ -18,6 +18,7 @@ es:
       blocked: "Este host no está permitido: %{detail}."
       unresolved: El nombre de host no se resuelve.
       invalid_type: Elige un tipo de registro compatible.
+      ptr_needs_ip: "El DNS inverso (PTR) necesita una dirección IP, como 203.0.113.10."
       blank_ports: Ingresa al menos un puerto.
       invalid_ports: "\"%{token}\" no es un puerto válido. Usa números del 1 al 65535, rangos como 8000-8010 o common."
       too_many_ports: "Comprueba como máximo %{max} puertos a la vez."
@@ -37,16 +38,21 @@ es:
       match: Coincide
       mismatch: Difiere
       no_answer: Sin respuesta
+      confirmed: "Confirmado"
+      unconfirmed: "Sin confirmar"
       open: Abierto
       closed: Cerrado
       filtered: Filtrado
     dns:
       domain: Dominio
-      hint: "Las respuestas DNS vienen de los nameservers autoritativos y de varios resolvers públicos, para saber si un cambio ya se propagó."
+      hint: "Las respuestas DNS vienen de los nameservers autoritativos y de varios resolvers públicos, para saber si un cambio ya se propagó. Para PTR, escribe una dirección IP: la comprobación también confirma que cada nombre resuelve de vuelta a ella."
       domain_placeholder: example.com 203.0.113.10
       type: Tipo
       submit: Comprobar DNS
       no_authoritative: No se pudieron determinar los nameservers autoritativos de este dominio.
+      forward:
+        title: "DNS inverso confirmado"
+        none: "No hay registro PTR que confirmar."
       summary:
         expected: "%{matched} de %{total} resolvers coinciden con el valor esperado"
         answered: "%{answered} de %{total} resolvers respondieron"

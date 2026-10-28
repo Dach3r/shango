@@ -12,6 +12,14 @@ RSpec.describe Network::Checks::Codec do
     expect(round_trip("dns", data)).to eq(data)
   end
 
+  it "round-trips a reverse DNS run with its forward confirmation" do
+    row = Network::Dns::Row.new(name: "Google", ip: "8.8.8.8", group: :public, status: :ok, answers: ["dns.google"], ttl: 60, ms: 12, match: nil)
+    data = { host: "8.8.8.8", type: "PTR", expected: nil, rows: [row], summary: {}, reverse: "8.8.8.8.in-addr.arpa",
+             forward: [{ name: "dns.google", addresses: ["8.8.8.8"], confirmed: true }] }
+
+    expect(round_trip("dns", data)).to eq(data)
+  end
+
   it "keeps rows without a match" do
     row = Network::Dns::Row.new(name: "ns1", ip: nil, group: :authoritative, status: :unresolved, answers: [], ttl: nil, ms: nil, match: nil)
 

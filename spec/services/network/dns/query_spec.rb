@@ -45,7 +45,8 @@ RSpec.describe Network::Dns::Query do
         "TXT" => [record(:TXT, "v=spf1 ", "-all"), "v=spf1 -all"],
         "SOA" => [record(:SOA, Resolv::DNS::Name.create("ns1.example.com."), Resolv::DNS::Name.create("admin.example.com."), 7, 3600, 600, 86_400, 300),
                   "ns1.example.com admin.example.com 7 3600 600 86400 300"],
-        "CAA" => [record(:CAA, 0, "issue", "letsencrypt.org"), "0 issue letsencrypt.org"]
+        "CAA" => [record(:CAA, 0, "issue", "letsencrypt.org"), "0 issue letsencrypt.org"],
+        "PTR" => [record(:PTR, Resolv::DNS::Name.create("dns.google.")), "dns.google"]
       }
 
       records.each do |type, (data, expected)|

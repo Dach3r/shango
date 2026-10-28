@@ -12,7 +12,8 @@ module Network
 
       def self.authoritative(domain)
         labels = domain.split(".")
-        zone = Array.new([labels.size - 1, 1].max) { |index| labels[index..].join(".") }.lazy.map { |name| ask(name, "NS") }.find { |answer| answer.status == :ok }
+        candidates = Array.new([labels.size - 1, 1].max) { |index| labels[index..].join(".") }
+        zone = Parallel.map(candidates, limit: LIMIT) { |name| ask(name, "NS") }.find { |answer| answer.status == :ok }
         return [] unless zone
 
         Parallel.map(zone.answers.map { |name| name.downcase.delete_suffix(".") }, limit: LIMIT) do |name|

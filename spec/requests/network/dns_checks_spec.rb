@@ -124,6 +124,35 @@ RSpec.describe "Network DNS checks" do
     expect(response.body).to include("{{nope}}")
   end
 
+  describe "reverse DNS" do
+    it "shows the reverse name and whether each name resolves back to the address", :aggregate_failures do
+      allow(Network::Dns::Query).to receive(:call) { |type:, **| type == "PTR" ? answer(:ok, "dns.google.") : answer(:ok, "8.8.4.4") }
+      create_check(domain: "8.8.8.8", type: "PTR")
+
+      expect(response.body).to include("PTR · 8.8.8.8 · 8.8.8.8.in-addr.arpa", I18n.t("network.dns.forward.title"), "dns.google", "8.8.4.4")
+      expect(response.body).to include(I18n.t("network.statuses.unconfirmed"))
+      expect(project.network_checks.last).to have_attributes(target: "8.8.8.8", input: { "domain" => "8.8.8.8", "type" => "PTR" })
+    end
+
+    it "confirms a name that points back and notes when there is nothing to confirm", :aggregate_failures do
+      allow(Network::Dns::Query).to receive(:call) { |type:, **| type == "PTR" ? answer(:ok, "dns.google") : answer(:ok, "8.8.8.8") }
+      create_check(domain: "8.8.8.8", type: "PTR")
+
+      expect(response.body).to include(I18n.t("network.statuses.confirmed"))
+
+      allow(Network::Dns::Query).to receive(:call).and_return(answer(:nxdomain))
+      create_check(domain: "192.0.2.55", type: "PTR")
+
+      expect(response.body).to include(I18n.t("network.dns.forward.none"), "—")
+    end
+
+    it "answers 422 when a host name is given" do
+      create_check(domain: "example.com", type: "PTR")
+
+      expect(response.body).to include(I18n.t("network.errors.ptr_needs_ip"))
+    end
+  end
+
   it "answers 422 for an unsupported type" do
     create_check(type: "ANY")
 

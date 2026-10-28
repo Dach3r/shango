@@ -35,6 +35,16 @@ RSpec.describe Network::Dns::Resolvers do
       expect(described_class.authoritative("www.example.com").map(&:name)).to eq(["ns1.example.net"])
     end
 
+    it "asks every parent at once and keeps the closest zone that answers" do
+      stub_query("8.8.8.in-addr.arpa", "NS", answer(:nodata))
+      stub_query("8.8.in-addr.arpa", "NS", answer(:ok, "ns1.google.com"))
+      stub_query("8.in-addr.arpa", "NS", answer(:ok, "ns.level3.net"))
+      stub_query("in-addr.arpa", "NS", answer(:ok, "a.in-addr-servers.arpa"))
+      stub_query("ns1.google.com", "A", answer(:ok, "216.239.32.10"))
+
+      expect(described_class.authoritative("8.8.8.in-addr.arpa").map(&:name)).to eq(["ns1.google.com"])
+    end
+
     it "falls back to IPv6 and keeps a nameserver without address", :aggregate_failures do
       stub_query("example.com", "NS", answer(:ok, "ns1.example.net", "ns2.example.net"))
       stub_query("ns1.example.net", "A", answer(:nodata))

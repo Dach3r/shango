@@ -13,7 +13,8 @@ module Network
         "A" => Resolv::DNS::Resource::IN::A, "AAAA" => Resolv::DNS::Resource::IN::AAAA,
         "CNAME" => Resolv::DNS::Resource::IN::CNAME, "MX" => Resolv::DNS::Resource::IN::MX,
         "TXT" => Resolv::DNS::Resource::IN::TXT, "NS" => Resolv::DNS::Resource::IN::NS,
-        "SOA" => Resolv::DNS::Resource::IN::SOA, "CAA" => Resolv::DNS::Resource::IN::CAA
+        "SOA" => Resolv::DNS::Resource::IN::SOA, "CAA" => Resolv::DNS::Resource::IN::CAA,
+        "PTR" => Resolv::DNS::Resource::IN::PTR
       }.freeze
       DEFAULT_TIMEOUT = 3
       RCODES = {
@@ -89,7 +90,7 @@ module Network
       def stringify(data)
         case data
         when Resolv::DNS::Resource::IN::A, Resolv::DNS::Resource::IN::AAAA then data.address.to_s
-        when Resolv::DNS::Resource::IN::CNAME, Resolv::DNS::Resource::IN::NS then data.name.to_s
+        when Resolv::DNS::Resource::IN::CNAME, Resolv::DNS::Resource::IN::NS, Resolv::DNS::Resource::IN::PTR then data.name.to_s
         when Resolv::DNS::Resource::IN::MX then "#{data.preference} #{data.exchange.to_s.presence || "."}"
         when Resolv::DNS::Resource::IN::TXT then data.strings.join
         when Resolv::DNS::Resource::IN::SOA then [data.mname, data.rname, data.serial, data.refresh, data.retry, data.expire, data.minimum].join(" ")

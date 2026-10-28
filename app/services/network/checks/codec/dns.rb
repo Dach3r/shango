@@ -5,7 +5,7 @@ module Network
         module_function
 
         def dump(data)
-          data.slice(:host, :type, :expected, :summary).merge(rows: data[:rows].map { |row| dump_row(row) })
+          data.slice(:host, :type, :expected, :summary, :reverse, :forward).merge(rows: data[:rows].map { |row| dump_row(row) })
         end
 
         def load(data)

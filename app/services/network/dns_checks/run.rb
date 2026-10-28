@@ -3,7 +3,8 @@ module Network
     # Asks the authoritative nameservers of a domain and a fixed set of public resolvers for one record type, in
     # parallel, and reports what each answered. With an expected value every row says whether it matches, which is
     # how DNS propagation is read. No user-supplied resolvers: queries only go to the fixed list and to nameservers
-    # named by the domain itself, and those pass the outbound guard.
+    # named by the domain itself, and those pass the outbound guard. A `PTR` check takes an IP, asks for its
+    # `in-addr.arpa` / `ip6.arpa` name and confirms that the names it points to resolve back to it.
     class Run
       include Serviceable
 
@@ -30,9 +31,24 @@ module Network
 
         @expected = expected.record.strip
         host = target.record
-        resolvers = Dns::Resolvers.authoritative(host) + Dns::Resolvers::PUBLIC
-        rows = Parallel.map(resolvers, limit: CONCURRENCY) { |resolver| check(resolver, host) }
-        Result.success(nil, host:, type: @type, expected: @expected.presence, rows:, summary: summarize(rows))
+        name = @type == "PTR" ? reverse(host) : host
+        return Result.failure(error: :ptr_needs_ip) unless name
+
+        resolvers = Dns::Resolvers.authoritative(name) + Dns::Resolvers::PUBLIC
+        rows = Parallel.map(resolvers, limit: CONCURRENCY) { |resolver| check(resolver, name) }
+        data = { host:, type: @type, expected: @expected.presence, rows:, summary: summarize(rows) }
+        data.merge!(reverse: name, forward: ForwardConfirmation.call(ip: host, names: pointed_names(rows))) if @type == "PTR"
+        Result.success(nil, **data)
+      end
+
+      def reverse(host)
+        IPAddr.new(host).reverse
+      rescue IPAddr::Error
+        nil
+      end
+
+      def pointed_names(rows)
+        rows.select { |row| row.status == :ok }.flat_map(&:answers).map { |answer| normalize(answer) }.uniq
       end
 
       def check(resolver, host)

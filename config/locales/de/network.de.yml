@@ -18,6 +18,7 @@ de:
       blocked: "Dieser Host ist nicht erlaubt: %{detail}."
       unresolved: Der Hostname wird nicht aufgelöst.
       invalid_type: Wähle einen unterstützten Eintragstyp.
+      ptr_needs_ip: "Reverse-DNS (PTR) braucht eine IP-Adresse, zum Beispiel 203.0.113.10."
       blank_ports: Gib mindestens einen Port ein.
       invalid_ports: "\"%{token}\" ist kein gültiger Port. Verwende Zahlen von 1 bis 65535, Bereiche wie 8000-8010 oder common."
       too_many_ports: "Prüfe höchstens %{max} Ports auf einmal."
@@ -37,16 +38,21 @@ de:
       match: Stimmt überein
       mismatch: Weicht ab
       no_answer: Keine Antwort
+      confirmed: "Bestätigt"
+      unconfirmed: "Nicht bestätigt"
       open: Offen
       closed: Geschlossen
       filtered: Gefiltert
     dns:
       domain: Domain
-      hint: "DNS-Antworten kommen von den autoritativen Nameservern und mehreren öffentlichen Resolvern, damit du siehst, ob sich eine Änderung verbreitet hat."
+      hint: "DNS-Antworten kommen von den autoritativen Nameservern und mehreren öffentlichen Resolvern, damit du siehst, ob sich eine Änderung verbreitet hat. Für PTR gib eine IP-Adresse ein: die Prüfung bestätigt auch, dass jeder Name wieder auf sie auflöst."
       domain_placeholder: example.com 203.0.113.10
       type: Typ
       submit: DNS prüfen
       no_authoritative: Die autoritativen Nameserver dieser Domain konnten nicht ermittelt werden.
+      forward:
+        title: "Vorwärts bestätigtes Reverse-DNS"
+        none: "Kein PTR-Eintrag zum Bestätigen."
       summary:
         expected: "%{matched} von %{total} Resolvern stimmen mit dem erwarteten Wert überein"
         answered: "%{answered} von %{total} Resolvern haben geantwortet"

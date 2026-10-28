@@ -18,6 +18,7 @@ en:
       blocked: "This host is not allowed: %{detail}."
       unresolved: The host name does not resolve.
       invalid_type: Choose a supported record type.
+      ptr_needs_ip: "Reverse DNS (PTR) needs an IP address, such as 203.0.113.10."
       blank_ports: Enter at least one port.
       invalid_ports: "\"%{token}\" is not a valid port. Use numbers from 1 to 65535, ranges like 8000-8010, or common."
       too_many_ports: "Check at most %{max} ports at a time."
@@ -37,16 +38,21 @@ en:
       match: Matches
       mismatch: Differs
       no_answer: No answer
+      confirmed: "Confirmed"
+      unconfirmed: "Not confirmed"
       open: Open
       closed: Closed
       filtered: Filtered
     dns:
       domain: Domain
-      hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated."
+      hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated. For PTR, enter an IP address: the check also confirms that each name resolves back to it."
       domain_placeholder: example.com 203.0.113.10
       type: Type
       submit: Check DNS
       no_authoritative: The authoritative nameservers of this domain could not be determined.
+      forward:
+        title: "Forward-confirmed reverse DNS"
+        none: "No PTR record to confirm."
       summary:
         expected: "%{matched} of %{total} resolvers match the expected value"
         answered: "%{answered} of %{total} resolvers answered"

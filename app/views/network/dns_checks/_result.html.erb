@@ -23,7 +23,7 @@
           <p class="mt-0.5 text-sm text-muted"><%= t(summary[:agree] ? "network.dns.summary.agree" : "network.dns.summary.differ") %></p>
         <% end %>
       </div>
-      <p class="w-full font-mono text-xs text-faint"><%= result.data[:type] %> · <%= result.data[:host] %></p>
+      <p class="w-full font-mono text-xs text-faint"><%= result.data.values_at(:type, :host, :reverse).compact.join(" · ") %></p>
     </div>
 
     <% rows.group_by(&:group).each do |group, group_rows| %>
@@ -58,6 +58,25 @@
 
     <% if rows.none? { |row| row.group == :authoritative } %>
       <p class="border-t border-line px-5 py-3 text-sm text-muted"><%= t("network.dns.no_authoritative") %></p>
+    <% end %>
+
+    <% if result.data.key?(:forward) %>
+      <section class="border-t border-line">
+        <h3 class="border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.dns.forward.title") %></h3>
+        <% if result.data[:forward].any? %>
+          <% result.data[:forward].each do |forward| %>
+            <div class="flex items-start justify-between gap-3 border-b border-line px-5 py-3 last:border-b-0">
+              <div class="min-w-0">
+                <span class="block truncate font-mono text-sm text-ink"><%= forward[:name] %></span>
+                <span class="block font-mono text-xs break-all text-faint"><%= forward[:addresses].presence&.join(", ") || "—" %></span>
+              </div>
+              <%= render NetworkStatus::Component.new(status: forward[:confirmed] ? :confirmed : :unconfirmed) %>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="px-5 py-3 text-sm text-muted"><%= t("network.dns.forward.none") %></p>
+        <% end %>
+      </section>
     <% end %>
   </div>
 <% end %>
