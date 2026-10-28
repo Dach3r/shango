@@ -2,12 +2,12 @@
      data-action="mouseenter->flash#pause mouseleave->flash#resume focusin->flash#pause focusout->flash#resume"
      class="<%= classes %>">
   <div class="flex w-full items-stretch">
-    <span class="flex w-12 shrink-0 items-center justify-center text-on-solid <%= config[:tone] %>">
+    <span class="flex w-14 shrink-0 items-center justify-center text-on-solid <%= config[:tone] %>">
       <%= lucide_icon config[:icon], class: "size-5", "aria-hidden": true %>
     </span>
-    <p class="min-w-0 flex-1 self-center px-4 py-3 leading-snug"><%= @message %></p>
+    <p class="min-w-0 flex-1 self-center px-5 py-4 leading-snug"><%= @message %></p>
     <button type="button" data-action="flash#close" aria-label="<%= t("components.flash.close") %>"
-            class="flex w-12 shrink-0 cursor-pointer items-center justify-center border-l border-line text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50">
+            class="flex w-14 shrink-0 cursor-pointer items-center justify-center border-l border-line text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50">
       <%= lucide_icon "x", class: "size-4" %>
     </button>
   </div>
