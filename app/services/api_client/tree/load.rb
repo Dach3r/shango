@@ -53,8 +53,8 @@ module ApiClient
       private
 
       def perform
-        folders = @project.folders.select(*FOLDER_COLUMNS).order(:position, :created_at).group_by(&:collection_id)
-        requests = @project.api_requests.select(*REQUEST_COLUMNS).order(:position, :created_at).group_by(&:collection_id)
+        folders = @project.folders.strict_loading.select(*FOLDER_COLUMNS).order(:position, :created_at).group_by(&:collection_id)
+        requests = @project.api_requests.strict_loading.select(*REQUEST_COLUMNS).order(:position, :created_at).group_by(&:collection_id)
 
         @project.collections.ordered.map do |collection|
           Branch.new(

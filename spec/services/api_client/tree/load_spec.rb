@@ -24,6 +24,15 @@ RSpec.describe ApiClient::Tree::Load do
     expect(branches.last.root_folders).to eq([])
   end
 
+  it "refuses lazy association loads on the folders and requests", :aggregate_failures do
+    [child, root_request, nested_request]
+    branch = described_class.call(project:).first
+
+    expect(branch.all_requests).to all(be_strict_loading)
+    expect(branch.folder(child.id)).to be_strict_loading
+    expect { branch.all_requests.first.collection }.to raise_error(ActiveRecord::StrictLoadingViolationError)
+  end
+
   it "looks up folders and the path to a folder inside a branch", :aggregate_failures do
     [child, root_request, nested_request]
     branch = described_class.call(project:).first

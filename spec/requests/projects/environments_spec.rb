@@ -16,6 +16,15 @@ RSpec.describe "Environments" do
       expect(response.body).to include(environment.name)
     end
 
+    it "preloads the variables of every environment", :aggregate_failures do
+      create(:variable, environment:, key: "HOST")
+      create(:variable, environment: create(:environment, project:, name: "Staging"), key: "TOKEN")
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Staging")
+    end
+
     it "marks the active environment and offers to activate the others", :aggregate_failures do
       other = create(:environment, project:)
       membership.update!(current_environment: environment)

@@ -5,7 +5,7 @@ module Projects
 
     def index
       authorize current_project, :use?
-      @environments = current_project.environments.ordered.includes(:variables)
+      @environments = current_project.environments.ordered.includes(:variables).strict_loading
     end
 
     def new
