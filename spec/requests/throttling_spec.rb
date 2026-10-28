@@ -102,6 +102,33 @@ RSpec.describe "Throttling" do
       expect(response).to redirect_to(workbench_root_path)
     end
 
+    it "limits invitations per project", :aggregate_failures do
+      limit(:invitations, 1)
+      2.times { |index| post invitations_path, params: { invitation: { email: "new#{index}@example.com", role: "member" } } }
+
+      expect(response).to redirect_to(workbench_root_path)
+      expect(flash[:alert]).to eq(I18n.t("throttling.limited"))
+      expect(Invitation.count).to eq(1)
+    end
+
+    it "does not count invitations of other projects", :aggregate_failures do
+      limit(:invitations, 1)
+      post invitations_path, params: { invitation: { email: "new@example.com", role: "member" } }
+      sign_out user
+      sign_in_with_project
+      post invitations_path, params: { invitation: { email: "other@example.com", role: "member" } }
+
+      expect(Invitation.count).to eq(2)
+    end
+
+    it "limits attempts at invitation tokens per user", :aggregate_failures do
+      limit(:invitation_acceptance, 2)
+      3.times { get invitation_acceptance_path(token: "guess") }
+
+      expect(response).to redirect_to(workbench_root_path)
+      expect(flash[:alert]).to eq(I18n.t("throttling.limited"))
+    end
+
     it "counts each user separately", :aggregate_failures do
       limit(:imports, 1)
       post workbench_import_path, params: { content: "" }

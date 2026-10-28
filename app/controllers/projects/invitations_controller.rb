@@ -1,6 +1,7 @@
 module Projects
   class InvitationsController < AuthenticatedController
     before_action { authorize current_project, :manage_members? }
+    throttle :invitations, by: -> { current_project.id }, only: :create
 
     def create
       attributes = params.expect(invitation: %i[email role])

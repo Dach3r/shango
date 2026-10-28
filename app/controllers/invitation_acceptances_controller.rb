@@ -3,6 +3,7 @@ class InvitationAcceptancesController < ApplicationController
   layout "devise"
 
   before_action :authenticate_user!
+  throttle :invitation_acceptance, by: -> { current_user.id }
   before_action :set_invitation
 
   def show
