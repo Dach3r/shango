@@ -11,12 +11,6 @@
   author: ekholme
   repository: https://github.com/ekholme/omarchy-virginia-tech-theme
   license:
-- key: venice_from_above
-  name: Venice From Above
-  scheme: light
-  author: mattbbia
-  repository: https://github.com/mattbbia/venice-from-above
-  license: MIT
 - key: vague
   name: Vague
   scheme: dark

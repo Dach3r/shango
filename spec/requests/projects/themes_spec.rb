@@ -30,6 +30,15 @@ RSpec.describe "Themes" do
     end
   end
 
+  describe "page refreshes" do
+    it "morph and keep the scroll position instead of reloading", :aggregate_failures do
+      get edit_theme_path
+
+      expect(response.body).to include(%(<meta name="turbo-refresh-method" content="morph">))
+      expect(response.body).to include(%(<meta name="turbo-refresh-scroll" content="preserve">))
+    end
+  end
+
   describe "Omarchy themes" do
     it "lists them in their own tab and opens it for a saved one", :aggregate_failures do
       membership.update!(theme: "vulkanite")
@@ -37,7 +46,7 @@ RSpec.describe "Themes" do
       get edit_theme_path
 
       expect(response.body).to include(I18n.t("projects.themes.edit.groups.omarchy"), %(data-tabs-active-value="omarchy"))
-      expect(response.body).to include(%(data-scheme="dark"), %(data-scheme="light"))
+      expect(response.body).to include(%(data-scheme="dark"))
     end
 
     it "disables the color scheme picker while one is selected" do
@@ -54,14 +63,12 @@ RSpec.describe "Themes" do
       expect(response.body.scan(/<input[^>]*name="membership\[color_scheme\]"[^>]*>/)).to all(satisfy { |input| input.exclude?("disabled") })
     end
 
-    it "pins the color scheme of the theme, whatever the member chose", :aggregate_failures do
+    it "pins the color scheme of the theme, whatever the member chose" do
       membership.update!(color_scheme: "light", theme: "vulkanite")
-      get edit_theme_path
-      expect(response.body).to include(%(data-theme="dark" data-palette="vulkanite"))
 
-      membership.update!(color_scheme: "dark", theme: "venice_from_above")
       get edit_theme_path
-      expect(response.body).to include(%(data-theme="light" data-palette="venice_from_above"))
+
+      expect(response.body).to include(%(data-theme="dark" data-palette="vulkanite"))
     end
 
     it "defines every palette in the stylesheet and the database check", :aggregate_failures do
@@ -77,7 +84,7 @@ RSpec.describe "Themes" do
     it "has a credit with author and repository for each", :aggregate_failures do
       expect(Membership::OMARCHY_CREDITS.size).to eq(Membership::OMARCHY_THEMES.size)
       expect(Membership::OMARCHY_CREDITS).to all(include(:author, :repository, :scheme))
-      expect(Membership::OMARCHY_SCHEMES.values.uniq).to match_array(%w[dark light])
+      expect(Membership::OMARCHY_SCHEMES.values.uniq).to eq(["dark"])
     end
   end
 

@@ -18,6 +18,7 @@
   <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <%= yield :module_preload %>
+  <%= yield :head %>
 </head>
 <body class="bg-page font-sans text-body" data-controller="form-validation" data-action="invalid->form-validation#mark:capture input->form-validation#clear">
   <%= render ToastRegion::Component.new(flash: flash) %>

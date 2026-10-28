@@ -449,27 +449,6 @@
   --glow: color-mix(in oklab, #e87d3e 14%, transparent);
 }
 
-[data-palette="venice_from_above"] {
-  color-scheme: light;
-  --page: #f5f2e9;
-  --card: #e9e6dd;
-  --line: #d3cac2;
-  --faint: #b0a29a;
-  --field: #faf9f4;
-  --field-focus: #ffffff;
-  --dots: #d3cac2;
-  --ink: #492924;
-  --body: #5e413c;
-  --muted: #8e7973;
-  --accent: #72684b;
-  --accent-hover: #5b533c;
-  --solid: #72684b;
-  --solid-hover: #5b533c;
-  --on-solid: #ffffff;
-  --danger: #b42318;
-  --glow: color-mix(in oklab, #72684b 14%, transparent);
-}
-
 [data-palette="vague"] {
   color-scheme: dark;
   --page: #141415;
