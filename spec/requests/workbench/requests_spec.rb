@@ -23,6 +23,13 @@ RSpec.describe "Workbench requests" do
       expect(response.body).to include(api_request.name)
     end
 
+    it "replaces the page on refresh so saving keeps the editors and tabs", :aggregate_failures do
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include(%(<meta name="turbo-refresh-method" content="replace">))
+      expect(response.body).not_to include(%(content="morph"))
+    end
+
     it "shows the collection and folder path of the request", :aggregate_failures do
       nested = create(:folder, collection:, parent: folder, name: "Deep")
       get workbench_request_path(create(:api_request, collection:, folder: nested, name: "Deep request"))

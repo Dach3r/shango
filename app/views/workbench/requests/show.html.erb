@@ -1,5 +1,7 @@
 <% content_for :title, "#{@api_request.name} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% content_for :heading, t("workbench.title") %>
+<%# Saving redirects back here; a morph would strip the editors and tabs that scripts built, so the page is replaced instead. %>
+<% content_for :refresh_method, "replace" %>
 <% content_for :module_preload, javascript_importmap_module_preload_tags(entry_point: "workbench") %>
 
 <% content_for :request_actions, render("workbench/requests/actions", api_request: @api_request) %>
