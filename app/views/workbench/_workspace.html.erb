@@ -3,11 +3,11 @@
 
 <div class="flex h-[calc(100vh-2.5rem)] w-full flex-col md:flex-row">
   <aside class="max-h-60 shrink-0 overflow-hidden border-b border-line bg-card md:max-h-none md:w-72 md:border-r md:border-b-0">
-    <%= render RequestTree::Component.new(branches: workspace_tree, history_groups: workspace_history, folder_toggle: current_membership.folder_toggle, request_open: current_membership.request_open, collapse_nested: current_membership.collapse_nested_folders, current_request_id: @api_request&.id, closed_ids: cookies[:api_client_tree_closed].to_s.split(",")) %>
+    <%= render RequestTree::Component.new(branches: workspace_tree, history_groups: workspace_history, folder_toggle: current_membership.folder_toggle, request_open: current_membership.request_open, membership: current_membership, collapse_nested: current_membership.collapse_nested_folders, current_request_id: @api_request&.id, closed_ids: cookies[:api_client_tree_closed].to_s.split(",")) %>
   </aside>
 
   <%= tag.section class: "flex min-h-0 min-w-0 flex-1 flex-col", data: local_assigns[:section_data] do %>
-    <%= render RequestTabs::Component.new(requests: open_requests, current_request_id: @api_request&.id, unsaved_ids: unsaved_request_ids) do %><%= yield :request_actions if content_for?(:request_actions) %><% end %>
+    <%= render RequestTabs::Component.new(requests: open_requests, membership: current_membership, current_request_id: @api_request&.id, unsaved_ids: unsaved_request_ids) do %><%= yield :request_actions if content_for?(:request_actions) %><% end %>
     <%= yield %>
   <% end %>
 </div>

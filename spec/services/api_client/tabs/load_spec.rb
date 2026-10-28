@@ -26,4 +26,12 @@ RSpec.describe ApiClient::Tabs::Load do
 
     expect(described_class.call(project:, user:).map(&:id)).to eq([draft.id])
   end
+
+  it "carries what the tabs need to check permissions without more queries", :aggregate_failures do
+    create(:request_tab, user:, api_request: create(:api_request, collection:))
+    tab = described_class.call(project:, user:).first
+
+    expect(tab).to have_attributes(user_id: nil, collection_id: collection.id)
+    expect(count_queries { tab.collection.creator_id }).to eq(0)
+  end
 end

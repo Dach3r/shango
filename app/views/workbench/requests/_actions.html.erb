@@ -1,9 +1,11 @@
 <%# Request actions. Rendered in the tab bar; the request-form controller wraps the whole workspace section. %>
-<div class="flex items-center self-stretch border-l border-line px-3">
-  <button type="submit" form="request_form" class="<%= button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs") %>">
-    <%= lucide_icon "save", class: "size-3.5" %><%= t("workbench.requests.save") %>
-  </button>
-</div>
+<% if policy(api_request).update? %>
+  <div class="flex items-center self-stretch border-l border-line px-3">
+    <button type="submit" form="request_form" class="<%= button_classes(:ghost, "!gap-1.5 !px-2 !py-1 !text-xs") %>">
+      <%= lucide_icon "save", class: "size-3.5" %><%= t("workbench.requests.save") %>
+    </button>
+  </div>
+<% end %>
 <div class="flex items-center self-stretch border-l border-line px-3">
   <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
     <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" aria-label="<%= t("workbench.requests.more_actions") %>" title="<%= t("workbench.requests.more_actions") %>"
@@ -14,13 +16,17 @@
       <button type="button" data-action="request-form#copyCurl" data-copied-label="<%= t("workbench.requests.copied") %>" class="flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "terminal", class: "size-4 shrink-0" %><span data-label class="truncate"><%= t("workbench.requests.copy_curl") %></span>
       </button>
-      <%= button_to workbench_request_duplication_path(api_request), method: :post, class: "flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50", form_class: "contents" do %>
-        <%= lucide_icon "copy", class: "size-4 shrink-0" %><%= t("workbench.requests.duplicate") %>
+      <% if policy(api_request).duplicate? %>
+        <%= button_to workbench_request_duplication_path(api_request), method: :post, class: "flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50", form_class: "contents" do %>
+          <%= lucide_icon "copy", class: "size-4 shrink-0" %><%= t("workbench.requests.duplicate") %>
+        <% end %>
       <% end %>
-      <div class="my-1 border-t border-line"></div>
-      <%= button_to workbench_request_path(api_request), method: :delete, class: "flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 hover:!text-danger", form_class: "contents",
-                    form: { data: { turbo_confirm: t("workbench.requests.confirm_delete", name: api_request.name) } } do %>
-        <%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("workbench.requests.delete") %>
+      <% if policy(api_request).destroy? %>
+        <div class="my-1 border-t border-line"></div>
+        <%= button_to workbench_request_path(api_request), method: :delete, class: "flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 hover:!text-danger", form_class: "contents",
+                      form: { data: { turbo_confirm: t("workbench.requests.confirm_delete", name: api_request.name) } } do %>
+          <%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("workbench.requests.delete") %>
+        <% end %>
       <% end %>
     </div>
   </div>

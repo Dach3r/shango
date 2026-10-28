@@ -30,4 +30,14 @@ RSpec.describe RequestTree::Collection::Component, type: :component do
     expect(page).not_to have_css("script", visible: :all)
     expect(page).to have_css("summary", text: "<script>alert(1)</script>")
   end
+
+  it "is neither a drop target, renamable nor actionable when the member cannot manage it", :aggregate_failures do
+    collection = create(:collection, name: "Docs")
+    branch = ApiClient::Tree::Load::Branch.new(collection:, folders: {}, requests: {})
+    render_inline(described_class.new(branch:, manage: false))
+
+    expect(page).to have_css("summary", text: "Docs")
+    expect(page).to have_no_css("[data-drop-mode], [data-controller=inline-rename], [data-controller=context-menu]", visible: :all)
+    expect(page).to have_no_link(I18n.t("components.request_tree.new_folder"), visible: :all)
+  end
 end

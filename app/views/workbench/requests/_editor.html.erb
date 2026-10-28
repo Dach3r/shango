@@ -18,6 +18,10 @@
     </div>
   <% end %>
 
+  <% unless policy(api_request).update? %>
+    <div role="status" class="mx-4 mt-3 border border-line bg-ink/[0.05] px-4 py-2 text-xs text-muted"><%= t("team.read_only.request") %></div>
+  <% end %>
+
   <% if @unsaved %>
     <div role="status" class="mx-4 mt-3 flex items-center justify-between gap-3 border border-line bg-ink/[0.05] px-4 py-2 text-xs text-muted">
       <span><%= t("workbench.requests.unsaved_notice") %></span>

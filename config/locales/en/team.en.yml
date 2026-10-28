@@ -1,3 +1,6 @@
 en:
   authorization:
     forbidden: You are not allowed to do that in this project.
+  team:
+    read_only:
+      request: You can send this request but only its creator or an owner can change it.

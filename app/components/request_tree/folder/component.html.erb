@@ -1,31 +1,31 @@
-<div class="group relative" data-controller="context-menu" data-action="contextmenu->context-menu#open">
+<%= tag.div class: "group relative", **wrapper_attributes do %>
   <details <%= "open" unless @closed_ids.include?(@folder.id.to_s) %> data-tree-target="branch" data-id="<%= @folder.id %>" data-action="toggle->tree#toggled" class="group/branch">
-    <summary draggable="true" data-drag-kind="folder" data-drag-id="<%= @folder.id %>" data-collection-id="<%= @folder.collection_id %>" data-folder-id="<%= @folder.id %>" data-drop-mode="into"
-             data-position-url="<%= workbench_folder_position_path(@folder) %>" data-action="dragstart->tree#dragStart dragend->tree#dragEnd click->tree#summaryClick dblclick->tree#summaryDoubleClick"
-             class="flex cursor-pointer list-none items-center gap-2 py-1.5 pr-9 pl-2 text-[0.8125rem] text-body transition hover:bg-field hover:text-ink data-[drop-active=into]:bg-accent/15 focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden">
+    <%= tag.summary class: "flex cursor-pointer list-none items-center gap-2 py-1.5 pr-9 pl-2 text-[0.8125rem] text-body transition hover:bg-field hover:text-ink data-[drop-active=into]:bg-accent/15 focus:outline-none focus-visible:outline-none [&::-webkit-details-marker]:hidden", **summary_attributes do %>
       <%= lucide_icon "chevron-right", data: { tree_arrow: true }, class: "size-4 shrink-0 text-muted transition [details[open]>summary>&]:rotate-90" %>
       <%= lucide_icon "folder", class: "size-4 shrink-0 text-muted" %>
-      <span data-controller="inline-rename" data-inline-rename-url-value="<%= workbench_folder_path(@folder) %>" data-inline-rename-param-value="folder" data-action="dblclick->inline-rename#edit" class="min-w-0 flex-1 truncate"><%= @folder.name %></span>
-    </summary>
+      <%= tag.span @folder.name, class: "min-w-0 flex-1 truncate", **name_attributes %>
+    <% end %>
 
     <ul class="ml-3 space-y-0.5 border-l border-line pl-1.5">
       <% @branch.children_of(@folder).each do |child| %>
-        <li><%= render RequestTree::Folder::Component.new(folder: child, branch: @branch, current_request_id: @current_request_id, closed_ids: @closed_ids) %></li>
+        <li><%= render RequestTree::Folder::Component.new(folder: child, branch: @branch, current_request_id: @current_request_id, closed_ids: @closed_ids, manage: @manage) %></li>
       <% end %>
       <% @branch.requests_in(@folder).each do |api_request| %>
-        <%= render RequestTree::Request::Component.new(api_request:, active: api_request.id == @current_request_id) %>
+        <%= render RequestTree::Request::Component.new(api_request:, active: api_request.id == @current_request_id, manage: @manage) %>
       <% end %>
     </ul>
   </details>
 
-  <div class="absolute right-1 top-1">
-    <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: @folder.name)) do %>
-      <%= link_to new_workbench_collection_request_path(@folder.collection_id, folder_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
-      <%= link_to new_workbench_collection_folder_path(@folder.collection_id, parent_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_subfolder") %><% end %>
-      <button type="button" data-action="context-menu#rename" class="<%= RequestTree::Menu::Component::ITEM %>"><%= lucide_icon "pencil", class: "size-4" %><%= t("components.request_tree.rename") %></button>
-      <%= link_to edit_workbench_folder_path(@folder), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
-      <%= button_to workbench_folder_path(@folder), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_folder", name: @folder.name) } },
-                    class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>
-    <% end %>
-  </div>
-</div>
+  <% if @manage %>
+    <div class="absolute right-1 top-1">
+      <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: @folder.name)) do %>
+        <%= link_to new_workbench_collection_request_path(@folder.collection_id, folder_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
+        <%= link_to new_workbench_collection_folder_path(@folder.collection_id, parent_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_subfolder") %><% end %>
+        <button type="button" data-action="context-menu#rename" class="<%= RequestTree::Menu::Component::ITEM %>"><%= lucide_icon "pencil", class: "size-4" %><%= t("components.request_tree.rename") %></button>
+        <%= link_to edit_workbench_folder_path(@folder), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
+        <%= button_to workbench_folder_path(@folder), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_folder", name: @folder.name) } },
+                      class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

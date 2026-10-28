@@ -9,8 +9,9 @@ class RequestTabs::Component < ApplicationComponent
 
   # requests: the ones the user has open as tabs; current_request_id highlights the one being edited;
   # unsaved_ids marks the saved requests whose edits are kept but not saved.
-  def initialize(requests:, current_request_id: nil, unsaved_ids: [])
+  def initialize(requests:, membership:, current_request_id: nil, unsaved_ids: [])
     @requests = requests
+    @membership = membership
     @current_request_id = current_request_id
     @unsaved_ids = unsaved_ids
   end
@@ -23,6 +24,10 @@ class RequestTabs::Component < ApplicationComponent
 
   def side_closable?(index)
     { left: index.positive?, right: index < @requests.size - 1 }
+  end
+
+  def duplicable?(api_request)
+    ApiRequestPolicy.new(@membership, api_request).duplicate?
   end
 
   def current?(api_request)

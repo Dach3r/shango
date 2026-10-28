@@ -214,6 +214,34 @@ RSpec.describe "Authorization" do
     end
   end
 
+  describe "what the screens offer" do
+    let(:read_only) { I18n.t("team.read_only.request") }
+
+    it "marks requests the member cannot change as read only", :aggregate_failures do
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include(read_only)
+      expect(response.body).not_to include(CGI.escapeHTML(I18n.t("workbench.requests.confirm_delete", name: api_request.name)))
+      expect(response.body).not_to include(workbench_request_duplication_path(api_request))
+    end
+
+    it "offers saving, duplicating and deleting on requests the member may change", :aggregate_failures do
+      own_request = create(:api_request, collection: create(:collection, project:, creator: member))
+      get workbench_request_path(own_request)
+
+      expect(response.body).not_to include(read_only)
+      expect(response.body).to include(CGI.escapeHTML(I18n.t("workbench.requests.confirm_delete", name: own_request.name)), workbench_request_duplication_path(own_request))
+    end
+
+    it "lists environments without actions the member cannot use", :aggregate_failures do
+      own = create(:environment, project:, creator: member)
+      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+
+      expect(response.body).to include(edit_environment_path(own))
+      expect(response.body).not_to include(edit_environment_path(environment))
+    end
+  end
+
   describe "shared project data" do
     it "lets members use cookies, the cookie jar, imports and drafts", :aggregate_failures do
       delete cookie_jar_path

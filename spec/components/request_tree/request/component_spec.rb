@@ -40,4 +40,14 @@ RSpec.describe RequestTree::Request::Component, type: :component do
     expect(page).to have_css("span[data-controller=inline-rename]", text: "<img src=x onerror=alert(1)>\"'")
     expect(page.native.to_html).not_to include("<img src=x")
   end
+
+  it "is a plain link without drag, rename or menu when the member cannot manage it", :aggregate_failures do
+    render_inline(described_class.new(api_request:, manage: false))
+
+    expect(page).to have_css("li:not([draggable]):not([data-drag-kind]):not([data-drop-mode])")
+    expect(page).to have_no_css("[data-controller=inline-rename]")
+    expect(page).to have_no_css("[data-controller=context-menu]", visible: :all)
+    expect(page).to have_no_button(visible: :all)
+    expect(page).to have_link("List")
+  end
 end

@@ -27,16 +27,18 @@
               <%= button_to t("projects.environments.index.activate"), current_environment_path, method: :patch, params: { environment_id: environment.id }, form: { data: { turbo_frame: "_top" } }, form_class: "contents",
                             class: "inline-flex h-9 shrink-0 cursor-pointer items-center border border-line px-3.5 text-xs font-medium text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %>
             <% end %>
-            <div class="relative shrink-0" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
-              <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" title="<%= t("projects.environments.index.actions") %>" aria-label="<%= t("projects.environments.index.actions") %>"
-                      class="flex size-10 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"><%= lucide_icon "ellipsis", class: "size-4" %></button>
-              <div data-dropdown-target="menu" hidden class="absolute top-full right-0 z-30 mt-1 w-40 border border-line bg-card p-1">
-                <%= link_to edit_environment_path(environment), class: "flex items-center gap-2.5 px-2.5 py-2 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4 shrink-0" %><%= t("projects.environments.index.edit") %><% end %>
-                <%= button_to environment_path(environment), method: :delete, form_class: "contents",
-                              class: "flex w-full cursor-pointer items-center gap-2.5 px-2.5 py-2 text-left text-sm text-danger transition hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50",
-                              form: { data: { turbo_confirm: t("projects.environments.index.confirm_delete", name: environment.name) } } do %><%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("projects.environments.index.delete") %><% end %>
+            <% if policy(environment).update? %>
+              <div class="relative shrink-0" data-controller="dropdown" data-action="click@window->dropdown#closeOnOutside keydown.esc->dropdown#closeOnEscape">
+                <button type="button" data-dropdown-target="trigger" data-action="dropdown#toggle" aria-haspopup="true" aria-expanded="false" title="<%= t("projects.environments.index.actions") %>" aria-label="<%= t("projects.environments.index.actions") %>"
+                        class="flex size-10 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"><%= lucide_icon "ellipsis", class: "size-4" %></button>
+                <div data-dropdown-target="menu" hidden class="absolute top-full right-0 z-30 mt-1 w-40 border border-line bg-card p-1">
+                  <%= link_to edit_environment_path(environment), class: "flex items-center gap-2.5 px-2.5 py-2 text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "pencil", class: "size-4 shrink-0" %><%= t("projects.environments.index.edit") %><% end %>
+                  <%= button_to environment_path(environment), method: :delete, form_class: "contents",
+                                class: "flex w-full cursor-pointer items-center gap-2.5 px-2.5 py-2 text-left text-sm text-danger transition hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50",
+                                form: { data: { turbo_confirm: t("projects.environments.index.confirm_delete", name: environment.name) } } do %><%= lucide_icon "trash-2", class: "size-4 shrink-0" %><%= t("projects.environments.index.delete") %><% end %>
+                </div>
               </div>
-            </div>
+            <% end %>
           </li>
         <% end %>
       </ul>

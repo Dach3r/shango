@@ -28,7 +28,9 @@
         <div class="absolute">
           <%= render RequestTree::Menu::Component.new(label: t("components.request_tabs.actions"), trigger: false) do %>
             <%= button_to workbench_drafts_path, method: :post, form_class: "contents", class: ITEM do %><%= lucide_icon "plus", class: "size-4" %><%= t("components.request_tabs.new_request") %><% end %>
-            <%= button_to workbench_request_duplication_path(api_request), method: :post, form_class: "contents", class: ITEM do %><%= lucide_icon "copy", class: "size-4" %><%= t("components.request_tabs.duplicate") %><% end %>
+            <% if duplicable?(api_request) %>
+              <%= button_to workbench_request_duplication_path(api_request), method: :post, form_class: "contents", class: ITEM do %><%= lucide_icon "copy", class: "size-4" %><%= t("components.request_tabs.duplicate") %><% end %>
+            <% end %>
             <hr class="my-1 border-line">
             <button type="button" data-action="request-tabs#closeTab" class="<%= ITEM %>"><%= lucide_icon "x", class: "size-4" %><%= t("components.request_tabs.close_tab") %></button>
             <% closable = side_closable?(index) %>
