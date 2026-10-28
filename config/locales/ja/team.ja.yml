@@ -1,0 +1,124 @@
+ja:
+  authorization:
+    forbidden: このプロジェクトでその操作を行う権限がありません。
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: プロジェクトには少なくとも1人のオーナーが必要です。
+  team:
+    read_only:
+      request: このリクエストは送信できますが、変更できるのは作成者かオーナーだけです。
+  projects:
+    members:
+      index:
+        title: メンバー
+        heading: メンバー
+        description: "%{project} にアクセスできる人。"
+        members:
+          one: "%{count} 人のメンバー"
+          other: "%{count} 人のメンバー"
+        you: "(あなた)"
+        activity: アクティビティ
+        roles:
+          owner: オーナー
+          member: メンバー
+        make_owner: オーナーにする
+        make_member: メンバーにする
+        remove: 削除
+        confirm_remove: "%{name} をこのプロジェクトから削除しますか?アクセス権はすぐに失われます。"
+        leave: プロジェクトを退出
+        confirm_leave: "%{project} を退出しますか?アクセス権が失われます。"
+        transfer:
+          title: 所有権を譲渡
+          hint: 選んだ人がオーナーになり、あなたはメンバーになります。
+          select: 新しいオーナー
+          submit: 所有権を譲渡
+          confirm: このプロジェクトの所有権を譲渡しますか?あなたはオーナーではなくなります。
+        invitations:
+          title: メンバーを招待
+          hint: このプロジェクトに参加するためのリンクが届きます。リンクは入力したメールアドレス宛てに1回だけ使え、7日後に無効になります。
+          email: メールアドレス
+          email_placeholder: name@example.com
+          role: ロール
+          submit: 招待を送信
+          pending: 保留中の招待
+          expires: "%{date} に期限切れ"
+          expired: 期限切れ
+          revoke: 取り消す
+          confirm_revoke: "%{email} への招待を取り消しますか?リンクは使えなくなります。"
+          link_title: 招待リンク
+          link_hint: 今すぐコピーしてください。再表示はされません。リンクを持つ人は、招待されたメールアドレスでサインインすれば参加できます。
+      update:
+        updated: "%{name} のロールを更新しました。"
+        failed:
+          last_owner: プロジェクトには少なくとも1人のオーナーが必要です。
+          invalid_role: そのロールは存在しません。
+      destroy:
+        revoked: "%{name} をプロジェクトから削除しました。"
+        failed: プロジェクトには少なくとも1人のオーナーが必要です。
+    audit_events:
+      index:
+        title: アクティビティ
+        heading: アクティビティ
+        description: "%{project} のチームを誰が変更したか。"
+        empty: まだ何も起きていません。
+        someone: 元メンバー
+        pagination: ページ
+        newer: 新しい順
+        older: 古い順
+        kinds:
+          member_invited: "%{actor} が %{email} を招待しました(%{role})。"
+          invitation_accepted: "%{actor} が招待から参加しました。"
+          invitation_revoked: "%{actor} が %{email} への招待を取り消しました。"
+          role_changed: "%{actor} が %{target} のロールを %{from} から %{to} に変更しました。"
+          member_revoked: "%{actor} が %{target} を削除しました。"
+          member_left: "%{actor} がプロジェクトを退出しました。"
+          ownership_transferred: "%{actor} がプロジェクトを %{target} に譲渡しました。"
+    leaves:
+      create:
+        left: "%{project} を退出しました。"
+        last_owner: あなたは唯一のオーナーです。退出する前に所有権を譲渡してください。
+    ownership_transfers:
+      create:
+        transferred: "%{name} がオーナーになり、あなたはメンバーになりました。"
+        invalid: そのメンバーに所有権を譲渡できませんでした。
+    invitations:
+      create:
+        sent: "%{email} に招待を送信しました。"
+        created: "%{email} への招待を作成しました。メールは利用できないため、リンクを自分で共有してください。"
+        failed:
+          invalid: 有効なメールアドレスとロールを入力してください。
+          already_member: その人はすでにこのプロジェクトのメンバーです。
+          duplicate: そのメールアドレスへの招待はすでに作成中です。もう一度お試しください。
+      destroy:
+        revoked: "%{email} への招待を取り消しました。"
+  invitation_acceptances:
+    show:
+      title: プロジェクトに参加
+      heading: プロジェクトに参加
+      body: "%{project} に招待されました。あなたのロールは「%{role}」です。"
+      roles:
+        owner: オーナー
+        member: メンバー
+      join: プロジェクトに参加する
+      wrong_account: この招待は別のメールアドレス宛てに送られました。現在 %{email} でサインインしています。
+      sign_out: サインアウト
+      invalid: この招待は無効になりました。プロジェクトのオーナーに新しい招待を依頼してください。
+      home: Shango へ移動
+    create:
+      joined: "%{project} に参加しました。"
+      failed:
+        unavailable: この招待は無効になりました。プロジェクトのオーナーに新しい招待を依頼してください。
+        wrong_account: この招待は別のメールアドレス宛てに送られました。
+  invitation_mailer:
+    invite:
+      subject: Shango の %{project} に招待されました
+      greeting: こんにちは。
+      body_by: "%{inviter} さんがあなたを Shango の %{project} に招待しました。"
+      body: Shango の %{project} に招待されました。
+      cta: プロジェクトに参加する
+      expires: この招待は1回のみ有効で、%{date} に期限切れになります。
+      ignore: この招待に心当たりがない場合は、このメールを無視してください。

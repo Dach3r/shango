@@ -1,0 +1,124 @@
+fr:
+  authorization:
+    forbidden: Vous n'avez pas le droit de faire cela dans ce projet.
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: Un projet doit avoir au moins un propriétaire.
+  team:
+    read_only:
+      request: Vous pouvez envoyer cette requête, mais seul son créateur ou un propriétaire peut la modifier.
+  projects:
+    members:
+      index:
+        title: Membres
+        heading: Membres
+        description: Personnes ayant accès à %{project}.
+        members:
+          one: "%{count} membre"
+          other: "%{count} membres"
+        you: "(vous)"
+        activity: Activité
+        roles:
+          owner: Propriétaire
+          member: Membre
+        make_owner: Nommer propriétaire
+        make_member: Rétrograder en membre
+        remove: Retirer
+        confirm_remove: Retirer %{name} de ce projet ? L'accès est perdu immédiatement.
+        leave: Quitter le projet
+        confirm_leave: Quitter %{project} ? Vous perdrez l'accès.
+        transfer:
+          title: Transférer la propriété
+          hint: La personne choisie devient propriétaire et vous devenez membre.
+          select: Nouveau propriétaire
+          submit: Transférer la propriété
+          confirm: Transférer la propriété de ce projet ? Vous ne serez plus propriétaire.
+        invitations:
+          title: Inviter des personnes
+          hint: Elles reçoivent un lien pour rejoindre ce projet. Il ne fonctionne qu'une fois, pour l'adresse e-mail saisie, et expire après 7 jours.
+          email: E-mail
+          email_placeholder: nom@exemple.com
+          role: Rôle
+          submit: Envoyer l'invitation
+          pending: Invitations en attente
+          expires: Expire le %{date}
+          expired: Expirée
+          revoke: Révoquer
+          confirm_revoke: Révoquer l'invitation pour %{email} ? Son lien ne fonctionnera plus.
+          link_title: Lien d'invitation
+          link_hint: Copiez-le maintenant, il ne sera plus affiché. Toute personne qui le possède peut rejoindre le projet, à condition de se connecter avec l'e-mail invité.
+      update:
+        updated: Le rôle de %{name} a été mis à jour.
+        failed:
+          last_owner: Un projet doit avoir au moins un propriétaire.
+          invalid_role: Ce rôle n'existe pas.
+      destroy:
+        revoked: "%{name} a été retiré du projet."
+        failed: Un projet doit avoir au moins un propriétaire.
+    audit_events:
+      index:
+        title: Activité
+        heading: Activité
+        description: Qui a modifié l'équipe de %{project}.
+        empty: Rien ne s'est encore passé.
+        someone: un ancien membre
+        pagination: Pages
+        newer: Plus récents
+        older: Plus anciens
+        kinds:
+          member_invited: "%{actor} a invité %{email} (%{role})."
+          invitation_accepted: "%{actor} a rejoint le projet avec une invitation."
+          invitation_revoked: "%{actor} a révoqué l'invitation pour %{email}."
+          role_changed: "%{actor} a changé le rôle de %{target} de %{from} à %{to}."
+          member_revoked: "%{actor} a retiré %{target}."
+          member_left: "%{actor} a quitté le projet."
+          ownership_transferred: "%{actor} a transféré le projet à %{target}."
+    leaves:
+      create:
+        left: Vous avez quitté %{project}.
+        last_owner: Vous êtes le seul propriétaire. Transférez la propriété avant de partir.
+    ownership_transfers:
+      create:
+        transferred: "%{name} est maintenant propriétaire et vous êtes membre."
+        invalid: La propriété n'a pas pu être transférée à ce membre.
+    invitations:
+      create:
+        sent: Invitation envoyée à %{email}.
+        created: Invitation créée pour %{email}. L'e-mail n'est pas disponible, partagez donc le lien vous-même.
+        failed:
+          invalid: Saisissez une adresse e-mail valide et un rôle.
+          already_member: Cette personne est déjà membre de ce projet.
+          duplicate: Une invitation pour cette adresse est déjà en cours de création. Réessayez.
+      destroy:
+        revoked: L'invitation pour %{email} a été révoquée.
+  invitation_acceptances:
+    show:
+      title: Rejoindre un projet
+      heading: Rejoindre un projet
+      body: Vous êtes invité à rejoindre %{project}. Votre rôle sera %{role}.
+      roles:
+        owner: Propriétaire
+        member: Membre
+      join: Rejoindre le projet
+      wrong_account: Cette invitation a été envoyée à une autre adresse e-mail. Vous êtes connecté en tant que %{email}.
+      sign_out: Se déconnecter
+      invalid: Cette invitation n'est plus valide. Demandez-en une nouvelle au propriétaire du projet.
+      home: Aller sur Shango
+    create:
+      joined: Vous avez rejoint %{project}.
+      failed:
+        unavailable: Cette invitation n'est plus valide. Demandez-en une nouvelle au propriétaire du projet.
+        wrong_account: Cette invitation a été envoyée à une autre adresse e-mail.
+  invitation_mailer:
+    invite:
+      subject: Vous êtes invité à rejoindre %{project} sur Shango
+      greeting: Bonjour,
+      body_by: "%{inviter} vous invite à rejoindre %{project} sur Shango."
+      body: Vous êtes invité à rejoindre %{project} sur Shango.
+      cta: Rejoindre le projet
+      expires: L'invitation ne fonctionne qu'une fois et expire le %{date}.
+      ignore: Si vous n'attendiez pas cette invitation, vous pouvez ignorer cet e-mail.

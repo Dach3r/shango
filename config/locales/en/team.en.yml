@@ -70,7 +70,7 @@ en:
         newer: Newer
         older: Older
         kinds:
-          member_invited: "%{actor} invited %{email} as %{role}."
+          member_invited: "%{actor} invited %{email} (%{role})."
           invitation_accepted: "%{actor} joined through an invitation."
           invitation_revoked: "%{actor} revoked the invitation for %{email}."
           role_changed: "%{actor} changed the role of %{target} from %{from} to %{to}."
@@ -99,10 +99,10 @@ en:
     show:
       title: Join a project
       heading: Join a project
-      body: You were invited to join %{project} as %{role}.
+      body: You were invited to join %{project}. Your role will be %{role}.
       roles:
-        owner: an owner
-        member: a member
+        owner: Owner
+        member: Member
       join: Join project
       wrong_account: This invitation was sent to another email address. You are signed in as %{email}.
       sign_out: Sign out

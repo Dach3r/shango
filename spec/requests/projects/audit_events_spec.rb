@@ -15,7 +15,7 @@ RSpec.describe "Team activity" do
       event(created_at: 1.hour.ago, kind: "member_revoked", target: create(:user, first_name: "Grace", last_name: "Hopper"))
       get audit_events_path
 
-      expect(response.body).to include("Ada Lovelace removed Grace Hopper.", "Ada Lovelace invited old@example.com as Member.")
+      expect(response.body).to include("Ada Lovelace removed Grace Hopper.", "Ada Lovelace invited old@example.com (Member).")
       expect(response.body.index("Grace Hopper")).to be < response.body.index("old@example.com")
     end
 

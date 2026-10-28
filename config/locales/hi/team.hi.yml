@@ -1,0 +1,124 @@
+hi:
+  authorization:
+    forbidden: आपको इस प्रोजेक्ट में ऐसा करने की अनुमति नहीं है।
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: प्रोजेक्ट में कम से कम एक मालिक होना चाहिए।
+  team:
+    read_only:
+      request: आप यह अनुरोध भेज सकते हैं, लेकिन इसे केवल इसका निर्माता या कोई मालिक ही बदल सकता है।
+  projects:
+    members:
+      index:
+        title: सदस्य
+        heading: सदस्य
+        description: "%{project} तक पहुंच रखने वाले लोग।"
+        members:
+          one: "%{count} सदस्य"
+          other: "%{count} सदस्य"
+        you: "(आप)"
+        activity: गतिविधि
+        roles:
+          owner: मालिक
+          member: सदस्य
+        make_owner: मालिक बनाएं
+        make_member: सदस्य बनाएं
+        remove: हटाएं
+        confirm_remove: "%{name} को इस प्रोजेक्ट से हटाएं? उनकी पहुंच तुरंत समाप्त हो जाएगी।"
+        leave: प्रोजेक्ट छोड़ें
+        confirm_leave: "%{project} छोड़ें? आपकी पहुंच समाप्त हो जाएगी।"
+        transfer:
+          title: स्वामित्व स्थानांतरित करें
+          hint: आप जिसे चुनेंगे वह मालिक बन जाएगा और आप सदस्य रह जाएंगे।
+          select: नया मालिक
+          submit: स्वामित्व स्थानांतरित करें
+          confirm: इस प्रोजेक्ट का स्वामित्व स्थानांतरित करें? आप अब मालिक नहीं रहेंगे।
+        invitations:
+          title: लोगों को आमंत्रित करें
+          hint: उन्हें इस प्रोजेक्ट में शामिल होने का लिंक मिलता है। यह केवल एक बार, आपके दिए ईमेल के लिए काम करता है और 7 दिन बाद समाप्त हो जाता है।
+          email: ईमेल
+          email_placeholder: name@example.com
+          role: भूमिका
+          submit: आमंत्रण भेजें
+          pending: लंबित आमंत्रण
+          expires: "%{date} को समाप्त"
+          expired: समाप्त
+          revoke: रद्द करें
+          confirm_revoke: "%{email} का आमंत्रण रद्द करें? उसका लिंक काम करना बंद कर देगा।"
+          link_title: आमंत्रण लिंक
+          link_hint: इसे अभी कॉपी करें, यह दोबारा नहीं दिखेगा। जिसके पास भी यह है वह शामिल हो सकता है, बशर्ते वह आमंत्रित ईमेल से साइन इन करे।
+      update:
+        updated: "%{name} की भूमिका अपडेट की गई।"
+        failed:
+          last_owner: प्रोजेक्ट में कम से कम एक मालिक होना चाहिए।
+          invalid_role: वह भूमिका मौजूद नहीं है।
+      destroy:
+        revoked: "%{name} को प्रोजेक्ट से हटा दिया गया।"
+        failed: प्रोजेक्ट में कम से कम एक मालिक होना चाहिए।
+    audit_events:
+      index:
+        title: गतिविधि
+        heading: गतिविधि
+        description: "%{project} की टीम में किसने बदलाव किए।"
+        empty: अभी तक कुछ नहीं हुआ है।
+        someone: एक पूर्व सदस्य
+        pagination: पृष्ठ
+        newer: नए
+        older: पुराने
+        kinds:
+          member_invited: "%{actor} ने %{email} को आमंत्रित किया (%{role})।"
+          invitation_accepted: "%{actor} आमंत्रण से शामिल हुए।"
+          invitation_revoked: "%{actor} ने %{email} का आमंत्रण रद्द किया।"
+          role_changed: "%{actor} ने %{target} की भूमिका %{from} से %{to} कर दी।"
+          member_revoked: "%{actor} ने %{target} को हटा दिया।"
+          member_left: "%{actor} ने प्रोजेक्ट छोड़ दिया।"
+          ownership_transferred: "%{actor} ने प्रोजेक्ट %{target} को सौंप दिया।"
+    leaves:
+      create:
+        left: आपने %{project} छोड़ दिया।
+        last_owner: आप अकेले मालिक हैं। छोड़ने से पहले स्वामित्व सौंपें।
+    ownership_transfers:
+      create:
+        transferred: "%{name} अब मालिक हैं और आप सदस्य हैं।"
+        invalid: उस सदस्य को स्वामित्व स्थानांतरित नहीं किया जा सका।
+    invitations:
+      create:
+        sent: "%{email} को आमंत्रण भेजा गया।"
+        created: "%{email} के लिए आमंत्रण बनाया गया। ईमेल उपलब्ध नहीं है, इसलिए लिंक खुद साझा करें।"
+        failed:
+          invalid: मान्य ईमेल पता और भूमिका दर्ज करें।
+          already_member: वह व्यक्ति पहले से इस प्रोजेक्ट का सदस्य है।
+          duplicate: उस ईमेल के लिए आमंत्रण पहले से बन रहा है। फिर से कोशिश करें।
+      destroy:
+        revoked: "%{email} का आमंत्रण रद्द कर दिया गया।"
+  invitation_acceptances:
+    show:
+      title: प्रोजेक्ट से जुड़ें
+      heading: प्रोजेक्ट से जुड़ें
+      body: आपको %{project} से जुड़ने के लिए आमंत्रित किया गया है। आपकी भूमिका %{role} होगी।
+      roles:
+        owner: मालिक
+        member: सदस्य
+      join: प्रोजेक्ट से जुड़ें
+      wrong_account: यह आमंत्रण किसी और ईमेल पते पर भेजा गया था। आप %{email} से साइन इन हैं।
+      sign_out: साइन आउट
+      invalid: यह आमंत्रण अब मान्य नहीं है। प्रोजेक्ट के मालिक से नया मांगें।
+      home: Shango पर जाएं
+    create:
+      joined: आप %{project} से जुड़ गए।
+      failed:
+        unavailable: यह आमंत्रण अब मान्य नहीं है। प्रोजेक्ट के मालिक से नया मांगें।
+        wrong_account: यह आमंत्रण किसी और ईमेल पते पर भेजा गया था।
+  invitation_mailer:
+    invite:
+      subject: आपको Shango पर %{project} से जुड़ने के लिए आमंत्रित किया गया है
+      greeting: नमस्ते,
+      body_by: "%{inviter} ने आपको Shango पर %{project} से जुड़ने के लिए आमंत्रित किया है।"
+      body: आपको Shango पर %{project} से जुड़ने के लिए आमंत्रित किया गया है।
+      cta: प्रोजेक्ट से जुड़ें
+      expires: यह आमंत्रण केवल एक बार काम करता है और %{date} को समाप्त हो जाएगा।
+      ignore: यदि आपको इस आमंत्रण की उम्मीद नहीं थी, तो इस ईमेल को अनदेखा करें।

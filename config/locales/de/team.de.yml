@@ -1,0 +1,124 @@
+de:
+  authorization:
+    forbidden: Du darfst das in diesem Projekt nicht tun.
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: Ein Projekt braucht mindestens einen Eigentümer.
+  team:
+    read_only:
+      request: Du kannst diese Anfrage senden, aber nur ihr Ersteller oder ein Eigentümer kann sie ändern.
+  projects:
+    members:
+      index:
+        title: Mitglieder
+        heading: Mitglieder
+        description: Personen mit Zugriff auf %{project}.
+        members:
+          one: "%{count} Mitglied"
+          other: "%{count} Mitglieder"
+        you: "(du)"
+        activity: Aktivität
+        roles:
+          owner: Eigentümer
+          member: Mitglied
+        make_owner: Zum Eigentümer machen
+        make_member: Zum Mitglied machen
+        remove: Entfernen
+        confirm_remove: "%{name} aus diesem Projekt entfernen? Der Zugriff geht sofort verloren."
+        leave: Projekt verlassen
+        confirm_leave: "%{project} verlassen? Du verlierst den Zugriff."
+        transfer:
+          title: Eigentum übertragen
+          hint: Die gewählte Person wird Eigentümer und du wirst Mitglied.
+          select: Neuer Eigentümer
+          submit: Eigentum übertragen
+          confirm: Das Eigentum an diesem Projekt übertragen? Du bist dann kein Eigentümer mehr.
+        invitations:
+          title: Personen einladen
+          hint: Sie erhalten einen Link zum Beitritt zu diesem Projekt. Er funktioniert einmal, nur für die angegebene E-Mail-Adresse, und läuft nach 7 Tagen ab.
+          email: E-Mail
+          email_placeholder: name@example.com
+          role: Rolle
+          submit: Einladung senden
+          pending: Ausstehende Einladungen
+          expires: Läuft am %{date} ab
+          expired: Abgelaufen
+          revoke: Widerrufen
+          confirm_revoke: Einladung für %{email} widerrufen? Der Link funktioniert dann nicht mehr.
+          link_title: Einladungslink
+          link_hint: Kopiere ihn jetzt, er wird nicht erneut angezeigt. Wer ihn hat, kann beitreten, sofern er sich mit der eingeladenen E-Mail-Adresse anmeldet.
+      update:
+        updated: Die Rolle von %{name} wurde aktualisiert.
+        failed:
+          last_owner: Ein Projekt braucht mindestens einen Eigentümer.
+          invalid_role: Diese Rolle gibt es nicht.
+      destroy:
+        revoked: "%{name} wurde aus dem Projekt entfernt."
+        failed: Ein Projekt braucht mindestens einen Eigentümer.
+    audit_events:
+      index:
+        title: Aktivität
+        heading: Aktivität
+        description: Wer das Team von %{project} geändert hat.
+        empty: Es ist noch nichts passiert.
+        someone: ein ehemaliges Mitglied
+        pagination: Seiten
+        newer: Neuer
+        older: Älter
+        kinds:
+          member_invited: "%{actor} hat %{email} eingeladen (%{role})."
+          invitation_accepted: "%{actor} ist über eine Einladung beigetreten."
+          invitation_revoked: "%{actor} hat die Einladung für %{email} widerrufen."
+          role_changed: "%{actor} hat die Rolle von %{target} von %{from} zu %{to} geändert."
+          member_revoked: "%{actor} hat %{target} entfernt."
+          member_left: "%{actor} hat das Projekt verlassen."
+          ownership_transferred: "%{actor} hat das Projekt an %{target} übergeben."
+    leaves:
+      create:
+        left: Du hast %{project} verlassen.
+        last_owner: Du bist der einzige Eigentümer. Übertrage das Eigentum, bevor du gehst.
+    ownership_transfers:
+      create:
+        transferred: "%{name} ist jetzt Eigentümer und du bist Mitglied."
+        invalid: Das Eigentum konnte nicht an dieses Mitglied übertragen werden.
+    invitations:
+      create:
+        sent: Einladung an %{email} gesendet.
+        created: Einladung für %{email} erstellt. E-Mail ist nicht verfügbar, teile den Link daher selbst.
+        failed:
+          invalid: Gib eine gültige E-Mail-Adresse und eine Rolle an.
+          already_member: Diese Person ist bereits Mitglied dieses Projekts.
+          duplicate: Für diese E-Mail-Adresse wird bereits eine Einladung erstellt. Versuche es erneut.
+      destroy:
+        revoked: Die Einladung für %{email} wurde widerrufen.
+  invitation_acceptances:
+    show:
+      title: Einem Projekt beitreten
+      heading: Einem Projekt beitreten
+      body: Du wurdest eingeladen, %{project} beizutreten. Deine Rolle wird %{role} sein.
+      roles:
+        owner: Eigentümer
+        member: Mitglied
+      join: Projekt beitreten
+      wrong_account: Diese Einladung wurde an eine andere E-Mail-Adresse gesendet. Du bist als %{email} angemeldet.
+      sign_out: Abmelden
+      invalid: Diese Einladung ist nicht mehr gültig. Bitte den Projekteigentümer um eine neue.
+      home: Zu Shango
+    create:
+      joined: Du bist %{project} beigetreten.
+      failed:
+        unavailable: Diese Einladung ist nicht mehr gültig. Bitte den Projekteigentümer um eine neue.
+        wrong_account: Diese Einladung wurde an eine andere E-Mail-Adresse gesendet.
+  invitation_mailer:
+    invite:
+      subject: Du wurdest zu %{project} auf Shango eingeladen
+      greeting: Hallo,
+      body_by: "%{inviter} hat dich zu %{project} auf Shango eingeladen."
+      body: Du wurdest zu %{project} auf Shango eingeladen.
+      cta: Dem Projekt beitreten
+      expires: Die Einladung funktioniert einmal und läuft am %{date} ab.
+      ignore: Wenn du diese Einladung nicht erwartet hast, kannst du diese E-Mail ignorieren.

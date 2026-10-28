@@ -1,0 +1,124 @@
+zh-CN:
+  authorization:
+    forbidden: 你没有权限在此项目中执行该操作。
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: 项目至少需要一位所有者。
+  team:
+    read_only:
+      request: 你可以发送此请求,但只有其创建者或所有者才能修改它。
+  projects:
+    members:
+      index:
+        title: 成员
+        heading: 成员
+        description: 可以访问 %{project} 的人员。
+        members:
+          one: "%{count} 位成员"
+          other: "%{count} 位成员"
+        you: "(你)"
+        activity: 动态
+        roles:
+          owner: 所有者
+          member: 成员
+        make_owner: 设为所有者
+        make_member: 设为成员
+        remove: 移除
+        confirm_remove: 要将 %{name} 从此项目中移除吗?其访问权限将立即失效。
+        leave: 退出项目
+        confirm_leave: 要退出 %{project} 吗?你将失去访问权限。
+        transfer:
+          title: 转让所有权
+          hint: 你选择的人将成为所有者,而你将降为成员。
+          select: 新所有者
+          submit: 转让所有权
+          confirm: 要转让此项目的所有权吗?你将不再是所有者。
+        invitations:
+          title: 邀请成员
+          hint: 对方会收到加入此项目的链接。该链接仅可使用一次,仅限你填写的邮箱,7 天后过期。
+          email: 邮箱
+          email_placeholder: name@example.com
+          role: 角色
+          submit: 发送邀请
+          pending: 待处理的邀请
+          expires: "%{date} 过期"
+          expired: 已过期
+          revoke: 撤销
+          confirm_revoke: 要撤销发给 %{email} 的邀请吗?其链接将失效。
+          link_title: 邀请链接
+          link_hint: 请现在复制,之后不会再显示。任何拥有该链接的人只要使用被邀请的邮箱登录即可加入。
+      update:
+        updated: 已更新 %{name} 的角色。
+        failed:
+          last_owner: 项目至少需要一位所有者。
+          invalid_role: 该角色不存在。
+      destroy:
+        revoked: "%{name} 已被移出项目。"
+        failed: 项目至少需要一位所有者。
+    audit_events:
+      index:
+        title: 动态
+        heading: 动态
+        description: 谁更改了 %{project} 的团队。
+        empty: 暂无动态。
+        someone: 一位前成员
+        pagination: 分页
+        newer: 较新
+        older: 较早
+        kinds:
+          member_invited: "%{actor} 邀请了 %{email}(%{role})。"
+          invitation_accepted: "%{actor} 通过邀请加入。"
+          invitation_revoked: "%{actor} 撤销了发给 %{email} 的邀请。"
+          role_changed: "%{actor} 将 %{target} 的角色从 %{from} 改为 %{to}。"
+          member_revoked: "%{actor} 移除了 %{target}。"
+          member_left: "%{actor} 退出了项目。"
+          ownership_transferred: "%{actor} 将项目转让给了 %{target}。"
+    leaves:
+      create:
+        left: 你已退出 %{project}。
+        last_owner: 你是唯一的所有者。请先转让所有权再退出。
+    ownership_transfers:
+      create:
+        transferred: "%{name} 现在是所有者,你是成员。"
+        invalid: 无法将所有权转让给该成员。
+    invitations:
+      create:
+        sent: 邀请已发送至 %{email}。
+        created: 已为 %{email} 创建邀请。邮件功能不可用,请自行分享链接。
+        failed:
+          invalid: 请输入有效的邮箱和角色。
+          already_member: 该用户已是此项目的成员。
+          duplicate: 该邮箱的邀请正在创建中,请重试。
+      destroy:
+        revoked: 发给 %{email} 的邀请已撤销。
+  invitation_acceptances:
+    show:
+      title: 加入项目
+      heading: 加入项目
+      body: 你被邀请加入 %{project}。你的角色将是%{role}。
+      roles:
+        owner: 所有者
+        member: 成员
+      join: 加入项目
+      wrong_account: 此邀请发送至另一个邮箱。你当前登录的是 %{email}。
+      sign_out: 退出登录
+      invalid: 此邀请已失效。请向项目所有者索取新的邀请。
+      home: 前往 Shango
+    create:
+      joined: 你已加入 %{project}。
+      failed:
+        unavailable: 此邀请已失效。请向项目所有者索取新的邀请。
+        wrong_account: 此邀请发送至另一个邮箱。
+  invitation_mailer:
+    invite:
+      subject: 你被邀请加入 Shango 上的 %{project}
+      greeting: 你好,
+      body_by: "%{inviter} 邀请你加入 Shango 上的 %{project}。"
+      body: 你被邀请加入 Shango 上的 %{project}。
+      cta: 加入项目
+      expires: 此邀请仅可使用一次,将于 %{date} 过期。
+      ignore: 如果你没有预期会收到此邀请,请忽略这封邮件。

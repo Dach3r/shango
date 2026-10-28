@@ -15,7 +15,7 @@ RSpec.describe AuditEventsHelper do
     invited = create(:audit_event, project:, actor:, kind: "member_invited", metadata: { "email" => "new@example.com", "role" => "member" })
 
     expect(helper.audit_event_summary(changed)).to eq("Grace Hopper changed the role of Alan Turing from Member to Owner.")
-    expect(helper.audit_event_summary(invited)).to eq("Grace Hopper invited new@example.com as Member.")
+    expect(helper.audit_event_summary(invited)).to eq("Grace Hopper invited new@example.com (Member).")
   end
 
   it "stands in for people whose accounts are gone" do

@@ -1,0 +1,126 @@
+ru:
+  authorization:
+    forbidden: У вас нет прав на это действие в данном проекте.
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: В проекте должен остаться хотя бы один владелец.
+  team:
+    read_only:
+      request: Вы можете отправить этот запрос, но изменить его может только автор или владелец.
+  projects:
+    members:
+      index:
+        title: Участники
+        heading: Участники
+        description: Люди, имеющие доступ к проекту %{project}.
+        members:
+          one: "%{count} участник"
+          few: "%{count} участника"
+          many: "%{count} участников"
+          other: "%{count} участника"
+        you: "(вы)"
+        activity: Активность
+        roles:
+          owner: Владелец
+          member: Участник
+        make_owner: Сделать владельцем
+        make_member: Сделать участником
+        remove: Удалить
+        confirm_remove: Удалить %{name} из проекта? Доступ будет потерян сразу же.
+        leave: Покинуть проект
+        confirm_leave: Покинуть проект %{project}? Вы потеряете доступ к нему.
+        transfer:
+          title: Передать владение
+          hint: Выбранный человек станет владельцем, а вы — обычным участником.
+          select: Новый владелец
+          submit: Передать владение
+          confirm: Передать владение этим проектом? Вы перестанете быть владельцем.
+        invitations:
+          title: Пригласить людей
+          hint: Они получат ссылку для присоединения к проекту. Она работает один раз, только для указанного адреса, и действует 7 дней.
+          email: Эл. почта
+          email_placeholder: name@example.com
+          role: Роль
+          submit: Отправить приглашение
+          pending: Ожидающие приглашения
+          expires: Истекает %{date}
+          expired: Истекло
+          revoke: Отозвать
+          confirm_revoke: Отозвать приглашение для %{email}? Ссылка перестанет работать.
+          link_title: Ссылка-приглашение
+          link_hint: Скопируйте сейчас, повторно ссылка не показывается. Присоединиться сможет любой, у кого она есть, если войдёт с приглашённым адресом.
+      update:
+        updated: Роль пользователя %{name} обновлена.
+        failed:
+          last_owner: В проекте должен остаться хотя бы один владелец.
+          invalid_role: Такой роли не существует.
+      destroy:
+        revoked: "%{name} удалён из проекта."
+        failed: В проекте должен остаться хотя бы один владелец.
+    audit_events:
+      index:
+        title: Активность
+        heading: Активность
+        description: Кто менял состав команды проекта %{project}.
+        empty: Пока ничего не происходило.
+        someone: бывший участник
+        pagination: Страницы
+        newer: Новее
+        older: Старше
+        kinds:
+          member_invited: "%{actor} пригласил(а) %{email} (%{role})."
+          invitation_accepted: "%{actor} присоединился(-ась) по приглашению."
+          invitation_revoked: "%{actor} отозвал(а) приглашение для %{email}."
+          role_changed: "%{actor} изменил(а) роль пользователя %{target} с «%{from}» на «%{to}»."
+          member_revoked: "%{actor} удалил(а) пользователя %{target}."
+          member_left: "%{actor} покинул(а) проект."
+          ownership_transferred: "%{actor} передал(а) проект пользователю %{target}."
+    leaves:
+      create:
+        left: Вы покинули проект %{project}.
+        last_owner: Вы единственный владелец. Передайте владение, прежде чем уйти.
+    ownership_transfers:
+      create:
+        transferred: "%{name} теперь владелец, а вы — участник."
+        invalid: Не удалось передать владение этому участнику.
+    invitations:
+      create:
+        sent: Приглашение отправлено на %{email}.
+        created: Приглашение для %{email} создано. Почта недоступна, поэтому передайте ссылку самостоятельно.
+        failed:
+          invalid: Укажите корректный адрес эл. почты и роль.
+          already_member: Этот человек уже участвует в проекте.
+          duplicate: Приглашение для этого адреса уже создаётся. Повторите попытку.
+      destroy:
+        revoked: Приглашение для %{email} отозвано.
+  invitation_acceptances:
+    show:
+      title: Присоединиться к проекту
+      heading: Присоединиться к проекту
+      body: 'Вас пригласили в проект %{project}. Ваша роль: %{role}.'
+      roles:
+        owner: Владелец
+        member: Участник
+      join: Присоединиться
+      wrong_account: Это приглашение отправлено на другой адрес. Вы вошли как %{email}.
+      sign_out: Выйти
+      invalid: Это приглашение больше недействительно. Попросите владельца проекта прислать новое.
+      home: Перейти в Shango
+    create:
+      joined: Вы присоединились к проекту %{project}.
+      failed:
+        unavailable: Это приглашение больше недействительно. Попросите владельца проекта прислать новое.
+        wrong_account: Это приглашение отправлено на другой адрес.
+  invitation_mailer:
+    invite:
+      subject: Вас приглашают в проект %{project} в Shango
+      greeting: Здравствуйте!
+      body_by: "%{inviter} приглашает вас в проект %{project} в Shango."
+      body: Вас приглашают в проект %{project} в Shango.
+      cta: Присоединиться к проекту
+      expires: Приглашение работает один раз и действует до %{date}.
+      ignore: Если вы не ожидали этого приглашения, просто проигнорируйте письмо.

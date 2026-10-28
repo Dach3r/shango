@@ -1,0 +1,124 @@
+pt-BR:
+  authorization:
+    forbidden: Você não tem permissão para fazer isso neste projeto.
+  activerecord:
+    errors:
+      models:
+        membership:
+          attributes:
+            base:
+              last_owner: Um projeto precisa de pelo menos um proprietário.
+  team:
+    read_only:
+      request: Você pode enviar esta requisição, mas somente quem a criou ou um proprietário pode alterá-la.
+  projects:
+    members:
+      index:
+        title: Membros
+        heading: Membros
+        description: Pessoas com acesso a %{project}.
+        members:
+          one: "%{count} membro"
+          other: "%{count} membros"
+        you: "(você)"
+        activity: Atividade
+        roles:
+          owner: Proprietário
+          member: Membro
+        make_owner: Tornar proprietário
+        make_member: Tornar membro
+        remove: Remover
+        confirm_remove: Remover %{name} deste projeto? O acesso é perdido imediatamente.
+        leave: Sair do projeto
+        confirm_leave: Sair de %{project}? Você perderá o acesso.
+        transfer:
+          title: Transferir a propriedade
+          hint: A pessoa escolhida passa a ser proprietária e você passa a ser membro.
+          select: Novo proprietário
+          submit: Transferir a propriedade
+          confirm: Transferir a propriedade deste projeto? Você deixará de ser proprietário.
+        invitations:
+          title: Convidar pessoas
+          hint: Elas recebem um link para entrar neste projeto. Ele funciona uma vez, para o e-mail informado, e expira em 7 dias.
+          email: E-mail
+          email_placeholder: nome@exemplo.com
+          role: Função
+          submit: Enviar convite
+          pending: Convites pendentes
+          expires: Expira em %{date}
+          expired: Expirado
+          revoke: Revogar
+          confirm_revoke: Revogar o convite para %{email}? O link deixará de funcionar.
+          link_title: Link do convite
+          link_hint: Copie agora, ele não será exibido novamente. Qualquer pessoa com o link pode entrar, desde que acesse com o e-mail convidado.
+      update:
+        updated: A função de %{name} foi atualizada.
+        failed:
+          last_owner: Um projeto precisa de pelo menos um proprietário.
+          invalid_role: Essa função não existe.
+      destroy:
+        revoked: "%{name} foi removido do projeto."
+        failed: Um projeto precisa de pelo menos um proprietário.
+    audit_events:
+      index:
+        title: Atividade
+        heading: Atividade
+        description: Quem alterou a equipe de %{project}.
+        empty: Nada aconteceu ainda.
+        someone: um ex-membro
+        pagination: Páginas
+        newer: Mais recentes
+        older: Mais antigos
+        kinds:
+          member_invited: "%{actor} convidou %{email} (%{role})."
+          invitation_accepted: "%{actor} entrou por meio de um convite."
+          invitation_revoked: "%{actor} revogou o convite para %{email}."
+          role_changed: "%{actor} alterou a função de %{target} de %{from} para %{to}."
+          member_revoked: "%{actor} removeu %{target}."
+          member_left: "%{actor} saiu do projeto."
+          ownership_transferred: "%{actor} transferiu o projeto para %{target}."
+    leaves:
+      create:
+        left: Você saiu de %{project}.
+        last_owner: Você é o único proprietário. Transfira a propriedade antes de sair.
+    ownership_transfers:
+      create:
+        transferred: "%{name} agora é proprietário e você é membro."
+        invalid: Não foi possível transferir a propriedade para esse membro.
+    invitations:
+      create:
+        sent: Convite enviado para %{email}.
+        created: Convite criado para %{email}. O e-mail não está disponível, então compartilhe o link você mesmo.
+        failed:
+          invalid: Informe um e-mail válido e uma função.
+          already_member: Essa pessoa já é membro deste projeto.
+          duplicate: Já existe um convite sendo criado para esse e-mail. Tente novamente.
+      destroy:
+        revoked: O convite para %{email} foi revogado.
+  invitation_acceptances:
+    show:
+      title: Entrar em um projeto
+      heading: Entrar em um projeto
+      body: Você foi convidado a entrar em %{project}. Sua função será %{role}.
+      roles:
+        owner: Proprietário
+        member: Membro
+      join: Entrar no projeto
+      wrong_account: Este convite foi enviado para outro e-mail. Você está conectado como %{email}.
+      sign_out: Sair
+      invalid: Este convite não é mais válido. Peça um novo ao proprietário do projeto.
+      home: Ir para o Shango
+    create:
+      joined: Você entrou em %{project}.
+      failed:
+        unavailable: Este convite não é mais válido. Peça um novo ao proprietário do projeto.
+        wrong_account: Este convite foi enviado para outro e-mail.
+  invitation_mailer:
+    invite:
+      subject: Você foi convidado para entrar em %{project} no Shango
+      greeting: Olá,
+      body_by: "%{inviter} convidou você para entrar em %{project} no Shango."
+      body: Você foi convidado para entrar em %{project} no Shango.
+      cta: Entrar no projeto
+      expires: O convite funciona uma vez e expira em %{date}.
+      ignore: Se você não esperava este convite, ignore este e-mail.
