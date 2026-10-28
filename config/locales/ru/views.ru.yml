@@ -50,7 +50,6 @@ ru:
         sidebar: Боковая панель
         themes: Темы
         members: Участники
-        credits: "Благодарности"
     tools_nav:
       label: Навигация по проекту
       api_client: API Client
@@ -118,6 +117,12 @@ ru:
         updated: Настройки сохранены.
     themes:
       edit:
+        credits:
+          label: "Благодарности"
+          hint: "Палитры, перенесённые из тем сообщества Omarchy. Каждая сохраняет исходные цвета, имеет фиксированную схему и принадлежит своему автору."
+          by: "Автор: %{author}"
+          repository: "Репозиторий"
+          no_license: "Лицензия не указана"
         title: Темы
         heading: Темы
         description: Как Shango выглядит для вас в этом проекте. Действует только для вас.
@@ -184,17 +189,6 @@ ru:
           azure_glow: "Azure Glow"
           bauhaus: "Bauhaus"
           black_sand: "Black Sand"
-    credits:
-      index:
-        title: "Благодарности"
-        heading: "Благодарности"
-        description: "Люди и проекты, на которых строится Shango."
-        omarchy:
-          title: "Темы Omarchy"
-          hint: "Палитры, перенесённые из тем сообщества Omarchy. Каждая сохраняет исходные цвета, имеет фиксированную схему и принадлежит своему автору."
-        by: "Автор: %{author}"
-        repository: "Репозиторий"
-        no_license: "Лицензия не указана"
   users:
     accounts:
       show:

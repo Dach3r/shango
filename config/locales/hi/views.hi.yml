@@ -50,7 +50,6 @@ hi:
         sidebar: "साइडबार"
         themes: "थीम"
         members: "सदस्य"
-        credits: "क्रेडिट"
     tools_nav:
       label: "प्रोजेक्ट नेविगेशन"
       api_client: "API Client"
@@ -118,6 +117,12 @@ hi:
         updated: "सेटिंग्स सहेज ली गईं।"
     themes:
       edit:
+        credits:
+          label: "क्रेडिट"
+          hint: "समुदाय के Omarchy थीम से ली गई पैलेट। हर एक अपने मूल रंग रखती है, उसकी रंग योजना तय है और वह अपने लेखक की है।"
+          by: "%{author} द्वारा"
+          repository: "रिपॉज़िटरी"
+          no_license: "कोई लाइसेंस निर्दिष्ट नहीं"
         title: "थीम"
         heading: "थीम"
         description: "इस प्रोजेक्ट में Shango आपको कैसा दिखे। यह सिर्फ़ आप पर लागू होता है।"
@@ -184,17 +189,6 @@ hi:
           azure_glow: "Azure Glow"
           bauhaus: "Bauhaus"
           black_sand: "Black Sand"
-    credits:
-      index:
-        title: "क्रेडिट"
-        heading: "क्रेडिट"
-        description: "Shango में शामिल चीज़ों के पीछे के लोग और प्रोजेक्ट।"
-        omarchy:
-          title: "Omarchy थीम"
-          hint: "समुदाय के Omarchy थीम से ली गई पैलेट। हर एक अपने मूल रंग रखती है, उसकी रंग योजना तय है और वह अपने लेखक की है।"
-        by: "%{author} द्वारा"
-        repository: "रिपॉज़िटरी"
-        no_license: "कोई लाइसेंस निर्दिष्ट नहीं"
   users:
     accounts:
       show:

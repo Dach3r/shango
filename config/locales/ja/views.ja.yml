@@ -50,7 +50,6 @@ ja:
         sidebar: サイドバー
         themes: テーマ
         members: メンバー
-        credits: "クレジット"
     tools_nav:
       label: プロジェクトナビゲーション
       api_client: API Client
@@ -118,6 +117,12 @@ ja:
         updated: 設定を保存しました。
     themes:
       edit:
+        credits:
+          label: "クレジット"
+          hint: "コミュニティの Omarchy テーマから移植したパレットです。元の色を保ち、配色は固定で、作者に帰属します。"
+          by: "作者: %{author}"
+          repository: "リポジトリ"
+          no_license: "ライセンス未指定"
         title: テーマ
         heading: テーマ
         description: このプロジェクトでの Shango の見た目を設定します。あなたにのみ適用されます。
@@ -184,17 +189,6 @@ ja:
           azure_glow: "Azure Glow"
           bauhaus: "Bauhaus"
           black_sand: "Black Sand"
-    credits:
-      index:
-        title: "クレジット"
-        heading: "クレジット"
-        description: "Shango に含まれるものを支える人々とプロジェクト。"
-        omarchy:
-          title: "Omarchy テーマ"
-          hint: "コミュニティの Omarchy テーマから移植したパレットです。元の色を保ち、配色は固定で、作者に帰属します。"
-        by: "作者: %{author}"
-        repository: "リポジトリ"
-        no_license: "ライセンス未指定"
   users:
     accounts:
       show:

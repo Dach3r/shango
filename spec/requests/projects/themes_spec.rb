@@ -49,6 +49,17 @@ RSpec.describe "Themes" do
       expect(response.body).to include(%(data-scheme="dark"))
     end
 
+    it "credits every Omarchy theme in a Credits tab shown next to the Omarchy one", :aggregate_failures do
+      get edit_theme_path
+
+      expect(response.body).to include(%(data-name="omarchy credits"), %(data-tabs-name-param="credits"), I18n.t("projects.themes.edit.credits.label"))
+      Membership::OMARCHY_CREDITS.each do |credit|
+        expect(response.body).to include(%(href="#{credit[:repository]}"), credit[:author])
+      end
+      expect(Membership::OMARCHY_CREDITS.pluck(:license)).to include(nil)
+      expect(response.body).to include(I18n.t("projects.themes.edit.credits.no_license"))
+    end
+
     it "disables the color scheme picker while one is selected" do
       membership.update!(theme: "vulkanite")
 

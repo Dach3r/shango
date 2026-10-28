@@ -31,7 +31,6 @@ Rails.application.routes.draw do
     resources :invitations, only: %i[create destroy]
     resources :audit_events, only: :index
     resource :theme, only: %i[edit update], path_names: { edit: "settings" }
-    resources :credits, only: :index
   end
 
   namespace :workbench do

@@ -32,7 +32,15 @@
         </div>
 
         <div class="mt-4 px-5 sm:px-7 [&>div]:px-0">
-          <%= render TabBar::Component.new(items: groups.keys.map { |group| { name: group.to_s, label: t("projects.themes.edit.groups.#{group}") } }, label: t("projects.themes.edit.theme.label")) %>
+          <%= render TabBar::Component.new(items: groups.keys.map { |group| { name: group.to_s, label: t("projects.themes.edit.groups.#{group}") } }, label: t("projects.themes.edit.theme.label")) do %>
+            <div data-tabs-target="panel" data-name="omarchy credits" class="self-end" hidden>
+              <button type="button" role="tab" class="<%= TabBar::Component::TAB %>" data-tabs-target="tab" data-name="credits"
+                      data-action="tabs#select" data-tabs-name-param="credits">
+                <%= lucide_icon "heart", class: "size-3.5 shrink-0", "aria-hidden": true %>
+                <%= t("projects.themes.edit.credits.label") %>
+              </button>
+            </div>
+          <% end %>
         </div>
 
         <% groups.each do |group, themes| %>
@@ -44,6 +52,29 @@
             </div>
           </div>
         <% end %>
+
+        <div data-tabs-target="panel" data-name="credits" class="mt-4 px-5 sm:px-7" hidden>
+          <p class="text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.credits.hint") %></p>
+          <ul class="mt-4 divide-y divide-line border border-line">
+            <% Membership::OMARCHY_CREDITS.each do |credit| %>
+              <li class="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+                <div data-palette="<%= credit[:key] %>" aria-hidden="true" class="flex size-9 shrink-0 items-center justify-center border border-line bg-page">
+                  <span class="size-3 bg-solid"></span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-sm font-medium text-ink"><%= t("projects.themes.edit.themes.#{credit[:key]}") %></p>
+                  <p class="truncate text-xs text-muted"><%= t("projects.themes.edit.credits.by", author: credit[:author]) %></p>
+                </div>
+                <span class="inline-flex items-center border border-line px-2 py-0.5 text-xs font-medium text-body"><%= credit[:license] || t("projects.themes.edit.credits.no_license") %></span>
+                <%= link_to credit[:repository], target: "_blank", rel: "noopener noreferrer",
+                            class: "inline-flex items-center gap-1.5 text-xs font-medium text-accent transition hover:text-accent-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+                  <%= lucide_icon "external-link", class: "size-3.5 shrink-0", "aria-hidden": true %>
+                  <%= t("projects.themes.edit.credits.repository") %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
       </fieldset>
     </div>
   <% end %>

@@ -50,7 +50,6 @@ pt-BR:
         sidebar: Barra lateral
         themes: Temas
         members: Membros
-        credits: "Créditos"
     tools_nav:
       label: Navegação do projeto
       api_client: API Client
@@ -118,6 +117,12 @@ pt-BR:
         updated: Configurações salvas.
     themes:
       edit:
+        credits:
+          label: "Créditos"
+          hint: "Paletas portadas de temas da comunidade Omarchy. Cada uma mantém as cores originais, tem um esquema fixo e pertence ao seu autor."
+          by: "Por %{author}"
+          repository: "Repositório"
+          no_license: "Nenhuma licença especificada"
         title: Temas
         heading: Temas
         description: Como o Shango aparece para você neste projeto. Isso vale só para você.
@@ -184,17 +189,6 @@ pt-BR:
           azure_glow: "Azure Glow"
           bauhaus: "Bauhaus"
           black_sand: "Black Sand"
-    credits:
-      index:
-        title: "Créditos"
-        heading: "Créditos"
-        description: "As pessoas e os projetos por trás do que o Shango inclui."
-        omarchy:
-          title: "Temas do Omarchy"
-          hint: "Paletas portadas de temas da comunidade Omarchy. Cada uma mantém as cores originais, tem um esquema fixo e pertence ao seu autor."
-        by: "Por %{author}"
-        repository: "Repositório"
-        no_license: "Nenhuma licença especificada"
   users:
     accounts:
       show:

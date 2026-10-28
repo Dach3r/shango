@@ -8,7 +8,7 @@ export default class extends Controller {
     const remembered = this.recall();
     if (
       remembered &&
-      this.panelTargets.some((panel) => panel.dataset.name === remembered)
+      this.panelTargets.some((panel) => this.shows(panel, remembered))
     )
       this.activeValue = remembered;
     this.render();
@@ -37,8 +37,13 @@ export default class extends Controller {
       ),
     );
     this.panelTargets.forEach((panel) => {
-      panel.hidden = panel.dataset.name !== this.activeValue;
+      panel.hidden = !this.shows(panel, this.activeValue);
     });
+  }
+
+  // A panel may list several space-separated names to stay visible across tabs.
+  shows(panel, name) {
+    return panel.dataset.name.split(" ").includes(name);
   }
 
   remember() {

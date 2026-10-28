@@ -9,8 +9,7 @@ class SettingsNav::Component < ApplicationComponent
     { key: :appearance, items: [
       { key: :preferences, icon: "sliders-horizontal", path: :edit_user_registration_path, params: { tab: "preferences" }, controllers: "users/registrations", tab: "preferences" },
       { key: :themes, icon: "palette", path: :edit_theme_path, controllers: "projects/themes" },
-      { key: :sidebar, icon: "panel-left", path: :edit_membership_path, controllers: "projects/memberships" },
-      { key: :credits, icon: "heart", path: :credits_path, controllers: "projects/credits" }
+      { key: :sidebar, icon: "panel-left", path: :edit_membership_path, controllers: "projects/memberships" }
     ] },
     { key: :project, items: [{ key: :members, icon: "users", path: :members_path, controllers: "projects/members" }] }
   ].freeze

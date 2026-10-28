@@ -50,7 +50,6 @@ de:
         sidebar: Seitenleiste
         themes: Themes
         members: Mitglieder
-        credits: "Credits"
     tools_nav:
       label: Projektnavigation
       api_client: API Client
@@ -118,6 +117,12 @@ de:
         updated: Einstellungen gespeichert.
     themes:
       edit:
+        credits:
+          label: "Credits"
+          hint: "Paletten aus Community-Themes für Omarchy. Jede behält ihre Originalfarben, hat ein festes Farbschema und gehört ihrem Autor."
+          by: "Von %{author}"
+          repository: "Repository"
+          no_license: "Keine Lizenz angegeben"
         title: Themes
         heading: Themes
         description: Wie Shango für dich in diesem Projekt aussieht. Das gilt nur für dich.
@@ -184,17 +189,6 @@ de:
           azure_glow: "Azure Glow"
           bauhaus: "Bauhaus"
           black_sand: "Black Sand"
-    credits:
-      index:
-        title: "Credits"
-        heading: "Credits"
-        description: "Die Menschen und Projekte hinter dem, was Shango mitbringt."
-        omarchy:
-          title: "Omarchy-Themes"
-          hint: "Paletten aus Community-Themes für Omarchy. Jede behält ihre Originalfarben, hat ein festes Farbschema und gehört ihrem Autor."
-        by: "Von %{author}"
-        repository: "Repository"
-        no_license: "Keine Lizenz angegeben"
   users:
     accounts:
       show:

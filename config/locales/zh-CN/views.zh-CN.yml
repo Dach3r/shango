@@ -50,7 +50,6 @@ zh-CN:
         sidebar: 侧边栏
         themes: 主题
         members: 成员
-        credits: "致谢"
     tools_nav:
       label: 项目导航
       api_client: API 客户端
@@ -118,6 +117,12 @@ zh-CN:
         updated: 设置已保存。
     themes:
       edit:
+        credits:
+          label: "致谢"
+          hint: "移植自社区 Omarchy 主题的配色。每套都保留原始颜色，配色方案固定，版权归其作者所有。"
+          by: "作者:%{author}"
+          repository: "仓库"
+          no_license: "未指定许可证"
         title: 主题
         heading: 主题
         description: Shango 在此项目中对你的显示效果。仅对你生效。
@@ -184,17 +189,6 @@ zh-CN:
           azure_glow: "Azure Glow"
           bauhaus: "Bauhaus"
           black_sand: "Black Sand"
-    credits:
-      index:
-        title: "致谢"
-        heading: "致谢"
-        description: "Shango 所包含内容背后的人与项目。"
-        omarchy:
-          title: "Omarchy 主题"
-          hint: "移植自社区 Omarchy 主题的配色。每套都保留原始颜色，配色方案固定，版权归其作者所有。"
-        by: "作者:%{author}"
-        repository: "仓库"
-        no_license: "未指定许可证"
   users:
     accounts:
       show:
