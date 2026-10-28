@@ -1,6 +1,7 @@
 ja:
   network:
     title: ネットワーク
+    new_check: 新しいチェック
     tabs:
       label: ネットワークツール
       dns: DNS

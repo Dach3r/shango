@@ -1,6 +1,7 @@
 zh-CN:
   network:
     title: 网络
+    new_check: 新建检查
     tabs:
       label: 网络工具
       dns: DNS

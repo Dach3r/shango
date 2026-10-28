@@ -1,6 +1,7 @@
 pt-BR:
   network:
     title: Rede
+    new_check: Nova verificação
     tabs:
       label: Ferramentas de rede
       dns: DNS

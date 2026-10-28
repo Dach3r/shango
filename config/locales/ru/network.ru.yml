@@ -1,6 +1,7 @@
 ru:
   network:
     title: Сеть
+    new_check: Новая проверка
     tabs:
       label: Сетевые инструменты
       dns: DNS

@@ -1,6 +1,7 @@
 fr:
   network:
     title: "Réseau"
+    new_check: "Nouvelle vérification"
     tabs:
       label: "Outils réseau"
       dns: "DNS"
