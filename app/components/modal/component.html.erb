@@ -1,5 +1,5 @@
 <dialog data-controller="dialog" data-action="close->dialog#closed <%= "click->dialog#backdrop" if @dismissible %>"
-        class="modal m-auto max-h-[90dvh] w-[calc(100%-2rem)] <%= size_class %> flex-col overflow-hidden border border-line bg-card p-0 text-body open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
+        class="modal m-auto focus:outline-none max-h-[90dvh] w-[calc(100%-2rem)] <%= size_class %> flex-col overflow-hidden border border-line bg-card p-0 text-body open:flex backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm">
   <header class="<%= class_names("flex shrink-0 gap-3 px-6 pt-5 pb-4", "items-start": !@centered, "flex-col items-center pt-7 text-center": @centered) %>">
     <% if @icon %>
       <span class="<%= class_names("flex shrink-0 items-center justify-center border border-line bg-field text-accent", "size-10 ": !@centered, "size-12": @centered) %>"><%= lucide_icon @icon, class: @centered ? "size-6" : "size-5" %></span>

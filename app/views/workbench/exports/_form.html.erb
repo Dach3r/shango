@@ -20,20 +20,12 @@
 
     <fieldset class="space-y-3">
       <legend class="<%= label_classes %>"><%= t(".include") %></legend>
-      <label class="flex cursor-pointer items-start gap-3">
-        <%= check_box_tag :include_environments, "1", false, class: "mt-0.5 accent-accent" %>
-        <span class="min-w-0">
-          <span class="block text-sm text-ink"><%= t(".environments") %></span>
-          <span class="block text-xs text-muted"><%= t(".environments_hint") %></span>
-        </span>
-      </label>
-      <label class="flex cursor-pointer items-start gap-3">
-        <%= check_box_tag :include_credentials, "1", false, class: "mt-0.5 accent-accent" %>
-        <span class="min-w-0">
-          <span class="block text-sm text-ink"><%= t(".credentials") %></span>
-          <span class="block text-xs text-muted"><%= t(".credentials_hint") %></span>
-        </span>
-      </label>
+      <% { include_environments: "environments", include_credentials: "credentials" }.each do |name, key| %>
+        <%= render Checkbox::Component.new(name: name, label_class: "!items-start", label: safe_join([
+          tag.span(t(".#{key}"), class: "block text-sm text-ink"),
+          tag.span(t(".#{key}_hint"), class: "block text-xs text-muted")
+        ])) %>
+      <% end %>
     </fieldset>
   <% end %>
 <% end %>
