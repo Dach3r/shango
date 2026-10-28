@@ -3,15 +3,16 @@ module Projects
     class Create
       include Serviceable
 
-      def initialize(project:, attributes:)
+      def initialize(project:, creator:, attributes:)
         @project = project
+        @creator = creator
         @attributes = attributes
       end
 
       private
 
       def perform
-        environment = @project.environments.new(Normalize.call(attributes: @attributes))
+        environment = @project.environments.new(Normalize.call(attributes: @attributes).merge(creator: @creator))
         environment.save ? Result.success(environment) : Result.failure(environment)
       end
     end

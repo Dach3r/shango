@@ -2,6 +2,7 @@ class Environment < ApplicationRecord
   include Positionable
 
   belongs_to :project
+  belongs_to :creator, class_name: "User", optional: true
 
   has_many :variables, -> { order(:position, :created_at) }, dependent: :destroy, inverse_of: :environment
   has_many :cookies, dependent: :destroy

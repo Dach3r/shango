@@ -121,7 +121,7 @@ module Seeds
 
     def environments_for(project_id)
       rows = ENVIRONMENTS.first(@sizes[:environments]).each_with_index.map do |name, position|
-        { id: SecureRandom.uuid, project_id:, name:, position: position + 1 }
+        { id: SecureRandom.uuid, project_id:, creator_id: @user.id, name:, position: position + 1 }
       end
       insert(Environment, rows)
       rows
@@ -140,7 +140,7 @@ module Seeds
 
     def collections_for(project_id, slug)
       collections = Array.new(@sizes[:collections]) do |position|
-        { id: SecureRandom.uuid, project_id:, name: "#{pick(NOUNS).capitalize} API v#{position + 1}", description: "Seeded collection #{position + 1}",
+        { id: SecureRandom.uuid, project_id:, creator_id: @user.id, name: "#{pick(NOUNS).capitalize} API v#{position + 1}", description: "Seeded collection #{position + 1}",
           position: position + 1, auth_type: "none", auth_config: nil }
       end
       insert(Collection, collections)

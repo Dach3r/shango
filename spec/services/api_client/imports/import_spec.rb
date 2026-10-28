@@ -2,9 +2,10 @@ require "rails_helper"
 
 RSpec.describe ApiClient::Imports::Import do
   let(:project) { create(:project) }
+  let(:user) { create(:user) }
 
   def run(content, target: project)
-    described_class.call(project: target, content:)
+    described_class.call(project: target, creator: user, content:)
   end
 
   def fixture(name)
@@ -86,6 +87,13 @@ RSpec.describe ApiClient::Imports::Import do
       expect(folder.api_requests.pluck(:name)).to eq(["List pets", "Create pet"])
       expect(collection.api_requests.where(folder_id: nil).count).to eq(13)
       expect(project.environments.first.variables.first).to have_attributes(key: "baseUrl", value: "https://api.example.com")
+    end
+
+    it "credits the importing user as creator", :aggregate_failures do
+      result
+
+      expect(project.collections.map(&:creator)).to eq([user])
+      expect(project.environments.map(&:creator)).to eq([user])
     end
 
     it "returns the warnings once", :aggregate_failures do

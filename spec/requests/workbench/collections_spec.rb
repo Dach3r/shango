@@ -15,6 +15,7 @@ RSpec.describe "Workbench collections" do
     it "creates a collection", :aggregate_failures do
       expect { post workbench_collections_path, params: { collection: { name: "Payments", description: "x" } } }.to change(project.collections, :count).by(1)
       expect(response).to redirect_to(workbench_root_path)
+      expect(project.collections.find_by!(name: "Payments").creator).to eq(user)
     end
 
     it "saves the originating draft into the new collection", :aggregate_failures do

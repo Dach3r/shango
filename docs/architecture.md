@@ -56,6 +56,7 @@ Entities and ownership:
 Rules:
 
 - **`Project` is the tenancy boundary.** Every project-owned record reaches its project, and every query is scoped through it. Cross-project access must be impossible by construction (scoped associations, not ad hoc `where` clauses).
+- **Resource creator.** `Collection` and `Environment` keep a nullable `creator_id` (the member who created or imported them; `nullify` when the user is deleted). It is recorded by `Collections::Create`, `Environments::Create` and the importers, and is the basis for the per-resource permissions that replace the unenforced `owner`/`member` roles. Folders and requests follow their collection.
 - **Selected environment.** `Membership#current_environment_id` stores the environment each member works with in a project.
 - **Reuse over duplication.** A `Monitor` references a `Request`; it does not copy URL, method, headers, or body. `ApiDocumentation` is derived from requests and extended manually.
 - **Variables resolve at execution time.** `{{name}}` references in requests, monitors, and servers are interpolated from the selected `Environment` when run.

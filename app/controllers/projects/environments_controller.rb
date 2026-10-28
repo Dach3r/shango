@@ -12,7 +12,7 @@ module Projects
     end
 
     def create
-      result = Environments::Create.call(project: current_project, attributes: environment_attributes)
+      result = Environments::Create.call(project: current_project, creator: current_user, attributes: environment_attributes)
       return redirect_to(environments_path, notice: t(".created"), status: :see_other) if result.success?
 
       @environment = result.record

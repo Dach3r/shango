@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_152718) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_210836) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -84,6 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_152718) do
     t.text "auth_config"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "creator_id"
+    t.index ["creator_id"], name: "index_collections_on_creator_id"
     t.index ["project_id"], name: "index_collections_on_project_id"
   end
 
@@ -111,6 +113,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_152718) do
     t.integer "position", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "creator_id"
+    t.index ["creator_id"], name: "index_environments_on_creator_id"
     t.index ["project_id", "name"], name: "index_environments_on_project_id_and_name", unique: true
     t.index ["project_id"], name: "index_environments_on_project_id"
   end
@@ -271,9 +275,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_152718) do
   add_foreign_key "api_requests", "projects"
   add_foreign_key "api_requests", "users", on_delete: :cascade
   add_foreign_key "collections", "projects"
+  add_foreign_key "collections", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "cookies", "environments"
   add_foreign_key "cookies", "projects"
   add_foreign_key "environments", "projects"
+  add_foreign_key "environments", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "folders", "collections"
   add_foreign_key "folders", "folders", column: "parent_id"
   add_foreign_key "memberships", "environments", column: "current_environment_id", on_delete: :nullify
