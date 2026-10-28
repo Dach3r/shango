@@ -9,8 +9,8 @@
     </div>
   </div>
 
-  <div data-body-type-target="panel" data-types="graphql" class="shrink-0 border-t border-line p-4 pt-3" hidden>
-    <label class="<%= label_classes %>"><%= t("workbench.body.graphql_variables") %></label>
+  <div data-body-type-target="panel" data-types="graphql" class="shrink-0 border-t border-line" hidden>
+    <label class="<%= label_classes %> mb-0! px-4 py-2"><%= t("workbench.body.graphql_variables") %></label>
     <div class="h-32 bg-field p-1">
       <%= render CodeEditor::Component.new(name: "api_request[graphql_variables]", value: api_request.graphql_variables, language: "json", variables: editor_variables, variables_url: editor_variables_url, responses: editor_responses, responses_url: editor_responses_url, class: "h-full", placeholder: "{}") %>
     </div>
