@@ -1,6 +1,6 @@
 # Shango — Network Tools
 
-> Design and reference for the Network Tools feature (DNS checker, port check, TCP ping). **Status: built** (DNS checker, port check, TCP ping). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
+> Design and reference for the Network Tools feature. **Status: built** (DNS checker, port check, TCP ping); **in progress** (the second wave in §2, built one tool at a time). Check the code for the details if something here looks out of date. Product context: [`product.md`](product.md). Technical conventions: [`architecture.md`](architecture.md). The outbound-request guard it reuses is described in [`api-client.md`](api-client.md) §6.
 
 ## 1. Why
 
@@ -30,7 +30,23 @@ Fit with the product: this is the *DNS Tools* entry of *Future tools* in `produc
 - ICMP ping (needs raw sockets or the system `ping` binary and extra container capabilities), SYN/UDP scans, OS or service fingerprinting, scanning more than one host per run, CIDR ranges, traceroute.
 - Saved checks with names, tags or sharing outside the project. Runs themselves are kept as history (see §3 and §10).
 - Custom DNS resolvers entered by the user (it would turn the DNS checker into a way to talk to arbitrary internal servers).
-- Whois, TLS certificate inspection, reverse DNS: natural follow-ups, separate decisions.
+
+### Second wave (in progress)
+
+Planned in this order; each one ships with its service, page, locales, specs and an update of this document, and moves to *In v1* when built. All use only the Ruby standard library and reuse `SsrfPolicy`, `Destination`, `Parallel`, `Dns::Query` and the history.
+
+| Tool | `kind` | What it does |
+|------|--------|--------------|
+| **Reverse DNS** | `dns` | `PTR` type in the DNS checker: takes an IP, queries `in-addr.arpa` / `ip6.arpa`, and checks forward-confirmed rDNS (the name resolves back to the same IP). |
+| **Subnet calculator** | none | Network, mask, wildcard, broadcast, host range and count for IPv4 and IPv6; split into `/N`; "is this IP in the range". No network access, no history. |
+| **TLS certificate** | `tls` | Handshake against the pinned IP with SNI, direct TLS or STARTTLS (SMTP, IMAP, POP3, chosen explicitly). Subject, issuer, SAN, validity, key, signature, chain, protocol, cipher, ALPN; trust and host match validated by hand so a bad certificate is reported, not an error. |
+| **Email DNS health** | `email` | SPF (recursive lookup count, duplicates, `+all`/`?all`, `ptr`), DKIM (selectors typed after the domain), DMARC (`p`, `sp`, `pct`, `rua`) and MX, as a list of findings with severity. DNS only. |
+| **Lookup** | `lookup` | Domain: RDAP through the IANA bootstrap (registrar, dates, status, nameservers, DNSSEC). IP: RDAP network data plus ASN through `origin.asn.cymru.com`. No personal data, only registrar and abuse contacts. |
+| **HTTP check** | `http` | GET or HEAD, redirects followed by hand with every hop re-checked by `SsrfPolicy`; DNS, TCP, TLS and TTFB timings per hop; security headers analysis. No body, cookies or auth. |
+| **Blocklist** | `blocklist` | An IP (or a domain through its A and MX) against a fixed set of DNSBLs whose terms allow this use (no Spamhaus); a list refusing the query is shown as `unavailable`, never as clean. |
+| **DNS health** | `zone` | NS count and network diversity, SOA serial agreement, CAA, broken delegation, and full DNSSEC validation (DS ↔ DNSKEY and RRSIG signatures and validity). |
+
+Whois over port 43 is not planned: RDAP replaces it with structured JSON over HTTPS.
 
 The UI labels the third tool **TCP ping**, never plain "ping", so nobody mistakes it for ICMP.
 
@@ -118,6 +134,16 @@ DNS and port probes run on short-lived threads through `Network::Parallel.map(it
 | Rate limit | 20 runs per minute per user, all three tools combined | Abuse protection (`throttle :network` in `Network::BaseController`) |
 | History kept | 50 runs per user, project and tool, 90 days | Bounds the table; `NetworkCheck::KEEP_PER_KIND`, `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` |
 
+Planned limits for the second wave (confirmed per tool when it is built):
+
+| Limit | Value |
+|-------|-------|
+| TLS handshake timeout (STARTTLS included) | 5 s, at most 4 KB read per protocol reply line |
+| RDAP / bootstrap request | HTTPS only, 5 s, 1 MB body; IANA bootstrap cached 24 h |
+| HTTP check | 10 redirects, 5 s per hop, GET or HEAD only, body discarded |
+| DNSBL query | 3 s per list, parallel |
+| SPF recursive lookups | 10 (the RFC 7208 limit) |
+
 Values are constants in the services; they are not user settings.
 
 ## 6. Security
@@ -186,3 +212,4 @@ Verification: RSpec at 100% line and branch coverage, rubocop and brakeman clean
 - **ICMP ping** through the system `ping` binary, only if there is demand; needs `CAP_NET_RAW` or `net.ipv4.ping_group_range` in containers.
 - **Resolver list.** Fixed list in code for v1; making it operator-configurable is cheap but not needed yet.
 - **Cloud offering:** a managed Shango would scan from shared IPs, which changes the abuse analysis (ownership verification becomes mandatory).
+- **DNSSEC through EDNS0.** `Resolv` (Ruby 4.0) has no DS, DNSKEY, RRSIG or OPT classes; those records arrive as `Resolv::DNS::Resource::Generic` and the DNS health tool parses them by hand and adds the OPT record (DO bit) itself. A spike confirms this before the tool is built.

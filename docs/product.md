@@ -212,7 +212,7 @@ Help detect, investigate, and resolve problems. Sources: HTTP monitors, failed r
 
 ### Network Tools
 
-Quick network checks from the project workspace, for the moments when a developer is configuring a server: a **DNS checker** (does a record match what I expect on public resolvers and on the authoritative nameservers, i.e. has it propagated), a **port check** (which ports are reachable from the outside) and a **TCP ping** (is the host online). Targets can use environment variables such as `{{host}}`. Results are shown on screen and not stored. See [`network-tools.md`](network-tools.md). It does not use nmap (license incompatible with AGPL-3.0).
+Quick network checks from the project workspace, for the moments when a developer is configuring a server: a **DNS checker** (does a record match what I expect on public resolvers and on the authoritative nameservers, i.e. has it propagated), a **port check** (which ports are reachable from the outside) and a **TCP ping** (is the host online). Targets can use environment variables such as `{{host}}`. Each member keeps a private history of their runs per project. A second wave adds reverse DNS, a subnet calculator, TLS certificate inspection, email DNS health (SPF, DKIM, DMARC), RDAP/ASN lookup, an HTTP check, DNSBL blocklists and DNS health with DNSSEC. See [`network-tools.md`](network-tools.md). It does not use nmap (license incompatible with AGPL-3.0).
 
 ### Future tools
 
