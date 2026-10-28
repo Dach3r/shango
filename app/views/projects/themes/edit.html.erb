@@ -4,6 +4,7 @@
   <%= form_with model: @membership, url: theme_path, method: :patch, data: { controller: "theme-preview" } do |form| %>
     <%= render "workbench/shared/errors", record: @membership %>
 
+    <% pinned = Membership.pinned_scheme(@membership.theme).present? %>
     <div class="divide-y divide-line">
       <fieldset class="grid gap-4 px-5 py-5 sm:px-7 md:grid-cols-[1fr_21rem] md:items-center md:gap-8">
         <div class="min-w-0">
@@ -11,10 +12,10 @@
           <p class="mt-1 clear-both text-xs leading-relaxed text-muted"><%= t("projects.themes.edit.color_scheme.hint") %></p>
         </div>
 
-        <div class="grid grid-cols-3 gap-1 border border-line bg-field p-1">
+        <div class="grid grid-cols-3 gap-1 border border-line bg-field p-1" data-theme-preview-target="schemes">
           <% { system: "monitor", light: "sun", dark: "moon" }.each do |value, icon| %>
-            <label class="flex cursor-pointer items-center justify-center gap-2 border border-transparent px-2 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-solid">
-              <%= form.radio_button :color_scheme, value, class: "sr-only", data: { action: "theme-preview#apply" } %>
+            <label class="flex cursor-pointer items-center justify-center gap-2 border border-transparent px-2 py-2 text-sm text-muted transition hover:text-ink has-[:checked]:border-solid/60 has-[:checked]:bg-solid/10 has-[:checked]:text-ink has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-solid has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50">
+              <%= form.radio_button :color_scheme, value, class: "sr-only", disabled: pinned, data: { action: "theme-preview#apply" } %>
               <%= lucide_icon icon, class: "size-4 shrink-0", "aria-hidden": true %>
               <span><%= t("projects.themes.edit.color_schemes.#{value}") %></span>
             </label>
@@ -22,7 +23,7 @@
         </div>
       </fieldset>
 
-      <% groups = { accents: Membership::ACCENT_THEMES, styles: Membership::STYLE_THEMES } %>
+      <% groups = { accents: Membership::ACCENT_THEMES, styles: Membership::STYLE_THEMES, omarchy: Membership::OMARCHY_THEMES } %>
       <% active_group = groups.key(groups.values.find { |themes| themes.include?(@membership.theme) }) %>
       <fieldset class="py-5" data-controller="tabs" data-tabs-active-value="<%= active_group %>">
         <div class="px-5 sm:px-7">

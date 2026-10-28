@@ -404,6 +404,649 @@
   --glow: color-mix(in oklab, #4c6ef5 14%, transparent);
 }
 
+/* Omarchy themes: fixed palettes ported from their repositories (see config/omarchy_themes.yml); they pin color-scheme and ignore the light/dark choice. */
+[data-palette="vulkanite"] {
+  color-scheme: dark;
+  --page: #0f1416;
+  --card: #1b2022;
+  --line: #383e40;
+  --faint: #61686a;
+  --field: #0b0f11;
+  --field-focus: #0b0f11;
+  --dots: #383e40;
+  --ink: #dce5e9;
+  --body: #c3ccd0;
+  --muted: #8a9195;
+  --accent: #8fe0fa;
+  --accent-hover: #a5e6fb;
+  --solid: #8fe0fa;
+  --solid-hover: #a5e6fb;
+  --on-solid: #0f1416;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #8fe0fa 14%, transparent);
+}
+
+[data-palette="virginia_tech"] {
+  color-scheme: dark;
+  --page: #121212;
+  --card: #1e1e1e;
+  --line: #3b3b3b;
+  --faint: #646464;
+  --field: #0e0e0e;
+  --field-focus: #0e0e0e;
+  --dots: #3b3b3b;
+  --ink: #e0e0e0;
+  --body: #c7c7c7;
+  --muted: #8e8e8e;
+  --accent: #e87d3e;
+  --accent-hover: #ed9765;
+  --solid: #e87d3e;
+  --solid-hover: #ed9765;
+  --on-solid: #121212;
+  --danger: #632523;
+  --syn-key: #ffb38a;
+  --syn-string: #e87d3e;
+  --glow: color-mix(in oklab, #e87d3e 14%, transparent);
+}
+
+[data-palette="venice_from_above"] {
+  color-scheme: light;
+  --page: #f5f2e9;
+  --card: #e9e6dd;
+  --line: #d3cac2;
+  --faint: #b0a29a;
+  --field: #faf9f4;
+  --field-focus: #ffffff;
+  --dots: #d3cac2;
+  --ink: #492924;
+  --body: #5e413c;
+  --muted: #8e7973;
+  --accent: #72684b;
+  --accent-hover: #5b533c;
+  --solid: #72684b;
+  --solid-hover: #5b533c;
+  --on-solid: #ffffff;
+  --danger: #b42318;
+  --glow: color-mix(in oklab, #72684b 14%, transparent);
+}
+
+[data-palette="vague"] {
+  color-scheme: dark;
+  --page: #141415;
+  --card: #202021;
+  --line: #39393a;
+  --faint: #5e5e5f;
+  --field: #0f0f10;
+  --field-focus: #0f0f10;
+  --dots: #39393a;
+  --ink: #cdcdcd;
+  --body: #b7b7b7;
+  --muted: #838383;
+  --accent: #6e94b2;
+  --accent-hover: #8ba9c1;
+  --solid: #6e94b2;
+  --solid-hover: #8ba9c1;
+  --on-solid: #141415;
+  --danger: #c48282;
+  --syn-key: #e0a363;
+  --syn-string: #7fa563;
+  --syn-number: #9595cb;
+  --syn-variable: #6e94b2;
+  --syn-keyword: #c48282;
+  --glow: color-mix(in oklab, #6e94b2 14%, transparent);
+}
+
+[data-palette="van_gogh"] {
+  color-scheme: dark;
+  --page: #0a192f;
+  --card: #162539;
+  --line: #384146;
+  --faint: #67695e;
+  --field: #081323;
+  --field-focus: #081323;
+  --dots: #384146;
+  --ink: #f2e2a4;
+  --body: #d6ca96;
+  --muted: #959275;
+  --accent: #e6b422;
+  --accent-hover: #ebc34e;
+  --solid: #e6b422;
+  --solid-hover: #ebc34e;
+  --on-solid: #0a192f;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #e6b422 14%, transparent);
+}
+
+[data-palette="vault"] {
+  color-scheme: dark;
+  --page: #191510;
+  --card: #25211c;
+  --line: #3e372e;
+  --faint: #63594d;
+  --field: #13100c;
+  --field-focus: #13100c;
+  --dots: #3e372e;
+  --ink: #d3c0a8;
+  --body: #bdab96;
+  --muted: #897c6b;
+  --accent: #e09355;
+  --accent-hover: #e6a977;
+  --solid: #e09355;
+  --solid-hover: #e6a977;
+  --on-solid: #191510;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #e09355 14%, transparent);
+}
+
+[data-palette="winslow"] {
+  color-scheme: dark;
+  --page: #13201b;
+  --card: #1f2b26;
+  --line: #3a4239;
+  --faint: #616457;
+  --field: #0e1814;
+  --field-focus: #0e1814;
+  --dots: #3a4239;
+  --ink: #d6c9b1;
+  --body: #bfb59f;
+  --muted: #888575;
+  --accent: #9ba4bb;
+  --accent-hover: #afb6c9;
+  --solid: #9ba4bb;
+  --solid-hover: #afb6c9;
+  --on-solid: #13201b;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #9ba4bb 14%, transparent);
+}
+
+[data-palette="unit_eva_001"] {
+  color-scheme: dark;
+  --page: #1f1530;
+  --card: #2a213a;
+  --line: #493f4c;
+  --faint: #736968;
+  --field: #171024;
+  --field-focus: #171024;
+  --dots: #493f4c;
+  --ink: #f0e6bc;
+  --body: #d7cdab;
+  --muted: #9c9284;
+  --accent: #84c766;
+  --accent-hover: #9dd285;
+  --solid: #84c766;
+  --solid-hover: #9dd285;
+  --on-solid: #1f1530;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #84c766 14%, transparent);
+}
+
+[data-palette="turner"] {
+  color-scheme: dark;
+  --page: #1c252b;
+  --card: #273036;
+  --line: #464b4b;
+  --faint: #70716c;
+  --field: #151c20;
+  --field-focus: #151c20;
+  --dots: #464b4b;
+  --ink: #eee4cd;
+  --body: #d5cdba;
+  --muted: #9a988c;
+  --accent: #d8b56d;
+  --accent-hover: #e0c48a;
+  --solid: #d8b56d;
+  --solid-hover: #e0c48a;
+  --on-solid: #1c252b;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #d8b56d 14%, transparent);
+}
+
+[data-palette="waveform_dark"] {
+  color-scheme: dark;
+  --page: #0a0a0a;
+  --card: #161616;
+  --line: #3b2727;
+  --faint: #6c4343;
+  --field: #080808;
+  --field-focus: #080808;
+  --dots: #3b2727;
+  --ink: #ff9999;
+  --body: #e28888;
+  --muted: #9d6060;
+  --accent: #cc00ff;
+  --accent-hover: #d633ff;
+  --solid: #cc00ff;
+  --solid-hover: #d633ff;
+  --on-solid: #0a0a0a;
+  --danger: #ff3333;
+  --syn-key: #ffaa00;
+  --syn-string: #ff6600;
+  --syn-number: #ff00aa;
+  --syn-variable: #cc00ff;
+  --syn-keyword: #ff3333;
+  --glow: color-mix(in oklab, #cc00ff 14%, transparent);
+}
+
+[data-palette="terminus"] {
+  color-scheme: dark;
+  --page: #0c1626;
+  --card: #182231;
+  --line: #353a42;
+  --faint: #5e5e5f;
+  --field: #09111d;
+  --field-focus: #09111d;
+  --dots: #353a42;
+  --ink: #d8cbb4;
+  --body: #c0b5a3;
+  --muted: #86837b;
+  --accent: #d9a862;
+  --accent-hover: #e1b981;
+  --solid: #d9a862;
+  --solid-hover: #e1b981;
+  --on-solid: #0c1626;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #d9a862 14%, transparent);
+}
+
+[data-palette="synctax"] {
+  color-scheme: dark;
+  --page: #000000;
+  --card: #0d0d0d;
+  --line: #292b31;
+  --faint: #525662;
+  --field: #000000;
+  --field-focus: #000000;
+  --dots: #292b31;
+  --ink: #cdd6f4;
+  --body: #b4bcd7;
+  --muted: #7b8092;
+  --accent: #1e66f5;
+  --accent-hover: #4b85f7;
+  --solid: #1e66f5;
+  --solid-hover: #4b85f7;
+  --on-solid: #ffffff;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #1e66f5 14%, transparent);
+}
+
+[data-palette="starsend"] {
+  color-scheme: dark;
+  --page: #05090a;
+  --card: #121516;
+  --line: #2b3132;
+  --faint: #515959;
+  --field: #040708;
+  --field-focus: #040708;
+  --dots: #2b3132;
+  --ink: #c3d2d0;
+  --body: #acbab8;
+  --muted: #778281;
+  --accent: #f0913f;
+  --accent-hover: #f3a765;
+  --solid: #f0913f;
+  --solid-hover: #f3a765;
+  --on-solid: #05090a;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #f0913f 14%, transparent);
+}
+
+[data-palette="spectrum"] {
+  color-scheme: dark;
+  --page: #0b0b12;
+  --card: #17171e;
+  --line: #38383f;
+  --faint: #64646c;
+  --field: #08080e;
+  --field-focus: #08080e;
+  --dots: #38383f;
+  --ink: #eaeaf2;
+  --body: #cfcfd7;
+  --muted: #919198;
+  --accent: #00e5ff;
+  --accent-hover: #33eaff;
+  --solid: #00e5ff;
+  --solid-hover: #33eaff;
+  --on-solid: #0b0b12;
+  --danger: #e5645f;
+  --syn-comment: #64646c;
+  --glow: color-mix(in oklab, #00e5ff 14%, transparent);
+}
+
+[data-palette="saule"] {
+  color-scheme: dark;
+  --page: #181f1f;
+  --card: #242a2a;
+  --line: #353d3a;
+  --faint: #535b55;
+  --field: #121717;
+  --field-focus: #121717;
+  --dots: #353d3a;
+  --ink: #abb4a7;
+  --body: #99a297;
+  --muted: #707871;
+  --accent: #c9a95c;
+  --accent-hover: #d4ba7d;
+  --solid: #c9a95c;
+  --solid-hover: #d4ba7d;
+  --on-solid: #181f1f;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #c9a95c 14%, transparent);
+}
+
+[data-palette="santa_fe"] {
+  color-scheme: dark;
+  --page: #1c2026;
+  --card: #272b31;
+  --line: #454546;
+  --faint: #6d6966;
+  --field: #15181d;
+  --field-focus: #15181d;
+  --dots: #454546;
+  --ink: #e7d7c6;
+  --body: #cfc1b3;
+  --muted: #968e86;
+  --accent: #55aaa6;
+  --accent-hover: #77bbb8;
+  --solid: #55aaa6;
+  --solid-hover: #77bbb8;
+  --on-solid: #1c2026;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #55aaa6 14%, transparent);
+}
+
+[data-palette="robzee84"] {
+  color-scheme: dark;
+  --page: #000000;
+  --card: #0d0d0d;
+  --line: #333333;
+  --faint: #666666;
+  --field: #000000;
+  --field-focus: #000000;
+  --dots: #333333;
+  --ink: #ffffff;
+  --body: #e0e0e0;
+  --muted: #999999;
+  --accent: #ff7edb;
+  --accent-hover: #ff98e2;
+  --solid: #ff7edb;
+  --solid-hover: #ff98e2;
+  --on-solid: #000000;
+  --danger: #fe4450;
+  --syn-key: #f3e70f;
+  --syn-string: #72f1b8;
+  --syn-number: #ff7edb;
+  --syn-variable: #03edf9;
+  --syn-keyword: #fe4450;
+  --syn-comment: #666666;
+  --glow: color-mix(in oklab, #ff7edb 14%, transparent);
+}
+
+[data-palette="rose_pine_moon"] {
+  color-scheme: dark;
+  --page: #232136;
+  --card: #2e2c40;
+  --line: #49475c;
+  --faint: #6f6d82;
+  --field: #1a1929;
+  --field-focus: #1a1929;
+  --dots: #49475c;
+  --ink: #e0def4;
+  --body: #c9c7dd;
+  --muted: #9492a8;
+  --accent: #9ccfd8;
+  --accent-hover: #b0d9e0;
+  --solid: #9ccfd8;
+  --solid-hover: #b0d9e0;
+  --on-solid: #232136;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #9ccfd8 14%, transparent);
+}
+
+[data-palette="roadster_dark"] {
+  color-scheme: dark;
+  --page: #070708;
+  --card: #131314;
+  --line: #363636;
+  --faint: #666563;
+  --field: #050506;
+  --field-focus: #050506;
+  --dots: #363636;
+  --ink: #f4f1ec;
+  --body: #d8d5d1;
+  --muted: #959391;
+  --accent: #ff3340;
+  --accent-hover: #ff5c66;
+  --solid: #ff3340;
+  --solid-hover: #ff5c66;
+  --on-solid: #070708;
+  --danger: #e5645f;
+  --syn-comment: #666563;
+  --glow: color-mix(in oklab, #ff3340 14%, transparent);
+}
+
+[data-palette="red_pill"] {
+  color-scheme: dark;
+  --page: #050b07;
+  --card: #121713;
+  --line: #2c3a30;
+  --faint: #536959;
+  --field: #040805;
+  --field-focus: #040805;
+  --dots: #2c3a30;
+  --ink: #c8f5d4;
+  --body: #b1d9bb;
+  --muted: #7a9782;
+  --accent: #f7931a;
+  --accent-hover: #f9a948;
+  --solid: #f7931a;
+  --solid-hover: #f9a948;
+  --on-solid: #050b07;
+  --danger: #e5645f;
+  --syn-comment: #536959;
+  --glow: color-mix(in oklab, #f7931a 14%, transparent);
+}
+
+[data-palette="periphery"] {
+  color-scheme: dark;
+  --page: #060f12;
+  --card: #121b1e;
+  --line: #273235;
+  --faint: #475657;
+  --field: #050b0e;
+  --field-focus: #050b0e;
+  --dots: #273235;
+  --ink: #a9c0bf;
+  --body: #95abaa;
+  --muted: #68797a;
+  --accent: #7fc9c4;
+  --accent-hover: #99d4d0;
+  --solid: #7fc9c4;
+  --solid-hover: #99d4d0;
+  --on-solid: #060f12;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #7fc9c4 14%, transparent);
+}
+
+[data-palette="outpost"] {
+  color-scheme: dark;
+  --page: #14282d;
+  --card: #203338;
+  --line: #3e4d4b;
+  --faint: #697169;
+  --field: #0f1e22;
+  --field-focus: #0f1e22;
+  --dots: #3e4d4b;
+  --ink: #e8dfc4;
+  --body: #cfc9b2;
+  --muted: #939688;
+  --accent: #d3ae78;
+  --accent-hover: #dcbe93;
+  --solid: #d3ae78;
+  --solid-hover: #dcbe93;
+  --on-solid: #14282d;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #d3ae78 14%, transparent);
+}
+
+[data-palette="neptune"] {
+  color-scheme: dark;
+  --page: #05060d;
+  --card: #121219;
+  --line: #282e37;
+  --faint: #4c5661;
+  --field: #04050a;
+  --field-focus: #04050a;
+  --dots: #282e37;
+  --ink: #b6cfdf;
+  --body: #a1b7c6;
+  --muted: #6f7f8b;
+  --accent: #9aa4be;
+  --accent-hover: #aeb6cb;
+  --solid: #9aa4be;
+  --solid-hover: #aeb6cb;
+  --on-solid: #05060d;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #9aa4be 14%, transparent);
+}
+
+[data-palette="alberta"] {
+  color-scheme: dark;
+  --page: #0c1b1c;
+  --card: #182627;
+  --line: #314344;
+  --faint: #566b6d;
+  --field: #091415;
+  --field-focus: #091415;
+  --dots: #314344;
+  --ink: #c6e2e6;
+  --body: #b0cace;
+  --muted: #7c9295;
+  --accent: #6bbdd4;
+  --accent-hover: #89cadd;
+  --solid: #6bbdd4;
+  --solid-hover: #89cadd;
+  --on-solid: #0c1b1c;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #6bbdd4 14%, transparent);
+}
+
+[data-palette="arc_blueberry"] {
+  color-scheme: dark;
+  --page: #111422;
+  --card: #1d202d;
+  --line: #333747;
+  --faint: #55596c;
+  --field: #0d0f1a;
+  --field-focus: #0d0f1a;
+  --dots: #333747;
+  --ink: #bcc1dc;
+  --body: #a7acc6;
+  --muted: #787c92;
+  --accent: #8eb0e6;
+  --accent-hover: #a5c0eb;
+  --solid: #8eb0e6;
+  --solid-hover: #a5c0eb;
+  --on-solid: #111422;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #8eb0e6 14%, transparent);
+}
+
+[data-palette="astral"] {
+  color-scheme: dark;
+  --page: #121212;
+  --card: #1e1e1e;
+  --line: #414141;
+  --faint: #717171;
+  --field: #0e0e0e;
+  --field-focus: #0e0e0e;
+  --dots: #414141;
+  --ink: #ffffff;
+  --body: #e3e3e3;
+  --muted: #a0a0a0;
+  --accent: #6a74f2;
+  --accent-hover: #8890f5;
+  --solid: #6a74f2;
+  --solid-hover: #8890f5;
+  --on-solid: #121212;
+  --danger: #e5645f;
+  --syn-comment: #717171;
+  --glow: color-mix(in oklab, #6a74f2 14%, transparent);
+}
+
+[data-palette="azure_glow"] {
+  color-scheme: dark;
+  --page: #0a0f1a;
+  --card: #161b25;
+  --line: #2a3948;
+  --faint: #496276;
+  --field: #080b14;
+  --field-focus: #080b14;
+  --dots: #2a3948;
+  --ink: #a8dfff;
+  --body: #95c6e4;
+  --muted: #698ca3;
+  --accent: #00aaff;
+  --accent-hover: #33bbff;
+  --solid: #00aaff;
+  --solid-hover: #33bbff;
+  --on-solid: #0a0f1a;
+  --danger: #e5645f;
+  --syn-key: #33ccff;
+  --syn-string: #00e0b8;
+  --syn-number: #3399ff;
+  --syn-variable: #00aaff;
+  --syn-keyword: #0099cc;
+  --glow: color-mix(in oklab, #00aaff 14%, transparent);
+}
+
+[data-palette="bauhaus"] {
+  color-scheme: dark;
+  --page: #101318;
+  --card: #1c1f24;
+  --line: #3c3f44;
+  --faint: #676b70;
+  --field: #0c0e12;
+  --field-focus: #0c0e12;
+  --dots: #3c3f44;
+  --ink: #eaeff5;
+  --body: #d0d5da;
+  --muted: #93979d;
+  --accent: #8999aa;
+  --accent-hover: #a1adbb;
+  --solid: #8999aa;
+  --solid-hover: #a1adbb;
+  --on-solid: #101318;
+  --danger: #cb886d;
+  --syn-key: #e7a46f;
+  --syn-string: #789fa2;
+  --syn-number: #8d758f;
+  --syn-variable: #8999aa;
+  --syn-keyword: #cb886d;
+  --syn-comment: #676b70;
+  --glow: color-mix(in oklab, #8999aa 14%, transparent);
+}
+
+[data-palette="black_sand"] {
+  color-scheme: dark;
+  --page: #14181e;
+  --card: #202429;
+  --line: #393e45;
+  --faint: #5e646c;
+  --field: #0f1217;
+  --field-focus: #0f1217;
+  --dots: #393e45;
+  --ink: #ced6e0;
+  --body: #b8bfc9;
+  --muted: #848a92;
+  --accent: #ced6e0;
+  --accent-hover: #d8dee6;
+  --solid: #ced6e0;
+  --solid-hover: #d8dee6;
+  --on-solid: #14181e;
+  --danger: #e5645f;
+  --glow: color-mix(in oklab, #ced6e0 14%, transparent);
+}
+
 /* Browser autofill paints its own background; cover it with the field tokens. */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

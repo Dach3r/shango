@@ -1,0 +1,175 @@
+---
+- key: vulkanite
+  name: Vulkanite
+  scheme: dark
+  author: kyerpotts
+  repository: https://github.com/kyerpotts/omarchy-vulkanite-theme
+  license: MIT
+- key: virginia_tech
+  name: Virginia Tech
+  scheme: dark
+  author: ekholme
+  repository: https://github.com/ekholme/omarchy-virginia-tech-theme
+  license:
+- key: venice_from_above
+  name: Venice From Above
+  scheme: light
+  author: mattbbia
+  repository: https://github.com/mattbbia/venice-from-above
+  license: MIT
+- key: vague
+  name: Vague
+  scheme: dark
+  author: ManogyaDahal
+  repository: https://github.com/ManogyaDahal/omarchy-vague-theme
+  license:
+- key: van_gogh
+  name: Van Gogh
+  scheme: dark
+  author: Nirmal314
+  repository: https://github.com/Nirmal314/omarchy-van-gogh-theme
+  license: MIT
+- key: vault
+  name: Vault
+  scheme: dark
+  author: r-bart
+  repository: https://github.com/r-bart/omarchy-vault-theme
+  license: MIT
+- key: winslow
+  name: Winslow
+  scheme: dark
+  author: chipkoziara
+  repository: https://github.com/chipkoziara/omarchy-winslow-theme
+  license:
+- key: unit_eva_001
+  name: Unit EVA-001
+  scheme: dark
+  author: mmilei
+  repository: https://github.com/mmilei/omarchy-unit-eva-001-theme
+  license: MIT
+- key: turner
+  name: Turner
+  scheme: dark
+  author: simoz
+  repository: https://github.com/simoz/omarchy-turner-theme
+  license: MIT
+- key: waveform_dark
+  name: Waveform Dark
+  scheme: dark
+  author: hipsterusername
+  repository: https://github.com/hipsterusername/omarchy-waveform-dark-theme
+  license:
+- key: terminus
+  name: Terminus
+  scheme: dark
+  author: r-bart
+  repository: https://github.com/r-bart/omarchy-terminus-theme
+  license: MIT
+- key: synctax
+  name: Synctax
+  scheme: dark
+  author: pxllbt
+  repository: https://github.com/pxllbt/synctax
+  license: MIT
+- key: starsend
+  name: Starsend
+  scheme: dark
+  author: r-bart
+  repository: https://github.com/r-bart/omarchy-starsend-theme
+  license: MIT
+- key: spectrum
+  name: Spectrum
+  scheme: dark
+  author: WhiskeyTangoFussell
+  repository: https://github.com/WhiskeyTangoFussell/omarchy-spectrum-theme
+  license:
+- key: saule
+  name: Saule
+  scheme: dark
+  author: ElijahL
+  repository: https://github.com/ElijahL/omarchy-saule-theme
+  license:
+- key: santa_fe
+  name: Santa Fe
+  scheme: dark
+  author: majesticio
+  repository: https://github.com/majesticio/omarchy-santa-fe-theme
+  license: MIT
+- key: robzee84
+  name: Robzee84
+  scheme: dark
+  author: robzolkos
+  repository: https://github.com/robzolkos/omarchy-robzee84-theme
+  license:
+- key: rose_pine_moon
+  name: Rose Pine Moon
+  scheme: dark
+  author: Memnoc
+  repository: https://github.com/Memnoc/omarchy-rose-pine-moon-theme
+  license: MIT
+- key: roadster_dark
+  name: Roadster Dark
+  scheme: dark
+  author: IM0001GT
+  repository: https://github.com/IM0001GT/omarchy-roadster-dark-theme
+  license:
+- key: red_pill
+  name: Red Pill
+  scheme: dark
+  author: ferlemes
+  repository: https://github.com/ferlemes/omarchy-red-pill-theme
+  license: MIT
+- key: periphery
+  name: Periphery
+  scheme: dark
+  author: r-bart
+  repository: https://github.com/r-bart/omarchy-periphery-theme
+  license: MIT
+- key: outpost
+  name: Outpost
+  scheme: dark
+  author: simoz
+  repository: https://github.com/simoz/omarchy-outpost-theme
+  license: MIT
+- key: neptune
+  name: Neptune
+  scheme: dark
+  author: ishansing
+  repository: https://github.com/ishansing/omarchy-neptune-theme
+  license:
+- key: alberta
+  name: Alberta
+  scheme: dark
+  author: dmcarrington
+  repository: https://github.com/dmcarrington/omarchy-alberta-theme
+  license:
+- key: arc_blueberry
+  name: Arc Blueberry
+  scheme: dark
+  author: vale-c
+  repository: https://github.com/vale-c/omarchy-arc-blueberry
+  license: MIT
+- key: astral
+  name: Astral
+  scheme: dark
+  author: brmnl
+  repository: https://github.com/brmnl/omarchy-astral-theme
+  license: MIT
+- key: azure_glow
+  name: Azure Glow
+  scheme: dark
+  author: Hydradevx
+  repository: https://github.com/Hydradevx/omarchy-azure-glow-theme
+  license:
+- key: bauhaus
+  name: Bauhaus
+  scheme: dark
+  author: mwaltzer
+  repository: https://github.com/mwaltzer/omarchy-bauhaus-theme
+  license: MIT
+- key: black_sand
+  name: Black Sand
+  scheme: dark
+  author: pkovzz
+  repository: https://github.com/pkovzz/omarchy-black-sand-theme
+  license:

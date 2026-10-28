@@ -1,0 +1,30 @@
+<% content_for :title, "#{t("projects.credits.index.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+
+<%= render layout: "settings/shell", locals: { icon: "heart", heading: t("projects.credits.index.heading"), description: t("projects.credits.index.description") } do %>
+  <section aria-labelledby="omarchy_credits_title">
+    <div class="px-5 pt-5 sm:px-7">
+      <h2 id="omarchy_credits_title" class="text-sm font-semibold text-ink"><%= t("projects.credits.index.omarchy.title") %></h2>
+      <p class="mt-1 text-xs leading-relaxed text-muted"><%= t("projects.credits.index.omarchy.hint") %></p>
+    </div>
+
+    <ul class="mt-4 divide-y divide-line border-y border-line">
+      <% @omarchy_themes.each do |theme| %>
+        <li class="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 sm:px-7">
+          <div data-palette="<%= theme[:key] %>" aria-hidden="true" class="flex size-9 shrink-0 items-center justify-center border border-line bg-page">
+            <span class="size-3 bg-solid"></span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-ink"><%= t("projects.themes.edit.themes.#{theme[:key]}") %></p>
+            <p class="truncate text-xs text-muted"><%= t("projects.credits.index.by", author: theme[:author]) %></p>
+          </div>
+          <span class="inline-flex items-center border border-line px-2 py-0.5 text-xs font-medium text-body"><%= theme[:license] || t("projects.credits.index.no_license") %></span>
+          <%= link_to theme[:repository], target: "_blank", rel: "noopener noreferrer",
+                      class: "inline-flex items-center gap-1.5 text-xs font-medium text-accent transition hover:text-accent-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+            <%= lucide_icon "external-link", class: "size-3.5 shrink-0", "aria-hidden": true %>
+            <%= t("projects.credits.index.repository") %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>

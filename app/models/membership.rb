@@ -7,7 +7,10 @@ class Membership < ApplicationRecord
   COLOR_SCHEMES = { system: "system", light: "light", dark: "dark" }.freeze
   ACCENT_THEMES = %w[default blue green yellow red purple rose orange mono].freeze
   STYLE_THEMES = %w[ocean forest midnight nord dracula gruvbox solarized sunset coffee cyberpunk graphite].freeze
-  THEMES = (ACCENT_THEMES + STYLE_THEMES).to_h { |theme| [theme.to_sym, theme] }.freeze
+  OMARCHY_CREDITS = YAML.load_file(Rails.root.join("config/omarchy_themes.yml")).map(&:with_indifferent_access).freeze
+  OMARCHY_THEMES = OMARCHY_CREDITS.pluck(:key).freeze
+  OMARCHY_SCHEMES = OMARCHY_CREDITS.to_h { |credit| [credit[:key], credit[:scheme]] }.freeze
+  THEMES = (ACCENT_THEMES + STYLE_THEMES + OMARCHY_THEMES).to_h { |theme| [theme.to_sym, theme] }.freeze
 
   enum :role, { member: "member", owner: "owner" }, default: "member"
   enum :folder_toggle, CLICK_MODES, default: "double_click", prefix: true, validate: true
@@ -19,6 +22,11 @@ class Membership < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :project_id, conditions: -> { active } }
   validate :project_keeps_an_owner, on: :update
+
+  # Omarchy themes pin their own color scheme; every other theme follows the member's choice.
+  def self.pinned_scheme(theme)
+    OMARCHY_SCHEMES[theme.to_s]
+  end
 
   def active?
     revoked_at.nil?

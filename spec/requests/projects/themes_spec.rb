@@ -30,6 +30,57 @@ RSpec.describe "Themes" do
     end
   end
 
+  describe "Omarchy themes" do
+    it "lists them in their own tab and opens it for a saved one", :aggregate_failures do
+      membership.update!(theme: "vulkanite")
+
+      get edit_theme_path
+
+      expect(response.body).to include(I18n.t("projects.themes.edit.groups.omarchy"), %(data-tabs-active-value="omarchy"))
+      expect(response.body).to include(%(data-scheme="dark"), %(data-scheme="light"))
+    end
+
+    it "disables the color scheme picker while one is selected" do
+      membership.update!(theme: "vulkanite")
+
+      get edit_theme_path
+
+      expect(response.body.scan(/<input[^>]*name="membership\[color_scheme\]"[^>]*>/)).to all(include("disabled"))
+    end
+
+    it "keeps the color scheme picker enabled for other themes" do
+      get edit_theme_path
+
+      expect(response.body.scan(/<input[^>]*name="membership\[color_scheme\]"[^>]*>/)).to all(satisfy { |input| input.exclude?("disabled") })
+    end
+
+    it "pins the color scheme of the theme, whatever the member chose", :aggregate_failures do
+      membership.update!(color_scheme: "light", theme: "vulkanite")
+      get edit_theme_path
+      expect(response.body).to include(%(data-theme="dark" data-palette="vulkanite"))
+
+      membership.update!(color_scheme: "dark", theme: "venice_from_above")
+      get edit_theme_path
+      expect(response.body).to include(%(data-theme="light" data-palette="venice_from_above"))
+    end
+
+    it "defines every palette in the stylesheet and the database check", :aggregate_failures do
+      css = Rails.root.join("app/assets/tailwind/application.css").read
+      constraint = ActiveRecord::Base.connection.check_constraints(:memberships).find { |c| c.name == "memberships_theme_check" }.expression
+
+      Membership::OMARCHY_THEMES.each do |theme|
+        expect(css).to include(%([data-palette="#{theme}"]))
+        expect(constraint).to include("'#{theme}'")
+      end
+    end
+
+    it "has a credit with author and repository for each", :aggregate_failures do
+      expect(Membership::OMARCHY_CREDITS.size).to eq(Membership::OMARCHY_THEMES.size)
+      expect(Membership::OMARCHY_CREDITS).to all(include(:author, :repository, :scheme))
+      expect(Membership::OMARCHY_SCHEMES.values.uniq).to match_array(%w[dark light])
+    end
+  end
+
   describe "PATCH /theme" do
     it "saves the color scheme and theme", :aggregate_failures do
       patch theme_path, params: { membership: { color_scheme: "dark", theme: "ocean" } }

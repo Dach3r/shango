@@ -49,6 +49,7 @@ hi:
         sidebar: "साइडबार"
         themes: "थीम"
         members: "सदस्य"
+        credits: "क्रेडिट"
     tools_nav:
       label: "प्रोजेक्ट नेविगेशन"
       api_client: "API Client"
@@ -121,7 +122,7 @@ hi:
         description: "इस प्रोजेक्ट में Shango आपको कैसा दिखे। यह सिर्फ़ आप पर लागू होता है।"
         color_scheme:
           label: "रंग योजना"
-          hint: "लाइट, डार्क, या अपने ऑपरेटिंग सिस्टम के अनुसार।"
+          hint: "लाइट, डार्क, या अपने ऑपरेटिंग सिस्टम के अनुसार। Omarchy थीम अपनी ही रंग योजना रखती हैं।"
         color_schemes:
           system: "सिस्टम"
           light: "लाइट"
@@ -132,6 +133,7 @@ hi:
         groups:
           accents: "एक्सेंट"
           styles: "स्टाइल"
+          omarchy: "Omarchy"
         themes:
           default: "Clay"
           blue: "नीला"
@@ -153,6 +155,46 @@ hi:
           cyberpunk: "Cyberpunk"
           mono: "Mono"
           graphite: "ग्रेफाइट"
+          vulkanite: "Vulkanite"
+          virginia_tech: "Virginia Tech"
+          venice_from_above: "Venice From Above"
+          vague: "Vague"
+          van_gogh: "Van Gogh"
+          vault: "Vault"
+          winslow: "Winslow"
+          unit_eva_001: "Unit EVA-001"
+          turner: "Turner"
+          waveform_dark: "Waveform Dark"
+          terminus: "Terminus"
+          synctax: "Synctax"
+          starsend: "Starsend"
+          spectrum: "Spectrum"
+          saule: "Saule"
+          santa_fe: "Santa Fe"
+          robzee84: "Robzee84"
+          rose_pine_moon: "Rose Pine Moon"
+          roadster_dark: "Roadster Dark"
+          red_pill: "Red Pill"
+          periphery: "Periphery"
+          outpost: "Outpost"
+          neptune: "Neptune"
+          alberta: "Alberta"
+          arc_blueberry: "Arc Blueberry"
+          astral: "Astral"
+          azure_glow: "Azure Glow"
+          bauhaus: "Bauhaus"
+          black_sand: "Black Sand"
+    credits:
+      index:
+        title: "क्रेडिट"
+        heading: "क्रेडिट"
+        description: "Shango में शामिल चीज़ों के पीछे के लोग और प्रोजेक्ट।"
+        omarchy:
+          title: "Omarchy थीम"
+          hint: "समुदाय के Omarchy थीम से ली गई पैलेट। हर एक अपने मूल रंग रखती है, उसकी रंग योजना तय है और वह अपने लेखक की है।"
+        by: "%{author} द्वारा"
+        repository: "रिपॉज़िटरी"
+        no_license: "कोई लाइसेंस निर्दिष्ट नहीं"
   users:
     accounts:
       show:

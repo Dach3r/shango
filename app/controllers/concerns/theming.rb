@@ -18,7 +18,10 @@ module Theming
 
   # Signed-in members use the scheme saved on their membership; public pages use the cookie.
   def current_theme
-    theme_membership&.color_scheme || Theming.supported(cookies[COOKIE_KEY]) || DEFAULT
+    membership = theme_membership
+    return Theming.supported(cookies[COOKIE_KEY]) || DEFAULT unless membership
+
+    Membership.pinned_scheme(membership.theme) || membership.color_scheme
   end
 
   def current_palette

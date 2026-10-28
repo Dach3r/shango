@@ -49,6 +49,7 @@ en:
         sidebar: Sidebar
         themes: Themes
         members: Members
+        credits: "Credits"
     tools_nav:
       label: Project navigation
       api_client: API Client
@@ -121,7 +122,7 @@ en:
         description: How Shango looks for you in this project. This only applies to you.
         color_scheme:
           label: Color scheme
-          hint: Light, dark, or follow your operating system.
+          hint: "Light, dark, or follow your operating system. Omarchy themes keep their own scheme."
         color_schemes:
           system: System
           light: Light
@@ -132,6 +133,7 @@ en:
         groups:
           accents: "Accents"
           styles: "Styles"
+          omarchy: "Omarchy"
         themes:
           default: Clay
           blue: Blue
@@ -153,6 +155,46 @@ en:
           cyberpunk: Cyberpunk
           mono: Mono
           graphite: Graphite
+          vulkanite: "Vulkanite"
+          virginia_tech: "Virginia Tech"
+          venice_from_above: "Venice From Above"
+          vague: "Vague"
+          van_gogh: "Van Gogh"
+          vault: "Vault"
+          winslow: "Winslow"
+          unit_eva_001: "Unit EVA-001"
+          turner: "Turner"
+          waveform_dark: "Waveform Dark"
+          terminus: "Terminus"
+          synctax: "Synctax"
+          starsend: "Starsend"
+          spectrum: "Spectrum"
+          saule: "Saule"
+          santa_fe: "Santa Fe"
+          robzee84: "Robzee84"
+          rose_pine_moon: "Rose Pine Moon"
+          roadster_dark: "Roadster Dark"
+          red_pill: "Red Pill"
+          periphery: "Periphery"
+          outpost: "Outpost"
+          neptune: "Neptune"
+          alberta: "Alberta"
+          arc_blueberry: "Arc Blueberry"
+          astral: "Astral"
+          azure_glow: "Azure Glow"
+          bauhaus: "Bauhaus"
+          black_sand: "Black Sand"
+    credits:
+      index:
+        title: "Credits"
+        heading: "Credits"
+        description: "The people and projects behind what Shango ships."
+        omarchy:
+          title: "Omarchy themes"
+          hint: "Palettes ported from community Omarchy themes. Each keeps its original colors, has a fixed color scheme and belongs to its author."
+        by: "By %{author}"
+        repository: "Repository"
+        no_license: "No license specified"
   users:
     accounts:
       show:

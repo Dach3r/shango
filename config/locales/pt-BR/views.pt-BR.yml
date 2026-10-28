@@ -49,6 +49,7 @@ pt-BR:
         sidebar: Barra lateral
         themes: Temas
         members: Membros
+        credits: "Créditos"
     tools_nav:
       label: Navegação do projeto
       api_client: API Client
@@ -121,7 +122,7 @@ pt-BR:
         description: Como o Shango aparece para você neste projeto. Isso vale só para você.
         color_scheme:
           label: Esquema de cores
-          hint: Claro, escuro ou seguir o seu sistema operacional.
+          hint: "Claro, escuro ou seguir o seu sistema operacional. Os temas do Omarchy mantêm o próprio esquema."
         color_schemes:
           system: Sistema
           light: Claro
@@ -132,6 +133,7 @@ pt-BR:
         groups:
           accents: "Destaques"
           styles: "Estilos"
+          omarchy: "Omarchy"
         themes:
           default: Argila
           blue: Azul
@@ -153,6 +155,46 @@ pt-BR:
           cyberpunk: Cyberpunk
           mono: Mono
           graphite: Grafite
+          vulkanite: "Vulkanite"
+          virginia_tech: "Virginia Tech"
+          venice_from_above: "Venice From Above"
+          vague: "Vague"
+          van_gogh: "Van Gogh"
+          vault: "Vault"
+          winslow: "Winslow"
+          unit_eva_001: "Unit EVA-001"
+          turner: "Turner"
+          waveform_dark: "Waveform Dark"
+          terminus: "Terminus"
+          synctax: "Synctax"
+          starsend: "Starsend"
+          spectrum: "Spectrum"
+          saule: "Saule"
+          santa_fe: "Santa Fe"
+          robzee84: "Robzee84"
+          rose_pine_moon: "Rose Pine Moon"
+          roadster_dark: "Roadster Dark"
+          red_pill: "Red Pill"
+          periphery: "Periphery"
+          outpost: "Outpost"
+          neptune: "Neptune"
+          alberta: "Alberta"
+          arc_blueberry: "Arc Blueberry"
+          astral: "Astral"
+          azure_glow: "Azure Glow"
+          bauhaus: "Bauhaus"
+          black_sand: "Black Sand"
+    credits:
+      index:
+        title: "Créditos"
+        heading: "Créditos"
+        description: "As pessoas e os projetos por trás do que o Shango inclui."
+        omarchy:
+          title: "Temas do Omarchy"
+          hint: "Paletas portadas de temas da comunidade Omarchy. Cada uma mantém as cores originais, tem um esquema fixo e pertence ao seu autor."
+        by: "Por %{author}"
+        repository: "Repositório"
+        no_license: "Nenhuma licença especificada"
   users:
     accounts:
       show:

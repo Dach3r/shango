@@ -49,6 +49,7 @@ ja:
         sidebar: サイドバー
         themes: テーマ
         members: メンバー
+        credits: "クレジット"
     tools_nav:
       label: プロジェクトナビゲーション
       api_client: API Client
@@ -121,7 +122,7 @@ ja:
         description: このプロジェクトでの Shango の見た目を設定します。あなたにのみ適用されます。
         color_scheme:
           label: カラースキーム
-          hint: ライト、ダーク、またはお使いのOSの設定に合わせます。
+          hint: "ライト、ダーク、またはお使いのOSの設定に合わせます。 Omarchy テーマは独自の配色を保ちます。"
         color_schemes:
           system: システム
           light: ライト
@@ -132,6 +133,7 @@ ja:
         groups:
           accents: "アクセント"
           styles: "スタイル"
+          omarchy: "Omarchy"
         themes:
           default: クレイ
           blue: ブルー
@@ -153,6 +155,46 @@ ja:
           cyberpunk: サイバーパンク
           mono: モノ
           graphite: グラファイト
+          vulkanite: "Vulkanite"
+          virginia_tech: "Virginia Tech"
+          venice_from_above: "Venice From Above"
+          vague: "Vague"
+          van_gogh: "Van Gogh"
+          vault: "Vault"
+          winslow: "Winslow"
+          unit_eva_001: "Unit EVA-001"
+          turner: "Turner"
+          waveform_dark: "Waveform Dark"
+          terminus: "Terminus"
+          synctax: "Synctax"
+          starsend: "Starsend"
+          spectrum: "Spectrum"
+          saule: "Saule"
+          santa_fe: "Santa Fe"
+          robzee84: "Robzee84"
+          rose_pine_moon: "Rose Pine Moon"
+          roadster_dark: "Roadster Dark"
+          red_pill: "Red Pill"
+          periphery: "Periphery"
+          outpost: "Outpost"
+          neptune: "Neptune"
+          alberta: "Alberta"
+          arc_blueberry: "Arc Blueberry"
+          astral: "Astral"
+          azure_glow: "Azure Glow"
+          bauhaus: "Bauhaus"
+          black_sand: "Black Sand"
+    credits:
+      index:
+        title: "クレジット"
+        heading: "クレジット"
+        description: "Shango に含まれるものを支える人々とプロジェクト。"
+        omarchy:
+          title: "Omarchy テーマ"
+          hint: "コミュニティの Omarchy テーマから移植したパレットです。元の色を保ち、配色は固定で、作者に帰属します。"
+        by: "作者: %{author}"
+        repository: "リポジトリ"
+        no_license: "ライセンス未指定"
   users:
     accounts:
       show:
