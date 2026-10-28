@@ -69,6 +69,12 @@ RSpec.describe "Workbench requests" do
       expect(response.body).to include("api_request[settings][use_cookie_jar]", I18n.t("workbench.settings.use_cookie_jar"))
     end
 
+    it "wires the max redirects field to the follow redirects switch", :aggregate_failures do
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include("data-dependent-setting-target=\"switch\"", "data-dependent-setting-target=\"input\"", "data-dependent-setting-target=\"mirror\"")
+    end
+
     it "renders the latest execution" do
       create(:request_execution, api_request:, project:, response_body: "hello-body")
       get workbench_request_path(api_request)

@@ -1,7 +1,7 @@
 <% row = "flex items-center justify-between gap-6 px-4 py-3" %>
 <% title = "text-sm font-medium text-ink" %>
 <% hint = "mt-0.5 text-xs text-muted" %>
-<div class="divide-y divide-line border-b border-line">
+<div class="divide-y divide-line border-b border-line" data-controller="dependent-setting" data-action="change->dependent-setting#update">
   <div class="<%= row %>">
     <div>
       <label for="api_request_settings_timeout" class="<%= title %>"><%= t("workbench.settings.timeout") %></label>
@@ -14,14 +14,15 @@
       <p class="<%= title %>"><%= t("workbench.settings.follow_redirects") %></p>
       <p class="<%= hint %>"><%= t("workbench.settings.follow_redirects_hint") %></p>
     </div>
-    <%= render Checkbox::Component.new(name: "api_request[settings][follow_redirects]", checked: api_request.setting(:follow_redirects), "aria-label": t("workbench.settings.follow_redirects")) %>
+    <%= render Checkbox::Component.new(name: "api_request[settings][follow_redirects]", checked: api_request.setting(:follow_redirects), "aria-label": t("workbench.settings.follow_redirects"), data: { dependent_setting_target: "switch" }) %>
   </div>
-  <div class="<%= row %>">
+  <div class="<%= row %> transition-opacity" data-dependent-row>
     <div>
       <label for="api_request_settings_max_redirects" class="<%= title %>"><%= t("workbench.settings.max_redirects") %></label>
       <p class="<%= hint %>"><%= t("workbench.settings.max_redirects_hint") %></p>
     </div>
-    <%= number_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: "api_request_settings_max_redirects", min: 0, max: ApiRequest::MAX_REDIRECTS, class: field_classes("w-24 shrink-0 text-right") %>
+    <%= number_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: "api_request_settings_max_redirects", min: 0, max: ApiRequest::MAX_REDIRECTS, class: field_classes("w-24 shrink-0 text-right"), data: { dependent_setting_target: "input" } %>
+    <%= hidden_field_tag "api_request[settings][max_redirects]", api_request.setting(:max_redirects), id: nil, disabled: true, data: { dependent_setting_target: "mirror" } %>
   </div>
   <div class="<%= row %>">
     <div>
