@@ -1,4 +1,4 @@
-<label class="group flex cursor-pointer flex-col gap-2 text-center text-sm text-muted transition hover:text-ink has-[:checked]:text-ink">
+<label class="group relative flex cursor-pointer flex-col gap-2 text-center text-sm text-muted transition hover:text-ink has-[:checked]:text-ink">
   <%= form.radio_button :theme, theme, class: "sr-only peer", data: { action: "theme-preview#apply", scheme: Membership.pinned_scheme(theme) } %>
   <div data-palette="default" class="contents">
     <div data-palette="<%= theme %>" aria-hidden="true" class="relative h-24 overflow-hidden border border-line bg-page transition group-has-[:checked]:border-solid group-has-[:checked]:ring-1 group-has-[:checked]:ring-solid group-has-[:focus-visible]:ring-1 group-has-[:focus-visible]:ring-solid">
