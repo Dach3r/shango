@@ -92,6 +92,10 @@ The goal: **reduce the number of tools, configurations, and steps needed to solv
 
 The main entity. A project represents an application, product, or system the developer manages (e.g. an app called *Example*). Each project keeps its own configuration and resources. **Data from one project must never mix accidentally with another's.**
 
+### Teams and roles
+
+A project can have several members. Each member is an **owner** or a **member**. Anyone in the project can see everything in it and send requests; creating collections and environments is open to all, but changing or deleting one is for its creator and the owners. Owners also invite people (by an email link that works once, for the invited address, and expires after a week), promote, remove, hand the project over, and read the team's activity log. A project always keeps at least one owner, and anyone can leave.
+
 ### Services
 
 A project may be composed of several services (e.g. Backend API, Frontend Web, Background Workers, Database). A service links tools to a specific component of the system: it can have monitors, servers, endpoints, and events associated. Services are an organizing concept, not a requirement to run microservices.
@@ -288,7 +292,7 @@ Network Tools (§9) belongs to no phase on purpose: it depends only on Foundatio
 
 Decisions not yet made; ask before assuming:
 
-- Team model: how projects are shared, and which roles and permissions exist.
+- Whether finer roles are needed (an admin, a read-only viewer) and whether collections or environments should be shared with specific members instead of the whole project.
 - How logs get into Shango (which sources matter first).
 - Which notification channels come after email and webhooks.
 - Which of the *Future tools* earn a place after the core phases.

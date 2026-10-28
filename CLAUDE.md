@@ -29,6 +29,7 @@ Add new docs under `docs/` and reference them here.
 - **Internal names**: system-defined records (roles, kinds, statuses) keep an internal `name`/value in lowercase snake_case English; display text always via i18n, never stored in DB. User-created records (projects, environments, collections, requests) store the name the user typed.
 - **i18n**: every user-facing string goes in both `en` and `es` locale files (default `en`); no hard-coded UI text.
 - **Project scope**: all domain data belongs to a project and must be queried through it (current project/membership). Data from one project never leaks into another.
+- **Authorization**: Pundit policies in `app/policies`, subject is the current membership. Every action of an `AuthenticatedController` must `authorize` (or `skip_authorization` for the member's own state); owners manage everything, members only what they created (`creator_id`). Hide UI a member cannot use with `policy(record)`. See `docs/architecture.md` §7.
 - **Secrets**: tokens, credentials, and sensitive variable values use Active Record encryption, never plain columns, and are never logged or rendered back unmasked.
 - **UI style**: line design (square corners, hairline borders, no shadows); see `docs/architecture.md` §5.
 - **Navigation**: never show unbuilt features as available; unbuilt nav entries render disabled with a "Soon" badge.

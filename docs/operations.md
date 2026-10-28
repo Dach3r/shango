@@ -22,7 +22,7 @@ Required in production:
 | `SECRET_KEY_BASE` | Rails secret (sessions, signed cookies). |
 | `SHANGO_DATABASE_PASSWORD` | PostgreSQL password for user `shango`. |
 | `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY`, `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY`, `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT` | Encryption of stored secrets; the app refuses to boot without them. Generate with `bin/rails db:encryption:init`. Upgrading an install that used derived keys: `bin/rails shango:encryption:derived_keys`. Rotation: [`api-client.md`](api-client.md) §6. |
-| `SHANGO_HOST` (and `SHANGO_PROTOCOL`, default `https`) | Host used in links inside emails. |
+| `SHANGO_HOST` (and `SHANGO_PROTOCOL`, default `https`) | Host used in links inside emails, invitations included. Without SMTP nothing is emailed: owners copy each invitation link from the Members screen right after creating it. |
 
 Optional, with defaults:
 
@@ -34,7 +34,7 @@ Optional, with defaults:
 | `SHANGO_REQUIRE_EMAIL_CONFIRMATION` | `true` when SMTP is set | `false` keeps email on without forcing confirmation. Ignored without SMTP. |
 | `SHANGO_MAX_SIGN_IN_ATTEMPTS` | 10 | Failed sign-ins before a 30-minute lock. |
 | `SHANGO_SESSION_TIMEOUT_HOURS` | 12 | Idle time before sign-in is required again. |
-| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `OAUTH`, `IMPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`. |
+| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `OAUTH`, `IMPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`. |
 | `SHANGO_CSP_REPORT_ONLY` | `false` | Report Content Security Policy violations without blocking. |
 | `SHANGO_STORAGE` | `local` | `s3` for S3-compatible storage (`SHANGO_S3_BUCKET`, `SHANGO_S3_REGION`, optional `SHANGO_S3_ACCESS_KEY_ID`/`SHANGO_S3_SECRET_ACCESS_KEY`/`SHANGO_S3_ENDPOINT`). |
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |
@@ -62,7 +62,8 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 5. Known gaps (tracked, not blocking)
 
-- **Roles:** memberships have an `owner`/`member` role but no controller enforces it yet: every member of a project can do everything in it. That is safe while projects have a single user or a trusted team and there is no invitation flow; before building invitations, add authorization (policy objects) so destructive project actions (archiving, deleting environments, revoking memberships) are owner-only. Related open question: *Team model* in [`architecture.md`](architecture.md) §10.
+- **Team history:** `audit_events` are never purged. A project's history only grows by team changes (a handful of rows per change), so this is fine for now; add a retention job if it ever matters.
+- **Existing data after roles shipped:** collections and environments created before `creator_id` existed have no creator, so only owners can change or delete them. Promote the right people to owner, or recreate the records, if members need to edit them.
 - **Sidebar tree cache:** the workspace tree is loaded with three bounded queries per page (no request bodies) and is covered by a query-count spec; it is not cached because moves and bulk position updates would need reliable invalidation. Revisit when projects with thousands of requests show up in profiling.
 - **Slow response headers:** the total deadline (`Executor::MAX_DURATION`) is checked between body chunks and redirect hops; a server that drips response *headers* is still bounded only by the per-read timeout.
 - **Docker image:** the `Dockerfile` follows the Rails 8 pattern but has not been built in CI yet.
