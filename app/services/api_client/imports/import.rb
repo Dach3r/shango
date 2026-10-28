@@ -12,8 +12,9 @@ module ApiClient
 
       class Failed < StandardError; end
 
-      def initialize(project:, content:)
+      def initialize(project:, creator:, content:)
         @project = project
+        @creator = creator
         @content = content.to_s
         @counts = { collections: 0, folders: 0, requests: 0, environments: 0 }
       end
@@ -69,7 +70,7 @@ module ApiClient
       end
 
       def create_collection(tree)
-        created = Collections::Create.call(project: @project, attributes: { name: unique_name(tree[:name], @project.collections), description: tree[:description] })
+        created = Collections::Create.call(project: @project, creator: @creator, attributes: { name: unique_name(tree[:name], @project.collections), description: tree[:description] })
         raise Failed, errors(created) if created.failure?
 
         @counts[:collections] += 1
@@ -99,7 +100,7 @@ module ApiClient
           valid
         end
         attributes = { name: unique_name(tree[:name], @project.environments), variables_attributes: variables.reverse.uniq { |variable| variable[:key] }.reverse }
-        created = Projects::Environments::Create.call(project: @project, attributes:)
+        created = Projects::Environments::Create.call(project: @project, creator: @creator, attributes:)
         raise Failed, errors(created) if created.failure?
 
         @counts[:environments] += 1

@@ -8,7 +8,7 @@ module Workbench
 
     def create
       @draft = draft_to_place
-      result = ApiClient::Collections::Create.call(project: current_project, attributes: collection_attributes)
+      result = ApiClient::Collections::Create.call(project: current_project, creator: current_user, attributes: collection_attributes)
       return redirect_to(after_create_path(result.record), notice: t(".created"), status: :see_other) if result.success?
 
       @collection = result.record

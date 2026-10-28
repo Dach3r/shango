@@ -71,6 +71,7 @@ RSpec.describe "Environments" do
 
       expect { post environments_path, params: }.to change(project.environments, :count).by(1)
       expect(response).to redirect_to(environments_path)
+      expect(project.environments.find_by!(name: "Staging").creator).to eq(user)
     end
 
     it "re-renders when invalid", :aggregate_failures do

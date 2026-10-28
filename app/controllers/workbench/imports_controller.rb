@@ -8,7 +8,7 @@ module Workbench
     end
 
     def create
-      result = ApiClient::Imports::Import.call(project: current_project, content: submitted_content)
+      result = ApiClient::Imports::Import.call(project: current_project, creator: current_user, content: submitted_content)
       return redirect_to(workbench_root_path, notice: summary(result.data), status: :see_other) if result.success?
 
       @error = result.error
