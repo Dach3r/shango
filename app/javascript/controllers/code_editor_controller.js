@@ -59,6 +59,15 @@ export default class extends Controller {
     });
   }
 
+  // A morphed page (e.g. after switching environment) swaps the variables: refresh the highlighting.
+  variablesValueChanged() {
+    if (!this.view) return;
+
+    this.view.dispatch({
+      effects: this.variablesCompartment.reconfigure(this.variableDecorations()),
+    });
+  }
+
   // Replaces the whole document (used by the URL/params sync and the pretty/raw toggle).
   setValue(text) {
     if (!this.view) {
