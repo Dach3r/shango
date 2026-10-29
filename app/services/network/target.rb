@@ -4,6 +4,7 @@ module Network
 
     LABEL = /\A[a-z0-9_]([a-z0-9_-]{0,61}[a-z0-9_])?\z/
     MAX_LENGTH = 253
+    SCHEME = %r{\Ahttps?://}
 
     def initialize(raw:, environment: nil)
       @raw = raw.to_s
@@ -16,11 +17,15 @@ module Network
       resolved = Variables.call(raw: @raw, environment: @environment)
       return resolved if resolved.failure?
 
-      host = resolved.record.strip.downcase.delete_suffix(".")
+      host = bare_host(resolved.record)
       return Result.failure(error: :blank) if host.empty?
       return Result.failure(error: :invalid) unless valid?(host)
 
       Result.success(host)
+    end
+
+    def bare_host(value)
+      value.strip.downcase.delete_prefix(value.strip.downcase[SCHEME].to_s).split(%r{[/?#]}, 2).first.to_s.delete_suffix(".")
     end
 
     def valid?(host)

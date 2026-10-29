@@ -104,7 +104,7 @@ RSpec.describe Network::Pings::Run do
   it "returns the target error", :aggregate_failures do
     allow(Network::Tcp::Probe).to receive(:call)
 
-    expect(described_class.call(host: "https://example.com").error).to eq(:invalid)
+    expect(described_class.call(host: "ftp://example.com").error).to eq(:invalid)
     expect(Network::Tcp::Probe).not_to have_received(:call)
   end
 

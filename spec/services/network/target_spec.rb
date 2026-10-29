@@ -30,6 +30,7 @@ RSpec.describe Network::Target do
 
   it "fails when the input is blank" do
     expect(call("  ").error).to eq(:blank)
+    expect(call("https://").error).to eq(:blank)
   end
 
   it "fails on undefined variables, naming the variable", :aggregate_failures do
@@ -57,8 +58,14 @@ RSpec.describe Network::Target do
     expect(result.data[:name]).to eq("host")
   end
 
-  it "rejects schemes, paths, ports and spaces", :aggregate_failures do
-    ["https://example.com", "example.com/path", "example.com:443", "exa mple.com", "-bad.example.com", "a..b"].each do |raw|
+  it "accepts a pasted URL, dropping scheme, path, query and fragment", :aggregate_failures do
+    ["https://www.webcds.cl/", "http://www.webcds.cl", "HTTPS://www.webcds.cl/a/b?q=1#x", "www.webcds.cl/", "www.webcds.cl", "www.webcds.cl?x=1", "www.webcds.cl#top"].each do |raw|
+      expect(call(raw).record).to eq("www.webcds.cl"), raw
+    end
+  end
+
+  it "rejects other schemes, ports and spaces", :aggregate_failures do
+    ["ftp://example.com", "example.com:443", "https://example.com:443/", "exa mple.com", "-bad.example.com", "a..b"].each do |raw|
       expect(call(raw).error).to eq(:invalid), raw
     end
   end

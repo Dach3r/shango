@@ -86,7 +86,7 @@ RSpec.describe "Network DNS checks" do
   end
 
   it "does not save failed runs", :aggregate_failures do
-    expect { create_check(domain: "https://example.com") }.not_to change(NetworkCheck, :count)
+    expect { create_check(domain: "ftp://example.com") }.not_to change(NetworkCheck, :count)
     expect(response.media_type).to eq("text/vnd.turbo-stream.html")
   end
 
@@ -111,7 +111,7 @@ RSpec.describe "Network DNS checks" do
   end
 
   it "answers 422 with the error for invalid input", :aggregate_failures do
-    create_check(domain: "https://example.com")
+    create_check(domain: "ftp://example.com")
 
     expect(response).to have_http_status(:unprocessable_content)
     expect(response.body).to include(CGI.escapeHTML(I18n.t("network.errors.invalid")))

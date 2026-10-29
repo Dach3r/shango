@@ -72,7 +72,7 @@ RSpec.describe Network::PortChecks::Run do
 
   it "returns the target error without connecting", :aggregate_failures do
     allow(Network::Tcp::Probe).to receive(:call)
-    result = described_class.call(host: "http://example.com", ports: "22")
+    result = described_class.call(host: "ftp://example.com", ports: "22")
 
     expect(result.error).to eq(:invalid)
     expect(Network::Tcp::Probe).not_to have_received(:call)

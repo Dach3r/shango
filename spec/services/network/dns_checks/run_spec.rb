@@ -153,7 +153,7 @@ RSpec.describe Network::DnsChecks::Run do
     end
 
     it "returns the target error", :aggregate_failures do
-      result = described_class.call(domain: "https://example.com", type: "A")
+      result = described_class.call(domain: "ftp://example.com", type: "A")
 
       expect(result).to be_failure
       expect(result.error).to eq(:invalid)
