@@ -1,6 +1,6 @@
 # Shango — Monitoring
 
-> Design and reference for the Monitoring module. **Status: in progress** — steps 2 and 3 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and the first half of step 4: HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`. Monitors of a saved request (the other half of step 4) and the other kinds are not built: the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
+> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`. Alerts, retention, audit events, the other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
 
 ## 1. Goal
 
@@ -156,15 +156,69 @@ RSpec at 100 % line and branch coverage. No real network: probes are stubbed at 
 
 ## 12. Build plan
 
-One logical commit per step, each with its specs (100 % line and branch), locales in every language, and this document updated:
+One logical commit per step, each with its specs (100 % line and branch), locales in every language, rubocop on the touched files, and this document updated (status line at the top, the step marked built). Migrations get real timestamps, one `create_table` each, referenced tables first; enums are string-backed with a `CHECK`; state machines use AASM.
 
-1. `📝 docs(monitoring)` — this design, linked from `CLAUDE.md`, `product.md` and `architecture.md`.
-2. `✨ feat(monitoring)` — models and migrations (`uptime_monitors`, `check_results`, `check_rollups`, `incidents`), validations per kind, policies, factories.
-3. `✨ feat(monitoring)` — `Checks::Apply` (state machine, confirmations, incidents, rollups), dispatcher, jobs, recurring task and queue worker.
-4. `✨ feat(monitoring)` — HTTP monitors (URL probe, saved-request probe with the executor's `deadline:`/`max_bytes:`), index/show/form, `ToolsNav` entry made live.
-5. `✨ feat(monitoring)` — TCP and SSL monitors.
-6. `✨ feat(monitoring)` — domain expiry monitors.
-7. `✨ feat(monitoring)` — push monitors and the push endpoint.
-8. `✨ feat(monitoring)` — notification channels (email, webhook), deliveries and *Send test*.
-9. `✨ feat(monitoring)` — Slack and Discord channels.
-10. `✨ feat(monitoring)` — retention job and `operations.md` sizing notes.
+### Built
+
+1. `📝 docs(monitoring)` — this design.
+2. `✨ feat(monitoring)` — models and migrations (`uptime_monitors`, `check_results`, `check_rollups`, `incidents`), validations per kind, policy, factories; AASM `status`.
+3. `✨ feat(monitoring)` — `Checks::Apply`, `Perform`, `Run`, dispatcher, `Pause`/`Resume`, jobs, recurring task and queue worker.
+4. `✨ feat(monitoring)` — HTTP monitors of a typed URL (`Probes::Http`, `Guard`), index/show/form, *Run now*, pause, the live `ToolsNav` entry.
+
+### Next, in this order
+
+Alerts come first: a monitor nobody is told about is only useful to someone watching the page. Then the upkeep that must exist before real use, then the other kinds by value and risk; the saved-request probe is last because it changes the shared `ApiClient::Executor`.
+
+**5. Notification channels: email and webhook, deliveries, *Send test*** — `✨ feat(monitoring)`, likely split in two commits (models and delivery; pages).
+
+- Migrations: `create_notification_channels`, `create_monitor_channels`, `create_notification_deliveries` (§5). `kind` and `event` with `CHECK`s; deliveries unique on `[notification_channel_id, incident_id, event]` (a partial unique index where `incident_id IS NOT NULL`, tests are not deduplicated); `[notification_channel_id, created_at]` for *last failure*.
+- Models: `NotificationChannel` (encrypted `target` and `signing_secret`, `has_secure_token`-style secret generated on create, validation per kind: up to 10 addresses for `email`, an `http(s)` URL of at most 2048 characters for `webhook`; limit 20 per project), `MonitorChannel` (same project on both sides, 10 per monitor), `NotificationDelivery` with an AASM `status` (`pending` → `sent` / `failed`; `retry` from `failed` to `pending`), `NotificationChannelPolicy` (same rules as monitors).
+- Apply: when `transition` is `opened` or `resolved`, create one `pending` delivery per enabled channel inside the same transaction; `Checks::Perform` enqueues `NotificationDeliveryJob` for them after commit (`ActiveJob.perform_all_later`). The job is a no-op for a delivery already `sent`; `retry_on` with polynomial backoff, 5 attempts, then `failed` with the error key.
+- Services: `Monitoring::Notifications::Message` (one value object: monitor name and kind, a safe target description, cause, times, link; built from the incident, never from resolved values), `Deliver` (dispatch by kind), `Senders::Email` (`MonitoringMailer#incident` and `#test`, text and HTML, localised in the recipient project creator's locale or `I18n.default_locale`), `Senders::Webhook` (pinned `Net::HTTP` through `Network::Destination` + `Monitoring::Guard`, 10 s, no redirects, no proxy, `X-Shango-Event`, `X-Shango-Timestamp`, `X-Shango-Signature: sha256=…` over `"timestamp.body"`; a non-2xx is a failure; the URL never logged), `Channels::Create`, `Update`, `SendTest` (a `test` delivery, rate limited with `network`).
+- Pages: `/monitoring/channels` (`Monitoring::ChannelsController`, index/new/create/edit/update/destroy; `Channels::TestsController` for *Send test*), the webhook signing secret shown once with *Regenerate*, the URL masked afterwards (scheme, host and the last four characters), email offered only when `Shango::Mailing.enabled?`. The monitor form gets channel checkboxes; show lists the attached channels.
+- Docs: §6 (verification snippet for the signature in the doc), `operations.md` (deliveries need SMTP for email).
+- Specs: Apply creates deliveries only on transitions and only for enabled channels; the job's idempotency and retries; signature (known vector); guard refusal and the metadata address; masking of the URL in errors; mailer previews in every locale.
+
+**6. Retention** — `✨ feat(monitoring)`.
+
+- `PruneMonitoringJob` in the pattern of `PruneNetworkChecksJob`: `check_results` older than `SHANGO_MONITOR_RESULTS_RETENTION_DAYS` (30, `0` keeps them), `check_rollups` older than 400 days, `notification_deliveries` with the same days as results; `in_batches(of: 1000).delete_all` on `checked_at` (BRIN) and `hour`. Incidents are kept (they are the uptime history).
+- `config/recurring.yml`: every hour under `production:` (not in development).
+- `operations.md`: the variable, the expected size (≈ 43 000 results per 1-minute monitor and 30 days, ≈ 200 bytes each), worker sizing with `SHANGO_MONITORING_THREADS`.
+
+**7. Audit events for monitors and channels** — `✨ feat(monitoring)`.
+
+- New migration replacing `audit_events_kind_check` (never editing the old one) with the kinds `monitor_created`, `monitor_updated`, `monitor_deleted`, `monitor_paused`, `monitor_resumed`, `channel_created`, `channel_updated`, `channel_deleted`. `target` stays a user, so the monitor or channel name goes in `metadata` (`name`), like `email` today.
+- Recorded by `Monitors::Create`, `Update` (only when something changed), `Pause`, `Resume`, the destroy path (moved to a `Monitors::Destroy` service) and the channel services.
+- `AuditEventsHelper` passes `name:`; the page heading changes from team history to project activity in every locale. `architecture.md` §7 lists the new kinds.
+
+**8. Slack and Discord channels** — `✨ feat(monitoring)`.
+
+- Kinds `slack` and `discord` on `NotificationChannel` (new migration replacing the kind `CHECK`), with the strict URL rules of §6 (scheme, port 443, no user info, exact host, path prefix).
+- `Senders::Slack` (`{"text": …}`, mrkdwn link to the monitor) and `Senders::Discord` (`{"content": …}`, `allowed_mentions: {parse: []}` so a monitor name cannot ping `@everyone`); both share the pinned, no-redirect poster of the webhook sender. Discord `429` honours `retry_after` within the job's retries.
+- Specs: every rejected URL shape; payload escaping of names with `<`, `&`, `@`.
+
+**9. TCP and SSL monitors** — `✨ feat(monitoring)`.
+
+- `Probes::Tcp`: `Network::Destination` (guard + metadata refusal) then `Network::Tcp::Probe`; causes `unresolved`, `blocked`, `connection_refused`, `connection_timeout`.
+- `Probes::Ssl`: `Network::Tls::Handshake` with `sni: host`, then `no_certificate`, `Network::Tls::Trust.check` (`untrusted_certificate`), `verify_certificate_identity` (`hostname_mismatch`), `certificate_expired`, and `certificate_expiring` when fewer than `days_before` days remain (detail: the expiry date). `response_ms` is the handshake time.
+- `Checks::Run::PROBES` gains both; the form shows host, port and, for SSL, days before expiry. The card and show page display the expiry date of an SSL monitor (stored in the result's `timings` jsonb as `expires_at`, no new column).
+- Specs: stubs at `Tcp::Probe` and `Tls::Handshake` (certificate fixtures generated in the spec), no quick retry for `ssl`.
+
+**10. Push monitors and the push endpoint** — `✨ feat(monitoring)`; the endpoint is public, so it gets the closest security review.
+
+- `Monitoring::PushesController#create` outside the authenticated namespace (`GET`/`POST /monitoring/push/:token`, `POST /monitoring/push` with `X-Shango-Push-Token`), CSRF skipped, `204` or `404` (same body and timing for unknown and paused), `rate_limit` per token digest and per IP (`SHANGO_RATE_LIMIT_PUSH`, 12/min).
+- `Shango::Middleware::SilencePushLogs` inserted before `Rails::Rack::Logger` so the path never reaches the log; a request spec asserts the token is absent from the log output. `filter_parameters` gains `token`.
+- `Monitors::Create` generates the token for `push` and shows it once (flash-free: rendered on the show page from a one-time `session` key); `Monitors::RegenerateToken` + `Monitors::TokensController#create`.
+- Overdue detection: `Monitors::Dispatch` also claims push monitors whose `last_pinged_at` (or `created_at`) is older than interval + grace and enqueues a check; `Probes::Push` returns `down` (`no_ping`) when still overdue at run time, `up` otherwise. A ping goes through `Checks::Apply` as `up` and sets `last_pinged_at`.
+- Docs: §7 and `operations.md` (proxy logs keep the token; prefer the header form).
+
+**11. Domain expiry monitors** — `✨ feat(monitoring)`.
+
+- `Probes::Domain` over `Network::Lookups::Domain` with the monitor's timeout as deadline: `domain_expired`, `domain_expiring` (fewer than `days_before`), `domain_on_hold` (`clientHold`/`serverHold`, `pendingDelete`); `rdap_unavailable`, `no_rdap_service` and a missing expiration event give `unknown`. The host is reduced to its registrable domain before the lookup.
+- Intervals 6, 12, 24 h already validated; no quick retry. The card shows the expiry date (`timings.expires_at`).
+
+**12. HTTP monitors of a saved request** — `✨ feat(api_client)` for the executor, then `✨ feat(monitoring)`.
+
+- First commit, shared code: `ApiClient::Executor` gains `deadline:` (seconds, default `MAX_DURATION`; also caps `Built.timeout`) and `max_bytes:` (default today's 5 MB). Defaults keep the API Client's behaviour byte for byte; its existing specs must pass untouched, plus new ones for both options.
+- Second commit: `Probes::Request` builds the **saved** request with `ApiClient::RequestBuilder` (monitor environment, no user), runs the executor with the monitor's timeout and 64 KB, discards the body, applies expected statuses and `max_response_ms`, masks every stored text with `ApiClient::Masker.new(built.secrets)`; causes `request_missing`, `environment_missing`, `auth_failed` (OAuth refresh failure or a flow that cannot refresh unattended), plus the HTTP ones. The form's *Saved request* mode with a picker grouped by collection; the safe target text is `collection / request`.
+- Specs: secrets never reach `check_results`, incidents or notifications; a deleted request opens an incident.
