@@ -4,7 +4,7 @@ module Network
     module Digest
       Summary = Data.define(:label, :tone, :key, :args, :progress)
 
-      KINDS = { "dns" => Dns, "ports" => Ports, "ping" => Ping, "subnet" => Subnet, "tls" => Tls }.freeze
+      KINDS = { "dns" => Dns, "ports" => Ports, "ping" => Ping, "subnet" => Subnet, "tls" => Tls, "email" => Email }.freeze
 
       module_function
 

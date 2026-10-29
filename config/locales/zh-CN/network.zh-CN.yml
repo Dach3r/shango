@@ -13,6 +13,7 @@ zh-CN:
       ping: Ping
       subnet: "子网计算器"
       tls: "TLS 证书"
+      email: "邮件 DNS"
     errors:
       blank: 请输入域名或主机。
       invalid: "这不是有效的主机名或 IP 地址。只需填写名称，不要包含协议、路径或端口。"
@@ -37,6 +38,10 @@ zh-CN:
       handshake_failed: "TLS 握手失败（%{detail}）。该端口可能不使用 TLS，或者需要 STARTTLS。"
       starttls_refused: "服务器未提供或未接受 STARTTLS。请检查协议和端口。"
       no_certificate: "服务器没有出示证书。"
+      domain_needed: "请输入域名，例如 example.com。IP 地址没有邮件记录。"
+      domain_not_found: "该域名不存在。"
+      invalid_selector: "\"%{token}\" 不是有效的 DKIM 选择器。请使用字母、数字、连字符、下划线和点。"
+      too_many_selectors: "一次最多检查 %{max} 个 DKIM 选择器。"
     statuses:
       ok: 已应答
       cname: 别名
@@ -64,6 +69,10 @@ zh-CN:
       expiring: "即将过期"
       expired: "已过期"
       not_yet_valid: "尚未生效"
+      healthy: "正常"
+      attention: "需要关注"
+      broken: "已损坏"
+      missing: "缺失"
     dns:
       domain: 域名
       hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。 对于 PTR，请输入 IP 地址：检查还会确认每个名称能解析回该地址。"
@@ -206,6 +215,80 @@ zh-CN:
       chain_title: "服务器发送的证书链"
       issued_by: "签发者：%{issuer}"
       self_signed: "自签名"
+    email:
+      domain: "域名"
+      domain_placeholder: "example.com selector1 selector2"
+      submit: "检查邮件 DNS"
+      hint: "仅通过 DNS 检查域名的邮件配置：SPF 及其查询开销、DKIM 密钥、DMARC 策略和 MX 服务器。DKIM 选择器无法从外部发现，请在域名后输入你的选择器；不输入时会尝试常见的选择器。"
+      summary:
+        clean: "没有问题"
+        issues: "%{bad} 个错误 · %{warn} 个警告"
+      sections:
+        spf: "SPF"
+        dkim: "DKIM"
+        dmarc: "DMARC"
+        mx: "MX"
+      findings_title: "检查结果"
+      no_findings: "未发现问题。"
+      findings:
+        spf:
+          missing: "没有 SPF 记录，因此收件方无法判断哪些服务器可以代表该域名发送邮件。"
+          multiple: "存在多条 SPF 记录。收件方会全部拒绝：请合并为一条。"
+          lookup_failed: "解析器无法读取 %{name}，因此这一部分可能不完整。"
+          too_many_lookups: "该记录需要 %{count} 次 DNS 查询，超过 %{limit} 次的上限。收件方会拒绝它：请删除 include 或将其展开。"
+          loop: "%{name} 直接或通过其他记录包含了自身。"
+          include_missing: "记录引用了 %{name}，但它没有有效的 SPF 记录。"
+          no_all: "记录没有以 all 结尾，因此其他服务器发出的邮件不在覆盖范围内。请以 -all 或 ~all 结尾。"
+          pass_all: "记录以 +all 结尾，这会允许任何服务器以该域名的名义发送邮件。"
+          neutral_all: "记录以 ?all 结尾，对其他服务器不作判定。请使用 ~all 或 -all。"
+          ptr: "ptr 机制已被弃用且速度慢。请改用 ip4、ip6 或 include。"
+        dkim:
+          selector_missing: "未找到选择器 %{selector} 的 DKIM 密钥。"
+          lookup_failed: "解析器无法读取 %{name}。"
+          revoked: "选择器 %{selector} 的密钥为空：已被吊销。"
+          invalid_key: "无法读取选择器 %{selector} 的密钥。"
+          weak_key: "选择器 %{selector} 的密钥只有 %{bits} 位。请使用 2048 位。"
+          testing: "选择器 %{selector} 处于测试模式 (t=y)，收件方可能忽略其签名。"
+          none_found: "常见选择器都没有 DKIM 密钥。请在域名后输入你的选择器进行检查。"
+        dmarc:
+          missing: "没有 DMARC 记录，因此没有任何信息告诉收件方如何处理未通过 SPF 和 DKIM 的邮件。"
+          multiple: "存在多条 DMARC 记录。收件方会全部忽略：请只保留一条。"
+          lookup_failed: "解析器无法读取 %{name}。"
+          invalid_policy: "策略 (p) 缺失，或不是 none、quarantine 或 reject。"
+          policy_none: "策略为 none：失败只会被报告。报告看起来正常后，请改为 quarantine 或 reject。"
+          weak_subdomain_policy: "子域名使用 %{sp}，比域名的 %{p} 更宽松。"
+          partial: "策略只应用于 %{pct}% 的失败邮件。"
+          no_reports: "没有 rua 地址，因此你收不到汇总报告。"
+        mx:
+          missing: "没有 MX 记录：邮件会回退到域名的 A 记录，或被拒收。"
+          lookup_failed: "解析器无法读取 %{name}。"
+          cname: "%{host} 是别名 (CNAME)，而 MX 不允许指向别名。"
+          unresolved: "%{host} 无法解析到任何地址。"
+      spf:
+        lookups: "DNS 查询"
+        ends_with: "结尾为"
+      dkim:
+        none: "未找到选择器。"
+        none_probed: "常见选择器中未找到 DKIM 密钥。"
+        probed: "已尝试 %{count} 个常见选择器。如果你的不在其中，请在域名后输入。"
+        statuses:
+          revoked: "已吊销"
+          invalid: "无效"
+          missing: "未找到"
+          unavailable: "无响应"
+      dmarc:
+        policy: "策略"
+        subdomain_policy: "子域名"
+        pct: "应用比例 (%)"
+        rua: "报告发送至"
+        inherited: "记录位于 %{domain}，覆盖该域名。"
+      mx:
+        no_mail: "该域名声明不接收邮件（空 MX）。"
+        statuses:
+          ok: "可解析"
+          cname: "别名"
+          unresolved: "无地址"
+          unavailable: "无响应"
     empty:
       dns:
         title: "暂无内容可显示"
@@ -222,6 +305,9 @@ zh-CN:
       tls:
         title: "暂无内容"
         hint: "输入主机以检查其 TLS 证书。"
+      email:
+        title: "暂无内容"
+        hint: "输入域名以检查其 SPF、DKIM、DMARC 和 MX 记录。"
     history:
       dns: "DNS 检查"
       ports: "端口检查"
@@ -235,6 +321,7 @@ zh-CN:
       confirm_delete: "删除此次运行？"
       previous: "上一次运行（%{time}前）：%{detail}"
       tls: "TLS 证书"
+      email: "邮件检查"
     guide:
       title: "如何解读结果"
       ok: "服务器返回了记录。"
@@ -253,6 +340,10 @@ zh-CN:
       valid: "在有效期内。"
       expiring: "即将过期：本应已经完成续期。"
       expired: "已超过到期日期；客户端会拒绝它。"
+      healthy: "这一部分未发现问题。"
+      attention: "可以工作，但有些地方需要修复。"
+      broken: "会导致投递失败或让域名失去保护的问题。"
+      missing: "未找到记录。"
     limits:
       about: "简介"
     results:

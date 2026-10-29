@@ -13,6 +13,7 @@ pt-BR:
       ping: Ping
       subnet: "Calculadora de sub-redes"
       tls: "Certificado TLS"
+      email: "DNS de e-mail"
     errors:
       blank: Informe um domínio ou host.
       invalid: "Esse não é um nome de host ou endereço IP válido. Use apenas o nome, sem esquema, caminho ou porta."
@@ -37,6 +38,10 @@ pt-BR:
       handshake_failed: "O handshake TLS falhou (%{detail}). A porta pode não falar TLS ou pode exigir STARTTLS."
       starttls_refused: "O servidor não ofereceu nem aceitou STARTTLS. Verifique o protocolo e a porta."
       no_certificate: "O servidor não apresentou nenhum certificado."
+      domain_needed: "Informe um nome de domínio, como example.com. Um endereço IP não tem registros de e-mail."
+      domain_not_found: "Este domínio não existe."
+      invalid_selector: "\"%{token}\" não é um seletor DKIM válido. Use letras, números, hífens, sublinhados e pontos."
+      too_many_selectors: "Verifique no máximo %{max} seletores DKIM por vez."
     statuses:
       ok: Respondeu
       cname: Alias
@@ -64,6 +69,10 @@ pt-BR:
       expiring: "Expirando"
       expired: "Expirado"
       not_yet_valid: "Ainda não válido"
+      healthy: "Saudável"
+      attention: "Requer atenção"
+      broken: "Quebrado"
+      missing: "Ausente"
     dns:
       domain: Domínio
       hint: "As respostas DNS vêm dos nameservers autoritativos e de vários resolvedores públicos, para saber se uma mudança já se propagou. Para PTR, digite um endereço IP: a verificação também confirma que cada nome resolve de volta para ele."
@@ -206,6 +215,80 @@ pt-BR:
       chain_title: "Cadeia enviada pelo servidor"
       issued_by: "Emitido por %{issuer}"
       self_signed: "Autoassinado"
+    email:
+      domain: "Domínio"
+      domain_placeholder: "example.com selector1 selector2"
+      submit: "Verificar DNS de e-mail"
+      hint: "Verifica como o e-mail de um domínio está configurado usando apenas DNS: SPF com as consultas que ele custa, chaves DKIM, a política DMARC e os servidores MX. Seletores DKIM não podem ser descobertos, então digite os seus depois do domínio; sem eles, os comuns são testados."
+      summary:
+        clean: "Sem problemas"
+        issues: "%{bad} erros · %{warn} avisos"
+      sections:
+        spf: "SPF"
+        dkim: "DKIM"
+        dmarc: "DMARC"
+        mx: "MX"
+      findings_title: "Achados"
+      no_findings: "Nenhum problema encontrado."
+      findings:
+        spf:
+          missing: "Não há registro SPF, então os receptores não sabem quais servidores podem enviar e-mail deste domínio."
+          multiple: "Há mais de um registro SPF. Os receptores rejeitam todos: una-os em um só."
+          lookup_failed: "O resolvedor não conseguiu ler %{name}, então esta parte pode estar incompleta."
+          too_many_lookups: "O registro precisa de %{count} consultas DNS, acima do limite de %{limit}. Os receptores o rejeitam: remova includes ou simplifique-os."
+          loop: "%{name} inclui a si mesmo, direta ou indiretamente por outros registros."
+          include_missing: "%{name} é referenciado pelo registro, mas não tem um registro SPF válido."
+          no_all: "O registro não termina com um termo all, então o e-mail de outros servidores não é coberto. Termine com -all ou ~all."
+          pass_all: "O registro termina com +all, o que permite que qualquer servidor envie e-mail como este domínio."
+          neutral_all: "O registro termina com ?all, que não dá veredito sobre outros servidores. Use ~all ou -all."
+          ptr: "O mecanismo ptr está obsoleto e é lento. Troque por ip4, ip6 ou include."
+        dkim:
+          selector_missing: "Nenhuma chave DKIM encontrada para o seletor %{selector}."
+          lookup_failed: "O resolvedor não conseguiu ler %{name}."
+          revoked: "A chave do seletor %{selector} está vazia: foi revogada."
+          invalid_key: "A chave do seletor %{selector} não pode ser lida."
+          weak_key: "A chave do seletor %{selector} tem apenas %{bits} bits. Use 2048."
+          testing: "O seletor %{selector} está em modo de teste (t=y), então os receptores podem ignorar suas assinaturas."
+          none_found: "Nenhum dos seletores comuns tem chave DKIM. Digite o seu seletor depois do domínio para verificá-lo."
+        dmarc:
+          missing: "Não há registro DMARC, então nada diz aos receptores o que fazer com e-mails que falham em SPF e DKIM."
+          multiple: "Há mais de um registro DMARC. Os receptores ignoram todos: mantenha um."
+          lookup_failed: "O resolvedor não conseguiu ler %{name}."
+          invalid_policy: "A política (p) está ausente ou não é none, quarantine nem reject."
+          policy_none: "A política é none: as falhas são apenas relatadas. Passe para quarantine ou reject quando os relatórios estiverem limpos."
+          weak_subdomain_policy: "Os subdomínios usam %{sp}, mais fraco que o %{p} do domínio."
+          partial: "A política é aplicada a apenas %{pct}% dos e-mails com falha."
+          no_reports: "Não há endereço rua, então você não recebe relatórios agregados."
+        mx:
+          missing: "Não há registro MX: o e-mail recorre ao registro A do domínio, ou é rejeitado."
+          lookup_failed: "O resolvedor não conseguiu ler %{name}."
+          cname: "%{host} é um alias (CNAME), e um MX não pode apontar para um."
+          unresolved: "%{host} não resolve para nenhum endereço."
+      spf:
+        lookups: "Consultas DNS"
+        ends_with: "Termina em"
+      dkim:
+        none: "Nenhum seletor encontrado."
+        none_probed: "Nenhuma chave DKIM encontrada entre os seletores comuns."
+        probed: "%{count} seletores comuns testados. Digite o seu depois do domínio se ele não estiver entre eles."
+        statuses:
+          revoked: "Revogada"
+          invalid: "Inválida"
+          missing: "Não encontrada"
+          unavailable: "Sem resposta"
+      dmarc:
+        policy: "Política"
+        subdomain_policy: "Subdomínios"
+        pct: "Aplicada (%)"
+        rua: "Relatórios para"
+        inherited: "Registro encontrado em %{domain}, que cobre este domínio."
+      mx:
+        no_mail: "Este domínio declara que não recebe e-mail (MX nulo)."
+        statuses:
+          ok: "Resolve"
+          cname: "Alias"
+          unresolved: "Sem endereço"
+          unavailable: "Sem resposta"
     empty:
       dns:
         title: "Ainda não há nada para mostrar"
@@ -222,6 +305,9 @@ pt-BR:
       tls:
         title: "Nada para mostrar ainda"
         hint: "Digite um host para inspecionar o certificado TLS."
+      email:
+        title: "Nada para mostrar ainda"
+        hint: "Informe um domínio para verificar seus registros SPF, DKIM, DMARC e MX."
     history:
       dns: "Verificações de DNS"
       ports: "Verificações de portas"
@@ -235,6 +321,7 @@ pt-BR:
       confirm_delete: "Excluir esta execução?"
       previous: "Execução anterior, há %{time}: %{detail}"
       tls: "Certificados TLS"
+      email: "Verificações de e-mail"
     guide:
       title: "Como ler os resultados"
       ok: "O servidor respondeu com registros."
@@ -253,6 +340,10 @@ pt-BR:
       valid: "Dentro das datas de validade."
       expiring: "Perto de expirar: a renovação já deveria ter acontecido."
       expired: "Passou da data de expiração; os clientes o recusam."
+      healthy: "Nenhum problema encontrado nesta parte."
+      attention: "Funciona, mas algo deve ser corrigido."
+      broken: "Um problema que impede a entrega ou deixa o domínio sem proteção."
+      missing: "Nenhum registro encontrado."
     limits:
       about: "Sobre"
     results:

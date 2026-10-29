@@ -13,6 +13,7 @@ ja:
       ping: Ping
       subnet: "サブネット計算"
       tls: "TLS 証明書"
+      email: "メールDNS"
     errors:
       blank: ドメインまたはホストを入力してください。
       invalid: "ホスト名またはIPアドレスが正しくありません。スキーム、パス、ポートを含めず、名前のみを入力してください。"
@@ -37,6 +38,10 @@ ja:
       handshake_failed: "TLS ハンドシェイクに失敗しました（%{detail}）。ポートが TLS を話さないか、STARTTLS が必要な可能性があります。"
       starttls_refused: "サーバーが STARTTLS を提供しなかったか、受け付けませんでした。プロトコルとポートを確認してください。"
       no_certificate: "サーバーが証明書を提示しませんでした。"
+      domain_needed: "example.com のようなドメイン名を入力してください。IPアドレスにはメールレコードがありません。"
+      domain_not_found: "このドメインは存在しません。"
+      invalid_selector: "\"%{token}\" は有効なDKIMセレクターではありません。英数字、ハイフン、アンダースコア、ドットを使ってください。"
+      too_many_selectors: "一度に確認できるDKIMセレクターは最大%{max}個です。"
     statuses:
       ok: 応答あり
       cname: エイリアス
@@ -64,6 +69,10 @@ ja:
       expiring: "期限間近"
       expired: "期限切れ"
       not_yet_valid: "まだ有効でない"
+      healthy: "正常"
+      attention: "要確認"
+      broken: "破損"
+      missing: "なし"
     dns:
       domain: ドメイン
       hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。 PTR では IP アドレスを入力してください。各名前が同じ IP に正引きされるかも確認します。"
@@ -206,6 +215,80 @@ ja:
       chain_title: "サーバーが送信したチェーン"
       issued_by: "発行者：%{issuer}"
       self_signed: "自己署名"
+    email:
+      domain: "ドメイン"
+      domain_placeholder: "example.com selector1 selector2"
+      submit: "メールDNSを確認"
+      hint: "DNSだけでドメインのメール設定を確認します。SPFとその参照回数、DKIM鍵、DMARCポリシー、MXサーバーが対象です。DKIMセレクターは外部から調べられないため、ドメインの後ろに入力してください。省略すると一般的なものを試します。"
+      summary:
+        clean: "問題なし"
+        issues: "エラー%{bad}件 · 警告%{warn}件"
+      sections:
+        spf: "SPF"
+        dkim: "DKIM"
+        dmarc: "DMARC"
+        mx: "MX"
+      findings_title: "検出事項"
+      no_findings: "問題は見つかりませんでした。"
+      findings:
+        spf:
+          missing: "SPFレコードがないため、受信側はこのドメインからメールを送れるサーバーを判断できません。"
+          multiple: "SPFレコードが複数あります。受信側はすべて拒否します。1つにまとめてください。"
+          lookup_failed: "リゾルバーが%{name}を読み取れなかったため、この部分は不完全な可能性があります。"
+          too_many_lookups: "レコードに%{count}回のDNS参照が必要で、上限の%{limit}回を超えています。受信側は拒否します。includeを減らすか展開してください。"
+          loop: "%{name}が直接または他のレコード経由で自分自身を参照しています。"
+          include_missing: "%{name}がレコードから参照されていますが、有効なSPFレコードがありません。"
+          no_all: "レコードがallで終わっていないため、他のサーバーからのメールが対象外です。-allまたは~allで終えてください。"
+          pass_all: "レコードが+allで終わっており、どのサーバーでもこのドメインとしてメールを送れてしまいます。"
+          neutral_all: "レコードが?allで終わっており、他のサーバーについて判定しません。~allまたは-allを使ってください。"
+          ptr: "ptrメカニズムは非推奨で低速です。ip4、ip6、またはincludeに置き換えてください。"
+        dkim:
+          selector_missing: "セレクター%{selector}のDKIM鍵が見つかりません。"
+          lookup_failed: "リゾルバーが%{name}を読み取れませんでした。"
+          revoked: "セレクター%{selector}の鍵が空です。失効しています。"
+          invalid_key: "セレクター%{selector}の鍵を読み取れません。"
+          weak_key: "セレクター%{selector}の鍵は%{bits}ビットしかありません。2048を使ってください。"
+          testing: "セレクター%{selector}はテストモード(t=y)のため、受信側が署名を無視する場合があります。"
+          none_found: "一般的なセレクターにDKIM鍵はありませんでした。確認するには、ドメインの後ろに自分のセレクターを入力してください。"
+        dmarc:
+          missing: "DMARCレコードがないため、SPFとDKIMに失敗したメールの扱いが受信側に伝わりません。"
+          multiple: "DMARCレコードが複数あります。受信側はすべて無視します。1つだけ残してください。"
+          lookup_failed: "リゾルバーが%{name}を読み取れませんでした。"
+          invalid_policy: "ポリシー(p)がないか、none、quarantine、rejectのいずれでもありません。"
+          policy_none: "ポリシーはnoneで、失敗は報告されるだけです。レポートに問題がなくなったらquarantineかrejectに移行してください。"
+          weak_subdomain_policy: "サブドメインは%{sp}を使っており、ドメインの%{p}より弱い設定です。"
+          partial: "ポリシーは失敗したメールの%{pct}%にしか適用されません。"
+          no_reports: "ruaアドレスがないため、集計レポートを受け取れません。"
+        mx:
+          missing: "MXレコードがありません。メールはドメインのAレコードにフォールバックするか、拒否されます。"
+          lookup_failed: "リゾルバーが%{name}を読み取れませんでした。"
+          cname: "%{host}はエイリアス(CNAME)で、MXはエイリアスを指せません。"
+          unresolved: "%{host}はアドレスに解決されません。"
+      spf:
+        lookups: "DNS参照"
+        ends_with: "終わり方"
+      dkim:
+        none: "セレクターが見つかりません。"
+        none_probed: "一般的なセレクターにDKIM鍵は見つかりませんでした。"
+        probed: "一般的なセレクターを%{count}個試しました。ない場合は、ドメインの後ろに自分のセレクターを入力してください。"
+        statuses:
+          revoked: "失効"
+          invalid: "無効"
+          missing: "見つかりません"
+          unavailable: "応答なし"
+      dmarc:
+        policy: "ポリシー"
+        subdomain_policy: "サブドメイン"
+        pct: "適用率(%)"
+        rua: "レポート送信先"
+        inherited: "レコードは%{domain}で見つかり、このドメインに適用されます。"
+      mx:
+        no_mail: "このドメインはメールを受信しないと宣言しています(Null MX)。"
+        statuses:
+          ok: "解決"
+          cname: "エイリアス"
+          unresolved: "アドレスなし"
+          unavailable: "応答なし"
     empty:
       dns:
         title: "表示する内容はまだありません"
@@ -222,6 +305,9 @@ ja:
       tls:
         title: "まだ表示するものがありません"
         hint: "ホストを入力して TLS 証明書を確認してください。"
+      email:
+        title: "まだ表示するものがありません"
+        hint: "ドメインを入力して、SPF、DKIM、DMARC、MXレコードを確認します。"
     history:
       dns: "DNS チェック"
       ports: "ポートチェック"
@@ -235,6 +321,7 @@ ja:
       confirm_delete: "この実行を削除しますか？"
       previous: "前回の実行（%{time}前）: %{detail}"
       tls: "TLS 証明書"
+      email: "メールチェック"
     guide:
       title: "結果の見方"
       ok: "サーバーがレコードを返しました。"
@@ -253,6 +340,10 @@ ja:
       valid: "有効期間内です。"
       expiring: "期限が近づいています。すでに更新されているべき時期です。"
       expired: "有効期限を過ぎており、クライアントは拒否します。"
+      healthy: "この項目に問題は見つかりませんでした。"
+      attention: "動作していますが、修正すべき点があります。"
+      broken: "配信を妨げる、またはドメインを無防備にする問題です。"
+      missing: "レコードが見つかりません。"
     limits:
       about: "概要"
     results:

@@ -52,6 +52,21 @@ FactoryBot.define do
       end
     end
 
+    trait :email do
+      kind { "email" }
+      input { { "domain" => "example.com", "selectors" => "selector1" } }
+      result do
+        {
+          "host" => "example.com",
+          "spf" => { "record" => "v=spf1 include:_spf.example.net -all", "lookups" => 2, "all" => "-all" },
+          "dkim" => { "probed" => false, "rows" => [{ "selector" => "selector1", "name" => "selector1._domainkey.example.com", "status" => "found", "key_type" => "rsa", "bits" => 2048, "testing" => false }] },
+          "dmarc" => { "record" => "v=DMARC1; p=reject; rua=mailto:dmarc@example.com", "domain" => "example.com", "policy" => "reject", "subdomain_policy" => nil, "pct" => nil, "rua" => ["mailto:dmarc@example.com"] },
+          "mx" => { "null" => false, "records" => [{ "preference" => 10, "exchange" => "mx.example.com", "status" => "ok" }] },
+          "findings" => []
+        }
+      end
+    end
+
     trait :ping do
       kind { "ping" }
       input { { "host" => "example.com", "port" => "443", "attempts" => "2" } }

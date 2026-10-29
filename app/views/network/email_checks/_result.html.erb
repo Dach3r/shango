@@ -1,0 +1,122 @@
+<%# Outcome of an email DNS check. Render with `result:` (a Result from Network::EmailChecks::Run). %>
+<% if result.failure? %>
+  <%= render "network/shared/error", result: result %>
+<% else %>
+  <% data = result.data %>
+  <% dots = { "ok" => "bg-emerald-500", "warn" => "bg-amber-500", "bad" => "bg-danger" } %>
+  <% heading = "border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint" %>
+  <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
+  <% spf = data[:spf] %>
+  <% dmarc = data[:dmarc] %>
+  <% mx = data[:mx] %>
+  <% dkim = data[:dkim] %>
+  <%= render "network/checks/previous", check: local_assigns[:check] %>
+
+  <div class="border border-line bg-card">
+    <div class="grid grid-cols-2 sm:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
+      <div class="col-span-2 flex min-w-0 flex-col gap-2 border-b border-line px-5 py-4 sm:col-span-1 sm:border-r sm:border-b-0">
+        <p class="<%= label %>"><%= t("network.results.target") %></p>
+        <p class="truncate font-mono text-sm text-ink"><%= data[:host] %></p>
+      </div>
+      <% %w[spf dkim dmarc mx].each_with_index do |section, index| %>
+        <div class="flex flex-col gap-2 border-line px-5 py-4 <%= ["border-r", "sm:border-r", "border-r", ""].fetch(index) %> <%= "border-t sm:border-t-0" if index > 1 %>">
+          <p class="<%= label %>"><%= t("network.email.sections.#{section}") %></p>
+          <%= render NetworkStatus::Component.new(status: email_section_status(data, section)) %>
+        </div>
+      <% end %>
+    </div>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.email.findings_title") %></h3>
+      <% if data[:findings].empty? %>
+        <p class="flex items-center gap-2.5 px-5 py-3 text-sm text-muted"><span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-emerald-500"></span><%= t("network.email.no_findings") %></p>
+      <% else %>
+        <ul class="text-sm">
+          <% data[:findings].each do |finding| %>
+            <li class="flex items-baseline gap-2.5 border-b border-line px-5 py-3 text-body last:border-b-0">
+              <span aria-hidden="true" class="size-1.5 shrink-0 -translate-y-0.5 rounded-full <%= dots.fetch(finding[:tone]) %>"></span>
+              <%= t("network.email.findings.#{finding[:key]}", **finding[:args]) %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </section>
+
+    <% if spf %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.email.sections.spf") %></h3>
+        <div class="flex flex-col gap-3 px-5 py-3">
+          <p class="font-mono text-sm break-all text-ink"><%= spf[:record] %></p>
+          <dl class="flex gap-8">
+            <div class="flex flex-col gap-1">
+              <dt class="<%= label %>"><%= t("network.email.spf.lookups") %></dt>
+              <dd class="font-mono text-sm text-ink"><%= spf[:lookups] %> / <%= Network::EmailChecks::Spf::LOOKUP_LIMIT %></dd>
+            </div>
+            <div class="flex flex-col gap-1">
+              <dt class="<%= label %>"><%= t("network.email.spf.ends_with") %></dt>
+              <dd class="font-mono text-sm text-ink"><%= spf[:all] || "—" %></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+    <% end %>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.email.sections.dkim") %></h3>
+      <% if dkim[:rows].empty? %>
+        <p class="px-5 py-3 text-sm text-muted"><%= t("network.email.dkim.#{dkim[:probed] ? "none_probed" : "none"}") %></p>
+      <% else %>
+        <ul class="text-sm">
+          <% dkim[:rows].each do |row| %>
+            <li class="flex items-start gap-4 border-b border-line px-5 py-3 last:border-b-0">
+              <span class="min-w-0 flex-1 truncate font-mono text-ink" title="<%= row[:name] %>"><%= row[:selector] %></span>
+              <span class="shrink-0 font-mono text-xs leading-5 whitespace-nowrap text-muted"><%= row[:status] == "found" ? [row[:key_type], (row[:bits] if row[:bits].to_i.positive?)].compact.join(" ") : t("network.email.dkim.statuses.#{row[:status]}") %></span>
+            </li>
+          <% end %>
+        </ul>
+        <% if dkim[:probed] %>
+          <p class="border-t border-line px-5 py-3 text-sm text-muted"><%= t("network.email.dkim.probed", count: Network::EmailChecks::Dkim::COMMON_SELECTORS.size) %></p>
+        <% end %>
+      <% end %>
+    </section>
+
+    <% if dmarc %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.email.sections.dmarc") %></h3>
+        <div class="flex flex-col gap-3 px-5 py-3">
+          <p class="font-mono text-sm break-all text-ink"><%= dmarc[:record] %></p>
+          <dl class="grid gap-x-8 gap-y-3 sm:grid-cols-4">
+            <% { policy: dmarc[:policy], subdomain_policy: dmarc[:subdomain_policy] || dmarc[:policy], pct: dmarc[:pct].presence || "100", rua: dmarc[:rua].join(", ") }.each do |field, value| %>
+              <div class="flex min-w-0 flex-col gap-1">
+                <dt class="<%= label %>"><%= t("network.email.dmarc.#{field}") %></dt>
+                <dd class="font-mono text-sm break-all text-ink"><%= value.presence || "—" %></dd>
+              </div>
+            <% end %>
+          </dl>
+          <% if dmarc[:domain] != data[:host] %>
+            <p class="text-sm text-muted"><%= t("network.email.dmarc.inherited", domain: dmarc[:domain]) %></p>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <% if mx %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.email.sections.mx") %></h3>
+        <% if mx[:null] %>
+          <p class="px-5 py-3 text-sm text-muted"><%= t("network.email.mx.no_mail") %></p>
+        <% else %>
+          <ol class="text-sm">
+            <% mx[:records].each do |record| %>
+              <li class="flex items-start gap-4 border-b border-line px-5 py-3 last:border-b-0">
+                <span class="w-8 shrink-0 font-mono text-xs leading-5 text-faint"><%= record[:preference] %></span>
+                <span class="min-w-0 flex-1 truncate font-mono text-ink"><%= record[:exchange] %></span>
+                <span class="shrink-0 font-mono text-xs leading-5 whitespace-nowrap text-muted"><%= t("network.email.mx.statuses.#{record[:status]}") %></span>
+              </li>
+            <% end %>
+          </ol>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+<% end %>

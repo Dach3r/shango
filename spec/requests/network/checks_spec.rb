@@ -62,6 +62,15 @@ RSpec.describe "Network checks" do
       expect(response.body).to include(I18n.t("network.tls.summary.valid", date: "2026-11-30", version: "TLSv1.3"))
     end
 
+    it "shows a saved email check with what was typed, ready to run again", :aggregate_failures do
+      email = create(:network_check, :email, project:, user:)
+      get network_check_path(email)
+
+      expect(response.body).to include("email_result", "v=spf1 include:_spf.example.net -all", "selector1._domainkey.example.com", "mx.example.com", I18n.t("network.statuses.healthy"))
+      expect(response.body).to include(%(action="#{network_email_checks_path}"), 'value="example.com selector1"')
+      expect(response.body).to include(I18n.t("network.email.summary.clean"))
+    end
+
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
       ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)

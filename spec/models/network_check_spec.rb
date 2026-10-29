@@ -7,9 +7,10 @@ RSpec.describe NetworkCheck do
 
   it "keeps the kind and outcome as strings with a database check", :aggregate_failures do
     expect(create(:network_check, :ports)).to be_ports
-    expect(described_class.kinds.values).to eq(%w[dns ports ping subnet tls])
+    expect(described_class.kinds.values).to eq(%w[dns ports ping subnet tls email])
     expect(create(:network_check, :subnet)).to be_subnet
     expect(create(:network_check, :tls)).to be_tls
+    expect(create(:network_check, :email)).to be_email
     expect { create(:network_check).update_columns(kind: "icmp") }.to raise_error(ActiveRecord::StatementInvalid)
   end
 

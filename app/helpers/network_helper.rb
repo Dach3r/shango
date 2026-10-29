@@ -17,4 +17,15 @@ module NetworkHelper
     typed = ports.to_s.strip
     port_preset_options.map(&:last).find { |value| value == typed && value != "custom" } || "custom"
   end
+
+  # The state of one part of an email check (spf, dkim, dmarc, mx) for its tile, from the findings that belong to it.
+  def email_section_status(data, section)
+    findings = data[:findings].select { |finding| finding[:key].start_with?("#{section}.") }
+    return :missing if findings.any? { |finding| finding[:key].end_with?(".missing") }
+
+    tones = findings.pluck(:tone)
+    return :broken if tones.include?("bad")
+
+    tones.include?("warn") ? :attention : :healthy
+  end
 end

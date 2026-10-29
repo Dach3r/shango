@@ -58,6 +58,12 @@ RSpec.describe Network::Checks::Codec do
     expect(round_trip("tls", data)).to eq(data)
   end
 
+  it "round-trips an email check as the plain data it already is" do
+    data = build(:network_check, :email).result.deep_symbolize_keys
+
+    expect(round_trip("email", data)).to eq(data)
+  end
+
   it "has a codec for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.dump("nmap", {}) }.to raise_error(KeyError)

@@ -13,6 +13,7 @@ en:
       ping: Ping
       subnet: "Subnet calculator"
       tls: "TLS certificate"
+      email: "Email DNS"
     errors:
       blank: Enter a domain or host.
       invalid: "That is not a valid host name or IP address. Use only the name, without scheme, path or port."
@@ -37,6 +38,10 @@ en:
       handshake_failed: "The TLS handshake failed (%{detail}). The port may not speak TLS, or it may need STARTTLS."
       starttls_refused: "The server did not offer or accept STARTTLS. Check the protocol and the port."
       no_certificate: "The server did not present a certificate."
+      domain_needed: "Enter a domain name, such as example.com. An IP address has no mail records."
+      domain_not_found: "This domain does not exist."
+      invalid_selector: "\"%{token}\" is not a valid DKIM selector. Use letters, numbers, hyphens, underscores and dots."
+      too_many_selectors: "Check at most %{max} DKIM selectors at a time."
     statuses:
       ok: Answered
       cname: Alias
@@ -64,6 +69,10 @@ en:
       expiring: "Expiring"
       expired: "Expired"
       not_yet_valid: "Not yet valid"
+      healthy: "Healthy"
+      attention: "Needs attention"
+      broken: "Broken"
+      missing: "Missing"
     dns:
       domain: Domain
       hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated. For PTR, enter an IP address: the check also confirms that each name resolves back to it."
@@ -206,6 +215,80 @@ en:
       chain_title: "Chain sent by the server"
       issued_by: "Issued by %{issuer}"
       self_signed: "Self-signed"
+    email:
+      domain: "Domain"
+      domain_placeholder: "example.com selector1 selector2"
+      submit: "Check email DNS"
+      hint: "Checks how a domain is set up for email using DNS only: SPF with the lookups it costs, DKIM keys, the DMARC policy and MX servers. DKIM selectors cannot be discovered, so type yours after the domain; without any, the common ones are tried."
+      summary:
+        clean: "No problems found"
+        issues: "%{bad} errors · %{warn} warnings"
+      sections:
+        spf: "SPF"
+        dkim: "DKIM"
+        dmarc: "DMARC"
+        mx: "MX"
+      findings_title: "Findings"
+      no_findings: "No problems found."
+      findings:
+        spf:
+          missing: "There is no SPF record, so receivers cannot tell which servers may send mail for this domain."
+          multiple: "There is more than one SPF record. Receivers reject them all: merge them into one."
+          lookup_failed: "The resolver could not read %{name}, so this part may be incomplete."
+          too_many_lookups: "The record needs %{count} DNS lookups, over the limit of %{limit}. Receivers reject it: remove includes or flatten them."
+          loop: "%{name} includes itself, directly or through other records."
+          include_missing: "%{name} is referenced by the record but has no valid SPF record."
+          no_all: "The record does not end with an all term, so mail from other servers is not covered. End it with -all or ~all."
+          pass_all: "The record ends with +all, which lets any server send mail as this domain."
+          neutral_all: "The record ends with ?all, which gives no verdict on other servers. Use ~all or -all."
+          ptr: "The ptr mechanism is deprecated and slow. Replace it with ip4, ip6 or include."
+        dkim:
+          selector_missing: "No DKIM key found for the selector %{selector}."
+          lookup_failed: "The resolver could not read %{name}."
+          revoked: "The key of the selector %{selector} is empty: it was revoked."
+          invalid_key: "The key of the selector %{selector} cannot be read."
+          weak_key: "The key of the selector %{selector} has only %{bits} bits. Use 2048."
+          testing: "The selector %{selector} is in testing mode (t=y), so receivers may ignore its signatures."
+          none_found: "None of the common selectors has a DKIM key. Type your selector after the domain to check it."
+        dmarc:
+          missing: "There is no DMARC record, so nothing tells receivers what to do with mail that fails SPF and DKIM."
+          multiple: "There is more than one DMARC record. Receivers ignore them all: keep one."
+          lookup_failed: "The resolver could not read %{name}."
+          invalid_policy: "The policy (p) is missing or is not none, quarantine or reject."
+          policy_none: "The policy is none: failures are only reported. Move to quarantine or reject once the reports look clean."
+          weak_subdomain_policy: "Subdomains use %{sp}, which is weaker than the %{p} of the domain."
+          partial: "The policy is applied to only %{pct}% of failing mail."
+          no_reports: "There is no rua address, so you receive no aggregate reports."
+        mx:
+          missing: "There is no MX record: mail falls back to the A record of the domain, or is rejected."
+          lookup_failed: "The resolver could not read %{name}."
+          cname: "%{host} is an alias (CNAME), which an MX is not allowed to point to."
+          unresolved: "%{host} does not resolve to an address."
+      spf:
+        lookups: "DNS lookups"
+        ends_with: "Ends with"
+      dkim:
+        none: "No selectors found."
+        none_probed: "No DKIM key found among the common selectors."
+        probed: "Tried %{count} common selectors. Type yours after the domain if it is not among them."
+        statuses:
+          revoked: "Revoked"
+          invalid: "Invalid"
+          missing: "Not found"
+          unavailable: "No answer"
+      dmarc:
+        policy: "Policy"
+        subdomain_policy: "Subdomains"
+        pct: "Applied (%)"
+        rua: "Reports to"
+        inherited: "Record found at %{domain}, which covers this domain."
+      mx:
+        no_mail: "This domain declares that it receives no mail (null MX)."
+        statuses:
+          ok: "Resolves"
+          cname: "Alias"
+          unresolved: "No address"
+          unavailable: "No answer"
     empty:
       dns:
         title: "Nothing to show yet"
@@ -222,6 +305,9 @@ en:
       tls:
         title: "Nothing to show yet"
         hint: "Enter a host to inspect its TLS certificate."
+      email:
+        title: "Nothing to show yet"
+        hint: "Enter a domain to check its SPF, DKIM, DMARC and MX records."
     history:
       dns: "DNS checks"
       ports: "Port checks"
@@ -235,6 +321,7 @@ en:
       confirm_delete: "Delete this run?"
       previous: "Previous run, %{time} ago: %{detail}"
       tls: "TLS certificates"
+      email: "Email checks"
     guide:
       title: "Reading the results"
       ok: "The server answered with records."
@@ -253,6 +340,10 @@ en:
       valid: "Within its validity dates."
       expiring: "Close to expiry: renewal should already have happened."
       expired: "Past its expiry date; clients refuse it."
+      healthy: "No problems found in this part."
+      attention: "Works, but something should be fixed."
+      broken: "A problem that breaks delivery or leaves the domain unprotected."
+      missing: "No record found."
     limits:
       about: "About"
     results:

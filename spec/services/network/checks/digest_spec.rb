@@ -90,6 +90,22 @@ RSpec.describe Network::Checks::Digest do
     end
   end
 
+  describe "email" do
+    def email(*tones)
+      data = build(:network_check, :email).result.deep_symbolize_keys
+      described_class.for(:email, data.merge(findings: tones.map { |tone| { key: "spf.missing", tone:, args: {} } }))
+    end
+
+    it "labels an email check with its domain and says when nothing is wrong", :aggregate_failures do
+      expect(email).to have_attributes(label: "example.com", tone: "ok", key: "network.email.summary.clean", progress: nil)
+    end
+
+    it "counts errors and warnings and takes the tone of the worst", :aggregate_failures do
+      expect(email("warn", "warn")).to have_attributes(tone: "warn", key: "network.email.summary.issues", args: { bad: 0, warn: 2 })
+      expect(email("warn", "bad")).to have_attributes(tone: "bad", args: { bad: 1, warn: 1 })
+    end
+  end
+
   it "has a digest for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.for("nmap", {}) }.to raise_error(KeyError)

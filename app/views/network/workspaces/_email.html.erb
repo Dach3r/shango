@@ -1,0 +1,14 @@
+<%# Panel of the email DNS check. Render with `check:` (the saved run on display, or nil) and `result:` (its stored result). %>
+<div class="flex h-full min-h-0 flex-col-reverse lg:flex-row">
+  <%= render "network/workspaces/history", tool: "email", current: check %>
+
+  <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+    <%= render "network/workspaces/email_form", input: check&.input || {} %>
+
+    <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <div id="email_result" class="min-h-0 min-w-0 flex-1 overflow-y-auto p-6 empty:hidden lg:empty:block" aria-live="polite"><%= render "network/workspaces/result", kind: "email", check:, result: %></div>
+
+      <%= render "network/workspaces/aside", width: "lg:w-[calc(22rem-1px)]", hint: t("network.email.hint"), statuses: %i[healthy attention broken missing] %>
+    </div>
+  </div>
+</div>

@@ -54,6 +54,14 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include('data-controller="tls-protocol variable-autocomplete"', 'data-tls-protocol-target="port"', 'placeholder="443"', I18n.t("network.tls.protocols.smtp"))
     end
 
+    it "renders the email DNS check", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("email")
+
+      expect(response.body).to include(I18n.t("network.email.submit"), network_email_checks_path, I18n.t("network.empty.email.hint"), I18n.t("network.history.email"), I18n.t("network.tabs.email"))
+      expect(response.body).to include('data-controller="variable-autocomplete"', I18n.t("network.statuses.healthy"), I18n.t("network.guide.missing"))
+    end
+
     it "has no page for an unknown tool" do
       sign_in_with_project
 

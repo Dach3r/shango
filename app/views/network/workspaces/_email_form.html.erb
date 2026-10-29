@@ -1,0 +1,10 @@
+<%# Form bar of the email DNS check. Render with `input:` (what was typed before, string keys; empty for a fresh form). DKIM selectors are typed after the domain in the same input. On a saved run the field holds what was typed and submitting runs it again as a new run. %>
+<%= tag.div id: "email_form", class: "shrink-0", data: variable_autocomplete_data do %>
+  <%= network_bar scope: :email_check, url: network_email_checks_path do |form| %>
+    <%= form.label :domain, t("network.email.domain"), class: "sr-only" %>
+    <%= form.text_field :domain, value: input.values_at("domain", "selectors").compact_blank.join(" "), required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.email.domain_placeholder"), class: bar_field_classes("min-w-48 flex-1 font-mono") %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "mail-check", class: "size-4" %><%= t("network.email.submit") %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -29,4 +29,24 @@ RSpec.describe NetworkHelper do
       expect(helper.port_preset_for(nil)).to eq("custom")
     end
   end
+
+  describe "#email_section_status" do
+    def status(section, *findings)
+      helper.email_section_status({ findings: findings.map { |key, tone| { key:, tone:, args: {} } } }, section)
+    end
+
+    it "is healthy without findings of the section, whatever the others have", :aggregate_failures do
+      expect(status("spf")).to eq(:healthy)
+      expect(status("spf", ["dmarc.policy_none", "warn"])).to eq(:healthy)
+    end
+
+    it "takes the worst tone of the findings of the section", :aggregate_failures do
+      expect(status("dmarc", ["dmarc.policy_none", "warn"])).to eq(:attention)
+      expect(status("dmarc", ["dmarc.policy_none", "warn"], ["dmarc.invalid_policy", "bad"])).to eq(:broken)
+    end
+
+    it "is missing when the record is not there" do
+      expect(status("spf", ["spf.missing", "bad"])).to eq(:missing)
+    end
+  end
 end
