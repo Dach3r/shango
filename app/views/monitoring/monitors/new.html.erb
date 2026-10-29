@@ -2,7 +2,30 @@
 <div class="mx-auto flex max-w-3xl flex-col gap-6">
   <header>
     <h1 class="text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.new.title") %></h1>
-    <p class="mt-1 text-sm text-muted"><%= t("monitoring.new.description") %></p>
+    <p class="mt-1 text-sm text-muted"><%= @monitor.kind ? t("monitoring.kind_hints.#{@monitor.kind}") : t("monitoring.new.choose") %></p>
   </header>
-  <%= render "monitoring/monitors/form", monitor: @monitor %>
+  <% if @monitor.kind %>
+    <%= render "monitoring/monitors/form", monitor: @monitor %>
+  <% else %>
+    <ul class="grid gap-3 sm:grid-cols-2">
+      <% UptimeMonitor.kinds.each_key do |kind| %>
+        <li>
+          <% if Monitoring::Checks::Run.kinds.include?(kind) %>
+            <%= link_to new_monitoring_monitor_path(kind:), class: "flex h-full flex-col gap-1 border border-line bg-card p-4 transition hover:border-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+              <span class="flex items-center gap-2 text-sm font-medium text-ink"><%= lucide_icon MonitoringHelper::KIND_ICONS.fetch(kind), class: "size-4 text-muted" %><%= t("monitoring.kinds.#{kind}") %></span>
+              <span class="text-xs text-muted"><%= t("monitoring.kind_hints.#{kind}") %></span>
+            <% end %>
+          <% else %>
+            <div class="flex h-full flex-col gap-1 border border-line bg-card p-4 opacity-60" aria-disabled="true">
+              <span class="flex items-center gap-2 text-sm font-medium text-ink">
+                <%= lucide_icon MonitoringHelper::KIND_ICONS.fetch(kind), class: "size-4 text-muted" %><%= t("monitoring.kinds.#{kind}") %>
+                <span class="border border-line px-1.5 py-0.5 font-mono text-[0.625rem] uppercase text-faint"><%= t("components.nav_item.soon") %></span>
+              </span>
+              <span class="text-xs text-muted"><%= t("monitoring.kind_hints.#{kind}") %></span>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>

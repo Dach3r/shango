@@ -1,0 +1,29 @@
+ja:
+  activerecord:
+    attributes:
+      uptime_monitor:
+        expires_at: "有効期限"
+  monitoring:
+    kind_hints:
+      http: "URL にリクエストし、ステータスと応答時間を確認します。"
+      tcp: "ホストとポートに TCP 接続し、すぐに閉じます。"
+      ssl: "ホストの TLS 証明書を確認します: 信頼済み、名前に対して有効、期限切れが近くないこと。"
+      domain: "RDAP でドメイン登録の有効期限を確認します。"
+      push: "ジョブ、cron、バックアップが秘密の URL を呼ぶのを待ちます。呼び出しが来なければダウンです。"
+    new:
+      choose: "監視する対象を選んでください。"
+    form:
+      host_placeholder: "example.com または {{host}}"
+      host_hint: "ホスト名または IP アドレス。変数は下で選んだ環境から取得されます。シークレット変数は使えません。"
+      ssl_hint: "証明書が信頼されていない、ホストに対して無効、期限切れ、または残り日数がこの値より少ない場合にダウンです。間隔ごとに確認し、すぐの再試行はしません。"
+      tcp_hint: "連続してこの回数接続が拒否または無応答だとダウンです。失敗後は 30 秒後に再確認します。"
+    card:
+      expires: "%{date} に期限切れ"
+    causes:
+      invalid_host: "ホストが有効な名前または IP アドレスではありません"
+      no_certificate: "サーバーが証明書を送信しませんでした"
+      untrusted_certificate: "信頼されていない証明書"
+      hostname_mismatch: "証明書はこのホストに対して無効です"
+      certificate_not_yet_valid: "証明書はまだ有効ではありません"
+      certificate_expired: "証明書の有効期限が切れました"
+      certificate_expiring: "証明書の有効期限が近づいています"

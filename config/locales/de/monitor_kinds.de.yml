@@ -1,0 +1,29 @@
+de:
+  activerecord:
+    attributes:
+      uptime_monitor:
+        expires_at: "Läuft ab"
+  monitoring:
+    kind_hints:
+      http: "Ruft eine URL ab und prüft Status und Antwortzeit."
+      tcp: "Öffnet eine TCP-Verbindung zu Host und Port und schließt sie sofort."
+      ssl: "Prüft das TLS-Zertifikat eines Hosts: vertrauenswürdig, gültig für den Namen und nicht kurz vor dem Ablauf."
+      domain: "Prüft per RDAP, wann die Registrierung einer Domain abläuft."
+      push: "Wartet darauf, dass Ihr Job, Cron oder Backup eine geheime URL aufruft; ausgefallen, wenn der Aufruf ausbleibt."
+    new:
+      choose: "Wählen Sie, was überwacht werden soll."
+    form:
+      host_placeholder: "example.com oder {{host}}"
+      host_hint: "Ein Hostname oder eine IP-Adresse. Variablen kommen aus der unten gewählten Umgebung; geheime Variablen sind nicht erlaubt."
+      ssl_hint: "Ausgefallen, wenn das Zertifikat nicht vertrauenswürdig, für den Host ungültig, abgelaufen ist oder in weniger Tagen abläuft. Geprüft im Intervall, ohne schnelle Wiederholung."
+      tcp_hint: "Ausgefallen nach so vielen abgelehnten oder unbeantworteten Verbindungen in Folge; nach einem Fehler folgt die nächste Prüfung 30 Sekunden später."
+    card:
+      expires: "läuft ab am %{date}"
+    causes:
+      invalid_host: "Der Host ist kein gültiger Name und keine gültige IP-Adresse"
+      no_certificate: "Der Server hat kein Zertifikat gesendet"
+      untrusted_certificate: "Nicht vertrauenswürdiges Zertifikat"
+      hostname_mismatch: "Das Zertifikat gilt nicht für diesen Host"
+      certificate_not_yet_valid: "Das Zertifikat ist noch nicht gültig"
+      certificate_expired: "Das Zertifikat ist abgelaufen"
+      certificate_expiring: "Das Zertifikat läuft bald ab"

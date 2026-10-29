@@ -19,7 +19,7 @@ module Monitoring
     end
 
     def new
-      @monitor = current_project.uptime_monitors.new(kind: "http", environment: current_environment, creator: current_user)
+      @monitor = current_project.uptime_monitors.new(kind: params[:kind].presence_in(Monitoring::Checks::Run.kinds), environment: current_environment, creator: current_user)
       authorize @monitor
     end
 
@@ -28,7 +28,8 @@ module Monitoring
     end
 
     def create
-      @monitor = current_project.uptime_monitors.new(monitor_params.merge(kind: "http", creator: current_user))
+      kind = params.dig(:uptime_monitor, :kind).presence_in(Monitoring::Checks::Run.kinds)
+      @monitor = current_project.uptime_monitors.new(monitor_params.merge(kind:, creator: current_user))
       authorize @monitor
       result = Monitoring::Monitors::Create.call(monitor: @monitor, channels:)
       return redirect_to(monitoring_monitor_path(@monitor), notice: t(".created"), status: :see_other) if result.success?
@@ -53,7 +54,7 @@ module Monitoring
     private
 
     def monitor_params
-      attributes = params.expect(uptime_monitor: [:name, :environment_id, :interval, :timeout, :confirmations, { settings: %i[url http_method expected_statuses max_response_ms] }]).to_h
+      attributes = params.expect(uptime_monitor: [:name, :environment_id, :interval, :timeout, :confirmations, { settings: %i[url http_method expected_statuses max_response_ms host port days_before grace] }]).to_h
       attributes["settings"] = attributes["settings"].merge("mode" => "url") if attributes.key?("settings")
       attributes
     end
@@ -65,7 +66,7 @@ module Monitoring
     end
 
     def filtered(scope)
-      scope = scope.where("name ILIKE :q OR settings->>'url' ILIKE :q", q: "%#{UptimeMonitor.sanitize_sql_like(@query)}%") if @query.present?
+      scope = scope.where("name ILIKE :q OR settings->>'url' ILIKE :q OR settings->>'host' ILIKE :q", q: "%#{UptimeMonitor.sanitize_sql_like(@query)}%") if @query.present?
       case @filter
       when "paused" then scope.where(enabled: false)
       when nil then scope

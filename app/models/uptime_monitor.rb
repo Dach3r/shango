@@ -64,6 +64,7 @@ class UptimeMonitor < ApplicationRecord
 
   store_accessor :settings, :mode, :url, :http_method, :expected_statuses, :max_response_ms, :host, :port, :days_before, :grace
 
+  after_initialize :fill_defaults, if: :new_record?
   before_validation :normalize_settings
   before_save :remember_environment
   before_update :bump_config_version
@@ -114,6 +115,11 @@ class UptimeMonitor < ApplicationRecord
 
   def stamp_status_change(at = Time.current)
     self.last_status_change_at = at
+  end
+
+  # A new form starts with the defaults of its kind (port 443 for SSL, for instance).
+  def fill_defaults
+    self.settings = DEFAULTS.fetch(kind.to_s, {}).merge(settings.to_h.stringify_keys)
   end
 
   def normalize_settings

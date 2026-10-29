@@ -12,6 +12,6 @@ RSpec.describe Monitoring::Checks::Run do
   end
 
   it "is unknown for a kind without a probe" do
-    expect(described_class.call(build(:uptime_monitor, :tcp))).to have_attributes(status: "unknown", error: "unsupported_kind")
+    expect(described_class.call(build(:uptime_monitor, kind: "icmp"))).to have_attributes(status: "unknown", error: "unsupported_kind")
   end
 end

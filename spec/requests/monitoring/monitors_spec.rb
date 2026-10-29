@@ -7,7 +7,7 @@ RSpec.describe "Monitoring monitors" do
   let(:user) { context[0] }
   let(:project) { context[1] }
   let(:membership) { context[2] }
-  let(:params) { { uptime_monitor: { name: "API health", interval: "300", timeout: "10", confirmations: "2", environment_id: "", settings: { url: "https://example.com/health", http_method: "GET", expected_statuses: "200-399", max_response_ms: "" } } } }
+  let(:params) { { uptime_monitor: { kind: "http", name: "API health", interval: "300", timeout: "10", confirmations: "2", environment_id: "", settings: { url: "https://example.com/health", http_method: "GET", expected_statuses: "200-399", max_response_ms: "" } } } }
 
   # Signs in a plain member of the project (another user owns it).
   def sign_in_member
@@ -46,6 +46,19 @@ RSpec.describe "Monitoring monitors" do
       expect(response.body).to include("Shop", "Old site", "https://example.com/health", "<polyline", "200 ms", "100%", edit_monitoring_monitor_path(up))
       expect(response.body).to include(monitoring_monitor_pause_path(paused), I18n.t("monitoring.actions.resume"), I18n.t("monitoring.statuses.paused"))
       expect(response.body).not_to include("Not mine")
+    end
+
+    it "shows the target of each kind and the expiry of a certificate", :aggregate_failures do
+      create(:uptime_monitor, :tcp, project:, settings: { "host" => "db.internal", "port" => 5432 })
+      create(:uptime_monitor, :ssl, project:, expires_at: Time.utc(2027, 1, 15))
+      create(:uptime_monitor, :domain, project:, settings: { "host" => "shop.example" })
+      create(:uptime_monitor, :push, project:)
+      get monitoring_root_path
+
+      expect(response.body).to include("db.internal:5432", "example.com:443 · #{I18n.t("monitoring.card.expires", date: "January 15, 2027")}", "shop.example", I18n.t("monitoring.kinds.push"))
+      get monitoring_root_path(q: "db.internal")
+      expect(response.body).to include("db.internal:5432")
+      expect(response.body).not_to include("shop.example")
     end
 
     it "filters by status and searches by name or URL", :aggregate_failures do
@@ -107,6 +120,14 @@ RSpec.describe "Monitoring monitors" do
       expect(response.body).to include(I18n.t("monitoring.show.ongoing"), I18n.t("monitoring.show.closed_by_pause"), I18n.t("monitoring.show.no_checks"), I18n.t("monitoring.card.no_data"))
     end
 
+    it "shows the target, settings and expiry of an SSL monitor", :aggregate_failures do
+      monitor = create(:uptime_monitor, :ssl, project:, expires_at: Time.utc(2027, 1, 15))
+      get monitoring_monitor_path(monitor)
+
+      expect(response.body).to include("example.com:443", UptimeMonitor.human_attribute_name(:days_before), UptimeMonitor.human_attribute_name(:expires_at), "January 15, 2027")
+      expect(response.body).not_to include(UptimeMonitor.human_attribute_name(:expected_statuses))
+    end
+
     it "shows a monitor without incidents" do
       get monitoring_monitor_path(create(:uptime_monitor, project:))
 
@@ -124,7 +145,7 @@ RSpec.describe "Monitoring monitors" do
     it "offers the form with the member's environment", :aggregate_failures do
       environment = create(:environment, project:)
       membership.update!(current_environment: environment)
-      get new_monitoring_monitor_path
+      get new_monitoring_monitor_path(kind: "http")
 
       expect(response.body).to include(I18n.t("monitoring.new.title"), %(<option selected="selected" value="#{environment.id}">), 'data-controller="variable-autocomplete"')
     end
@@ -137,6 +158,41 @@ RSpec.describe "Monitoring monitors" do
       expect(response).to redirect_to(monitoring_monitor_path(monitor))
       expect(monitor).to have_attributes(name: "API health", kind: "http", creator: user, interval: 300, url: "https://example.com/health", mode: "url", environment_required: false)
       expect(monitor.next_check_at).to be_between(5.minutes.from_now - 5.seconds, 6.minutes.from_now)
+    end
+
+    it "asks for the kind first, offering only the kinds that can run", :aggregate_failures do
+      get new_monitoring_monitor_path
+
+      expect(response.body).to include(I18n.t("monitoring.new.choose"), new_monitoring_monitor_path(kind: "tcp"), new_monitoring_monitor_path(kind: "ssl"), I18n.t("components.nav_item.soon"))
+      expect(response.body).not_to include(new_monitoring_monitor_path(kind: "push"))
+      get new_monitoring_monitor_path(kind: "nope")
+      expect(response.body).to include(I18n.t("monitoring.new.choose"))
+    end
+
+    it "shows the fields of each kind", :aggregate_failures do
+      get new_monitoring_monitor_path(kind: "ssl")
+      expect(response.body).to include('name="uptime_monitor[settings][host]"', 'value="443"', 'name="uptime_monitor[settings][days_before]"', I18n.t("monitoring.form.ssl_hint"), 'name="uptime_monitor[kind]"')
+      expect(response.body).not_to include('name="uptime_monitor[settings][url]"')
+
+      get new_monitoring_monitor_path(kind: "tcp")
+      expect(response.body).to include('name="uptime_monitor[settings][port]"', I18n.t("monitoring.form.tcp_hint"))
+      expect(response.body).not_to include('name="uptime_monitor[settings][days_before]"')
+    end
+
+    it "creates TCP and SSL monitors", :aggregate_failures do
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "tcp", name: "DB", interval: "60", timeout: "5", confirmations: "2", settings: { host: "db.example.com", port: "5432" } } }
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "ssl", name: "Cert", interval: "3600", timeout: "10", confirmations: "1", settings: { host: "example.com", port: "443", days_before: "21" } } }
+
+      expect(project.uptime_monitors.find_by(kind: "tcp")).to have_attributes(host: "db.example.com", port: 5432, settings: { "host" => "db.example.com", "port" => 5432 })
+      expect(project.uptime_monitors.find_by(kind: "ssl")).to have_attributes(host: "example.com", port: 443, days_before: 21)
+    end
+
+    it "does not create a kind that cannot run yet", :aggregate_failures do
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "push", name: "Cron", interval: "3600", timeout: "10", confirmations: "1" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("monitoring.new.choose"))
+      expect(project.uptime_monitors).to be_empty
     end
 
     it "shows what is wrong with invalid input", :aggregate_failures do
@@ -206,11 +262,11 @@ RSpec.describe "Monitoring monitors" do
     let(:mine) { create(:notification_channel, project:, name: "Ops hooks") }
 
     it "offers the project's channels in the form, or the way to create one", :aggregate_failures do
-      get new_monitoring_monitor_path
+      get new_monitoring_monitor_path(kind: "http")
       expect(response.body).to include(I18n.t("monitoring.form.no_channels"), new_monitoring_channel_path)
 
       mine
-      get new_monitoring_monitor_path
+      get new_monitoring_monitor_path(kind: "tcp")
       expect(response.body).to include("Ops hooks", "uptime_monitor_channel_#{mine.id}")
     end
 

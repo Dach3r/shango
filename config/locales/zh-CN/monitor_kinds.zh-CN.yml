@@ -1,0 +1,29 @@
+zh-CN:
+  activerecord:
+    attributes:
+      uptime_monitor:
+        expires_at: "到期"
+  monitoring:
+    kind_hints:
+      http: "请求一个 URL,检查状态码和响应时间。"
+      tcp: "向主机和端口建立 TCP 连接并立即关闭。"
+      ssl: "检查主机的 TLS 证书:受信任、与名称匹配且不会很快过期。"
+      domain: "通过 RDAP 检查域名注册何时到期。"
+      push: "等待你的任务、cron 或备份调用一个秘密 URL;调用未按时到达即为宕机。"
+    new:
+      choose: "选择要监控的内容。"
+    form:
+      host_placeholder: "example.com 或 {{host}}"
+      host_hint: "主机名或 IP 地址。变量来自下方选择的环境;不能使用秘密变量。"
+      ssl_hint: "当证书不受信任、与主机不匹配、已过期或剩余天数少于此值时为宕机。按间隔检查,不做快速重试。"
+      tcp_hint: "连续这么多次连接被拒绝或无应答后为宕机;失败后 30 秒再次检查。"
+    card:
+      expires: "%{date} 到期"
+    causes:
+      invalid_host: "主机不是有效的名称或 IP 地址"
+      no_certificate: "服务器未发送证书"
+      untrusted_certificate: "证书不受信任"
+      hostname_mismatch: "证书对此主机无效"
+      certificate_not_yet_valid: "证书尚未生效"
+      certificate_expired: "证书已过期"
+      certificate_expiring: "证书即将过期"

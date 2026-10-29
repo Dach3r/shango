@@ -28,4 +28,23 @@ RSpec.describe MonitoringHelper do
     expect(helper.channel_delivery_error(build(:notification_delivery, error: "rate_limited"))).to eq(I18n.t("monitoring.delivery_errors.rate_limited"))
     expect(helper.channel_delivery_error(build(:notification_delivery, error: "unexpected_status", detail: "404"))).to eq("#{I18n.t("monitoring.delivery_errors.unexpected_status")} (404)")
   end
+
+  it "describes the target of each kind and an expiry", :aggregate_failures do
+    expect(helper.monitor_target(create(:uptime_monitor))).to eq("GET https://example.com/health")
+    expect(helper.monitor_target(build(:uptime_monitor, :tcp))).to eq("example.com:5432")
+    expect(helper.monitor_target(build(:uptime_monitor, :domain))).to eq("example.com")
+    expect(helper.monitor_target(build(:uptime_monitor, :push))).to eq(I18n.t("monitoring.kinds.push"))
+    expect(helper.monitor_expiry(build(:uptime_monitor, :ssl))).to be_nil
+    expect(helper.monitor_expiry(build(:uptime_monitor, :ssl, expires_at: Time.utc(2027, 1, 15)))).to eq(I18n.t("monitoring.card.expires", date: "January 15, 2027"))
+  end
+
+  it "lists the settings of a monitor's kind", :aggregate_failures do
+    http = helper.monitor_settings(create(:uptime_monitor)).to_h
+    ssl = helper.monitor_settings(create(:uptime_monitor, :ssl)).to_h
+
+    expect(http).to include(UptimeMonitor.human_attribute_name(:expected_statuses) => "200-399", UptimeMonitor.human_attribute_name(:environment) => "—")
+    expect(ssl).to include(UptimeMonitor.human_attribute_name(:days_before) => 14, UptimeMonitor.human_attribute_name(:expires_at) => "—")
+    expect(ssl).not_to have_key(UptimeMonitor.human_attribute_name(:expected_statuses))
+    expect(helper.monitor_settings(create(:uptime_monitor, :tcp)).to_h.keys).not_to include(UptimeMonitor.human_attribute_name(:days_before))
+  end
 end

@@ -41,7 +41,7 @@ fr:
         down: "Hors ligne"
         pending: "En attente"
         paused: "En pause"
-      search: "Rechercher par nom ou URL"
+      search: "Rechercher par nom, URL ou hôte"
       empty:
         title: "Aucun moniteur pour l’instant"
         filtered: "Aucun moniteur ne correspond à ce filtre."

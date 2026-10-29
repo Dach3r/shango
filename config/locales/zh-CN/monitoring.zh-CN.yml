@@ -41,7 +41,7 @@ zh-CN:
         down: "宕机"
         pending: "待检查"
         paused: "已暂停"
-      search: "按名称或 URL 搜索"
+      search: "按名称、URL 或主机搜索"
       empty:
         title: "还没有监控"
         filtered: "没有符合此筛选的监控。"

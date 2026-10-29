@@ -1,0 +1,29 @@
+pt-BR:
+  activerecord:
+    attributes:
+      uptime_monitor:
+        expires_at: "Expira"
+  monitoring:
+    kind_hints:
+      http: "Requisita uma URL e verifica o status e o tempo de resposta."
+      tcp: "Abre uma conexão TCP com um host e porta e a fecha em seguida."
+      ssl: "Verifica o certificado TLS de um host: confiável, válido para o nome e sem expirar em breve."
+      domain: "Verifica quando o registro de um domínio expira, via RDAP."
+      push: "Espera seu job, cron ou backup chamar uma URL secreta; fica fora do ar quando a chamada não chega."
+    new:
+      choose: "Escolha o que monitorar."
+    form:
+      host_placeholder: "example.com ou {{host}}"
+      host_hint: "Um nome de host ou endereço IP. As variáveis vêm do ambiente escolhido abaixo; variáveis secretas não podem ser usadas."
+      ssl_hint: "Fica fora do ar quando o certificado não é confiável, não vale para o host, expirou ou expira em menos dias que este número. Verificado no seu intervalo, sem a nova tentativa rápida."
+      tcp_hint: "Fica fora do ar após esse número de conexões recusadas ou sem resposta seguidas; após uma falha a próxima verificação ocorre 30 segundos depois."
+    card:
+      expires: "expira em %{date}"
+    causes:
+      invalid_host: "O host não é um nome nem um IP válido"
+      no_certificate: "O servidor não enviou certificado"
+      untrusted_certificate: "Certificado não confiável"
+      hostname_mismatch: "O certificado não é válido para este host"
+      certificate_not_yet_valid: "O certificado ainda não é válido"
+      certificate_expired: "O certificado expirou"
+      certificate_expiring: "O certificado expira em breve"

@@ -1,0 +1,29 @@
+en:
+  activerecord:
+    attributes:
+      uptime_monitor:
+        expires_at: "Expires"
+  monitoring:
+    kind_hints:
+      http: "Requests a URL and checks the status and response time."
+      tcp: "Opens a TCP connection to a host and port, and closes it right away."
+      ssl: "Checks the TLS certificate of a host: trusted, valid for the name and not about to expire."
+      domain: "Checks when a domain's registration expires, through RDAP."
+      push: "Waits for your job, cron or backup to call a secret URL; down when the call does not come."
+    new:
+      choose: "Choose what to monitor."
+    form:
+      host_placeholder: "example.com or {{host}}"
+      host_hint: "A host name or IP address. Variables come from the environment chosen below; secret variables cannot be used."
+      ssl_hint: "Down when the certificate is not trusted, not valid for the host, expired, or expires in fewer days than this. Checked on its interval, without the quick retry."
+      tcp_hint: "Down after this many refused or unanswered connections in a row; after a failure the next check runs 30 seconds later."
+    card:
+      expires: "expires %{date}"
+    causes:
+      invalid_host: "The host is not a valid name or IP address"
+      no_certificate: "The server sent no certificate"
+      untrusted_certificate: "Untrusted certificate"
+      hostname_mismatch: "The certificate is not valid for this host"
+      certificate_not_yet_valid: "The certificate is not valid yet"
+      certificate_expired: "The certificate expired"
+      certificate_expiring: "The certificate expires soon"

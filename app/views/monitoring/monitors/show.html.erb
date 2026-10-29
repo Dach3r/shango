@@ -14,7 +14,7 @@
         <h1 class="truncate text-lg font-semibold tracking-tight text-ink"><%= @monitor.name %></h1>
         <%= render MonitorStatus::Component.for(@monitor) %>
       </div>
-      <p class="mt-1 font-mono text-sm break-all text-muted"><%= @monitor.http_method %> <%= @monitor.url %></p>
+      <p class="mt-1 font-mono text-sm break-all text-muted"><%= monitor_target(@monitor) %></p>
     </div>
     <% if policy(@monitor).update? %>
       <%= render "monitoring/monitors/actions", monitor: @monitor, compact: false %>
@@ -72,11 +72,9 @@
     <section class="border border-line bg-card">
       <h2 class="<%= heading %>"><%= t("monitoring.show.settings") %></h2>
       <dl class="text-sm">
-        <% { interval: monitor_interval_label(@monitor.interval), timeout: t("monitoring.units.seconds", value: @monitor.timeout), confirmations: @monitor.confirmations,
-             expected_statuses: @monitor.expected_statuses, max_response_ms: monitor_ms(@monitor.max_response_ms), environment: @monitor.environment&.name || "—",
-             notification_channels: @monitor.notification_channels.map(&:name).sort.join(", ").presence || "—" }.each do |field, value| %>
+        <% monitor_settings(@monitor).each do |field, value| %>
           <div class="flex items-baseline justify-between gap-4 border-b border-line px-5 py-2.5 last:border-b-0">
-            <dt class="text-muted"><%= UptimeMonitor.human_attribute_name(field) %></dt>
+            <dt class="text-muted"><%= field %></dt>
             <dd class="font-mono text-ink"><%= value %></dd>
           </div>
         <% end %>

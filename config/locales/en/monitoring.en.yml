@@ -41,7 +41,7 @@ en:
         down: "Down"
         pending: "Pending"
         paused: "Paused"
-      search: "Search by name or URL"
+      search: "Search by name, URL or host"
       empty:
         title: "No monitors yet"
         filtered: "No monitor matches this filter."

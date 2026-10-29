@@ -120,4 +120,13 @@ RSpec.describe Monitoring::Checks::Apply do
     expect { apply(up) }.not_to have_enqueued_job(NotificationDeliveryJob)
     expect(stray.reload.resolution).to eq("recovered")
   end
+
+  it "keeps when what it checks expires, from any result that knows it", :aggregate_failures do
+    expires_at = Time.utc(2027, 1, 1)
+    apply(Monitoring::Checks::Outcome.up(expires_at:))
+
+    expect(monitor.reload.expires_at).to eq(expires_at)
+    apply(up, at: at + 1.minute)
+    expect(monitor.reload.expires_at).to eq(expires_at)
+  end
 end

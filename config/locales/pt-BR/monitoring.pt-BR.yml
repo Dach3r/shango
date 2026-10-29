@@ -41,7 +41,7 @@ pt-BR:
         down: "Fora do ar"
         pending: "Pendentes"
         paused: "Pausados"
-      search: "Buscar por nome ou URL"
+      search: "Buscar por nome, URL ou host"
       empty:
         title: "Nenhum monitor ainda"
         filtered: "Nenhum monitor corresponde a este filtro."

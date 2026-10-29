@@ -41,7 +41,7 @@ ja:
         down: "ダウン"
         pending: "保留中"
         paused: "一時停止"
-      search: "名前または URL で検索"
+      search: "名前、URL、ホストで検索"
       empty:
         title: "まだモニターがありません"
         filtered: "この条件に一致するモニターはありません。"

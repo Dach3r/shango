@@ -23,6 +23,31 @@ module MonitoringHelper
     detail.present? ? "#{text} (#{detail})" : text
   end
 
+  KIND_ICONS = { "http" => "globe", "tcp" => "plug", "ssl" => "shield-check", "domain" => "earth", "push" => "radio" }.freeze
+
+  # What a monitor checks, in one line.
+  def monitor_target(monitor)
+    case monitor.kind
+    when "http" then "#{monitor.http_method} #{monitor.url}"
+    when "tcp", "ssl" then "#{monitor.host}:#{monitor.port}"
+    when "domain" then monitor.host
+    else t("monitoring.kinds.#{monitor.kind}")
+    end
+  end
+
+  def monitor_expiry(monitor)
+    t("monitoring.card.expires", date: l(monitor.expires_at.to_date, format: :long)) if monitor.expires_at
+  end
+
+  # The settings of a monitor's kind, as [label, value] pairs for its page.
+  def monitor_settings(monitor)
+    fields = { interval: monitor_interval_label(monitor.interval), timeout: t("monitoring.units.seconds", value: monitor.timeout), confirmations: monitor.confirmations }
+    fields.merge!(expected_statuses: monitor.expected_statuses, max_response_ms: monitor_ms(monitor.max_response_ms)) if monitor.http?
+    fields.merge!(days_before: monitor.days_before, expires_at: monitor.expires_at ? l(monitor.expires_at, format: :long) : "—") if monitor.ssl?
+    fields.merge!(environment: monitor.environment&.name || "—", notification_channels: monitor.notification_channels.map(&:name).sort.join(", ").presence || "—")
+    fields.map { |field, value| [UptimeMonitor.human_attribute_name(field), value] }
+  end
+
   CHANNEL_ICONS = { "email" => "mail", "webhook" => "webhook", "slack" => "slack", "discord" => "message-circle" }.freeze
 
   def channel_icon(channel)

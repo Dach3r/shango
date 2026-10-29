@@ -1,0 +1,29 @@
+es:
+  activerecord:
+    attributes:
+      uptime_monitor:
+        expires_at: "Vence"
+  monitoring:
+    kind_hints:
+      http: "Pide una URL y revisa el estado y el tiempo de respuesta."
+      tcp: "Abre una conexión TCP a un host y puerto, y la cierra enseguida."
+      ssl: "Revisa el certificado TLS de un host: de confianza, válido para el nombre y sin estar por vencer."
+      domain: "Revisa cuándo vence el registro de un dominio, mediante RDAP."
+      push: "Espera a que tu job, cron o backup llame a una URL secreta; se marca caído cuando la llamada no llega."
+    new:
+      choose: "Elige qué monitorear."
+    form:
+      host_placeholder: "example.com o {{host}}"
+      host_hint: "Un nombre de host o una dirección IP. Las variables vienen del entorno elegido abajo; no se pueden usar variables secretas."
+      ssl_hint: "Se marca caído cuando el certificado no es de confianza, no es válido para el host, está vencido o le quedan menos días que este número. Se revisa en su intervalo, sin el reintento rápido."
+      tcp_hint: "Se marca caído tras esta cantidad de conexiones rechazadas o sin respuesta seguidas; después de un fallo el siguiente chequeo corre 30 segundos más tarde."
+    card:
+      expires: "vence %{date}"
+    causes:
+      invalid_host: "El host no es un nombre ni una IP válidos"
+      no_certificate: "El servidor no envió certificado"
+      untrusted_certificate: "Certificado no confiable"
+      hostname_mismatch: "El certificado no es válido para este host"
+      certificate_not_yet_valid: "El certificado todavía no es válido"
+      certificate_expired: "El certificado venció"
+      certificate_expiring: "El certificado vence pronto"

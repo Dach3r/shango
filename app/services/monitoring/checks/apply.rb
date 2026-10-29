@@ -37,6 +37,7 @@ module Monitoring
           record(monitor)
           transition, retry_soon = change_state(monitor) unless @outcome.status == "unknown"
           monitor.last_checked_at = @at
+          monitor.expires_at = @outcome.expires_at if @outcome.expires_at
           monitor.save!
           Result.success(monitor, transition:, retry: retry_soon || false)
         end

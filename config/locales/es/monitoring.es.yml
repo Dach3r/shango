@@ -41,7 +41,7 @@ es:
         down: "Caídos"
         pending: "Pendientes"
         paused: "Pausados"
-      search: "Buscar por nombre o URL"
+      search: "Buscar por nombre, URL o host"
       empty:
         title: "Aún no hay monitores"
         filtered: "Ningún monitor coincide con este filtro."
