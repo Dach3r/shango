@@ -14,6 +14,7 @@ ja:
       subnet: "サブネット計算"
       tls: "TLS 証明書"
       email: "メールDNS"
+      lookup: "照会"
     errors:
       blank: ドメインまたはホストを入力してください。
       invalid: "ホスト名またはIPアドレスが正しくありません。スキーム、パス、ポートを含めず、名前のみを入力してください。"
@@ -42,6 +43,10 @@ ja:
       domain_not_found: "このドメインは存在しません。"
       invalid_selector: "\"%{token}\" は有効なDKIMセレクターではありません。英数字、ハイフン、アンダースコア、ドットを使ってください。"
       too_many_selectors: "一度に確認できるDKIMセレクターは最大%{max}個です。"
+      not_registered: "このドメインは登録されていません。"
+      no_rdap_service: "このトップレベルドメインまたはアドレス範囲にはRDAPサービスが公開されていません。"
+      rdap_unavailable: "登録データサービスが正しく応答しませんでした。後でもう一度お試しください。"
+      private_address: "プライベート、ループバック、予約済みのアドレスには公開の登録データがありません。"
     statuses:
       ok: 応答あり
       cname: エイリアス
@@ -73,6 +78,8 @@ ja:
       attention: "要確認"
       broken: "破損"
       missing: "なし"
+      signed: "署名済み"
+      unsigned: "未署名"
     dns:
       domain: ドメイン
       hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。 PTR では IP アドレスを入力してください。各名前が同じ IP に正引きされるかも確認します。"
@@ -289,6 +296,52 @@ ja:
           cname: "エイリアス"
           unresolved: "アドレスなし"
           unavailable: "応答なし"
+    lookup:
+      host: "ドメインまたはIPアドレス"
+      host_placeholder: "example.com または 203.0.113.9"
+      submit: "照会する"
+      hint: "公開されている登録データ(RDAP)とルーティングテーブルから、ドメインやIPアドレスの背後にいるのが誰かを表示します。ドメインではレジストラ、日付、ステータス、ネームサーバー、DNSSEC、IPアドレスではネットワーク、保有組織、abuse連絡先、自律システム(ASN)が対象です。読み取るのはレジストラ、組織、abuse連絡先のみで、個人情報は扱いません。対象自体には接続しません。"
+      summary:
+        domain: "%{date}に期限切れ予定 · %{registrar}"
+        expired: "%{date}に期限切れ · %{registrar}"
+        no_expiry: "%{registrar}に登録"
+        ip: "%{asn} · %{name}"
+        ip_no_asn: "%{name}"
+      findings_title: "検出事項"
+      no_findings: "問題は見つかりませんでした。"
+      findings:
+        expired: "ドメインは%{date}に期限切れになりました。"
+        expiring: "ドメインは%{date}に期限切れになります。早めに更新してください。"
+        hold: "レジストリまたはレジストラがドメインを保留(hold)にしているため、名前解決されません。"
+        pending_delete: "ドメインは償還期間または削除保留期間にあり、更新しなければ解放されます。"
+        rdap_failed: "登録データサービスが応答しなかったため、ネットワークの詳細がありません。"
+        not_announced: "このアドレスを広告している自律システムがないため、インターネット上でルーティングされていない可能性があります。"
+        asn_unavailable: "ルーティングデータを読み取れなかったため、自律システムがありません。"
+      domain_title: "ドメイン"
+      network_title: "ネットワーク"
+      asn_title: "自律システム"
+      nameservers_title: "ネームサーバー(%{count})"
+      registered_domain: "%{name}の登録データです。入力した名前の登録ドメインです。"
+      fields:
+        days_left: "残り日数"
+        dnssec: "DNSSEC"
+        nameservers: "ネームサーバー"
+        asn: "ASN"
+        country: "国"
+        prefix: "広告されているプレフィックス"
+        registrar: "レジストラ"
+        iana_id: "IANAレジストラID"
+        registered: "登録日"
+        expires: "有効期限"
+        updated: "最終更新"
+        abuse: "abuse連絡先"
+        statuses: "ステータス"
+        name: "名前"
+        handle: "ハンドル"
+        type: "種別"
+        range: "範囲"
+        cidr: "プレフィックス"
+        organization: "組織"
     empty:
       dns:
         title: "表示する内容はまだありません"
@@ -308,6 +361,9 @@ ja:
       email:
         title: "まだ表示するものがありません"
         hint: "ドメインを入力して、SPF、DKIM、DMARC、MXレコードを確認します。"
+      lookup:
+        title: "まだ表示するものがありません"
+        hint: "ドメインまたはIPアドレスを入力すると、その背後にいるのが誰かを確認できます。"
     history:
       dns: "DNS チェック"
       ports: "ポートチェック"
@@ -322,6 +378,7 @@ ja:
       previous: "前回の実行（%{time}前）: %{detail}"
       tls: "TLS 証明書"
       email: "メールチェック"
+      lookup: "照会"
     guide:
       title: "結果の見方"
       ok: "サーバーがレコードを返しました。"
@@ -344,6 +401,8 @@ ja:
       attention: "動作していますが、修正すべき点があります。"
       broken: "配信を妨げる、またはドメインを無防備にする問題です。"
       missing: "レコードが見つかりません。"
+      signed: "ゾーンは署名されており、リゾルバーが応答を検証できます。"
+      unsigned: "ゾーンはDNSSECで署名されていません。"
     limits:
       about: "概要"
     results:

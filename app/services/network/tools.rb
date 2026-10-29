@@ -6,6 +6,7 @@ module Network
 
     ALL = [
       Tool.new(name: "dns", icon: "search", group: "dns"),
+      Tool.new(name: "lookup", icon: "globe", group: "dns"),
       Tool.new(name: "ports", icon: "radar", group: "connectivity"),
       Tool.new(name: "ping", icon: "activity", group: "connectivity"),
       Tool.new(name: "tls", icon: "shield-check", group: "security"),

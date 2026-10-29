@@ -14,6 +14,7 @@ es:
       subnet: "Calculadora de subredes"
       tls: "Certificado TLS"
       email: "DNS de correo"
+      lookup: "Consulta"
     errors:
       blank: Ingresa un dominio o host.
       invalid: "No es un nombre de host ni una dirección IP válidos. Usa solo el nombre, sin esquema, ruta ni puerto."
@@ -42,6 +43,10 @@ es:
       domain_not_found: "Este dominio no existe."
       invalid_selector: "\"%{token}\" no es un selector DKIM válido. Usa letras, números, guiones, guiones bajos y puntos."
       too_many_selectors: "Revisa como máximo %{max} selectores DKIM a la vez."
+      not_registered: "Este dominio no está registrado."
+      no_rdap_service: "No hay servicio RDAP publicado para este dominio de primer nivel ni para este rango de direcciones."
+      rdap_unavailable: "El servicio de datos de registro no respondió bien. Inténtalo de nuevo más tarde."
+      private_address: "Las direcciones privadas, de loopback y reservadas no tienen datos de registro públicos."
     statuses:
       ok: Respondió
       cname: Alias
@@ -73,6 +78,8 @@ es:
       attention: "Requiere atención"
       broken: "Roto"
       missing: "Falta"
+      signed: "Firmada"
+      unsigned: "Sin firmar"
     dns:
       domain: Dominio
       hint: "Las respuestas DNS vienen de los nameservers autoritativos y de varios resolvers públicos, para saber si un cambio ya se propagó. Para PTR, escribe una dirección IP: la comprobación también confirma que cada nombre resuelve de vuelta a ella."
@@ -289,6 +296,52 @@ es:
           cname: "Alias"
           unresolved: "Sin dirección"
           unavailable: "Sin respuesta"
+    lookup:
+      host: "Dominio o dirección IP"
+      host_placeholder: "example.com o 203.0.113.9"
+      submit: "Consultar"
+      hint: "Muestra quién está detrás de un dominio o una dirección IP con datos de registro públicos (RDAP) y la tabla de rutas: registrador, fechas, estado, servidores de nombres y DNSSEC para un dominio; la red, la organización que la tiene, su contacto de abuso y el sistema autónomo (ASN) para una IP. Solo se leen registradores, organizaciones y contactos de abuso: ningún dato personal. El destino nunca se contacta."
+      summary:
+        domain: "Vence el %{date} · %{registrar}"
+        expired: "Venció el %{date} · %{registrar}"
+        no_expiry: "Registrado en %{registrar}"
+        ip: "%{asn} · %{name}"
+        ip_no_asn: "%{name}"
+      findings_title: "Hallazgos"
+      no_findings: "No se encontraron problemas."
+      findings:
+        expired: "El dominio venció el %{date}."
+        expiring: "El dominio vence el %{date}. Renuévalo pronto."
+        hold: "El registro o el registrador puso el dominio en espera, así que no resuelve."
+        pending_delete: "El dominio está en su periodo de redención o de eliminación pendiente y se liberará si no se renueva."
+        rdap_failed: "El servicio de datos de registro no respondió, así que faltan los detalles de la red."
+        not_announced: "Ningún sistema autónomo anuncia esta dirección, así que probablemente no está enrutada en internet."
+        asn_unavailable: "No se pudieron leer los datos de enrutamiento, así que falta el sistema autónomo."
+      domain_title: "Dominio"
+      network_title: "Red"
+      asn_title: "Sistema autónomo"
+      nameservers_title: "Servidores de nombres (%{count})"
+      registered_domain: "Datos de registro de %{name}, el dominio registrado del nombre que escribiste."
+      fields:
+        days_left: "Días restantes"
+        dnssec: "DNSSEC"
+        nameservers: "Servidores de nombres"
+        asn: "ASN"
+        country: "País"
+        prefix: "Prefijo anunciado"
+        registrar: "Registrador"
+        iana_id: "ID de registrador IANA"
+        registered: "Registrado"
+        expires: "Vence"
+        updated: "Último cambio"
+        abuse: "Contacto de abuso"
+        statuses: "Estado"
+        name: "Nombre"
+        handle: "Handle"
+        type: "Tipo"
+        range: "Rango"
+        cidr: "Prefijos"
+        organization: "Organización"
     empty:
       dns:
         title: "Aún no hay nada que mostrar"
@@ -308,6 +361,9 @@ es:
       email:
         title: "Aún no hay nada que mostrar"
         hint: "Ingresa un dominio para revisar sus registros SPF, DKIM, DMARC y MX."
+      lookup:
+        title: "Aún no hay nada que mostrar"
+        hint: "Ingresa un dominio o una dirección IP para ver quién está detrás."
     history:
       dns: "Comprobaciones DNS"
       ports: "Comprobaciones de puertos"
@@ -322,6 +378,7 @@ es:
       previous: "Ejecución anterior, hace %{time}: %{detail}"
       tls: "Certificados TLS"
       email: "Chequeos de correo"
+      lookup: "Consultas"
     guide:
       title: "Cómo leer los resultados"
       ok: "El servidor respondió con registros."
@@ -344,6 +401,8 @@ es:
       attention: "Funciona, pero hay algo que corregir."
       broken: "Un problema que rompe la entrega o deja el dominio sin protección."
       missing: "No se encontró ningún registro."
+      signed: "La zona está firmada: los resolvedores pueden verificar sus respuestas."
+      unsigned: "La zona no está firmada con DNSSEC."
     limits:
       about: "Acerca de"
     results:

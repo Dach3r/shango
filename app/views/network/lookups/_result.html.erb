@@ -1,0 +1,162 @@
+<%# Outcome of a lookup. Render with `result:` (a Result from Network::Lookups::Run). %>
+<% if result.failure? %>
+  <%= render "network/shared/error", result: result %>
+<% else %>
+  <% data = result.data %>
+  <% domain = data[:domain] %>
+  <% network = data[:network] %>
+  <% dots = { "ok" => "bg-emerald-500", "warn" => "bg-amber-500", "bad" => "bg-danger" } %>
+  <% heading = "border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint" %>
+  <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
+  <% cell = "flex min-w-0 flex-col gap-1 border-r border-b border-line px-5 py-3" %>
+  <%= render "network/checks/previous", check: local_assigns[:check] %>
+
+  <div class="border border-line bg-card">
+    <% if domain %>
+      <div class="grid grid-cols-2 sm:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div class="col-span-2 flex min-w-0 flex-col gap-2 border-b border-line px-5 py-4 sm:col-span-1 sm:border-r sm:border-b-0">
+          <p class="<%= label %>"><%= t("network.results.target") %></p>
+          <p class="truncate font-mono text-sm text-ink"><%= domain[:name] %></p>
+          <p class="truncate font-mono text-xs text-faint"><%= domain.dig(:registrar, :name) || "—" %></p>
+        </div>
+        <div class="flex flex-col gap-2 border-r border-line px-5 py-4">
+          <p class="<%= label %>"><%= t("network.lookup.fields.days_left") %></p>
+          <% if domain[:days_left] %>
+            <p class="text-3xl leading-none font-medium text-ink"><%= [domain[:days_left], 0].max %></p>
+            <%= render NetworkStatus::Component.new(status: lookup_expiry_status(domain[:days_left])) %>
+          <% else %>
+            <p class="font-mono text-sm text-muted">—</p>
+          <% end %>
+        </div>
+        <div class="flex flex-col gap-2 border-line px-5 py-4 sm:border-r">
+          <p class="<%= label %>"><%= t("network.lookup.fields.dnssec") %></p>
+          <% if domain[:dnssec].nil? %>
+            <p class="font-mono text-sm text-muted">—</p>
+          <% else %>
+            <%= render NetworkStatus::Component.new(status: domain[:dnssec] ? :signed : :unsigned) %>
+          <% end %>
+        </div>
+        <div class="col-span-2 flex min-w-0 flex-col gap-2 border-t border-line px-5 py-4 sm:col-span-1 sm:border-t-0">
+          <p class="<%= label %>"><%= t("network.lookup.fields.nameservers") %></p>
+          <p class="text-3xl leading-none font-medium text-ink"><%= domain[:nameservers].size %></p>
+        </div>
+      </div>
+    <% else %>
+      <% asn = data[:asn].first %>
+      <div class="grid grid-cols-2 sm:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div class="col-span-2 flex min-w-0 flex-col gap-2 border-b border-line px-5 py-4 sm:col-span-1 sm:border-r sm:border-b-0">
+          <p class="<%= label %>"><%= t("network.results.target") %></p>
+          <p class="truncate font-mono text-sm text-ink"><%= data[:host] %></p>
+          <p class="truncate font-mono text-xs text-faint"><%= network&.dig(:organization) || network&.dig(:name) || "—" %></p>
+        </div>
+        <div class="flex min-w-0 flex-col gap-2 border-r border-line px-5 py-4">
+          <p class="<%= label %>"><%= t("network.lookup.fields.asn") %></p>
+          <p class="truncate font-mono text-sm text-ink"><%= asn ? "AS#{asn[:number]}" : "—" %></p>
+          <p class="truncate text-xs text-faint"><%= asn&.dig(:name) %></p>
+        </div>
+        <div class="flex min-w-0 flex-col gap-2 border-line px-5 py-4 sm:border-r">
+          <p class="<%= label %>"><%= t("network.lookup.fields.country") %></p>
+          <p class="font-mono text-sm text-ink"><%= network&.dig(:country) || asn&.dig(:country) || "—" %></p>
+        </div>
+        <div class="col-span-2 flex min-w-0 flex-col gap-2 border-t border-line px-5 py-4 sm:col-span-1 sm:border-t-0">
+          <p class="<%= label %>"><%= t("network.lookup.fields.prefix") %></p>
+          <p class="truncate font-mono text-sm text-ink"><%= asn&.dig(:prefix) || network&.dig(:cidrs)&.first || "—" %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.lookup.findings_title") %></h3>
+      <% if data[:findings].empty? %>
+        <p class="flex items-center gap-2.5 px-5 py-3 text-sm text-muted"><span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-emerald-500"></span><%= t("network.lookup.no_findings") %></p>
+      <% else %>
+        <ul class="text-sm">
+          <% data[:findings].each do |finding| %>
+            <li class="flex items-baseline gap-2.5 border-b border-line px-5 py-3 text-body last:border-b-0">
+              <span aria-hidden="true" class="size-1.5 shrink-0 -translate-y-0.5 rounded-full <%= dots.fetch(finding[:tone]) %>"></span>
+              <%= t("network.lookup.findings.#{finding[:key]}", **finding[:args]) %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </section>
+
+    <% if domain %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.lookup.domain_title") %></h3>
+        <% if domain[:queried] != data[:host] %>
+          <p class="border-b border-line px-5 py-3 text-sm text-muted"><%= t("network.lookup.registered_domain", name: domain[:queried]) %></p>
+        <% end %>
+        <div class="overflow-hidden">
+          <dl class="-mr-px -mb-px grid sm:grid-cols-2">
+            <% { registrar: domain.dig(:registrar, :name), iana_id: domain.dig(:registrar, :iana_id), registered: domain[:registered]&.first(10), expires: domain[:expires]&.first(10),
+                 updated: domain[:updated]&.first(10), abuse: domain[:abuse]&.values&.compact&.join(" · ") }.each do |field, value| %>
+              <div class="<%= cell %>">
+                <dt class="<%= label %>"><%= t("network.lookup.fields.#{field}") %></dt>
+                <dd class="font-mono text-sm break-all text-ink"><%= value.presence || "—" %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </section>
+
+      <% if domain[:statuses].any? %>
+        <section class="border-t border-line">
+          <h3 class="<%= heading %>"><%= t("network.lookup.fields.statuses") %></h3>
+          <ul class="flex flex-wrap gap-2 px-5 py-3">
+            <% domain[:statuses].each do |status| %>
+              <li class="border border-line px-2 py-0.5 font-mono text-xs text-body"><%= status %></li>
+            <% end %>
+          </ul>
+        </section>
+      <% end %>
+
+      <% if domain[:nameservers].any? %>
+        <section class="border-t border-line">
+          <h3 class="<%= heading %>"><%= t("network.lookup.nameservers_title", count: domain[:nameservers].size) %></h3>
+          <div class="overflow-hidden">
+            <ul class="-mr-px -mb-px grid sm:grid-cols-2">
+              <% domain[:nameservers].each do |server| %>
+                <li class="truncate border-r border-b border-line px-5 py-2 font-mono text-sm text-body" title="<%= server %>"><%= server %></li>
+              <% end %>
+            </ul>
+          </div>
+        </section>
+      <% end %>
+    <% end %>
+
+    <% if network %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.lookup.network_title") %></h3>
+        <div class="overflow-hidden">
+          <dl class="-mr-px -mb-px grid sm:grid-cols-2">
+            <% { name: network[:name], handle: network[:handle], type: network[:type], country: network[:country], range: network[:range], cidr: network[:cidrs].join(", "),
+                 organization: network[:organization], abuse: network[:abuse]&.values&.compact&.join(" · "), updated: network[:updated]&.first(10) }.each do |field, value| %>
+              <div class="<%= cell %>">
+                <dt class="<%= label %>"><%= t("network.lookup.fields.#{field}") %></dt>
+                <dd class="font-mono text-sm break-all text-ink"><%= value.presence || "—" %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </section>
+    <% end %>
+
+    <% if data[:asn].any? %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.lookup.asn_title") %></h3>
+        <ul class="text-sm">
+          <% data[:asn].each do |origin| %>
+            <li class="flex items-start gap-4 border-b border-line px-5 py-3 last:border-b-0">
+              <span class="w-24 shrink-0 font-mono text-ink">AS<%= origin[:number] %></span>
+              <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span class="truncate text-ink"><%= origin[:name] || "—" %></span>
+                <span class="truncate font-mono text-xs text-muted"><%= [origin[:prefix], origin[:country], origin[:registry], origin[:allocated]].compact.join(" · ") %></span>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+  </div>
+<% end %>

@@ -62,6 +62,14 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include('data-controller="variable-autocomplete"', I18n.t("network.statuses.healthy"), I18n.t("network.guide.missing"))
     end
 
+    it "renders the lookup tool", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("lookup")
+
+      expect(response.body).to include(I18n.t("network.lookup.submit"), network_lookups_path, I18n.t("network.empty.lookup.hint"), I18n.t("network.history.lookup"), I18n.t("network.tabs.lookup"))
+      expect(response.body).to include('data-controller="variable-autocomplete"', I18n.t("network.statuses.signed"), I18n.t("network.guide.unsigned"))
+    end
+
     it "has no page for an unknown tool" do
       sign_in_with_project
 

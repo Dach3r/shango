@@ -14,6 +14,7 @@ fr:
       subnet: "Calculateur de sous-réseaux"
       tls: "Certificat TLS"
       email: "DNS e-mail"
+      lookup: "Recherche"
     errors:
       blank: "Saisissez un domaine ou un hôte."
       invalid: "Ce n'est pas un nom d'hôte ni une adresse IP valide. Utilisez uniquement le nom, sans schéma, chemin ni port."
@@ -42,6 +43,10 @@ fr:
       domain_not_found: "Ce domaine n'existe pas."
       invalid_selector: "\"%{token}\" n'est pas un sélecteur DKIM valide. Utilisez des lettres, chiffres, tirets, tirets bas et points."
       too_many_selectors: "Vérifiez au plus %{max} sélecteurs DKIM à la fois."
+      not_registered: "Ce domaine n'est pas enregistré."
+      no_rdap_service: "Aucun service RDAP n'est publié pour ce domaine de premier niveau ou cette plage d'adresses."
+      rdap_unavailable: "Le service de données d'enregistrement n'a pas répondu correctement. Réessayez plus tard."
+      private_address: "Les adresses privées, de bouclage et réservées n'ont pas de données d'enregistrement publiques."
     statuses:
       ok: "Répondu"
       cname: "Alias"
@@ -73,6 +78,8 @@ fr:
       attention: "À surveiller"
       broken: "Cassé"
       missing: "Manquant"
+      signed: "Signée"
+      unsigned: "Non signée"
     dns:
       domain: "Domaine"
       hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée. Pour PTR, saisissez une adresse IP : la vérification confirme aussi que chaque nom renvoie vers elle."
@@ -289,6 +296,52 @@ fr:
           cname: "Alias"
           unresolved: "Sans adresse"
           unavailable: "Sans réponse"
+    lookup:
+      host: "Domaine ou adresse IP"
+      host_placeholder: "example.com ou 203.0.113.9"
+      submit: "Rechercher"
+      hint: "Montre qui se trouve derrière un domaine ou une adresse IP à partir des données d'enregistrement publiques (RDAP) et de la table de routage : registrar, dates, statut, serveurs de noms et DNSSEC pour un domaine ; réseau, organisation titulaire, contact d'abus et système autonome (ASN) pour une adresse IP. Seuls les registrars, les organisations et les contacts d'abus sont lus : aucune donnée personnelle. La cible elle-même n'est jamais contactée."
+      summary:
+        domain: "Expire le %{date} · %{registrar}"
+        expired: "Expiré le %{date} · %{registrar}"
+        no_expiry: "Enregistré chez %{registrar}"
+        ip: "%{asn} · %{name}"
+        ip_no_asn: "%{name}"
+      findings_title: "Constats"
+      no_findings: "Aucun problème trouvé."
+      findings:
+        expired: "Le domaine a expiré le %{date}."
+        expiring: "Le domaine expire le %{date}. Renouvelez-le bientôt."
+        hold: "Le registre ou le registrar a mis le domaine en suspens (hold) : il ne se résout pas."
+        pending_delete: "Le domaine est dans sa période de rédemption ou de suppression en attente et sera libéré s'il n'est pas renouvelé."
+        rdap_failed: "Le service de données d'enregistrement n'a pas répondu : les détails du réseau manquent."
+        not_announced: "Aucun système autonome n'annonce cette adresse : elle n'est probablement pas routée sur internet."
+        asn_unavailable: "Les données de routage n'ont pas pu être lues : le système autonome manque."
+      domain_title: "Domaine"
+      network_title: "Réseau"
+      asn_title: "Système autonome"
+      nameservers_title: "Serveurs de noms (%{count})"
+      registered_domain: "Données d'enregistrement de %{name}, le domaine enregistré du nom saisi."
+      fields:
+        days_left: "Jours restants"
+        dnssec: "DNSSEC"
+        nameservers: "Serveurs de noms"
+        asn: "ASN"
+        country: "Pays"
+        prefix: "Préfixe annoncé"
+        registrar: "Registrar"
+        iana_id: "ID de registrar IANA"
+        registered: "Enregistré"
+        expires: "Expire"
+        updated: "Dernière modification"
+        abuse: "Contact d'abus"
+        statuses: "Statut"
+        name: "Nom"
+        handle: "Handle"
+        type: "Type"
+        range: "Plage"
+        cidr: "Préfixes"
+        organization: "Organisation"
     empty:
       dns:
         title: "Rien à afficher pour l'instant"
@@ -308,6 +361,9 @@ fr:
       email:
         title: "Rien à afficher pour l'instant"
         hint: "Saisissez un domaine pour vérifier ses enregistrements SPF, DKIM, DMARC et MX."
+      lookup:
+        title: "Rien à afficher pour l'instant"
+        hint: "Saisissez un domaine ou une adresse IP pour voir qui est derrière."
     history:
       dns: "Vérifications DNS"
       ports: "Vérifications de ports"
@@ -322,6 +378,7 @@ fr:
       previous: "Exécution précédente, il y a %{time} : %{detail}"
       tls: "Certificats TLS"
       email: "Vérifications e-mail"
+      lookup: "Recherches"
     guide:
       title: "Lire les résultats"
       ok: "Le serveur a répondu avec des enregistrements."
@@ -344,6 +401,8 @@ fr:
       attention: "Fonctionne, mais quelque chose doit être corrigé."
       broken: "Un problème qui empêche la livraison ou laisse le domaine sans protection."
       missing: "Aucun enregistrement trouvé."
+      signed: "La zone est signée : les résolveurs peuvent vérifier ses réponses."
+      unsigned: "La zone n'est pas signée avec DNSSEC."
     limits:
       about: "À propos"
     results:

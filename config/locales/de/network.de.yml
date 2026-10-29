@@ -14,6 +14,7 @@ de:
       subnet: "Subnetzrechner"
       tls: "TLS-Zertifikat"
       email: "E-Mail-DNS"
+      lookup: "Abfrage"
     errors:
       blank: Gib eine Domain oder einen Host ein.
       invalid: "Das ist kein gültiger Hostname und keine gültige IP-Adresse. Verwende nur den Namen, ohne Schema, Pfad oder Port."
@@ -42,6 +43,10 @@ de:
       domain_not_found: "Diese Domain existiert nicht."
       invalid_selector: "\"%{token}\" ist kein gültiger DKIM-Selektor. Verwende Buchstaben, Ziffern, Bindestriche, Unterstriche und Punkte."
       too_many_selectors: "Prüfe höchstens %{max} DKIM-Selektoren auf einmal."
+      not_registered: "Diese Domain ist nicht registriert."
+      no_rdap_service: "Für diese Top-Level-Domain oder diesen Adressbereich wird kein RDAP-Dienst veröffentlicht."
+      rdap_unavailable: "Der Registrierungsdatendienst hat nicht korrekt geantwortet. Versuche es später erneut."
+      private_address: "Private, Loopback- und reservierte Adressen haben keine öffentlichen Registrierungsdaten."
     statuses:
       ok: Antwortet
       cname: Alias
@@ -73,6 +78,8 @@ de:
       attention: "Braucht Aufmerksamkeit"
       broken: "Defekt"
       missing: "Fehlt"
+      signed: "Signiert"
+      unsigned: "Nicht signiert"
     dns:
       domain: Domain
       hint: "DNS-Antworten kommen von den autoritativen Nameservern und mehreren öffentlichen Resolvern, damit du siehst, ob sich eine Änderung verbreitet hat. Für PTR gib eine IP-Adresse ein: die Prüfung bestätigt auch, dass jeder Name wieder auf sie auflöst."
@@ -289,6 +296,52 @@ de:
           cname: "Alias"
           unresolved: "Keine Adresse"
           unavailable: "Keine Antwort"
+    lookup:
+      host: "Domain oder IP-Adresse"
+      host_placeholder: "example.com oder 203.0.113.9"
+      submit: "Abfragen"
+      hint: "Zeigt anhand öffentlicher Registrierungsdaten (RDAP) und der Routing-Tabelle, wer hinter einer Domain oder IP-Adresse steckt: Registrar, Daten, Status, Nameserver und DNSSEC bei einer Domain; Netz, Inhaber-Organisation, Abuse-Kontakt und autonomes System (ASN) bei einer IP-Adresse. Gelesen werden nur Registrare, Organisationen und Abuse-Kontakte: keine personenbezogenen Daten. Das Ziel selbst wird nie kontaktiert."
+      summary:
+        domain: "Läuft ab am %{date} · %{registrar}"
+        expired: "Abgelaufen am %{date} · %{registrar}"
+        no_expiry: "Registriert bei %{registrar}"
+        ip: "%{asn} · %{name}"
+        ip_no_asn: "%{name}"
+      findings_title: "Befunde"
+      no_findings: "Keine Probleme gefunden."
+      findings:
+        expired: "Die Domain ist am %{date} abgelaufen."
+        expiring: "Die Domain läuft am %{date} ab. Verlängere sie bald."
+        hold: "Die Registry oder der Registrar hat die Domain gesperrt (Hold), daher wird sie nicht aufgelöst."
+        pending_delete: "Die Domain befindet sich in der Redemption- oder Pending-Delete-Phase und wird freigegeben, wenn sie nicht verlängert wird."
+        rdap_failed: "Der Registrierungsdatendienst hat nicht geantwortet, daher fehlen die Netzdetails."
+        not_announced: "Kein autonomes System kündigt diese Adresse an, sie wird im Internet wahrscheinlich nicht geroutet."
+        asn_unavailable: "Die Routing-Daten konnten nicht gelesen werden, daher fehlt das autonome System."
+      domain_title: "Domain"
+      network_title: "Netz"
+      asn_title: "Autonomes System"
+      nameservers_title: "Nameserver (%{count})"
+      registered_domain: "Registrierungsdaten für %{name}, die registrierte Domain des eingegebenen Namens."
+      fields:
+        days_left: "Verbleibende Tage"
+        dnssec: "DNSSEC"
+        nameservers: "Nameserver"
+        asn: "ASN"
+        country: "Land"
+        prefix: "Angekündigtes Präfix"
+        registrar: "Registrar"
+        iana_id: "IANA-Registrar-ID"
+        registered: "Registriert"
+        expires: "Läuft ab"
+        updated: "Zuletzt geändert"
+        abuse: "Abuse-Kontakt"
+        statuses: "Status"
+        name: "Name"
+        handle: "Handle"
+        type: "Typ"
+        range: "Bereich"
+        cidr: "Präfixe"
+        organization: "Organisation"
     empty:
       dns:
         title: "Noch nichts anzuzeigen"
@@ -308,6 +361,9 @@ de:
       email:
         title: "Noch nichts anzuzeigen"
         hint: "Gib eine Domain ein, um ihre SPF-, DKIM-, DMARC- und MX-Einträge zu prüfen."
+      lookup:
+        title: "Noch nichts anzuzeigen"
+        hint: "Gib eine Domain oder IP-Adresse ein, um zu sehen, wer dahintersteckt."
     history:
       dns: "DNS-Prüfungen"
       ports: "Port-Prüfungen"
@@ -322,6 +378,7 @@ de:
       previous: "Vorheriger Lauf, vor %{time}: %{detail}"
       tls: "TLS-Zertifikate"
       email: "E-Mail-Prüfungen"
+      lookup: "Abfragen"
     guide:
       title: "Ergebnisse lesen"
       ok: "Der Server hat mit Einträgen geantwortet."
@@ -344,6 +401,8 @@ de:
       attention: "Funktioniert, aber etwas sollte behoben werden."
       broken: "Ein Problem, das die Zustellung verhindert oder die Domain ungeschützt lässt."
       missing: "Kein Eintrag gefunden."
+      signed: "Die Zone ist signiert: Resolver können ihre Antworten prüfen."
+      unsigned: "Die Zone ist nicht mit DNSSEC signiert."
     limits:
       about: "Info"
     results:

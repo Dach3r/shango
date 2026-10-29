@@ -14,6 +14,7 @@ en:
       subnet: "Subnet calculator"
       tls: "TLS certificate"
       email: "Email DNS"
+      lookup: "Lookup"
     errors:
       blank: Enter a domain or host.
       invalid: "That is not a valid host name or IP address. Use only the name, without scheme, path or port."
@@ -42,6 +43,10 @@ en:
       domain_not_found: "This domain does not exist."
       invalid_selector: "\"%{token}\" is not a valid DKIM selector. Use letters, numbers, hyphens, underscores and dots."
       too_many_selectors: "Check at most %{max} DKIM selectors at a time."
+      not_registered: "This domain is not registered."
+      no_rdap_service: "No RDAP service is published for this top-level domain or address range."
+      rdap_unavailable: "The registration data service did not answer correctly. Try again later."
+      private_address: "Private, loopback and reserved addresses have no public registration data."
     statuses:
       ok: Answered
       cname: Alias
@@ -73,6 +78,8 @@ en:
       attention: "Needs attention"
       broken: "Broken"
       missing: "Missing"
+      signed: "Signed"
+      unsigned: "Unsigned"
     dns:
       domain: Domain
       hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated. For PTR, enter an IP address: the check also confirms that each name resolves back to it."
@@ -289,6 +296,52 @@ en:
           cname: "Alias"
           unresolved: "No address"
           unavailable: "No answer"
+    lookup:
+      host: "Domain or IP address"
+      host_placeholder: "example.com or 203.0.113.9"
+      submit: "Look up"
+      hint: "Shows who is behind a domain or an IP address from public registration data (RDAP) and the routing table: registrar, dates, status, nameservers and DNSSEC for a domain; the network, the organization that holds it, its abuse contact and the autonomous system (ASN) for an IP address. Only registrars, organizations and abuse contacts are read: no personal data. The target itself is never contacted."
+      summary:
+        domain: "Expires %{date} · %{registrar}"
+        expired: "Expired %{date} · %{registrar}"
+        no_expiry: "Registered with %{registrar}"
+        ip: "%{asn} · %{name}"
+        ip_no_asn: "%{name}"
+      findings_title: "Findings"
+      no_findings: "No problems found."
+      findings:
+        expired: "The domain expired on %{date}."
+        expiring: "The domain expires on %{date}. Renew it soon."
+        hold: "The registry or the registrar has put the domain on hold, so it does not resolve."
+        pending_delete: "The domain is in its redemption or pending-delete period and will be released unless it is renewed."
+        rdap_failed: "The registration data service did not answer, so the network details are missing."
+        not_announced: "No autonomous system announces this address, so it is probably not routed on the internet."
+        asn_unavailable: "The routing data could not be read, so the autonomous system is missing."
+      domain_title: "Domain"
+      network_title: "Network"
+      asn_title: "Autonomous system"
+      nameservers_title: "Nameservers (%{count})"
+      registered_domain: "Registration data for %{name}, the registered domain of the name you typed."
+      fields:
+        days_left: "Days left"
+        dnssec: "DNSSEC"
+        nameservers: "Nameservers"
+        asn: "ASN"
+        country: "Country"
+        prefix: "Announced prefix"
+        registrar: "Registrar"
+        iana_id: "IANA registrar ID"
+        registered: "Registered"
+        expires: "Expires"
+        updated: "Last changed"
+        abuse: "Abuse contact"
+        statuses: "Status"
+        name: "Name"
+        handle: "Handle"
+        type: "Type"
+        range: "Range"
+        cidr: "Prefixes"
+        organization: "Organization"
     empty:
       dns:
         title: "Nothing to show yet"
@@ -308,6 +361,9 @@ en:
       email:
         title: "Nothing to show yet"
         hint: "Enter a domain to check its SPF, DKIM, DMARC and MX records."
+      lookup:
+        title: "Nothing to show yet"
+        hint: "Enter a domain or an IP address to see who is behind it."
     history:
       dns: "DNS checks"
       ports: "Port checks"
@@ -322,6 +378,7 @@ en:
       previous: "Previous run, %{time} ago: %{detail}"
       tls: "TLS certificates"
       email: "Email checks"
+      lookup: "Lookups"
     guide:
       title: "Reading the results"
       ok: "The server answered with records."
@@ -344,6 +401,8 @@ en:
       attention: "Works, but something should be fixed."
       broken: "A problem that breaks delivery or leaves the domain unprotected."
       missing: "No record found."
+      signed: "The zone is signed: resolvers can verify its answers."
+      unsigned: "The zone is not signed with DNSSEC."
     limits:
       about: "About"
     results:

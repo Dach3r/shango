@@ -6,7 +6,7 @@ class NetworkCheck < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :environment, optional: true
 
-  enum :kind, { dns: "dns", ports: "ports", ping: "ping", subnet: "subnet", tls: "tls", email: "email" }
+  enum :kind, { dns: "dns", ports: "ports", ping: "ping", subnet: "subnet", tls: "tls", email: "email", lookup: "lookup" }
   enum :outcome, { ok: "ok", warn: "warn", bad: "bad" }, prefix: :outcome
 
   validates :target, presence: true

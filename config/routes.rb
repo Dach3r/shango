@@ -91,6 +91,7 @@ Rails.application.routes.draw do
     resources :subnets, only: :create
     resources :tls_checks, only: :create
     resources :email_checks, only: :create
+    resources :lookups, only: :create
     resources :checks, only: %i[show destroy]
     resource :history, only: :destroy
     get ":kind", to: "workspaces#show", constraints: { kind: Regexp.union(Network::Tools.names) }, as: :workspace

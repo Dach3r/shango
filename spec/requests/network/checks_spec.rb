@@ -71,6 +71,19 @@ RSpec.describe "Network checks" do
       expect(response.body).to include(I18n.t("network.email.summary.clean"))
     end
 
+    it "shows a saved lookup of a domain and of an address", :aggregate_failures do
+      domain = create(:network_check, :lookup, project:, user:)
+      get network_check_path(domain)
+
+      expect(response.body).to include("lookup_result", "RESERVED-IANA", "a.iana-servers.net", "client transfer prohibited", I18n.t("network.statuses.signed"), I18n.t("network.statuses.valid"), %(action="#{network_lookups_path}"))
+      expect(response.body).to include(I18n.t("network.lookup.summary.domain", date: "2027-08-13", registrar: "RESERVED-IANA"))
+
+      address = create(:network_check, :lookup_address, project:, user:)
+      get network_check_path(address)
+
+      expect(response.body).to include("AS15169", "GOOGLE, US", "Google LLC", "8.8.8.0 - 8.8.8.255", "network-abuse@google.com", I18n.t("network.lookup.asn_title"))
+    end
+
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
       ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)

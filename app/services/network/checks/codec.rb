@@ -5,7 +5,7 @@ module Network
       MAX_ANSWERS = 10
       MAX_ANSWER_LENGTH = 255
 
-      KINDS = { "dns" => Dns, "ports" => Ports, "ping" => Ping, "subnet" => Subnet, "tls" => Tls, "email" => Email }.freeze
+      KINDS = { "dns" => Dns, "ports" => Ports, "ping" => Ping, "subnet" => Subnet, "tls" => Tls, "email" => Email, "lookup" => Lookup }.freeze
 
       module_function
 

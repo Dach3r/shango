@@ -49,4 +49,13 @@ RSpec.describe NetworkHelper do
       expect(status("spf", ["spf.missing", "bad"])).to eq(:missing)
     end
   end
+
+  describe "#lookup_expiry_status" do
+    it "tells expired, expiring and valid domains", :aggregate_failures do
+      expect(helper.lookup_expiry_status(-1)).to eq(:expired)
+      expect(helper.lookup_expiry_status(0)).to eq(:expiring)
+      expect(helper.lookup_expiry_status(Network::Lookups::Domain::EXPIRING_DAYS)).to eq(:expiring)
+      expect(helper.lookup_expiry_status(Network::Lookups::Domain::EXPIRING_DAYS + 1)).to eq(:valid)
+    end
+  end
 end

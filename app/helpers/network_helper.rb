@@ -28,4 +28,11 @@ module NetworkHelper
 
     tones.include?("warn") ? :attention : :healthy
   end
+
+  # The state of the days left before a domain expires.
+  def lookup_expiry_status(days_left)
+    return :expired if days_left.negative?
+
+    days_left <= Network::Lookups::Domain::EXPIRING_DAYS ? :expiring : :valid
+  end
 end

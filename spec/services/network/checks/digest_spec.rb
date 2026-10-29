@@ -106,6 +106,41 @@ RSpec.describe Network::Checks::Digest do
     end
   end
 
+  describe "lookup" do
+    def lookup(trait = :lookup, &)
+      data = build(:network_check, trait).result.deep_symbolize_keys
+      yield data if block_given?
+      described_class.for(:lookup, data)
+    end
+
+    it "labels a domain with its expiry and registrar", :aggregate_failures do
+      digest = lookup
+
+      expect(digest).to have_attributes(label: "example.com", tone: "ok", key: "network.lookup.summary.domain", progress: nil)
+      expect(digest.args).to eq(date: "2027-08-13", registrar: "RESERVED-IANA")
+    end
+
+    it "words an expired domain, one without expiry and one without registrar", :aggregate_failures do
+      expect(lookup { |data| data[:domain][:days_left] = -3 }.key).to eq("network.lookup.summary.expired")
+
+      digest = lookup { |data| data[:domain].merge!(expires: nil, days_left: nil, registrar: nil) }
+
+      expect(digest).to have_attributes(key: "network.lookup.summary.no_expiry", args: { registrar: "—" })
+    end
+
+    it "labels an address with its autonomous system, or with the network alone", :aggregate_failures do
+      expect(lookup(:lookup_address)).to have_attributes(label: "8.8.8.8", key: "network.lookup.summary.ip", args: { asn: "AS15169", name: "GOOGLE, US" })
+      expect(lookup(:lookup_address) { |data| data[:asn] = [] }).to have_attributes(key: "network.lookup.summary.ip_no_asn", args: { name: "GOGL" })
+      expect(lookup(:lookup_address) { |data| data.merge!(asn: [{ number: "1", name: nil }]) }.args).to eq(asn: "AS1", name: "GOGL")
+      expect(lookup(:lookup_address) { |data| data.merge!(asn: [], network: nil) }.args).to eq(name: "—")
+    end
+
+    it "takes the tone of the worst finding", :aggregate_failures do
+      expect(lookup { |data| data[:findings] = [{ key: "expiring", tone: "warn", args: {} }] }.tone).to eq("warn")
+      expect(lookup { |data| data[:findings] = [{ key: "expiring", tone: "warn", args: {} }, { key: "hold", tone: "bad", args: {} }] }.tone).to eq("bad")
+    end
+  end
+
   it "has a digest for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.for("nmap", {}) }.to raise_error(KeyError)

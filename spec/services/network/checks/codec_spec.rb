@@ -64,6 +64,14 @@ RSpec.describe Network::Checks::Codec do
     expect(round_trip("email", data)).to eq(data)
   end
 
+  it "round-trips a lookup as the plain data it already is", :aggregate_failures do
+    %i[lookup lookup_address].each do |trait|
+      data = build(:network_check, trait).result.deep_symbolize_keys
+
+      expect(round_trip("lookup", data)).to eq(data)
+    end
+  end
+
   it "has a codec for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.dump("nmap", {}) }.to raise_error(KeyError)

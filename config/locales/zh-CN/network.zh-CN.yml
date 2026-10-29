@@ -14,6 +14,7 @@ zh-CN:
       subnet: "子网计算器"
       tls: "TLS 证书"
       email: "邮件 DNS"
+      lookup: "查询"
     errors:
       blank: 请输入域名或主机。
       invalid: "这不是有效的主机名或 IP 地址。只需填写名称，不要包含协议、路径或端口。"
@@ -42,6 +43,10 @@ zh-CN:
       domain_not_found: "该域名不存在。"
       invalid_selector: "\"%{token}\" 不是有效的 DKIM 选择器。请使用字母、数字、连字符、下划线和点。"
       too_many_selectors: "一次最多检查 %{max} 个 DKIM 选择器。"
+      not_registered: "该域名未注册。"
+      no_rdap_service: "该顶级域名或地址范围没有发布 RDAP 服务。"
+      rdap_unavailable: "注册数据服务未正确响应。请稍后重试。"
+      private_address: "私有、回环和保留地址没有公开的注册数据。"
     statuses:
       ok: 已应答
       cname: 别名
@@ -73,6 +78,8 @@ zh-CN:
       attention: "需要关注"
       broken: "已损坏"
       missing: "缺失"
+      signed: "已签名"
+      unsigned: "未签名"
     dns:
       domain: 域名
       hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。 对于 PTR，请输入 IP 地址：检查还会确认每个名称能解析回该地址。"
@@ -289,6 +296,52 @@ zh-CN:
           cname: "别名"
           unresolved: "无地址"
           unavailable: "无响应"
+    lookup:
+      host: "域名或 IP 地址"
+      host_placeholder: "example.com 或 203.0.113.9"
+      submit: "查询"
+      hint: "根据公开注册数据 (RDAP) 和路由表，显示域名或 IP 地址背后是谁：域名显示注册商、日期、状态、名称服务器和 DNSSEC；IP 地址显示网络、持有组织、滥用联系人和自治系统 (ASN)。只读取注册商、组织和滥用联系人，不涉及个人数据。不会联系目标本身。"
+      summary:
+        domain: "%{date} 到期 · %{registrar}"
+        expired: "%{date} 已到期 · %{registrar}"
+        no_expiry: "注册商：%{registrar}"
+        ip: "%{asn} · %{name}"
+        ip_no_asn: "%{name}"
+      findings_title: "检查结果"
+      no_findings: "未发现问题。"
+      findings:
+        expired: "该域名已于 %{date} 到期。"
+        expiring: "该域名将于 %{date} 到期。请尽快续费。"
+        hold: "注册局或注册商已将该域名置于保留状态 (hold)，因此无法解析。"
+        pending_delete: "该域名处于赎回期或待删除期，如不续费将被释放。"
+        rdap_failed: "注册数据服务没有响应，因此缺少网络详情。"
+        not_announced: "没有自治系统宣告该地址，因此它很可能没有在互联网上路由。"
+        asn_unavailable: "无法读取路由数据，因此缺少自治系统。"
+      domain_title: "域名"
+      network_title: "网络"
+      asn_title: "自治系统"
+      nameservers_title: "名称服务器 (%{count})"
+      registered_domain: "%{name} 的注册数据，即你所输入名称的注册域名。"
+      fields:
+        days_left: "剩余天数"
+        dnssec: "DNSSEC"
+        nameservers: "名称服务器"
+        asn: "ASN"
+        country: "国家/地区"
+        prefix: "宣告的前缀"
+        registrar: "注册商"
+        iana_id: "IANA 注册商 ID"
+        registered: "注册时间"
+        expires: "到期时间"
+        updated: "最后变更"
+        abuse: "滥用联系人"
+        statuses: "状态"
+        name: "名称"
+        handle: "句柄"
+        type: "类型"
+        range: "范围"
+        cidr: "前缀"
+        organization: "组织"
     empty:
       dns:
         title: "暂无内容可显示"
@@ -308,6 +361,9 @@ zh-CN:
       email:
         title: "暂无内容"
         hint: "输入域名以检查其 SPF、DKIM、DMARC 和 MX 记录。"
+      lookup:
+        title: "暂无内容"
+        hint: "输入域名或 IP 地址，查看其背后是谁。"
     history:
       dns: "DNS 检查"
       ports: "端口检查"
@@ -322,6 +378,7 @@ zh-CN:
       previous: "上一次运行（%{time}前）：%{detail}"
       tls: "TLS 证书"
       email: "邮件检查"
+      lookup: "查询"
     guide:
       title: "如何解读结果"
       ok: "服务器返回了记录。"
@@ -344,6 +401,8 @@ zh-CN:
       attention: "可以工作，但有些地方需要修复。"
       broken: "会导致投递失败或让域名失去保护的问题。"
       missing: "未找到记录。"
+      signed: "该区域已签名：解析器可以验证其响应。"
+      unsigned: "该区域未使用 DNSSEC 签名。"
     limits:
       about: "简介"
     results:

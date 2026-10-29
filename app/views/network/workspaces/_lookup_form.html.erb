@@ -1,0 +1,10 @@
+<%# Form bar of the lookup tool. Render with `input:` (what was typed before, string keys; empty for a fresh form). On a saved run the field holds what was typed and submitting runs it again as a new run. %>
+<%= tag.div id: "lookup_form", class: "shrink-0", data: variable_autocomplete_data do %>
+  <%= network_bar scope: :lookup, url: network_lookups_path do |form| %>
+    <%= form.label :host, t("network.lookup.host"), class: "sr-only" %>
+    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.lookup.host_placeholder"), class: bar_field_classes("min-w-48 flex-1 font-mono") %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "globe", class: "size-4" %><%= t("network.lookup.submit") %>
+    <% end %>
+  <% end %>
+<% end %>

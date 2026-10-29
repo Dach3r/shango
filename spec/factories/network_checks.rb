@@ -67,6 +67,37 @@ FactoryBot.define do
       end
     end
 
+    trait :lookup do
+      kind { "lookup" }
+      input { { "host" => "example.com" } }
+      result do
+        {
+          "host" => "example.com", "type" => "domain",
+          "domain" => {
+            "name" => "example.com", "queried" => "example.com", "registrar" => { "name" => "RESERVED-IANA", "iana_id" => "376" }, "abuse" => { "email" => "abuse@iana.example", "phone" => nil },
+            "registered" => "1995-08-14T04:00:00Z", "expires" => "2027-08-13T04:00:00Z", "updated" => "2026-08-14T08:01:43Z", "days_left" => 288,
+            "statuses" => ["client transfer prohibited"], "nameservers" => %w[a.iana-servers.net b.iana-servers.net], "dnssec" => true
+          },
+          "network" => nil, "asn" => [], "findings" => []
+        }
+      end
+    end
+
+    trait :lookup_address do
+      kind { "lookup" }
+      target { "8.8.8.8" }
+      input { { "host" => "8.8.8.8" } }
+      result do
+        {
+          "host" => "8.8.8.8", "type" => "ip", "domain" => nil,
+          "network" => { "name" => "GOGL", "handle" => "NET-8-8-8-0-2", "type" => "DIRECT ALLOCATION", "country" => "US", "range" => "8.8.8.0 - 8.8.8.255", "cidrs" => ["8.8.8.0/24"],
+                         "organization" => "Google LLC", "abuse" => { "email" => "network-abuse@google.com", "phone" => nil }, "updated" => "2023-12-28T22:24:56Z" },
+          "asn" => [{ "number" => "15169", "name" => "GOOGLE, US", "prefix" => "8.8.8.0/24", "country" => "US", "registry" => "arin", "allocated" => "2023-12-28" }],
+          "findings" => []
+        }
+      end
+    end
+
     trait :ping do
       kind { "ping" }
       input { { "host" => "example.com", "port" => "443", "attempts" => "2" } }
