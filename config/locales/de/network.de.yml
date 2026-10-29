@@ -1,7 +1,6 @@
 de:
   network:
     title: Netzwerk
-    new_check: Neue Prüfung
     groups:
       connectivity: Konnektivität
       dns: DNS

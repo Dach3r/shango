@@ -1,19 +1,12 @@
-<%# Form bar of the DNS tool. Render with `input:` (what was typed before, string keys; empty for a fresh form). The domain placeholder follows the type (`dns-type` controller). A non-empty `input` is a saved run: the bar is read-only. %>
-<% readonly = input.present? %>
+<%# Form bar of the DNS tool. Render with `input:` (what was typed before, string keys; empty for a fresh form). The domain placeholder follows the type (`dns-type` controller). On a saved run the fields hold what was typed and submitting runs it again as a new run. %>
 <% type = input.fetch("type", "A") %>
 <%= tag.div id: "dns_form", class: "shrink-0", data: variable_autocomplete_data(controller: "dns-type").merge(dns_type_domain_value: t("network.dns.domain_placeholder"), dns_type_ptr_value: t("network.dns.ptr_placeholder")) do %>
-  <%= network_bar scope: :dns_check, url: network_dns_checks_path, readonly: readonly do |form| %>
+  <%= network_bar scope: :dns_check, url: network_dns_checks_path do |form| %>
     <%= form.label :domain, t("network.dns.domain"), class: "sr-only" %>
-    <%= form.text_field :domain, readonly:, value: input.values_at("domain", "expected").compact_blank.join(" "), required: true, autocomplete: "off", spellcheck: false, placeholder: t(type == "PTR" ? "network.dns.ptr_placeholder" : "network.dns.domain_placeholder"), data: { dns_type_target: "field" }, class: bar_field_classes("min-w-48 flex-1 font-mono") %>
-    <%= render Select::Component.new(disabled: readonly, name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: type, id: "dns_check_type", label: t("network.dns.type"), dock: true, dock_top: "top-14", dock_width: "lg:w-[calc(22rem-1px)] w-56", class: "w-44 font-mono aria-expanded:bg-ink/[0.08]! disabled:cursor-default disabled:opacity-100 disabled:[&_svg]:hidden", input_data: { dns_type_target: "type", action: "change->dns-type#sync" }) %>
-    <% if readonly %>
-      <%= link_to network_workspace_path("dns"), class: button_classes(:primary, "w-44 shrink-0") do %>
-        <%= lucide_icon "plus", class: "size-4" %><%= t("network.new_check") %>
-      <% end %>
-    <% else %>
-      <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
-        <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
-      <% end %>
+    <%= form.text_field :domain, value: input.values_at("domain", "expected").compact_blank.join(" "), required: true, autocomplete: "off", spellcheck: false, placeholder: t(type == "PTR" ? "network.dns.ptr_placeholder" : "network.dns.domain_placeholder"), data: { dns_type_target: "field" }, class: bar_field_classes("min-w-48 flex-1 font-mono") %>
+    <%= render Select::Component.new(name: "dns_check[type]", options: Network::Dns::Query::TYPES.keys.map { |type| [type, type] }, value: type, id: "dns_check_type", label: t("network.dns.type"), dock: true, dock_top: "top-14", dock_width: "lg:w-[calc(22rem-1px)] w-56", class: "w-44 font-mono aria-expanded:bg-ink/[0.08]!", input_data: { dns_type_target: "type", action: "change->dns-type#sync" }) %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "search", class: "size-4" %><%= t("network.dns.submit") %>
     <% end %>
   <% end %>
 <% end %>

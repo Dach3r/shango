@@ -1,7 +1,6 @@
 fr:
   network:
     title: "Réseau"
-    new_check: "Nouvelle vérification"
     groups:
       connectivity: Connectivité
       dns: DNS

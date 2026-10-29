@@ -1,27 +1,20 @@
-<%# Form bar of the port check. Render with `input:` (what was typed before, string keys; empty for a fresh form). A non-empty `input` is a saved run: the bar is read-only. %>
-<% readonly = input.present? %>
+<%# Form bar of the port check. Render with `input:` (what was typed before, string keys; empty for a fresh form). On a saved run the fields hold what was typed and submitting runs it again as a new run. %>
 <%= tag.div id: "ports_form", class: "shrink-0", data: variable_autocomplete_data(controller: "port-preset").merge(port_preset_custom_label_value: t("network.ports.presets.custom")) do %>
-  <%= network_bar scope: :port_check, url: network_port_checks_path, readonly: readonly do |form| %>
+  <%= network_bar scope: :port_check, url: network_port_checks_path do |form| %>
     <%= form.label :host, t("network.ports.host"), class: "sr-only" %>
-    <%= form.text_field :host, readonly:, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.host_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.host_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
     <% ports = input.fetch("ports", "common") %>
     <% preset = port_preset_for(ports) %>
     <%= form.hidden_field :ports, value: ports, data: { port_preset_target: "field" } %>
-    <%= render Select::Component.new(disabled: readonly, name: "port_preset", options: port_preset_options(custom: (ports if preset == "custom")), value: preset, id: "port_check_preset", label: t("network.ports.preset"), searchable: false, dock: true, dock_top: "top-14", dock_width: "lg:w-[calc(22rem-1px)] w-56", keep_open: %w[custom],
-                                     class: "w-44 font-mono aria-expanded:bg-ink/[0.08]! disabled:cursor-default disabled:opacity-100 disabled:[&_svg]:hidden", input_data: { port_preset_target: "preset", action: "change->port-preset#apply" }) do %>
+    <%= render Select::Component.new(name: "port_preset", options: port_preset_options(custom: (ports if preset == "custom")), value: preset, id: "port_check_preset", label: t("network.ports.preset"), searchable: false, dock: true, dock_top: "top-14", dock_width: "lg:w-[calc(22rem-1px)] w-56", keep_open: %w[custom],
+                                     class: "w-44 font-mono aria-expanded:bg-ink/[0.08]!", input_data: { port_preset_target: "preset", action: "change->port-preset#apply" }) do %>
       <div data-port-preset-target="customWrap" hidden class="border-b border-line p-3">
         <%= label_tag "port_check_custom", t("network.ports.ports"), class: "sr-only" %>
         <%= text_field_tag nil, ports, id: "port_check_custom", data: { port_preset_target: "custom", action: "input->port-preset#typed" }, autocomplete: "off", spellcheck: false, placeholder: t("network.ports.ports_placeholder"), class: field_classes("font-mono") %>
       </div>
     <% end %>
-    <% if readonly %>
-      <%= link_to network_workspace_path("ports"), class: button_classes(:primary, "w-44 shrink-0") do %>
-        <%= lucide_icon "plus", class: "size-4" %><%= t("network.new_check") %>
-      <% end %>
-    <% else %>
-      <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
-        <%= lucide_icon "radar", class: "size-4" %><%= t("network.ports.submit") %>
-      <% end %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "radar", class: "size-4" %><%= t("network.ports.submit") %>
     <% end %>
   <% end %>
 <% end %>

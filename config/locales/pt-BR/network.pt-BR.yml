@@ -1,7 +1,6 @@
 pt-BR:
   network:
     title: Rede
-    new_check: Nova verificação
     groups:
       connectivity: Conectividade
       dns: DNS

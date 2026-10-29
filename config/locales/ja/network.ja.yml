@@ -1,7 +1,6 @@
 ja:
   network:
     title: ネットワーク
-    new_check: 新しいチェック
     groups:
       connectivity: 接続
       dns: DNS

@@ -1,7 +1,6 @@
 en:
   network:
     title: Network
-    new_check: New check
     groups:
       connectivity: Connectivity
       dns: DNS

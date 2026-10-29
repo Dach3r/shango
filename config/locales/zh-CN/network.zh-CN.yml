@@ -1,7 +1,6 @@
 zh-CN:
   network:
     title: 网络
-    new_check: 新建检查
     groups:
       connectivity: 连通性
       dns: DNS

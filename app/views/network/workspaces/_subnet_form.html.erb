@@ -1,21 +1,14 @@
-<%# Form bar of the subnet calculator: the network, an optional prefix to split it into and an optional address to look for. Render with `input:` (what was typed before, string keys; empty for a fresh form). A non-empty `input` is a saved run: the bar is read-only. %>
-<% readonly = input.present? %>
+<%# Form bar of the subnet calculator: the network, an optional prefix to split it into and an optional address to look for. Render with `input:` (what was typed before, string keys; empty for a fresh form). On a saved run the fields hold what was typed and submitting runs it again as a new run. %>
 <%= tag.div id: "subnet_form", class: "shrink-0", data: variable_autocomplete_data do %>
-  <%= network_bar scope: :subnet, url: network_subnets_path, readonly: readonly do |form| %>
+  <%= network_bar scope: :subnet, url: network_subnets_path do |form| %>
     <%= form.label :network, t("network.subnet.network"), class: "sr-only" %>
-    <%= form.text_field :network, readonly:, value: input["network"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.network_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.text_field :network, value: input["network"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.network_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
     <%= form.label :split, t("network.subnet.split"), class: "sr-only" %>
-    <%= form.text_field :split, readonly:, value: input["split"], autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.split_placeholder"), title: t("network.subnet.split"), class: bar_field_classes("w-28 shrink-0 font-mono") %>
+    <%= form.text_field :split, value: input["split"], autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.split_placeholder"), title: t("network.subnet.split"), class: bar_field_classes("w-28 shrink-0 font-mono") %>
     <%= form.label :contains, t("network.subnet.contains"), class: "sr-only" %>
-    <%= form.text_field :contains, readonly:, value: input["contains"], autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.contains_placeholder"), title: t("network.subnet.contains"), class: bar_field_classes("min-w-36 flex-1 font-mono") %>
-    <% if readonly %>
-      <%= link_to network_workspace_path("subnet"), class: button_classes(:primary, "w-44 shrink-0") do %>
-        <%= lucide_icon "plus", class: "size-4" %><%= t("network.new_check") %>
-      <% end %>
-    <% else %>
-      <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
-        <%= lucide_icon "calculator", class: "size-4" %><%= t("network.subnet.submit") %>
-      <% end %>
+    <%= form.text_field :contains, value: input["contains"], autocomplete: "off", spellcheck: false, placeholder: t("network.subnet.contains_placeholder"), title: t("network.subnet.contains"), class: bar_field_classes("min-w-36 flex-1 font-mono") %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "calculator", class: "size-4" %><%= t("network.subnet.submit") %>
     <% end %>
   <% end %>
 <% end %>

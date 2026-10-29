@@ -1,11 +1,9 @@
 module NetworkHelper
   BAR_FORM_CLASSES = "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0 [&_[data-select-target=trigger]:focus]:border-line! [&_[data-select-target=trigger]:focus]:ring-0! [&>:is(button,a)]:border-b [&>:is(button,a)]:border-r [&>:is(button,a)]:border-line".freeze
 
-  # Form bar of a tool. A saved run (`readonly: true`) renders the same fields without a form, so it cannot be submitted.
-  def network_bar(scope:, url:, readonly:, &)
-    return form_with(scope:, url:, class: BAR_FORM_CLASSES, &) unless readonly
-
-    tag.div(class: BAR_FORM_CLASSES) { fields(scope, &) }
+  # Form bar of a tool. Always submittable: on a saved run, submitting records a new run.
+  def network_bar(scope:, url:, &)
+    form_with(scope:, url:, class: BAR_FORM_CLASSES, &)
   end
 
   # Options of the port presets: the value is what the ports field receives; `custom` leaves the field as typed and is labelled with the typed list.

@@ -1,7 +1,6 @@
 ru:
   network:
     title: Сеть
-    new_check: Новая проверка
     groups:
       connectivity: Связность
       dns: DNS

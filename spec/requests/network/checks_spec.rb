@@ -22,11 +22,11 @@ RSpec.describe "Network checks" do
       expect(response.body).not_to include(I18n.t("network.ports.submit"))
     end
 
-    it "renders the saved run read-only, without a form to run it again", :aggregate_failures do
+    it "keeps the bar editable with what was typed, so submitting records a new run", :aggregate_failures do
       get network_check_path(check)
 
-      expect(response.body).not_to include(network_dns_checks_path, I18n.t("network.dns.submit"))
-      expect(response.body).to include(I18n.t("network.new_check"), "readonly")
+      expect(response.body).to include(%(action="#{network_dns_checks_path}"), I18n.t("network.dns.submit"), 'value="shango.dev v=spf1"')
+      expect(response.body).not_to include("readonly")
     end
 
     it "mentions the previous run of the same target", :aggregate_failures do
@@ -45,25 +45,24 @@ RSpec.describe "Network checks" do
       expect(response.body).to include(%(placeholder="#{I18n.t("network.dns.ptr_placeholder")}"))
     end
 
-    it "shows a saved subnet read-only with what was typed", :aggregate_failures do
+    it "shows a saved subnet with what was typed, ready to run again", :aggregate_failures do
       subnet = create(:network_check, :subnet, project:, user:)
       get network_check_path(subnet)
 
-      expect(response.body).to include("subnet_result", "192.168.1.0/24", "192.168.1.10/24", "192.168.1.77", I18n.t("network.statuses.inside"), I18n.t("network.new_check"))
+      expect(response.body).to include("subnet_result", "192.168.1.0/24", "192.168.1.10/24", "192.168.1.77", I18n.t("network.statuses.inside"), I18n.t("network.subnet.submit"))
       expect(response.body).to include(I18n.t("network.subnet.summary", version: 4, hosts: 254))
-      expect(response.body).not_to include(I18n.t("network.subnet.submit"))
     end
 
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
       ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)
 
-      expect(response.body).to include("ports_result", I18n.t("network.ports.columns.service"), I18n.t("network.new_check"))
+      expect(response.body).to include("ports_result", I18n.t("network.ports.columns.service"), I18n.t("network.ports.submit"))
 
       ping = create(:network_check, :ping, project:, user:)
       get network_check_path(ping)
 
-      expect(response.body).to include("ping_result", "443", I18n.t("network.new_check"))
+      expect(response.body).to include("ping_result", "443", I18n.t("network.ping.submit"))
     end
 
     it "does not show runs of other projects" do

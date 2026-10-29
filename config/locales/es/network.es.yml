@@ -1,7 +1,6 @@
 es:
   network:
     title: Red
-    new_check: Nueva comprobación
     groups:
       connectivity: Conectividad
       dns: DNS
