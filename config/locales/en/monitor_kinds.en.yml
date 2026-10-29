@@ -23,6 +23,7 @@ en:
       host_placeholder: "example.com or {{host}}"
       host_hint: "A host name or IP address. Variables come from the environment chosen below; secret variables cannot be used."
       ssl_hint: "Down when the certificate is not trusted, not valid for the host, expired, or expires in fewer days than this. Checked on its interval, without the quick retry."
+      domain_hint: "Down when the domain is not registered, expired, on hold, about to be deleted, or expires in fewer days than this. A registry that does not answer is unknown, never down. Use the registered domain or any name under it."
       push_hint: "Shango gives this monitor a secret URL. Your job, cron or backup calls it each time it runs; the monitor goes down when no call comes within the interval plus the grace period."
       push_conditions_hint: "The interval is how often your job runs; the grace period covers runs that take longer. After the first missed deadline it is checked again 30 seconds later before counting as down."
       tcp_hint: "Down after this many refused or unanswered connections in a row; after a failure the next check runs 30 seconds later."
@@ -48,6 +49,14 @@ en:
         create:
           regenerated: "New push URL created. Copy it below."
     causes:
+      domain_not_registered: "The domain is not registered"
+      domain_expired: "The domain expired"
+      domain_expiring: "The domain expires soon"
+      domain_on_hold: "The domain is on hold and does not resolve"
+      domain_pending_delete: "The domain is about to be deleted"
+      no_rdap_service: "This domain's registry has no RDAP service"
+      rdap_unavailable: "The registry did not answer"
+      no_expiry: "The registry gives no expiry date"
       no_ping: "No ping in time"
       invalid_host: "The host is not a valid name or IP address"
       no_certificate: "The server sent no certificate"

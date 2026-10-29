@@ -100,7 +100,7 @@
         <%= form.select :confirmations, UptimeMonitor::CONFIRMATIONS.to_a, {}, class: field_classes %>
       </div>
     </div>
-    <p class="text-xs text-muted"><%= t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %></p>
+    <p class="text-xs text-muted"><%= t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "domain" => "monitoring.form.domain_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %></p>
   </section>
 
   <section class="flex flex-col gap-4 border border-line bg-card p-5">

@@ -160,11 +160,10 @@ RSpec.describe "Monitoring monitors" do
       expect(monitor.next_check_at).to be_between(5.minutes.from_now - 5.seconds, 6.minutes.from_now)
     end
 
-    it "asks for the kind first, offering only the kinds that can run", :aggregate_failures do
+    it "asks for the kind first", :aggregate_failures do
       get new_monitoring_monitor_path
 
-      expect(response.body).to include(I18n.t("monitoring.new.choose"), new_monitoring_monitor_path(kind: "tcp"), new_monitoring_monitor_path(kind: "ssl"), I18n.t("components.nav_item.soon"))
-      expect(response.body).not_to include(new_monitoring_monitor_path(kind: "domain"))
+      expect(response.body).to include(I18n.t("monitoring.new.choose"), *UptimeMonitor.kinds.keys.map { |kind| new_monitoring_monitor_path(kind:) })
       get new_monitoring_monitor_path(kind: "nope")
       expect(response.body).to include(I18n.t("monitoring.new.choose"))
     end
@@ -207,12 +206,15 @@ RSpec.describe "Monitoring monitors" do
       expect(response.body).not_to include('name="uptime_monitor[timeout]"', 'name="uptime_monitor[environment_id]"')
     end
 
-    it "does not create a kind that cannot run yet", :aggregate_failures do
-      post monitoring_monitors_path, params: { uptime_monitor: { kind: "domain", name: "Domain", interval: "86400", timeout: "10", confirmations: "1", settings: { host: "example.com" } } }
+    it "creates a domain monitor and refuses an unknown kind", :aggregate_failures do
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "domain", name: "Domain", interval: "86400", timeout: "10", confirmations: "1", settings: { host: "example.com", days_before: "45" } } }
+      expect(project.uptime_monitors.sole).to have_attributes(kind: "domain", host: "example.com", days_before: 45)
+
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "icmp", name: "Ping", interval: "60", timeout: "10", confirmations: "1" } }
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include(I18n.t("monitoring.new.choose"))
-      expect(project.uptime_monitors).to be_empty
+      expect(project.uptime_monitors.count).to eq(1)
     end
 
     it "shows what is wrong with invalid input", :aggregate_failures do

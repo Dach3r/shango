@@ -23,6 +23,7 @@ fr:
       host_placeholder: "example.com ou {{host}}"
       host_hint: "Un nom d’hôte ou une adresse IP. Les variables viennent de l’environnement choisi plus bas ; les variables secrètes ne sont pas permises."
       ssl_hint: "En panne si le certificat n’est pas de confiance, pas valide pour l’hôte, expiré, ou expire dans moins de jours que ce nombre. Vérifié à son intervalle, sans nouvel essai rapide."
+      domain_hint: "En panne si le domaine n’est pas enregistré, a expiré, est suspendu, va être supprimé ou expire dans moins de jours que ce nombre. Un registre qui ne répond pas donne un statut inconnu, jamais en panne. Utilisez le domaine enregistré ou n’importe quel nom en dessous."
       push_hint: "Shango donne à ce moniteur une URL secrète. Votre tâche, cron ou sauvegarde l’appelle à chaque exécution ; le moniteur tombe si aucun appel n’arrive dans l’intervalle plus le délai de grâce."
       push_conditions_hint: "L’intervalle est la fréquence d’exécution de votre tâche ; le délai de grâce couvre les exécutions plus longues. Après la première échéance manquée, une nouvelle vérification a lieu 30 secondes plus tard avant de le compter en panne."
       tcp_hint: "En panne après autant de connexions refusées ou sans réponse d’affilée ; après un échec, la vérification suivante a lieu 30 secondes plus tard."
@@ -48,6 +49,14 @@ fr:
         create:
           regenerated: "Nouvelle URL de push créée. Copiez-la ci-dessous."
     causes:
+      domain_not_registered: "Le domaine n’est pas enregistré"
+      domain_expired: "Le domaine a expiré"
+      domain_expiring: "Le domaine expire bientôt"
+      domain_on_hold: "Le domaine est suspendu et ne se résout pas"
+      domain_pending_delete: "Le domaine est sur le point d’être supprimé"
+      no_rdap_service: "Le registre de ce domaine n’a pas de service RDAP"
+      rdap_unavailable: "Le registre n’a pas répondu"
+      no_expiry: "Le registre ne donne pas de date d’expiration"
       no_ping: "Pas de ping à temps"
       invalid_host: "L’hôte n’est ni un nom ni une adresse IP valides"
       no_certificate: "Le serveur n’a envoyé aucun certificat"

@@ -23,6 +23,7 @@ pt-BR:
       host_placeholder: "example.com ou {{host}}"
       host_hint: "Um nome de host ou endereço IP. As variáveis vêm do ambiente escolhido abaixo; variáveis secretas não podem ser usadas."
       ssl_hint: "Fica fora do ar quando o certificado não é confiável, não vale para o host, expirou ou expira em menos dias que este número. Verificado no seu intervalo, sem a nova tentativa rápida."
+      domain_hint: "Fica fora do ar quando o domínio não está registrado, expirou, está suspenso, prestes a ser excluído ou expira em menos dias que este número. Um registro que não responde fica como desconhecido, nunca fora do ar. Use o domínio registrado ou qualquer nome abaixo dele."
       push_hint: "O Shango dá a este monitor uma URL secreta. Seu job, cron ou backup a chama a cada execução; o monitor cai quando nenhuma chamada chega dentro do intervalo mais o período de tolerância."
       push_conditions_hint: "O intervalo é a frequência com que seu job roda; o período de tolerância cobre execuções mais longas. Após o primeiro prazo perdido, ele é verificado de novo 30 segundos depois antes de contar como fora do ar."
       tcp_hint: "Fica fora do ar após esse número de conexões recusadas ou sem resposta seguidas; após uma falha a próxima verificação ocorre 30 segundos depois."
@@ -48,6 +49,14 @@ pt-BR:
         create:
           regenerated: "Nova URL de push criada. Copie abaixo."
     causes:
+      domain_not_registered: "O domínio não está registrado"
+      domain_expired: "O domínio expirou"
+      domain_expiring: "O domínio expira em breve"
+      domain_on_hold: "O domínio está suspenso e não resolve"
+      domain_pending_delete: "O domínio está prestes a ser excluído"
+      no_rdap_service: "O registro deste domínio não tem serviço RDAP"
+      rdap_unavailable: "O registro não respondeu"
+      no_expiry: "O registro não informa data de expiração"
       no_ping: "Nenhum ping a tempo"
       invalid_host: "O host não é um nome nem um IP válido"
       no_certificate: "O servidor não enviou certificado"

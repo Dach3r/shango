@@ -63,4 +63,10 @@ RSpec.describe MonitoringHelper do
     expect(settings).not_to have_key(UptimeMonitor.human_attribute_name(:timeout))
     expect(helper.monitor_settings(create(:uptime_monitor, :push)).to_h[UptimeMonitor.human_attribute_name(:last_pinged_at)]).to eq("—")
   end
+
+  it "lists the days before expiry and the expiry of a domain monitor" do
+    settings = helper.monitor_settings(create(:uptime_monitor, :domain, expires_at: Time.utc(2027, 1, 15))).to_h
+
+    expect(settings).to include(UptimeMonitor.human_attribute_name(:days_before) => 30, UptimeMonitor.human_attribute_name(:expires_at) => "January 15, 2027 00:00")
+  end
 end

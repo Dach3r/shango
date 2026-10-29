@@ -54,7 +54,7 @@ module MonitoringHelper
     fields[:timeout] = t("monitoring.units.seconds", value: monitor.timeout) unless monitor.push?
     fields[:confirmations] = monitor.confirmations
     fields.merge!(expected_statuses: monitor.expected_statuses, max_response_ms: monitor_ms(monitor.max_response_ms)) if monitor.http?
-    fields.merge!(days_before: monitor.days_before, expires_at: monitor.expires_at ? l(monitor.expires_at, format: :long) : "—") if monitor.ssl?
+    fields.merge!(days_before: monitor.days_before, expires_at: monitor.expires_at ? l(monitor.expires_at, format: :long) : "—") if monitor.ssl? || monitor.domain?
     fields.merge!(grace: monitor_grace_label(monitor.grace), last_pinged_at: monitor.last_pinged_at ? l(monitor.last_pinged_at, format: :long) : "—") if monitor.push?
     fields.merge!(environment: monitor.environment&.name || "—", notification_channels: monitor.notification_channels.map(&:name).sort.join(", ").presence || "—")
     fields.map { |field, value| [UptimeMonitor.human_attribute_name(field), value] }

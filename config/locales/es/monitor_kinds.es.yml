@@ -23,6 +23,7 @@ es:
       host_placeholder: "example.com o {{host}}"
       host_hint: "Un nombre de host o una dirección IP. Las variables vienen del entorno elegido abajo; no se pueden usar variables secretas."
       ssl_hint: "Se marca caído cuando el certificado no es de confianza, no es válido para el host, está vencido o le quedan menos días que este número. Se revisa en su intervalo, sin el reintento rápido."
+      domain_hint: "Se marca caído cuando el dominio no está registrado, venció, está suspendido, está por eliminarse o vence en menos días que este número. Un registro que no responde queda como desconocido, nunca caído. Usa el dominio registrado o cualquier nombre debajo de él."
       push_hint: "Shango le da a este monitor una URL secreta. Tu job, cron o backup la llama cada vez que corre; el monitor se cae cuando no llega ninguna llamada dentro del intervalo más el período de gracia."
       push_conditions_hint: "El intervalo es cada cuánto corre tu job; el período de gracia cubre las ejecuciones que tardan más. Tras el primer plazo vencido se revisa de nuevo 30 segundos después antes de contarlo como caído."
       tcp_hint: "Se marca caído tras esta cantidad de conexiones rechazadas o sin respuesta seguidas; después de un fallo el siguiente chequeo corre 30 segundos más tarde."
@@ -48,6 +49,14 @@ es:
         create:
           regenerated: "Nueva URL de push creada. Cópiala abajo."
     causes:
+      domain_not_registered: "El dominio no está registrado"
+      domain_expired: "El dominio venció"
+      domain_expiring: "El dominio vence pronto"
+      domain_on_hold: "El dominio está suspendido y no resuelve"
+      domain_pending_delete: "El dominio está por ser eliminado"
+      no_rdap_service: "El registro de este dominio no tiene servicio RDAP"
+      rdap_unavailable: "El registro no respondió"
+      no_expiry: "El registro no informa fecha de vencimiento"
       no_ping: "Sin ping a tiempo"
       invalid_host: "El host no es un nombre ni una IP válidos"
       no_certificate: "El servidor no envió certificado"

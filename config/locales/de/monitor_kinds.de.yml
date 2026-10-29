@@ -23,6 +23,7 @@ de:
       host_placeholder: "example.com oder {{host}}"
       host_hint: "Ein Hostname oder eine IP-Adresse. Variablen kommen aus der unten gewählten Umgebung; geheime Variablen sind nicht erlaubt."
       ssl_hint: "Ausgefallen, wenn das Zertifikat nicht vertrauenswürdig, für den Host ungültig, abgelaufen ist oder in weniger Tagen abläuft. Geprüft im Intervall, ohne schnelle Wiederholung."
+      domain_hint: "Ausgefallen, wenn die Domain nicht registriert, abgelaufen, gesperrt, kurz vor der Löschung ist oder in weniger Tagen abläuft. Antwortet die Registry nicht, ist der Status unbekannt, nie ausgefallen. Verwenden Sie die registrierte Domain oder einen Namen darunter."
       push_hint: "Shango gibt diesem Monitor eine geheime URL. Ihr Job, Cron oder Backup ruft sie bei jedem Lauf auf; der Monitor fällt aus, wenn innerhalb von Intervall plus Karenzzeit kein Aufruf kommt."
       push_conditions_hint: "Das Intervall ist, wie oft Ihr Job läuft; die Karenzzeit deckt längere Läufe ab. Nach der ersten verpassten Frist wird 30 Sekunden später erneut geprüft, bevor er als ausgefallen gilt."
       tcp_hint: "Ausgefallen nach so vielen abgelehnten oder unbeantworteten Verbindungen in Folge; nach einem Fehler folgt die nächste Prüfung 30 Sekunden später."
@@ -48,6 +49,14 @@ de:
         create:
           regenerated: "Neue Push-URL erstellt. Unten kopieren."
     causes:
+      domain_not_registered: "Die Domain ist nicht registriert"
+      domain_expired: "Die Domain ist abgelaufen"
+      domain_expiring: "Die Domain läuft bald ab"
+      domain_on_hold: "Die Domain ist gesperrt und löst nicht auf"
+      domain_pending_delete: "Die Domain wird bald gelöscht"
+      no_rdap_service: "Die Registry dieser Domain hat keinen RDAP-Dienst"
+      rdap_unavailable: "Die Registry hat nicht geantwortet"
+      no_expiry: "Die Registry nennt kein Ablaufdatum"
       no_ping: "Kein Ping rechtzeitig"
       invalid_host: "Der Host ist kein gültiger Name und keine gültige IP-Adresse"
       no_certificate: "Der Server hat kein Zertifikat gesendet"
