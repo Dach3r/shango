@@ -94,6 +94,7 @@ ru:
       icon_empty: Иконки не найдены
       submit: Создать проект
       cancel: Отмена
+      or: Или
     memberships:
       edit:
         title: Настройки

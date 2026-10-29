@@ -94,6 +94,7 @@ ja:
       icon_empty: アイコンが見つかりません
       submit: プロジェクトを作成
       cancel: キャンセル
+      or: または
     memberships:
       edit:
         title: 設定

@@ -94,6 +94,7 @@ fr:
       icon_empty: "Aucune icône trouvée"
       submit: "Créer le projet"
       cancel: Annuler
+      or: Ou
     memberships:
       edit:
         title: "Paramètres"

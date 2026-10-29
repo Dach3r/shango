@@ -28,7 +28,14 @@
   </fieldset>
 
   <%= render Button::Component.new(form: f, icon: "plus", label: t(".submit")) %>
-  <% if current_membership %>
-    <%= render Button::Component.new(href: root_path, icon: "x", label: t(".cancel"), variant: :secondary) %>
-  <% end %>
+<% end %>
+
+<% if current_membership %>
+  <div class="my-6 flex items-center gap-4 text-xs font-medium uppercase tracking-widest text-muted">
+    <span class="h-px flex-1 bg-line"></span>
+    <%= t(".or") %>
+    <span class="h-px flex-1 bg-line"></span>
+  </div>
+
+  <%= render Button::Component.new(href: root_path, icon: "x", label: t(".cancel"), variant: :secondary) %>
 <% end %>

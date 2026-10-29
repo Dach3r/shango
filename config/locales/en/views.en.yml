@@ -94,6 +94,7 @@ en:
       icon_empty: No icons found
       submit: Create project
       cancel: Cancel
+      or: Or
     memberships:
       edit:
         title: Settings

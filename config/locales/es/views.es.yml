@@ -94,6 +94,7 @@ es:
       icon_empty: No se encontraron iconos
       submit: Crear proyecto
       cancel: Cancelar
+      or: O
     memberships:
       edit:
         title: Configuración

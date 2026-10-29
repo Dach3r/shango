@@ -94,6 +94,7 @@ zh-CN:
       icon_empty: 未找到图标
       submit: 创建项目
       cancel: 取消
+      or: 或
     memberships:
       edit:
         title: 设置

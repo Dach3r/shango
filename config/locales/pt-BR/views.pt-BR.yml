@@ -94,6 +94,7 @@ pt-BR:
       icon_empty: Nenhum ícone encontrado
       submit: Criar projeto
       cancel: Cancelar
+      or: Ou
     memberships:
       edit:
         title: Configurações

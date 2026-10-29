@@ -94,6 +94,7 @@ hi:
       icon_empty: "कोई आइकन नहीं मिला"
       submit: "प्रोजेक्ट बनाएँ"
       cancel: "रद्द करें"
+      or: "या"
     memberships:
       edit:
         title: "सेटिंग्स"
