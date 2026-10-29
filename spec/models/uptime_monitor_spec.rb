@@ -33,6 +33,28 @@ RSpec.describe UptimeMonitor do
     expect { create(:uptime_monitor, project:).update_columns(status: "paused") }.to raise_error(ActiveRecord::StatementInvalid)
   end
 
+  describe "status" do
+    let(:record) { create(:uptime_monitor, project:) }
+
+    it "moves only through its events and stamps each change", :aggregate_failures do
+      at = 1.hour.ago
+      record.go_down(at)
+
+      expect(record).to have_attributes(status: "down", last_status_change_at: at)
+
+      record.go_up
+      record.restart
+
+      expect(record).to be_pending
+      expect { record.status = "up" }.to raise_error(AASM::NoDirectAssignmentError)
+    end
+
+    it "refuses transitions that make no sense", :aggregate_failures do
+      expect { record.tap(&:go_up).go_up }.to raise_error(AASM::InvalidTransition)
+      expect { record.tap(&:go_down).go_down }.to raise_error(AASM::InvalidTransition)
+    end
+  end
+
   describe "settings" do
     it "fills the defaults of the kind, casts numbers and drops fields of other kinds", :aggregate_failures do
       record = monitor(settings: { "url" => " https://example.com ", "host" => "x", "max_response_ms" => "800", "expected_statuses" => "200, 301-302" })
@@ -125,7 +147,10 @@ RSpec.describe UptimeMonitor do
   it "bumps the config version only when what is checked changes", :aggregate_failures do
     record = create(:uptime_monitor, project:)
 
-    expect { record.update!(status: "up", failures: 1, last_checked_at: Time.current, next_check_at: 1.minute.from_now, name: "Renamed") }.not_to change(record, :config_version)
+    expect do
+      record.go_up
+      record.update!(failures: 1, last_checked_at: Time.current, next_check_at: 1.minute.from_now, name: "Renamed")
+    end.not_to change(record, :config_version)
     expect { record.update!(enabled: false) }.to change(record, :config_version).by(1)
     expect { record.update!(settings: record.settings.merge("url" => "https://example.com/other")) }.to change(record, :config_version).by(1)
     expect(record).to be_paused

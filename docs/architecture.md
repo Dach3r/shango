@@ -77,6 +77,7 @@ Existing, to be followed:
 - The browser's own find-in-page shortcuts (Cmd/Ctrl+F, Cmd/Ctrl+G, F3) are suppressed app-wide by `app/javascript/block_browser_find.js`; screens that need search provide their own (e.g. the response body search). It is a keydown `preventDefault`, so it works in every mainstream browser but cannot hide the browser's menu entry.
 - Listing queries (workspace tree, members, audit events, environments) call `.strict_loading`, so a lazy association load there raises `ActiveRecord::StrictLoadingViolationError` in specs instead of becoming an N+1; preload what the view needs. It is not a global default: single-record reads (`find`, policies) may lazy-load.
 - Tailwind with a `brand-*` color palette.
+- State machines use the `aasm` gem: states and transitions are AASM events on the model (`no_direct_assignment: true`, over the string enum with `enum: true, create_scopes: false`), so a status column never changes by assignment. First use: `UptimeMonitor#status` ([`monitoring.md`](monitoring.md) §4).
 - Lint with rubocop (`rubocop-kode`); security checks with brakeman and bundler-audit.
 
 ## 6. Key subsystems (Target)

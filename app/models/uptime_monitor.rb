@@ -1,8 +1,10 @@
 # A check that Shango runs on a schedule against something a project depends on (see docs/monitoring.md). Named
 # UptimeMonitor because Ruby already defines ::Monitor. The fields of each kind live in `settings` and are validated
 # per kind; the kind cannot change after creation. Every change to what is checked bumps `config_version`, so a check
-# enqueued before the change is discarded.
+# enqueued before the change is discarded. `status` is an AASM state machine: it only moves through its events.
 class UptimeMonitor < ApplicationRecord
+  include AASM
+
   INTERVALS = [60, 120, 300, 600, 900, 1800, 3600].freeze
   DOMAIN_INTERVALS = [21_600, 43_200, 86_400].freeze
   PUSH_INTERVALS = (60..604_800)
@@ -38,6 +40,25 @@ class UptimeMonitor < ApplicationRecord
 
   enum :kind, { http: "http", tcp: "tcp", ssl: "ssl", domain: "domain", push: "push" }, validate: true
   enum :status, { pending: "pending", up: "up", down: "down" }
+
+  aasm column: :status, enum: true, create_scopes: false, no_direct_assignment: true, whiny_transitions: true do
+    state :pending, initial: true
+    state :up, :down
+
+    after_all_transitions :stamp_status_change
+
+    event :go_up do
+      transitions from: %i[pending down], to: :up
+    end
+
+    event :go_down do
+      transitions from: %i[pending up], to: :down
+    end
+
+    event :restart do
+      transitions from: %i[pending up down], to: :pending
+    end
+  end
 
   store_accessor :settings, :mode, :url, :http_method, :expected_statuses, :max_response_ms, :host, :port, :days_before, :grace
 
@@ -87,6 +108,10 @@ class UptimeMonitor < ApplicationRecord
   end
 
   private
+
+  def stamp_status_change(at = Time.current)
+    self.last_status_change_at = at
+  end
 
   def normalize_settings
     kept = settings.to_h.stringify_keys.slice(*SETTINGS.fetch(kind.to_s, [])).compact_blank
