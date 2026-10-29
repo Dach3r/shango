@@ -1,10 +1,14 @@
-<%# Panel of the subnet calculator. It keeps no history, so it only has the form, the result and the info column. %>
-<div class="relative flex h-full min-h-0 min-w-0 flex-col">
-  <%= render "network/workspaces/subnet_form" %>
+<%# Panel of the subnet calculator. Render with `check:` (the saved run on display, or nil) and `result:` (its stored result). %>
+<div class="flex h-full min-h-0 flex-col-reverse lg:flex-row">
+  <%= render "network/workspaces/history", tool: "subnet", current: check %>
 
-  <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
-    <div id="subnet_result" class="min-h-0 min-w-0 flex-1 overflow-y-auto p-6 empty:hidden lg:empty:block" aria-live="polite"><%= render "network/workspaces/result", kind: "subnet", check: nil, result: nil %></div>
+  <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+    <%= render "network/workspaces/subnet_form", input: check&.input || {} %>
 
-    <%= render "network/workspaces/aside", width: "lg:w-[calc(22rem-1px)]", hint: t("network.subnet.hint"), statuses: %i[inside outside] %>
+    <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <div id="subnet_result" class="min-h-0 min-w-0 flex-1 overflow-y-auto p-6 empty:hidden lg:empty:block" aria-live="polite"><%= render "network/workspaces/result", kind: "subnet", check:, result: %></div>
+
+      <%= render "network/workspaces/aside", width: "lg:w-[calc(22rem-1px)]", hint: t("network.subnet.hint"), statuses: %i[inside outside] %>
+    </div>
   </div>
 </div>

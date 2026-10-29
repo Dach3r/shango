@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.describe "Network subnets" do
   include_context "with workbench project"
 
-  def calculate(**fields)
-    post network_subnets_path, params: { subnet: { network: "192.168.1.0/24", **fields } }, headers: turbo_headers
+  def calculate(network: "192.168.1.0/24", **fields)
+    post network_subnets_path, params: { subnet: { network:, **fields } }, headers: turbo_headers
+    follow_redirect! if response.location.to_s.include?("/network/checks/")
   end
 
   it "requires authentication" do
@@ -14,9 +15,11 @@ RSpec.describe "Network subnets" do
     expect(response).to redirect_to(new_user_session_path)
   end
 
-  it "shows the range of the network without saving it", :aggregate_failures do
-    expect { calculate }.not_to change(NetworkCheck, :count)
+  it "saves the run and shows the range of the network at its own address", :aggregate_failures do
+    expect { calculate(contains: "") }.to change(project.network_checks.subnet, :count).by(1)
 
+    expect(request.path).to eq(network_check_path(project.network_checks.last))
+    expect(project.network_checks.last).to have_attributes(target: "192.168.1.0/24", outcome: "ok", input: { "network" => "192.168.1.0/24" })
     expect(response).to have_http_status(:ok)
     expect(response.body).to include("subnet_result", "192.168.1.0/24", "255.255.255.0", "0.0.0.255", "192.168.1.255", "254")
     expect(response.body).to include(I18n.t("network.subnet.fields.broadcast"), I18n.t("network.subnet.scopes.private"), "IPv4")
@@ -35,14 +38,21 @@ RSpec.describe "Network subnets" do
   end
 
   it "writes large counts as powers of two and notes a cut list", :aggregate_failures do
-    post network_subnets_path, params: { subnet: { network: "2001:db8::/48", split: "/64" } }, headers: turbo_headers
+    calculate(network: "2001:db8::/48", split: "/64")
 
     expect(response.body).to include("2^80", I18n.t("network.subnet.split_truncated", shown: 64, count: "65,536"))
     expect(response.body).not_to include(I18n.t("network.subnet.fields.broadcast"))
   end
 
-  it "answers 422 with the error for invalid input", :aggregate_failures do
-    calculate(split: "/8")
+  it "marks the run when the address is outside", :aggregate_failures do
+    calculate(contains: "10.0.0.1")
+
+    expect(project.network_checks.last.outcome).to eq("warn")
+    expect(response.body).to include(I18n.t("network.history.subnet"), "192.168.1.0/24")
+  end
+
+  it "answers 422 with the error for invalid input and saves nothing", :aggregate_failures do
+    expect { calculate(split: "/8") }.not_to change(NetworkCheck, :count)
 
     expect(response).to have_http_status(:unprocessable_content)
     expect(response.body).to include(I18n.t("network.errors.invalid_split", min: 25, max: 32))

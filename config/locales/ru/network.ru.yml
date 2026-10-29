@@ -137,6 +137,7 @@ ru:
       contains_title: "Проверка адреса"
       split_title: "%{count} подсетей /%{prefix}"
       split_truncated: "Показаны первые %{shown} из %{count}."
+      summary: "IPv%{version} · доступных хостов: %{hosts}"
     empty:
       dns:
         title: "Пока нечего показывать"
@@ -154,6 +155,7 @@ ru:
       dns: "Проверки DNS"
       ports: "Проверки портов"
       ping: "TCP-пинги"
+      subnet: "Подсети"
       empty: "Пока ничего не проверялось."
       clear: "Очистить"
       ago: "%{time} назад"

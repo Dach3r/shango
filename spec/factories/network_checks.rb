@@ -25,6 +25,13 @@ FactoryBot.define do
       end
     end
 
+    trait :subnet do
+      kind { "subnet" }
+      target { "192.168.1.0/24" }
+      input { { "network" => "192.168.1.10/24", "contains" => "192.168.1.77" } }
+      result { Network::Checks::Codec.dump("subnet", Network::Subnets::Calculate.call(network: "192.168.1.10/24", contains: "192.168.1.77").data) }
+    end
+
     trait :ping do
       kind { "ping" }
       input { { "host" => "example.com", "port" => "443", "attempts" => "2" } }

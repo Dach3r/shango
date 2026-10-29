@@ -48,6 +48,22 @@ RSpec.describe Network::Checks::Digest do
     expect(ping.call(0).tone).to eq("bad")
   end
 
+  it "labels a subnet with its network and usable hosts", :aggregate_failures do
+    digest = described_class.for(:subnet, Network::Subnets::Calculate.call(network: "10.0.0.0/16").data)
+
+    expect(digest).to have_attributes(label: "10.0.0.0/16", tone: "ok", key: "network.subnet.summary", progress: nil)
+    expect(digest.args).to eq(hosts: "65,534", version: 4)
+    expect(described_class.for(:subnet, Network::Subnets::Calculate.call(network: "2001:db8::/48").data).args[:hosts]).to eq("2^80")
+  end
+
+  it "warns when the address looked for is outside the subnet", :aggregate_failures do
+    inside = Network::Subnets::Calculate.call(network: "10.0.0.0/16", contains: "10.0.9.9").data
+    outside = Network::Subnets::Calculate.call(network: "10.0.0.0/16", contains: "10.1.0.1").data
+
+    expect(described_class.for(:subnet, inside).tone).to eq("ok")
+    expect(described_class.for(:subnet, outside).tone).to eq("warn")
+  end
+
   it "has a digest for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.for("nmap", {}) }.to raise_error(KeyError)

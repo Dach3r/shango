@@ -1,5 +1,5 @@
 <%# The stored result of a saved run, or an empty state. Render with `kind:`, `check:` and `result:`. %>
-<% partials = { "dns" => "network/dns_checks/result", "ports" => "network/port_checks/result", "ping" => "network/pings/result" } %>
+<% partials = { "dns" => "network/dns_checks/result", "ports" => "network/port_checks/result", "ping" => "network/pings/result", "subnet" => "network/subnets/result" } %>
 <% if check %>
   <%= render partials.fetch(kind), result:, check: %>
 <% else %>

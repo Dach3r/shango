@@ -46,6 +46,12 @@ RSpec.describe Network::Checks::Codec do
     expect(round_trip("ping", data)).to eq(data)
   end
 
+  it "round-trips a subnet, its huge IPv6 counts included" do
+    data = Network::Subnets::Calculate.call(network: "2001:db8::/48", split: "/64", contains: "2001:db8::1").data
+
+    expect(round_trip("subnet", data)).to eq(data)
+  end
+
   it "has a codec for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.dump("nmap", {}) }.to raise_error(KeyError)

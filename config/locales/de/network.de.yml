@@ -137,6 +137,7 @@ de:
       contains_title: "Adressprüfung"
       split_title: "%{count} Subnetze /%{prefix}"
       split_truncated: "Die ersten %{shown} von %{count} werden angezeigt."
+      summary: "IPv%{version} · %{hosts} nutzbare Hosts"
     empty:
       dns:
         title: "Noch nichts anzuzeigen"
@@ -154,6 +155,7 @@ de:
       dns: "DNS-Prüfungen"
       ports: "Port-Prüfungen"
       ping: "TCP-Pings"
+      subnet: "Subnetze"
       empty: "Noch nichts geprüft."
       clear: "Leeren"
       ago: "vor %{time}"

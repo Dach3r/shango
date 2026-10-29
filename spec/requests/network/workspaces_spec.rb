@@ -38,12 +38,12 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(%(data-dns-type-ptr-value="#{I18n.t("network.dns.ptr_placeholder")}"), %(placeholder="#{I18n.t("network.dns.domain_placeholder")}"))
     end
 
-    it "renders the subnet calculator without a history", :aggregate_failures do
+    it "renders the subnet calculator with its history", :aggregate_failures do
       sign_in_with_project
       get network_workspace_path("subnet")
 
       expect(response.body).to include(I18n.t("network.subnet.submit"), network_subnets_path, I18n.t("network.empty.subnet.hint"), I18n.t("network.groups.utilities"))
-      expect(response.body).not_to include(I18n.t("network.history.clear"))
+      expect(response.body).to include(I18n.t("network.history.subnet"), I18n.t("network.history.empty"))
     end
 
     it "has no page for an unknown tool" do

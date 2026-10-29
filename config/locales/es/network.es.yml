@@ -137,6 +137,7 @@ es:
       contains_title: "Comprobación de dirección"
       split_title: "%{count} subredes /%{prefix}"
       split_truncated: "Se muestran las primeras %{shown} de %{count}."
+      summary: "IPv%{version} · %{hosts} hosts utilizables"
     empty:
       dns:
         title: "Aún no hay nada que mostrar"
@@ -154,6 +155,7 @@ es:
       dns: "Comprobaciones DNS"
       ports: "Comprobaciones de puertos"
       ping: "Pings TCP"
+      subnet: "Subredes"
       empty: "Aún no hay comprobaciones."
       clear: "Borrar"
       ago: "hace %{time}"

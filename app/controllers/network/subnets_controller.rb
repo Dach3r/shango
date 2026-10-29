@@ -3,6 +3,9 @@ module Network
     def create
       attributes = params.expect(subnet: %i[network split contains])
       @result = Network::Subnets::Calculate.call(network: attributes[:network], split: attributes[:split], contains: attributes[:contains], environment: current_environment)
+      @check = record_check(:subnet, attributes.to_h.compact_blank)
+      return redirect_to(network_check_path(@check), status: :see_other) if @check
+
       render status: @result.success? ? :ok : :unprocessable_content
     end
 

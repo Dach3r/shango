@@ -45,6 +45,15 @@ RSpec.describe "Network checks" do
       expect(response.body).to include(%(placeholder="#{I18n.t("network.dns.ptr_placeholder")}"))
     end
 
+    it "shows a saved subnet read-only with what was typed", :aggregate_failures do
+      subnet = create(:network_check, :subnet, project:, user:)
+      get network_check_path(subnet)
+
+      expect(response.body).to include("subnet_result", "192.168.1.0/24", "192.168.1.10/24", "192.168.1.77", I18n.t("network.statuses.inside"), I18n.t("network.new_check"))
+      expect(response.body).to include(I18n.t("network.subnet.summary", version: 4, hosts: 254))
+      expect(response.body).not_to include(I18n.t("network.subnet.submit"))
+    end
+
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
       ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)

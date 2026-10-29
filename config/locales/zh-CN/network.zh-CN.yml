@@ -137,6 +137,7 @@ zh-CN:
       contains_title: "地址检查"
       split_title: "%{count} 个 /%{prefix} 子网"
       split_truncated: "显示 %{count} 个中的前 %{shown} 个。"
+      summary: "IPv%{version} · %{hosts} 个可用主机"
     empty:
       dns:
         title: "暂无内容可显示"
@@ -154,6 +155,7 @@ zh-CN:
       dns: "DNS 检查"
       ports: "端口检查"
       ping: "TCP ping"
+      subnet: "子网"
       empty: "尚未检查任何内容。"
       clear: "清除"
       ago: "%{time}前"

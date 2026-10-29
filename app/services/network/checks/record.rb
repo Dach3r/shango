@@ -21,7 +21,7 @@ module Network
         return Result.failure(error: :failed_run) if @result.failure?
 
         digest = Digest.for(@kind, @result.data)
-        check = @project.network_checks.create!(kind: @kind, user: @user, environment: @environment, target: @result.data[:host], outcome: digest.tone,
+        check = @project.network_checks.create!(kind: @kind, user: @user, environment: @environment, target: @result.data[:host] || @result.data[:cidr], outcome: digest.tone,
                                                 input: @input.to_h.transform_values { |value| value.to_s.first(NetworkCheck::INPUT_LIMIT) }, result: Codec.dump(@kind, @result.data))
         trim
         Result.success(check)

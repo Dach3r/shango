@@ -137,6 +137,7 @@ ja:
       contains_title: "アドレスの確認"
       split_title: "/%{prefix} のサブネット %{count} 個"
       split_truncated: "%{count} 個のうち最初の %{shown} 個を表示しています。"
+      summary: "IPv%{version} · 利用可能なホスト %{hosts}"
     empty:
       dns:
         title: "表示する内容はまだありません"
@@ -154,6 +155,7 @@ ja:
       dns: "DNS チェック"
       ports: "ポートチェック"
       ping: "TCP ping"
+      subnet: "サブネット"
       empty: "まだチェックしていません。"
       clear: "消去"
       ago: "%{time}前"

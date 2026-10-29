@@ -137,6 +137,7 @@ hi:
       contains_title: "पते की जाँच"
       split_title: "/%{prefix} के %{count} सबनेट"
       split_truncated: "%{count} में से पहले %{shown} दिखाए गए हैं।"
+      summary: "IPv%{version} · %{hosts} उपयोग योग्य होस्ट"
     empty:
       dns:
         title: "अभी दिखाने के लिए कुछ नहीं"
@@ -154,6 +155,7 @@ hi:
       dns: "DNS जाँच"
       ports: "पोर्ट जाँच"
       ping: "TCP पिंग"
+      subnet: "सबनेट"
       empty: "अभी तक कुछ जाँचा नहीं गया।"
       clear: "साफ़ करें"
       ago: "%{time} पहले"

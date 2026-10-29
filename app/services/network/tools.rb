@@ -1,6 +1,6 @@
 module Network
-  # The tools of the Network workspace in rail order. Each one has a page at `/network/<name>`; tools that keep a history
-  # store their runs as `NetworkCheck` of the same kind.
+  # The tools of the Network workspace in rail order. Each one has a page at `/network/<name>` and stores its runs as
+  # `NetworkCheck` of the same kind.
   module Tools
     Tool = Data.define(:name, :icon, :group)
 

@@ -137,6 +137,7 @@ en:
       contains_title: "Address check"
       split_title: "%{count} subnets of /%{prefix}"
       split_truncated: "Showing the first %{shown} of %{count}."
+      summary: "IPv%{version} · %{hosts} usable hosts"
     empty:
       dns:
         title: "Nothing to show yet"
@@ -154,6 +155,7 @@ en:
       dns: "DNS checks"
       ports: "Port checks"
       ping: "TCP pings"
+      subnet: "Subnets"
       empty: "Nothing checked yet."
       clear: "Clear"
       ago: "%{time} ago"

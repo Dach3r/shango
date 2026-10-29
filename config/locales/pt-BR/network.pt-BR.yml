@@ -137,6 +137,7 @@ pt-BR:
       contains_title: "Verificação de endereço"
       split_title: "%{count} sub-redes /%{prefix}"
       split_truncated: "Mostrando as primeiras %{shown} de %{count}."
+      summary: "IPv%{version} · %{hosts} hosts utilizáveis"
     empty:
       dns:
         title: "Ainda não há nada para mostrar"
@@ -154,6 +155,7 @@ pt-BR:
       dns: "Verificações de DNS"
       ports: "Verificações de portas"
       ping: "Pings TCP"
+      subnet: "Sub-redes"
       empty: "Nada verificado ainda."
       clear: "Limpar"
       ago: "há %{time}"
