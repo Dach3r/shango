@@ -1,5 +1,4 @@
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
-<% content_for :palette, "mono" %>
 <% content_for :content do %>
   <main class="relative flex min-h-screen overflow-hidden bg-page font-sans text-body">
     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--dots)_1.5px,transparent_1.5px)] bg-size-[1.75rem_1.75rem] [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)] lg:[mask-image:radial-gradient(ellipse_at_72%_50%,black_25%,transparent_75%)]"></div>
@@ -21,7 +20,7 @@
       <%= render Logo::Component.new(href: root_path, class: "absolute top-5 left-5 z-10 sm:top-8 sm:left-8") %>
 
       <div class="absolute right-5 bottom-5 z-10 flex items-center gap-2">
-        <%= render ThemeSwitcher::Component.new %>
+        <%= render ThemeSwitcher::Component.new unless membership_theme? %>
         <%= render LocaleSwitcher::Component.new(collapsible: true) %>
       </div>
 

@@ -6,7 +6,7 @@ module Theming
   DEFAULT = "system".freeze
 
   included do
-    helper_method :current_theme, :current_palette
+    helper_method :current_theme, :current_palette, :membership_theme?
   end
 
   # Returns the theme as a string when it is supported, nil otherwise.
@@ -26,6 +26,11 @@ module Theming
 
   def current_palette
     theme_membership&.theme || Membership::THEMES.fetch(:mono)
+  end
+
+  # True when the theme comes from the membership, so the cookie switcher has no effect.
+  def membership_theme?
+    theme_membership.present?
   end
 
   def theme_membership

@@ -12,10 +12,12 @@ RSpec.describe "Projects" do
       expect(response).to redirect_to(new_project_path)
     end
 
-    it "renders the new form" do
+    it "renders the new form with the mono palette and the theme switcher", :aggregate_failures do
       get new_project_path
 
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include(%(data-theme="system" data-palette="mono"))
+      expect(response.body).to include(%(data-controller="theme-switcher"))
     end
 
     it "creates the project and selects it", :aggregate_failures do
@@ -38,6 +40,14 @@ RSpec.describe "Projects" do
       get workbench_root_path
 
       expect(response).to have_http_status(:ok)
+    end
+
+    it "renders the new form with the member's theme and no switcher", :aggregate_failures do
+      context[2].update!(color_scheme: "light", theme: "green")
+      get new_project_path
+
+      expect(response.body).to include(%(data-theme="light" data-palette="green"))
+      expect(response.body).not_to include(%(data-controller="theme-switcher"))
     end
 
     it "falls back to the oldest membership when the current one is archived", :aggregate_failures do
