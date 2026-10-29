@@ -41,11 +41,12 @@ Planned in this order; each one ships with its service, page, locales, specs and
 
 | Tool | `kind` | What it does |
 |------|--------|--------------|
-| **HTTP check** | `http` | GET or HEAD, redirects followed by hand with every hop re-checked by `SsrfPolicy`; DNS, TCP, TLS and TTFB timings per hop; security headers analysis. No body, cookies or auth. |
 | **Blocklist** | `blocklist` | An IP (or a domain through its A and MX) against a fixed set of DNSBLs whose terms allow this use (no Spamhaus); a list refusing the query is shown as `unavailable`, never as clean. |
 | **DNS health** | `zone` | NS count and network diversity, SOA serial agreement, CAA, broken delegation, and full DNSSEC validation (DS ↔ DNSKEY and RRSIG signatures and validity). |
 
 Whois over port 43 is not planned: RDAP replaces it with structured JSON over HTTPS.
+
+An HTTP check (status, redirects, timings and headers of a URL) is not a Network tool: checking a URL belongs to Monitoring, which runs it on a schedule with history and alerts ([`monitoring.md`](monitoring.md)).
 
 The UI labels the third tool **TCP ping**, never plain "ping", so nobody mistakes it for ICMP.
 
@@ -175,7 +176,6 @@ Planned limits for the second wave (confirmed per tool when it is built):
 
 | Limit | Value |
 |-------|-------|
-| HTTP check | 10 redirects, 5 s per hop, GET or HEAD only, body discarded |
 | DNSBL query | 3 s per list, parallel |
 | SPF recursive lookups | 10 (the RFC 7208 limit) |
 

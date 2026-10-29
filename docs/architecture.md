@@ -49,7 +49,7 @@ Entities and ownership:
 - A `Project` owns its `Environment`s (with `Variable`s), `Service`s, `Server`s, `NotificationChannel`s, `Collection`s, `Monitor`s, and `ApiDocumentation`.
 - A `Project` has `Membership`s (a `User` with the role `owner` or `member`), the `Invitation`s that bring new people in and the `AuditEvent`s that record changes to that team.
 - A `Collection` contains nested `Folder`s, which contain `Request`s (the model is named `ApiRequest`; each run is stored as a `RequestExecution`).
-- A `Monitor` references a `Request`, runs in an `Environment`, optionally targets a `Service`, and records many `CheckResult`s and `Incident`s.
+- A `Monitor` (the model is named `UptimeMonitor`, because Ruby already defines `::Monitor`) checks a typed URL or references a `Request`, or a host, domain or push token depending on its kind; it runs in an `Environment`, optionally targets a `Service`, alerts its `NotificationChannel`s and records many `CheckResult`s and `Incident`s.
 - An `Incident` can start many `Investigation`s (AI-assisted).
 - A `Server` optionally belongs to an `Environment`.
 - `ApiDocumentation` is derived from `Request`s.
@@ -59,7 +59,7 @@ Rules:
 - **`Project` is the tenancy boundary.** Every project-owned record reaches its project, and every query is scoped through it. Cross-project access must be impossible by construction (scoped associations, not ad hoc `where` clauses).
 - **Resource creator.** `Collection` and `Environment` keep a nullable `creator_id` (the member who created or imported them; `nullify` when the user is deleted). It is recorded by `Collections::Create`, `Environments::Create` and the importers, and decides who may change or delete them (see *Authorization* in §7). Folders and requests follow their collection.
 - **Selected environment.** `Membership#current_environment_id` stores the environment each member works with in a project.
-- **Reuse over duplication.** A `Monitor` references a `Request`; it does not copy URL, method, headers, or body. `ApiDocumentation` is derived from requests and extended manually.
+- **Reuse over duplication.** A `Monitor` built from a `Request` references it; it does not copy URL, method, headers, or body (a monitor of a typed URL keeps only that URL). `ApiDocumentation` is derived from requests and extended manually.
 - **Variables resolve at execution time.** `{{name}}` references in requests, monitors, and servers are interpolated from the selected `Environment` when run.
 
 ## 5. Application conventions
@@ -87,7 +87,7 @@ Requests run server-side and synchronously inside the web request: `ApiClient::R
 
 ### Monitoring
 
-A scheduler enqueues check jobs per monitor at its interval (Solid Queue recurring tasks or a dispatcher job). Each check executes the referenced request, evaluates success/failure conditions, and writes a `CheckResult`. State transitions (up → down, down → up) open or resolve an `Incident` and emit notification events. Notification dispatch is deduplicated to avoid repeated alerts.
+A scheduler enqueues check jobs per monitor at its interval (Solid Queue recurring tasks or a dispatcher job). Each check executes the referenced request, evaluates success/failure conditions, and writes a `CheckResult`. State transitions (up → down, down → up) open or resolve an `Incident` and emit notification events. Notification dispatch is deduplicated to avoid repeated alerts. Design, limits and build plan: [`monitoring.md`](monitoring.md).
 
 ### Notifications
 
