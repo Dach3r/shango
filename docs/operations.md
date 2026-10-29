@@ -42,6 +42,7 @@ Optional, with defaults:
 | `SHANGO_DRAFT_RETENTION_DAYS` | 30 | Request drafts (unsaved editor state) untouched for this long are deleted daily (`0` keeps them). |
 | `SHANGO_EXPORT_RETENTION_MINUTES` | 60 | Finished collection exports (the file, encrypted in `collection_exports`) are deleted this many minutes after they finish (1 to 1440); `PruneCollectionExportsJob` sweeps hourly. Exports are built by `ExportCollectionJob` on the `exports` queue, so a Solid Queue worker must be running. |
 | `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` | 90 | Saved Network Tools runs older than this are deleted daily (`0` keeps them). |
+| `SHANGO_MONITOR_RESULTS_RETENTION_DAYS` | 30 | Monitor check results and alert deliveries older than this are deleted hourly by `PruneMonitoringJob` (`0` keeps them). Hourly rollups (charts, averages) are kept 400 days and incidents (uptime) forever. |
 | `RAILS_MAX_THREADS`, `WEB_CONCURRENCY` | 5, 1 | Puma threads (also the DB pool per process) and worker processes. |
 | `JOB_CONCURRENCY` | 1 | Solid Queue worker processes. |
 | `SHANGO_MONITORING_THREADS` | 5 | Threads of the Solid Queue worker dedicated to the `monitoring` queue (monitor checks). |
@@ -58,13 +59,14 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 4. Routine upkeep
 
-- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors). They only run while a worker is up.
+- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors), monitoring retention (hourly at :40). They only run while a worker is up.
 - Rotate encryption keys when someone with access leaves: [`api-client.md`](api-client.md) §6.
 - Keep dependencies current (Dependabot PRs; CI runs `bundler-audit` on every push).
 - Errors go to stdout with a request id (`log_tags`); ship them to your log platform. An error tracker (Sentry or similar) is not bundled; add one if you need alerting.
 
 ## 5. Known gaps (tracked, not blocking)
 
+- **Monitoring size:** a monitor checked every minute writes about 1 440 results a day, ≈ 43 000 over the default 30 days (≈ 200 bytes each with indexes, so ≈ 9 MB per monitor); the 50 monitors a project may have at one minute come to ≈ 430 MB. Five-minute monitors (the default) need a fifth of that. Rollups add one row per monitor and hour (≈ 9 600 per monitor over 400 days). Lower `SHANGO_MONITOR_RESULTS_RETENTION_DAYS` on small disks. Each `monitoring` thread handles about 30 one-minute monitors whose checks always hit the 10 s timeout, and many more in practice (most checks take well under a second); raise `SHANGO_MONITORING_THREADS` when the Solid Queue dashboard shows `monitoring` jobs waiting, and watch `SHANGO_MONITORS_TOTAL` on shared installations.
 - **Team history:** `audit_events` are never purged. A project's history only grows by team changes (a handful of rows per change), so this is fine for now; add a retention job if it ever matters.
 - **Existing data after roles shipped:** collections and environments created before `creator_id` existed have no creator, so only owners can change or delete them. Promote the right people to owner, or recreate the records, if members need to edit them.
 - **Sidebar tree cache:** the workspace tree is loaded with three bounded queries per page (no request bodies) and is covered by a query-count spec; it is not cached because moves and bulk position updates would need reliable invalidation. Revisit when projects with thousands of requests show up in profiling.

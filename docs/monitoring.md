@@ -1,6 +1,6 @@
 # Shango — Monitoring
 
-> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`; and alerts by email and webhook (`NotificationChannel`, `MonitorChannel`, `NotificationDelivery`, `Monitoring::Notifications::*`, `NotificationDeliveryJob`, `MonitoringMailer`, `Monitoring::ChannelsController`). Retention, audit events, Slack and Discord, the other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
+> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`; and alerts by email and webhook (`NotificationChannel`, `MonitorChannel`, `NotificationDelivery`, `Monitoring::Notifications::*`, `NotificationDeliveryJob`, `MonitoringMailer`, `Monitoring::ChannelsController`). Results and deliveries are pruned by `PruneMonitoringJob`. Audit events, Slack and Discord, the other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
 
 ## 1. Goal
 
@@ -172,6 +172,7 @@ One logical commit per step, each with its specs (100 % line and branch), locale
 3. `✨ feat(monitoring)` — `Checks::Apply`, `Perform`, `Run`, dispatcher, `Pause`/`Resume`, jobs, recurring task and queue worker.
 4. `✨ feat(monitoring)` — HTTP monitors of a typed URL (`Probes::Http`, `Guard`), index/show/form, *Run now*, pause, the live `ToolsNav` entry.
 5. `✨ feat(monitoring)` — notification channels (email, webhook), deliveries, *Send test* (below).
+6. `✨ feat(monitoring)` — retention (`PruneMonitoringJob`, below).
 
 ### Next, in this order
 
@@ -187,7 +188,7 @@ Alerts come first: a monitor nobody is told about is only useful to someone watc
 - Docs: §6 (verification snippet for the signature in the doc), `operations.md` (deliveries need SMTP for email).
 - Specs: Apply creates deliveries only on transitions and only for enabled channels; the job's idempotency and retries; signature (known vector); guard refusal and the metadata address; masking of the URL in errors; mailer previews in every locale.
 
-**6. Retention** — `✨ feat(monitoring)`.
+**6. Retention** — `✨ feat(monitoring)`. **Built.**
 
 - `PruneMonitoringJob` in the pattern of `PruneNetworkChecksJob`: `check_results` older than `SHANGO_MONITOR_RESULTS_RETENTION_DAYS` (30, `0` keeps them), `check_rollups` older than 400 days, `notification_deliveries` with the same days as results; `in_batches(of: 1000).delete_all` on `checked_at` (BRIN) and `hour`. Incidents are kept (they are the uptime history).
 - `config/recurring.yml`: every hour under `production:` (not in development).
