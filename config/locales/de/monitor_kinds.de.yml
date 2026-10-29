@@ -23,6 +23,10 @@ de:
       host_placeholder: "example.com oder {{host}}"
       host_hint: "Ein Hostname oder eine IP-Adresse. Variablen kommen aus der unten gewählten Umgebung; geheime Variablen sind nicht erlaubt."
       ssl_hint: "Ausgefallen, wenn das Zertifikat nicht vertrauenswürdig, für den Host ungültig, abgelaufen ist oder in weniger Tagen abläuft. Geprüft im Intervall, ohne schnelle Wiederholung."
+      modes:
+        url: "Eine URL"
+        request: "Eine gespeicherte Anfrage des API-Clients"
+      request_hint: "Wird wie gespeichert gesendet (Methode, Header, Body und Auth) mit der unten gewählten Umgebung; geheime Variablen funktionieren und von der Antwort wird nichts gespeichert. Entwürfe werden nicht verwendet."
       domain_hint: "Ausgefallen, wenn die Domain nicht registriert, abgelaufen, gesperrt, kurz vor der Löschung ist oder in weniger Tagen abläuft. Antwortet die Registry nicht, ist der Status unbekannt, nie ausgefallen. Verwenden Sie die registrierte Domain oder einen Namen darunter."
       push_hint: "Shango gibt diesem Monitor eine geheime URL. Ihr Job, Cron oder Backup ruft sie bei jedem Lauf auf; der Monitor fällt aus, wenn innerhalb von Intervall plus Karenzzeit kein Aufruf kommt."
       push_conditions_hint: "Das Intervall ist, wie oft Ihr Job läuft; die Karenzzeit deckt längere Läufe ab. Nach der ersten verpassten Frist wird 30 Sekunden später erneut geprüft, bevor er als ausgefallen gilt."
@@ -49,6 +53,9 @@ de:
         create:
           regenerated: "Neue Push-URL erstellt. Unten kopieren."
     causes:
+      request_missing: "Die gespeicherte Anfrage wurde gelöscht"
+      auth_failed: "Die Authentifizierung der Anfrage ist fehlgeschlagen"
+      invalid_request: "Die gespeicherte Anfrage kann nicht gesendet werden"
       domain_not_registered: "Die Domain ist nicht registriert"
       domain_expired: "Die Domain ist abgelaufen"
       domain_expiring: "Die Domain läuft bald ab"

@@ -26,6 +26,7 @@ RSpec.describe Monitoring::Probes::Domain do
     expect(probe(lookup(expires: "2026-10-01T00:00:00Z"))).to have_attributes(error: "domain_expired", detail: "2026-10-01")
     expect(probe(lookup(statuses: ["client hold"]))).to have_attributes(error: "domain_on_hold")
     expect(probe(lookup(statuses: ["pending delete"]))).to have_attributes(error: "domain_pending_delete")
+    expect(probe(lookup(expires: nil, statuses: ["server hold"]))).to have_attributes(error: "domain_on_hold", detail: nil, expires_at: nil)
     expect(probe(Result.failure(error: :not_registered))).to have_attributes(status: "down", error: "domain_not_registered")
   end
 

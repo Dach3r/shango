@@ -30,6 +30,13 @@ RSpec.describe Monitoring::Monitors::Ping do
     expect(monitor.reload.last_pinged_at).to be_nil
   end
 
+  it "leaves the ping time alone when the check could not be applied" do
+    allow(Monitoring::Checks::Apply).to receive(:call).and_return(Result.failure(error: :stale))
+    described_class.call(token:, at:)
+
+    expect(monitor.reload.last_pinged_at).to be_nil
+  end
+
   it "finds nothing for an unknown or blank token, or a token of another kind", :aggregate_failures do
     expect(described_class.call(token: "nope")).to have_attributes(error: :not_found)
     expect(described_class.call(token: "")).to have_attributes(error: :not_found)

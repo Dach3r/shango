@@ -23,6 +23,10 @@ pt-BR:
       host_placeholder: "example.com ou {{host}}"
       host_hint: "Um nome de host ou endereço IP. As variáveis vêm do ambiente escolhido abaixo; variáveis secretas não podem ser usadas."
       ssl_hint: "Fica fora do ar quando o certificado não é confiável, não vale para o host, expirou ou expira em menos dias que este número. Verificado no seu intervalo, sem a nova tentativa rápida."
+      modes:
+        url: "Uma URL"
+        request: "Uma requisição salva do Cliente de API"
+      request_hint: "Enviada como está salva (método, cabeçalhos, corpo e autenticação) com o ambiente escolhido abaixo; variáveis secretas funcionam e nada da resposta é armazenado. Rascunhos não são usados."
       domain_hint: "Fica fora do ar quando o domínio não está registrado, expirou, está suspenso, prestes a ser excluído ou expira em menos dias que este número. Um registro que não responde fica como desconhecido, nunca fora do ar. Use o domínio registrado ou qualquer nome abaixo dele."
       push_hint: "O Shango dá a este monitor uma URL secreta. Seu job, cron ou backup a chama a cada execução; o monitor cai quando nenhuma chamada chega dentro do intervalo mais o período de tolerância."
       push_conditions_hint: "O intervalo é a frequência com que seu job roda; o período de tolerância cobre execuções mais longas. Após o primeiro prazo perdido, ele é verificado de novo 30 segundos depois antes de contar como fora do ar."
@@ -49,6 +53,9 @@ pt-BR:
         create:
           regenerated: "Nova URL de push criada. Copie abaixo."
     causes:
+      request_missing: "Sua requisição salva foi excluída"
+      auth_failed: "A autenticação da requisição falhou"
+      invalid_request: "A requisição salva não pode ser enviada"
       domain_not_registered: "O domínio não está registrado"
       domain_expired: "O domínio expirou"
       domain_expiring: "O domínio expira em breve"

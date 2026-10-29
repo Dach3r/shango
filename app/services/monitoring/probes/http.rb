@@ -21,8 +21,17 @@ module Monitoring
         end
       end
 
+      # A monitor of a saved request is checked by Probes::Request.
       def self.call(monitor)
-        new(monitor).call
+        monitor.mode == "request" ? Request.call(monitor) : new(monitor).call
+      end
+
+      # Whether a status is one of the monitor's expected ones ("200-399", "200,301-302").
+      def self.expected?(monitor, status)
+        monitor.expected_statuses.to_s.split(",").any? do |part|
+          first, last = part.split("-").map(&:to_i)
+          (first..(last || first)).cover?(status)
+        end
       end
 
       def initialize(monitor)
@@ -60,19 +69,12 @@ module Monitoring
       end
 
       def evaluate(status, reason, timings, ms)
-        return Checks::Outcome.down(:unexpected_status, http_status: status, response_ms: ms, detail: "#{status} #{reason}".strip, timings:) unless expected?(status)
+        return Checks::Outcome.down(:unexpected_status, http_status: status, response_ms: ms, detail: "#{status} #{reason}".strip, timings:) unless self.class.expected?(@monitor, status)
 
         limit = @monitor.max_response_ms
         return Checks::Outcome.down(:slow_response, http_status: status, response_ms: ms, detail: "#{ms} ms > #{limit} ms", timings:) if limit && ms > limit
 
         Checks::Outcome.up(http_status: status, response_ms: ms, timings:)
-      end
-
-      def expected?(status)
-        @monitor.expected_statuses.to_s.split(",").any? do |part|
-          first, last = part.split("-").map(&:to_i)
-          (first..(last || first)).cover?(status)
-        end
       end
 
       # One hop: the status, reason, location and phase timings of the answer.

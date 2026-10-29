@@ -23,6 +23,10 @@ zh-CN:
       host_placeholder: "example.com 或 {{host}}"
       host_hint: "主机名或 IP 地址。变量来自下方选择的环境;不能使用秘密变量。"
       ssl_hint: "当证书不受信任、与主机不匹配、已过期或剩余天数少于此值时为宕机。按间隔检查,不做快速重试。"
+      modes:
+        url: "一个 URL"
+        request: "API 客户端中保存的请求"
+      request_hint: "按保存的内容发送(方法、请求头、请求体和认证),使用下方选择的环境;可以使用秘密变量,且不会保存任何响应内容。不使用草稿。"
       domain_hint: "当域名未注册、已过期、被暂停、即将被删除,或剩余天数少于此值时为宕机。注册局未响应时为未知,而非宕机。可填写注册域名或其下任意名称。"
       push_hint: "Shango 会为此监控提供一个秘密 URL。你的任务、cron 或备份每次运行时调用它;若在间隔加宽限期内没有调用,监控即为宕机。"
       push_conditions_hint: "间隔是任务的运行频率;宽限期用于覆盖运行时间较长的情况。首次超时后会在 30 秒后再次检查,然后才计为宕机。"
@@ -49,6 +53,9 @@ zh-CN:
         create:
           regenerated: "已创建新的推送 URL。请在下方复制。"
     causes:
+      request_missing: "其保存的请求已被删除"
+      auth_failed: "请求的身份验证失败"
+      invalid_request: "保存的请求无法发送"
       domain_not_registered: "该域名未注册"
       domain_expired: "域名已过期"
       domain_expiring: "域名即将过期"

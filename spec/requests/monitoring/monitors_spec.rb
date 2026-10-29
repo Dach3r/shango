@@ -328,4 +328,45 @@ RSpec.describe "Monitoring monitors" do
       expect(response).to have_http_status(:unprocessable_content)
     end
   end
+
+  describe "saved request monitors" do
+    let(:collection) { create(:collection, project:, name: "Shop") }
+    let!(:api_request) { create(:api_request, collection:, name: "Health", http_method: "POST") }
+
+    it "offers the project's requests by collection", :aggregate_failures do
+      create(:api_request, name: "Elsewhere")
+      create(:collection, project:, name: "Empty")
+      get new_monitoring_monitor_path(kind: "http")
+
+      expect(response.body).to include(I18n.t("monitoring.form.modes.request"), %(<optgroup label="Shop">), "POST Health", I18n.t("monitoring.form.request_hint"))
+      expect(response.body).not_to include("Elsewhere", %(<optgroup label="Empty">))
+    end
+
+    it "creates one and shows it by collection and name", :aggregate_failures do
+      post monitoring_monitors_path, params: params.deep_merge(uptime_monitor: { api_request_id: api_request.id, settings: { mode: "request", url: "" } })
+      monitor = project.uptime_monitors.sole
+
+      expect(monitor).to have_attributes(mode: "request", api_request:)
+      get monitoring_root_path
+      expect(response.body).to include("POST Shop / Health")
+      get monitoring_monitor_path(monitor)
+      expect(response.body).to include("POST Shop / Health")
+    end
+
+    it "refuses a request of another project and a URL monitor forgets its request", :aggregate_failures do
+      post monitoring_monitors_path, params: params.deep_merge(uptime_monitor: { api_request_id: create(:api_request).id, settings: { mode: "request" } })
+      expect(response).to have_http_status(:unprocessable_content)
+
+      post monitoring_monitors_path, params: params.deep_merge(uptime_monitor: { api_request_id: api_request.id, settings: { mode: "nope" } })
+      expect(project.uptime_monitors.sole).to have_attributes(mode: "url", api_request: nil)
+    end
+
+    it "says when its request is gone" do
+      monitor = create(:uptime_monitor, :request, project:)
+      monitor.update_columns(api_request_id: nil)
+      get monitoring_root_path
+
+      expect(response.body).to include(I18n.t("monitoring.causes.request_missing"))
+    end
+  end
 end

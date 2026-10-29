@@ -23,6 +23,10 @@ es:
       host_placeholder: "example.com o {{host}}"
       host_hint: "Un nombre de host o una dirección IP. Las variables vienen del entorno elegido abajo; no se pueden usar variables secretas."
       ssl_hint: "Se marca caído cuando el certificado no es de confianza, no es válido para el host, está vencido o le quedan menos días que este número. Se revisa en su intervalo, sin el reintento rápido."
+      modes:
+        url: "Una URL"
+        request: "Un request guardado del Cliente API"
+      request_hint: "Se envía tal como está guardado (método, cabeceras, body y auth) con el entorno elegido abajo; las variables secretas funcionan y no se guarda nada de la respuesta. Los borradores no se usan."
       domain_hint: "Se marca caído cuando el dominio no está registrado, venció, está suspendido, está por eliminarse o vence en menos días que este número. Un registro que no responde queda como desconocido, nunca caído. Usa el dominio registrado o cualquier nombre debajo de él."
       push_hint: "Shango le da a este monitor una URL secreta. Tu job, cron o backup la llama cada vez que corre; el monitor se cae cuando no llega ninguna llamada dentro del intervalo más el período de gracia."
       push_conditions_hint: "El intervalo es cada cuánto corre tu job; el período de gracia cubre las ejecuciones que tardan más. Tras el primer plazo vencido se revisa de nuevo 30 segundos después antes de contarlo como caído."
@@ -49,6 +53,9 @@ es:
         create:
           regenerated: "Nueva URL de push creada. Cópiala abajo."
     causes:
+      request_missing: "Su request guardado fue eliminado"
+      auth_failed: "Falló la autenticación del request"
+      invalid_request: "El request guardado no se puede enviar"
       domain_not_registered: "El dominio no está registrado"
       domain_expired: "El dominio venció"
       domain_expiring: "El dominio vence pronto"

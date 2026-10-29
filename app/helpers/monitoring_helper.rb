@@ -37,10 +37,22 @@ module MonitoringHelper
   # What a monitor checks, in one line.
   def monitor_target(monitor)
     case monitor.kind
-    when "http" then "#{monitor.http_method} #{monitor.url}"
+    when "http" then monitor.mode == "request" ? monitor_request_name(monitor.api_request) : "#{monitor.http_method} #{monitor.url}"
     when "tcp", "ssl" then "#{monitor.host}:#{monitor.port}"
     when "domain" then monitor.host
     else monitor.last_pinged_at ? t("monitoring.card.last_ping", time: time_ago_in_words(monitor.last_pinged_at)) : t("monitoring.card.no_ping")
+    end
+  end
+
+  def monitor_request_name(request)
+    request ? "#{request.http_method} #{request.collection.name} / #{request.name}" : t("monitoring.causes.request_missing")
+  end
+
+  # The project's saved requests by collection, for the request picker of an HTTP monitor.
+  def monitor_request_options
+    current_project.collections.ordered.includes(:api_requests).filter_map do |collection|
+      requests = collection.api_requests.sort_by { |request| [request.name.to_s.downcase, request.id] }
+      [collection.name, requests.map { |request| ["#{request.http_method} #{request.name}", request.id] }] if requests.any?
     end
   end
 

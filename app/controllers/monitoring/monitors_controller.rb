@@ -9,7 +9,7 @@ module Monitoring
       authorize current_project, :use?
       @filter = params[:status].presence_in(FILTERS)
       @query = params[:q].to_s.strip.first(100)
-      all = current_project.uptime_monitors.order(:name).strict_loading
+      all = current_project.uptime_monitors.order(:name).includes(api_request: :collection).strict_loading
       @overview = Monitoring::Monitors::Overview.call(monitors: all.to_a).data
       @monitors = filtered(all)
     end
@@ -58,8 +58,13 @@ module Monitoring
     private
 
     def monitor_params
-      attributes = params.expect(uptime_monitor: [:name, :environment_id, :interval, :timeout, :confirmations, { settings: %i[url http_method expected_statuses max_response_ms host port days_before grace] }]).to_h
-      attributes["settings"] = attributes["settings"].merge("mode" => "url") if attributes.key?("settings")
+      attributes = params.expect(uptime_monitor: [:name, :environment_id, :api_request_id, :interval, :timeout, :confirmations,
+                                                   { settings: %i[mode url http_method expected_statuses max_response_ms host port days_before grace] }]).to_h
+      return attributes unless attributes.key?("settings")
+
+      mode = attributes.dig("settings", "mode").presence_in(UptimeMonitor::MODES) || "url"
+      attributes["settings"] = attributes["settings"].merge("mode" => mode)
+      attributes["api_request_id"] = nil if mode == "url"
       attributes
     end
 

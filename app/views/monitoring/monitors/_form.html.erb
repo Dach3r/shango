@@ -17,18 +17,33 @@
       <%= form.text_field :name, required: true, maxlength: 100, autocomplete: "off", placeholder: t("monitoring.form.name_placeholder"), aria: { invalid: monitor.errors.include?(:name) }, class: field_classes %>
     </div>
     <% if monitor.http? %>
-    <%= tag.div class: "grid gap-4 sm:grid-cols-[1fr_8rem]", data: variable_autocomplete_data do %>
+    <div class="flex flex-col gap-4" data-controller="conditional-fields" data-action="change->conditional-fields#update">
       <div>
-        <%= label_tag "uptime_monitor_settings_url", UptimeMonitor.human_attribute_name(:url), class: label_classes %>
-        <%= text_field_tag "uptime_monitor[settings][url]", monitor.url, id: "uptime_monitor_settings_url", required: true, autocomplete: "off", spellcheck: false, placeholder: t("monitoring.form.url_placeholder"),
-                           aria: { invalid: monitor.errors.include?(:url) }, class: field_classes("font-mono") %>
+        <%= label_tag "uptime_monitor_settings_mode", UptimeMonitor.human_attribute_name(:mode), class: label_classes %>
+        <%= select_tag "uptime_monitor[settings][mode]", options_for_select(UptimeMonitor::MODES.map { |mode| [t("monitoring.form.modes.#{mode}"), mode] }, monitor.mode), id: "uptime_monitor_settings_mode",
+                                                       data: { field_name: "mode" }, class: field_classes %>
       </div>
-      <div>
-        <%= label_tag "uptime_monitor_settings_http_method", UptimeMonitor.human_attribute_name(:http_method), class: label_classes %>
-        <%= select_tag "uptime_monitor[settings][http_method]", options_for_select(UptimeMonitor::HTTP_METHODS, monitor.http_method), id: "uptime_monitor_settings_http_method", class: field_classes("font-mono") %>
+      <div class="flex flex-col gap-4" data-conditional-fields-target="field" data-show-when='{"mode": ["url"]}'>
+        <%= tag.div class: "grid gap-4 sm:grid-cols-[1fr_8rem]", data: variable_autocomplete_data do %>
+          <div>
+            <%= label_tag "uptime_monitor_settings_url", UptimeMonitor.human_attribute_name(:url), class: label_classes %>
+            <%= text_field_tag "uptime_monitor[settings][url]", monitor.url, id: "uptime_monitor_settings_url", required: true, autocomplete: "off", spellcheck: false, placeholder: t("monitoring.form.url_placeholder"),
+                               aria: { invalid: monitor.errors.include?(:url) }, class: field_classes("font-mono") %>
+          </div>
+          <div>
+            <%= label_tag "uptime_monitor_settings_http_method", UptimeMonitor.human_attribute_name(:http_method), class: label_classes %>
+            <%= select_tag "uptime_monitor[settings][http_method]", options_for_select(UptimeMonitor::HTTP_METHODS, monitor.http_method), id: "uptime_monitor_settings_http_method", class: field_classes("font-mono") %>
+          </div>
+        <% end %>
+        <p class="text-xs text-muted"><%= t("monitoring.form.url_hint") %></p>
       </div>
-    <% end %>
-    <p class="text-xs text-muted"><%= t("monitoring.form.url_hint") %></p>
+      <div class="flex flex-col gap-2" data-conditional-fields-target="field" data-show-when='{"mode": ["request"]}'>
+        <%= label_tag "uptime_monitor_api_request_id", UptimeMonitor.human_attribute_name(:api_request), class: label_classes %>
+        <%= select_tag "uptime_monitor[api_request_id]", grouped_options_for_select(monitor_request_options, monitor.api_request_id), id: "uptime_monitor_api_request_id", required: true,
+                                                         include_blank: true, aria: { invalid: monitor.errors.include?(:api_request) }, class: field_classes("font-mono") %>
+        <p class="text-xs text-muted"><%= t("monitoring.form.request_hint") %></p>
+      </div>
+    </div>
     <% elsif monitor.push? %>
     <p class="text-sm text-muted"><%= t("monitoring.form.push_hint") %></p>
     <% else %>
