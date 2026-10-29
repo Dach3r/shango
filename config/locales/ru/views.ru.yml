@@ -93,6 +93,7 @@ ru:
       icon_search: Поиск иконок
       icon_empty: Иконки не найдены
       submit: Создать проект
+      cancel: Отмена
     memberships:
       edit:
         title: Настройки

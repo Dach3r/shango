@@ -93,6 +93,7 @@ zh-CN:
       icon_search: 搜索图标
       icon_empty: 未找到图标
       submit: 创建项目
+      cancel: 取消
     memberships:
       edit:
         title: 设置

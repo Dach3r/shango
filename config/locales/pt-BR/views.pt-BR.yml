@@ -93,6 +93,7 @@ pt-BR:
       icon_search: Buscar ícones
       icon_empty: Nenhum ícone encontrado
       submit: Criar projeto
+      cancel: Cancelar
     memberships:
       edit:
         title: Configurações

@@ -93,6 +93,7 @@ ja:
       icon_search: アイコンを検索
       icon_empty: アイコンが見つかりません
       submit: プロジェクトを作成
+      cancel: キャンセル
     memberships:
       edit:
         title: 設定

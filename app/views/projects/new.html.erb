@@ -28,4 +28,7 @@
   </fieldset>
 
   <%= render Button::Component.new(form: f, icon: "plus", label: t(".submit")) %>
+  <% if current_membership %>
+    <%= render Button::Component.new(href: root_path, icon: "x", label: t(".cancel"), variant: :secondary) %>
+  <% end %>
 <% end %>

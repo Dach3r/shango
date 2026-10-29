@@ -93,6 +93,7 @@ de:
       icon_search: Icons suchen
       icon_empty: Keine Icons gefunden
       submit: Projekt erstellen
+      cancel: Abbrechen
     memberships:
       edit:
         title: Einstellungen

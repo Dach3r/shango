@@ -93,6 +93,7 @@ en:
       icon_search: Search icons
       icon_empty: No icons found
       submit: Create project
+      cancel: Cancel
     memberships:
       edit:
         title: Settings

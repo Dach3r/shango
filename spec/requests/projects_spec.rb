@@ -18,6 +18,7 @@ RSpec.describe "Projects" do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(%(data-theme="system" data-palette="mono"))
       expect(response.body).to include(%(data-controller="theme-switcher"))
+      expect(response.body).not_to include("</svg>#{I18n.t("projects.new.cancel")}</a>")
     end
 
     it "creates the project and selects it", :aggregate_failures do
@@ -48,6 +49,12 @@ RSpec.describe "Projects" do
 
       expect(response.body).to include(%(data-theme="light" data-palette="green"))
       expect(response.body).not_to include(%(data-controller="theme-switcher"))
+    end
+
+    it "offers a cancel link back to the root on the new form" do
+      get new_project_path
+
+      expect(response.body).to match(%r{<a [^>]*href="#{root_path}"[^>]*>.*</svg>#{I18n.t("projects.new.cancel")}</a>})
     end
 
     it "falls back to the oldest membership when the current one is archived", :aggregate_failures do
