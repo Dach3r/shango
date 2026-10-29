@@ -9,6 +9,8 @@ de:
             target:
               too_many_addresses: "darf höchstens %{count} Adressen enthalten"
               invalid_address: "enthält eine ungültige Adresse: %{address}"
+              invalid_slack_url: "muss eine Slack-Incoming-Webhook-URL sein (https://hooks.slack.com/services/…)"
+              invalid_discord_url: "muss eine Discord-Webhook-URL sein (https://discord.com/api/webhooks/…)"
               invalid_url: "muss eine http- oder https-URL ohne Benutzername und Passwort sein"
             base:
               project_limit: "Dieses Projekt hat bereits %{count} Alarmkanäle, das Maximum."
@@ -66,6 +68,7 @@ de:
         incident_opened: "🔴 %{monitor} ist ausgefallen: %{cause}"
         incident_resolved: "🟢 %{monitor} ist nach %{duration} wieder erreichbar"
         test: "✅ Testalarm für den Kanal %{channel} von %{project}. Alarme erreichen diesen Kanal."
+      open: "In Shango öffnen"
       mail:
         monitor: "Monitor"
         target: "Ziel"
@@ -79,8 +82,12 @@ de:
       kinds:
         email: "E-Mail"
         webhook: "Webhook"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "Bis zu 10 Adressen, getrennt durch Kommas oder Zeilenumbrüche."
+        slack: "Eine Incoming-Webhook-URL einer Slack-App (Incoming Webhooks oder ein Workflow-Trigger); Nachrichten gehen in den Kanal, für den sie erstellt wurde."
+        discord: "Eine Webhook-URL aus den Kanaleinstellungen in Discord (Integrationen > Webhooks)."
         webhook: "Shango sendet signiertes JSON per POST an diese URL (Header X-Shango-Signature)."
       index:
         title: "Alarmkanäle"
@@ -116,8 +123,12 @@ de:
         targets:
           email: "E-Mail-Adressen"
           webhook: "Webhook-URL"
+          slack: "Slack-Webhook-URL"
+          discord: "Discord-Webhook-URL"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "Leer lassen, um die aktuelle URL zu behalten."
         save: "Kanal speichern"
         create: "Kanal anlegen"

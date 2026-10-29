@@ -9,6 +9,8 @@ ru:
             target:
               too_many_addresses: "может содержать не более %{count} адресов"
               invalid_address: "содержит неверный адрес: %{address}"
+              invalid_slack_url: "должен быть URL входящего вебхука Slack (https://hooks.slack.com/services/…)"
+              invalid_discord_url: "должен быть URL вебхука Discord (https://discord.com/api/webhooks/…)"
               invalid_url: "должен быть URL http или https без имени пользователя и пароля"
             base:
               project_limit: "В этом проекте уже %{count} каналов оповещений — это максимум."
@@ -66,6 +68,7 @@ ru:
         incident_opened: "🔴 %{monitor} недоступен: %{cause}"
         incident_resolved: "🟢 %{monitor} снова работает спустя %{duration}"
         test: "✅ Тестовое оповещение для канала %{channel} проекта %{project}. Оповещения доходят до этого канала."
+      open: "Открыть в Shango"
       mail:
         monitor: "Монитор"
         target: "Цель"
@@ -79,8 +82,12 @@ ru:
       kinds:
         email: "Email"
         webhook: "Вебхук"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "До 10 адресов через запятую или с новой строки."
+        slack: "URL входящего вебхука приложения Slack (Incoming Webhooks или триггер workflow); сообщения приходят в канал, для которого он создан."
+        discord: "URL вебхука из настроек канала в Discord (Интеграция > Вебхуки)."
         webhook: "Shango отправляет на этот URL POST с подписанным JSON (заголовок X-Shango-Signature)."
       index:
         title: "Каналы оповещений"
@@ -118,8 +125,12 @@ ru:
         targets:
           email: "Адреса электронной почты"
           webhook: "URL вебхука"
+          slack: "URL вебхука Slack"
+          discord: "URL вебхука Discord"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "Оставьте пустым, чтобы сохранить текущий URL."
         save: "Сохранить канал"
         create: "Создать канал"

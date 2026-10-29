@@ -1,11 +1,17 @@
-# Where a project's monitors send their alerts: email addresses or a webhook URL. The target and the signing secret
-# carry credentials (a webhook URL is often its own secret), so both are encrypted and only rendered masked. Messages
-# are written in the channel's `locale`. The kind cannot change after creation.
+# Where a project's monitors send their alerts: email addresses, a webhook URL, or a Slack or Discord incoming-webhook
+# URL. The target and the signing secret carry credentials (those URLs are their own secret), so both are encrypted and
+# only rendered masked. Slack and Discord URLs must point at those services exactly. Messages are written in the
+# channel's `locale`. The kind cannot change after creation.
 class NotificationChannel < ApplicationRecord
   PER_PROJECT = 20
   MAX_ADDRESSES = 10
   MAX_URL_LENGTH = 2048
   SEPARATORS = /[\s,;]+/
+  # Host and path prefixes an incoming-webhook URL of each chat service must have.
+  SERVICES = {
+    "slack" => [%w[hooks.slack.com], %w[/services/ /triggers/]],
+    "discord" => [%w[discord.com discordapp.com], %w[/api/webhooks/]]
+  }.freeze
 
   belongs_to :project
   belongs_to :creator, class_name: "User", optional: true
@@ -14,7 +20,7 @@ class NotificationChannel < ApplicationRecord
   has_many :uptime_monitors, through: :monitor_channels
   has_many :deliveries, class_name: "NotificationDelivery", dependent: :delete_all
 
-  enum :kind, { email: "email", webhook: "webhook" }, validate: true
+  enum :kind, { email: "email", webhook: "webhook", slack: "slack", discord: "discord" }, validate: true
 
   encrypts :target, :signing_secret
 
@@ -70,7 +76,16 @@ class NotificationChannel < ApplicationRecord
     return errors.add(:target, :blank) if target.blank?
     return errors.add(:target, :too_long, count: MAX_URL_LENGTH) if target.length > MAX_URL_LENGTH
 
-    errors.add(:target, :invalid_url) unless uri.is_a?(URI::HTTP) && uri.host.present? && uri.userinfo.nil?
+    return errors.add(:target, :invalid_url) unless uri.is_a?(URI::HTTP) && uri.host.present? && uri.userinfo.nil?
+
+    service_target if SERVICES.key?(kind)
+  end
+
+  # https on 443, the service's own host and one of its webhook paths, so the URL cannot point anywhere else.
+  def service_target
+    hosts, paths = SERVICES.fetch(kind)
+    valid = uri.is_a?(URI::HTTPS) && uri.port == 443 && hosts.include?(uri.host.downcase) && paths.any? { |path| uri.path.start_with?(path) }
+    errors.add(:target, :"invalid_#{kind}_url") unless valid
   end
 
   def kind_unchanged

@@ -9,6 +9,8 @@ zh-CN:
             target:
               too_many_addresses: "最多只能有 %{count} 个地址"
               invalid_address: "包含无效地址:%{address}"
+              invalid_slack_url: "必须是 Slack 传入 Webhook URL(https://hooks.slack.com/services/…)"
+              invalid_discord_url: "必须是 Discord Webhook URL(https://discord.com/api/webhooks/…)"
               invalid_url: "必须是不含用户名和密码的 http 或 https URL"
             base:
               project_limit: "此项目已有 %{count} 个告警渠道,已达上限。"
@@ -66,6 +68,7 @@ zh-CN:
         incident_opened: "🔴 %{monitor} 已宕机:%{cause}"
         incident_resolved: "🟢 %{monitor} 已恢复,宕机 %{duration}"
         test: "✅ 这是 %{project} 的渠道 %{channel} 的测试告警。告警可以送达此渠道。"
+      open: "在 Shango 中打开"
       mail:
         monitor: "监控"
         target: "目标"
@@ -79,8 +82,12 @@ zh-CN:
       kinds:
         email: "电子邮件"
         webhook: "Webhook"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "最多 10 个地址,用逗号或换行分隔。"
+        slack: "Slack 应用的传入 Webhook URL(Incoming Webhooks 或工作流触发器);消息会发送到创建它时选择的频道。"
+        discord: "Discord 频道设置中的 Webhook URL(整合 > Webhooks)。"
         webhook: "Shango 会向此 URL 发送签名的 JSON POST 请求(请求头 X-Shango-Signature)。"
       index:
         title: "告警渠道"
@@ -115,8 +122,12 @@ zh-CN:
         targets:
           email: "电子邮件地址"
           webhook: "Webhook URL"
+          slack: "Slack Webhook URL"
+          discord: "Discord Webhook URL"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "留空则保留当前 URL。"
         save: "保存渠道"
         create: "创建渠道"

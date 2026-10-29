@@ -1,6 +1,6 @@
 # Shango — Monitoring
 
-> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`; and alerts by email and webhook (`NotificationChannel`, `MonitorChannel`, `NotificationDelivery`, `Monitoring::Notifications::*`, `NotificationDeliveryJob`, `MonitoringMailer`, `Monitoring::ChannelsController`). Results and deliveries are pruned by `PruneMonitoringJob`, and changes to monitors and channels are recorded as `AuditEvent`s. Slack and Discord, the other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
+> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`; and alerts by email, webhook, Slack and Discord (`NotificationChannel`, `MonitorChannel`, `NotificationDelivery`, `Monitoring::Notifications::*`, `NotificationDeliveryJob`, `MonitoringMailer`, `Monitoring::ChannelsController`). Results and deliveries are pruned by `PruneMonitoringJob`, and changes to monitors and channels are recorded as `AuditEvent`s. The other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
 
 ## 1. Goal
 
@@ -108,8 +108,8 @@ The message carries the monitor name and kind, a safe description of the target 
 |------|----------|
 | `email` | `MonitoringMailer`, up to 10 addresses per channel; only when SMTP is configured |
 | `webhook` | `POST` JSON to an http(s) URL through the guard with the pinned address, 10 s, no redirects; headers `X-Shango-Event`, `X-Shango-Timestamp` and `X-Shango-Signature: sha256=<HMAC of "timestamp.body" with the channel's signing secret>`. Body: `event`, `text`, `sent_at`, `url`, `project {id, name}`, `monitor {id, name, kind, target}` and `incident {id, cause, cause_text, detail, started_at, resolved_at, duration_seconds}` (both `null` in a test) |
-| `slack` | `POST {"text": …}`; the URL must be `https`, port 443, no user info, host exactly `hooks.slack.com`, path starting with `/services/` or `/triggers/` |
-| `discord` | `POST {"content": …}`; `https`, port 443, no user info, host exactly `discord.com` or `discordapp.com`, path starting with `/api/webhooks/` |
+| `slack` | `POST {"text": …}` (the alert line, then `<url|Open in Shango>`; `&`, `<`, `>` escaped so a name cannot inject markup or mentions); the URL must be `https`, port 443, no user info, host exactly `hooks.slack.com`, path starting with `/services/` or `/triggers/` |
+| `discord` | `POST {"content": …, "allowed_mentions": {"parse": []}}` (the alert line and the link, at most 2000 characters; no mentions, so `@everyone` in a name pings nobody; a `429` is retried after its `Retry-After`); `https`, port 443, no user info, host exactly `discord.com` or `discordapp.com`, path starting with `/api/webhooks/` |
 
 Slack and Discord deliveries also go through the guard with the pinned address and never follow redirects (`Notifications::Post`, shared by the three URL kinds). Failures are recorded on the delivery (`error` key under `monitoring.delivery_errors`, short `detail`) and never carry the URL.
 
@@ -174,6 +174,7 @@ One logical commit per step, each with its specs (100 % line and branch), locale
 5. `✨ feat(monitoring)` — notification channels (email, webhook), deliveries, *Send test* (below).
 6. `✨ feat(monitoring)` — retention (`PruneMonitoringJob`, below).
 7. `✨ feat(monitoring)` — audit events for monitors and channels (below).
+8. `✨ feat(monitoring)` — Slack and Discord channels (below).
 
 ### Next, in this order
 
@@ -201,9 +202,9 @@ Alerts come first: a monitor nobody is told about is only useful to someone watc
 - Recorded by `Monitors::Create`, `Update` (only when something changed), `Pause`, `Resume`, the destroy path (moved to a `Monitors::Destroy` service) and the channel services.
 - `AuditEventsHelper` passes `name:`; the page heading changes from team history to project activity in every locale. `architecture.md` §7 lists the new kinds.
 
-**8. Slack and Discord channels** — `✨ feat(monitoring)`.
+**8. Slack and Discord channels** — `✨ feat(monitoring)`. **Built.** The kind `CHECK` already listed both, so no migration was needed.
 
-- Kinds `slack` and `discord` on `NotificationChannel` (new migration replacing the kind `CHECK`), with the strict URL rules of §6 (scheme, port 443, no user info, exact host, path prefix).
+- Kinds `slack` and `discord` on `NotificationChannel`, with the strict URL rules of §6 (scheme, port 443, no user info, exact host, path prefix).
 - `Senders::Slack` (`{"text": …}`, mrkdwn link to the monitor) and `Senders::Discord` (`{"content": …}`, `allowed_mentions: {parse: []}` so a monitor name cannot ping `@everyone`); both share the pinned, no-redirect poster of the webhook sender. Discord `429` honours `retry_after` within the job's retries.
 - Specs: every rejected URL shape; payload escaping of names with `<`, `&`, `@`.
 

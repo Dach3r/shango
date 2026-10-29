@@ -9,6 +9,16 @@ FactoryBot.define do
       kind { "email" }
       target { "ops@example.com" }
     end
+
+    trait :slack do
+      kind { "slack" }
+      target { "https://hooks.slack.com/services/T000/B000/abcd1234" }
+    end
+
+    trait :discord do
+      kind { "discord" }
+      target { "https://discord.com/api/webhooks/123/abcd1234" }
+    end
   end
 
   factory :monitor_channel do

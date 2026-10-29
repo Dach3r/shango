@@ -9,6 +9,8 @@ en:
             target:
               too_many_addresses: "can have at most %{count} addresses"
               invalid_address: "has an invalid address: %{address}"
+              invalid_slack_url: "must be a Slack incoming-webhook URL (https://hooks.slack.com/services/…)"
+              invalid_discord_url: "must be a Discord webhook URL (https://discord.com/api/webhooks/…)"
               invalid_url: "must be an http or https URL without user name or password"
             base:
               project_limit: "This project already has %{count} alert channels, the most it can have."
@@ -66,6 +68,7 @@ en:
         incident_opened: "🔴 %{monitor} is down: %{cause}"
         incident_resolved: "🟢 %{monitor} is up again after %{duration}"
         test: "✅ Test alert for the channel %{channel} of %{project}. Alerts reach this channel."
+      open: "Open in Shango"
       mail:
         monitor: "Monitor"
         target: "Target"
@@ -79,8 +82,12 @@ en:
       kinds:
         email: "Email"
         webhook: "Webhook"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "Up to 10 addresses, separated by commas or new lines."
+        slack: "An incoming-webhook URL of a Slack app (Incoming Webhooks or a workflow trigger); messages go to the channel it was created for."
+        discord: "A webhook URL from the channel settings in Discord (Integrations > Webhooks)."
         webhook: "Shango POSTs signed JSON to this URL (header X-Shango-Signature)."
       index:
         title: "Alert channels"
@@ -116,8 +123,12 @@ en:
         targets:
           email: "Email addresses"
           webhook: "Webhook URL"
+          slack: "Slack webhook URL"
+          discord: "Discord webhook URL"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "Leave it blank to keep the current URL."
         save: "Save channel"
         create: "Create channel"

@@ -9,6 +9,8 @@ fr:
             target:
               too_many_addresses: "peut contenir au plus %{count} adresses"
               invalid_address: "contient une adresse invalide : %{address}"
+              invalid_slack_url: "doit être une URL de webhook entrant Slack (https://hooks.slack.com/services/…)"
+              invalid_discord_url: "doit être une URL de webhook Discord (https://discord.com/api/webhooks/…)"
               invalid_url: "doit être une URL http ou https sans nom d’utilisateur ni mot de passe"
             base:
               project_limit: "Ce projet a déjà %{count} canaux d’alerte, le maximum autorisé."
@@ -66,6 +68,7 @@ fr:
         incident_opened: "🔴 %{monitor} est en panne : %{cause}"
         incident_resolved: "🟢 %{monitor} est rétabli après %{duration}"
         test: "✅ Alerte de test du canal %{channel} de %{project}. Les alertes arrivent bien sur ce canal."
+      open: "Ouvrir dans Shango"
       mail:
         monitor: "Moniteur"
         target: "Cible"
@@ -79,8 +82,12 @@ fr:
       kinds:
         email: "Email"
         webhook: "Webhook"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "Jusqu’à 10 adresses, séparées par des virgules ou des retours à la ligne."
+        slack: "Une URL de webhook entrant d’une app Slack (Incoming Webhooks ou le déclencheur d’un workflow) ; les messages vont dans le canal pour lequel elle a été créée."
+        discord: "Une URL de webhook des paramètres du salon dans Discord (Intégrations > Webhooks)."
         webhook: "Shango envoie un POST de JSON signé à cette URL (en-tête X-Shango-Signature)."
       index:
         title: "Canaux d’alerte"
@@ -116,8 +123,12 @@ fr:
         targets:
           email: "Adresses email"
           webhook: "URL du webhook"
+          slack: "URL du webhook Slack"
+          discord: "URL du webhook Discord"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "Laissez vide pour garder l’URL actuelle."
         save: "Enregistrer le canal"
         create: "Créer le canal"

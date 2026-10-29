@@ -79,6 +79,18 @@ RSpec.describe "Monitoring channels" do
       expect(response.body).not_to include(channel.signing_secret)
     end
 
+    it "creates Slack and Discord channels from their webhook URLs, refusing other hosts", :aggregate_failures do
+      post monitoring_channels_path, params: { notification_channel: { kind: "slack", name: "Slack", target: "https://hooks.slack.com/services/T0/B0/xyz" } }
+      post monitoring_channels_path, params: { notification_channel: { kind: "discord", name: "Discord", target: "https://discord.com/api/webhooks/1/xyz" } }
+
+      expect(project.notification_channels.pluck(:kind)).to contain_exactly("slack", "discord")
+      expect(project.notification_channels.map(&:signing_secret)).to all(be_nil)
+      post monitoring_channels_path, params: { notification_channel: { kind: "slack", name: "Fake", target: "https://example.com/services/x" } }
+      expect(response).to have_http_status(:unprocessable_content)
+      get new_monitoring_channel_path
+      expect(response.body).to include(new_monitoring_channel_path(kind: "slack"), new_monitoring_channel_path(kind: "discord"))
+    end
+
     it "creates an email channel without a secret to show", :aggregate_failures do
       enable_mail
       post monitoring_channels_path, params: { notification_channel: { kind: "email", name: "Mail", target: "ops@example.com" } }

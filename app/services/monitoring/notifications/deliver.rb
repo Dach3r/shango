@@ -6,7 +6,7 @@ module Monitoring
     class Deliver
       include Serviceable
 
-      SENDERS = { "email" => Senders::Email, "webhook" => Senders::Webhook }.freeze
+      SENDERS = { "email" => Senders::Email, "webhook" => Senders::Webhook, "slack" => Senders::Slack, "discord" => Senders::Discord }.freeze
       WAITS = [10, 30, 120, 600].freeze
       MAX_WAIT = 3600
 

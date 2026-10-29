@@ -9,6 +9,8 @@ hi:
             target:
               too_many_addresses: "में अधिकतम %{count} पते हो सकते हैं"
               invalid_address: "में एक अमान्य पता है: %{address}"
+              invalid_slack_url: "Slack इनकमिंग वेबहुक URL होना चाहिए (https://hooks.slack.com/services/…)"
+              invalid_discord_url: "Discord वेबहुक URL होना चाहिए (https://discord.com/api/webhooks/…)"
               invalid_url: "उपयोगकर्ता नाम या पासवर्ड के बिना http या https URL होना चाहिए"
             base:
               project_limit: "इस प्रोजेक्ट में पहले से %{count} अलर्ट चैनल हैं, जो अधिकतम सीमा है।"
@@ -66,6 +68,7 @@ hi:
         incident_opened: "🔴 %{monitor} डाउन है: %{cause}"
         incident_resolved: "🟢 %{monitor} %{duration} बाद फिर से अप है"
         test: "✅ %{project} के चैनल %{channel} के लिए परीक्षण अलर्ट। अलर्ट इस चैनल तक पहुँचते हैं।"
+      open: "Shango में खोलें"
       mail:
         monitor: "मॉनिटर"
         target: "लक्ष्य"
@@ -79,8 +82,12 @@ hi:
       kinds:
         email: "ईमेल"
         webhook: "वेबहुक"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "अधिकतम 10 पते, कॉमा या नई पंक्ति से अलग किए गए।"
+        slack: "Slack ऐप का इनकमिंग वेबहुक URL (Incoming Webhooks या वर्कफ़्लो ट्रिगर); संदेश उसी चैनल में जाते हैं जिसके लिए इसे बनाया गया था।"
+        discord: "Discord में चैनल सेटिंग्स से वेबहुक URL (Integrations > Webhooks)।"
         webhook: "Shango इस URL पर हस्ताक्षरित JSON POST करता है (हेडर X-Shango-Signature)।"
       index:
         title: "अलर्ट चैनल"
@@ -116,8 +123,12 @@ hi:
         targets:
           email: "ईमेल पते"
           webhook: "वेबहुक URL"
+          slack: "Slack वेबहुक URL"
+          discord: "Discord वेबहुक URL"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "मौजूदा URL रखने के लिए इसे खाली छोड़ें।"
         save: "चैनल सहेजें"
         create: "चैनल बनाएँ"

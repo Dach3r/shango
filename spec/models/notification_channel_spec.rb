@@ -72,4 +72,20 @@ RSpec.describe NotificationChannel do
     expect(MonitorChannel.count).to eq(0)
     expect(NotificationDelivery.count).to eq(0)
   end
+
+  it "accepts only the incoming-webhook URLs of Slack and Discord", :aggregate_failures do
+    expect(build(:notification_channel, :slack)).to be_valid
+    expect(build(:notification_channel, :slack, target: "https://hooks.slack.com/triggers/T0/1/abc")).to be_valid
+    expect(build(:notification_channel, :discord)).to be_valid
+    expect(build(:notification_channel, :discord, target: "https://discordapp.com/api/webhooks/1/x")).to be_valid
+    expect(build(:notification_channel, :discord, target: "https://DISCORD.com/api/webhooks/1/x")).to be_valid
+    {
+      slack: %w[http://hooks.slack.com/services/x https://hooks.slack.com:8443/services/x https://evil.example/services/x https://hooks.slack.com.evil.example/services/x
+                https://hooks.slack.com/api/x],
+      discord: %w[https://discord.com/webhooks/1/x https://discord.com:444/api/webhooks/1/x https://cdn.discord.com/api/webhooks/1/x http://discord.com/api/webhooks/1/x]
+    }.each do |kind, targets|
+      targets.each { |target| expect(build(:notification_channel, kind, target:)).to have_error(:target, :"invalid_#{kind}_url"), target }
+    end
+    expect(build(:notification_channel, :slack, target: "https://user@hooks.slack.com/services/x")).to have_error(:target, :invalid_url)
+  end
 end

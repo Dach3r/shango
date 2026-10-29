@@ -9,6 +9,8 @@ ja:
             target:
               too_many_addresses: "は最大 %{count} 件までです"
               invalid_address: "に無効なアドレスがあります: %{address}"
+              invalid_slack_url: "Slack の Incoming Webhook URL(https://hooks.slack.com/services/…)である必要があります"
+              invalid_discord_url: "Discord の Webhook URL(https://discord.com/api/webhooks/…)である必要があります"
               invalid_url: "ユーザー名やパスワードを含まない http または https の URL である必要があります"
             base:
               project_limit: "このプロジェクトにはすでに上限の %{count} 件のアラートチャンネルがあります。"
@@ -66,6 +68,7 @@ ja:
         incident_opened: "🔴 %{monitor} がダウンしています: %{cause}"
         incident_resolved: "🟢 %{monitor} は %{duration} 後に復旧しました"
         test: "✅ %{project} のチャンネル %{channel} のテストアラートです。このチャンネルにアラートが届きます。"
+      open: "Shango で開く"
       mail:
         monitor: "モニター"
         target: "対象"
@@ -79,8 +82,12 @@ ja:
       kinds:
         email: "メール"
         webhook: "Webhook"
+        slack: "Slack"
+        discord: "Discord"
       hints:
         email: "最大 10 件のアドレスをカンマまたは改行で区切って入力します。"
+        slack: "Slack アプリの Incoming Webhook URL(Incoming Webhooks またはワークフローのトリガー)。メッセージは作成時に選んだチャンネルに届きます。"
+        discord: "Discord のチャンネル設定(連携サービス > ウェブフック)の Webhook URL。"
         webhook: "Shango はこの URL に署名付き JSON を POST します(ヘッダー X-Shango-Signature)。"
       index:
         title: "アラートチャンネル"
@@ -115,8 +122,12 @@ ja:
         targets:
           email: "メールアドレス"
           webhook: "Webhook URL"
+          slack: "Slack Webhook URL"
+          discord: "Discord Webhook URL"
         url_placeholders:
           webhook: "https://example.com/hooks/shango"
+          slack: "https://hooks.slack.com/services/T000/B000/XXXX"
+          discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "空欄のままにすると現在の URL を維持します。"
         save: "チャンネルを保存"
         create: "チャンネルを作成"

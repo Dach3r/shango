@@ -53,10 +53,11 @@ RSpec.describe Monitoring::Notifications::Deliver do
     expect(other.reload).to be_failed
   end
 
-  it "sends emails with the email sender" do
-    email = create(:notification_delivery, notification_channel: create(:notification_channel, :email))
-    allow(Monitoring::Notifications::Senders::Email).to receive(:call).and_return(Result.success)
-
-    expect(described_class.call(delivery: email)).to be_success
+  it "sends with the sender of the channel's kind", :aggregate_failures do
+    { email: Monitoring::Notifications::Senders::Email, slack: Monitoring::Notifications::Senders::Slack, discord: Monitoring::Notifications::Senders::Discord }.each do |kind, kind_sender|
+      allow(kind_sender).to receive(:call).and_return(Result.success)
+      expect(described_class.call(delivery: create(:notification_delivery, notification_channel: create(:notification_channel, kind)))).to be_success
+      expect(kind_sender).to have_received(:call)
+    end
   end
 end
