@@ -23,7 +23,7 @@ RSpec.describe "Network email checks" do
     }
   end
 
-  before { allow(Network::EmailChecks::Lookup).to receive(:call) { |name, type| records.fetch([name, type]) { answer } } }
+  before { allow(Network::Dns::Lookup).to receive(:call) { |name, type| records.fetch([name, type]) { answer } } }
 
   it "requires authentication" do
     sign_out user

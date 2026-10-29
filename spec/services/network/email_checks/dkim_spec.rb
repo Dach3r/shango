@@ -10,7 +10,7 @@ RSpec.describe Network::EmailChecks::Dkim do
   end
 
   def check(selectors, records)
-    allow(Network::EmailChecks::Lookup).to receive(:call) { |name, _type| records.fetch(name) { answer } }
+    allow(Network::Dns::Lookup).to receive(:call) { |name, _type| records.fetch(name) { answer } }
     described_class.call(domain: "example.com", selectors:)
   end
 
@@ -77,7 +77,7 @@ RSpec.describe Network::EmailChecks::Dkim do
     expect(section.data).to include(probed: true)
     expect(section.data[:rows].pluck(:selector)).to eq(%w[google])
     expect(section.findings).to be_empty
-    expect(Network::EmailChecks::Lookup).to have_received(:call).exactly(described_class::COMMON_SELECTORS.size).times
+    expect(Network::Dns::Lookup).to have_received(:call).exactly(described_class::COMMON_SELECTORS.size).times
   end
 
   it "warns when none of the common selectors has a key" do

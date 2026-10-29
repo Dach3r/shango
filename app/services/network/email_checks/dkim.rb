@@ -28,8 +28,8 @@ module Network
 
       def row(selector)
         name = "#{selector}._domainkey.#{@domain}"
-        answer = Lookup.call(name, "TXT")
-        return { selector:, name:, status: "unavailable" } if Lookup.failed?(answer)
+        answer = Dns::Lookup.call(name, "TXT")
+        return { selector:, name:, status: "unavailable" } if Dns::Lookup.failed?(answer)
 
         tags = answer.answers.map { |text| Tags.parse(text) }.find { |candidate| candidate.key?("p") }
         return { selector:, name:, status: "missing" } unless tags

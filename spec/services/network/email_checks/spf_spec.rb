@@ -6,7 +6,7 @@ RSpec.describe Network::EmailChecks::Spf do
   end
 
   def stub_records(records)
-    allow(Network::EmailChecks::Lookup).to receive(:call) { |name, _type| records.fetch(name) { answer } }
+    allow(Network::Dns::Lookup).to receive(:call) { |name, _type| records.fetch(name) { answer } }
   end
 
   def check(record, records = {})
@@ -78,7 +78,7 @@ RSpec.describe Network::EmailChecks::Spf do
     section = check("v=spf1 #{Array.new(25) { |index| "include:i#{index}.example.net" }.join(" ")} -all")
 
     expect(keys(section)).to eq(%w[spf.too_many_lookups])
-    expect(Network::EmailChecks::Lookup).not_to have_received(:call)
+    expect(Network::Dns::Lookup).not_to have_received(:call)
   end
 
   it "stops following once a deeper record took it far over the limit", :aggregate_failures do
@@ -131,6 +131,6 @@ RSpec.describe Network::EmailChecks::Spf do
     section = check("v=spf1 include:a.example.net include:a.example.net -all", "a.example.net" => answer("v=spf1 -all"))
 
     expect(section.data[:lookups]).to eq(2)
-    expect(Network::EmailChecks::Lookup).to have_received(:call).with("a.example.net", "TXT").once
+    expect(Network::Dns::Lookup).to have_received(:call).with("a.example.net", "TXT").once
   end
 end

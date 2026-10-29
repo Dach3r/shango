@@ -10,7 +10,7 @@ RSpec.describe Network::EmailChecks::Run do
   end
 
   before do
-    allow(Network::EmailChecks::Lookup).to receive(:call) do |name, type|
+    allow(Network::Dns::Lookup).to receive(:call) do |name, type|
       {
         ["example.com", "TXT"] => answer("v=spf1 ip4:203.0.113.1 -all"),
         ["_dmarc.example.com", "TXT"] => answer("v=DMARC1; p=none"),
@@ -32,7 +32,7 @@ RSpec.describe Network::EmailChecks::Run do
   end
 
   it "lists what breaks mail before what should be fixed", :aggregate_failures do
-    allow(Network::EmailChecks::Lookup).to receive(:call) { |_name, _type| answer }
+    allow(Network::Dns::Lookup).to receive(:call) { |_name, _type| answer }
     result = run
 
     expect(result.data[:findings].pluck(:key)).to eq(%w[spf.missing dmarc.missing dkim.none_found mx.missing])
@@ -61,7 +61,7 @@ RSpec.describe Network::EmailChecks::Run do
   end
 
   it "refuses a domain that does not exist" do
-    allow(Network::EmailChecks::Lookup).to receive(:call).with("example.com", "TXT").and_return(answer(status: :nxdomain))
+    allow(Network::Dns::Lookup).to receive(:call).with("example.com", "TXT").and_return(answer(status: :nxdomain))
 
     expect(run).to have_attributes(failure?: true, error: :domain_not_found)
   end

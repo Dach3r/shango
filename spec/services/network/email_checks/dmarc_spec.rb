@@ -6,7 +6,7 @@ RSpec.describe Network::EmailChecks::Dmarc do
   end
 
   def check(records, domain = "example.com")
-    allow(Network::EmailChecks::Lookup).to receive(:call) { |name, _type| records.fetch(name) { answer } }
+    allow(Network::Dns::Lookup).to receive(:call) { |name, _type| records.fetch(name) { answer } }
     described_class.call(domain:)
   end
 

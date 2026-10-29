@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Network::EmailChecks::Lookup do
+RSpec.describe Network::Dns::Lookup do
   def answer(status)
     Network::Dns::Query::Answer.new(status:, answers: [], ttl: nil, ms: 1)
   end

@@ -27,7 +27,7 @@ module Network
       private
 
       def perform
-        return Section.new(data: nil, findings: [Section.finding("spf.lookup_failed", "warn", name: @domain)]) if Lookup.failed?(@answer)
+        return Section.new(data: nil, findings: [Section.finding("spf.lookup_failed", "warn", name: @domain)]) if Dns::Lookup.failed?(@answer)
 
         records = spf_records(@answer)
         return Section.new(data: nil, findings: [Section.finding("spf.missing", "bad")]) if records.empty?
@@ -68,10 +68,10 @@ module Network
       def follow(target, chain)
         return if target.include?("%") || @lookups > GIVE_UP || chain.size >= MAX_DEPTH
         return flag(@loops, target) if chain.include?(target)
-        return flag(@missing, target) unless Lookup.name?(target)
+        return flag(@missing, target) unless Dns::Lookup.name?(target)
 
         answer = fetch(target)
-        return flag(@unavailable, target) if Lookup.failed?(answer)
+        return flag(@unavailable, target) if Dns::Lookup.failed?(answer)
 
         record = spf_records(answer).first
         record ? walk(target, record, chain) : flag(@missing, target)
@@ -85,12 +85,12 @@ module Network
       def prefetch(names)
         return if @lookups > GIVE_UP
 
-        pending = names.uniq.select { |name| Lookup.name?(name) && !@cache.key?(name) }
-        Parallel.map(pending, limit: 5) { |name| [name, Lookup.call(name, "TXT")] }.each { |name, answer| @cache[name] = answer }
+        pending = names.uniq.select { |name| Dns::Lookup.name?(name) && !@cache.key?(name) }
+        Parallel.map(pending, limit: 5) { |name| [name, Dns::Lookup.call(name, "TXT")] }.each { |name, answer| @cache[name] = answer }
       end
 
       def fetch(name)
-        @cache[name] ||= Lookup.call(name, "TXT")
+        @cache[name] ||= Dns::Lookup.call(name, "TXT")
       end
 
       def findings(qualifier)

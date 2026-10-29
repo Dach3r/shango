@@ -17,7 +17,7 @@ module Network
       def perform
         labels = @domain.split(".")
         names = Array.new([labels.size - 1, 1].max) { |index| labels[index..].join(".") }
-        answers = Parallel.map(names, limit: 4) { |name| [name, Lookup.call("_dmarc.#{name}", "TXT")] }
+        answers = Parallel.map(names, limit: 4) { |name| [name, Dns::Lookup.call("_dmarc.#{name}", "TXT")] }
         found = answers.map { |name, answer| [name, records(answer)] }.find { |_name, records| records.any? }
         return missing(answers) unless found
 
@@ -32,7 +32,7 @@ module Network
       end
 
       def missing(answers)
-        failed = answers.find { |_name, answer| Lookup.failed?(answer) }
+        failed = answers.find { |_name, answer| Dns::Lookup.failed?(answer) }
         finding = failed ? Section.finding("dmarc.lookup_failed", "warn", name: "_dmarc.#{failed.first}") : Section.finding("dmarc.missing", "bad")
         Section.new(data: nil, findings: [finding])
       end

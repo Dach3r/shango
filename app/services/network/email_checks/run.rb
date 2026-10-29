@@ -27,7 +27,7 @@ module Network
         selectors = parse_selectors
         return selectors if selectors.failure?
 
-        txt = Lookup.call(host, "TXT")
+        txt = Dns::Lookup.call(host, "TXT")
         return Result.failure(error: :domain_not_found) if txt.status == :nxdomain
 
         spf, dkim, dmarc, mx = Parallel.map(sections(host, txt, selectors.record), limit: 4, &:call)

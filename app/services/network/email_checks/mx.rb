@@ -14,8 +14,8 @@ module Network
       private
 
       def perform
-        answer = Lookup.call(@domain, "MX")
-        return Section.new(data: nil, findings: [Section.finding("mx.lookup_failed", "warn", name: @domain)]) if Lookup.failed?(answer)
+        answer = Dns::Lookup.call(@domain, "MX")
+        return Section.new(data: nil, findings: [Section.finding("mx.lookup_failed", "warn", name: @domain)]) if Dns::Lookup.failed?(answer)
 
         records = answer.status == :ok ? answer.answers.map { |text| preference_and_exchange(text) } : []
         return Section.new(data: nil, findings: [Section.finding("mx.missing", "warn")]) if records.empty?
@@ -31,13 +31,13 @@ module Network
       end
 
       def status(exchange)
-        return "unresolved" unless Lookup.name?(exchange)
+        return "unresolved" unless Dns::Lookup.name?(exchange)
 
-        answers = %w[A AAAA].map { |type| Lookup.call(exchange, type) }
+        answers = %w[A AAAA].map { |type| Dns::Lookup.call(exchange, type) }
         return "ok" if answers.any? { |answer| answer.status == :ok }
         return "cname" if answers.any? { |answer| answer.status == :cname }
 
-        answers.any? { |answer| Lookup.failed?(answer) } ? "unavailable" : "unresolved"
+        answers.any? { |answer| Dns::Lookup.failed?(answer) } ? "unavailable" : "unresolved"
       end
 
       def finding(row)

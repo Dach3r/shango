@@ -1,7 +1,7 @@
 module Network
-  module EmailChecks
-    # The DNS questions of the email check. They only go to the fixed public resolver, never to a server named by the
-    # domain under test, so a record cannot point the check at an internal address.
+  module Dns
+    # The DNS questions of the tools that read records (email DNS, ASN lookup). They only go to the fixed public
+    # resolver, never to a server named by the domain under test, so a record cannot point the check at an internal address.
     module Lookup
       TIMEOUT = 3
       FAILURES = %i[timeout servfail refused error].freeze

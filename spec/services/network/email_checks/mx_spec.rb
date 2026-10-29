@@ -6,7 +6,7 @@ RSpec.describe Network::EmailChecks::Mx do
   end
 
   def check(records)
-    allow(Network::EmailChecks::Lookup).to receive(:call) { |name, type| records.fetch([name, type]) { answer } }
+    allow(Network::Dns::Lookup).to receive(:call) { |name, type| records.fetch([name, type]) { answer } }
     described_class.call(domain: "example.com")
   end
 
