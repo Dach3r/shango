@@ -26,17 +26,23 @@ module ApiClient
 
     # `cancelled` is polled between chunks and hops so a user can stop a run that is already in flight.
     # `cookie_jar` (see CookieJar) adds the stored cookies to every hop and keeps the ones each response sets.
-    def initialize(built:, cancelled: nil, cookie_jar: nil)
+    # Unattended callers (monitors) narrow the run: `deadline` (seconds) bounds the whole run, redirects and digest
+    # retry included, and caps each attempt's timeout; `max_bytes` caps the body kept; `resolve` (see Connection) picks
+    # the address of every hop instead of the outbound guard alone.
+    def initialize(built:, cancelled: nil, cookie_jar: nil, deadline: MAX_DURATION, max_bytes: MAX_RESPONSE_BYTES, resolve: nil)
       @built = built
       @cancelled = cancelled
       @cookie_jar = cookie_jar
+      @max_duration = deadline
+      @max_bytes = max_bytes
+      @resolve = resolve
     end
 
     private
 
     def perform
       started = monotonic_now
-      @deadline = started + MAX_DURATION
+      @deadline = started + @max_duration
       @timing = Timing.new
       state = { method: @built.http_method, url: @built.url, headers: @built.headers.dup, send_body: true }
       redirects = []
@@ -67,7 +73,8 @@ module ApiClient
 
     def attempt(state)
       @sent_headers = with_cookies(state[:headers], state[:url])
-      connection = Connection.build(url: state[:url], timeout: attempt_timeout, verify_ssl: @built.verify_ssl, multipart: @built.body.multipart && state[:send_body], timing: @timing)
+      connection = Connection.build(url: state[:url], timeout: attempt_timeout, verify_ssl: @built.verify_ssl, multipart: @built.body.multipart && state[:send_body], timing: @timing,
+                                    resolve: @resolve)
       buffer = String.new(encoding: Encoding::BINARY)
       seen = {}
       body = state[:send_body] ? @built.body.factory.call : nil
@@ -81,7 +88,7 @@ module ApiClient
           seen[:status_text] ||= env.reason_phrase
           seen[:headers] ||= env.response_headers
           seen[:size] = total
-          room = MAX_RESPONSE_BYTES - buffer.bytesize
+          room = @max_bytes - buffer.bytesize
           if chunk.bytesize > room
             buffer << chunk.byteslice(0, room)
             raise TooLarge
@@ -94,7 +101,7 @@ module ApiClient
       Attempt.new(status: response.status, status_text: response.reason_phrase, headers: response.headers, body: buffer, size: buffer.bytesize, truncated: false)
     rescue TooLarge
       @timing.end_attempt
-      Attempt.new(status: seen[:status], status_text: seen[:status_text], headers: seen[:headers] || {}, body: buffer, size: MAX_RESPONSE_BYTES, truncated: true)
+      Attempt.new(status: seen[:status], status_text: seen[:status_text], headers: seen[:headers] || {}, body: buffer, size: @max_bytes, truncated: true)
     end
 
     # Cookies the user typed in a Cookie header win over stored ones with the same name.
@@ -113,7 +120,7 @@ module ApiClient
 
     def check_deadline!
       raise Cancelled, "Cancelled" if @cancelled&.call
-      raise DeadlineExceeded, "The request exceeded the maximum duration of #{MAX_DURATION} seconds" if monotonic_now >= @deadline
+      raise DeadlineExceeded, "The request exceeded the maximum duration of #{@max_duration} seconds" if monotonic_now >= @deadline
     end
 
     # The per-attempt timeout never outlives the overall deadline.

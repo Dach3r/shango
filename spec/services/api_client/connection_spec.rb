@@ -11,6 +11,18 @@ RSpec.describe ApiClient::Connection do
       expect(connection.ssl.verify).to be(true)
     end
 
+    it "pins the address a resolver picks instead of asking the guard", :aggregate_failures do
+      allow(Network::SsrfPolicy).to receive(:check!)
+      resolve = ->(host) { host == "a.test" ? "203.0.113.7" : raise(Network::SsrfPolicy::Blocked, host) }
+      http = Net::HTTP.new("a.test", 443)
+      connection = described_class.build(url: "https://a.test", timeout: 5, resolve:)
+      connection.builder.adapter.instance_variable_get(:@block).call(http)
+
+      expect(http.ipaddr).to eq("203.0.113.7")
+      expect(Network::SsrfPolicy).not_to have_received(:check!)
+      expect { described_class.build(url: "https://b.test", timeout: 5, resolve:) }.to raise_error(Network::SsrfPolicy::Blocked)
+    end
+
     it "caps open timeout by timeout" do
       expect(described_class.build(url: "https://a.test", timeout: 3).options.open_timeout).to eq(3)
     end

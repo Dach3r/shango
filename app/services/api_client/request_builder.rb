@@ -55,7 +55,7 @@ module ApiClient
         unresolved: @resolver.unresolved.to_a.sort, secrets: secrets(strategy), defaults_added:
       ))
     rescue InvalidRequest, Auth::ConfigurationError => error
-      Result.failure(error: error.message, unresolved: @resolver.unresolved.to_a.sort)
+      Result.failure(error: error.message, unresolved: @resolver.unresolved.to_a.sort, auth: error.is_a?(Auth::ConfigurationError))
     end
 
     def resolved_url

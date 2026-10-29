@@ -514,6 +514,29 @@ RSpec.describe ApiClient::Executor do
       expect(ApiClient::Connection).to have_received(:build).with(hash_including(timeout: 2))
     end
 
+    it "takes a shorter deadline, a smaller body cap and a resolver from unattended callers", :aggregate_failures do
+      allow(ApiClient::Connection).to receive(:build).and_call_original
+      resolve = ->(_host) { "203.0.113.7" }
+      stub_request(:get, url).to_return(status: 200, body: "a" * 100)
+      short = described_class.call(built:, deadline: 3, max_bytes: 10, resolve:)
+
+      expect(short).to have_attributes(status: 200, truncated: true, size_bytes: 10)
+      expect(short.body).to eq("a" * 10)
+      expect(ApiClient::Connection).to have_received(:build).with(hash_including(timeout: 3, resolve:))
+    end
+
+    it "words the deadline it was given" do
+      stub_request(:get, url).to_return(status: 200)
+
+      expect(described_class.call(built:, deadline: 0)).to have_attributes(error_kind: "timeout", error_message: /maximum duration of 0 seconds/)
+    end
+
+    it "reports a hop the resolver refuses as blocked" do
+      reply = described_class.call(built:, resolve: ->(host) { raise Network::SsrfPolicy::Blocked, "#{host} is not allowed" })
+
+      expect(reply).to have_attributes(error_kind: "blocked", error_message: "api.example.com is not allowed")
+    end
+
     it "stops when cancelled", :aggregate_failures do
       stub_request(:get, url).to_return(status: 200, body: "hello")
 

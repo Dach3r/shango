@@ -65,6 +65,7 @@ RSpec.describe ApiClient::RequestBuilder do
       it "fails", :aggregate_failures do
         expect(result).to be_failure
         expect(result.error).to eq(I18n.t("workbench.errors.blank_url"))
+        expect(result.data[:auth]).to be(false)
       end
     end
 
@@ -369,8 +370,9 @@ RSpec.describe ApiClient::RequestBuilder do
     context "when the config is incomplete" do
       let(:attributes) { { auth_type: "bearer", auth_config: {} } }
 
-      it "fails" do
+      it "fails, flagged as an authentication problem", :aggregate_failures do
         expect(result.error).to eq("Missing token")
+        expect(result.data[:auth]).to be(true)
       end
     end
   end
