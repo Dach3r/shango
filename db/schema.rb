@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_29_113657) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_121657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -105,6 +105,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_113657) do
     t.integer "failures", default: 0, null: false
     t.bigint "response_ms_sum", default: 0, null: false
     t.integer "response_ms_max", default: 0, null: false
+    t.integer "responses", default: 0, null: false
     t.index ["hour"], name: "index_check_rollups_on_hour"
     t.index ["uptime_monitor_id", "hour"], name: "index_check_rollups_on_uptime_monitor_id_and_hour", unique: true
   end

@@ -7,6 +7,10 @@ default: &default
       threads: 3
       processes: <%= ENV.fetch("JOB_CONCURRENCY", 1) %>
       polling_interval: 1
+    - queues: "monitoring"
+      threads: <%= ENV.fetch("SHANGO_MONITORING_THREADS", 5) %>
+      processes: 1
+      polling_interval: 1
 
 development:
   <<: *default

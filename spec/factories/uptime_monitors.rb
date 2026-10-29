@@ -48,6 +48,7 @@ FactoryBot.define do
     hour { Time.current.beginning_of_hour }
     checks { 12 }
     failures { 0 }
+    responses { 12 }
     response_ms_sum { 1440 }
     response_ms_max { 300 }
   end

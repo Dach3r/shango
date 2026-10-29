@@ -44,6 +44,7 @@ Optional, with defaults:
 | `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` | 90 | Saved Network Tools runs older than this are deleted daily (`0` keeps them). |
 | `RAILS_MAX_THREADS`, `WEB_CONCURRENCY` | 5, 1 | Puma threads (also the DB pool per process) and worker processes. |
 | `JOB_CONCURRENCY` | 1 | Solid Queue worker processes. |
+| `SHANGO_MONITORING_THREADS` | 5 | Threads of the Solid Queue worker dedicated to the `monitoring` queue (monitor checks). |
 
 ## 3. Backups and restore
 
@@ -57,7 +58,7 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 4. Routine upkeep
 
-- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45). They only run while a worker is up.
+- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors). They only run while a worker is up.
 - Rotate encryption keys when someone with access leaves: [`api-client.md`](api-client.md) §6.
 - Keep dependencies current (Dependabot PRs; CI runs `bundler-audit` on every push).
 - Errors go to stdout with a request id (`log_tags`); ship them to your log platform. An error tracker (Sentry or similar) is not bundled; add one if you need alerting.
