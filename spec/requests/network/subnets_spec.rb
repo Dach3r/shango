@@ -51,6 +51,15 @@ RSpec.describe "Network subnets" do
     expect(response.body).to include(I18n.t("network.history.subnet"), "192.168.1.0/24")
   end
 
+  it "still shows the result in place when the run cannot be saved", :aggregate_failures do
+    allow(Network::Checks::Record).to receive(:call).and_return(Result.failure(error: :not_saved))
+    calculate
+
+    expect(response).to have_http_status(:ok)
+    expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+    expect(response.body).to include("subnet_result")
+  end
+
   it "answers 422 with the error for invalid input and saves nothing", :aggregate_failures do
     expect { calculate(split: "/8") }.not_to change(NetworkCheck, :count)
 
