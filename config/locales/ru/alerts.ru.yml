@@ -1,0 +1,137 @@
+ru:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "нельзя изменить после создания канала"
+            target:
+              too_many_addresses: "может содержать не более %{count} адресов"
+              invalid_address: "содержит неверный адрес: %{address}"
+              invalid_url: "должен быть URL http или https без имени пользователя и пароля"
+            base:
+              project_limit: "В этом проекте уже %{count} каналов оповещений — это максимум."
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "Монитор может оповещать не более %{count} каналов."
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "не более %{count}"
+    attributes:
+      notification_channel:
+        name: "Название"
+        kind: "Тип"
+        target: "Получатель"
+        locale: "Язык сообщений"
+        enabled: "Отправлять оповещения в этот канал"
+      uptime_monitor:
+        notification_channels: "Каналы оповещений"
+  monitoring:
+    tabs:
+      label: "Разделы мониторинга"
+      monitors: "Мониторы"
+      channels: "Каналы оповещений"
+    kinds:
+      http: "HTTP"
+      tcp: "TCP-порт"
+      ssl: "SSL-сертификат"
+      domain: "Срок регистрации домена"
+      push: "Push (heartbeat)"
+    form:
+      alerts: "Оповещения"
+      alerts_hint: "Отмеченные каналы получают оповещение, когда монитор падает и когда восстанавливается."
+      no_channels: "В этом проекте пока нет каналов оповещений."
+      create_channel: "Создать"
+    delivery_errors:
+      invalid_url: "Неверный URL"
+      blocked: "Адрес запрещён"
+      unresolved: "Имя хоста не разрешается"
+      connection_refused: "Соединение отклонено"
+      connection_timeout: "Нет ответа вовремя"
+      tls_failed: "Ошибка TLS"
+      connection_failed: "Ошибка соединения"
+      unexpected_status: "Получатель ответил ошибкой"
+      rate_limited: "Получатель попросил подождать"
+      mail_disabled: "Почта не настроена в этой установке"
+      mail_failed: "Почтовый сервер не принял сообщение"
+    notifications:
+      subjects:
+        incident_opened: "[Недоступен] %{monitor}"
+        incident_resolved: "[Работает] %{monitor}"
+        test: "Тестовое оповещение из %{project}"
+      text:
+        incident_opened: "🔴 %{monitor} недоступен: %{cause}"
+        incident_resolved: "🟢 %{monitor} снова работает спустя %{duration}"
+        test: "✅ Тестовое оповещение для канала %{channel} проекта %{project}. Оповещения доходят до этого канала."
+      mail:
+        monitor: "Монитор"
+        target: "Цель"
+        cause: "Причина"
+        started: "Недоступен с"
+        resolved: "Восстановлен в"
+        open_monitor: "Открыть монитор"
+        open_channels: "Открыть каналы оповещений"
+        footer: "Отправлено Shango в канал оповещений %{channel} проекта %{project}."
+    channels:
+      kinds:
+        email: "Email"
+        webhook: "Вебхук"
+      hints:
+        email: "До 10 адресов через запятую или с новой строки."
+        webhook: "Shango отправляет на этот URL POST с подписанным JSON (заголовок X-Shango-Signature)."
+      index:
+        title: "Каналы оповещений"
+        description: "Куда мониторы отправляют оповещения, когда падают и когда восстанавливаются."
+        new: "Новый канал"
+        secret_title: "Секрет подписи для %{name}"
+        secret_hint: "Скопируйте его сейчас: он больше не будет показан. Используйте его для проверки заголовка X-Shango-Signature каждого запроса."
+        copy: "Копировать"
+        copied: "Скопировано"
+        empty: "Каналов оповещений пока нет"
+        empty_hint: "Создайте канал и отметьте его в мониторах, которые должны его оповещать."
+        disabled: "Выключен"
+        monitors:
+          one: "%{count} монитор"
+          few: "%{count} монитора"
+          many: "%{count} мониторов"
+          other: "%{count} монитора"
+        latest:
+          pending: "отправляется… (%{time} назад)"
+          sent: "последнее оповещение отправлено %{time} назад"
+          failed: "последнее оповещение не доставлено %{time} назад:"
+      actions:
+        test: "Отправить тест"
+        secret: "Новый секрет"
+        confirm_secret: "Создать новый секрет подписи? Текущий сразу перестанет работать."
+        confirm_delete: "Удалить канал %{name}? Мониторы перестанут его оповещать."
+      new:
+        title: "Новый канал оповещений"
+        description: "Выберите, куда отправлять оповещения."
+        mail_disabled: "Нужен SMTP, который в этой установке не настроен."
+      edit:
+        title: "Изменить канал оповещений"
+      form:
+        name_placeholder: "Дежурная команда"
+        targets:
+          email: "Адреса электронной почты"
+          webhook: "URL вебхука"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "Оставьте пустым, чтобы сохранить текущий URL."
+        save: "Сохранить канал"
+        create: "Создать канал"
+      create:
+        created: "Канал создан. Отправьте тест, чтобы проверить его."
+      update:
+        updated: "Канал сохранён."
+      destroy:
+        destroyed: "Канал удалён."
+      tests:
+        create:
+          queued: "Тестовое оповещение отправляется. Результат появится здесь через несколько секунд."
+      secrets:
+        create:
+          regenerated: "Создан новый секрет подписи. Старый больше не работает."

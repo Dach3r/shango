@@ -30,7 +30,7 @@ Optional, with defaults:
 | --- | --- | --- |
 | `SHANGO_BLOCK_PRIVATE_NETWORKS` | `true` in production | `false` lets API Client requests reach localhost and private networks (self-hosted installs that call internal services; every project member can then send requests from the server into your network). |
 | `SHANGO_EXECUTION_MODE` | `async` in production, `inline` elsewhere | Where API Client requests run. |
-| `SHANGO_SMTP_ADDRESS` | unset | Turns email on. Also `SHANGO_SMTP_PORT` (587), `SHANGO_SMTP_USERNAME`, `SHANGO_SMTP_PASSWORD`, `SHANGO_SMTP_DOMAIN`, `SHANGO_SMTP_AUTHENTICATION` (plain), `SHANGO_SMTP_STARTTLS` (true), `SHANGO_MAIL_FROM`. |
+| `SHANGO_SMTP_ADDRESS` | unset | Turns email on (invitations, confirmations and the email alert channels of Monitoring; without it only webhook, Slack and Discord channels can be created). Also `SHANGO_SMTP_PORT` (587), `SHANGO_SMTP_USERNAME`, `SHANGO_SMTP_PASSWORD`, `SHANGO_SMTP_DOMAIN`, `SHANGO_SMTP_AUTHENTICATION` (plain), `SHANGO_SMTP_STARTTLS` (true), `SHANGO_MAIL_FROM`. |
 | `SHANGO_REQUIRE_EMAIL_CONFIRMATION` | `true` when SMTP is set | `false` keeps email on without forcing confirmation. Ignored without SMTP. |
 | `SHANGO_MAX_SIGN_IN_ATTEMPTS` | 10 | Failed sign-ins before a 30-minute lock. |
 | `SHANGO_SESSION_TIMEOUT_HOURS` | 12 | Idle time before sign-in is required again. |

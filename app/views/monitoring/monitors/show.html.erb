@@ -73,7 +73,8 @@
       <h2 class="<%= heading %>"><%= t("monitoring.show.settings") %></h2>
       <dl class="text-sm">
         <% { interval: monitor_interval_label(@monitor.interval), timeout: t("monitoring.units.seconds", value: @monitor.timeout), confirmations: @monitor.confirmations,
-             expected_statuses: @monitor.expected_statuses, max_response_ms: monitor_ms(@monitor.max_response_ms), environment: @monitor.environment&.name || "—" }.each do |field, value| %>
+             expected_statuses: @monitor.expected_statuses, max_response_ms: monitor_ms(@monitor.max_response_ms), environment: @monitor.environment&.name || "—",
+             notification_channels: @monitor.notification_channels.map(&:name).sort.join(", ").presence || "—" }.each do |field, value| %>
           <div class="flex items-baseline justify-between gap-4 border-b border-line px-5 py-2.5 last:border-b-0">
             <dt class="text-muted"><%= UptimeMonitor.human_attribute_name(field) %></dt>
             <dd class="font-mono text-ink"><%= value %></dd>

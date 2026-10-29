@@ -1,0 +1,135 @@
+de:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "kann nach dem Anlegen des Kanals nicht mehr geändert werden"
+            target:
+              too_many_addresses: "darf höchstens %{count} Adressen enthalten"
+              invalid_address: "enthält eine ungültige Adresse: %{address}"
+              invalid_url: "muss eine http- oder https-URL ohne Benutzername und Passwort sein"
+            base:
+              project_limit: "Dieses Projekt hat bereits %{count} Alarmkanäle, das Maximum."
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "Ein Monitor kann höchstens %{count} Kanäle benachrichtigen."
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "dürfen höchstens %{count} sein"
+    attributes:
+      notification_channel:
+        name: "Name"
+        kind: "Art"
+        target: "Ziel"
+        locale: "Sprache der Nachrichten"
+        enabled: "Alarme an diesen Kanal senden"
+      uptime_monitor:
+        notification_channels: "Alarmkanäle"
+  monitoring:
+    tabs:
+      label: "Bereiche des Monitorings"
+      monitors: "Monitore"
+      channels: "Alarmkanäle"
+    kinds:
+      http: "HTTP"
+      tcp: "TCP-Port"
+      ssl: "SSL-Zertifikat"
+      domain: "Domain-Ablauf"
+      push: "Push (Heartbeat)"
+    form:
+      alerts: "Alarme"
+      alerts_hint: "Die ausgewählten Kanäle werden benachrichtigt, wenn der Monitor ausfällt und wenn er sich erholt."
+      no_channels: "Dieses Projekt hat noch keine Alarmkanäle."
+      create_channel: "Einen anlegen"
+    delivery_errors:
+      invalid_url: "Ungültige URL"
+      blocked: "Adresse nicht erlaubt"
+      unresolved: "Der Hostname lässt sich nicht auflösen"
+      connection_refused: "Verbindung abgelehnt"
+      connection_timeout: "Keine Antwort in der Zeit"
+      tls_failed: "TLS fehlgeschlagen"
+      connection_failed: "Verbindung fehlgeschlagen"
+      unexpected_status: "Der Empfänger hat mit einem Fehler geantwortet"
+      rate_limited: "Der Empfänger bat um eine Pause"
+      mail_disabled: "E-Mail ist in dieser Installation nicht eingerichtet"
+      mail_failed: "Der Mailserver hat die Nachricht nicht angenommen"
+    notifications:
+      subjects:
+        incident_opened: "[Ausgefallen] %{monitor}"
+        incident_resolved: "[Wieder da] %{monitor}"
+        test: "Testalarm aus %{project}"
+      text:
+        incident_opened: "🔴 %{monitor} ist ausgefallen: %{cause}"
+        incident_resolved: "🟢 %{monitor} ist nach %{duration} wieder erreichbar"
+        test: "✅ Testalarm für den Kanal %{channel} von %{project}. Alarme erreichen diesen Kanal."
+      mail:
+        monitor: "Monitor"
+        target: "Ziel"
+        cause: "Ursache"
+        started: "Ausgefallen seit"
+        resolved: "Wieder erreichbar um"
+        open_monitor: "Monitor öffnen"
+        open_channels: "Alarmkanäle öffnen"
+        footer: "Von Shango an den Alarmkanal %{channel} von %{project} gesendet."
+    channels:
+      kinds:
+        email: "E-Mail"
+        webhook: "Webhook"
+      hints:
+        email: "Bis zu 10 Adressen, getrennt durch Kommas oder Zeilenumbrüche."
+        webhook: "Shango sendet signiertes JSON per POST an diese URL (Header X-Shango-Signature)."
+      index:
+        title: "Alarmkanäle"
+        description: "Wohin Monitore ihre Alarme senden, wenn sie ausfallen und wenn sie sich erholen."
+        new: "Neuer Kanal"
+        secret_title: "Signaturgeheimnis von %{name}"
+        secret_hint: "Jetzt kopieren: Es wird nicht noch einmal angezeigt. Damit prüfen Sie den Header X-Shango-Signature jeder Anfrage."
+        copy: "Kopieren"
+        copied: "Kopiert"
+        empty: "Noch keine Alarmkanäle"
+        empty_hint: "Legen Sie einen Kanal an und wählen Sie ihn in den Monitoren aus, die ihn benachrichtigen sollen."
+        disabled: "Aus"
+        monitors:
+          one: "%{count} Monitor"
+          other: "%{count} Monitore"
+        latest:
+          pending: "wird gesendet … (vor %{time})"
+          sent: "letzter Alarm vor %{time} gesendet"
+          failed: "letzter Alarm vor %{time} fehlgeschlagen:"
+      actions:
+        test: "Test senden"
+        secret: "Neues Geheimnis"
+        confirm_secret: "Neues Signaturgeheimnis erstellen? Das aktuelle funktioniert dann sofort nicht mehr."
+        confirm_delete: "Kanal %{name} löschen? Monitore benachrichtigen ihn dann nicht mehr."
+      new:
+        title: "Neuer Alarmkanal"
+        description: "Wählen Sie, wohin die Alarme gehen."
+        mail_disabled: "Benötigt SMTP, das in dieser Installation nicht eingerichtet ist."
+      edit:
+        title: "Alarmkanal bearbeiten"
+      form:
+        name_placeholder: "Bereitschaft"
+        targets:
+          email: "E-Mail-Adressen"
+          webhook: "Webhook-URL"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "Leer lassen, um die aktuelle URL zu behalten."
+        save: "Kanal speichern"
+        create: "Kanal anlegen"
+      create:
+        created: "Kanal angelegt. Senden Sie einen Test, um ihn zu prüfen."
+      update:
+        updated: "Kanal gespeichert."
+      destroy:
+        destroyed: "Kanal gelöscht."
+      tests:
+        create:
+          queued: "Testalarm unterwegs. Das Ergebnis erscheint hier in wenigen Sekunden."
+      secrets:
+        create:
+          regenerated: "Neues Signaturgeheimnis erstellt. Das alte funktioniert nicht mehr."

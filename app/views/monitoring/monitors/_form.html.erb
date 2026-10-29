@@ -63,6 +63,32 @@
     <p class="text-xs text-muted"><%= t("monitoring.form.conditions_hint") %></p>
   </section>
 
+  <section class="flex flex-col gap-4 border border-line bg-card p-5">
+    <h2 class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("monitoring.form.alerts") %></h2>
+    <% channels = current_project.notification_channels.ordered %>
+    <%= hidden_field_tag "uptime_monitor[notification_channel_ids][]", "", id: nil %>
+    <% if channels.empty? %>
+      <p class="text-sm text-muted"><%= t("monitoring.form.no_channels") %> <%= link_to t("monitoring.form.create_channel"), new_monitoring_channel_path, class: "text-ink underline underline-offset-2" %></p>
+    <% else %>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        <% selected = monitor.notification_channel_ids %>
+        <% channels.each do |channel| %>
+          <li>
+            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink">
+              <span class="relative flex size-5 shrink-0">
+                <%= check_box_tag "uptime_monitor[notification_channel_ids][]", channel.id, selected.include?(channel.id), id: "uptime_monitor_channel_#{channel.id}", class: Checkbox::Component::BOX %>
+                <%= lucide_icon "check", class: Checkbox::Component::ICON, "aria-hidden": true %>
+              </span>
+              <%= lucide_icon channel_icon(channel), class: "size-4 text-muted" %>
+              <span class="truncate"><%= channel.name %></span>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+      <p class="text-xs text-muted"><%= t("monitoring.form.alerts_hint") %></p>
+    <% end %>
+  </section>
+
   <div class="flex flex-wrap justify-end gap-2">
     <%= link_to t("monitoring.form.cancel"), (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_root_path), class: button_classes(:secondary) %>
     <%= form.button type: :submit, class: button_classes(:primary) do %><%= lucide_icon "check", class: "size-4" %><%= t(monitor.persisted? ? "monitoring.form.save" : "monitoring.form.create") %><% end %>

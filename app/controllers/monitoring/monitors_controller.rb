@@ -30,7 +30,7 @@ module Monitoring
     def create
       @monitor = current_project.uptime_monitors.new(monitor_params.merge(kind: "http", creator: current_user))
       authorize @monitor
-      result = Monitoring::Monitors::Create.call(monitor: @monitor)
+      result = Monitoring::Monitors::Create.call(monitor: @monitor, channels:)
       return redirect_to(monitoring_monitor_path(@monitor), notice: t(".created"), status: :see_other) if result.success?
 
       render :new, status: :unprocessable_content
@@ -38,7 +38,7 @@ module Monitoring
 
     def update
       authorize @monitor
-      result = Monitoring::Monitors::Update.call(monitor: @monitor, attributes: monitor_params)
+      result = Monitoring::Monitors::Update.call(monitor: @monitor, attributes: monitor_params, channels:)
       return redirect_to(monitoring_monitor_path(@monitor), notice: t(".updated"), status: :see_other) if result.success?
 
       render :edit, status: :unprocessable_content
@@ -56,6 +56,12 @@ module Monitoring
       attributes = params.expect(uptime_monitor: [:name, :environment_id, :interval, :timeout, :confirmations, { settings: %i[url http_method expected_statuses max_response_ms] }]).to_h
       attributes["settings"] = attributes["settings"].merge("mode" => "url") if attributes.key?("settings")
       attributes
+    end
+
+    # The channels ticked in the form, only among the project's; nil when the form did not send the list.
+    def channels
+      ids = params.dig(:uptime_monitor, :notification_channel_ids)
+      current_project.notification_channels.where(id: Array(ids).compact_blank).to_a if ids
     end
 
     def filtered(scope)

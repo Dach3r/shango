@@ -31,7 +31,7 @@ RSpec.describe "Locale files" do
     expect(I18n.available_locales).to eq(%i[en es zh-CN hi pt-BR ru ja de fr])
   end
 
-  %w[views workbench network team monitoring].each do |name|
+  %w[views workbench network team monitoring alerts].each do |name|
     (I18n.available_locales - [:en]).each do |locale|
       context "with #{name} in #{locale}" do
         let(:en) { load_locale(name, :en) }

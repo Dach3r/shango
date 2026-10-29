@@ -1,0 +1,135 @@
+hi:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "चैनल बनने के बाद बदला नहीं जा सकता"
+            target:
+              too_many_addresses: "में अधिकतम %{count} पते हो सकते हैं"
+              invalid_address: "में एक अमान्य पता है: %{address}"
+              invalid_url: "उपयोगकर्ता नाम या पासवर्ड के बिना http या https URL होना चाहिए"
+            base:
+              project_limit: "इस प्रोजेक्ट में पहले से %{count} अलर्ट चैनल हैं, जो अधिकतम सीमा है।"
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "एक मॉनिटर अधिकतम %{count} चैनलों को अलर्ट कर सकता है।"
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "अधिकतम %{count} हो सकते हैं"
+    attributes:
+      notification_channel:
+        name: "नाम"
+        kind: "प्रकार"
+        target: "गंतव्य"
+        locale: "संदेशों की भाषा"
+        enabled: "इस चैनल पर अलर्ट भेजें"
+      uptime_monitor:
+        notification_channels: "अलर्ट चैनल"
+  monitoring:
+    tabs:
+      label: "मॉनिटरिंग अनुभाग"
+      monitors: "मॉनिटर"
+      channels: "अलर्ट चैनल"
+    kinds:
+      http: "HTTP"
+      tcp: "TCP पोर्ट"
+      ssl: "SSL प्रमाणपत्र"
+      domain: "डोमेन समाप्ति"
+      push: "पुश (हार्टबीट)"
+    form:
+      alerts: "अलर्ट"
+      alerts_hint: "चुने गए चैनलों को मॉनिटर के डाउन होने और ठीक होने पर सूचना मिलती है।"
+      no_channels: "इस प्रोजेक्ट में अभी कोई अलर्ट चैनल नहीं है।"
+      create_channel: "एक बनाएँ"
+    delivery_errors:
+      invalid_url: "अमान्य URL"
+      blocked: "पता अनुमत नहीं है"
+      unresolved: "होस्ट नाम रिज़ॉल्व नहीं होता"
+      connection_refused: "कनेक्शन अस्वीकार किया गया"
+      connection_timeout: "समय पर कोई उत्तर नहीं"
+      tls_failed: "TLS विफल"
+      connection_failed: "कनेक्शन विफल"
+      unexpected_status: "प्राप्तकर्ता ने त्रुटि के साथ उत्तर दिया"
+      rate_limited: "प्राप्तकर्ता ने धीमा करने को कहा"
+      mail_disabled: "इस इंस्टॉलेशन पर ईमेल कॉन्फ़िगर नहीं है"
+      mail_failed: "मेल सर्वर ने संदेश स्वीकार नहीं किया"
+    notifications:
+      subjects:
+        incident_opened: "[डाउन] %{monitor}"
+        incident_resolved: "[अप] %{monitor}"
+        test: "%{project} से परीक्षण अलर्ट"
+      text:
+        incident_opened: "🔴 %{monitor} डाउन है: %{cause}"
+        incident_resolved: "🟢 %{monitor} %{duration} बाद फिर से अप है"
+        test: "✅ %{project} के चैनल %{channel} के लिए परीक्षण अलर्ट। अलर्ट इस चैनल तक पहुँचते हैं।"
+      mail:
+        monitor: "मॉनिटर"
+        target: "लक्ष्य"
+        cause: "कारण"
+        started: "डाउन होने का समय"
+        resolved: "ठीक होने का समय"
+        open_monitor: "मॉनिटर खोलें"
+        open_channels: "अलर्ट चैनल खोलें"
+        footer: "Shango द्वारा %{project} के अलर्ट चैनल %{channel} पर भेजा गया।"
+    channels:
+      kinds:
+        email: "ईमेल"
+        webhook: "वेबहुक"
+      hints:
+        email: "अधिकतम 10 पते, कॉमा या नई पंक्ति से अलग किए गए।"
+        webhook: "Shango इस URL पर हस्ताक्षरित JSON POST करता है (हेडर X-Shango-Signature)।"
+      index:
+        title: "अलर्ट चैनल"
+        description: "मॉनिटर डाउन होने और ठीक होने पर अपने अलर्ट कहाँ भेजते हैं।"
+        new: "नया चैनल"
+        secret_title: "%{name} का साइनिंग सीक्रेट"
+        secret_hint: "इसे अभी कॉपी करें: यह दोबारा नहीं दिखेगा। हर अनुरोध के X-Shango-Signature हेडर की जाँच के लिए इसका उपयोग करें।"
+        copy: "कॉपी करें"
+        copied: "कॉपी हो गया"
+        empty: "अभी कोई अलर्ट चैनल नहीं है"
+        empty_hint: "एक चैनल बनाएँ, फिर उसे उन मॉनिटरों में चुनें जिन्हें उसे अलर्ट करना चाहिए।"
+        disabled: "बंद"
+        monitors:
+          one: "%{count} मॉनिटर"
+          other: "%{count} मॉनिटर"
+        latest:
+          pending: "भेजा जा रहा है… (%{time} पहले)"
+          sent: "पिछला अलर्ट %{time} पहले भेजा गया"
+          failed: "पिछला अलर्ट %{time} पहले विफल हुआ:"
+      actions:
+        test: "परीक्षण भेजें"
+        secret: "नया सीक्रेट"
+        confirm_secret: "नया साइनिंग सीक्रेट बनाएँ? मौजूदा तुरंत काम करना बंद कर देगा।"
+        confirm_delete: "चैनल %{name} हटाएँ? मॉनिटर उसे अलर्ट करना बंद कर देंगे।"
+      new:
+        title: "नया अलर्ट चैनल"
+        description: "चुनें कि अलर्ट कहाँ जाएँ।"
+        mail_disabled: "SMTP की आवश्यकता है, जो इस इंस्टॉलेशन में कॉन्फ़िगर नहीं है।"
+      edit:
+        title: "अलर्ट चैनल संपादित करें"
+      form:
+        name_placeholder: "ऑन-कॉल टीम"
+        targets:
+          email: "ईमेल पते"
+          webhook: "वेबहुक URL"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "मौजूदा URL रखने के लिए इसे खाली छोड़ें।"
+        save: "चैनल सहेजें"
+        create: "चैनल बनाएँ"
+      create:
+        created: "चैनल बन गया। जाँचने के लिए परीक्षण भेजें।"
+      update:
+        updated: "चैनल सहेजा गया।"
+      destroy:
+        destroyed: "चैनल हटाया गया।"
+      tests:
+        create:
+          queued: "परीक्षण अलर्ट भेजा जा रहा है। इसका परिणाम कुछ सेकंड में यहाँ दिखेगा।"
+      secrets:
+        create:
+          regenerated: "नया साइनिंग सीक्रेट बनाया गया। पुराना अब काम नहीं करता।"

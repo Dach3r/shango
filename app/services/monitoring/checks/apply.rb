@@ -4,7 +4,8 @@ module Monitoring
     # change of state (scheduled checks, Run now, push pings) goes through here,
     # under a row lock, after the probe returned. A result for a disabled monitor, or for a configuration that changed
     # since the check was enqueued (`config_version`), is dropped. Returns the monitor with `transition` (`opened`,
-    # `resolved` or nil) and `retry` (a failure below the confirmations, to be checked again soon).
+    # `resolved` or nil) and `retry` (a failure below the confirmations, to be checked again soon). Opening or
+    # resolving an incident plans its alerts in the same transaction and enqueues them after it commits.
     class Apply
       include Serviceable
 
@@ -21,6 +22,13 @@ module Monitoring
       private
 
       def perform
+        @deliveries = []
+        result = apply
+        Notifications::Plan.enqueue(@deliveries)
+        result
+      end
+
+      def apply
         UptimeMonitor.transaction do
           monitor = UptimeMonitor.lock.find_by(id: @monitor_id)
           return Result.failure(error: :gone) unless monitor
@@ -62,7 +70,10 @@ module Monitoring
         return [nil, false] if monitor.up?
 
         transition = (:resolved if monitor.down?)
-        monitor.incidents.open.find_each { |incident| incident.update!(resolved_at: @at, resolution: "recovered") }
+        monitor.incidents.open.find_each do |incident|
+          incident.update!(resolved_at: @at, resolution: "recovered")
+          @deliveries.concat(Notifications::Plan.call(incident, "incident_resolved")) if transition
+        end
         monitor.go_up(@at)
         [transition, false]
       end
@@ -72,7 +83,8 @@ module Monitoring
         return [nil, false] if monitor.down?
         return [nil, QUICK_RETRY_KINDS.include?(monitor.kind)] if monitor.failures < monitor.confirmations
 
-        monitor.incidents.create!(project_id: monitor.project_id, cause: @outcome.error, detail: @outcome.detail&.first(DETAIL_LIMIT), started_at: @at)
+        incident = monitor.incidents.create!(project_id: monitor.project_id, cause: @outcome.error, detail: @outcome.detail&.first(DETAIL_LIMIT), started_at: @at)
+        @deliveries.concat(Notifications::Plan.call(incident, "incident_opened"))
         monitor.go_down(@at)
         [:opened, false]
       end

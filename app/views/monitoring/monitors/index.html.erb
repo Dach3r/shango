@@ -4,6 +4,8 @@
 <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
 
 <div class="mx-auto flex max-w-6xl flex-col gap-6" data-controller="refresh">
+  <%= render "monitoring/tabs", current: :monitors %>
+
   <header class="flex flex-wrap items-end justify-between gap-4">
     <div class="min-w-0">
       <h1 class="truncate text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.title") %></h1>

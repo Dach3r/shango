@@ -1,0 +1,134 @@
+zh-CN:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "创建渠道后不能更改"
+            target:
+              too_many_addresses: "最多只能有 %{count} 个地址"
+              invalid_address: "包含无效地址:%{address}"
+              invalid_url: "必须是不含用户名和密码的 http 或 https URL"
+            base:
+              project_limit: "此项目已有 %{count} 个告警渠道,已达上限。"
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "一个监控最多可以通知 %{count} 个渠道。"
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "最多 %{count} 个"
+    attributes:
+      notification_channel:
+        name: "名称"
+        kind: "类型"
+        target: "目标"
+        locale: "消息语言"
+        enabled: "向此渠道发送告警"
+      uptime_monitor:
+        notification_channels: "告警渠道"
+  monitoring:
+    tabs:
+      label: "监控分区"
+      monitors: "监控"
+      channels: "告警渠道"
+    kinds:
+      http: "HTTP"
+      tcp: "TCP 端口"
+      ssl: "SSL 证书"
+      domain: "域名到期"
+      push: "推送(心跳)"
+    form:
+      alerts: "告警"
+      alerts_hint: "勾选的渠道会在监控宕机和恢复时收到通知。"
+      no_channels: "此项目还没有告警渠道。"
+      create_channel: "创建一个"
+    delivery_errors:
+      invalid_url: "无效的 URL"
+      blocked: "地址不被允许"
+      unresolved: "主机名无法解析"
+      connection_refused: "连接被拒绝"
+      connection_timeout: "未及时响应"
+      tls_failed: "TLS 失败"
+      connection_failed: "连接失败"
+      unexpected_status: "接收方返回了错误"
+      rate_limited: "接收方要求降低频率"
+      mail_disabled: "此安装未配置电子邮件"
+      mail_failed: "邮件服务器未接受该消息"
+    notifications:
+      subjects:
+        incident_opened: "[宕机] %{monitor}"
+        incident_resolved: "[恢复] %{monitor}"
+        test: "来自 %{project} 的测试告警"
+      text:
+        incident_opened: "🔴 %{monitor} 已宕机:%{cause}"
+        incident_resolved: "🟢 %{monitor} 已恢复,宕机 %{duration}"
+        test: "✅ 这是 %{project} 的渠道 %{channel} 的测试告警。告警可以送达此渠道。"
+      mail:
+        monitor: "监控"
+        target: "目标"
+        cause: "原因"
+        started: "宕机开始于"
+        resolved: "恢复于"
+        open_monitor: "打开监控"
+        open_channels: "打开告警渠道"
+        footer: "由 Shango 发送到 %{project} 的告警渠道 %{channel}。"
+    channels:
+      kinds:
+        email: "电子邮件"
+        webhook: "Webhook"
+      hints:
+        email: "最多 10 个地址,用逗号或换行分隔。"
+        webhook: "Shango 会向此 URL 发送签名的 JSON POST 请求(请求头 X-Shango-Signature)。"
+      index:
+        title: "告警渠道"
+        description: "监控宕机和恢复时发送告警的位置。"
+        new: "新建渠道"
+        secret_title: "%{name} 的签名密钥"
+        secret_hint: "请立即复制:它不会再次显示。用它来校验每个请求的 X-Shango-Signature 请求头。"
+        copy: "复制"
+        copied: "已复制"
+        empty: "还没有告警渠道"
+        empty_hint: "创建一个渠道,然后在需要通知它的监控中勾选它。"
+        disabled: "已关闭"
+        monitors:
+          other: "%{count} 个监控"
+        latest:
+          pending: "发送中…(%{time}前)"
+          sent: "上次告警发送于 %{time}前"
+          failed: "上次告警失败于 %{time}前:"
+      actions:
+        test: "发送测试"
+        secret: "新密钥"
+        confirm_secret: "创建新的签名密钥?当前密钥将立即失效。"
+        confirm_delete: "删除渠道 %{name}?监控将不再通知它。"
+      new:
+        title: "新建告警渠道"
+        description: "选择告警发送到哪里。"
+        mail_disabled: "需要 SMTP,但此安装尚未配置。"
+      edit:
+        title: "编辑告警渠道"
+      form:
+        name_placeholder: "值班团队"
+        targets:
+          email: "电子邮件地址"
+          webhook: "Webhook URL"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "留空则保留当前 URL。"
+        save: "保存渠道"
+        create: "创建渠道"
+      create:
+        created: "渠道已创建。发送一次测试来检查它。"
+      update:
+        updated: "渠道已保存。"
+      destroy:
+        destroyed: "渠道已删除。"
+      tests:
+        create:
+          queued: "测试告警已发出。几秒钟后结果会显示在这里。"
+      secrets:
+        create:
+          regenerated: "已创建新的签名密钥。旧密钥已失效。"

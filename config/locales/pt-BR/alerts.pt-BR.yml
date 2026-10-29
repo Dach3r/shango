@@ -1,0 +1,135 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "não pode mudar depois que o canal é criado"
+            target:
+              too_many_addresses: "pode ter no máximo %{count} endereços"
+              invalid_address: "tem um endereço inválido: %{address}"
+              invalid_url: "deve ser uma URL http ou https sem usuário nem senha"
+            base:
+              project_limit: "Este projeto já tem %{count} canais de alerta, o máximo permitido."
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "Um monitor pode alertar no máximo %{count} canais."
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "podem ser no máximo %{count}"
+    attributes:
+      notification_channel:
+        name: "Nome"
+        kind: "Tipo"
+        target: "Destino"
+        locale: "Idioma das mensagens"
+        enabled: "Enviar alertas para este canal"
+      uptime_monitor:
+        notification_channels: "Canais de alerta"
+  monitoring:
+    tabs:
+      label: "Seções de monitoramento"
+      monitors: "Monitores"
+      channels: "Canais de alerta"
+    kinds:
+      http: "HTTP"
+      tcp: "Porta TCP"
+      ssl: "Certificado SSL"
+      domain: "Expiração de domínio"
+      push: "Push (heartbeat)"
+    form:
+      alerts: "Alertas"
+      alerts_hint: "Os canais marcados são avisados quando o monitor cai e quando se recupera."
+      no_channels: "Este projeto ainda não tem canais de alerta."
+      create_channel: "Criar um"
+    delivery_errors:
+      invalid_url: "URL inválida"
+      blocked: "Endereço não permitido"
+      unresolved: "O nome do host não resolve"
+      connection_refused: "Conexão recusada"
+      connection_timeout: "Sem resposta a tempo"
+      tls_failed: "Falha de TLS"
+      connection_failed: "Falha na conexão"
+      unexpected_status: "O receptor respondeu com um erro"
+      rate_limited: "O receptor pediu para esperar"
+      mail_disabled: "O email não está configurado nesta instalação"
+      mail_failed: "O servidor de email não aceitou a mensagem"
+    notifications:
+      subjects:
+        incident_opened: "[Fora do ar] %{monitor}"
+        incident_resolved: "[No ar] %{monitor}"
+        test: "Alerta de teste de %{project}"
+      text:
+        incident_opened: "🔴 %{monitor} está fora do ar: %{cause}"
+        incident_resolved: "🟢 %{monitor} voltou ao ar depois de %{duration}"
+        test: "✅ Alerta de teste do canal %{channel} de %{project}. Os alertas chegam a este canal."
+      mail:
+        monitor: "Monitor"
+        target: "Alvo"
+        cause: "Causa"
+        started: "Fora do ar desde"
+        resolved: "Recuperado às"
+        open_monitor: "Abrir o monitor"
+        open_channels: "Abrir os canais de alerta"
+        footer: "Enviado pelo Shango ao canal de alerta %{channel} de %{project}."
+    channels:
+      kinds:
+        email: "Email"
+        webhook: "Webhook"
+      hints:
+        email: "Até 10 endereços, separados por vírgulas ou quebras de linha."
+        webhook: "O Shango envia um POST com JSON assinado para esta URL (cabeçalho X-Shango-Signature)."
+      index:
+        title: "Canais de alerta"
+        description: "Para onde os monitores enviam alertas quando caem e quando se recuperam."
+        new: "Novo canal"
+        secret_title: "Segredo de assinatura de %{name}"
+        secret_hint: "Copie agora: ele não será mostrado de novo. Use-o para verificar o cabeçalho X-Shango-Signature de cada requisição."
+        copy: "Copiar"
+        copied: "Copiado"
+        empty: "Ainda não há canais de alerta"
+        empty_hint: "Crie um canal e marque-o nos monitores que devem alertá-lo."
+        disabled: "Desligado"
+        monitors:
+          one: "%{count} monitor"
+          other: "%{count} monitores"
+        latest:
+          pending: "enviando… (há %{time})"
+          sent: "último alerta enviado há %{time}"
+          failed: "o último alerta falhou há %{time}:"
+      actions:
+        test: "Enviar teste"
+        secret: "Novo segredo"
+        confirm_secret: "Criar um novo segredo de assinatura? O atual deixa de funcionar na hora."
+        confirm_delete: "Excluir o canal %{name}? Os monitores deixam de alertá-lo."
+      new:
+        title: "Novo canal de alerta"
+        description: "Escolha para onde vão os alertas."
+        mail_disabled: "Precisa de SMTP, que esta instalação não configurou."
+      edit:
+        title: "Editar canal de alerta"
+      form:
+        name_placeholder: "Equipe de plantão"
+        targets:
+          email: "Endereços de email"
+          webhook: "URL do webhook"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "Deixe em branco para manter a URL atual."
+        save: "Salvar canal"
+        create: "Criar canal"
+      create:
+        created: "Canal criado. Envie um teste para conferir."
+      update:
+        updated: "Canal salvo."
+      destroy:
+        destroyed: "Canal excluído."
+      tests:
+        create:
+          queued: "Alerta de teste a caminho. O resultado aparece aqui em alguns segundos."
+      secrets:
+        create:
+          regenerated: "Novo segredo de assinatura criado. O anterior não funciona mais."

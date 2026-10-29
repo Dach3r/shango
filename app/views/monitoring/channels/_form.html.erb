@@ -1,0 +1,43 @@
+<%# Form of a notification channel of one kind. Render with `channel:`. %>
+<%= form_with model: channel, scope: :notification_channel, url: (channel.persisted? ? monitoring_channel_path(channel) : monitoring_channels_path), class: "flex flex-col gap-6" do |form| %>
+  <%= hidden_field_tag "notification_channel[kind]", channel.kind unless channel.persisted? %>
+  <% if channel.errors.any? %>
+    <div role="alert" class="border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
+      <ul class="list-inside list-disc">
+        <% channel.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="flex flex-col gap-4 border border-line bg-card p-5">
+    <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-faint"><%= lucide_icon channel_icon(channel), class: "size-4" %><%= t("monitoring.channels.kinds.#{channel.kind}") %></p>
+    <div>
+      <%= form.label :name, NotificationChannel.human_attribute_name(:name), class: label_classes %>
+      <%= form.text_field :name, required: true, maxlength: 100, autocomplete: "off", placeholder: t("monitoring.channels.form.name_placeholder"), aria: { invalid: channel.errors.include?(:name) }, class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :target, t("monitoring.channels.form.targets.#{channel.kind}"), class: label_classes %>
+      <% if channel.email? %>
+        <%= form.text_area :target, rows: 3, required: true, spellcheck: false, placeholder: "ops@example.com, oncall@example.com", aria: { invalid: channel.errors.include?(:target) }, class: field_classes("font-mono") %>
+      <% else %>
+        <%= form.url_field :target, value: (channel.persisted? && !channel.target_changed? ? "" : channel.target), required: channel.new_record?, autocomplete: "off", spellcheck: false,
+                                    placeholder: (channel.persisted? ? channel.masked_target : t("monitoring.channels.form.url_placeholders.#{channel.kind}")), aria: { invalid: channel.errors.include?(:target) }, class: field_classes("font-mono") %>
+      <% end %>
+      <p class="mt-1.5 text-xs text-muted"><%= t("monitoring.channels.hints.#{channel.kind}") %><% if channel.persisted? && !channel.email? %> <%= t("monitoring.channels.form.keep_url") %><% end %></p>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :locale, NotificationChannel.human_attribute_name(:locale), class: label_classes %>
+        <%= form.select :locale, LocaleSwitcher::Component::NAMES.map { |code, name| [name, code] }, {}, class: field_classes %>
+      </div>
+      <div class="flex items-end pb-2">
+        <%= render Checkbox::Component.new(form:, attribute: :enabled, label: NotificationChannel.human_attribute_name(:enabled)) %>
+      </div>
+    </div>
+  </section>
+
+  <div class="flex flex-wrap justify-end gap-2">
+    <%= link_to t("monitoring.form.cancel"), monitoring_channels_path, class: button_classes(:secondary) %>
+    <%= form.button type: :submit, class: button_classes(:primary) do %><%= lucide_icon "check", class: "size-4" %><%= t(channel.persisted? ? "monitoring.channels.form.save" : "monitoring.channels.form.create") %><% end %>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<p><strong><%= @message.text %></strong></p>
+
+<% if @message.monitor %>
+  <p>
+    <%= t("monitoring.notifications.mail.monitor") %>: <%= @message.monitor.name %> (<%= @message.kind_name %>)<br>
+    <% if @message.target %><%= t("monitoring.notifications.mail.target") %>: <code><%= @message.target %></code><br><% end %>
+    <%= t("monitoring.notifications.mail.cause") %>: <%= @message.cause %><br>
+    <%= t("monitoring.notifications.mail.started") %>: <%= l(@message.incident.started_at, format: :long) %>
+    <% if @message.incident.resolved_at %><br><%= t("monitoring.notifications.mail.resolved") %>: <%= l(@message.incident.resolved_at, format: :long) %> (<%= @message.duration %>)<% end %>
+  </p>
+<% end %>
+
+<p><%= link_to t(@message.monitor ? "monitoring.notifications.mail.open_monitor" : "monitoring.notifications.mail.open_channels"), @message.url %></p>
+
+<p><%= t("monitoring.notifications.mail.footer", channel: @message.channel.name, project: @message.channel.project.name) %></p>

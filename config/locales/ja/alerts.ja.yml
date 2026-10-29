@@ -1,0 +1,134 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "チャンネル作成後は変更できません"
+            target:
+              too_many_addresses: "は最大 %{count} 件までです"
+              invalid_address: "に無効なアドレスがあります: %{address}"
+              invalid_url: "ユーザー名やパスワードを含まない http または https の URL である必要があります"
+            base:
+              project_limit: "このプロジェクトにはすでに上限の %{count} 件のアラートチャンネルがあります。"
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "1 つのモニターが通知できるチャンネルは最大 %{count} 件です。"
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "は最大 %{count} 件です"
+    attributes:
+      notification_channel:
+        name: "名前"
+        kind: "種類"
+        target: "送信先"
+        locale: "メッセージの言語"
+        enabled: "このチャンネルにアラートを送信する"
+      uptime_monitor:
+        notification_channels: "アラートチャンネル"
+  monitoring:
+    tabs:
+      label: "モニタリングのセクション"
+      monitors: "モニター"
+      channels: "アラートチャンネル"
+    kinds:
+      http: "HTTP"
+      tcp: "TCP ポート"
+      ssl: "SSL 証明書"
+      domain: "ドメインの有効期限"
+      push: "プッシュ(ハートビート)"
+    form:
+      alerts: "アラート"
+      alerts_hint: "チェックしたチャンネルに、モニターのダウン時と復旧時に通知します。"
+      no_channels: "このプロジェクトにはまだアラートチャンネルがありません。"
+      create_channel: "作成する"
+    delivery_errors:
+      invalid_url: "無効な URL"
+      blocked: "許可されていないアドレス"
+      unresolved: "ホスト名を解決できません"
+      connection_refused: "接続が拒否されました"
+      connection_timeout: "時間内に応答がありません"
+      tls_failed: "TLS に失敗しました"
+      connection_failed: "接続に失敗しました"
+      unexpected_status: "受信側がエラーを返しました"
+      rate_limited: "受信側から送信の抑制を求められました"
+      mail_disabled: "このインストールではメールが設定されていません"
+      mail_failed: "メールサーバーがメッセージを受け付けませんでした"
+    notifications:
+      subjects:
+        incident_opened: "[ダウン] %{monitor}"
+        incident_resolved: "[復旧] %{monitor}"
+        test: "%{project} からのテストアラート"
+      text:
+        incident_opened: "🔴 %{monitor} がダウンしています: %{cause}"
+        incident_resolved: "🟢 %{monitor} は %{duration} 後に復旧しました"
+        test: "✅ %{project} のチャンネル %{channel} のテストアラートです。このチャンネルにアラートが届きます。"
+      mail:
+        monitor: "モニター"
+        target: "対象"
+        cause: "原因"
+        started: "ダウン開始"
+        resolved: "復旧時刻"
+        open_monitor: "モニターを開く"
+        open_channels: "アラートチャンネルを開く"
+        footer: "Shango が %{project} のアラートチャンネル %{channel} に送信しました。"
+    channels:
+      kinds:
+        email: "メール"
+        webhook: "Webhook"
+      hints:
+        email: "最大 10 件のアドレスをカンマまたは改行で区切って入力します。"
+        webhook: "Shango はこの URL に署名付き JSON を POST します(ヘッダー X-Shango-Signature)。"
+      index:
+        title: "アラートチャンネル"
+        description: "モニターがダウン時と復旧時にアラートを送る先です。"
+        new: "新しいチャンネル"
+        secret_title: "%{name} の署名シークレット"
+        secret_hint: "今すぐコピーしてください。再表示されません。各リクエストの X-Shango-Signature ヘッダーの検証に使います。"
+        copy: "コピー"
+        copied: "コピーしました"
+        empty: "アラートチャンネルはまだありません"
+        empty_hint: "チャンネルを作成し、通知させたいモニターでチェックを入れてください。"
+        disabled: "オフ"
+        monitors:
+          other: "%{count} 件のモニター"
+        latest:
+          pending: "送信中…(%{time}前)"
+          sent: "最後のアラート送信: %{time}前"
+          failed: "最後のアラートは %{time}前に失敗しました:"
+      actions:
+        test: "テスト送信"
+        secret: "新しいシークレット"
+        confirm_secret: "新しい署名シークレットを作成しますか?現在のものはすぐに使えなくなります。"
+        confirm_delete: "チャンネル %{name} を削除しますか?モニターからの通知が止まります。"
+      new:
+        title: "新しいアラートチャンネル"
+        description: "アラートの送信先を選んでください。"
+        mail_disabled: "SMTP が必要ですが、このインストールでは設定されていません。"
+      edit:
+        title: "アラートチャンネルを編集"
+      form:
+        name_placeholder: "当番チーム"
+        targets:
+          email: "メールアドレス"
+          webhook: "Webhook URL"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "空欄のままにすると現在の URL を維持します。"
+        save: "チャンネルを保存"
+        create: "チャンネルを作成"
+      create:
+        created: "チャンネルを作成しました。テストを送信して確認してください。"
+      update:
+        updated: "チャンネルを保存しました。"
+      destroy:
+        destroyed: "チャンネルを削除しました。"
+      tests:
+        create:
+          queued: "テストアラートを送信中です。数秒後に結果がここに表示されます。"
+      secrets:
+        create:
+          regenerated: "新しい署名シークレットを作成しました。古いものは使えません。"

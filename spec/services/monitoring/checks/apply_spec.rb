@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Monitoring::Checks::Apply do
+  include ActiveJob::TestHelper
+
   let(:monitor) { create(:uptime_monitor, confirmations: 2) }
   let(:at) { Time.zone.parse("2026-10-29 10:15:00") }
   let(:up) { Monitoring::Checks::Outcome.up(response_ms: 120, http_status: 200, timings: { "ttfb" => 80.0 }) }
@@ -97,5 +99,25 @@ RSpec.describe Monitoring::Checks::Apply do
     expect(apply(up)).to have_attributes(error: :stale)
     expect(described_class.call(monitor_id: SecureRandom.uuid, config_version: 0, outcome: up)).to have_attributes(error: :gone)
     expect(CheckResult.count).to eq(0)
+  end
+
+  it "alerts the monitor's enabled channels when an incident opens and when it resolves, once each", :aggregate_failures do
+    monitor.update!(confirmations: 1)
+    channel = create(:notification_channel, project: monitor.project)
+    monitor.notification_channels = [channel, create(:notification_channel, project: monitor.project, enabled: false)]
+
+    expect { apply(down) }.to have_enqueued_job(NotificationDeliveryJob).exactly(:once)
+    expect { apply(down, at: at + 1.minute) }.not_to have_enqueued_job(NotificationDeliveryJob)
+    expect { apply(up, at: at + 2.minutes) }.to have_enqueued_job(NotificationDeliveryJob).exactly(:once)
+    expect(channel.deliveries.pluck(:event)).to contain_exactly("incident_opened", "incident_resolved")
+    expect(channel.deliveries.map(&:incident)).to all(eq(monitor.incidents.sole))
+  end
+
+  it "does not alert when a pending monitor comes up, even with a stray open incident", :aggregate_failures do
+    monitor.notification_channels = [create(:notification_channel, project: monitor.project)]
+    stray = create(:incident, uptime_monitor: monitor)
+
+    expect { apply(up) }.not_to have_enqueued_job(NotificationDeliveryJob)
+    expect(stray.reload.resolution).to eq("recovered")
   end
 end

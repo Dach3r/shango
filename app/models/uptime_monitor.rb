@@ -37,6 +37,8 @@ class UptimeMonitor < ApplicationRecord
   has_many :check_results, dependent: :delete_all
   has_many :check_rollups, dependent: :delete_all
   has_many :incidents, dependent: :delete_all
+  has_many :monitor_channels, dependent: :delete_all
+  has_many :notification_channels, through: :monitor_channels
 
   enum :kind, { http: "http", tcp: "tcp", ssl: "ssl", domain: "domain", push: "push" }, validate: true
   enum :status, { pending: "pending", up: "up", down: "down" }
@@ -73,6 +75,7 @@ class UptimeMonitor < ApplicationRecord
   validate :settings_of_kind
   validate :references_in_project
   validate :kind_unchanged, on: :update
+  validate :channels_within_limit
   validate :within_limits, on: :create
 
   def self.per_project_limit
@@ -191,6 +194,10 @@ class UptimeMonitor < ApplicationRecord
 
   def kind_unchanged
     errors.add(:kind, :immutable) if kind_changed?
+  end
+
+  def channels_within_limit
+    errors.add(:notification_channels, :too_many, count: MonitorChannel::PER_MONITOR) if notification_channels.size > MonitorChannel::PER_MONITOR
   end
 
   def within_limits

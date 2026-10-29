@@ -1,0 +1,135 @@
+en:
+  activerecord:
+    errors:
+      models:
+        notification_channel:
+          attributes:
+            kind:
+              immutable: "cannot change after the channel is created"
+            target:
+              too_many_addresses: "can have at most %{count} addresses"
+              invalid_address: "has an invalid address: %{address}"
+              invalid_url: "must be an http or https URL without user name or password"
+            base:
+              project_limit: "This project already has %{count} alert channels, the most it can have."
+        monitor_channel:
+          attributes:
+            base:
+              monitor_limit: "A monitor can alert at most %{count} channels."
+        uptime_monitor:
+          attributes:
+            notification_channels:
+              too_many: "can be at most %{count}"
+    attributes:
+      notification_channel:
+        name: "Name"
+        kind: "Kind"
+        target: "Destination"
+        locale: "Language of the messages"
+        enabled: "Send alerts to this channel"
+      uptime_monitor:
+        notification_channels: "Alert channels"
+  monitoring:
+    tabs:
+      label: "Monitoring sections"
+      monitors: "Monitors"
+      channels: "Alert channels"
+    kinds:
+      http: "HTTP"
+      tcp: "TCP port"
+      ssl: "SSL certificate"
+      domain: "Domain expiry"
+      push: "Push (heartbeat)"
+    form:
+      alerts: "Alerts"
+      alerts_hint: "The ticked channels are told when the monitor goes down and when it recovers."
+      no_channels: "This project has no alert channels yet."
+      create_channel: "Create one"
+    delivery_errors:
+      invalid_url: "Invalid URL"
+      blocked: "Address not allowed"
+      unresolved: "The host name does not resolve"
+      connection_refused: "Connection refused"
+      connection_timeout: "No answer in time"
+      tls_failed: "TLS failed"
+      connection_failed: "Connection failed"
+      unexpected_status: "The receiver answered with an error"
+      rate_limited: "The receiver asked to slow down"
+      mail_disabled: "Email is not configured on this installation"
+      mail_failed: "The mail server did not accept the message"
+    notifications:
+      subjects:
+        incident_opened: "[Down] %{monitor}"
+        incident_resolved: "[Up] %{monitor}"
+        test: "Test alert from %{project}"
+      text:
+        incident_opened: "🔴 %{monitor} is down: %{cause}"
+        incident_resolved: "🟢 %{monitor} is up again after %{duration}"
+        test: "✅ Test alert for the channel %{channel} of %{project}. Alerts reach this channel."
+      mail:
+        monitor: "Monitor"
+        target: "Target"
+        cause: "Cause"
+        started: "Down since"
+        resolved: "Recovered at"
+        open_monitor: "Open the monitor"
+        open_channels: "Open the alert channels"
+        footer: "Sent by Shango to the alert channel %{channel} of %{project}."
+    channels:
+      kinds:
+        email: "Email"
+        webhook: "Webhook"
+      hints:
+        email: "Up to 10 addresses, separated by commas or new lines."
+        webhook: "Shango POSTs signed JSON to this URL (header X-Shango-Signature)."
+      index:
+        title: "Alert channels"
+        description: "Where monitors send their alerts when they go down and when they recover."
+        new: "New channel"
+        secret_title: "Signing secret of %{name}"
+        secret_hint: "Copy it now: it is not shown again. Use it to check the X-Shango-Signature header of each request."
+        copy: "Copy"
+        copied: "Copied"
+        empty: "No alert channels yet"
+        empty_hint: "Create a channel, then tick it in the monitors that should alert it."
+        disabled: "Off"
+        monitors:
+          one: "%{count} monitor"
+          other: "%{count} monitors"
+        latest:
+          pending: "sending… (%{time} ago)"
+          sent: "last alert sent %{time} ago"
+          failed: "last alert failed %{time} ago:"
+      actions:
+        test: "Send test"
+        secret: "New secret"
+        confirm_secret: "Create a new signing secret? The current one stops working right away."
+        confirm_delete: "Delete the channel %{name}? Monitors stop alerting it."
+      new:
+        title: "New alert channel"
+        description: "Choose where the alerts go."
+        mail_disabled: "Needs SMTP, which this installation has not configured."
+      edit:
+        title: "Edit alert channel"
+      form:
+        name_placeholder: "On-call team"
+        targets:
+          email: "Email addresses"
+          webhook: "Webhook URL"
+        url_placeholders:
+          webhook: "https://example.com/hooks/shango"
+        keep_url: "Leave it blank to keep the current URL."
+        save: "Save channel"
+        create: "Create channel"
+      create:
+        created: "Channel created. Send a test to check it."
+      update:
+        updated: "Channel saved."
+      destroy:
+        destroyed: "Channel deleted."
+      tests:
+        create:
+          queued: "Test alert on its way. Its result shows here in a few seconds."
+      secrets:
+        create:
+          regenerated: "New signing secret created. The old one no longer works."

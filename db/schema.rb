@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_29_121657) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_155017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -267,6 +267,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_121657) do
     t.check_constraint "theme::text = ANY (ARRAY['default'::character varying::text, 'blue'::character varying::text, 'green'::character varying::text, 'yellow'::character varying::text, 'red'::character varying::text, 'ocean'::character varying::text, 'purple'::character varying::text, 'rose'::character varying::text, 'orange'::character varying::text, 'forest'::character varying::text, 'midnight'::character varying::text, 'nord'::character varying::text, 'dracula'::character varying::text, 'gruvbox'::character varying::text, 'solarized'::character varying::text, 'sunset'::character varying::text, 'coffee'::character varying::text, 'cyberpunk'::character varying::text, 'mono'::character varying::text, 'graphite'::character varying::text, 'vulkanite'::character varying::text, 'virginia_tech'::character varying::text, 'vague'::character varying::text, 'van_gogh'::character varying::text, 'vault'::character varying::text, 'winslow'::character varying::text, 'unit_eva_001'::character varying::text, 'turner'::character varying::text, 'waveform_dark'::character varying::text, 'terminus'::character varying::text, 'synctax'::character varying::text, 'starsend'::character varying::text, 'spectrum'::character varying::text, 'saule'::character varying::text, 'santa_fe'::character varying::text, 'robzee84'::character varying::text, 'rose_pine_moon'::character varying::text, 'roadster_dark'::character varying::text, 'red_pill'::character varying::text, 'periphery'::character varying::text, 'outpost'::character varying::text, 'neptune'::character varying::text, 'alberta'::character varying::text, 'arc_blueberry'::character varying::text, 'astral'::character varying::text, 'azure_glow'::character varying::text, 'bauhaus'::character varying::text, 'black_sand'::character varying::text])", name: "memberships_theme_check"
   end
 
+  create_table "monitor_channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "uptime_monitor_id", null: false
+    t.uuid "notification_channel_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notification_channel_id"], name: "index_monitor_channels_on_notification_channel_id"
+    t.index ["uptime_monitor_id", "notification_channel_id"], name: "idx_on_uptime_monitor_id_notification_channel_id_61f710189a", unique: true
+  end
+
   create_table "network_checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "user_id"
@@ -283,6 +292,41 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_121657) do
     t.index ["user_id"], name: "index_network_checks_on_user_id"
     t.check_constraint "kind::text = ANY (ARRAY['dns'::character varying::text, 'ports'::character varying::text, 'ping'::character varying::text, 'subnet'::character varying::text, 'tls'::character varying::text, 'email'::character varying::text, 'lookup'::character varying::text])", name: "network_checks_kind_check"
     t.check_constraint "outcome::text = ANY (ARRAY['ok'::character varying::text, 'warn'::character varying::text, 'bad'::character varying::text])", name: "network_checks_outcome_check"
+  end
+
+  create_table "notification_channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "creator_id"
+    t.string "name", null: false
+    t.string "kind", default: "email", null: false
+    t.boolean "enabled", default: true, null: false
+    t.string "locale", default: "en", null: false
+    t.text "target", null: false
+    t.text "signing_secret"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_notification_channels_on_creator_id"
+    t.index ["project_id"], name: "index_notification_channels_on_project_id"
+    t.check_constraint "kind::text = ANY (ARRAY['email'::character varying, 'webhook'::character varying, 'slack'::character varying, 'discord'::character varying]::text[])", name: "notification_channels_kind_check"
+  end
+
+  create_table "notification_deliveries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "notification_channel_id", null: false
+    t.uuid "incident_id"
+    t.string "event", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "attempts", default: 0, null: false
+    t.string "error"
+    t.string "detail"
+    t.datetime "sent_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_notification_deliveries_on_created_at", using: :brin
+    t.index ["incident_id"], name: "index_notification_deliveries_on_incident_id"
+    t.index ["notification_channel_id", "created_at"], name: "idx_on_notification_channel_id_created_at_867e9d6635"
+    t.index ["notification_channel_id", "incident_id", "event"], name: "index_notification_deliveries_once_per_event", unique: true, where: "(incident_id IS NOT NULL)"
+    t.check_constraint "event::text = ANY (ARRAY['incident_opened'::character varying, 'incident_resolved'::character varying, 'test'::character varying]::text[])", name: "notification_deliveries_event_check"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'sent'::character varying, 'failed'::character varying]::text[])", name: "notification_deliveries_status_check"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -465,9 +509,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_121657) do
   add_foreign_key "memberships", "environments", column: "current_environment_id", on_delete: :nullify
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
+  add_foreign_key "monitor_channels", "notification_channels", on_delete: :cascade
+  add_foreign_key "monitor_channels", "uptime_monitors", on_delete: :cascade
   add_foreign_key "network_checks", "environments", on_delete: :nullify
   add_foreign_key "network_checks", "projects"
   add_foreign_key "network_checks", "users", on_delete: :nullify
+  add_foreign_key "notification_channels", "projects", on_delete: :cascade
+  add_foreign_key "notification_channels", "users", column: "creator_id", on_delete: :nullify
+  add_foreign_key "notification_deliveries", "incidents", on_delete: :cascade
+  add_foreign_key "notification_deliveries", "notification_channels", on_delete: :cascade
   add_foreign_key "request_drafts", "api_requests", on_delete: :cascade
   add_foreign_key "request_drafts", "projects", on_delete: :cascade
   add_foreign_key "request_drafts", "users", on_delete: :cascade

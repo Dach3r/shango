@@ -1,0 +1,9 @@
+<%# Monitors and alert channels of the Monitoring module. Render with `current:` (:monitors or :channels). %>
+<nav aria-label="<%= t("monitoring.tabs.label") %>" class="flex border-b border-line">
+  <% { monitors: [monitoring_root_path, "activity"], channels: [monitoring_channels_path, "bell"] }.each do |name, (path, icon)| %>
+    <%= link_to path, aria: { current: (current == name ? "page" : nil) },
+          class: "-mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 aria-[current=page]:border-solid aria-[current=page]:text-ink" do %>
+      <%= lucide_icon icon, class: "size-4" %><%= t("monitoring.tabs.#{name}") %>
+    <% end %>
+  <% end %>
+</nav>

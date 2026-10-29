@@ -22,4 +22,16 @@ module MonitoringHelper
     text = t("monitoring.causes.#{error}")
     detail.present? ? "#{text} (#{detail})" : text
   end
+
+  CHANNEL_ICONS = { "email" => "mail", "webhook" => "webhook", "slack" => "slack", "discord" => "message-circle" }.freeze
+
+  def channel_icon(channel)
+    CHANNEL_ICONS.fetch(channel.is_a?(NotificationChannel) ? channel.kind : channel.to_s)
+  end
+
+  # Why the latest delivery of a channel failed, in words.
+  def channel_delivery_error(delivery)
+    text = t("monitoring.delivery_errors.#{delivery.error}")
+    delivery.detail.present? ? "#{text} (#{delivery.detail})" : text
+  end
 end

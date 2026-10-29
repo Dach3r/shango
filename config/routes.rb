@@ -91,6 +91,13 @@ Rails.application.routes.draw do
         resource :pause, only: %i[create destroy]
       end
     end
+
+    resources :channels, except: :show do
+      scope module: :channels do
+        resource :test, only: :create
+        resource :secret, only: :create
+      end
+    end
   end
 
   namespace :network do

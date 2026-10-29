@@ -201,4 +201,53 @@ RSpec.describe "Monitoring monitors" do
     expect { delete monitoring_monitor_path(monitor) }.to change(UptimeMonitor, :count).by(-1).and change(CheckResult, :count).by(-1)
     expect(response).to redirect_to(monitoring_root_path)
   end
+
+  describe "alert channels" do
+    let(:mine) { create(:notification_channel, project:, name: "Ops hooks") }
+
+    it "offers the project's channels in the form, or the way to create one", :aggregate_failures do
+      get new_monitoring_monitor_path
+      expect(response.body).to include(I18n.t("monitoring.form.no_channels"), new_monitoring_channel_path)
+
+      mine
+      get new_monitoring_monitor_path
+      expect(response.body).to include("Ops hooks", "uptime_monitor_channel_#{mine.id}")
+    end
+
+    it "attaches only channels of the project and shows them", :aggregate_failures do
+      other = create(:notification_channel)
+      post monitoring_monitors_path, params: params.deep_merge(uptime_monitor: { notification_channel_ids: ["", mine.id, other.id] })
+      monitor = project.uptime_monitors.sole
+
+      expect(monitor.notification_channels).to eq([mine])
+      get monitoring_monitor_path(monitor)
+      expect(response.body).to include("Ops hooks")
+    end
+
+    it "replaces or clears the channels on update", :aggregate_failures do
+      monitor = create(:uptime_monitor, project:, creator: user)
+      monitor.notification_channels = [mine]
+      patch monitoring_monitor_path(monitor), params: { uptime_monitor: { name: monitor.name, notification_channel_ids: [""] } }
+
+      expect(monitor.reload.notification_channels).to be_empty
+      patch monitoring_monitor_path(monitor), params: { uptime_monitor: { name: "Kept" } }
+      expect(monitor.reload.name).to eq("Kept")
+    end
+
+    it "keeps the channels as they were when the change is invalid", :aggregate_failures do
+      monitor = create(:uptime_monitor, project:, creator: user)
+      monitor.notification_channels = [mine]
+      patch monitoring_monitor_path(monitor), params: { uptime_monitor: { name: "", notification_channel_ids: [""] } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(monitor.reload.notification_channels).to eq([mine])
+    end
+
+    it "caps the channels of a monitor" do
+      stub_const("MonitorChannel::PER_MONITOR", 1)
+      post monitoring_monitors_path, params: params.deep_merge(uptime_monitor: { notification_channel_ids: [mine.id, create(:notification_channel, project:).id] })
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
 end

@@ -1,0 +1,28 @@
+<% content_for :title, "#{t("monitoring.channels.new.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<div class="mx-auto flex max-w-3xl flex-col gap-6">
+  <header>
+    <h1 class="text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.channels.new.title") %></h1>
+    <p class="mt-1 text-sm text-muted"><%= t("monitoring.channels.new.description") %></p>
+  </header>
+  <% if @channel.kind %>
+    <%= render "monitoring/channels/form", channel: @channel %>
+  <% else %>
+    <ul class="grid gap-3 sm:grid-cols-2">
+      <% NotificationChannel.kinds.each_key do |kind| %>
+        <li>
+          <% if kind == "email" && !Shango::Mailing.enabled? %>
+            <div class="flex h-full flex-col gap-1 border border-line bg-card p-4 opacity-60">
+              <p class="flex items-center gap-2 text-sm font-medium text-ink"><%= lucide_icon channel_icon(kind), class: "size-4 text-muted" %><%= t("monitoring.channels.kinds.#{kind}") %></p>
+              <p class="text-xs text-muted"><%= t("monitoring.channels.new.mail_disabled") %></p>
+            </div>
+          <% else %>
+            <%= link_to new_monitoring_channel_path(kind:), class: "flex h-full flex-col gap-1 border border-line bg-card p-4 transition hover:border-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+              <span class="flex items-center gap-2 text-sm font-medium text-ink"><%= lucide_icon channel_icon(kind), class: "size-4 text-muted" %><%= t("monitoring.channels.kinds.#{kind}") %></span>
+              <span class="text-xs text-muted"><%= t("monitoring.channels.hints.#{kind}") %></span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

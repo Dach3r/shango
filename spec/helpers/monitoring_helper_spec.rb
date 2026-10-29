@@ -18,4 +18,14 @@ RSpec.describe MonitoringHelper do
     expect(helper.monitor_cause("connection_refused")).to eq(I18n.t("monitoring.causes.connection_refused"))
     expect(helper.monitor_cause("unexpected_status", "503")).to eq("#{I18n.t("monitoring.causes.unexpected_status")} (503)")
   end
+
+  it "picks the icon of a channel or kind", :aggregate_failures do
+    expect(helper.channel_icon(build(:notification_channel, :email))).to eq("mail")
+    expect(helper.channel_icon("webhook")).to eq("webhook")
+  end
+
+  it "words a delivery error with its detail", :aggregate_failures do
+    expect(helper.channel_delivery_error(build(:notification_delivery, error: "rate_limited"))).to eq(I18n.t("monitoring.delivery_errors.rate_limited"))
+    expect(helper.channel_delivery_error(build(:notification_delivery, error: "unexpected_status", detail: "404"))).to eq("#{I18n.t("monitoring.delivery_errors.unexpected_status")} (404)")
+  end
 end
