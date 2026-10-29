@@ -27,3 +27,119 @@ pt-BR:
         grace: "Período de tolerância"
         environment: "Ambiente"
         api_request: "Requisição salva"
+  monitoring:
+    title: "Monitoramento"
+    index:
+      description: "O Shango verifica estes periodicamente e abre um incidente quando um cai."
+      new: "Novo monitor"
+      in_use: "Monitores"
+      uptime: "Uptime 24 h"
+      filter: "Filtrar por status"
+      filters:
+        all: "Todos"
+        up: "No ar"
+        down: "Fora do ar"
+        pending: "Pendentes"
+        paused: "Pausados"
+      search: "Buscar por nome ou URL"
+      empty:
+        title: "Nenhum monitor ainda"
+        filtered: "Nenhum monitor corresponde a este filtro."
+        hint: "Crie um monitor para verificar uma URL a cada poucos minutos e ver seu uptime e tempo de resposta."
+    statuses:
+      up: "No ar"
+      down: "Fora do ar"
+      paused: "Pausado"
+      pending: "Pendente"
+      unknown: "Desconhecido"
+    chart:
+      title: "Tempo de resposta · últimas 24 h"
+      label: "Tempo médio de resposta por hora de %{name}"
+      max: "máx. %{ms} ms"
+    card:
+      no_data: "Nenhuma verificação ainda"
+      uptime: "Uptime 24 h"
+      average: "Resp. média"
+      checked: "Última verificação"
+    ago: "há %{time}"
+    actions:
+      run: "Executar agora"
+      pause: "Pausar"
+      resume: "Retomar"
+      edit: "Editar"
+      delete: "Excluir"
+      confirm_delete: "Excluir o monitor %{name} com seu histórico?"
+    show:
+      back: "Todos os monitores"
+      uptime_day: "Uptime 24 h"
+      uptime_week: "Uptime 7 dias"
+      uptime_month: "Uptime 30 dias"
+      average: "Resp. média 24 h"
+      incidents: "Incidentes"
+      no_incidents: "Nenhum incidente nos últimos 30 dias."
+      ongoing: "em andamento"
+      closed_by_pause: "fechado por uma pausa"
+      settings: "Configurações"
+      checks: "Últimas verificações"
+      no_checks: "Ainda não verificado."
+      columns:
+        time: "Hora"
+        status: "Status"
+        http_status: "HTTP"
+        response: "Resposta"
+        cause: "Causa"
+    form:
+      name_placeholder: "Saúde da API"
+      url_placeholder: "https://example.com/health ou {{base_url}}/health"
+      url_hint: "As variáveis vêm do ambiente escolhido abaixo; variáveis secretas não podem ser usadas em uma URL."
+      no_environment: "Sem ambiente"
+      conditions: "Condições"
+      no_limit: "Sem limite"
+      conditions_hint: "Fica fora do ar após esta quantidade de verificações com falha seguidas; após uma falha a próxima verificação roda 30 segundos depois. Status: uma lista como 200, 301-302 ou 200-399."
+      cancel: "Cancelar"
+      save: "Salvar monitor"
+      create: "Criar monitor"
+    new:
+      title: "Novo monitor"
+      description: "Um monitor HTTP requisita uma URL periodicamente e fica fora do ar quando não há resposta, o status é inesperado ou lento demais."
+    edit:
+      title: "Editar monitor"
+    intervals:
+      minutes: "A cada %{value} min"
+      hours: "A cada %{value} h"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} s"
+    causes:
+      environment_missing: "Seu ambiente foi excluído"
+      unresolved_variable: "Uma variável da URL não está definida"
+      secret_variable: "Uma variável secreta não pode ser usada na URL"
+      invalid_url: "A URL não é uma URL http ou https válida"
+      unexpected_status: "Status inesperado"
+      slow_response: "Mais lento que o limite"
+      invalid_redirect: "Redirecionamento para uma URL inválida"
+      redirect_loop: "Loop de redirecionamentos"
+      too_many_redirects: "Redirecionamentos demais"
+      connection_refused: "Conexão recusada"
+      connection_timeout: "Sem resposta a tempo"
+      tls_failed: "Falha no TLS"
+      connection_failed: "Falha na conexão"
+      blocked: "Endereço não permitido"
+      unresolved: "O nome do host não resolve"
+      unsupported_kind: "Este tipo de monitor ainda não pode rodar"
+    monitors:
+      create:
+        created: "Monitor criado. Sua primeira verificação está a caminho."
+      update:
+        updated: "Monitor salvo."
+      destroy:
+        destroyed: "Monitor excluído."
+      runs:
+        create:
+          queued: "Verificação na fila. O resultado aparece aqui em alguns segundos."
+          paused: "Retome o monitor para verificá-lo."
+      pauses:
+        create:
+          paused: "Monitor pausado."
+        destroy:
+          resumed: "Monitor retomado. Ele é verificado em menos de um minuto."

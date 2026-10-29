@@ -3,7 +3,7 @@ class ToolsNav::Component < ApplicationComponent
   ITEMS = [
     { key: :api_client, icon: "send", path: :workbench_root_path },
     { key: :documentation, icon: "book-open" },
-    { key: :monitoring, icon: "activity" },
+    { key: :monitoring, icon: "activity", path: :monitoring_root_path },
     { key: :servers, icon: "server" },
     { key: :network, icon: "radar", path: :network_root_path },
     { key: :logs, icon: "scroll-text" },

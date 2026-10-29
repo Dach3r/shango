@@ -27,3 +27,119 @@ en:
         grace: "Grace period"
         environment: "Environment"
         api_request: "Saved request"
+  monitoring:
+    title: "Monitoring"
+    index:
+      description: "Shango checks these on a schedule and opens an incident when one goes down."
+      new: "New monitor"
+      in_use: "Monitors"
+      uptime: "Uptime 24 h"
+      filter: "Filter by status"
+      filters:
+        all: "All"
+        up: "Up"
+        down: "Down"
+        pending: "Pending"
+        paused: "Paused"
+      search: "Search by name or URL"
+      empty:
+        title: "No monitors yet"
+        filtered: "No monitor matches this filter."
+        hint: "Create a monitor to check a URL every few minutes and see its uptime and response time."
+    statuses:
+      up: "Up"
+      down: "Down"
+      paused: "Paused"
+      pending: "Pending"
+      unknown: "Unknown"
+    chart:
+      title: "Response time · last 24 h"
+      label: "Average response time per hour of %{name}"
+      max: "max %{ms} ms"
+    card:
+      no_data: "No checks yet"
+      uptime: "Uptime 24 h"
+      average: "Avg response"
+      checked: "Last check"
+    ago: "%{time} ago"
+    actions:
+      run: "Run now"
+      pause: "Pause"
+      resume: "Resume"
+      edit: "Edit"
+      delete: "Delete"
+      confirm_delete: "Delete the monitor %{name} with its history?"
+    show:
+      back: "All monitors"
+      uptime_day: "Uptime 24 h"
+      uptime_week: "Uptime 7 days"
+      uptime_month: "Uptime 30 days"
+      average: "Avg response 24 h"
+      incidents: "Incidents"
+      no_incidents: "No incidents in the last 30 days."
+      ongoing: "ongoing"
+      closed_by_pause: "closed by a pause"
+      settings: "Settings"
+      checks: "Latest checks"
+      no_checks: "Not checked yet."
+      columns:
+        time: "Time"
+        status: "Status"
+        http_status: "HTTP"
+        response: "Response"
+        cause: "Cause"
+    form:
+      name_placeholder: "API health"
+      url_placeholder: "https://example.com/health or {{base_url}}/health"
+      url_hint: "Variables come from the environment chosen below; secret variables cannot be used in a URL."
+      no_environment: "No environment"
+      conditions: "Conditions"
+      no_limit: "No limit"
+      conditions_hint: "Down after this many failed checks in a row; after a failure the next check runs 30 seconds later. Statuses: a list such as 200, 301-302 or 200-399."
+      cancel: "Cancel"
+      save: "Save monitor"
+      create: "Create monitor"
+    new:
+      title: "New monitor"
+      description: "An HTTP monitor requests a URL on a schedule and is down when it gets no answer, an unexpected status or a slow one."
+    edit:
+      title: "Edit monitor"
+    intervals:
+      minutes: "Every %{value} min"
+      hours: "Every %{value} h"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} s"
+    causes:
+      environment_missing: "Its environment was deleted"
+      unresolved_variable: "A variable of the URL is not defined"
+      secret_variable: "A secret variable cannot be used in the URL"
+      invalid_url: "The URL is not a valid http or https URL"
+      unexpected_status: "Unexpected status"
+      slow_response: "Slower than the limit"
+      invalid_redirect: "Redirect to an invalid URL"
+      redirect_loop: "Redirect loop"
+      too_many_redirects: "Too many redirects"
+      connection_refused: "Connection refused"
+      connection_timeout: "No answer in time"
+      tls_failed: "TLS failed"
+      connection_failed: "Connection failed"
+      blocked: "Address not allowed"
+      unresolved: "The host name does not resolve"
+      unsupported_kind: "This kind of monitor cannot run yet"
+    monitors:
+      create:
+        created: "Monitor created. Its first check is on its way."
+      update:
+        updated: "Monitor saved."
+      destroy:
+        destroyed: "Monitor deleted."
+      runs:
+        create:
+          queued: "Check queued. Its result appears here in a few seconds."
+          paused: "Resume the monitor to check it."
+      pauses:
+        create:
+          paused: "Monitor paused."
+        destroy:
+          resumed: "Monitor resumed. It is checked within a minute."

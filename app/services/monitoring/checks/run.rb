@@ -3,7 +3,7 @@ module Monitoring
     # Runs the probe of a monitor's kind and returns its Outcome. A kind without a probe yet is `unknown`, so it never
     # opens an incident.
     module Run
-      PROBES = {}.freeze
+      PROBES = { "http" => Probes::Http }.freeze
 
       module_function
 

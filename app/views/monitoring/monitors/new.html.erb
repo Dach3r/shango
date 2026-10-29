@@ -1,0 +1,8 @@
+<% content_for :title, "#{t("monitoring.new.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<div class="mx-auto flex max-w-3xl flex-col gap-6">
+  <header>
+    <h1 class="text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.new.title") %></h1>
+    <p class="mt-1 text-sm text-muted"><%= t("monitoring.new.description") %></p>
+  </header>
+  <%= render "monitoring/monitors/form", monitor: @monitor %>
+</div>

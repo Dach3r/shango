@@ -82,6 +82,17 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :monitoring do
+    root to: "monitors#index"
+
+    resources :monitors, except: :index do
+      scope module: :monitors do
+        resource :run, only: :create
+        resource :pause, only: %i[create destroy]
+      end
+    end
+  end
+
   namespace :network do
     root to: "workspaces#show"
 

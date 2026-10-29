@@ -27,3 +27,119 @@ fr:
         grace: "Délai de grâce"
         environment: "Environnement"
         api_request: "Requête enregistrée"
+  monitoring:
+    title: "Surveillance"
+    index:
+      description: "Shango les vérifie régulièrement et ouvre un incident quand l’un d’eux tombe."
+      new: "Nouveau moniteur"
+      in_use: "Moniteurs"
+      uptime: "Disponibilité 24 h"
+      filter: "Filtrer par statut"
+      filters:
+        all: "Tous"
+        up: "En ligne"
+        down: "Hors ligne"
+        pending: "En attente"
+        paused: "En pause"
+      search: "Rechercher par nom ou URL"
+      empty:
+        title: "Aucun moniteur pour l’instant"
+        filtered: "Aucun moniteur ne correspond à ce filtre."
+        hint: "Créez un moniteur pour vérifier une URL toutes les quelques minutes et voir sa disponibilité et son temps de réponse."
+    statuses:
+      up: "En ligne"
+      down: "Hors ligne"
+      paused: "En pause"
+      pending: "En attente"
+      unknown: "Inconnu"
+    chart:
+      title: "Temps de réponse · dernières 24 h"
+      label: "Temps de réponse moyen par heure de %{name}"
+      max: "max %{ms} ms"
+    card:
+      no_data: "Aucune vérification"
+      uptime: "Dispo. 24 h"
+      average: "Réponse moy."
+      checked: "Dernière vérif."
+    ago: "il y a %{time}"
+    actions:
+      run: "Lancer"
+      pause: "Pause"
+      resume: "Reprendre"
+      edit: "Modifier"
+      delete: "Supprimer"
+      confirm_delete: "Supprimer le moniteur %{name} et son historique ?"
+    show:
+      back: "Tous les moniteurs"
+      uptime_day: "Disponibilité 24 h"
+      uptime_week: "Disponibilité 7 jours"
+      uptime_month: "Disponibilité 30 jours"
+      average: "Réponse moy. 24 h"
+      incidents: "Incidents"
+      no_incidents: "Aucun incident ces 30 derniers jours."
+      ongoing: "en cours"
+      closed_by_pause: "clos par une pause"
+      settings: "Réglages"
+      checks: "Dernières vérifications"
+      no_checks: "Pas encore vérifié."
+      columns:
+        time: "Heure"
+        status: "Statut"
+        http_status: "HTTP"
+        response: "Réponse"
+        cause: "Cause"
+    form:
+      name_placeholder: "Santé de l’API"
+      url_placeholder: "https://example.com/health ou {{base_url}}/health"
+      url_hint: "Les variables viennent de l’environnement choisi ci-dessous ; les variables secrètes ne peuvent pas être utilisées dans une URL."
+      no_environment: "Aucun environnement"
+      conditions: "Conditions"
+      no_limit: "Aucune limite"
+      conditions_hint: "Hors ligne après ce nombre d’échecs consécutifs ; après un échec, la vérification suivante a lieu 30 secondes plus tard. Statuts : une liste comme 200, 301-302 ou 200-399."
+      cancel: "Annuler"
+      save: "Enregistrer le moniteur"
+      create: "Créer le moniteur"
+    new:
+      title: "Nouveau moniteur"
+      description: "Un moniteur HTTP demande une URL à intervalles réguliers et passe hors ligne sans réponse, avec un statut inattendu ou une réponse trop lente."
+    edit:
+      title: "Modifier le moniteur"
+    intervals:
+      minutes: "Toutes les %{value} min"
+      hours: "Toutes les %{value} h"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} s"
+    causes:
+      environment_missing: "Son environnement a été supprimé"
+      unresolved_variable: "Une variable de l’URL n’est pas définie"
+      secret_variable: "Une variable secrète ne peut pas être utilisée dans l’URL"
+      invalid_url: "L’URL n’est pas une URL http ou https valide"
+      unexpected_status: "Statut inattendu"
+      slow_response: "Plus lent que la limite"
+      invalid_redirect: "Redirection vers une URL invalide"
+      redirect_loop: "Boucle de redirections"
+      too_many_redirects: "Trop de redirections"
+      connection_refused: "Connexion refusée"
+      connection_timeout: "Pas de réponse à temps"
+      tls_failed: "Échec TLS"
+      connection_failed: "Échec de la connexion"
+      blocked: "Adresse non autorisée"
+      unresolved: "Le nom d’hôte ne se résout pas"
+      unsupported_kind: "Ce type de moniteur ne peut pas encore s’exécuter"
+    monitors:
+      create:
+        created: "Moniteur créé. Sa première vérification est en route."
+      update:
+        updated: "Moniteur enregistré."
+      destroy:
+        destroyed: "Moniteur supprimé."
+      runs:
+        create:
+          queued: "Vérification en file. Son résultat apparaît ici dans quelques secondes."
+          paused: "Reprenez le moniteur pour le vérifier."
+      pauses:
+        create:
+          paused: "Moniteur en pause."
+        destroy:
+          resumed: "Moniteur repris. Il est vérifié dans la minute."

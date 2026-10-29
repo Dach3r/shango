@@ -27,3 +27,119 @@ ru:
         grace: "Льготный период"
         environment: "Окружение"
         api_request: "Сохранённый запрос"
+  monitoring:
+    title: "Мониторинг"
+    index:
+      description: "Shango проверяет их по расписанию и открывает инцидент, когда что-то падает."
+      new: "Новый монитор"
+      in_use: "Мониторы"
+      uptime: "Аптайм 24 ч"
+      filter: "Фильтр по статусу"
+      filters:
+        all: "Все"
+        up: "Работают"
+        down: "Недоступны"
+        pending: "Ожидают"
+        paused: "На паузе"
+      search: "Поиск по имени или URL"
+      empty:
+        title: "Мониторов пока нет"
+        filtered: "Ни один монитор не подходит под фильтр."
+        hint: "Создайте монитор, чтобы проверять URL каждые несколько минут и видеть его аптайм и время ответа."
+    statuses:
+      up: "Работает"
+      down: "Недоступен"
+      paused: "На паузе"
+      pending: "Ожидает"
+      unknown: "Неизвестно"
+    chart:
+      title: "Время ответа · последние 24 ч"
+      label: "Среднее время ответа по часам для %{name}"
+      max: "макс. %{ms} мс"
+    card:
+      no_data: "Проверок пока нет"
+      uptime: "Аптайм 24 ч"
+      average: "Ср. ответ"
+      checked: "Последняя проверка"
+    ago: "%{time} назад"
+    actions:
+      run: "Проверить"
+      pause: "Пауза"
+      resume: "Возобновить"
+      edit: "Изменить"
+      delete: "Удалить"
+      confirm_delete: "Удалить монитор %{name} вместе с историей?"
+    show:
+      back: "Все мониторы"
+      uptime_day: "Аптайм 24 ч"
+      uptime_week: "Аптайм 7 дней"
+      uptime_month: "Аптайм 30 дней"
+      average: "Ср. ответ 24 ч"
+      incidents: "Инциденты"
+      no_incidents: "Инцидентов за последние 30 дней нет."
+      ongoing: "продолжается"
+      closed_by_pause: "закрыт паузой"
+      settings: "Настройки"
+      checks: "Последние проверки"
+      no_checks: "Ещё не проверялся."
+      columns:
+        time: "Время"
+        status: "Статус"
+        http_status: "HTTP"
+        response: "Ответ"
+        cause: "Причина"
+    form:
+      name_placeholder: "Состояние API"
+      url_placeholder: "https://example.com/health или {{base_url}}/health"
+      url_hint: "Переменные берутся из окружения, выбранного ниже; секретные переменные нельзя использовать в URL."
+      no_environment: "Без окружения"
+      conditions: "Условия"
+      no_limit: "Без ограничения"
+      conditions_hint: "Считается недоступным после стольких неудачных проверок подряд; после сбоя следующая проверка идёт через 30 секунд. Статусы: список вида 200, 301-302 или 200-399."
+      cancel: "Отмена"
+      save: "Сохранить монитор"
+      create: "Создать монитор"
+    new:
+      title: "Новый монитор"
+      description: "HTTP-монитор запрашивает URL по расписанию и считается недоступным, если нет ответа, статус неожиданный или ответ слишком медленный."
+    edit:
+      title: "Изменить монитор"
+    intervals:
+      minutes: "Каждые %{value} мин"
+      hours: "Каждые %{value} ч"
+    units:
+      ms: "%{value} мс"
+      seconds: "%{value} с"
+    causes:
+      environment_missing: "Его окружение удалено"
+      unresolved_variable: "Переменная в URL не определена"
+      secret_variable: "Секретную переменную нельзя использовать в URL"
+      invalid_url: "Это не корректный URL http или https"
+      unexpected_status: "Неожиданный статус"
+      slow_response: "Медленнее предела"
+      invalid_redirect: "Перенаправление на некорректный URL"
+      redirect_loop: "Цикл перенаправлений"
+      too_many_redirects: "Слишком много перенаправлений"
+      connection_refused: "Соединение отклонено"
+      connection_timeout: "Нет ответа вовремя"
+      tls_failed: "Ошибка TLS"
+      connection_failed: "Ошибка соединения"
+      blocked: "Адрес запрещён"
+      unresolved: "Имя хоста не разрешается"
+      unsupported_kind: "Этот тип монитора пока не может работать"
+    monitors:
+      create:
+        created: "Монитор создан. Первая проверка уже запущена."
+      update:
+        updated: "Монитор сохранён."
+      destroy:
+        destroyed: "Монитор удалён."
+      runs:
+        create:
+          queued: "Проверка в очереди. Результат появится здесь через несколько секунд."
+          paused: "Возобновите монитор, чтобы проверить его."
+      pauses:
+        create:
+          paused: "Монитор на паузе."
+        destroy:
+          resumed: "Монитор возобновлён. Он будет проверен в течение минуты."

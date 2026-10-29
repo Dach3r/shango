@@ -27,3 +27,119 @@ ja:
         grace: "猶予期間"
         environment: "環境"
         api_request: "保存済みリクエスト"
+  monitoring:
+    title: "モニタリング"
+    index:
+      description: "Shango が定期的にチェックし、ダウンしたらインシデントを開きます。"
+      new: "新しいモニター"
+      in_use: "モニター"
+      uptime: "稼働率 24 時間"
+      filter: "ステータスで絞り込み"
+      filters:
+        all: "すべて"
+        up: "稼働中"
+        down: "ダウン"
+        pending: "保留中"
+        paused: "一時停止"
+      search: "名前または URL で検索"
+      empty:
+        title: "まだモニターがありません"
+        filtered: "この条件に一致するモニターはありません。"
+        hint: "モニターを作成すると、数分ごとに URL をチェックして稼働率と応答時間を確認できます。"
+    statuses:
+      up: "稼働中"
+      down: "ダウン"
+      paused: "一時停止"
+      pending: "保留中"
+      unknown: "不明"
+    chart:
+      title: "応答時間 · 直近 24 時間"
+      label: "%{name} の 1 時間ごとの平均応答時間"
+      max: "最大 %{ms} ms"
+    card:
+      no_data: "まだチェックがありません"
+      uptime: "稼働率 24 時間"
+      average: "平均応答"
+      checked: "最終チェック"
+    ago: "%{time}前"
+    actions:
+      run: "今すぐ実行"
+      pause: "一時停止"
+      resume: "再開"
+      edit: "編集"
+      delete: "削除"
+      confirm_delete: "モニター %{name} を履歴ごと削除しますか？"
+    show:
+      back: "すべてのモニター"
+      uptime_day: "稼働率 24 時間"
+      uptime_week: "稼働率 7 日"
+      uptime_month: "稼働率 30 日"
+      average: "平均応答 24 時間"
+      incidents: "インシデント"
+      no_incidents: "直近 30 日間にインシデントはありません。"
+      ongoing: "継続中"
+      closed_by_pause: "一時停止で終了"
+      settings: "設定"
+      checks: "最近のチェック"
+      no_checks: "まだチェックされていません。"
+      columns:
+        time: "時刻"
+        status: "ステータス"
+        http_status: "HTTP"
+        response: "応答"
+        cause: "原因"
+    form:
+      name_placeholder: "API ヘルス"
+      url_placeholder: "https://example.com/health または {{base_url}}/health"
+      url_hint: "変数は下で選んだ環境から取得されます。シークレット変数は URL に使えません。"
+      no_environment: "環境なし"
+      conditions: "条件"
+      no_limit: "制限なし"
+      conditions_hint: "この回数連続で失敗するとダウンになります。失敗後の次のチェックは 30 秒後に行われます。ステータス: 200、301-302、200-399 のような一覧。"
+      cancel: "キャンセル"
+      save: "モニターを保存"
+      create: "モニターを作成"
+    new:
+      title: "新しいモニター"
+      description: "HTTP モニターは定期的に URL をリクエストし、応答がない、想定外のステータス、または遅すぎる場合にダウンになります。"
+    edit:
+      title: "モニターを編集"
+    intervals:
+      minutes: "%{value} 分ごと"
+      hours: "%{value} 時間ごと"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} 秒"
+    causes:
+      environment_missing: "環境が削除されました"
+      unresolved_variable: "URL の変数が定義されていません"
+      secret_variable: "シークレット変数は URL に使えません"
+      invalid_url: "有効な http または https の URL ではありません"
+      unexpected_status: "想定外のステータス"
+      slow_response: "制限より遅い"
+      invalid_redirect: "無効な URL へのリダイレクト"
+      redirect_loop: "リダイレクトのループ"
+      too_many_redirects: "リダイレクトが多すぎます"
+      connection_refused: "接続が拒否されました"
+      connection_timeout: "時間内に応答がありません"
+      tls_failed: "TLS に失敗しました"
+      connection_failed: "接続に失敗しました"
+      blocked: "許可されていないアドレス"
+      unresolved: "ホスト名を解決できません"
+      unsupported_kind: "この種類のモニターはまだ実行できません"
+    monitors:
+      create:
+        created: "モニターを作成しました。最初のチェックを実行中です。"
+      update:
+        updated: "モニターを保存しました。"
+      destroy:
+        destroyed: "モニターを削除しました。"
+      runs:
+        create:
+          queued: "チェックをキューに入れました。数秒で結果が表示されます。"
+          paused: "チェックするにはモニターを再開してください。"
+      pauses:
+        create:
+          paused: "モニターを一時停止しました。"
+        destroy:
+          resumed: "モニターを再開しました。1 分以内にチェックされます。"

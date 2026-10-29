@@ -27,3 +27,119 @@ zh-CN:
         grace: "宽限期"
         environment: "环境"
         api_request: "已保存的请求"
+  monitoring:
+    title: "监控"
+    index:
+      description: "Shango 会定期检查它们，并在某个宕机时创建事件。"
+      new: "新建监控"
+      in_use: "监控"
+      uptime: "24 小时可用率"
+      filter: "按状态筛选"
+      filters:
+        all: "全部"
+        up: "正常"
+        down: "宕机"
+        pending: "待检查"
+        paused: "已暂停"
+      search: "按名称或 URL 搜索"
+      empty:
+        title: "还没有监控"
+        filtered: "没有符合此筛选的监控。"
+        hint: "创建一个监控，每隔几分钟检查一个 URL，查看其可用率和响应时间。"
+    statuses:
+      up: "正常"
+      down: "宕机"
+      paused: "已暂停"
+      pending: "待检查"
+      unknown: "未知"
+    chart:
+      title: "响应时间 · 最近 24 小时"
+      label: "%{name} 每小时平均响应时间"
+      max: "最大 %{ms} ms"
+    card:
+      no_data: "还没有检查"
+      uptime: "24 小时可用率"
+      average: "平均响应"
+      checked: "最近检查"
+    ago: "%{time}前"
+    actions:
+      run: "立即检查"
+      pause: "暂停"
+      resume: "恢复"
+      edit: "编辑"
+      delete: "删除"
+      confirm_delete: "删除监控 %{name} 及其历史？"
+    show:
+      back: "所有监控"
+      uptime_day: "24 小时可用率"
+      uptime_week: "7 天可用率"
+      uptime_month: "30 天可用率"
+      average: "24 小时平均响应"
+      incidents: "事件"
+      no_incidents: "最近 30 天没有事件。"
+      ongoing: "进行中"
+      closed_by_pause: "因暂停而关闭"
+      settings: "设置"
+      checks: "最近检查"
+      no_checks: "尚未检查。"
+      columns:
+        time: "时间"
+        status: "状态"
+        http_status: "HTTP"
+        response: "响应"
+        cause: "原因"
+    form:
+      name_placeholder: "API 健康"
+      url_placeholder: "https://example.com/health 或 {{base_url}}/health"
+      url_hint: "变量来自下方选择的环境；URL 中不能使用秘密变量。"
+      no_environment: "无环境"
+      conditions: "条件"
+      no_limit: "无限制"
+      conditions_hint: "连续失败达到此次数后判定为宕机；失败后下一次检查在 30 秒后进行。状态码：如 200、301-302 或 200-399 的列表。"
+      cancel: "取消"
+      save: "保存监控"
+      create: "创建监控"
+    new:
+      title: "新建监控"
+      description: "HTTP 监控定期请求一个 URL，在没有响应、状态码不符或响应过慢时判定为宕机。"
+    edit:
+      title: "编辑监控"
+    intervals:
+      minutes: "每 %{value} 分钟"
+      hours: "每 %{value} 小时"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} 秒"
+    causes:
+      environment_missing: "其环境已被删除"
+      unresolved_variable: "URL 中的变量未定义"
+      secret_variable: "URL 中不能使用秘密变量"
+      invalid_url: "这不是有效的 http 或 https URL"
+      unexpected_status: "状态码不符"
+      slow_response: "慢于限制"
+      invalid_redirect: "重定向到无效的 URL"
+      redirect_loop: "重定向循环"
+      too_many_redirects: "重定向过多"
+      connection_refused: "连接被拒绝"
+      connection_timeout: "未及时响应"
+      tls_failed: "TLS 失败"
+      connection_failed: "连接失败"
+      blocked: "地址不被允许"
+      unresolved: "主机名无法解析"
+      unsupported_kind: "此类监控尚不能运行"
+    monitors:
+      create:
+        created: "监控已创建，首次检查正在进行。"
+      update:
+        updated: "监控已保存。"
+      destroy:
+        destroyed: "监控已删除。"
+      runs:
+        create:
+          queued: "检查已排队，几秒后结果会显示在这里。"
+          paused: "请先恢复监控再检查。"
+      pauses:
+        create:
+          paused: "监控已暂停。"
+        destroy:
+          resumed: "监控已恢复，一分钟内会进行检查。"

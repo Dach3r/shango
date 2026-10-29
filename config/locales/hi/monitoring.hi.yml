@@ -27,3 +27,119 @@ hi:
         grace: "छूट अवधि"
         environment: "एनवायरनमेंट"
         api_request: "सहेजा गया अनुरोध"
+  monitoring:
+    title: "मॉनिटरिंग"
+    index:
+      description: "Shango इन्हें तय समय पर जाँचता है और किसी के डाउन होने पर इंसिडेंट खोलता है।"
+      new: "नया मॉनिटर"
+      in_use: "मॉनिटर"
+      uptime: "अपटाइम 24 घंटे"
+      filter: "स्टेटस से फ़िल्टर करें"
+      filters:
+        all: "सभी"
+        up: "चालू"
+        down: "डाउन"
+        pending: "लंबित"
+        paused: "रुके हुए"
+      search: "नाम या URL से खोजें"
+      empty:
+        title: "अभी कोई मॉनिटर नहीं"
+        filtered: "इस फ़िल्टर से कोई मॉनिटर मेल नहीं खाता।"
+        hint: "हर कुछ मिनट में किसी URL को जाँचने और उसका अपटाइम व रिस्पॉन्स समय देखने के लिए मॉनिटर बनाएँ।"
+    statuses:
+      up: "चालू"
+      down: "डाउन"
+      paused: "रुका हुआ"
+      pending: "लंबित"
+      unknown: "अज्ञात"
+    chart:
+      title: "रिस्पॉन्स समय · पिछले 24 घंटे"
+      label: "%{name} का प्रति घंटा औसत रिस्पॉन्स समय"
+      max: "अधिकतम %{ms} ms"
+    card:
+      no_data: "अभी कोई जाँच नहीं"
+      uptime: "अपटाइम 24 घंटे"
+      average: "औसत रिस्पॉन्स"
+      checked: "अंतिम जाँच"
+    ago: "%{time} पहले"
+    actions:
+      run: "अभी चलाएँ"
+      pause: "रोकें"
+      resume: "फिर शुरू करें"
+      edit: "संपादित करें"
+      delete: "हटाएँ"
+      confirm_delete: "मॉनिटर %{name} को उसके इतिहास सहित हटाएँ?"
+    show:
+      back: "सभी मॉनिटर"
+      uptime_day: "अपटाइम 24 घंटे"
+      uptime_week: "अपटाइम 7 दिन"
+      uptime_month: "अपटाइम 30 दिन"
+      average: "औसत रिस्पॉन्स 24 घंटे"
+      incidents: "इंसिडेंट"
+      no_incidents: "पिछले 30 दिनों में कोई इंसिडेंट नहीं।"
+      ongoing: "जारी"
+      closed_by_pause: "रोकने से बंद हुआ"
+      settings: "सेटिंग्स"
+      checks: "हाल की जाँचें"
+      no_checks: "अभी जाँचा नहीं गया।"
+      columns:
+        time: "समय"
+        status: "स्टेटस"
+        http_status: "HTTP"
+        response: "रिस्पॉन्स"
+        cause: "कारण"
+    form:
+      name_placeholder: "API हेल्थ"
+      url_placeholder: "https://example.com/health या {{base_url}}/health"
+      url_hint: "वेरिएबल नीचे चुने गए एनवायरनमेंट से आते हैं; सीक्रेट वेरिएबल URL में इस्तेमाल नहीं हो सकते।"
+      no_environment: "कोई एनवायरनमेंट नहीं"
+      conditions: "शर्तें"
+      no_limit: "कोई सीमा नहीं"
+      conditions_hint: "लगातार इतनी जाँचें विफल होने पर डाउन; विफलता के बाद अगली जाँच 30 सेकंड बाद चलती है। स्टेटस: 200, 301-302 या 200-399 जैसी सूची।"
+      cancel: "रद्द करें"
+      save: "मॉनिटर सहेजें"
+      create: "मॉनिटर बनाएँ"
+    new:
+      title: "नया मॉनिटर"
+      description: "HTTP मॉनिटर तय समय पर किसी URL को माँगता है और जवाब न मिलने, अनपेक्षित स्टेटस या बहुत धीमे जवाब पर डाउन माना जाता है।"
+    edit:
+      title: "मॉनिटर संपादित करें"
+    intervals:
+      minutes: "हर %{value} मिनट"
+      hours: "हर %{value} घंटे"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} से."
+    causes:
+      environment_missing: "उसका एनवायरनमेंट हटा दिया गया"
+      unresolved_variable: "URL का एक वेरिएबल परिभाषित नहीं है"
+      secret_variable: "URL में सीक्रेट वेरिएबल इस्तेमाल नहीं हो सकता"
+      invalid_url: "URL मान्य http या https URL नहीं है"
+      unexpected_status: "अनपेक्षित स्टेटस"
+      slow_response: "सीमा से धीमा"
+      invalid_redirect: "अमान्य URL पर रीडायरेक्ट"
+      redirect_loop: "रीडायरेक्ट लूप"
+      too_many_redirects: "बहुत अधिक रीडायरेक्ट"
+      connection_refused: "कनेक्शन अस्वीकार"
+      connection_timeout: "समय पर जवाब नहीं"
+      tls_failed: "TLS विफल"
+      connection_failed: "कनेक्शन विफल"
+      blocked: "पता अनुमत नहीं"
+      unresolved: "होस्ट नाम रिज़ॉल्व नहीं होता"
+      unsupported_kind: "इस प्रकार का मॉनिटर अभी नहीं चल सकता"
+    monitors:
+      create:
+        created: "मॉनिटर बन गया। उसकी पहली जाँच शुरू हो रही है।"
+      update:
+        updated: "मॉनिटर सहेजा गया।"
+      destroy:
+        destroyed: "मॉनिटर हटाया गया।"
+      runs:
+        create:
+          queued: "जाँच कतार में है। उसका नतीजा कुछ सेकंड में यहाँ दिखेगा।"
+          paused: "जाँचने के लिए मॉनिटर फिर शुरू करें।"
+      pauses:
+        create:
+          paused: "मॉनिटर रोका गया।"
+        destroy:
+          resumed: "मॉनिटर फिर शुरू हुआ। एक मिनट के भीतर जाँचा जाएगा।"

@@ -8,6 +8,14 @@ module Monitoring
         super
       end
 
+      def up?
+        status == "up"
+      end
+
+      def down?
+        status == "down"
+      end
+
       def self.up(**)
         new(status: "up", **)
       end

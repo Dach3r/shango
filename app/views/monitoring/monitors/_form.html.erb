@@ -1,0 +1,70 @@
+<%# Form of an HTTP monitor of a URL. Render with `monitor:`. %>
+<% row = "grid gap-4 sm:grid-cols-2" %>
+<%= form_with model: monitor, scope: :uptime_monitor, url: (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_monitors_path), class: "flex flex-col gap-6" do |form| %>
+  <% if monitor.errors.any? %>
+    <div role="alert" class="border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
+      <ul class="list-inside list-disc">
+        <% monitor.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="flex flex-col gap-4 border border-line bg-card p-5">
+    <div>
+      <%= form.label :name, UptimeMonitor.human_attribute_name(:name), class: label_classes %>
+      <%= form.text_field :name, required: true, maxlength: 100, autocomplete: "off", placeholder: t("monitoring.form.name_placeholder"), aria: { invalid: monitor.errors.include?(:name) }, class: field_classes %>
+    </div>
+    <%= tag.div class: "grid gap-4 sm:grid-cols-[1fr_8rem]", data: variable_autocomplete_data do %>
+      <div>
+        <%= label_tag "uptime_monitor_settings_url", UptimeMonitor.human_attribute_name(:url), class: label_classes %>
+        <%= text_field_tag "uptime_monitor[settings][url]", monitor.url, id: "uptime_monitor_settings_url", required: true, autocomplete: "off", spellcheck: false, placeholder: t("monitoring.form.url_placeholder"),
+                           aria: { invalid: monitor.errors.include?(:url) }, class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= label_tag "uptime_monitor_settings_http_method", UptimeMonitor.human_attribute_name(:http_method), class: label_classes %>
+        <%= select_tag "uptime_monitor[settings][http_method]", options_for_select(UptimeMonitor::HTTP_METHODS, monitor.http_method), id: "uptime_monitor_settings_http_method", class: field_classes("font-mono") %>
+      </div>
+    <% end %>
+    <p class="text-xs text-muted"><%= t("monitoring.form.url_hint") %></p>
+    <div class="<%= row %>">
+      <div>
+        <%= form.label :environment_id, UptimeMonitor.human_attribute_name(:environment), class: label_classes %>
+        <%= form.select :environment_id, current_project.environments.ordered.map { |environment| [environment.name, environment.id] }, { include_blank: t("monitoring.form.no_environment") }, class: field_classes %>
+      </div>
+      <div>
+        <%= form.label :interval, UptimeMonitor.human_attribute_name(:interval), class: label_classes %>
+        <%= form.select :interval, monitor_interval_options(monitor), {}, class: field_classes %>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4 border border-line bg-card p-5">
+    <h2 class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("monitoring.form.conditions") %></h2>
+    <div class="<%= row %>">
+      <div>
+        <%= label_tag "uptime_monitor_settings_expected_statuses", UptimeMonitor.human_attribute_name(:expected_statuses), class: label_classes %>
+        <%= text_field_tag "uptime_monitor[settings][expected_statuses]", monitor.expected_statuses, id: "uptime_monitor_settings_expected_statuses", autocomplete: "off", spellcheck: false, placeholder: "200-399",
+                           aria: { invalid: monitor.errors.include?(:expected_statuses) }, class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= label_tag "uptime_monitor_settings_max_response_ms", UptimeMonitor.human_attribute_name(:max_response_ms), class: label_classes %>
+        <%= number_field_tag "uptime_monitor[settings][max_response_ms]", monitor.max_response_ms, id: "uptime_monitor_settings_max_response_ms", min: 1, max: 60_000, placeholder: t("monitoring.form.no_limit"),
+                             aria: { invalid: monitor.errors.include?(:max_response_ms) }, class: field_classes("font-mono") %>
+      </div>
+      <div>
+        <%= form.label :timeout, UptimeMonitor.human_attribute_name(:timeout), class: label_classes %>
+        <%= form.select :timeout, UptimeMonitor::TIMEOUTS.map { |seconds| [t("monitoring.units.seconds", value: seconds), seconds] }, {}, class: field_classes %>
+      </div>
+      <div>
+        <%= form.label :confirmations, UptimeMonitor.human_attribute_name(:confirmations), class: label_classes %>
+        <%= form.select :confirmations, UptimeMonitor::CONFIRMATIONS.to_a, {}, class: field_classes %>
+      </div>
+    </div>
+    <p class="text-xs text-muted"><%= t("monitoring.form.conditions_hint") %></p>
+  </section>
+
+  <div class="flex flex-wrap justify-end gap-2">
+    <%= link_to t("monitoring.form.cancel"), (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_root_path), class: button_classes(:secondary) %>
+    <%= form.button type: :submit, class: button_classes(:primary) do %><%= lucide_icon "check", class: "size-4" %><%= t(monitor.persisted? ? "monitoring.form.save" : "monitoring.form.create") %><% end %>
+  </div>
+<% end %>

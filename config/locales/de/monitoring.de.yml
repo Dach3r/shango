@@ -27,3 +27,119 @@ de:
         grace: "Kulanzzeit"
         environment: "Umgebung"
         api_request: "Gespeicherte Anfrage"
+  monitoring:
+    title: "Monitoring"
+    index:
+      description: "Shango prüft diese regelmäßig und öffnet einen Vorfall, wenn einer ausfällt."
+      new: "Neuer Monitor"
+      in_use: "Monitore"
+      uptime: "Verfügbarkeit 24 h"
+      filter: "Nach Status filtern"
+      filters:
+        all: "Alle"
+        up: "Online"
+        down: "Ausgefallen"
+        pending: "Ausstehend"
+        paused: "Pausiert"
+      search: "Nach Name oder URL suchen"
+      empty:
+        title: "Noch keine Monitore"
+        filtered: "Kein Monitor passt zu diesem Filter."
+        hint: "Lege einen Monitor an, um eine URL alle paar Minuten zu prüfen und ihre Verfügbarkeit und Antwortzeit zu sehen."
+    statuses:
+      up: "Online"
+      down: "Ausgefallen"
+      paused: "Pausiert"
+      pending: "Ausstehend"
+      unknown: "Unbekannt"
+    chart:
+      title: "Antwortzeit · letzte 24 h"
+      label: "Durchschnittliche Antwortzeit pro Stunde von %{name}"
+      max: "max. %{ms} ms"
+    card:
+      no_data: "Noch keine Prüfungen"
+      uptime: "Verfügb. 24 h"
+      average: "Ø Antwort"
+      checked: "Letzte Prüfung"
+    ago: "vor %{time}"
+    actions:
+      run: "Jetzt prüfen"
+      pause: "Pausieren"
+      resume: "Fortsetzen"
+      edit: "Bearbeiten"
+      delete: "Löschen"
+      confirm_delete: "Den Monitor %{name} samt Verlauf löschen?"
+    show:
+      back: "Alle Monitore"
+      uptime_day: "Verfügbarkeit 24 h"
+      uptime_week: "Verfügbarkeit 7 Tage"
+      uptime_month: "Verfügbarkeit 30 Tage"
+      average: "Ø Antwort 24 h"
+      incidents: "Vorfälle"
+      no_incidents: "Keine Vorfälle in den letzten 30 Tagen."
+      ongoing: "laufend"
+      closed_by_pause: "durch Pause beendet"
+      settings: "Einstellungen"
+      checks: "Letzte Prüfungen"
+      no_checks: "Noch nicht geprüft."
+      columns:
+        time: "Zeit"
+        status: "Status"
+        http_status: "HTTP"
+        response: "Antwort"
+        cause: "Ursache"
+    form:
+      name_placeholder: "API-Status"
+      url_placeholder: "https://example.com/health oder {{base_url}}/health"
+      url_hint: "Variablen kommen aus der unten gewählten Umgebung; geheime Variablen können nicht in einer URL verwendet werden."
+      no_environment: "Keine Umgebung"
+      conditions: "Bedingungen"
+      no_limit: "Keine Grenze"
+      conditions_hint: "Ausgefallen nach so vielen fehlgeschlagenen Prüfungen in Folge; nach einem Fehler läuft die nächste Prüfung 30 Sekunden später. Statuscodes: eine Liste wie 200, 301-302 oder 200-399."
+      cancel: "Abbrechen"
+      save: "Monitor speichern"
+      create: "Monitor anlegen"
+    new:
+      title: "Neuer Monitor"
+      description: "Ein HTTP-Monitor ruft regelmäßig eine URL ab und gilt als ausgefallen, wenn keine Antwort, ein unerwarteter Status oder eine zu langsame Antwort kommt."
+    edit:
+      title: "Monitor bearbeiten"
+    intervals:
+      minutes: "Alle %{value} Min."
+      hours: "Alle %{value} Std."
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} s"
+    causes:
+      environment_missing: "Seine Umgebung wurde gelöscht"
+      unresolved_variable: "Eine Variable der URL ist nicht definiert"
+      secret_variable: "Eine geheime Variable kann nicht in der URL verwendet werden"
+      invalid_url: "Die URL ist keine gültige http- oder https-URL"
+      unexpected_status: "Unerwarteter Status"
+      slow_response: "Langsamer als die Grenze"
+      invalid_redirect: "Weiterleitung zu einer ungültigen URL"
+      redirect_loop: "Weiterleitungsschleife"
+      too_many_redirects: "Zu viele Weiterleitungen"
+      connection_refused: "Verbindung abgelehnt"
+      connection_timeout: "Keine Antwort in der Zeit"
+      tls_failed: "TLS fehlgeschlagen"
+      connection_failed: "Verbindung fehlgeschlagen"
+      blocked: "Adresse nicht erlaubt"
+      unresolved: "Der Hostname lässt sich nicht auflösen"
+      unsupported_kind: "Diese Art von Monitor kann noch nicht laufen"
+    monitors:
+      create:
+        created: "Monitor angelegt. Die erste Prüfung ist unterwegs."
+      update:
+        updated: "Monitor gespeichert."
+      destroy:
+        destroyed: "Monitor gelöscht."
+      runs:
+        create:
+          queued: "Prüfung eingereiht. Das Ergebnis erscheint hier in wenigen Sekunden."
+          paused: "Setze den Monitor fort, um ihn zu prüfen."
+      pauses:
+        create:
+          paused: "Monitor pausiert."
+        destroy:
+          resumed: "Monitor fortgesetzt. Er wird innerhalb einer Minute geprüft."

@@ -1,0 +1,15 @@
+<%# Run, pause or resume, edit and delete one monitor; only rendered for members who may manage it. Render with `monitor:` and `compact:` (icon-only buttons in a row). %>
+<% base = compact ? "flex flex-1 items-center justify-center gap-1.5 py-2 text-xs text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" : nil %>
+<div class="<%= compact ? "flex divide-x divide-line border-t border-line" : "flex flex-wrap gap-2" %>">
+  <% unless monitor.paused? %>
+    <%= button_to monitoring_monitor_run_path(monitor), form_class: (compact ? "flex flex-1" : "contents"), class: base || button_classes(:secondary) do %><%= lucide_icon "play", class: "size-3.5" %><%= t("monitoring.actions.run") %><% end %>
+  <% end %>
+  <% if monitor.paused? %>
+    <%= button_to monitoring_monitor_pause_path(monitor), method: :delete, form_class: (compact ? "flex flex-1" : "contents"), class: base || button_classes(:secondary) do %><%= lucide_icon "rotate-ccw", class: "size-3.5" %><%= t("monitoring.actions.resume") %><% end %>
+  <% else %>
+    <%= button_to monitoring_monitor_pause_path(monitor), form_class: (compact ? "flex flex-1" : "contents"), class: base || button_classes(:secondary) do %><%= lucide_icon "pause", class: "size-3.5" %><%= t("monitoring.actions.pause") %><% end %>
+  <% end %>
+  <%= link_to edit_monitoring_monitor_path(monitor), class: (compact ? base : button_classes(:secondary)) do %><%= lucide_icon "pencil", class: "size-3.5" %><%= t("monitoring.actions.edit") %><% end %>
+  <%= button_to monitoring_monitor_path(monitor), method: :delete, form_class: (compact ? "flex flex-1" : "contents"), form: { data: { turbo_confirm: t("monitoring.actions.confirm_delete", name: monitor.name) } },
+        class: (compact ? class_names(base, "hover:text-danger") : button_classes(:danger)) do %><%= lucide_icon "trash-2", class: "size-3.5" %><%= t("monitoring.actions.delete") %><% end %>
+</div>

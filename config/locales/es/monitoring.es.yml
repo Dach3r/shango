@@ -27,3 +27,119 @@ es:
         grace: "Periodo de gracia"
         environment: "Entorno"
         api_request: "Request guardado"
+  monitoring:
+    title: "Monitoreo"
+    index:
+      description: "Shango los revisa periódicamente y abre un incidente cuando uno se cae."
+      new: "Nuevo monitor"
+      in_use: "Monitores"
+      uptime: "Uptime 24 h"
+      filter: "Filtrar por estado"
+      filters:
+        all: "Todos"
+        up: "Arriba"
+        down: "Caídos"
+        pending: "Pendientes"
+        paused: "Pausados"
+      search: "Buscar por nombre o URL"
+      empty:
+        title: "Aún no hay monitores"
+        filtered: "Ningún monitor coincide con este filtro."
+        hint: "Crea un monitor para revisar una URL cada pocos minutos y ver su uptime y tiempo de respuesta."
+    statuses:
+      up: "Arriba"
+      down: "Caído"
+      paused: "Pausado"
+      pending: "Pendiente"
+      unknown: "Desconocido"
+    chart:
+      title: "Tiempo de respuesta · últimas 24 h"
+      label: "Tiempo de respuesta promedio por hora de %{name}"
+      max: "máx. %{ms} ms"
+    card:
+      no_data: "Aún sin chequeos"
+      uptime: "Uptime 24 h"
+      average: "Resp. promedio"
+      checked: "Último chequeo"
+    ago: "hace %{time}"
+    actions:
+      run: "Ejecutar ahora"
+      pause: "Pausar"
+      resume: "Reanudar"
+      edit: "Editar"
+      delete: "Eliminar"
+      confirm_delete: "¿Eliminar el monitor %{name} con su historial?"
+    show:
+      back: "Todos los monitores"
+      uptime_day: "Uptime 24 h"
+      uptime_week: "Uptime 7 días"
+      uptime_month: "Uptime 30 días"
+      average: "Resp. promedio 24 h"
+      incidents: "Incidentes"
+      no_incidents: "Sin incidentes en los últimos 30 días."
+      ongoing: "en curso"
+      closed_by_pause: "cerrado por una pausa"
+      settings: "Configuración"
+      checks: "Últimos chequeos"
+      no_checks: "Aún no se ha revisado."
+      columns:
+        time: "Hora"
+        status: "Estado"
+        http_status: "HTTP"
+        response: "Respuesta"
+        cause: "Causa"
+    form:
+      name_placeholder: "Salud de la API"
+      url_placeholder: "https://example.com/health o {{base_url}}/health"
+      url_hint: "Las variables vienen del entorno elegido abajo; las variables secretas no se pueden usar en una URL."
+      no_environment: "Sin entorno"
+      conditions: "Condiciones"
+      no_limit: "Sin límite"
+      conditions_hint: "Se marca caído tras esta cantidad de chequeos fallidos seguidos; tras un fallo el siguiente chequeo corre 30 segundos después. Estados: una lista como 200, 301-302 o 200-399."
+      cancel: "Cancelar"
+      save: "Guardar monitor"
+      create: "Crear monitor"
+    new:
+      title: "Nuevo monitor"
+      description: "Un monitor HTTP pide una URL periódicamente y se marca caído cuando no hay respuesta, el estado no es el esperado o tarda demasiado."
+    edit:
+      title: "Editar monitor"
+    intervals:
+      minutes: "Cada %{value} min"
+      hours: "Cada %{value} h"
+    units:
+      ms: "%{value} ms"
+      seconds: "%{value} s"
+    causes:
+      environment_missing: "Su entorno fue eliminado"
+      unresolved_variable: "Una variable de la URL no está definida"
+      secret_variable: "No se puede usar una variable secreta en la URL"
+      invalid_url: "La URL no es una URL http o https válida"
+      unexpected_status: "Estado inesperado"
+      slow_response: "Más lento que el límite"
+      invalid_redirect: "Redirección a una URL inválida"
+      redirect_loop: "Bucle de redirecciones"
+      too_many_redirects: "Demasiadas redirecciones"
+      connection_refused: "Conexión rechazada"
+      connection_timeout: "Sin respuesta a tiempo"
+      tls_failed: "Falló TLS"
+      connection_failed: "Falló la conexión"
+      blocked: "Dirección no permitida"
+      unresolved: "El nombre de host no resuelve"
+      unsupported_kind: "Este tipo de monitor aún no puede ejecutarse"
+    monitors:
+      create:
+        created: "Monitor creado. Su primer chequeo va en camino."
+      update:
+        updated: "Monitor guardado."
+      destroy:
+        destroyed: "Monitor eliminado."
+      runs:
+        create:
+          queued: "Chequeo en cola. Su resultado aparece aquí en unos segundos."
+          paused: "Reanuda el monitor para revisarlo."
+      pauses:
+        create:
+          paused: "Monitor pausado."
+        destroy:
+          resumed: "Monitor reanudado. Se revisa en menos de un minuto."
