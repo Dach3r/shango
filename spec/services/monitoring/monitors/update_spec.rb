@@ -20,4 +20,13 @@ RSpec.describe Monitoring::Monitors::Update do
   it "keeps an invalid change unsaved" do
     expect(described_class.call(monitor:, attributes: { timeout: 99 })).to have_attributes(failure?: true, error: :invalid)
   end
+
+  it "records a real change in the project's activity, not a form that changed nothing", :aggregate_failures do
+    actor = create(:user)
+    expect { described_class.call(monitor:, attributes: { name: "Renamed" }, actor:) }.to change(AuditEvent, :count).by(1)
+    expect(AuditEvent.recent.first).to have_attributes(kind: "monitor_updated", actor:, project: monitor.project, metadata: include("name" => "Renamed"))
+    expect { described_class.call(monitor:, attributes: { name: "Renamed", settings: { url: "https://example.com" } }, actor:) }.not_to change(AuditEvent, :count)
+    expect { described_class.call(monitor:, attributes: {}, channels: [create(:notification_channel, project: monitor.project)], actor:) }.to change(AuditEvent, :count).by(1)
+    expect { described_class.call(monitor:, attributes: { timeout: 99 }, actor:) }.not_to change(AuditEvent, :count)
+  end
 end

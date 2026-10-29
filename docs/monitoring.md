@@ -1,6 +1,6 @@
 # Shango — Monitoring
 
-> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`; and alerts by email and webhook (`NotificationChannel`, `MonitorChannel`, `NotificationDelivery`, `Monitoring::Notifications::*`, `NotificationDeliveryJob`, `MonitoringMailer`, `Monitoring::ChannelsController`). Results and deliveries are pruned by `PruneMonitoringJob`. Audit events, Slack and Discord, the other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
+> Design and reference for the Monitoring module. **Status: in progress** — steps 1 to 4 of §12 are built: the models (`UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`), the state machine (`Monitoring::Checks::Apply` over the AASM `status`), `Checks::Perform`, `Checks::Run`, `Monitors::Dispatch`, `Pause`, `Resume`, `MonitoringDispatchJob` and `MonitorCheckJob`; and HTTP monitors of a typed URL (`Monitoring::Probes::Http`, `Monitoring::Guard`), the pages (`Monitoring::MonitorsController`, `Monitors::RunsController`, `Monitors::PausesController`, `Monitors::Create`, `Update`, `Overview`, `Report`, `Monitoring::Uptime`, `MonitorStatus` and `ResponseChart` components) and the live *Monitoring* entry of `ToolsNav`; and alerts by email and webhook (`NotificationChannel`, `MonitorChannel`, `NotificationDelivery`, `Monitoring::Notifications::*`, `NotificationDeliveryJob`, `MonitoringMailer`, `Monitoring::ChannelsController`). Results and deliveries are pruned by `PruneMonitoringJob`, and changes to monitors and channels are recorded as `AuditEvent`s. Slack and Discord, the other kinds and monitors of a saved request are not built (§12 *Next*): the form only creates URL monitors, and a kind without a probe gives `unknown` (`unsupported_kind`). Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
 
 ## 1. Goal
 
@@ -146,7 +146,7 @@ ActiveSupport::SecurityUtils.secure_compare(expected, request.headers["X-Shango-
 2. **Secrets.** Channel URLs and signing secrets use Active Record encryption and are never rendered back unmasked. Push tokens are stored as digests and kept out of the logs (§7). Saved-request monitors may use secret variables and auth; their values never reach `check_results`, incidents, notifications or logs (no bodies are stored; every stored text goes through the masker with `built.secrets`).
 3. **Authorization** (Pundit, membership as subject): any member sees the project's monitors, incidents and channels and can create monitors and channels; changing, pausing, running, deleting a monitor or channel is for its creator or an owner (`manage?`), like collections and environments. Attaching a channel to a monitor needs the right to change the monitor only. Unauthorized actions are not rendered.
 4. **Abuse.** The per-project and install-wide caps, the minimum interval and connect-only TCP probes bound what a member can make the server do. *Run now* shares the `network` rate limit.
-5. **Audit.** Creating, changing and deleting monitors and channels are recorded as `AuditEvent`s.
+5. **Audit.** Creating, changing (only when something changed), pausing, resuming and deleting a monitor, and creating, changing and deleting a channel, are recorded as `AuditEvent`s with the name in `metadata` (`Monitors::Create`, `Update`, `Pause`, `Resume`, `Destroy`; `Channels::Save`, `Destroy`), shown on the project's activity page.
 6. **Project scope.** Monitors, results, incidents and channels belong to one project; a monitor can only reference a request, an environment and channels of its own project (validated).
 
 ## 10. Testing
@@ -173,6 +173,7 @@ One logical commit per step, each with its specs (100 % line and branch), locale
 4. `✨ feat(monitoring)` — HTTP monitors of a typed URL (`Probes::Http`, `Guard`), index/show/form, *Run now*, pause, the live `ToolsNav` entry.
 5. `✨ feat(monitoring)` — notification channels (email, webhook), deliveries, *Send test* (below).
 6. `✨ feat(monitoring)` — retention (`PruneMonitoringJob`, below).
+7. `✨ feat(monitoring)` — audit events for monitors and channels (below).
 
 ### Next, in this order
 
@@ -194,7 +195,7 @@ Alerts come first: a monitor nobody is told about is only useful to someone watc
 - `config/recurring.yml`: every hour under `production:` (not in development).
 - `operations.md`: the variable, the expected size (≈ 43 000 results per 1-minute monitor and 30 days, ≈ 200 bytes each), worker sizing with `SHANGO_MONITORING_THREADS`.
 
-**7. Audit events for monitors and channels** — `✨ feat(monitoring)`.
+**7. Audit events for monitors and channels** — `✨ feat(monitoring)`. **Built.**
 
 - New migration replacing `audit_events_kind_check` (never editing the old one) with the kinds `monitor_created`, `monitor_updated`, `monitor_deleted`, `monitor_paused`, `monitor_resumed`, `channel_created`, `channel_updated`, `channel_deleted`. `target` stays a user, so the monitor or channel name goes in `metadata` (`name`), like `email` today.
 - Recorded by `Monitors::Create`, `Update` (only when something changed), `Pause`, `Resume`, the destroy path (moved to a `Monitors::Destroy` service) and the channel services.

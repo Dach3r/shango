@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_29_155017) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_161522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -81,7 +81,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_155017) do
     t.index ["actor_id"], name: "index_audit_events_on_actor_id"
     t.index ["project_id", "created_at"], name: "index_audit_events_on_project_id_and_created_at"
     t.index ["target_id"], name: "index_audit_events_on_target_id"
-    t.check_constraint "kind::text = ANY (ARRAY['member_invited'::character varying::text, 'invitation_accepted'::character varying::text, 'invitation_revoked'::character varying::text, 'role_changed'::character varying::text, 'member_revoked'::character varying::text, 'member_left'::character varying::text, 'ownership_transferred'::character varying::text])", name: "audit_events_kind_check"
+    t.check_constraint "kind::text = ANY (ARRAY['member_invited'::character varying, 'invitation_accepted'::character varying, 'invitation_revoked'::character varying, 'role_changed'::character varying, 'member_revoked'::character varying, 'member_left'::character varying, 'ownership_transferred'::character varying, 'monitor_created'::character varying, 'monitor_updated'::character varying, 'monitor_deleted'::character varying, 'monitor_paused'::character varying, 'monitor_resumed'::character varying, 'channel_created'::character varying, 'channel_updated'::character varying, 'channel_deleted'::character varying]::text[])", name: "audit_events_kind_check"
   end
 
   create_table "check_results", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -65,7 +65,7 @@ ru:
       index:
         title: Активность
         heading: Активность
-        description: Кто менял состав команды проекта %{project}.
+        description: "Кто менял команду, мониторы и каналы оповещений проекта %{project}."
         empty: Пока ничего не происходило.
         someone: бывший участник
         pagination: Страницы
@@ -79,6 +79,14 @@ ru:
           member_revoked: "%{actor} удалил(а) пользователя %{target}."
           member_left: "%{actor} покинул(а) проект."
           ownership_transferred: "%{actor} передал(а) проект пользователю %{target}."
+          monitor_created: "%{actor} создал(а) монитор %{name}."
+          monitor_updated: "%{actor} изменил(а) монитор %{name}."
+          monitor_deleted: "%{actor} удалил(а) монитор %{name}."
+          monitor_paused: "%{actor} приостановил(а) монитор %{name}."
+          monitor_resumed: "%{actor} возобновил(а) монитор %{name}."
+          channel_created: "%{actor} создал(а) канал оповещений %{name}."
+          channel_updated: "%{actor} изменил(а) канал оповещений %{name}."
+          channel_deleted: "%{actor} удалил(а) канал оповещений %{name}."
     leaves:
       create:
         left: Вы покинули проект %{project}.

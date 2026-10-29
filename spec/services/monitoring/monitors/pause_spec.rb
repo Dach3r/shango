@@ -11,4 +11,12 @@ RSpec.describe Monitoring::Monitors::Pause do
     expect(monitor.reload).to have_attributes(enabled: false, failures: 0)
     expect(incident.reload).to have_attributes(resolved_at: at, resolution: "paused")
   end
+
+  it "records who paused it" do
+    monitor = create(:uptime_monitor, name: "API")
+    actor = create(:user)
+    described_class.call(monitor:, actor:)
+
+    expect(AuditEvent.sole).to have_attributes(kind: "monitor_paused", actor:, metadata: include("name" => "API"))
+  end
 end

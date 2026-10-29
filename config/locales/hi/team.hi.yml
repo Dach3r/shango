@@ -63,7 +63,7 @@ hi:
       index:
         title: गतिविधि
         heading: गतिविधि
-        description: "%{project} की टीम में किसने बदलाव किए।"
+        description: "%{project} की टीम, मॉनिटरों और अलर्ट चैनलों में किसने बदलाव किए।"
         empty: अभी तक कुछ नहीं हुआ है।
         someone: एक पूर्व सदस्य
         pagination: पृष्ठ
@@ -77,6 +77,14 @@ hi:
           member_revoked: "%{actor} ने %{target} को हटा दिया।"
           member_left: "%{actor} ने प्रोजेक्ट छोड़ दिया।"
           ownership_transferred: "%{actor} ने प्रोजेक्ट %{target} को सौंप दिया।"
+          monitor_created: "%{actor} ने मॉनिटर %{name} बनाया।"
+          monitor_updated: "%{actor} ने मॉनिटर %{name} बदला।"
+          monitor_deleted: "%{actor} ने मॉनिटर %{name} हटाया।"
+          monitor_paused: "%{actor} ने मॉनिटर %{name} रोका।"
+          monitor_resumed: "%{actor} ने मॉनिटर %{name} फिर से शुरू किया।"
+          channel_created: "%{actor} ने अलर्ट चैनल %{name} बनाया।"
+          channel_updated: "%{actor} ने अलर्ट चैनल %{name} बदला।"
+          channel_deleted: "%{actor} ने अलर्ट चैनल %{name} हटाया।"
     leaves:
       create:
         left: आपने %{project} छोड़ दिया।

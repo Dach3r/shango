@@ -17,4 +17,11 @@ RSpec.describe Monitoring::Monitors::Create do
     expect { result = described_class.call(monitor: build(:uptime_monitor, name: "")) }.not_to have_enqueued_job(MonitorCheckJob)
     expect(result).to have_attributes(failure?: true, error: :invalid)
   end
+
+  it "records the creation by its creator" do
+    creator = create(:user)
+    described_class.call(monitor: build(:uptime_monitor, name: "API", creator:))
+
+    expect(AuditEvent.sole).to have_attributes(kind: "monitor_created", actor: creator, metadata: include("name" => "API"))
+  end
 end

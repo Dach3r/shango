@@ -4,8 +4,9 @@ module Monitoring
     class Resume
       include Serviceable
 
-      def initialize(monitor:, at: Time.current)
+      def initialize(monitor:, actor: nil, at: Time.current)
         @monitor = monitor
+        @actor = actor
         @at = at
       end
 
@@ -16,6 +17,7 @@ module Monitoring
           @monitor.restart(@at)
           @monitor.update!(enabled: true, failures: 0, next_check_at: @at)
         end
+        AuditEvents::Record.call(project: @monitor.project, kind: :monitor_resumed, actor: @actor, name: @monitor.name)
         Result.success(@monitor)
       end
     end

@@ -63,7 +63,7 @@ de:
       index:
         title: Aktivität
         heading: Aktivität
-        description: Wer das Team von %{project} geändert hat.
+        description: "Wer das Team, die Monitore und die Alarmkanäle von %{project} geändert hat."
         empty: Es ist noch nichts passiert.
         someone: ein ehemaliges Mitglied
         pagination: Seiten
@@ -77,6 +77,14 @@ de:
           member_revoked: "%{actor} hat %{target} entfernt."
           member_left: "%{actor} hat das Projekt verlassen."
           ownership_transferred: "%{actor} hat das Projekt an %{target} übergeben."
+          monitor_created: "%{actor} hat den Monitor %{name} angelegt."
+          monitor_updated: "%{actor} hat den Monitor %{name} geändert."
+          monitor_deleted: "%{actor} hat den Monitor %{name} gelöscht."
+          monitor_paused: "%{actor} hat den Monitor %{name} pausiert."
+          monitor_resumed: "%{actor} hat den Monitor %{name} fortgesetzt."
+          channel_created: "%{actor} hat den Alarmkanal %{name} angelegt."
+          channel_updated: "%{actor} hat den Alarmkanal %{name} geändert."
+          channel_deleted: "%{actor} hat den Alarmkanal %{name} gelöscht."
     leaves:
       create:
         left: Du hast %{project} verlassen.

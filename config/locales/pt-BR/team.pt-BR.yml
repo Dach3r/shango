@@ -63,7 +63,7 @@ pt-BR:
       index:
         title: Atividade
         heading: Atividade
-        description: Quem alterou a equipe de %{project}.
+        description: "Quem alterou a equipe, os monitores e os canais de alerta de %{project}."
         empty: Nada aconteceu ainda.
         someone: um ex-membro
         pagination: Páginas
@@ -77,6 +77,14 @@ pt-BR:
           member_revoked: "%{actor} removeu %{target}."
           member_left: "%{actor} saiu do projeto."
           ownership_transferred: "%{actor} transferiu o projeto para %{target}."
+          monitor_created: "%{actor} criou o monitor %{name}."
+          monitor_updated: "%{actor} alterou o monitor %{name}."
+          monitor_deleted: "%{actor} excluiu o monitor %{name}."
+          monitor_paused: "%{actor} pausou o monitor %{name}."
+          monitor_resumed: "%{actor} retomou o monitor %{name}."
+          channel_created: "%{actor} criou o canal de alerta %{name}."
+          channel_updated: "%{actor} alterou o canal de alerta %{name}."
+          channel_deleted: "%{actor} excluiu o canal de alerta %{name}."
     leaves:
       create:
         left: Você saiu de %{project}.

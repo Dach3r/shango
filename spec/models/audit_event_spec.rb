@@ -6,7 +6,8 @@ RSpec.describe AuditEvent do
   it { is_expected.to belong_to(:target).optional }
 
   it "knows the kinds of event" do
-    expect(described_class.kinds.keys).to eq(%w[member_invited invitation_accepted invitation_revoked role_changed member_revoked member_left ownership_transferred])
+    expect(described_class.kinds.keys).to eq(%w[member_invited invitation_accepted invitation_revoked role_changed member_revoked member_left ownership_transferred monitor_created monitor_updated
+                                                monitor_deleted monitor_paused monitor_resumed channel_created channel_updated channel_deleted])
   end
 
   it "rejects unknown kinds", :aggregate_failures do

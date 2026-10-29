@@ -17,6 +17,7 @@ module Monitoring
         @monitor.notification_channels = @channels if @channels
         return Result.failure(@monitor, error: :invalid) unless @monitor.save
 
+        AuditEvents::Record.call(project: @monitor.project, kind: :monitor_created, actor: @monitor.creator, name: @monitor.name)
         MonitorCheckJob.perform_later(@monitor.id, @monitor.config_version)
         Result.success(@monitor)
       end

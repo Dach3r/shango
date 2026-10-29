@@ -38,7 +38,7 @@ module Monitoring
 
     def update
       authorize @monitor
-      result = Monitoring::Monitors::Update.call(monitor: @monitor, attributes: monitor_params, channels:)
+      result = Monitoring::Monitors::Update.call(monitor: @monitor, attributes: monitor_params, channels:, actor: current_user)
       return redirect_to(monitoring_monitor_path(@monitor), notice: t(".updated"), status: :see_other) if result.success?
 
       render :edit, status: :unprocessable_content
@@ -46,7 +46,7 @@ module Monitoring
 
     def destroy
       authorize @monitor
-      @monitor.destroy!
+      Monitoring::Monitors::Destroy.call(monitor: @monitor, actor: current_user)
       redirect_to monitoring_root_path, notice: t(".destroyed"), status: :see_other
     end
 

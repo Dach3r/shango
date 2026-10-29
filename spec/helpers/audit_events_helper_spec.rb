@@ -23,4 +23,9 @@ RSpec.describe AuditEventsHelper do
 
     expect(helper.audit_event_summary(event)).to eq("a former member removed a former member.")
   end
+
+  it "names monitors and channels from the metadata", :aggregate_failures do
+    expect(helper.audit_event_summary(create(:audit_event, project:, actor:, kind: "monitor_paused", metadata: { "name" => "API" }))).to eq("Grace Hopper paused the monitor API.")
+    expect(helper.audit_event_summary(create(:audit_event, project:, actor:, kind: "channel_deleted", metadata: { "name" => "Ops" }))).to eq("Grace Hopper deleted the alert channel Ops.")
+  end
 end

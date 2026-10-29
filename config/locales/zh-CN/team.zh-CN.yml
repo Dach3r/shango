@@ -63,7 +63,7 @@ zh-CN:
       index:
         title: 动态
         heading: 动态
-        description: 谁更改了 %{project} 的团队。
+        description: "谁更改了 %{project} 的团队、监控和告警渠道。"
         empty: 暂无动态。
         someone: 一位前成员
         pagination: 分页
@@ -77,6 +77,14 @@ zh-CN:
           member_revoked: "%{actor} 移除了 %{target}。"
           member_left: "%{actor} 退出了项目。"
           ownership_transferred: "%{actor} 将项目转让给了 %{target}。"
+          monitor_created: "%{actor} 创建了监控 %{name}。"
+          monitor_updated: "%{actor} 更改了监控 %{name}。"
+          monitor_deleted: "%{actor} 删除了监控 %{name}。"
+          monitor_paused: "%{actor} 暂停了监控 %{name}。"
+          monitor_resumed: "%{actor} 恢复了监控 %{name}。"
+          channel_created: "%{actor} 创建了告警渠道 %{name}。"
+          channel_updated: "%{actor} 更改了告警渠道 %{name}。"
+          channel_deleted: "%{actor} 删除了告警渠道 %{name}。"
     leaves:
       create:
         left: 你已退出 %{project}。

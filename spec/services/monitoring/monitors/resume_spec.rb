@@ -10,4 +10,11 @@ RSpec.describe Monitoring::Monitors::Resume do
     expect(described_class.call(monitor:, at:)).to be_success
     expect(monitor.reload).to have_attributes(enabled: true, status: "pending", failures: 0, next_check_at: at, last_status_change_at: at)
   end
+
+  it "records who resumed it" do
+    monitor = create(:uptime_monitor, enabled: false)
+    described_class.call(monitor:, actor: monitor.creator)
+
+    expect(AuditEvent.sole.kind).to eq("monitor_resumed")
+  end
 end

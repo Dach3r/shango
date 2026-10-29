@@ -63,7 +63,7 @@ ja:
       index:
         title: アクティビティ
         heading: アクティビティ
-        description: "%{project} のチームを誰が変更したか。"
+        description: "%{project} のチーム、モニター、アラートチャンネルを誰が変更したか。"
         empty: まだ何も起きていません。
         someone: 元メンバー
         pagination: ページ
@@ -77,6 +77,14 @@ ja:
           member_revoked: "%{actor} が %{target} を削除しました。"
           member_left: "%{actor} がプロジェクトを退出しました。"
           ownership_transferred: "%{actor} がプロジェクトを %{target} に譲渡しました。"
+          monitor_created: "%{actor} がモニター %{name} を作成しました。"
+          monitor_updated: "%{actor} がモニター %{name} を変更しました。"
+          monitor_deleted: "%{actor} がモニター %{name} を削除しました。"
+          monitor_paused: "%{actor} がモニター %{name} を一時停止しました。"
+          monitor_resumed: "%{actor} がモニター %{name} を再開しました。"
+          channel_created: "%{actor} がアラートチャンネル %{name} を作成しました。"
+          channel_updated: "%{actor} がアラートチャンネル %{name} を変更しました。"
+          channel_deleted: "%{actor} がアラートチャンネル %{name} を削除しました。"
     leaves:
       create:
         left: "%{project} を退出しました。"

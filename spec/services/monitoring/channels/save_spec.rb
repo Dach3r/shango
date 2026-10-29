@@ -18,4 +18,15 @@ RSpec.describe Monitoring::Channels::Save do
     expect(described_class.call(channel: build(:notification_channel), attributes: { target: "" })).to have_attributes(error: :invalid)
     expect(described_class.call(channel: create(:notification_channel, :email), attributes: { target: "" })).to have_attributes(error: :invalid)
   end
+
+  it "records creations and real changes", :aggregate_failures do
+    actor = create(:user)
+    created = build(:notification_channel, name: "Ops")
+
+    expect { described_class.call(channel: created, attributes: {}, actor:) }.to change(AuditEvent, :count).by(1)
+    expect(AuditEvent.recent.first).to have_attributes(kind: "channel_created", actor:, metadata: include("name" => "Ops"))
+    expect { described_class.call(channel: created, attributes: { name: "Ops", target: "" }, actor:) }.not_to change(AuditEvent, :count)
+    expect { described_class.call(channel: created, attributes: { enabled: false }, actor:) }.to change(AuditEvent, :count).by(1)
+    expect(AuditEvent.recent.first.kind).to eq("channel_updated")
+  end
 end

@@ -25,7 +25,7 @@ module Monitoring
     def create
       @channel = current_project.notification_channels.new(kind: params.dig(:notification_channel, :kind).presence_in(kinds), creator: current_user)
       authorize @channel
-      return render(:new, status: :unprocessable_content) unless Monitoring::Channels::Save.call(channel: @channel, attributes: channel_params).success?
+      return render(:new, status: :unprocessable_content) unless Monitoring::Channels::Save.call(channel: @channel, attributes: channel_params, actor: current_user).success?
 
       session[REVEAL] = @channel.id if @channel.webhook?
       redirect_to monitoring_channels_path, notice: t(".created"), status: :see_other
@@ -33,14 +33,14 @@ module Monitoring
 
     def update
       authorize @channel
-      return render(:edit, status: :unprocessable_content) unless Monitoring::Channels::Save.call(channel: @channel, attributes: channel_params).success?
+      return render(:edit, status: :unprocessable_content) unless Monitoring::Channels::Save.call(channel: @channel, attributes: channel_params, actor: current_user).success?
 
       redirect_to monitoring_channels_path, notice: t(".updated"), status: :see_other
     end
 
     def destroy
       authorize @channel
-      @channel.destroy!
+      Monitoring::Channels::Destroy.call(channel: @channel, actor: current_user)
       redirect_to monitoring_channels_path, notice: t(".destroyed"), status: :see_other
     end
 

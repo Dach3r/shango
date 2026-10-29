@@ -5,8 +5,9 @@ module Monitoring
     class Pause
       include Serviceable
 
-      def initialize(monitor:, at: Time.current)
+      def initialize(monitor:, actor: nil, at: Time.current)
         @monitor = monitor
+        @actor = actor
         @at = at
       end
 
@@ -17,6 +18,7 @@ module Monitoring
           @monitor.incidents.open.find_each { |incident| incident.update!(resolved_at: @at, resolution: "paused") }
           @monitor.update!(enabled: false, failures: 0)
         end
+        AuditEvents::Record.call(project: @monitor.project, kind: :monitor_paused, actor: @actor, name: @monitor.name)
         Result.success(@monitor)
       end
     end

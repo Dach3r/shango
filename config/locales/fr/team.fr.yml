@@ -63,7 +63,7 @@ fr:
       index:
         title: Activité
         heading: Activité
-        description: Qui a modifié l'équipe de %{project}.
+        description: "Qui a modifié l’équipe, les moniteurs et les canaux d’alerte de %{project}."
         empty: Rien ne s'est encore passé.
         someone: un ancien membre
         pagination: Pages
@@ -77,6 +77,14 @@ fr:
           member_revoked: "%{actor} a retiré %{target}."
           member_left: "%{actor} a quitté le projet."
           ownership_transferred: "%{actor} a transféré le projet à %{target}."
+          monitor_created: "%{actor} a créé le moniteur %{name}."
+          monitor_updated: "%{actor} a modifié le moniteur %{name}."
+          monitor_deleted: "%{actor} a supprimé le moniteur %{name}."
+          monitor_paused: "%{actor} a mis en pause le moniteur %{name}."
+          monitor_resumed: "%{actor} a repris le moniteur %{name}."
+          channel_created: "%{actor} a créé le canal d’alerte %{name}."
+          channel_updated: "%{actor} a modifié le canal d’alerte %{name}."
+          channel_deleted: "%{actor} a supprimé le canal d’alerte %{name}."
     leaves:
       create:
         left: Vous avez quitté %{project}.
