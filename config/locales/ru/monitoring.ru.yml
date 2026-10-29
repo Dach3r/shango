@@ -1,0 +1,29 @@
+ru:
+  activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            kind:
+              immutable: "нельзя изменить после создания монитора"
+            base:
+              project_limit: "В этом проекте уже %{count} мониторов — это максимум."
+              total_limit: "В этой установке уже %{count} мониторов — это максимум."
+    attributes:
+      uptime_monitor:
+        name: "Название"
+        kind: "Тип"
+        interval: "Интервал"
+        timeout: "Тайм-аут"
+        confirmations: "Подтверждения"
+        mode: "Цель"
+        url: "URL"
+        http_method: "Метод"
+        expected_statuses: "Ожидаемые статусы"
+        max_response_ms: "Предел времени ответа (мс)"
+        host: "Хост"
+        port: "Порт"
+        days_before: "Дней до истечения"
+        grace: "Льготный период"
+        environment: "Окружение"
+        api_request: "Сохранённый запрос"

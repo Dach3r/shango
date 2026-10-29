@@ -1,0 +1,29 @@
+zh-CN:
+  activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            kind:
+              immutable: "创建监控后不能更改"
+            base:
+              project_limit: "此项目已有 %{count} 个监控，已达上限。"
+              total_limit: "此安装已有 %{count} 个监控，已达上限。"
+    attributes:
+      uptime_monitor:
+        name: "名称"
+        kind: "类型"
+        interval: "间隔"
+        timeout: "超时"
+        confirmations: "确认次数"
+        mode: "目标"
+        url: "URL"
+        http_method: "方法"
+        expected_statuses: "期望状态码"
+        max_response_ms: "响应时间上限 (ms)"
+        host: "主机"
+        port: "端口"
+        days_before: "到期前天数"
+        grace: "宽限期"
+        environment: "环境"
+        api_request: "已保存的请求"

@@ -1,0 +1,29 @@
+hi:
+  activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            kind:
+              immutable: "मॉनिटर बनने के बाद बदला नहीं जा सकता"
+            base:
+              project_limit: "इस प्रोजेक्ट में पहले से %{count} मॉनिटर हैं, जो अधिकतम सीमा है।"
+              total_limit: "इस इंस्टॉलेशन में पहले से %{count} मॉनिटर हैं, जो अधिकतम सीमा है।"
+    attributes:
+      uptime_monitor:
+        name: "नाम"
+        kind: "प्रकार"
+        interval: "अंतराल"
+        timeout: "टाइमआउट"
+        confirmations: "पुष्टियाँ"
+        mode: "लक्ष्य"
+        url: "URL"
+        http_method: "मेथड"
+        expected_statuses: "अपेक्षित स्टेटस"
+        max_response_ms: "रिस्पॉन्स समय सीमा (ms)"
+        host: "होस्ट"
+        port: "पोर्ट"
+        days_before: "समाप्ति से पहले के दिन"
+        grace: "छूट अवधि"
+        environment: "एनवायरनमेंट"
+        api_request: "सहेजा गया अनुरोध"

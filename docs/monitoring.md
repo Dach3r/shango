@@ -1,6 +1,6 @@
 # Shango — Monitoring
 
-> Design and reference for the Monitoring module. **Status: designed, not built.** Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
+> Design and reference for the Monitoring module. **Status: in progress** — the models exist (step 2 of §12: `UptimeMonitor`, `CheckResult`, `CheckRollup`, `Incident`, `UptimeMonitorPolicy`; locale file `config/locales/<locale>/monitoring.<locale>.yml`); nothing runs checks yet and the *Monitoring* entry stays disabled. Built one step at a time (§12); check the code for the real state. Product context: [`product.md`](product.md) §9 (*Monitoring*, *Notifications*). Technical conventions: [`architecture.md`](architecture.md). It reuses the outbound guard of the API Client ([`api-client.md`](api-client.md) §6) and the probes of [`network-tools.md`](network-tools.md).
 
 ## 1. Goal
 
@@ -95,7 +95,7 @@ The product calls them *monitors*; the model is **`UptimeMonitor`** because Ruby
 | `MonitorChannel` (`monitor_channels`) | `uptime_monitor_id` (cascade), `notification_channel_id` (cascade) | Unique pair |
 | `NotificationDelivery` (`notification_deliveries`) | `notification_channel_id` (cascade), `incident_id` (cascade, null for tests), `event` (`incident_opened`, `incident_resolved`, `test`), `status` (`pending`, `sent`, `failed`), `attempts`, `error`, `sent_at` | Unique `[notification_channel_id, incident_id, event]`: one delivery per channel and transition. Pruned with the results |
 
-Large child tables use database-level `ON DELETE CASCADE`, not `dependent: :destroy`, so deleting a monitor with tens of thousands of results is one statement. All enums are string-backed with a `CHECK` constraint; one `create_table` per migration, referenced tables first. All reads go through `current_project`; jobs load by id and every record carries its project.
+Large child tables use database-level `ON DELETE CASCADE`, and the models declare `dependent: :delete_all` (never `:destroy`), so deleting a monitor with tens of thousands of results is one statement and never instantiates them. Settings outside the monitor's kind are dropped on save, numbers are cast, and the defaults of the kind are filled in (`UptimeMonitor::DEFAULTS`). `config_version` is bumped only when `enabled`, `interval`, `timeout`, `confirmations`, `settings`, `environment_id` or `api_request_id` change, never by the state updates of a check. All enums are string-backed with a `CHECK` constraint; one `create_table` per migration, referenced tables first. All reads go through `current_project`; jobs load by id and every record carries its project.
 
 ## 6. Notifications
 

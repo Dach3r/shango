@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_113657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -82,6 +82,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
     t.index ["project_id", "created_at"], name: "index_audit_events_on_project_id_and_created_at"
     t.index ["target_id"], name: "index_audit_events_on_target_id"
     t.check_constraint "kind::text = ANY (ARRAY['member_invited'::character varying::text, 'invitation_accepted'::character varying::text, 'invitation_revoked'::character varying::text, 'role_changed'::character varying::text, 'member_revoked'::character varying::text, 'member_left'::character varying::text, 'ownership_transferred'::character varying::text])", name: "audit_events_kind_check"
+  end
+
+  create_table "check_results", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "uptime_monitor_id", null: false
+    t.string "status", null: false
+    t.integer "response_ms"
+    t.integer "http_status"
+    t.string "error"
+    t.string "detail"
+    t.jsonb "timings", default: {}, null: false
+    t.datetime "checked_at", null: false
+    t.index ["checked_at"], name: "index_check_results_on_checked_at", using: :brin
+    t.index ["uptime_monitor_id", "checked_at"], name: "index_check_results_on_uptime_monitor_id_and_checked_at"
+    t.check_constraint "status::text = ANY (ARRAY['up'::character varying, 'down'::character varying, 'unknown'::character varying]::text[])", name: "check_results_status_check"
+  end
+
+  create_table "check_rollups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "uptime_monitor_id", null: false
+    t.datetime "hour", null: false
+    t.integer "checks", default: 0, null: false
+    t.integer "failures", default: 0, null: false
+    t.bigint "response_ms_sum", default: 0, null: false
+    t.integer "response_ms_max", default: 0, null: false
+    t.index ["hour"], name: "index_check_rollups_on_hour"
+    t.index ["uptime_monitor_id", "hour"], name: "index_check_rollups_on_uptime_monitor_id_and_hour", unique: true
   end
 
   create_table "collection_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -165,6 +190,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
     t.index ["parent_id"], name: "index_folders_on_parent_id"
   end
 
+  create_table "incidents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "uptime_monitor_id", null: false
+    t.string "cause", null: false
+    t.string "detail"
+    t.datetime "started_at", null: false
+    t.datetime "resolved_at"
+    t.string "resolution"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_incidents_on_project_id"
+    t.index ["uptime_monitor_id", "started_at"], name: "index_incidents_on_uptime_monitor_id_and_started_at"
+    t.index ["uptime_monitor_id"], name: "index_incidents_on_open_uptime_monitor", unique: true, where: "(resolved_at IS NULL)"
+    t.check_constraint "resolution::text = ANY (ARRAY['recovered'::character varying, 'paused'::character varying]::text[])", name: "incidents_resolution_check"
+  end
+
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "inviter_id"
@@ -239,7 +280,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
     t.index ["project_id", "kind", "created_at"], name: "index_network_checks_on_project_id_and_kind_and_created_at"
     t.index ["project_id", "kind", "target", "created_at"], name: "index_network_checks_on_project_kind_target_and_created_at"
     t.index ["user_id"], name: "index_network_checks_on_user_id"
-    t.check_constraint "kind::text = ANY (ARRAY['dns'::character varying, 'ports'::character varying, 'ping'::character varying, 'subnet'::character varying, 'tls'::character varying, 'email'::character varying, 'lookup'::character varying]::text[])", name: "network_checks_kind_check"
+    t.check_constraint "kind::text = ANY (ARRAY['dns'::character varying::text, 'ports'::character varying::text, 'ping'::character varying::text, 'subnet'::character varying::text, 'tls'::character varying::text, 'email'::character varying::text, 'lookup'::character varying::text])", name: "network_checks_kind_check"
     t.check_constraint "outcome::text = ANY (ARRAY['ok'::character varying::text, 'warn'::character varying::text, 'bad'::character varying::text])", name: "network_checks_outcome_check"
   end
 
@@ -315,6 +356,39 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
     t.check_constraint "(api_request_id IS NULL) <> (request_draft_id IS NULL)", name: "request_tabs_target_check"
   end
 
+  create_table "uptime_monitors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "creator_id"
+    t.uuid "environment_id"
+    t.uuid "api_request_id"
+    t.string "name", null: false
+    t.string "kind", default: "http", null: false
+    t.boolean "enabled", default: true, null: false
+    t.boolean "environment_required", default: false, null: false
+    t.integer "interval", default: 300, null: false
+    t.integer "timeout", default: 10, null: false
+    t.integer "confirmations", default: 2, null: false
+    t.jsonb "settings", default: {}, null: false
+    t.string "push_token_digest"
+    t.string "status", default: "pending", null: false
+    t.integer "failures", default: 0, null: false
+    t.integer "config_version", default: 0, null: false
+    t.datetime "next_check_at"
+    t.datetime "last_checked_at"
+    t.datetime "last_pinged_at"
+    t.datetime "last_status_change_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_request_id"], name: "index_uptime_monitors_on_api_request_id"
+    t.index ["creator_id"], name: "index_uptime_monitors_on_creator_id"
+    t.index ["environment_id"], name: "index_uptime_monitors_on_environment_id"
+    t.index ["next_check_at"], name: "index_uptime_monitors_on_next_check_at", where: "enabled"
+    t.index ["project_id", "status"], name: "index_uptime_monitors_on_project_id_and_status"
+    t.index ["push_token_digest"], name: "index_uptime_monitors_on_push_token_digest", unique: true, where: "(push_token_digest IS NOT NULL)"
+    t.check_constraint "kind::text = ANY (ARRAY['http'::character varying, 'tcp'::character varying, 'ssl'::character varying, 'domain'::character varying, 'push'::character varying]::text[])", name: "uptime_monitors_kind_check"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'up'::character varying, 'down'::character varying]::text[])", name: "uptime_monitors_status_check"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -366,6 +440,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
   add_foreign_key "audit_events", "projects"
   add_foreign_key "audit_events", "users", column: "actor_id", on_delete: :nullify
   add_foreign_key "audit_events", "users", column: "target_id", on_delete: :nullify
+  add_foreign_key "check_results", "uptime_monitors", on_delete: :cascade
+  add_foreign_key "check_rollups", "uptime_monitors", on_delete: :cascade
   add_foreign_key "collection_exports", "collections", on_delete: :cascade
   add_foreign_key "collection_exports", "projects", on_delete: :cascade
   add_foreign_key "collection_exports", "users", on_delete: :cascade
@@ -377,6 +453,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
   add_foreign_key "environments", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "folders", "collections"
   add_foreign_key "folders", "folders", column: "parent_id"
+  add_foreign_key "incidents", "projects", on_delete: :cascade
+  add_foreign_key "incidents", "uptime_monitors", on_delete: :cascade
   add_foreign_key "invitations", "projects"
   add_foreign_key "invitations", "users", column: "inviter_id", on_delete: :nullify
   add_foreign_key "latest_executions", "api_requests", on_delete: :cascade
@@ -399,6 +477,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_204543) do
   add_foreign_key "request_tabs", "api_requests", on_delete: :cascade
   add_foreign_key "request_tabs", "request_drafts", on_delete: :cascade
   add_foreign_key "request_tabs", "users", on_delete: :cascade
+  add_foreign_key "uptime_monitors", "api_requests", on_delete: :nullify
+  add_foreign_key "uptime_monitors", "environments", on_delete: :nullify
+  add_foreign_key "uptime_monitors", "projects", on_delete: :cascade
+  add_foreign_key "uptime_monitors", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "users", "memberships", column: "current_membership_id", on_delete: :nullify
   add_foreign_key "variables", "environments"
 end

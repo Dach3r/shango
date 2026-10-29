@@ -1,0 +1,29 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            kind:
+              immutable: "モニターの作成後は変更できません"
+            base:
+              project_limit: "このプロジェクトにはすでに上限の %{count} 件のモニターがあります。"
+              total_limit: "このインストールにはすでに上限の %{count} 件のモニターがあります。"
+    attributes:
+      uptime_monitor:
+        name: "名前"
+        kind: "種類"
+        interval: "間隔"
+        timeout: "タイムアウト"
+        confirmations: "確認回数"
+        mode: "対象"
+        url: "URL"
+        http_method: "メソッド"
+        expected_statuses: "期待するステータス"
+        max_response_ms: "応答時間の上限 (ms)"
+        host: "ホスト"
+        port: "ポート"
+        days_before: "期限までの日数"
+        grace: "猶予期間"
+        environment: "環境"
+        api_request: "保存済みリクエスト"

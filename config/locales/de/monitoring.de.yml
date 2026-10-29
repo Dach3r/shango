@@ -1,0 +1,29 @@
+de:
+  activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            kind:
+              immutable: "kann nach dem Anlegen des Monitors nicht geändert werden"
+            base:
+              project_limit: "Dieses Projekt hat bereits %{count} Monitore, das Maximum."
+              total_limit: "Diese Installation hat bereits %{count} Monitore, das Maximum."
+    attributes:
+      uptime_monitor:
+        name: "Name"
+        kind: "Art"
+        interval: "Intervall"
+        timeout: "Timeout"
+        confirmations: "Bestätigungen"
+        mode: "Ziel"
+        url: "URL"
+        http_method: "Methode"
+        expected_statuses: "Erwartete Statuscodes"
+        max_response_ms: "Grenze der Antwortzeit (ms)"
+        host: "Host"
+        port: "Port"
+        days_before: "Tage vor Ablauf"
+        grace: "Kulanzzeit"
+        environment: "Umgebung"
+        api_request: "Gespeicherte Anfrage"
