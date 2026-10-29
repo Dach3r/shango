@@ -64,6 +64,32 @@ RSpec.describe Network::Checks::Digest do
     expect(described_class.for(:subnet, outside).tone).to eq("warn")
   end
 
+  describe "TLS" do
+    def tls(validity: "valid", tones: [])
+      data = build(:network_check, :tls).result.deep_symbolize_keys
+      data[:certificate][:validity] = validity
+      described_class.for(:tls, data.merge(findings: tones.map { |tone| { key: "expired", tone:, args: {} } }))
+    end
+
+    it "labels a TLS check with host and port and its expiry", :aggregate_failures do
+      digest = tls
+
+      expect(digest).to have_attributes(label: "example.com:443", tone: "ok", key: "network.tls.summary.valid", progress: nil)
+      expect(digest.args).to eq(date: "2026-11-30", version: "TLSv1.3")
+    end
+
+    it "takes the tone of the worst finding", :aggregate_failures do
+      expect(tls(tones: %w[warn]).tone).to eq("warn")
+      expect(tls(tones: %w[warn bad]).tone).to eq("bad")
+    end
+
+    it "words the summary after the validity", :aggregate_failures do
+      expect(tls(validity: "expiring").key).to eq("network.tls.summary.valid")
+      expect(tls(validity: "expired").key).to eq("network.tls.summary.expired")
+      expect(tls(validity: "not_yet_valid")).to have_attributes(key: "network.tls.summary.not_yet_valid", args: include(date: "2026-09-01"))
+    end
+  end
+
   it "has a digest for every kind and none for unknown ones", :aggregate_failures do
     expect(described_class::KINDS.keys).to match_array(NetworkCheck.kinds.keys)
     expect { described_class.for("nmap", {}) }.to raise_error(KeyError)

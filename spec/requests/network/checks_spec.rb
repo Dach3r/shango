@@ -53,6 +53,15 @@ RSpec.describe "Network checks" do
       expect(response.body).to include(I18n.t("network.subnet.summary", version: 4, hosts: 254))
     end
 
+    it "shows a saved TLS check with what was typed, ready to run again", :aggregate_failures do
+      tls = create(:network_check, :tls, project:, user:, input: { "host" => "example.com", "port" => "", "protocol" => "smtp" })
+      get network_check_path(tls)
+
+      expect(response.body).to include("tls_result", "Shango Test Root", "www.example.com", "AB:CD:EF", I18n.t("network.tls.no_findings"), I18n.t("network.statuses.trusted"))
+      expect(response.body).to include(%(action="#{network_tls_checks_path}"), 'value="example.com"', 'placeholder="587"')
+      expect(response.body).to include(I18n.t("network.tls.summary.valid", date: "2026-11-30", version: "TLSv1.3"))
+    end
+
     it "shows saved port checks and pings in their own tool", :aggregate_failures do
       ports = create(:network_check, :ports, project:, user:)
       get network_check_path(ports)

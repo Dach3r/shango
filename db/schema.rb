@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_190133) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_194945) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -239,7 +239,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_190133) do
     t.index ["project_id", "kind", "created_at"], name: "index_network_checks_on_project_id_and_kind_and_created_at"
     t.index ["project_id", "kind", "target", "created_at"], name: "index_network_checks_on_project_kind_target_and_created_at"
     t.index ["user_id"], name: "index_network_checks_on_user_id"
-    t.check_constraint "kind::text = ANY (ARRAY['dns'::character varying, 'ports'::character varying, 'ping'::character varying, 'subnet'::character varying]::text[])", name: "network_checks_kind_check"
+    t.check_constraint "kind::text = ANY (ARRAY['dns'::character varying, 'ports'::character varying, 'ping'::character varying, 'subnet'::character varying, 'tls'::character varying]::text[])", name: "network_checks_kind_check"
     t.check_constraint "outcome::text = ANY (ARRAY['ok'::character varying::text, 'warn'::character varying::text, 'bad'::character varying::text])", name: "network_checks_outcome_check"
   end
 

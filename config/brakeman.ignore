@@ -1,0 +1,28 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SSL Verification Bypass",
+      "warning_code": 71,
+      "fingerprint": "3577f81ae68e0a080fb9e5e1acb493e9ef2f77691d75ed58a65431da95d6d17a",
+      "check_name": "SSLVerify",
+      "message": "SSL certificate verification was bypassed",
+      "file": "app/services/network/tls/handshake.rb",
+      "line": 43,
+      "link": "https://brakemanscanner.org/docs/warning_types/ssl_verification_bypass/",
+      "code": "context.verify_mode = OpenSSL::SSL::VERIFY_NONE",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Network::Tls::Handshake",
+        "method": "self.context"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        295
+      ],
+      "note": "The TLS certificate tool inspects certificates instead of trusting them: the handshake must accept any certificate so a bad one is reported, and trust is verified by hand in Network::Tls::Trust. No data is sent over this connection."
+    }
+  ],
+  "brakeman_version": "8.1.0"
+}

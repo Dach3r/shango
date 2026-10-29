@@ -5,12 +5,14 @@ ja:
       connectivity: 接続
       dns: DNS
       utilities: "ユーティリティ"
+      security: "セキュリティ"
     tabs:
       label: ネットワークツール
       dns: DNS
       ports: ポート
       ping: Ping
       subnet: "サブネット計算"
+      tls: "TLS 証明書"
     errors:
       blank: ドメインまたはホストを入力してください。
       invalid: "ホスト名またはIPアドレスが正しくありません。スキーム、パス、ポートを含めず、名前のみを入力してください。"
@@ -29,6 +31,12 @@ ja:
       invalid_network: "「%{token}」は有効なネットワークではありません。プレフィックス付きのアドレス (192.168.1.0/24、2001:db8::/48) かマスク付き (192.168.1.0 255.255.255.0) で入力してください。"
       invalid_split: "/%{min} から /%{max} のプレフィックスで分割してください。"
       invalid_ip: "「%{token}」は有効な IP アドレスではありません。"
+      invalid_protocol: "対応しているプロトコルを選択してください。"
+      connection_refused: "ホストが接続を拒否しました。そのポートでは何も待ち受けていません。"
+      connection_timeout: "ホストが時間内に応答しませんでした。ファイアウォールがパケットを破棄している可能性があります。"
+      handshake_failed: "TLS ハンドシェイクに失敗しました（%{detail}）。ポートが TLS を話さないか、STARTTLS が必要な可能性があります。"
+      starttls_refused: "サーバーが STARTTLS を提供しなかったか、受け付けませんでした。プロトコルとポートを確認してください。"
+      no_certificate: "サーバーが証明書を提示しませんでした。"
     statuses:
       ok: 応答あり
       cname: エイリアス
@@ -50,6 +58,12 @@ ja:
       filtered: フィルタ済み
       inside: "含まれる"
       outside: "含まれない"
+      trusted: "信頼済み"
+      untrusted: "信頼されていない"
+      valid: "有効"
+      expiring: "期限間近"
+      expired: "期限切れ"
+      not_yet_valid: "まだ有効でない"
     dns:
       domain: ドメイン
       hint: "DNS の応答は権威ネームサーバーと複数のパブリックリゾルバーから返されるため、変更が反映されたかどうかを確認できます。 PTR では IP アドレスを入力してください。各名前が同じ IP に正引きされるかも確認します。"
@@ -137,6 +151,61 @@ ja:
       split_title: "/%{prefix} のサブネット %{count} 個"
       split_truncated: "%{count} 個のうち最初の %{shown} 個を表示しています。"
       summary: "IPv%{version} · 利用可能なホスト %{hosts}"
+    tls:
+      host: ホスト
+      host_placeholder: "example.com、203.0.113.10 または {{host}}"
+      port: ポート
+      protocol: "プロトコル"
+      protocols:
+        tls: "直接 TLS"
+        smtp: "STARTTLS · SMTP"
+        imap: "STARTTLS · IMAP"
+        pop3: "STARTTLS · POP3"
+      submit: "証明書を確認"
+      hint: "ホストに接続し、提示された証明書を確認します：信頼できるチェーン、ホスト名、日付、鍵、プロトコル。問題のある証明書はエラーにせず、何が問題かを表示します。ポートを空欄にするとプロトコルの標準ポートを使います。587、143、110 のメールサーバーには STARTTLS が必要です。"
+      summary:
+        valid: "%{date} に期限切れ · %{version}"
+        expired: "%{date} に期限切れ済み · %{version}"
+        not_yet_valid: "%{date} から有効 · %{version}"
+      trust: "チェーン"
+      hostname: "ホスト名"
+      days_left: "残り日数"
+      findings_title: "検出事項"
+      no_findings: "問題は見つかりませんでした。"
+      findings:
+        expired: "証明書は %{date} に期限切れになりました。"
+        not_yet_valid: "証明書は %{date} まで有効になりません。"
+        expiring: "証明書は %{date} に期限切れになります。早めに更新してください。"
+        name_mismatch: "証明書は %{host} をカバーしていません。"
+        untrusted:
+          self_signed: "証明書は自己署名のため、既定ではどのクライアントも信頼しません。"
+          untrusted_root: "チェーンが信頼されていないルートで終わっています。"
+          unknown_issuer: "チェーンが信頼済みルートに届きません。中間証明書が欠けているか、発行者が不明です。"
+          other: "チェーンを検証できませんでした（OpenSSL エラー %{code}）。"
+        old_protocol: "サーバーは非推奨の %{version} をネゴシエートしました。TLS 1.2 または 1.3 を有効にしてください。"
+        weak_key: "%{type} 鍵は %{bits} ビットしかありません。"
+        weak_signature: "証明書は安全でなくなった %{algorithm} で署名されています。"
+      certificate_title: "証明書"
+      fields:
+        subject: "サブジェクト"
+        issuer: "発行者"
+        not_before: "有効期間の開始"
+        not_after: "有効期間の終了"
+        key: "鍵"
+        signature: "署名"
+        serial: "シリアル番号"
+        sha256: "SHA-256 フィンガープリント"
+      names_title: "名前（%{total}）"
+      names_truncated: "%{total} 件中、最初の %{shown} 件を表示しています。"
+      connection_title: "接続"
+      connection:
+        version: "プロトコル"
+        cipher: "暗号スイート"
+        alpn: "ALPN"
+        sni: "SNI"
+      chain_title: "サーバーが送信したチェーン"
+      issued_by: "発行者：%{issuer}"
+      self_signed: "自己署名"
     empty:
       dns:
         title: "表示する内容はまだありません"
@@ -150,6 +219,9 @@ ja:
       subnet:
         title: "表示する内容はまだありません"
         hint: "192.168.1.0/24 のようにネットワークを入力すると範囲が表示されます。"
+      tls:
+        title: "まだ表示するものがありません"
+        hint: "ホストを入力して TLS 証明書を確認してください。"
     history:
       dns: "DNS チェック"
       ports: "ポートチェック"
@@ -162,6 +234,7 @@ ja:
       confirm_clear: "このツールのプロジェクトの履歴をすべて削除しますか？"
       confirm_delete: "この実行を削除しますか？"
       previous: "前回の実行（%{time}前）: %{detail}"
+      tls: "TLS 証明書"
     guide:
       title: "結果の見方"
       ok: "サーバーがレコードを返しました。"
@@ -175,6 +248,11 @@ ja:
       filtered: "応答なし。ファイアウォールがパケットを破棄している可能性があります。"
       inside: "このアドレスはこのネットワークに属しています。"
       outside: "このアドレスはネットワーク外か、別の IP バージョンです。"
+      trusted: "チェーンがブラウザやシステムの信頼するルートにつながっています。"
+      untrusted: "信頼できるチェーンがありません：自己署名、不明なルート、または中間証明書の欠落。"
+      valid: "有効期間内です。"
+      expiring: "期限が近づいています。すでに更新されているべき時期です。"
+      expired: "有効期限を過ぎており、クライアントは拒否します。"
     limits:
       about: "概要"
     results:

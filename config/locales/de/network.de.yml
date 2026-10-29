@@ -5,12 +5,14 @@ de:
       connectivity: Konnektivität
       dns: DNS
       utilities: "Werkzeuge"
+      security: "Sicherheit"
     tabs:
       label: Netzwerk-Tools
       dns: DNS
       ports: Ports
       ping: Ping
       subnet: "Subnetzrechner"
+      tls: "TLS-Zertifikat"
     errors:
       blank: Gib eine Domain oder einen Host ein.
       invalid: "Das ist kein gültiger Hostname und keine gültige IP-Adresse. Verwende nur den Namen, ohne Schema, Pfad oder Port."
@@ -29,6 +31,12 @@ de:
       invalid_network: "„%{token}“ ist kein gültiges Netz. Verwende eine Adresse mit Präfix (192.168.1.0/24, 2001:db8::/48) oder mit Maske (192.168.1.0 255.255.255.0)."
       invalid_split: "Teile in ein Präfix von /%{min} bis /%{max}."
       invalid_ip: "„%{token}“ ist keine gültige IP-Adresse."
+      invalid_protocol: "Wähle ein unterstütztes Protokoll."
+      connection_refused: "Der Host hat die Verbindung abgelehnt: Auf diesem Port lauscht nichts."
+      connection_timeout: "Der Host hat nicht rechtzeitig geantwortet. Eine Firewall verwirft möglicherweise die Pakete."
+      handshake_failed: "Der TLS-Handshake ist fehlgeschlagen (%{detail}). Der Port spricht vielleicht kein TLS oder braucht STARTTLS."
+      starttls_refused: "Der Server hat STARTTLS nicht angeboten oder nicht angenommen. Prüfe Protokoll und Port."
+      no_certificate: "Der Server hat kein Zertifikat vorgelegt."
     statuses:
       ok: Antwortet
       cname: Alias
@@ -50,6 +58,12 @@ de:
       filtered: Gefiltert
       inside: "Enthalten"
       outside: "Außerhalb"
+      trusted: "Vertrauenswürdig"
+      untrusted: "Nicht vertrauenswürdig"
+      valid: "Gültig"
+      expiring: "Läuft bald ab"
+      expired: "Abgelaufen"
+      not_yet_valid: "Noch nicht gültig"
     dns:
       domain: Domain
       hint: "DNS-Antworten kommen von den autoritativen Nameservern und mehreren öffentlichen Resolvern, damit du siehst, ob sich eine Änderung verbreitet hat. Für PTR gib eine IP-Adresse ein: die Prüfung bestätigt auch, dass jeder Name wieder auf sie auflöst."
@@ -137,6 +151,61 @@ de:
       split_title: "%{count} Subnetze /%{prefix}"
       split_truncated: "Die ersten %{shown} von %{count} werden angezeigt."
       summary: "IPv%{version} · %{hosts} nutzbare Hosts"
+    tls:
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 oder {{host}}
+      port: Port
+      protocol: "Protokoll"
+      protocols:
+        tls: "Direktes TLS"
+        smtp: "STARTTLS · SMTP"
+        imap: "STARTTLS · IMAP"
+        pop3: "STARTTLS · POP3"
+      submit: "Zertifikat prüfen"
+      hint: "Verbindet sich mit dem Host und prüft das vorgelegte Zertifikat: vertrauenswürdige Kette, Hostname, Daten, Schlüssel und Protokoll. Ein fehlerhaftes Zertifikat wird mit seinen Mängeln angezeigt, statt abzubrechen. Lass den Port leer, um den üblichen des Protokolls zu verwenden; Mailserver auf 587, 143 und 110 brauchen STARTTLS."
+      summary:
+        valid: "Läuft ab am %{date} · %{version}"
+        expired: "Abgelaufen am %{date} · %{version}"
+        not_yet_valid: "Gültig ab %{date} · %{version}"
+      trust: "Kette"
+      hostname: "Hostname"
+      days_left: "Verbleibende Tage"
+      findings_title: "Befunde"
+      no_findings: "Keine Probleme gefunden."
+      findings:
+        expired: "Das Zertifikat ist am %{date} abgelaufen."
+        not_yet_valid: "Das Zertifikat ist erst ab %{date} gültig."
+        expiring: "Das Zertifikat läuft am %{date} ab. Erneuere es bald."
+        name_mismatch: "Das Zertifikat deckt %{host} nicht ab."
+        untrusted:
+          self_signed: "Das Zertifikat ist selbstsigniert, daher vertraut ihm standardmäßig kein Client."
+          untrusted_root: "Die Kette endet bei einer Wurzel, der nicht vertraut wird."
+          unknown_issuer: "Die Kette erreicht keine vertrauenswürdige Wurzel: Ein Zwischenzertifikat fehlt oder der Aussteller ist unbekannt."
+          other: "Die Kette konnte nicht geprüft werden (OpenSSL-Fehler %{code})."
+        old_protocol: "Der Server hat %{version} ausgehandelt, das veraltet ist. Aktiviere TLS 1.2 oder 1.3."
+        weak_key: "Der %{type}-Schlüssel hat nur %{bits} Bit."
+        weak_signature: "Das Zertifikat ist mit %{algorithm} signiert, das nicht mehr sicher ist."
+      certificate_title: "Zertifikat"
+      fields:
+        subject: "Inhaber"
+        issuer: "Aussteller"
+        not_before: "Gültig ab"
+        not_after: "Gültig bis"
+        key: "Schlüssel"
+        signature: "Signatur"
+        serial: "Seriennummer"
+        sha256: "SHA-256-Fingerabdruck"
+      names_title: "Namen (%{total})"
+      names_truncated: "Die ersten %{shown} von %{total} werden angezeigt."
+      connection_title: "Verbindung"
+      connection:
+        version: "Protokoll"
+        cipher: "Cipher"
+        alpn: "ALPN"
+        sni: "SNI"
+      chain_title: "Vom Server gesendete Kette"
+      issued_by: "Ausgestellt von %{issuer}"
+      self_signed: "Selbstsigniert"
     empty:
       dns:
         title: "Noch nichts anzuzeigen"
@@ -150,6 +219,9 @@ de:
       subnet:
         title: "Noch nichts anzuzeigen"
         hint: "Gib ein Netz wie 192.168.1.0/24 ein, um seinen Bereich zu sehen."
+      tls:
+        title: "Noch nichts anzuzeigen"
+        hint: "Gib einen Host ein, um sein TLS-Zertifikat zu prüfen."
     history:
       dns: "DNS-Prüfungen"
       ports: "Port-Prüfungen"
@@ -162,6 +234,7 @@ de:
       confirm_clear: "Den gesamten Verlauf dieses Tools für das Projekt löschen?"
       confirm_delete: "Diesen Lauf löschen?"
       previous: "Vorheriger Lauf, vor %{time}: %{detail}"
+      tls: "TLS-Zertifikate"
     guide:
       title: "Ergebnisse lesen"
       ok: "Der Server hat mit Einträgen geantwortet."
@@ -175,6 +248,11 @@ de:
       filtered: "Keine Antwort. Eine Firewall verwirft möglicherweise die Pakete."
       inside: "Die Adresse gehört zu diesem Netz."
       outside: "Die Adresse liegt außerhalb dieses Netzes oder hat die andere IP-Version."
+      trusted: "Die Kette führt zu einer Wurzel, der Browser und Systeme vertrauen."
+      untrusted: "Keine vertrauenswürdige Kette: selbstsigniert, unbekannte Wurzel oder fehlendes Zwischenzertifikat."
+      valid: "Innerhalb seines Gültigkeitszeitraums."
+      expiring: "Kurz vor dem Ablauf: Die Erneuerung hätte schon passieren sollen."
+      expired: "Ablaufdatum überschritten; Clients lehnen es ab."
     limits:
       about: "Info"
     results:

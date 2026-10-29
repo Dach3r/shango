@@ -5,12 +5,14 @@ en:
       connectivity: Connectivity
       dns: DNS
       utilities: "Utilities"
+      security: "Security"
     tabs:
       label: Network tools
       dns: DNS
       ports: Ports
       ping: Ping
       subnet: "Subnet calculator"
+      tls: "TLS certificate"
     errors:
       blank: Enter a domain or host.
       invalid: "That is not a valid host name or IP address. Use only the name, without scheme, path or port."
@@ -29,6 +31,12 @@ en:
       invalid_network: "\"%{token}\" is not a valid network. Use an address with a prefix (192.168.1.0/24, 2001:db8::/48) or with a mask (192.168.1.0 255.255.255.0)."
       invalid_split: "Split into a prefix from /%{min} to /%{max}."
       invalid_ip: "\"%{token}\" is not a valid IP address."
+      invalid_protocol: "Choose a supported protocol."
+      connection_refused: "The host refused the connection: nothing is listening on that port."
+      connection_timeout: "The host did not answer in time. A firewall may be dropping the packets."
+      handshake_failed: "The TLS handshake failed (%{detail}). The port may not speak TLS, or it may need STARTTLS."
+      starttls_refused: "The server did not offer or accept STARTTLS. Check the protocol and the port."
+      no_certificate: "The server did not present a certificate."
     statuses:
       ok: Answered
       cname: Alias
@@ -50,6 +58,12 @@ en:
       filtered: Filtered
       inside: "Inside"
       outside: "Outside"
+      trusted: "Trusted"
+      untrusted: "Untrusted"
+      valid: "Valid"
+      expiring: "Expiring"
+      expired: "Expired"
+      not_yet_valid: "Not yet valid"
     dns:
       domain: Domain
       hint: "DNS answers come from the authoritative nameservers and several public resolvers, so you can tell whether a change has propagated. For PTR, enter an IP address: the check also confirms that each name resolves back to it."
@@ -137,6 +151,61 @@ en:
       split_title: "%{count} subnets of /%{prefix}"
       split_truncated: "Showing the first %{shown} of %{count}."
       summary: "IPv%{version} · %{hosts} usable hosts"
+    tls:
+      host: Host
+      host_placeholder: example.com, 203.0.113.10 or {{host}}
+      port: Port
+      protocol: "Protocol"
+      protocols:
+        tls: "Direct TLS"
+        smtp: "STARTTLS · SMTP"
+        imap: "STARTTLS · IMAP"
+        pop3: "STARTTLS · POP3"
+      submit: "Check certificate"
+      hint: "Connects to the host and checks the certificate it presents: trusted chain, host name, dates, key and protocol. A bad certificate is reported with what is wrong instead of failing. Leave the port empty to use the usual one of the protocol; mail servers on 587, 143 and 110 need STARTTLS."
+      summary:
+        valid: "Expires %{date} · %{version}"
+        expired: "Expired %{date} · %{version}"
+        not_yet_valid: "Valid from %{date} · %{version}"
+      trust: "Chain"
+      hostname: "Host name"
+      days_left: "Days left"
+      findings_title: "Findings"
+      no_findings: "No problems found."
+      findings:
+        expired: "The certificate expired on %{date}."
+        not_yet_valid: "The certificate is not valid until %{date}."
+        expiring: "The certificate expires on %{date}. Renew it soon."
+        name_mismatch: "The certificate does not cover %{host}."
+        untrusted:
+          self_signed: "The certificate is self-signed, so no client trusts it by default."
+          untrusted_root: "The chain ends in a root that is not trusted."
+          unknown_issuer: "The chain does not reach a trusted root: an intermediate certificate is missing or the issuer is unknown."
+          other: "The chain could not be verified (OpenSSL error %{code})."
+        old_protocol: "The server negotiated %{version}, which is deprecated. Enable TLS 1.2 or 1.3."
+        weak_key: "The %{type} key has only %{bits} bits."
+        weak_signature: "The certificate is signed with %{algorithm}, which is no longer secure."
+      certificate_title: "Certificate"
+      fields:
+        subject: "Subject"
+        issuer: "Issuer"
+        not_before: "Valid from"
+        not_after: "Valid until"
+        key: "Key"
+        signature: "Signature"
+        serial: "Serial number"
+        sha256: "SHA-256 fingerprint"
+      names_title: "Names (%{total})"
+      names_truncated: "Showing the first %{shown} of %{total}."
+      connection_title: "Connection"
+      connection:
+        version: "Protocol"
+        cipher: "Cipher"
+        alpn: "ALPN"
+        sni: "SNI"
+      chain_title: "Chain sent by the server"
+      issued_by: "Issued by %{issuer}"
+      self_signed: "Self-signed"
     empty:
       dns:
         title: "Nothing to show yet"
@@ -150,6 +219,9 @@ en:
       subnet:
         title: "Nothing to show yet"
         hint: "Enter a network, such as 192.168.1.0/24, to see its range."
+      tls:
+        title: "Nothing to show yet"
+        hint: "Enter a host to inspect its TLS certificate."
     history:
       dns: "DNS checks"
       ports: "Port checks"
@@ -162,6 +234,7 @@ en:
       confirm_clear: "Delete this tool's whole history for the project?"
       confirm_delete: "Delete this run?"
       previous: "Previous run, %{time} ago: %{detail}"
+      tls: "TLS certificates"
     guide:
       title: "Reading the results"
       ok: "The server answered with records."
@@ -175,6 +248,11 @@ en:
       filtered: "No answer. A firewall may be dropping the packets."
       inside: "The address belongs to this network."
       outside: "The address is outside this network, or is of the other IP version."
+      trusted: "The chain leads to a root that browsers and systems trust."
+      untrusted: "No trusted chain: self-signed, unknown root or a missing intermediate."
+      valid: "Within its validity dates."
+      expiring: "Close to expiry: renewal should already have happened."
+      expired: "Past its expiry date; clients refuse it."
     limits:
       about: "About"
     results:

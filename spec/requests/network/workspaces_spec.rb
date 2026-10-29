@@ -46,6 +46,14 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(I18n.t("network.history.subnet"), I18n.t("network.history.empty"))
     end
 
+    it "renders the TLS check with the usual port of the protocol as placeholder", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("tls")
+
+      expect(response.body).to include(I18n.t("network.tls.submit"), network_tls_checks_path, I18n.t("network.empty.tls.hint"), I18n.t("network.groups.security"), I18n.t("network.history.tls"))
+      expect(response.body).to include('data-controller="tls-protocol variable-autocomplete"', 'data-tls-protocol-target="port"', 'placeholder="443"', I18n.t("network.tls.protocols.smtp"))
+    end
+
     it "has no page for an unknown tool" do
       sign_in_with_project
 

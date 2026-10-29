@@ -5,12 +5,14 @@ zh-CN:
       connectivity: 连通性
       dns: DNS
       utilities: "实用工具"
+      security: "安全"
     tabs:
       label: 网络工具
       dns: DNS
       ports: 端口
       ping: Ping
       subnet: "子网计算器"
+      tls: "TLS 证书"
     errors:
       blank: 请输入域名或主机。
       invalid: "这不是有效的主机名或 IP 地址。只需填写名称，不要包含协议、路径或端口。"
@@ -29,6 +31,12 @@ zh-CN:
       invalid_network: "“%{token}”不是有效的网络。请使用带前缀的地址（192.168.1.0/24、2001:db8::/48）或带掩码的地址（192.168.1.0 255.255.255.0）。"
       invalid_split: "请拆分为 /%{min} 到 /%{max} 的前缀。"
       invalid_ip: "“%{token}”不是有效的 IP 地址。"
+      invalid_protocol: "请选择受支持的协议。"
+      connection_refused: "主机拒绝了连接：该端口上没有服务在监听。"
+      connection_timeout: "主机未及时响应。可能是防火墙丢弃了数据包。"
+      handshake_failed: "TLS 握手失败（%{detail}）。该端口可能不使用 TLS，或者需要 STARTTLS。"
+      starttls_refused: "服务器未提供或未接受 STARTTLS。请检查协议和端口。"
+      no_certificate: "服务器没有出示证书。"
     statuses:
       ok: 已应答
       cname: 别名
@@ -50,6 +58,12 @@ zh-CN:
       filtered: 被过滤
       inside: "在内"
       outside: "在外"
+      trusted: "受信任"
+      untrusted: "不受信任"
+      valid: "有效"
+      expiring: "即将过期"
+      expired: "已过期"
+      not_yet_valid: "尚未生效"
     dns:
       domain: 域名
       hint: "DNS 响应来自权威名称服务器和多个公共解析器，帮助你判断变更是否已生效。 对于 PTR，请输入 IP 地址：检查还会确认每个名称能解析回该地址。"
@@ -137,6 +151,61 @@ zh-CN:
       split_title: "%{count} 个 /%{prefix} 子网"
       split_truncated: "显示 %{count} 个中的前 %{shown} 个。"
       summary: "IPv%{version} · %{hosts} 个可用主机"
+    tls:
+      host: 主机
+      host_placeholder: "example.com、203.0.113.10 或 {{host}}"
+      port: 端口
+      protocol: "协议"
+      protocols:
+        tls: "直接 TLS"
+        smtp: "STARTTLS · SMTP"
+        imap: "STARTTLS · IMAP"
+        pop3: "STARTTLS · POP3"
+      submit: "检查证书"
+      hint: "连接到主机并检查其出示的证书：受信任的证书链、主机名、日期、密钥和协议。有问题的证书会列出问题所在，而不是直接报错。端口留空则使用该协议的默认端口；587、143 和 110 上的邮件服务器需要 STARTTLS。"
+      summary:
+        valid: "%{date} 过期 · %{version}"
+        expired: "已于 %{date} 过期 · %{version}"
+        not_yet_valid: "%{date} 起生效 · %{version}"
+      trust: "证书链"
+      hostname: "主机名"
+      days_left: "剩余天数"
+      findings_title: "发现的问题"
+      no_findings: "未发现问题。"
+      findings:
+        expired: "证书已于 %{date} 过期。"
+        not_yet_valid: "证书在 %{date} 之前无效。"
+        expiring: "证书将于 %{date} 过期。请尽快续期。"
+        name_mismatch: "证书不包含 %{host}。"
+        untrusted:
+          self_signed: "证书是自签名的，默认没有客户端信任它。"
+          untrusted_root: "证书链以不受信任的根证书结尾。"
+          unknown_issuer: "证书链无法到达受信任的根证书：缺少中间证书或签发者未知。"
+          other: "无法验证证书链（OpenSSL 错误 %{code}）。"
+        old_protocol: "服务器协商了已弃用的 %{version}。请启用 TLS 1.2 或 1.3。"
+        weak_key: "%{type} 密钥只有 %{bits} 位。"
+        weak_signature: "证书使用 %{algorithm} 签名，已不再安全。"
+      certificate_title: "证书"
+      fields:
+        subject: "主体"
+        issuer: "签发者"
+        not_before: "生效时间"
+        not_after: "到期时间"
+        key: "密钥"
+        signature: "签名"
+        serial: "序列号"
+        sha256: "SHA-256 指纹"
+      names_title: "名称（%{total}）"
+      names_truncated: "显示 %{total} 个中的前 %{shown} 个。"
+      connection_title: "连接"
+      connection:
+        version: "协议"
+        cipher: "加密套件"
+        alpn: "ALPN"
+        sni: "SNI"
+      chain_title: "服务器发送的证书链"
+      issued_by: "签发者：%{issuer}"
+      self_signed: "自签名"
     empty:
       dns:
         title: "暂无内容可显示"
@@ -150,6 +219,9 @@ zh-CN:
       subnet:
         title: "暂无内容可显示"
         hint: "输入一个网络（例如 192.168.1.0/24）即可查看其范围。"
+      tls:
+        title: "暂无内容"
+        hint: "输入主机以检查其 TLS 证书。"
     history:
       dns: "DNS 检查"
       ports: "端口检查"
@@ -162,6 +234,7 @@ zh-CN:
       confirm_clear: "删除该项目中此工具的全部历史记录？"
       confirm_delete: "删除此次运行？"
       previous: "上一次运行（%{time}前）：%{detail}"
+      tls: "TLS 证书"
     guide:
       title: "如何解读结果"
       ok: "服务器返回了记录。"
@@ -175,6 +248,11 @@ zh-CN:
       filtered: "无响应。防火墙可能正在丢弃数据包。"
       inside: "该地址属于此网络。"
       outside: "该地址不在此网络内，或属于另一个 IP 版本。"
+      trusted: "证书链通向浏览器和系统信任的根证书。"
+      untrusted: "没有受信任的证书链：自签名、未知根证书或缺少中间证书。"
+      valid: "在有效期内。"
+      expiring: "即将过期：本应已经完成续期。"
+      expired: "已超过到期日期；客户端会拒绝它。"
     limits:
       about: "简介"
     results:

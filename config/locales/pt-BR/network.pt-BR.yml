@@ -5,12 +5,14 @@ pt-BR:
       connectivity: Conectividade
       dns: DNS
       utilities: "Utilitários"
+      security: "Segurança"
     tabs:
       label: Ferramentas de rede
       dns: DNS
       ports: Portas
       ping: Ping
       subnet: "Calculadora de sub-redes"
+      tls: "Certificado TLS"
     errors:
       blank: Informe um domínio ou host.
       invalid: "Esse não é um nome de host ou endereço IP válido. Use apenas o nome, sem esquema, caminho ou porta."
@@ -29,6 +31,12 @@ pt-BR:
       invalid_network: "\"%{token}\" não é uma rede válida. Use um endereço com prefixo (192.168.1.0/24, 2001:db8::/48) ou com máscara (192.168.1.0 255.255.255.0)."
       invalid_split: "Divida em um prefixo de /%{min} a /%{max}."
       invalid_ip: "\"%{token}\" não é um endereço IP válido."
+      invalid_protocol: "Escolha um protocolo compatível."
+      connection_refused: "O host recusou a conexão: nada está escutando nessa porta."
+      connection_timeout: "O host não respondeu a tempo. Um firewall pode estar descartando os pacotes."
+      handshake_failed: "O handshake TLS falhou (%{detail}). A porta pode não falar TLS ou pode exigir STARTTLS."
+      starttls_refused: "O servidor não ofereceu nem aceitou STARTTLS. Verifique o protocolo e a porta."
+      no_certificate: "O servidor não apresentou nenhum certificado."
     statuses:
       ok: Respondeu
       cname: Alias
@@ -50,6 +58,12 @@ pt-BR:
       filtered: Filtrada
       inside: "Dentro"
       outside: "Fora"
+      trusted: "Confiável"
+      untrusted: "Não confiável"
+      valid: "Válido"
+      expiring: "Expirando"
+      expired: "Expirado"
+      not_yet_valid: "Ainda não válido"
     dns:
       domain: Domínio
       hint: "As respostas DNS vêm dos nameservers autoritativos e de vários resolvedores públicos, para saber se uma mudança já se propagou. Para PTR, digite um endereço IP: a verificação também confirma que cada nome resolve de volta para ele."
@@ -137,6 +151,61 @@ pt-BR:
       split_title: "%{count} sub-redes /%{prefix}"
       split_truncated: "Mostrando as primeiras %{shown} de %{count}."
       summary: "IPv%{version} · %{hosts} hosts utilizáveis"
+    tls:
+      host: Host
+      host_placeholder: exemplo.com, 203.0.113.10 ou {{host}}
+      port: Porta
+      protocol: "Protocolo"
+      protocols:
+        tls: "TLS direto"
+        smtp: "STARTTLS · SMTP"
+        imap: "STARTTLS · IMAP"
+        pop3: "STARTTLS · POP3"
+      submit: "Verificar certificado"
+      hint: "Conecta ao host e verifica o certificado que ele apresenta: cadeia confiável, nome do host, datas, chave e protocolo. Um certificado ruim é mostrado com o que está errado em vez de falhar. Deixe a porta vazia para usar a habitual do protocolo; servidores de e-mail em 587, 143 e 110 precisam de STARTTLS."
+      summary:
+        valid: "Expira em %{date} · %{version}"
+        expired: "Expirou em %{date} · %{version}"
+        not_yet_valid: "Válido a partir de %{date} · %{version}"
+      trust: "Cadeia"
+      hostname: "Nome do host"
+      days_left: "Dias restantes"
+      findings_title: "Achados"
+      no_findings: "Nenhum problema encontrado."
+      findings:
+        expired: "O certificado expirou em %{date}."
+        not_yet_valid: "O certificado só é válido a partir de %{date}."
+        expiring: "O certificado expira em %{date}. Renove-o em breve."
+        name_mismatch: "O certificado não cobre %{host}."
+        untrusted:
+          self_signed: "O certificado é autoassinado, então nenhum cliente confia nele por padrão."
+          untrusted_root: "A cadeia termina em uma raiz que não é confiável."
+          unknown_issuer: "A cadeia não chega a uma raiz confiável: falta um certificado intermediário ou o emissor é desconhecido."
+          other: "Não foi possível verificar a cadeia (erro do OpenSSL %{code})."
+        old_protocol: "O servidor negociou %{version}, que está obsoleto. Habilite TLS 1.2 ou 1.3."
+        weak_key: "A chave %{type} tem apenas %{bits} bits."
+        weak_signature: "O certificado é assinado com %{algorithm}, que não é mais seguro."
+      certificate_title: "Certificado"
+      fields:
+        subject: "Titular"
+        issuer: "Emissor"
+        not_before: "Válido desde"
+        not_after: "Válido até"
+        key: "Chave"
+        signature: "Assinatura"
+        serial: "Número de série"
+        sha256: "Impressão digital SHA-256"
+      names_title: "Nomes (%{total})"
+      names_truncated: "Mostrando os primeiros %{shown} de %{total}."
+      connection_title: "Conexão"
+      connection:
+        version: "Protocolo"
+        cipher: "Cifra"
+        alpn: "ALPN"
+        sni: "SNI"
+      chain_title: "Cadeia enviada pelo servidor"
+      issued_by: "Emitido por %{issuer}"
+      self_signed: "Autoassinado"
     empty:
       dns:
         title: "Ainda não há nada para mostrar"
@@ -150,6 +219,9 @@ pt-BR:
       subnet:
         title: "Ainda não há nada para mostrar"
         hint: "Digite uma rede, como 192.168.1.0/24, para ver seu intervalo."
+      tls:
+        title: "Nada para mostrar ainda"
+        hint: "Digite um host para inspecionar o certificado TLS."
     history:
       dns: "Verificações de DNS"
       ports: "Verificações de portas"
@@ -162,6 +234,7 @@ pt-BR:
       confirm_clear: "Excluir todo o histórico desta ferramenta do projeto?"
       confirm_delete: "Excluir esta execução?"
       previous: "Execução anterior, há %{time}: %{detail}"
+      tls: "Certificados TLS"
     guide:
       title: "Como ler os resultados"
       ok: "O servidor respondeu com registros."
@@ -175,6 +248,11 @@ pt-BR:
       filtered: "Sem resposta. Um firewall pode estar descartando os pacotes."
       inside: "O endereço pertence a esta rede."
       outside: "O endereço está fora desta rede, ou é da outra versão de IP."
+      trusted: "A cadeia leva a uma raiz em que navegadores e sistemas confiam."
+      untrusted: "Sem cadeia confiável: autoassinado, raiz desconhecida ou intermediário ausente."
+      valid: "Dentro das datas de validade."
+      expiring: "Perto de expirar: a renovação já deveria ter acontecido."
+      expired: "Passou da data de expiração; os clientes o recusam."
     limits:
       about: "Sobre"
     results:

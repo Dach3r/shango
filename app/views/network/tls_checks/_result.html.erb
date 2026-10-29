@@ -1,0 +1,119 @@
+<%# Outcome of a TLS certificate check. Render with `result:` (a Result from Network::TlsChecks::Run). %>
+<% if result.failure? %>
+  <%= render "network/shared/error", result: result %>
+<% else %>
+  <% data = result.data %>
+  <% certificate = data[:certificate] %>
+  <% session = data[:session] %>
+  <% dots = { "ok" => "bg-emerald-500", "warn" => "bg-amber-500", "bad" => "bg-danger" } %>
+  <% heading = "border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint" %>
+  <% key = certificate[:key] %>
+  <%= render "network/checks/previous", check: local_assigns[:check] %>
+
+  <div class="border border-line bg-card">
+    <div class="grid grid-cols-2 sm:grid-cols-[1.5fr_1fr_1fr_1fr]">
+      <div class="col-span-2 flex min-w-0 flex-col gap-2 border-b border-line px-5 py-4 sm:col-span-1 sm:border-r sm:border-b-0">
+        <p class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.results.target") %></p>
+        <p class="truncate font-mono text-sm text-ink"><%= data[:host] %></p>
+        <p class="truncate font-mono text-xs text-faint"><%= data[:address] %>:<%= data[:port] %> · <%= t("network.tls.protocols.#{data[:protocol]}") %></p>
+      </div>
+      <div class="flex flex-col gap-2 border-r border-line px-5 py-4">
+        <p class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.tls.trust") %></p>
+        <%= render NetworkStatus::Component.new(status: data[:trust][:status]) %>
+      </div>
+      <div class="flex flex-col gap-2 border-line px-5 py-4 sm:border-r">
+        <p class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.tls.hostname") %></p>
+        <%= render NetworkStatus::Component.new(status: data[:host_match] ? :match : :mismatch) %>
+      </div>
+      <div class="col-span-2 flex flex-col gap-2 border-t border-line px-5 py-4 sm:col-span-1 sm:border-t-0">
+        <p class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.tls.days_left") %></p>
+        <p class="text-3xl leading-none font-medium text-ink"><%= [certificate[:days_left], 0].max %></p>
+        <%= render NetworkStatus::Component.new(status: certificate[:validity]) %>
+      </div>
+    </div>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.tls.findings_title") %></h3>
+      <% if data[:findings].empty? %>
+        <p class="flex items-center gap-2.5 px-5 py-3 text-sm text-muted"><span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-emerald-500"></span><%= t("network.tls.no_findings") %></p>
+      <% else %>
+        <ul class="text-sm">
+          <% data[:findings].each do |finding| %>
+            <li class="flex items-baseline gap-2.5 border-b border-line px-5 py-3 text-body last:border-b-0">
+              <span aria-hidden="true" class="size-1.5 shrink-0 -translate-y-0.5 rounded-full <%= dots.fetch(finding[:tone]) %>"></span>
+              <%= t("network.tls.findings.#{finding[:key]}", **finding[:args]) %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </section>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.tls.certificate_title") %></h3>
+      <div class="overflow-hidden">
+        <dl class="-mr-px -mb-px grid sm:grid-cols-2">
+          <% { subject: certificate[:subject].values.compact.uniq.join(" · "), issuer: certificate[:issuer].values.compact.uniq.join(" · "),
+               not_before: certificate[:not_before].first(10), not_after: certificate[:not_after].first(10),
+               key: [key[:type], key[:bits], key[:curve] && "(#{key[:curve]})"].compact.join(" "), signature: certificate[:signature] }.each do |field, value| %>
+            <div class="flex min-w-0 flex-col gap-1 border-r border-b border-line px-5 py-3">
+              <dt class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.tls.fields.#{field}") %></dt>
+              <dd class="font-mono text-sm break-all text-ink"><%= value %></dd>
+            </div>
+          <% end %>
+          <% { serial: certificate[:serial], sha256: certificate[:sha256] }.each do |field, value| %>
+            <div class="flex min-w-0 flex-col gap-1 border-r border-b border-line px-5 py-3 sm:col-span-2">
+              <dt class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.tls.fields.#{field}") %></dt>
+              <dd class="font-mono text-xs break-all text-ink"><%= value %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    </section>
+
+    <% if certificate[:names].any? %>
+      <section class="border-t border-line">
+        <h3 class="<%= heading %>"><%= t("network.tls.names_title", total: certificate[:names_count]) %></h3>
+        <div class="overflow-hidden">
+          <ul class="-mr-px -mb-px grid sm:grid-cols-2 xl:grid-cols-3">
+            <% certificate[:names].each do |name| %>
+              <li class="truncate border-r border-b border-line px-5 py-2 font-mono text-sm text-body" title="<%= name %>"><%= name %></li>
+            <% end %>
+          </ul>
+        </div>
+        <% if certificate[:names_count] > certificate[:names].size %>
+          <p class="border-t border-line px-5 py-3 text-sm text-muted"><%= t("network.tls.names_truncated", shown: certificate[:names].size, total: certificate[:names_count]) %></p>
+        <% end %>
+      </section>
+    <% end %>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.tls.connection_title") %></h3>
+      <div class="overflow-hidden">
+        <dl class="-mr-px -mb-px grid sm:grid-cols-2">
+          <% { version: session[:version], cipher: [session[:cipher], session[:bits] && "(#{session[:bits]} bits)"].compact.join(" "), alpn: session[:alpn], sni: data[:sni] }.each do |field, value| %>
+            <div class="flex min-w-0 flex-col gap-1 border-r border-b border-line px-5 py-3">
+              <dt class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.tls.connection.#{field}") %></dt>
+              <dd class="font-mono text-sm break-all text-ink"><%= value.presence || "—" %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    </section>
+
+    <section class="border-t border-line">
+      <h3 class="<%= heading %>"><%= t("network.tls.chain_title") %></h3>
+      <ol class="text-sm">
+        <% data[:chain].each_with_index do |cert, index| %>
+          <li class="flex items-start gap-4 border-b border-line px-5 py-3 last:border-b-0">
+            <span class="w-6 shrink-0 font-mono text-xs leading-5 text-faint"><%= index %></span>
+            <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span class="truncate font-mono text-ink"><%= cert[:subject][:name] %></span>
+              <span class="truncate text-xs text-muted"><%= cert[:self_signed] ? t("network.tls.self_signed") : t("network.tls.issued_by", issuer: cert[:issuer][:name]) %></span>
+            </div>
+            <span class="shrink-0 font-mono text-xs leading-5 whitespace-nowrap text-muted"><%= cert[:not_after].first(10) %></span>
+          </li>
+        <% end %>
+      </ol>
+    </section>
+  </div>
+<% end %>

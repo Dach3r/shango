@@ -1,0 +1,16 @@
+<%# Form bar of the TLS certificate check. Render with `input:` (what was typed before, string keys; empty for a fresh form). A blank port uses the usual one of the protocol, shown as the placeholder (`tls-protocol` controller). On a saved run the fields hold what was typed and submitting runs it again as a new run. %>
+<% protocol = input.fetch("protocol", "tls") %>
+<% defaults = Network::TlsChecks::Run::DEFAULT_PORTS %>
+<%= tag.div id: "tls_form", class: "shrink-0", data: variable_autocomplete_data(controller: "tls-protocol").merge(tls_protocol_ports_value: defaults.to_json) do %>
+  <%= network_bar scope: :tls_check, url: network_tls_checks_path do |form| %>
+    <%= form.label :host, t("network.tls.host"), class: "sr-only" %>
+    <%= form.text_field :host, value: input["host"], required: true, autocomplete: "off", spellcheck: false, placeholder: t("network.tls.host_placeholder"), class: bar_field_classes("min-w-48 flex-[2_1_12rem] font-mono") %>
+    <%= form.label :port, t("network.tls.port"), class: "sr-only" %>
+    <%= form.text_field :port, value: input["port"], autocomplete: "off", spellcheck: false, inputmode: "numeric", placeholder: defaults.fetch(protocol, defaults["tls"]).to_s, title: t("network.tls.port"), data: { tls_protocol_target: "port" }, class: bar_field_classes("w-24 shrink-0 font-mono") %>
+    <%= render Select::Component.new(name: "tls_check[protocol]", options: Network::TlsChecks::Run::PROTOCOLS.map { |name| [t("network.tls.protocols.#{name}"), name] }, value: protocol, id: "tls_check_protocol", label: t("network.tls.protocol"), searchable: false, dock: true, dock_top: "top-14", dock_width: "lg:w-[calc(22rem-1px)] w-56",
+                                     class: "w-44 font-mono aria-expanded:bg-ink/[0.08]!", input_data: { tls_protocol_target: "protocol", action: "change->tls-protocol#sync" }) %>
+    <%= form.button type: :submit, class: button_classes(:primary, "w-44 shrink-0") do %>
+      <%= lucide_icon "shield-check", class: "size-4" %><%= t("network.tls.submit") %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -6,10 +6,10 @@ class NetworkStatus::Component < ApplicationComponent
     neutral: "text-muted"
   }.freeze
   STATUS_TONES = {
-    ok: :success, match: :success, open: :success, confirmed: :success, inside: :success,
+    ok: :success, match: :success, open: :success, confirmed: :success, inside: :success, trusted: :success, valid: :success,
     cname: :neutral, closed: :neutral,
-    nodata: :warning, nxdomain: :warning, mismatch: :warning, no_answer: :warning, timeout: :warning, filtered: :warning, unconfirmed: :warning, outside: :warning,
-    servfail: :danger, refused: :danger, error: :danger, blocked: :danger, unresolved: :danger
+    nodata: :warning, nxdomain: :warning, mismatch: :warning, no_answer: :warning, timeout: :warning, filtered: :warning, unconfirmed: :warning, outside: :warning, expiring: :warning,
+    servfail: :danger, refused: :danger, error: :danger, blocked: :danger, unresolved: :danger, untrusted: :danger, expired: :danger, not_yet_valid: :danger
   }.freeze
 
   def initialize(status:)

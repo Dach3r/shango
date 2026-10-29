@@ -8,6 +8,7 @@ module Network
       Tool.new(name: "dns", icon: "search", group: "dns"),
       Tool.new(name: "ports", icon: "radar", group: "connectivity"),
       Tool.new(name: "ping", icon: "activity", group: "connectivity"),
+      Tool.new(name: "tls", icon: "shield-check", group: "security"),
       Tool.new(name: "subnet", icon: "calculator", group: "utilities")
     ].freeze
 

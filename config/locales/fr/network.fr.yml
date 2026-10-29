@@ -5,12 +5,14 @@ fr:
       connectivity: Connectivité
       dns: DNS
       utilities: "Utilitaires"
+      security: "Sécurité"
     tabs:
       label: "Outils réseau"
       dns: "DNS"
       ports: "Ports"
       ping: "Ping"
       subnet: "Calculateur de sous-réseaux"
+      tls: "Certificat TLS"
     errors:
       blank: "Saisissez un domaine ou un hôte."
       invalid: "Ce n'est pas un nom d'hôte ni une adresse IP valide. Utilisez uniquement le nom, sans schéma, chemin ni port."
@@ -29,6 +31,12 @@ fr:
       invalid_network: "« %{token} » n'est pas un réseau valide. Utilisez une adresse avec un préfixe (192.168.1.0/24, 2001:db8::/48) ou un masque (192.168.1.0 255.255.255.0)."
       invalid_split: "Découpez en un préfixe de /%{min} à /%{max}."
       invalid_ip: "« %{token} » n'est pas une adresse IP valide."
+      invalid_protocol: "Choisissez un protocole pris en charge."
+      connection_refused: "L’hôte a refusé la connexion : rien n’écoute sur ce port."
+      connection_timeout: "L’hôte n’a pas répondu à temps. Un pare-feu bloque peut-être les paquets."
+      handshake_failed: "La négociation TLS a échoué (%{detail}). Le port ne parle peut-être pas TLS, ou il faut STARTTLS."
+      starttls_refused: "Le serveur n’a pas proposé ou pas accepté STARTTLS. Vérifiez le protocole et le port."
+      no_certificate: "Le serveur n’a présenté aucun certificat."
     statuses:
       ok: "Répondu"
       cname: "Alias"
@@ -50,6 +58,12 @@ fr:
       filtered: "Filtré"
       inside: "Dedans"
       outside: "Dehors"
+      trusted: "De confiance"
+      untrusted: "Non fiable"
+      valid: "Valide"
+      expiring: "Expire bientôt"
+      expired: "Expiré"
+      not_yet_valid: "Pas encore valide"
     dns:
       domain: "Domaine"
       hint: "Les réponses DNS proviennent des serveurs de noms faisant autorité et de plusieurs résolveurs publics, pour savoir si une modification s'est propagée. Pour PTR, saisissez une adresse IP : la vérification confirme aussi que chaque nom renvoie vers elle."
@@ -137,6 +151,61 @@ fr:
       split_title: "%{count} sous-réseaux /%{prefix}"
       split_truncated: "Affichage des %{shown} premiers sur %{count}."
       summary: "IPv%{version} · %{hosts} hôtes utilisables"
+    tls:
+      host: "Hôte"
+      host_placeholder: "example.com, 203.0.113.10 ou {{host}}"
+      port: "Port"
+      protocol: "Protocole"
+      protocols:
+        tls: "TLS direct"
+        smtp: "STARTTLS · SMTP"
+        imap: "STARTTLS · IMAP"
+        pop3: "STARTTLS · POP3"
+      submit: "Vérifier le certificat"
+      hint: "Se connecte à l’hôte et vérifie le certificat qu’il présente : chaîne de confiance, nom d’hôte, dates, clé et protocole. Un mauvais certificat est affiché avec ce qui ne va pas au lieu d’échouer. Laissez le port vide pour utiliser celui du protocole ; les serveurs de messagerie sur 587, 143 et 110 demandent STARTTLS."
+      summary:
+        valid: "Expire le %{date} · %{version}"
+        expired: "Expiré le %{date} · %{version}"
+        not_yet_valid: "Valide à partir du %{date} · %{version}"
+      trust: "Chaîne"
+      hostname: "Nom d’hôte"
+      days_left: "Jours restants"
+      findings_title: "Constats"
+      no_findings: "Aucun problème détecté."
+      findings:
+        expired: "Le certificat a expiré le %{date}."
+        not_yet_valid: "Le certificat n’est pas valide avant le %{date}."
+        expiring: "Le certificat expire le %{date}. Renouvelez-le bientôt."
+        name_mismatch: "Le certificat ne couvre pas %{host}."
+        untrusted:
+          self_signed: "Le certificat est auto-signé : aucun client ne lui fait confiance par défaut."
+          untrusted_root: "La chaîne se termine par une racine qui n’est pas de confiance."
+          unknown_issuer: "La chaîne n’atteint pas une racine de confiance : un certificat intermédiaire manque ou l’émetteur est inconnu."
+          other: "La chaîne n’a pas pu être vérifiée (erreur OpenSSL %{code})."
+        old_protocol: "Le serveur a négocié %{version}, qui est obsolète. Activez TLS 1.2 ou 1.3."
+        weak_key: "La clé %{type} ne fait que %{bits} bits."
+        weak_signature: "Le certificat est signé avec %{algorithm}, qui n’est plus sûr."
+      certificate_title: "Certificat"
+      fields:
+        subject: "Sujet"
+        issuer: "Émetteur"
+        not_before: "Valide depuis"
+        not_after: "Valide jusqu’au"
+        key: "Clé"
+        signature: "Signature"
+        serial: "Numéro de série"
+        sha256: "Empreinte SHA-256"
+      names_title: "Noms (%{total})"
+      names_truncated: "Affichage des %{shown} premiers sur %{total}."
+      connection_title: "Connexion"
+      connection:
+        version: "Protocole"
+        cipher: "Suite de chiffrement"
+        alpn: "ALPN"
+        sni: "SNI"
+      chain_title: "Chaîne envoyée par le serveur"
+      issued_by: "Émis par %{issuer}"
+      self_signed: "Auto-signé"
     empty:
       dns:
         title: "Rien à afficher pour l'instant"
@@ -150,6 +219,9 @@ fr:
       subnet:
         title: "Rien à afficher pour l'instant"
         hint: "Saisissez un réseau, par exemple 192.168.1.0/24, pour voir sa plage."
+      tls:
+        title: "Rien à afficher pour l’instant"
+        hint: "Saisissez un hôte pour inspecter son certificat TLS."
     history:
       dns: "Vérifications DNS"
       ports: "Vérifications de ports"
@@ -162,6 +234,7 @@ fr:
       confirm_clear: "Supprimer tout l'historique de cet outil pour le projet ?"
       confirm_delete: "Supprimer cette exécution ?"
       previous: "Exécution précédente, il y a %{time} : %{detail}"
+      tls: "Certificats TLS"
     guide:
       title: "Lire les résultats"
       ok: "Le serveur a répondu avec des enregistrements."
@@ -175,6 +248,11 @@ fr:
       filtered: "Aucune réponse. Un pare-feu abandonne peut-être les paquets."
       inside: "L'adresse appartient à ce réseau."
       outside: "L'adresse est hors de ce réseau, ou d'une autre version d'IP."
+      trusted: "La chaîne mène à une racine reconnue par les navigateurs et les systèmes."
+      untrusted: "Pas de chaîne de confiance : auto-signé, racine inconnue ou intermédiaire manquant."
+      valid: "Dans ses dates de validité."
+      expiring: "Proche de l’expiration : le renouvellement aurait déjà dû avoir lieu."
+      expired: "Date d’expiration dépassée ; les clients le refusent."
     limits:
       about: "À propos"
     results:
