@@ -89,8 +89,11 @@ Rails.application.routes.draw do
       scope module: :monitors do
         resource :run, only: :create
         resource :pause, only: %i[create destroy]
+        resource :token, only: :create
       end
     end
+
+    match "push(/:token)", to: "pushes#create", via: %i[get post], as: :push, constraints: { token: /[A-Za-z0-9_-]+/ }
 
     resources :channels, except: :show do
       scope module: :channels do

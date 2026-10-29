@@ -3,6 +3,7 @@ require_relative "../lib/shango/mailing"
 require_relative "../lib/shango/encryption_keys"
 require_relative "../lib/shango/storage"
 require_relative "../lib/shango/execution_mode"
+require_relative "../lib/shango/silence_push_logs"
 
 require "rails"
 # Pick the frameworks you want:
@@ -31,6 +32,7 @@ module Shango
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks shango])
+    config.middleware.insert_before Rails::Rack::Logger, Shango::SilencePushLogs
 
     # Configuration for the application, engines, and railties goes here.
     #

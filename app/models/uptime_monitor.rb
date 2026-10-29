@@ -7,7 +7,8 @@ class UptimeMonitor < ApplicationRecord
 
   INTERVALS = [60, 120, 300, 600, 900, 1800, 3600].freeze
   DOMAIN_INTERVALS = [21_600, 43_200, 86_400].freeze
-  PUSH_INTERVALS = (60..604_800)
+  PUSH_INTERVALS = [60, 300, 600, 900, 1800, 3600, 7200, 21_600, 43_200, 86_400, 604_800].freeze
+  GRACES = [0, 60, 300, 900, 1800, 3600, 21_600, 86_400].freeze
   TIMEOUTS = (1..30)
   CONFIRMATIONS = (1..5)
   HTTP_METHODS = %w[GET HEAD].freeze
@@ -100,6 +101,11 @@ class UptimeMonitor < ApplicationRecord
     !enabled
   end
 
+  # When a push monitor without a ping since `since` turns overdue.
+  def push_deadline(since)
+    since + interval.to_i.seconds + (grace || DEFAULTS["push"]["grace"]).to_i.seconds
+  end
+
   # A new random push token; only its digest is kept, so the token is returned to be shown once.
   def regenerate_push_token
     SecureRandom.urlsafe_base64(32).tap { |token| self.push_token_digest = self.class.digest(token) }
@@ -148,7 +154,7 @@ class UptimeMonitor < ApplicationRecord
     when "tcp" then host_settings
     when "ssl" then host_settings && number_setting(:days_before, 1..90)
     when "domain" then host_present && number_setting(:days_before, 1..365)
-    when "push" then number_setting(:grace, 0..86_400)
+    when "push" then number_setting(:grace, 0..86_400) && push_token_present
     end
   end
 
@@ -164,6 +170,10 @@ class UptimeMonitor < ApplicationRecord
     end
     errors.add(:expected_statuses, :invalid) unless valid_statuses?
     number_setting(:max_response_ms, 1..60_000, optional: true)
+  end
+
+  def push_token_present
+    errors.add(:base, :push_token) if push_token_digest.blank?
   end
 
   def host_settings

@@ -1,6 +1,7 @@
 module Monitoring
   module Monitors
-    # Checks a paused monitor again from scratch: status `pending`, checked on the next dispatch.
+    # Checks a paused monitor again from scratch: status `pending`, checked on the next dispatch (a push monitor gets
+    # a whole interval and grace to ping again).
     class Resume
       include Serviceable
 
@@ -15,7 +16,7 @@ module Monitoring
       def perform
         @monitor.with_lock do
           @monitor.restart(@at)
-          @monitor.update!(enabled: true, failures: 0, next_check_at: @at)
+          @monitor.update!(enabled: true, failures: 0, next_check_at: @monitor.push? ? @monitor.push_deadline(@at) : @at)
         end
         AuditEvents::Record.call(project: @monitor.project, kind: :monitor_resumed, actor: @actor, name: @monitor.name)
         Result.success(@monitor)

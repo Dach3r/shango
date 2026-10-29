@@ -99,8 +99,8 @@ RSpec.describe UptimeMonitor do
   it "accepts only the intervals of its kind", :aggregate_failures do
     expect(errors_on(interval: 30)).to eq([:interval])
     expect(errors_on(:domain, interval: 300)).to eq([:interval])
-    expect(errors_on(:push, interval: 90)).to be_empty
-    expect(errors_on(:push, interval: 604_801)).to eq([:interval])
+    expect(errors_on(:push, interval: 86_400)).to be_empty
+    expect(errors_on(:push, interval: 90)).to eq([:interval])
     expect(monitor(:domain).intervals).to eq(described_class::DOMAIN_INTERVALS)
   end
 
@@ -201,5 +201,16 @@ RSpec.describe UptimeMonitor do
     record.api_request.destroy
 
     expect(record.reload.api_request_id).to be_nil
+  end
+
+  it "needs a push token for a push monitor and knows when it turns overdue", :aggregate_failures do
+    expect(errors_on(:push, push_token_digest: nil)).to eq([:base])
+    record = monitor(:push, interval: 3600, settings: { "grace" => 300 })
+    at = Time.utc(2026, 1, 1)
+    expect(record.push_deadline(at)).to eq(at + 3900)
+  end
+
+  it "starts a new monitor with the defaults of its kind" do
+    expect(described_class.new(kind: "ssl").port).to eq(443)
   end
 end

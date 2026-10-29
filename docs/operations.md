@@ -34,7 +34,7 @@ Optional, with defaults:
 | `SHANGO_REQUIRE_EMAIL_CONFIRMATION` | `true` when SMTP is set | `false` keeps email on without forcing confirmation. Ignored without SMTP. |
 | `SHANGO_MAX_SIGN_IN_ATTEMPTS` | 10 | Failed sign-ins before a 30-minute lock. |
 | `SHANGO_SESSION_TIMEOUT_HOURS` | 12 | Idle time before sign-in is required again. |
-| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `DRAFTS`, `OAUTH`, `IMPORTS`, `EXPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`. |
+| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `DRAFTS`, `OAUTH`, `IMPORTS`, `EXPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`, `PUSH` (pings per push-monitor token, 12/60), `PUSH_IP` (pings per IP, 120/60). |
 | `SHANGO_CSP_REPORT_ONLY` | `false` | Report Content Security Policy violations without blocking. |
 | `SHANGO_STORAGE` | `local` | `s3` for S3-compatible storage (`SHANGO_S3_BUCKET`, `SHANGO_S3_REGION`, optional `SHANGO_S3_ACCESS_KEY_ID`/`SHANGO_S3_SECRET_ACCESS_KEY`/`SHANGO_S3_ENDPOINT`). |
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |
@@ -66,6 +66,7 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 5. Known gaps (tracked, not blocking)
 
+- **Push monitor URLs** (`/monitoring/push/<token>`) carry their secret in the path. Shango keeps them out of its own log (`Shango::SilencePushLogs`), but a reverse proxy or load balancer in front of it logs request paths by default: exclude that path from its access log, or have jobs send the token in the `X-Shango-Push-Token` header to `POST /monitoring/push` instead.
 - **Monitoring size:** a monitor checked every minute writes about 1 440 results a day, ≈ 43 000 over the default 30 days (≈ 200 bytes each with indexes, so ≈ 9 MB per monitor); the 50 monitors a project may have at one minute come to ≈ 430 MB. Five-minute monitors (the default) need a fifth of that. Rollups add one row per monitor and hour (≈ 9 600 per monitor over 400 days). Lower `SHANGO_MONITOR_RESULTS_RETENTION_DAYS` on small disks. Each `monitoring` thread handles about 30 one-minute monitors whose checks always hit the 10 s timeout, and many more in practice (most checks take well under a second); raise `SHANGO_MONITORING_THREADS` when the Solid Queue dashboard shows `monitoring` jobs waiting, and watch `SHANGO_MONITORS_TOTAL` on shared installations.
 - **Team history:** `audit_events` are never purged. A project's history only grows by team, monitor and alert channel changes made by people (a handful of rows per change; checks and alerts never write to it), so this is fine for now; add a retention job if it ever matters.
 - **Existing data after roles shipped:** collections and environments created before `creator_id` existed have no creator, so only owners can change or delete them. Promote the right people to owner, or recreate the records, if members need to edit them.

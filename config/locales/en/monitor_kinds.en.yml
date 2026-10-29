@@ -1,8 +1,15 @@
 en:
   activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            base:
+              push_token: "A push monitor needs its secret token."
     attributes:
       uptime_monitor:
         expires_at: "Expires"
+        last_pinged_at: "Last ping"
   monitoring:
     kind_hints:
       http: "Requests a URL and checks the status and response time."
@@ -16,10 +23,32 @@ en:
       host_placeholder: "example.com or {{host}}"
       host_hint: "A host name or IP address. Variables come from the environment chosen below; secret variables cannot be used."
       ssl_hint: "Down when the certificate is not trusted, not valid for the host, expired, or expires in fewer days than this. Checked on its interval, without the quick retry."
+      push_hint: "Shango gives this monitor a secret URL. Your job, cron or backup calls it each time it runs; the monitor goes down when no call comes within the interval plus the grace period."
+      push_conditions_hint: "The interval is how often your job runs; the grace period covers runs that take longer. After the first missed deadline it is checked again 30 seconds later before counting as down."
       tcp_hint: "Down after this many refused or unanswered connections in a row; after a failure the next check runs 30 seconds later."
     card:
       expires: "expires %{date}"
+      last_ping: "last ping %{time} ago"
+      no_ping: "waiting for the first ping"
+    intervals:
+      days: "Every %{value} d"
+    durations:
+      none: "None"
+      minutes: "%{value} min"
+      hours: "%{value} h"
+    push:
+      title: "Push URL"
+      once: "Copy it now: it is not shown again. Call it with GET or POST at the end of each run of your job."
+      examples: "For example, with curl (the second form keeps the token out of URLs and proxy logs):"
+      hidden: "The push URL is secret and was shown once. Create a new one if you lost it; the old one stops working."
+      regenerate: "New push URL"
+      confirm: "Create a new push URL? The current one stops working right away, so update your job."
+    monitors:
+      tokens:
+        create:
+          regenerated: "New push URL created. Copy it below."
     causes:
+      no_ping: "No ping in time"
       invalid_host: "The host is not a valid name or IP address"
       no_certificate: "The server sent no certificate"
       untrusted_certificate: "Untrusted certificate"

@@ -23,4 +23,12 @@ RSpec.describe Monitoring::Checks::Perform do
     expect(described_class.call(monitor_id: monitor.id, config_version: monitor.config_version).error).to eq(:stale)
     expect(Monitoring::Checks::Run).not_to have_received(:call)
   end
+
+  it "applies nothing when the probe has nothing to say", :aggregate_failures do
+    monitor = create(:uptime_monitor, :push, last_pinged_at: Time.current)
+    result = described_class.call(monitor_id: monitor.id, config_version: monitor.config_version)
+
+    expect(result.data).to eq(transition: nil, retry: false)
+    expect(monitor.check_results).to be_empty
+  end
 end

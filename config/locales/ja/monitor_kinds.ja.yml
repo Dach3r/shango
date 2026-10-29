@@ -1,8 +1,15 @@
 ja:
   activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            base:
+              push_token: "プッシュモニターには秘密トークンが必要です。"
     attributes:
       uptime_monitor:
         expires_at: "有効期限"
+        last_pinged_at: "最後の ping"
   monitoring:
     kind_hints:
       http: "URL にリクエストし、ステータスと応答時間を確認します。"
@@ -16,10 +23,32 @@ ja:
       host_placeholder: "example.com または {{host}}"
       host_hint: "ホスト名または IP アドレス。変数は下で選んだ環境から取得されます。シークレット変数は使えません。"
       ssl_hint: "証明書が信頼されていない、ホストに対して無効、期限切れ、または残り日数がこの値より少ない場合にダウンです。間隔ごとに確認し、すぐの再試行はしません。"
+      push_hint: "Shango はこのモニターに秘密の URL を発行します。ジョブ、cron、バックアップが実行のたびに呼び出し、間隔と猶予期間内に呼び出しがなければダウンになります。"
+      push_conditions_hint: "間隔はジョブの実行頻度、猶予期間は時間のかかる実行のための余裕です。最初に期限を過ぎると、ダウンとみなす前に 30 秒後に再確認します。"
       tcp_hint: "連続してこの回数接続が拒否または無応答だとダウンです。失敗後は 30 秒後に再確認します。"
     card:
       expires: "%{date} に期限切れ"
+      last_ping: "最後の ping: %{time}前"
+      no_ping: "最初の ping を待っています"
+    intervals:
+      days: "%{value} 日ごと"
+    durations:
+      none: "なし"
+      minutes: "%{value} 分"
+      hours: "%{value} 時間"
+    push:
+      title: "プッシュ URL"
+      once: "今すぐコピーしてください。再表示されません。ジョブの実行が終わるたびに GET か POST で呼び出してください。"
+      examples: "例: curl の場合(2 つ目の形式ならトークンが URL やプロキシのログに残りません):"
+      hidden: "プッシュ URL は秘密で、一度だけ表示されました。なくした場合は新しく作成してください。古いものは使えなくなります。"
+      regenerate: "新しいプッシュ URL"
+      confirm: "新しいプッシュ URL を作成しますか?現在のものはすぐに使えなくなるので、ジョブを更新してください。"
+    monitors:
+      tokens:
+        create:
+          regenerated: "新しいプッシュ URL を作成しました。下でコピーしてください。"
     causes:
+      no_ping: "期限内に ping がありません"
       invalid_host: "ホストが有効な名前または IP アドレスではありません"
       no_certificate: "サーバーが証明書を送信しませんでした"
       untrusted_certificate: "信頼されていない証明書"

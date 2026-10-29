@@ -1,0 +1,26 @@
+<%# Where a push monitor is pinged. The URL is shown once, right after creation or regeneration (`token:`); afterwards only how to get a new one. Render with `monitor:` and `token:`. %>
+<% if token %>
+  <% url = monitoring_push_url(token:) %>
+  <section role="status" class="flex flex-col gap-3 border border-accent/40 bg-accent/10 p-4" data-controller="clipboard" data-clipboard-text-value="<%= url %>">
+    <p class="text-sm font-medium text-ink"><%= t("monitoring.push.title") %></p>
+    <p class="text-xs text-muted"><%= t("monitoring.push.once") %></p>
+    <div class="flex items-center gap-2">
+      <code class="min-w-0 flex-1 truncate border border-line bg-field px-3 py-2 font-mono text-xs text-ink"><%= url %></code>
+      <button type="button" class="<%= button_classes(:secondary) %>" data-action="clipboard#copy">
+        <span data-clipboard-target="copy" class="inline-flex items-center gap-1.5"><%= lucide_icon "copy", class: "size-3.5" %><%= t("monitoring.channels.index.copy") %></span>
+        <span data-clipboard-target="done" class="hidden items-center gap-1.5"><%= lucide_icon "check", class: "size-3.5" %><%= t("monitoring.channels.index.copied") %></span>
+      </button>
+    </div>
+    <p class="text-xs text-muted"><%= t("monitoring.push.examples") %></p>
+    <pre class="overflow-x-auto border border-line bg-field px-3 py-2 font-mono text-xs text-ink">curl -fsS -m 10 --retry 3 <%= url %>
+
+curl -fsS -m 10 -X POST -H "X-Shango-Push-Token: <%= token %>" <%= monitoring_push_url %></pre>
+  </section>
+<% else %>
+  <section class="flex flex-wrap items-center justify-between gap-3 border border-line bg-card px-5 py-4">
+    <p class="text-sm text-muted"><%= t("monitoring.push.hidden") %></p>
+    <% if policy(monitor).update? %>
+      <%= button_to monitoring_monitor_token_path(monitor), form_class: "contents", form: { data: { turbo_confirm: t("monitoring.push.confirm") } }, class: button_classes(:secondary) do %><%= lucide_icon "key-round", class: "size-3.5" %><%= t("monitoring.push.regenerate") %><% end %>
+    <% end %>
+  </section>
+<% end %>

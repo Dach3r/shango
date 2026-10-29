@@ -21,6 +21,10 @@
     <% end %>
   </header>
 
+  <% if @monitor.push? %>
+    <%= render "monitoring/monitors/push_url", monitor: @monitor, token: @push_token %>
+  <% end %>
+
   <dl class="grid grid-cols-2 border border-line bg-card sm:grid-cols-4">
     <% { day: "uptime_day", week: "uptime_week", month: "uptime_month" }.each do |span, key| %>
       <div class="flex flex-col gap-1.5 border-r border-b border-line px-5 py-4 sm:border-b-0">

@@ -29,6 +29,8 @@
       </div>
     <% end %>
     <p class="text-xs text-muted"><%= t("monitoring.form.url_hint") %></p>
+    <% elsif monitor.push? %>
+    <p class="text-sm text-muted"><%= t("monitoring.form.push_hint") %></p>
     <% else %>
     <%= tag.div class: (monitor.domain? ? "grid gap-4" : "grid gap-4 sm:grid-cols-[1fr_8rem]"), data: variable_autocomplete_data do %>
       <div>
@@ -46,10 +48,12 @@
     <p class="text-xs text-muted"><%= t("monitoring.form.host_hint") %></p>
     <% end %>
     <div class="<%= row %>">
+      <% unless monitor.push? %>
       <div>
         <%= form.label :environment_id, UptimeMonitor.human_attribute_name(:environment), class: label_classes %>
         <%= form.select :environment_id, current_project.environments.ordered.map { |environment| [environment.name, environment.id] }, { include_blank: t("monitoring.form.no_environment") }, class: field_classes %>
       </div>
+      <% end %>
       <div>
         <%= form.label :interval, UptimeMonitor.human_attribute_name(:interval), class: label_classes %>
         <%= form.select :interval, monitor_interval_options(monitor), {}, class: field_classes %>
@@ -72,6 +76,12 @@
                              aria: { invalid: monitor.errors.include?(:max_response_ms) }, class: field_classes("font-mono") %>
       </div>
       <% end %>
+      <% if monitor.push? %>
+        <div>
+          <%= label_tag "uptime_monitor_settings_grace", UptimeMonitor.human_attribute_name(:grace), class: label_classes %>
+          <%= select_tag "uptime_monitor[settings][grace]", options_for_select(UptimeMonitor::GRACES.map { |seconds| [monitor_grace_label(seconds), seconds] }, monitor.grace), id: "uptime_monitor_settings_grace", class: field_classes %>
+        </div>
+      <% end %>
       <% if monitor.ssl? || monitor.domain? %>
         <div>
           <%= label_tag "uptime_monitor_settings_days_before", UptimeMonitor.human_attribute_name(:days_before), class: label_classes %>
@@ -79,16 +89,18 @@
                                aria: { invalid: monitor.errors.include?(:days_before) }, class: field_classes("font-mono") %>
         </div>
       <% end %>
+      <% unless monitor.push? %>
       <div>
         <%= form.label :timeout, UptimeMonitor.human_attribute_name(:timeout), class: label_classes %>
         <%= form.select :timeout, UptimeMonitor::TIMEOUTS.map { |seconds| [t("monitoring.units.seconds", value: seconds), seconds] }, {}, class: field_classes %>
       </div>
+      <% end %>
       <div>
         <%= form.label :confirmations, UptimeMonitor.human_attribute_name(:confirmations), class: label_classes %>
         <%= form.select :confirmations, UptimeMonitor::CONFIRMATIONS.to_a, {}, class: field_classes %>
       </div>
     </div>
-    <p class="text-xs text-muted"><%= t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint" }.fetch(monitor.kind)) %></p>
+    <p class="text-xs text-muted"><%= t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %></p>
   </section>
 
   <section class="flex flex-col gap-4 border border-line bg-card p-5">

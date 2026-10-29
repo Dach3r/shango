@@ -33,7 +33,8 @@ RSpec.describe MonitoringHelper do
     expect(helper.monitor_target(create(:uptime_monitor))).to eq("GET https://example.com/health")
     expect(helper.monitor_target(build(:uptime_monitor, :tcp))).to eq("example.com:5432")
     expect(helper.monitor_target(build(:uptime_monitor, :domain))).to eq("example.com")
-    expect(helper.monitor_target(build(:uptime_monitor, :push))).to eq(I18n.t("monitoring.kinds.push"))
+    expect(helper.monitor_target(build(:uptime_monitor, :push))).to eq(I18n.t("monitoring.card.no_ping"))
+    expect(helper.monitor_target(build(:uptime_monitor, :push, last_pinged_at: 3.minutes.ago))).to eq(I18n.t("monitoring.card.last_ping", time: "3 minutes"))
     expect(helper.monitor_expiry(build(:uptime_monitor, :ssl))).to be_nil
     expect(helper.monitor_expiry(build(:uptime_monitor, :ssl, expires_at: Time.utc(2027, 1, 15)))).to eq(I18n.t("monitoring.card.expires", date: "January 15, 2027"))
   end
@@ -46,5 +47,20 @@ RSpec.describe MonitoringHelper do
     expect(ssl).to include(UptimeMonitor.human_attribute_name(:days_before) => 14, UptimeMonitor.human_attribute_name(:expires_at) => "—")
     expect(ssl).not_to have_key(UptimeMonitor.human_attribute_name(:expected_statuses))
     expect(helper.monitor_settings(create(:uptime_monitor, :tcp)).to_h.keys).not_to include(UptimeMonitor.human_attribute_name(:days_before))
+  end
+
+  it "words intervals in days and grace periods", :aggregate_failures do
+    expect(helper.monitor_interval_label(604_800)).to eq(I18n.t("monitoring.intervals.days", value: 7))
+    expect(helper.monitor_grace_label(0)).to eq(I18n.t("monitoring.durations.none"))
+    expect(helper.monitor_grace_label(300)).to eq(I18n.t("monitoring.durations.minutes", value: 5))
+    expect(helper.monitor_grace_label(7200)).to eq(I18n.t("monitoring.durations.hours", value: 2))
+  end
+
+  it "lists the settings of a push monitor without a timeout", :aggregate_failures do
+    settings = helper.monitor_settings(create(:uptime_monitor, :push, last_pinged_at: Time.utc(2026, 1, 1))).to_h
+
+    expect(settings).to include(UptimeMonitor.human_attribute_name(:grace) => I18n.t("monitoring.durations.minutes", value: 5), UptimeMonitor.human_attribute_name(:last_pinged_at) => "January 01, 2026 00:00")
+    expect(settings).not_to have_key(UptimeMonitor.human_attribute_name(:timeout))
+    expect(helper.monitor_settings(create(:uptime_monitor, :push)).to_h[UptimeMonitor.human_attribute_name(:last_pinged_at)]).to eq("—")
   end
 end

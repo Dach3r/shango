@@ -1,8 +1,15 @@
 es:
   activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            base:
+              push_token: "Un monitor push necesita su token secreto."
     attributes:
       uptime_monitor:
         expires_at: "Vence"
+        last_pinged_at: "Último ping"
   monitoring:
     kind_hints:
       http: "Pide una URL y revisa el estado y el tiempo de respuesta."
@@ -16,10 +23,32 @@ es:
       host_placeholder: "example.com o {{host}}"
       host_hint: "Un nombre de host o una dirección IP. Las variables vienen del entorno elegido abajo; no se pueden usar variables secretas."
       ssl_hint: "Se marca caído cuando el certificado no es de confianza, no es válido para el host, está vencido o le quedan menos días que este número. Se revisa en su intervalo, sin el reintento rápido."
+      push_hint: "Shango le da a este monitor una URL secreta. Tu job, cron o backup la llama cada vez que corre; el monitor se cae cuando no llega ninguna llamada dentro del intervalo más el período de gracia."
+      push_conditions_hint: "El intervalo es cada cuánto corre tu job; el período de gracia cubre las ejecuciones que tardan más. Tras el primer plazo vencido se revisa de nuevo 30 segundos después antes de contarlo como caído."
       tcp_hint: "Se marca caído tras esta cantidad de conexiones rechazadas o sin respuesta seguidas; después de un fallo el siguiente chequeo corre 30 segundos más tarde."
     card:
       expires: "vence %{date}"
+      last_ping: "último ping hace %{time}"
+      no_ping: "esperando el primer ping"
+    intervals:
+      days: "Cada %{value} d"
+    durations:
+      none: "Ninguna"
+      minutes: "%{value} min"
+      hours: "%{value} h"
+    push:
+      title: "URL de push"
+      once: "Cópiala ahora: no se vuelve a mostrar. Llámala con GET o POST al final de cada ejecución de tu job."
+      examples: "Por ejemplo, con curl (la segunda forma deja el token fuera de las URLs y de los logs de proxies):"
+      hidden: "La URL de push es secreta y se mostró una sola vez. Crea una nueva si la perdiste; la anterior deja de funcionar."
+      regenerate: "Nueva URL de push"
+      confirm: "¿Crear una nueva URL de push? La actual deja de funcionar de inmediato, así que actualiza tu job."
+    monitors:
+      tokens:
+        create:
+          regenerated: "Nueva URL de push creada. Cópiala abajo."
     causes:
+      no_ping: "Sin ping a tiempo"
       invalid_host: "El host no es un nombre ni una IP válidos"
       no_certificate: "El servidor no envió certificado"
       untrusted_certificate: "Certificado no confiable"

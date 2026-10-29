@@ -1,6 +1,7 @@
 module Monitoring
   class MonitorsController < BaseController
     FILTERS = %w[up down pending paused].freeze
+    PUSH_TOKEN = :monitoring_push_token
 
     before_action :find_monitor, only: %i[show edit update destroy]
 
@@ -16,6 +17,8 @@ module Monitoring
     def show
       authorize @monitor
       @report = Monitoring::Monitors::Report.call(monitor: @monitor).record
+      revealed = session.delete(PUSH_TOKEN)
+      @push_token = revealed["token"] if revealed.is_a?(Hash) && revealed["id"] == @monitor.id
     end
 
     def new
@@ -32,6 +35,7 @@ module Monitoring
       @monitor = current_project.uptime_monitors.new(monitor_params.merge(kind:, creator: current_user))
       authorize @monitor
       result = Monitoring::Monitors::Create.call(monitor: @monitor, channels:)
+      session[PUSH_TOKEN] = { "id" => @monitor.id, "token" => result.data[:push_token] } if result.success? && @monitor.push?
       return redirect_to(monitoring_monitor_path(@monitor), notice: t(".created"), status: :see_other) if result.success?
 
       render :new, status: :unprocessable_content

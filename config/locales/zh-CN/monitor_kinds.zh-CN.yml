@@ -1,8 +1,15 @@
 zh-CN:
   activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            base:
+              push_token: "推送监控需要其秘密令牌。"
     attributes:
       uptime_monitor:
         expires_at: "到期"
+        last_pinged_at: "上次 ping"
   monitoring:
     kind_hints:
       http: "请求一个 URL,检查状态码和响应时间。"
@@ -16,10 +23,32 @@ zh-CN:
       host_placeholder: "example.com 或 {{host}}"
       host_hint: "主机名或 IP 地址。变量来自下方选择的环境;不能使用秘密变量。"
       ssl_hint: "当证书不受信任、与主机不匹配、已过期或剩余天数少于此值时为宕机。按间隔检查,不做快速重试。"
+      push_hint: "Shango 会为此监控提供一个秘密 URL。你的任务、cron 或备份每次运行时调用它;若在间隔加宽限期内没有调用,监控即为宕机。"
+      push_conditions_hint: "间隔是任务的运行频率;宽限期用于覆盖运行时间较长的情况。首次超时后会在 30 秒后再次检查,然后才计为宕机。"
       tcp_hint: "连续这么多次连接被拒绝或无应答后为宕机;失败后 30 秒再次检查。"
     card:
       expires: "%{date} 到期"
+      last_ping: "上次 ping 于 %{time}前"
+      no_ping: "等待第一次 ping"
+    intervals:
+      days: "每 %{value} 天"
+    durations:
+      none: "无"
+      minutes: "%{value} 分钟"
+      hours: "%{value} 小时"
+    push:
+      title: "推送 URL"
+      once: "请立即复制:它不会再次显示。在任务每次运行结束时用 GET 或 POST 调用它。"
+      examples: "例如使用 curl(第二种方式可避免令牌出现在 URL 和代理日志中):"
+      hidden: "推送 URL 是秘密的,只显示过一次。如果丢失请创建新的;旧的将失效。"
+      regenerate: "新的推送 URL"
+      confirm: "创建新的推送 URL?当前 URL 会立即失效,请更新你的任务。"
+    monitors:
+      tokens:
+        create:
+          regenerated: "已创建新的推送 URL。请在下方复制。"
     causes:
+      no_ping: "未按时收到 ping"
       invalid_host: "主机不是有效的名称或 IP 地址"
       no_certificate: "服务器未发送证书"
       untrusted_certificate: "证书不受信任"

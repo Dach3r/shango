@@ -17,4 +17,12 @@ RSpec.describe Monitoring::Monitors::Resume do
 
     expect(AuditEvent.sole.kind).to eq("monitor_resumed")
   end
+
+  it "gives a push monitor a whole interval and grace to ping again" do
+    at = Time.current.change(usec: 0)
+    monitor = create(:uptime_monitor, :push, interval: 3600, enabled: false)
+    described_class.call(monitor:, at:)
+
+    expect(monitor.reload.next_check_at).to eq(at + 3900)
+  end
 end

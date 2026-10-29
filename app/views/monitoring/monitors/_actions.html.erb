@@ -1,7 +1,7 @@
 <%# Run, pause or resume, edit and delete one monitor; only rendered for members who may manage it. Render with `monitor:` and `compact:` (icon-only buttons in a row). %>
 <% base = compact ? "flex flex-1 items-center justify-center gap-1.5 py-2 text-xs text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" : nil %>
 <div class="<%= compact ? "flex divide-x divide-line border-t border-line" : "flex flex-wrap gap-2" %>">
-  <% unless monitor.paused? %>
+  <% unless monitor.paused? || monitor.push? %>
     <%= button_to monitoring_monitor_run_path(monitor), form_class: (compact ? "flex flex-1" : "contents"), class: base || button_classes(:secondary) do %><%= lucide_icon "play", class: "size-3.5" %><%= t("monitoring.actions.run") %><% end %>
   <% end %>
   <% if monitor.paused? %>

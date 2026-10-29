@@ -55,7 +55,7 @@ RSpec.describe "Monitoring monitors" do
       create(:uptime_monitor, :push, project:)
       get monitoring_root_path
 
-      expect(response.body).to include("db.internal:5432", "example.com:443 · #{I18n.t("monitoring.card.expires", date: "January 15, 2027")}", "shop.example", I18n.t("monitoring.kinds.push"))
+      expect(response.body).to include("db.internal:5432", "example.com:443 · #{I18n.t("monitoring.card.expires", date: "January 15, 2027")}", "shop.example", I18n.t("monitoring.card.no_ping"))
       get monitoring_root_path(q: "db.internal")
       expect(response.body).to include("db.internal:5432")
       expect(response.body).not_to include("shop.example")
@@ -164,7 +164,7 @@ RSpec.describe "Monitoring monitors" do
       get new_monitoring_monitor_path
 
       expect(response.body).to include(I18n.t("monitoring.new.choose"), new_monitoring_monitor_path(kind: "tcp"), new_monitoring_monitor_path(kind: "ssl"), I18n.t("components.nav_item.soon"))
-      expect(response.body).not_to include(new_monitoring_monitor_path(kind: "push"))
+      expect(response.body).not_to include(new_monitoring_monitor_path(kind: "domain"))
       get new_monitoring_monitor_path(kind: "nope")
       expect(response.body).to include(I18n.t("monitoring.new.choose"))
     end
@@ -187,8 +187,28 @@ RSpec.describe "Monitoring monitors" do
       expect(project.uptime_monitors.find_by(kind: "ssl")).to have_attributes(host: "example.com", port: 443, days_before: 21)
     end
 
+    it "creates a push monitor and shows its URL once", :aggregate_failures do
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "push", name: "Backup", interval: "86400", confirmations: "1", settings: { grace: "3600" } } }
+      monitor = project.uptime_monitors.sole
+
+      expect(monitor).to have_attributes(kind: "push", interval: 86_400, grace: 3600)
+      follow_redirect!
+      url = response.body[%r{http://www\.example\.com/monitoring/push/[A-Za-z0-9_-]+}]
+      expect(monitor.push_token_digest).to eq(UptimeMonitor.digest(url.split("/").last))
+      expect(response.body).not_to include(monitoring_monitor_run_path(monitor))
+      get monitoring_monitor_path(monitor)
+      expect(response.body).not_to include(url)
+    end
+
+    it "shows the push fields without a timeout or environment", :aggregate_failures do
+      get new_monitoring_monitor_path(kind: "push")
+
+      expect(response.body).to include('name="uptime_monitor[settings][grace]"', I18n.t("monitoring.form.push_hint"), I18n.t("monitoring.intervals.days", value: 7))
+      expect(response.body).not_to include('name="uptime_monitor[timeout]"', 'name="uptime_monitor[environment_id]"')
+    end
+
     it "does not create a kind that cannot run yet", :aggregate_failures do
-      post monitoring_monitors_path, params: { uptime_monitor: { kind: "push", name: "Cron", interval: "3600", timeout: "10", confirmations: "1" } }
+      post monitoring_monitors_path, params: { uptime_monitor: { kind: "domain", name: "Domain", interval: "86400", timeout: "10", confirmations: "1", settings: { host: "example.com" } } }
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include(I18n.t("monitoring.new.choose"))

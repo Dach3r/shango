@@ -1,8 +1,15 @@
 fr:
   activerecord:
+    errors:
+      models:
+        uptime_monitor:
+          attributes:
+            base:
+              push_token: "Un moniteur push a besoin de son jeton secret."
     attributes:
       uptime_monitor:
         expires_at: "Expire"
+        last_pinged_at: "Dernier ping"
   monitoring:
     kind_hints:
       http: "Interroge une URL et vérifie le statut et le temps de réponse."
@@ -16,10 +23,32 @@ fr:
       host_placeholder: "example.com ou {{host}}"
       host_hint: "Un nom d’hôte ou une adresse IP. Les variables viennent de l’environnement choisi plus bas ; les variables secrètes ne sont pas permises."
       ssl_hint: "En panne si le certificat n’est pas de confiance, pas valide pour l’hôte, expiré, ou expire dans moins de jours que ce nombre. Vérifié à son intervalle, sans nouvel essai rapide."
+      push_hint: "Shango donne à ce moniteur une URL secrète. Votre tâche, cron ou sauvegarde l’appelle à chaque exécution ; le moniteur tombe si aucun appel n’arrive dans l’intervalle plus le délai de grâce."
+      push_conditions_hint: "L’intervalle est la fréquence d’exécution de votre tâche ; le délai de grâce couvre les exécutions plus longues. Après la première échéance manquée, une nouvelle vérification a lieu 30 secondes plus tard avant de le compter en panne."
       tcp_hint: "En panne après autant de connexions refusées ou sans réponse d’affilée ; après un échec, la vérification suivante a lieu 30 secondes plus tard."
     card:
       expires: "expire le %{date}"
+      last_ping: "dernier ping il y a %{time}"
+      no_ping: "en attente du premier ping"
+    intervals:
+      days: "Tous les %{value} j"
+    durations:
+      none: "Aucune"
+      minutes: "%{value} min"
+      hours: "%{value} h"
+    push:
+      title: "URL de push"
+      once: "Copiez-la maintenant : elle ne sera plus affichée. Appelez-la en GET ou POST à la fin de chaque exécution de votre tâche."
+      examples: "Par exemple avec curl (la seconde forme garde le jeton hors des URL et des journaux de proxy) :"
+      hidden: "L’URL de push est secrète et n’a été affichée qu’une fois. Créez-en une nouvelle si vous l’avez perdue ; l’ancienne cessera de fonctionner."
+      regenerate: "Nouvelle URL de push"
+      confirm: "Créer une nouvelle URL de push ? L’actuelle cesse aussitôt de fonctionner, mettez donc à jour votre tâche."
+    monitors:
+      tokens:
+        create:
+          regenerated: "Nouvelle URL de push créée. Copiez-la ci-dessous."
     causes:
+      no_ping: "Pas de ping à temps"
       invalid_host: "L’hôte n’est ni un nom ni une adresse IP valides"
       no_certificate: "Le serveur n’a envoyé aucun certificat"
       untrusted_certificate: "Certificat non fiable"
