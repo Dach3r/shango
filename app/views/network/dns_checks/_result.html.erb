@@ -27,7 +27,7 @@
     </div>
 
     <% rows.group_by(&:group).each do |group, group_rows| %>
-      <h3 class="border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.dns.groups.#{group}") %></h3>
+      <h3 class="border-b border-line bg-page px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.dns.groups.#{group}") %></h3>
       <div class="overflow-hidden border-b border-line last:border-b-0">
         <div class="-mr-px -mb-px grid sm:grid-cols-2">
           <% group_rows.each do |row| %>
@@ -62,7 +62,7 @@
 
     <% if result.data.key?(:forward) %>
       <section class="border-t border-line">
-        <h3 class="border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.dns.forward.title") %></h3>
+        <h3 class="border-b border-line bg-page px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.dns.forward.title") %></h3>
         <% if result.data[:forward].any? %>
           <% result.data[:forward].each do |forward| %>
             <div class="flex items-start justify-between gap-3 border-b border-line px-5 py-3 last:border-b-0">

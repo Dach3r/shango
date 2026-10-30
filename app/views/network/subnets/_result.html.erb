@@ -26,7 +26,7 @@
 
     <% if data[:contains] %>
       <section class="border-t border-line">
-        <h3 class="border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.subnet.contains_title") %></h3>
+        <h3 class="border-b border-line bg-page px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.subnet.contains_title") %></h3>
         <div class="flex items-center justify-between gap-3 px-5 py-3">
           <span class="min-w-0 truncate font-mono text-sm text-ink"><%= data[:contains][:address] %></span>
           <%= render NetworkStatus::Component.new(status: data[:contains][:inside] ? :inside : :outside) %>
@@ -37,7 +37,7 @@
     <% if data[:split] %>
       <% split = data[:split] %>
       <section class="border-t border-line">
-        <h3 class="border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.subnet.split_title", count: count.call(split[:count]), prefix: split[:prefix]) %></h3>
+        <h3 class="border-b border-line bg-page px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-faint"><%= t("network.subnet.split_title", count: count.call(split[:count]), prefix: split[:prefix]) %></h3>
         <div class="overflow-hidden">
           <ul class="-mr-px -mb-px grid sm:grid-cols-2 xl:grid-cols-3">
             <% split[:subnets].each do |subnet| %>

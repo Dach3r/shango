@@ -6,7 +6,7 @@
   <% domain = data[:domain] %>
   <% network = data[:network] %>
   <% dots = { "ok" => "bg-emerald-500", "warn" => "bg-amber-500", "bad" => "bg-danger" } %>
-  <% heading = "border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint" %>
+  <% heading = "border-b border-line bg-page px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-faint" %>
   <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
   <% cell = "flex min-w-0 flex-col gap-1 border-r border-b border-line px-5 py-3" %>
   <%= render "network/checks/previous", check: local_assigns[:check] %>
