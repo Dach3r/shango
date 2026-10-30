@@ -81,6 +81,7 @@ hi:
       average: "औसत रिस्पॉन्स 24 घंटे"
       incidents: "इंसिडेंट"
       no_incidents: "पिछले 30 दिनों में कोई इंसिडेंट नहीं।"
+      connect_channel: "चैनल जोड़ें"
       ongoing: "जारी"
       closed_by_pause: "रोकने से बंद हुआ"
       settings: "सेटिंग्स"

@@ -81,6 +81,7 @@ ru:
       average: "Ср. ответ 24 ч"
       incidents: "Инциденты"
       no_incidents: "Инцидентов за последние 30 дней нет."
+      connect_channel: "Подключить канал"
       ongoing: "продолжается"
       closed_by_pause: "закрыт паузой"
       settings: "Настройки"

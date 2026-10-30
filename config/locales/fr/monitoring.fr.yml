@@ -81,6 +81,7 @@ fr:
       average: "Réponse moy. 24 h"
       incidents: "Incidents"
       no_incidents: "Aucun incident ces 30 derniers jours."
+      connect_channel: "Connecter un canal"
       ongoing: "en cours"
       closed_by_pause: "clos par une pause"
       settings: "Réglages"

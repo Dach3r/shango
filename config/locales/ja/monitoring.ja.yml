@@ -81,6 +81,7 @@ ja:
       average: "平均応答 24 時間"
       incidents: "インシデント"
       no_incidents: "直近 30 日間にインシデントはありません。"
+      connect_channel: "チャンネルを接続"
       ongoing: "継続中"
       closed_by_pause: "一時停止で終了"
       settings: "設定"

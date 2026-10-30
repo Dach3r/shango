@@ -81,6 +81,7 @@ zh-CN:
       average: "24 小时平均响应"
       incidents: "事件"
       no_incidents: "最近 30 天没有事件。"
+      connect_channel: "连接渠道"
       ongoing: "进行中"
       closed_by_pause: "因暂停而关闭"
       settings: "设置"

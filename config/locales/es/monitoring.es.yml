@@ -81,6 +81,7 @@ es:
       average: "Resp. promedio 24 h"
       incidents: "Incidentes"
       no_incidents: "Sin incidentes en los últimos 30 días."
+      connect_channel: "Conectar un canal"
       ongoing: "en curso"
       closed_by_pause: "cerrado por una pausa"
       settings: "Configuración"

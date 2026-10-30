@@ -134,6 +134,21 @@ RSpec.describe "Monitoring monitors" do
       expect(response.body).to include(I18n.t("monitoring.show.no_incidents"))
     end
 
+    it "links to connect an alert channel only when there is none and the monitor can be edited", :aggregate_failures do
+      monitor = create(:uptime_monitor, project:)
+      linked = create(:uptime_monitor, project:, notification_channels: [create(:notification_channel, project:, name: "Ops hooks")])
+      get monitoring_monitor_path(monitor)
+      expect(response.body).to include(I18n.t("monitoring.show.connect_channel"), edit_monitoring_monitor_path(monitor, anchor: "alerts"))
+
+      get monitoring_monitor_path(linked)
+      expect(response.body).to include("Ops hooks")
+      expect(response.body).not_to include(I18n.t("monitoring.show.connect_channel"))
+
+      sign_in_member
+      get monitoring_monitor_path(monitor)
+      expect(response.body).not_to include(I18n.t("monitoring.show.connect_channel"))
+    end
+
     it "does not reach a monitor of another project" do
       get monitoring_monitor_path(create(:uptime_monitor))
 

@@ -81,6 +81,7 @@ de:
       average: "Ø Antwort 24 h"
       incidents: "Vorfälle"
       no_incidents: "Keine Vorfälle in den letzten 30 Tagen."
+      connect_channel: "Kanal verbinden"
       ongoing: "laufend"
       closed_by_pause: "durch Pause beendet"
       settings: "Einstellungen"
