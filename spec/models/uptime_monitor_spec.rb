@@ -37,7 +37,7 @@ RSpec.describe UptimeMonitor do
     let(:record) { create(:uptime_monitor, project:) }
 
     it "moves only through its events and stamps each change", :aggregate_failures do
-      at = 1.hour.ago
+      at = 1.hour.ago.change(usec: 0)
       record.go_down(at)
 
       expect(record).to have_attributes(status: "down", last_status_change_at: at)

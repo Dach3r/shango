@@ -10,7 +10,7 @@ RSpec.describe NotificationDelivery do
   end
 
   it "is sent or given up only once, through its events", :aggregate_failures do
-    at = 1.minute.ago
+    at = 1.minute.ago.change(usec: 0)
     delivery.deliver!(at)
 
     expect(delivery).to have_attributes(status: "sent", sent_at: at)
