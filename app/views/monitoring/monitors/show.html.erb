@@ -18,12 +18,12 @@
 
     <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4 lg:grid-cols-[repeat(3,minmax(0,1fr))_24rem]">
       <% { day: "uptime_day", week: "uptime_week", month: "uptime_month" }.each do |span, key| %>
-        <div class="flex flex-col gap-2 border-r border-b border-line px-5 py-4 sm:border-b-0">
+        <div class="<%= class_names("flex flex-col gap-2 border-r border-b border-line px-5 py-4 sm:border-b-0", "lg:border-r-0" => span == :month) %>">
           <dt class="<%= label %>"><%= t("monitoring.show.#{key}") %></dt>
           <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_uptime(report.uptime[span]) %></dd>
         </div>
       <% end %>
-      <div class="flex flex-col gap-2 px-5 py-4">
+      <div class="flex flex-col gap-2 border-line px-5 py-4 lg:border-l">
         <dt class="<%= label %>"><%= t("monitoring.show.average") %></dt>
         <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_ms(report.average_ms) %></dd>
       </div>
