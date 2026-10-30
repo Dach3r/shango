@@ -1,0 +1,42 @@
+<%# One monitor in the list. Render with `monitor:` and `card:` (a Monitoring::Monitors::Overview::Card). The name link covers the row; the strip and the actions sit above it. %>
+<% label = "font-mono text-[0.6875rem] uppercase tracking-wide text-faint lg:sr-only" %>
+<% value = "font-mono text-sm whitespace-nowrap text-ink" %>
+<li class="relative grid grid-cols-3 items-center gap-x-6 gap-y-3 border-b border-line px-5 py-3.5 transition hover:bg-card lg:grid-cols-[minmax(14rem,1.25fr)_minmax(9rem,1fr)_5rem_6rem_7.5rem_8rem] lg:py-3">
+  <div class="col-span-3 flex min-w-0 items-center gap-3 lg:col-span-1">
+    <span class="flex size-8 shrink-0 items-center justify-center border border-line text-muted" title="<%= t("monitoring.kinds.#{monitor.kind}") %>">
+      <%= lucide_icon MonitoringHelper::KIND_ICONS.fetch(monitor.kind), class: "size-4" %>
+    </span>
+    <div class="min-w-0 flex-1">
+      <div class="flex min-w-0 items-center gap-3">
+        <h2 class="truncate text-sm font-semibold text-ink">
+          <%= link_to monitor.name, monitoring_monitor_path(monitor), class: "after:absolute after:inset-0 hover:text-accent focus-visible:outline-none focus-visible:after:ring-1 focus-visible:after:ring-inset focus-visible:after:ring-accent/50" %>
+        </h2>
+        <%= render MonitorStatus::Component.for(monitor) %>
+      </div>
+      <p class="truncate font-mono text-xs text-faint" title="<%= monitor_target(monitor) %>"><%= monitor_target(monitor) %><% if monitor.expires_at %> · <%= monitor_expiry(monitor) %><% end %></p>
+    </div>
+  </div>
+
+  <div class="<%= class_names("relative z-10 col-span-3 lg:col-span-1", "opacity-50" => monitor.paused?) %>">
+    <%= render UptimeStrip::Component.new(hours: card.hours, label: t("monitoring.strip.label", name: monitor.name)) %>
+  </div>
+
+  <div class="flex flex-col gap-1 lg:items-end">
+    <span class="<%= label %>"><%= t("monitoring.card.uptime") %></span>
+    <span class="<%= value %>"><%= monitor_uptime(card.uptime) %></span>
+  </div>
+  <div class="flex flex-col gap-1 lg:items-end">
+    <span class="<%= label %>"><%= t("monitoring.card.average") %></span>
+    <span class="<%= value %>"><%= monitor_ms(card.average_ms) %></span>
+  </div>
+  <div class="flex min-w-0 flex-col gap-1 lg:items-end">
+    <span class="<%= label %>"><%= t("monitoring.card.checked") %></span>
+    <span class="<%= value %> truncate text-muted" title="<%= l(monitor.last_checked_at, format: :long) if monitor.last_checked_at %>"><%= monitor.last_checked_at ? t("monitoring.ago", time: time_ago_in_words(monitor.last_checked_at)) : "—" %></span>
+  </div>
+
+  <div class="relative z-10 col-span-3 flex justify-end lg:col-span-1">
+    <% if policy(monitor).update? %>
+      <%= render "monitoring/monitors/actions", monitor:, compact: true %>
+    <% end %>
+  </div>
+</li>

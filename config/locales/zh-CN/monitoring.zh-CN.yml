@@ -42,6 +42,7 @@ zh-CN:
         pending: "待检查"
         paused: "已暂停"
       search: "按名称、URL 或主机搜索"
+      about: "关于"
       empty:
         title: "还没有监控"
         filtered: "没有符合此筛选的监控。"
@@ -56,6 +57,11 @@ zh-CN:
       title: "响应时间 · 最近 24 小时"
       label: "%{name} 每小时平均响应时间"
       max: "最大 %{ms} ms"
+    strip:
+      title: "最近 24 小时"
+      label: "%{name} 最近 24 小时每小时的检查"
+      hour: "%{hour} · 检查：%{checks} · 失败：%{failures}"
+      empty: "%{hour} · 无检查"
     card:
       no_data: "还没有检查"
       uptime: "24 小时可用率"

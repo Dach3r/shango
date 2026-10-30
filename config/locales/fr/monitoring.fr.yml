@@ -42,6 +42,7 @@ fr:
         pending: "En attente"
         paused: "En pause"
       search: "Rechercher par nom, URL ou hôte"
+      about: "À propos"
       empty:
         title: "Aucun moniteur pour l’instant"
         filtered: "Aucun moniteur ne correspond à ce filtre."
@@ -56,6 +57,11 @@ fr:
       title: "Temps de réponse · dernières 24 h"
       label: "Temps de réponse moyen par heure de %{name}"
       max: "max %{ms} ms"
+    strip:
+      title: "Dernières 24 h"
+      label: "Vérifications par heure de %{name} sur les dernières 24 h"
+      hour: "%{hour} · vérifications : %{checks} · échecs : %{failures}"
+      empty: "%{hour} · aucune vérification"
     card:
       no_data: "Aucune vérification"
       uptime: "Dispo. 24 h"

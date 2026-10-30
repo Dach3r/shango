@@ -42,6 +42,7 @@ pt-BR:
         pending: "Pendentes"
         paused: "Pausados"
       search: "Buscar por nome, URL ou host"
+      about: "Sobre"
       empty:
         title: "Nenhum monitor ainda"
         filtered: "Nenhum monitor corresponde a este filtro."
@@ -56,6 +57,11 @@ pt-BR:
       title: "Tempo de resposta · últimas 24 h"
       label: "Tempo médio de resposta por hora de %{name}"
       max: "máx. %{ms} ms"
+    strip:
+      title: "Últimas 24 h"
+      label: "Verificações por hora de %{name} nas últimas 24 h"
+      hour: "%{hour} · verificações: %{checks} · falhas: %{failures}"
+      empty: "%{hour} · sem verificações"
     card:
       no_data: "Nenhuma verificação ainda"
       uptime: "Uptime 24 h"

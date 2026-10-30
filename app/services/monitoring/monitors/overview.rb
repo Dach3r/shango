@@ -1,14 +1,25 @@
 module Monitoring
   module Monitors
     # What the monitor list shows, in three queries for any number of monitors: per monitor the uptime and average
-    # response time of the last 24 hours and its hourly averages for the sparkline; for the project the counts by
+    # response time of the last 24 hours and one slot per hour for its status strip; for the project the counts by
     # status and the overall uptime.
     class Overview
       include Serviceable
 
       SPAN = 24.hours
 
-      Card = Data.define(:uptime, :average_ms, :points)
+      Card = Data.define(:uptime, :average_ms, :hours)
+
+      # One hour of the status strip: `empty` without checks, `up` without failures, `down` when every check failed and
+      # `degraded` in between.
+      Hour = Data.define(:hour, :checks, :failures) do
+        def state
+          return :empty if checks.zero?
+          return :up if failures.zero?
+
+          failures == checks ? :down : :degraded
+        end
+      end
 
       def initialize(monitors:, now: Time.current)
         @monitors = monitors
@@ -32,7 +43,17 @@ module Monitoring
       end
 
       def card(monitor, rollups, incidents)
-        Card.new(uptime: Uptime.percent(monitor, incidents, SPAN, now: @now), average_ms: self.class.average(rollups), points: rollups.map { |rollup| [rollup.hour, rollup.average_ms] })
+        Card.new(uptime: Uptime.percent(monitor, incidents, SPAN, now: @now), average_ms: self.class.average(rollups), hours: hours(rollups))
+      end
+
+      # The last 24 hours, oldest first, ending with the current one.
+      def hours(rollups)
+        by_hour = rollups.index_by(&:hour)
+        23.downto(0).map do |ago|
+          hour = @now.beginning_of_hour - ago.hours
+          rollup = by_hour[hour]
+          Hour.new(hour:, checks: rollup&.checks.to_i, failures: rollup&.failures.to_i)
+        end
       end
 
       def summary(cards)

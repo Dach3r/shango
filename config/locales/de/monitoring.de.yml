@@ -42,6 +42,7 @@ de:
         pending: "Ausstehend"
         paused: "Pausiert"
       search: "Nach Name, URL oder Host suchen"
+      about: "Info"
       empty:
         title: "Noch keine Monitore"
         filtered: "Kein Monitor passt zu diesem Filter."
@@ -56,6 +57,11 @@ de:
       title: "Antwortzeit · letzte 24 h"
       label: "Durchschnittliche Antwortzeit pro Stunde von %{name}"
       max: "max. %{ms} ms"
+    strip:
+      title: "Letzte 24 h"
+      label: "Prüfungen pro Stunde von %{name} in den letzten 24 h"
+      hour: "%{hour} · Prüfungen: %{checks} · fehlgeschlagen: %{failures}"
+      empty: "%{hour} · keine Prüfungen"
     card:
       no_data: "Noch keine Prüfungen"
       uptime: "Verfügb. 24 h"

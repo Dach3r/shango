@@ -17,12 +17,10 @@ RSpec.describe ResponseChart::Component, type: :component do
     expect(page).to have_css("figcaption", text: I18n.t("monitoring.chart.max", ms: 200))
   end
 
-  it "draws a single point as a dot and leaves out the axis when compact", :aggregate_failures do
-    render_inline(described_class.new(points: points(120), label: "Response time", compact: true))
+  it "draws a single point as a dot", :aggregate_failures do
+    render_inline(described_class.new(points: points(120), label: "Response time"))
 
     expect(page).to have_no_css("polyline")
-    expect(page).to have_no_css("line")
-    expect(page).to have_no_css("figcaption")
     expect(page).to have_css("circle[cx='120.0']", count: 3)
   end
 

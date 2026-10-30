@@ -42,6 +42,7 @@ es:
         pending: "Pendientes"
         paused: "Pausados"
       search: "Buscar por nombre, URL o host"
+      about: "Acerca de"
       empty:
         title: "Aún no hay monitores"
         filtered: "Ningún monitor coincide con este filtro."
@@ -56,6 +57,11 @@ es:
       title: "Tiempo de respuesta · últimas 24 h"
       label: "Tiempo de respuesta promedio por hora de %{name}"
       max: "máx. %{ms} ms"
+    strip:
+      title: "Últimas 24 h"
+      label: "Chequeos por hora de %{name} en las últimas 24 h"
+      hour: "%{hour} · chequeos: %{checks} · fallidos: %{failures}"
+      empty: "%{hour} · sin chequeos"
     card:
       no_data: "Aún sin chequeos"
       uptime: "Uptime 24 h"

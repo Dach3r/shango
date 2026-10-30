@@ -1,15 +1,14 @@
 # Average response time per hour as one line (one series: no legend, the title names it), drawn on the server as an
-# inline SVG. Each point has a hover target and a native tooltip with the hour and the value; `compact` drops the axis
-# for the sparklines of the monitor list. Hours without a response leave a gap instead of a fake zero.
+# inline SVG. Each point has a hover target and a native tooltip with the hour and the value. Hours without a response
+# leave a gap instead of a fake zero.
 class ResponseChart::Component < ApplicationComponent
   WIDTH = 240
   HEIGHT = 64
   PADDING = 4
 
-  def initialize(points:, label:, compact: false)
+  def initialize(points:, label:)
     @points = points
     @label = label
-    @compact = compact
   end
 
   def render?
@@ -41,9 +40,5 @@ class ResponseChart::Component < ApplicationComponent
 
   def marks
     @points.each_with_index.filter_map { |(hour, ms), index| [x(index).round(1), y(ms).round(1), hour, ms] if ms }
-  end
-
-  def compact?
-    @compact
   end
 end

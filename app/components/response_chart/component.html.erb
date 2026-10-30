@@ -1,8 +1,6 @@
 <figure class="w-full min-w-0">
-  <svg viewBox="0 0 <%= WIDTH %> <%= HEIGHT %>" preserveAspectRatio="none" role="img" aria-label="<%= @label %>" class="<%= compact? ? "h-12" : "h-40" %> w-full overflow-visible text-accent">
-    <% unless compact? %>
-      <line x1="0" y1="<%= HEIGHT - PADDING %>" x2="<%= WIDTH %>" y2="<%= HEIGHT - PADDING %>" class="stroke-line" stroke-width="1" vector-effect="non-scaling-stroke" />
-    <% end %>
+  <svg viewBox="0 0 <%= WIDTH %> <%= HEIGHT %>" preserveAspectRatio="none" role="img" aria-label="<%= @label %>" class="h-40 w-full overflow-visible text-accent">
+    <line x1="0" y1="<%= HEIGHT - PADDING %>" x2="<%= WIDTH %>" y2="<%= HEIGHT - PADDING %>" class="stroke-line" stroke-width="1" vector-effect="non-scaling-stroke" />
     <% segments.each do |points| %>
       <% if points.one? %>
         <circle cx="<%= points.first.split(",").first %>" cy="<%= points.first.split(",").last %>" r="2" class="fill-current" />
@@ -17,11 +15,9 @@
       </g>
     <% end %>
   </svg>
-  <% unless compact? %>
-    <figcaption class="mt-2 flex justify-between font-mono text-xs text-faint">
-      <span><%= l(@points.first.first, format: :short) %></span>
-      <span><%= t("monitoring.chart.max", ms: max) %></span>
-      <span><%= l(@points.last.first, format: :short) %></span>
-    </figcaption>
-  <% end %>
+  <figcaption class="mt-2 flex justify-between font-mono text-xs text-faint">
+    <span><%= l(@points.first.first, format: :short) %></span>
+    <span><%= t("monitoring.chart.max", ms: max) %></span>
+    <span><%= l(@points.last.first, format: :short) %></span>
+  </figcaption>
 </figure>

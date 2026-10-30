@@ -42,6 +42,7 @@ ja:
         pending: "保留中"
         paused: "一時停止"
       search: "名前、URL、ホストで検索"
+      about: "概要"
       empty:
         title: "まだモニターがありません"
         filtered: "この条件に一致するモニターはありません。"
@@ -56,6 +57,11 @@ ja:
       title: "応答時間 · 直近 24 時間"
       label: "%{name} の 1 時間ごとの平均応答時間"
       max: "最大 %{ms} ms"
+    strip:
+      title: "直近 24 時間"
+      label: "%{name} の直近 24 時間の時間ごとのチェック"
+      hour: "%{hour} · チェック: %{checks} · 失敗: %{failures}"
+      empty: "%{hour} · チェックなし"
     card:
       no_data: "まだチェックがありません"
       uptime: "稼働率 24 時間"

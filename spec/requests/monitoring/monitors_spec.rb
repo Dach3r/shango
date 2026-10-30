@@ -33,7 +33,7 @@ RSpec.describe "Monitoring monitors" do
       expect(response.body).to include('data-controller="refresh"')
     end
 
-    it "lists the project's monitors with their uptime, response time and sparkline", :aggregate_failures do
+    it "lists the project's monitors with their uptime, response time and hourly strip", :aggregate_failures do
       up = create(:uptime_monitor, project:, name: "Shop", creator: user, last_checked_at: 1.minute.ago, created_at: 2.days.ago)
       up.go_up
       up.save!
@@ -43,7 +43,7 @@ RSpec.describe "Monitoring monitors" do
       create(:uptime_monitor, name: "Not mine")
       get monitoring_root_path
 
-      expect(response.body).to include("Shop", "Old site", "https://example.com/health", "<polyline", "200 ms", "100%", edit_monitoring_monitor_path(up))
+      expect(response.body).to include("Shop", "Old site", "https://example.com/health", I18n.t("monitoring.strip.label", name: "Shop"), "bg-emerald-500", "200 ms", "100%", edit_monitoring_monitor_path(up))
       expect(response.body).to include(monitoring_monitor_pause_path(paused), I18n.t("monitoring.actions.resume"), I18n.t("monitoring.statuses.paused"))
       expect(response.body).not_to include("Not mine")
     end

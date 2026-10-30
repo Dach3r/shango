@@ -42,6 +42,7 @@ en:
         pending: "Pending"
         paused: "Paused"
       search: "Search by name, URL or host"
+      about: "About"
       empty:
         title: "No monitors yet"
         filtered: "No monitor matches this filter."
@@ -56,6 +57,11 @@ en:
       title: "Response time · last 24 h"
       label: "Average response time per hour of %{name}"
       max: "max %{ms} ms"
+    strip:
+      title: "Last 24 h"
+      label: "Checks per hour of %{name} in the last 24 h"
+      hour: "%{hour} · checks: %{checks} · failed: %{failures}"
+      empty: "%{hour} · no checks"
     card:
       no_data: "No checks yet"
       uptime: "Uptime 24 h"

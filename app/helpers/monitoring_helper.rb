@@ -72,6 +72,16 @@ module MonitoringHelper
     fields.map { |field, value| [UptimeMonitor.human_attribute_name(field), value] }
   end
 
+  ICON_ACTION = "flex size-8 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50".freeze
+
+  # Options of one monitor action button: a labelled button, or a square icon named by its tooltip when compact.
+  def monitor_action(name, compact:, danger: false)
+    return { class: button_classes(danger ? :danger : :secondary) } unless compact
+
+    label = t("monitoring.actions.#{name}")
+    { class: class_names(ICON_ACTION, "hover:text-danger" => danger), title: label, aria: { label: } }
+  end
+
   CHANNEL_ICONS = { "email" => "mail", "webhook" => "webhook", "slack" => "slack", "discord" => "message-circle" }.freeze
 
   def channel_icon(channel)
