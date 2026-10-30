@@ -4,13 +4,13 @@
   <%= render layout: "monitoring/page_bar", locals: { back: (@monitor.kind ? new_monitoring_monitor_path : monitoring_root_path), title: t("monitoring.new.title"), detail: (@monitor.kind ? t("monitoring.kinds.#{@monitor.kind}") : t("monitoring.new.choose")) } do %>
     <% if @monitor.kind %><%= render "monitoring/monitors/submit", monitor: @monitor %><% end %>
   <% end %>
-  <div class="min-h-0 flex-1 overflow-y-auto">
-    <% if @monitor.kind %>
-      <%= render "monitoring/monitors/form", monitor: @monitor %>
-    <% else %>
+  <% if @monitor.kind %>
+    <%= render "monitoring/monitors/form", monitor: @monitor %>
+  <% else %>
+    <div class="min-h-0 flex-1 overflow-y-auto">
       <%= render "monitoring/kind_picker", kinds: Monitoring::Checks::Run.kinds.map { |kind|
             { icon: MonitoringHelper::KIND_ICONS.fetch(kind), title: t("monitoring.kinds.#{kind}"), hint: t("monitoring.kind_hints.#{kind}"), path: new_monitoring_monitor_path(kind:) }
           } %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 <% end %>

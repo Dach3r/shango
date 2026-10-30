@@ -4,7 +4,5 @@
   <%= render layout: "monitoring/page_bar", locals: { back: monitoring_monitor_path(@monitor), title: t("monitoring.edit.title"), detail: @monitor.name_was } do %>
     <%= render "monitoring/monitors/submit", monitor: @monitor %>
   <% end %>
-  <div class="min-h-0 flex-1 overflow-y-auto">
-    <%= render "monitoring/monitors/form", monitor: @monitor %>
-  </div>
+  <%= render "monitoring/monitors/form", monitor: @monitor %>
 <% end %>

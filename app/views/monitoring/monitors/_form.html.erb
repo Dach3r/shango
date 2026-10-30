@@ -1,133 +1,146 @@
-<%# Form of a monitor of any kind; only the fields of its kind are shown. Render with `monitor:`. Fields are the sign-in inputs (Input::Component) and large selects. %>
+<%# Form of a monitor of any kind; only the fields of its kind are shown. Render with `monitor:`. Fields are the sign-in inputs (Input::Component) and large selects; from xl the alerts sit in a full-height panel on the right. %>
 <% row = "grid gap-5 sm:grid-cols-2" %>
 <% label = Input::Component::LABEL %>
 <% hint = "-mt-2 text-sm text-muted" %>
-<%= form_with model: monitor, scope: :uptime_monitor, url: (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_monitors_path), id: "monitor_form" do |form| %>
-  <%= render "monitoring/errors", record: monitor %>
+<%= form_with model: monitor, scope: :uptime_monitor, url: (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_monitors_path), id: "monitor_form",
+                                    class: "min-h-0 flex-1 overflow-y-auto xl:flex xl:overflow-hidden" do |form| %>
   <%= hidden_field_tag "uptime_monitor[kind]", monitor.kind, id: nil unless monitor.persisted? %>
+  <div class="xl:min-w-0 xl:flex-1 xl:overflow-y-auto">
+    <%= render "monitoring/errors", record: monitor %>
 
-  <%= form.fields_for :settings, monitor do |settings| %>
-    <%= render layout: "monitoring/section", locals: { title: t("monitoring.kinds.#{monitor.kind}"), icon: MonitoringHelper::KIND_ICONS.fetch(monitor.kind), hint: t("monitoring.kind_hints.#{monitor.kind}") } do %>
-      <%= render Input::Component.new(form:, attribute: :name, label: UptimeMonitor.human_attribute_name(:name), icon: "tag", placeholder: t("monitoring.form.name_placeholder"), required: true, maxlength: 100, autocomplete: "off",
-                                      aria: { invalid: monitor.errors.include?(:name) }) %>
+    <%= form.fields_for :settings, monitor do |settings| %>
+      <%= render layout: "monitoring/section", locals: { title: t("monitoring.kinds.#{monitor.kind}"), icon: MonitoringHelper::KIND_ICONS.fetch(monitor.kind), hint: t("monitoring.kind_hints.#{monitor.kind}") } do %>
+        <%= render Input::Component.new(form:, attribute: :name, label: UptimeMonitor.human_attribute_name(:name), icon: "tag", placeholder: t("monitoring.form.name_placeholder"), required: true, maxlength: 100, autocomplete: "off",
+                                        aria: { invalid: monitor.errors.include?(:name) }) %>
 
-      <% if monitor.http? %>
-        <div class="flex flex-col gap-5" data-controller="conditional-fields" data-action="change->conditional-fields#update">
-          <div>
-            <%= label_tag "uptime_monitor_settings_mode", UptimeMonitor.human_attribute_name(:mode), class: label %>
-            <%= render Select::Component.new(name: "uptime_monitor[settings][mode]", id: "uptime_monitor_settings_mode", options: UptimeMonitor::MODES.map { |mode| [t("monitoring.form.modes.#{mode}"), mode] }, value: monitor.mode,
-                                             input_data: { field_name: "mode" }, large: true) %>
-          </div>
-          <div class="flex flex-col gap-5" data-conditional-fields-target="field" data-show-when='{"mode": ["url"]}'>
-            <%= tag.div class: "grid gap-5 sm:grid-cols-[minmax(0,1fr)_9rem]", data: variable_autocomplete_data do %>
-              <%= render Input::Component.new(form: settings, attribute: :url, label: UptimeMonitor.human_attribute_name(:url), icon: "link", placeholder: t("monitoring.form.url_placeholder"), required: true, autocomplete: "off",
-                                              spellcheck: false, class: "font-mono", aria: { invalid: monitor.errors.include?(:url) }) %>
-              <div>
-                <%= label_tag "uptime_monitor_settings_http_method", UptimeMonitor.human_attribute_name(:http_method), class: label %>
-                <%= render Select::Component.new(name: "uptime_monitor[settings][http_method]", id: "uptime_monitor_settings_http_method", options: UptimeMonitor::HTTP_METHODS.map { |method| [method, method] }, value: monitor.http_method,
-                                                 searchable: false, large: true, class: "font-mono") %>
-              </div>
-            <% end %>
-            <p class="<%= hint %>"><%= t("monitoring.form.url_hint") %></p>
-          </div>
-          <div class="flex flex-col gap-5" data-conditional-fields-target="field" data-show-when='{"mode": ["request"]}'>
+        <% if monitor.http? %>
+          <div class="flex flex-col gap-5" data-controller="conditional-fields" data-action="change->conditional-fields#update">
             <div>
-              <%= label_tag "uptime_monitor_api_request_id", UptimeMonitor.human_attribute_name(:api_request), class: label %>
-              <%= render Select::Component.new(name: "uptime_monitor[api_request_id]", id: "uptime_monitor_api_request_id", value: monitor.api_request_id, large: true, class: "font-mono",
-                                               options: [["—", ""], *monitor_request_options.flat_map { |collection, requests| requests.map { |name, id| ["#{collection} / #{name}", id] } }]) %>
+              <%= label_tag "uptime_monitor_settings_mode", UptimeMonitor.human_attribute_name(:mode), class: label %>
+              <%= render Select::Component.new(name: "uptime_monitor[settings][mode]", id: "uptime_monitor_settings_mode", options: UptimeMonitor::MODES.map { |mode| [t("monitoring.form.modes.#{mode}"), mode] }, value: monitor.mode,
+                                               input_data: { field_name: "mode" }, large: true) %>
             </div>
-            <p class="<%= hint %>"><%= t("monitoring.form.request_hint") %></p>
+            <div class="flex flex-col gap-5" data-conditional-fields-target="field" data-show-when='{"mode": ["url"]}'>
+              <%= tag.div class: "grid gap-5 sm:grid-cols-[minmax(0,1fr)_9rem]", data: variable_autocomplete_data do %>
+                <%= render Input::Component.new(form: settings, attribute: :url, label: UptimeMonitor.human_attribute_name(:url), icon: "link", placeholder: t("monitoring.form.url_placeholder"), required: true, autocomplete: "off",
+                                                spellcheck: false, class: "font-mono", aria: { invalid: monitor.errors.include?(:url) }) %>
+                <div>
+                  <%= label_tag "uptime_monitor_settings_http_method", UptimeMonitor.human_attribute_name(:http_method), class: label %>
+                  <%= render Select::Component.new(name: "uptime_monitor[settings][http_method]", id: "uptime_monitor_settings_http_method", options: UptimeMonitor::HTTP_METHODS.map { |method| [method, method] }, value: monitor.http_method,
+                                                   searchable: false, large: true, class: "font-mono") %>
+                </div>
+              <% end %>
+              <p class="<%= hint %>"><%= t("monitoring.form.url_hint") %></p>
+            </div>
+            <div class="flex flex-col gap-5" data-conditional-fields-target="field" data-show-when='{"mode": ["request"]}'>
+              <div>
+                <%= label_tag "uptime_monitor_api_request_id", UptimeMonitor.human_attribute_name(:api_request), class: label %>
+                <%= render Select::Component.new(name: "uptime_monitor[api_request_id]", id: "uptime_monitor_api_request_id", value: monitor.api_request_id, large: true, class: "font-mono",
+                                                 options: [["—", ""], *monitor_request_options.flat_map { |collection, requests| requests.map { |name, id| ["#{collection} / #{name}", id] } }]) %>
+              </div>
+              <p class="<%= hint %>"><%= t("monitoring.form.request_hint") %></p>
+            </div>
+          </div>
+        <% elsif monitor.push? %>
+          <p class="text-sm text-muted"><%= t("monitoring.form.push_hint") %></p>
+        <% else %>
+          <%= tag.div class: (monitor.domain? ? "grid gap-5" : "grid gap-5 sm:grid-cols-[minmax(0,1fr)_9rem]"), data: variable_autocomplete_data do %>
+            <%= render Input::Component.new(form: settings, attribute: :host, label: UptimeMonitor.human_attribute_name(:host), icon: "server", placeholder: t("monitoring.form.host_placeholder"), required: true, autocomplete: "off",
+                                            spellcheck: false, class: "font-mono", aria: { invalid: monitor.errors.include?(:host) }) %>
+            <% unless monitor.domain? %>
+              <%= render Input::Component.new(form: settings, attribute: :port, type: :number, label: UptimeMonitor.human_attribute_name(:port), required: true, min: 1, max: 65_535, class: "font-mono",
+                                              aria: { invalid: monitor.errors.include?(:port) }) %>
+            <% end %>
+          <% end %>
+          <p class="<%= hint %>"><%= t("monitoring.form.host_hint") %></p>
+        <% end %>
+
+        <div class="<%= row %>">
+          <% unless monitor.push? %>
+            <div>
+              <%= label_tag "uptime_monitor_environment_id", UptimeMonitor.human_attribute_name(:environment), class: label %>
+              <%= render Select::Component.new(name: "uptime_monitor[environment_id]", id: "uptime_monitor_environment_id", value: monitor.environment_id, large: true,
+                                               options: [[t("monitoring.form.no_environment"), ""], *current_project.environments.ordered.map { |environment| [environment.name, environment.id] }]) %>
+            </div>
+          <% end %>
+          <div>
+            <%= label_tag "uptime_monitor_interval", UptimeMonitor.human_attribute_name(:interval), class: label %>
+            <%= render Select::Component.new(name: "uptime_monitor[interval]", id: "uptime_monitor_interval", options: monitor_interval_options(monitor), value: monitor.interval, searchable: false, large: true) %>
           </div>
         </div>
-      <% elsif monitor.push? %>
-        <p class="text-sm text-muted"><%= t("monitoring.form.push_hint") %></p>
-      <% else %>
-        <%= tag.div class: (monitor.domain? ? "grid gap-5" : "grid gap-5 sm:grid-cols-[minmax(0,1fr)_9rem]"), data: variable_autocomplete_data do %>
-          <%= render Input::Component.new(form: settings, attribute: :host, label: UptimeMonitor.human_attribute_name(:host), icon: "server", placeholder: t("monitoring.form.host_placeholder"), required: true, autocomplete: "off",
-                                          spellcheck: false, class: "font-mono", aria: { invalid: monitor.errors.include?(:host) }) %>
-          <% unless monitor.domain? %>
-            <%= render Input::Component.new(form: settings, attribute: :port, type: :number, label: UptimeMonitor.human_attribute_name(:port), required: true, min: 1, max: 65_535, class: "font-mono",
-                                            aria: { invalid: monitor.errors.include?(:port) }) %>
-          <% end %>
-        <% end %>
-        <p class="<%= hint %>"><%= t("monitoring.form.host_hint") %></p>
       <% end %>
 
-      <div class="<%= row %>">
-        <% unless monitor.push? %>
+      <% conditions_hint = t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "domain" => "monitoring.form.domain_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %>
+      <%= render layout: "monitoring/section", locals: { title: t("monitoring.form.conditions"), icon: "list-checks", hint: conditions_hint } do %>
+        <div class="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
+          <% if monitor.http? %>
+            <%= render Input::Component.new(form: settings, attribute: :expected_statuses, label: UptimeMonitor.human_attribute_name(:expected_statuses), placeholder: "200-399", autocomplete: "off", spellcheck: false, class: "font-mono",
+                                            aria: { invalid: monitor.errors.include?(:expected_statuses) }) %>
+            <%= render Input::Component.new(form: settings, attribute: :max_response_ms, type: :number, label: UptimeMonitor.human_attribute_name(:max_response_ms), placeholder: t("monitoring.form.no_limit"), min: 1, max: 60_000,
+                                            class: "font-mono", aria: { invalid: monitor.errors.include?(:max_response_ms) }) %>
+          <% end %>
+          <% if monitor.push? %>
+            <div>
+              <%= label_tag "uptime_monitor_settings_grace", UptimeMonitor.human_attribute_name(:grace), class: label %>
+              <%= render Select::Component.new(name: "uptime_monitor[settings][grace]", id: "uptime_monitor_settings_grace", options: UptimeMonitor::GRACES.map { |seconds| [monitor_grace_label(seconds), seconds] }, value: monitor.grace,
+                                               searchable: false, large: true) %>
+            </div>
+          <% end %>
+          <% if monitor.ssl? || monitor.domain? %>
+            <%= render Input::Component.new(form: settings, attribute: :days_before, type: :number, label: UptimeMonitor.human_attribute_name(:days_before), required: true, min: 1, max: (monitor.ssl? ? 90 : 365), class: "font-mono",
+                                            aria: { invalid: monitor.errors.include?(:days_before) }) %>
+          <% end %>
+          <% unless monitor.push? %>
+            <div>
+              <%= label_tag "uptime_monitor_timeout", UptimeMonitor.human_attribute_name(:timeout), class: label %>
+              <%= render Select::Component.new(name: "uptime_monitor[timeout]", id: "uptime_monitor_timeout", options: UptimeMonitor::TIMEOUTS.map { |seconds| [t("monitoring.units.seconds", value: seconds), seconds] }, value: monitor.timeout,
+                                               searchable: false, large: true) %>
+            </div>
+          <% end %>
           <div>
-            <%= label_tag "uptime_monitor_environment_id", UptimeMonitor.human_attribute_name(:environment), class: label %>
-            <%= render Select::Component.new(name: "uptime_monitor[environment_id]", id: "uptime_monitor_environment_id", value: monitor.environment_id, large: true,
-                                             options: [[t("monitoring.form.no_environment"), ""], *current_project.environments.ordered.map { |environment| [environment.name, environment.id] }]) %>
+            <%= label_tag "uptime_monitor_confirmations", UptimeMonitor.human_attribute_name(:confirmations), class: label %>
+            <%= render Select::Component.new(name: "uptime_monitor[confirmations]", id: "uptime_monitor_confirmations", options: UptimeMonitor::CONFIRMATIONS.map { |count| [count, count] }, value: monitor.confirmations,
+                                             searchable: false, large: true) %>
           </div>
-        <% end %>
-        <div>
-          <%= label_tag "uptime_monitor_interval", UptimeMonitor.human_attribute_name(:interval), class: label %>
-          <%= render Select::Component.new(name: "uptime_monitor[interval]", id: "uptime_monitor_interval", options: monitor_interval_options(monitor), value: monitor.interval, searchable: false, large: true) %>
         </div>
-      </div>
+      <% end %>
     <% end %>
 
-    <% conditions_hint = t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "domain" => "monitoring.form.domain_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %>
-    <%= render layout: "monitoring/section", locals: { title: t("monitoring.form.conditions"), icon: "list-checks", hint: conditions_hint } do %>
-      <div class="<%= row %>">
-        <% if monitor.http? %>
-          <%= render Input::Component.new(form: settings, attribute: :expected_statuses, label: UptimeMonitor.human_attribute_name(:expected_statuses), placeholder: "200-399", autocomplete: "off", spellcheck: false, class: "font-mono",
-                                          aria: { invalid: monitor.errors.include?(:expected_statuses) }) %>
-          <%= render Input::Component.new(form: settings, attribute: :max_response_ms, type: :number, label: UptimeMonitor.human_attribute_name(:max_response_ms), placeholder: t("monitoring.form.no_limit"), min: 1, max: 60_000,
-                                          class: "font-mono", aria: { invalid: monitor.errors.include?(:max_response_ms) }) %>
-        <% end %>
-        <% if monitor.push? %>
-          <div>
-            <%= label_tag "uptime_monitor_settings_grace", UptimeMonitor.human_attribute_name(:grace), class: label %>
-            <%= render Select::Component.new(name: "uptime_monitor[settings][grace]", id: "uptime_monitor_settings_grace", options: UptimeMonitor::GRACES.map { |seconds| [monitor_grace_label(seconds), seconds] }, value: monitor.grace,
-                                             searchable: false, large: true) %>
-          </div>
-        <% end %>
-        <% if monitor.ssl? || monitor.domain? %>
-          <%= render Input::Component.new(form: settings, attribute: :days_before, type: :number, label: UptimeMonitor.human_attribute_name(:days_before), required: true, min: 1, max: (monitor.ssl? ? 90 : 365), class: "font-mono",
-                                          aria: { invalid: monitor.errors.include?(:days_before) }) %>
-        <% end %>
-        <% unless monitor.push? %>
-          <div>
-            <%= label_tag "uptime_monitor_timeout", UptimeMonitor.human_attribute_name(:timeout), class: label %>
-            <%= render Select::Component.new(name: "uptime_monitor[timeout]", id: "uptime_monitor_timeout", options: UptimeMonitor::TIMEOUTS.map { |seconds| [t("monitoring.units.seconds", value: seconds), seconds] }, value: monitor.timeout,
-                                             searchable: false, large: true) %>
-          </div>
-        <% end %>
-        <div>
-          <%= label_tag "uptime_monitor_confirmations", UptimeMonitor.human_attribute_name(:confirmations), class: label %>
-          <%= render Select::Component.new(name: "uptime_monitor[confirmations]", id: "uptime_monitor_confirmations", options: UptimeMonitor::CONFIRMATIONS.map { |count| [count, count] }, value: monitor.confirmations,
-                                           searchable: false, large: true) %>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
+  </div>
 
   <% channels = current_project.notification_channels.ordered %>
-  <%= render layout: "monitoring/section", locals: { title: t("monitoring.form.alerts"), icon: "bell", hint: (t("monitoring.form.alerts_hint") if channels.any?) } do %>
-    <%= hidden_field_tag "uptime_monitor[notification_channel_ids][]", "", id: nil %>
-    <% if channels.empty? %>
-      <div class="flex flex-col items-start gap-3 border border-dashed border-line px-5 py-5">
-        <p class="text-sm text-muted"><%= t("monitoring.form.no_channels") %></p>
-        <%= link_to new_monitoring_channel_path, class: button_classes(:secondary) do %><%= lucide_icon "plus", class: "size-4" %><%= t("monitoring.channels.index.new") %><% end %>
+  <aside class="grid gap-x-12 gap-y-5 border-b border-line px-5 py-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:px-8 xl:flex xl:w-96 xl:shrink-0 xl:flex-col xl:overflow-y-auto xl:border-b-0 xl:border-l xl:px-6">
+    <div class="flex min-w-0 gap-4 lg:flex-col lg:gap-3">
+      <span class="flex size-10 shrink-0 items-center justify-center border border-line text-muted"><%= lucide_icon "bell", class: "size-4" %></span>
+      <div class="min-w-0">
+        <h2 class="text-base font-semibold text-ink"><%= t("monitoring.form.alerts") %></h2>
+        <% if channels.any? %><p class="mt-1.5 text-sm leading-relaxed text-muted"><%= t("monitoring.form.alerts_hint") %></p><% end %>
       </div>
-    <% else %>
-      <ul class="grid gap-3 sm:grid-cols-2">
-        <% selected = monitor.notification_channel_ids %>
-        <% channels.each do |channel| %>
-          <li>
-            <label class="flex h-14 cursor-pointer items-center gap-3 border border-line bg-field px-4 text-sm text-ink transition hover:bg-field-focus has-checked:border-solid">
-              <span class="relative flex size-5 shrink-0">
-                <%= check_box_tag "uptime_monitor[notification_channel_ids][]", channel.id, selected.include?(channel.id), id: "uptime_monitor_channel_#{channel.id}", class: Checkbox::Component::BOX %>
-                <%= lucide_icon "check", class: Checkbox::Component::ICON, "aria-hidden": true %>
-              </span>
-              <%= lucide_icon channel_icon(channel), class: "size-4 text-muted" %>
-              <span class="truncate"><%= channel.name %></span>
-            </label>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-  <% end %>
+    </div>
+    <div class="flex min-w-0 flex-col gap-5">
+      <%= hidden_field_tag "uptime_monitor[notification_channel_ids][]", "", id: nil %>
+      <% if channels.empty? %>
+        <div class="flex flex-col items-start gap-3 border border-dashed border-line px-5 py-5">
+          <p class="text-sm text-muted"><%= t("monitoring.form.no_channels") %></p>
+          <%= link_to new_monitoring_channel_path, class: button_classes(:secondary) do %><%= lucide_icon "plus", class: "size-4" %><%= t("monitoring.channels.index.new") %><% end %>
+        </div>
+      <% else %>
+        <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+          <% selected = monitor.notification_channel_ids %>
+          <% channels.each do |channel| %>
+            <li>
+              <label class="flex h-14 cursor-pointer items-center gap-3 border border-line bg-field px-4 text-sm text-ink transition hover:bg-field-focus has-checked:border-solid">
+                <span class="relative flex size-5 shrink-0">
+                  <%= check_box_tag "uptime_monitor[notification_channel_ids][]", channel.id, selected.include?(channel.id), id: "uptime_monitor_channel_#{channel.id}", class: Checkbox::Component::BOX %>
+                  <%= lucide_icon "check", class: Checkbox::Component::ICON, "aria-hidden": true %>
+                </span>
+                <%= lucide_icon channel_icon(channel), class: "size-4 text-muted" %>
+                <span class="truncate"><%= channel.name %></span>
+              </label>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </aside>
 <% end %>
