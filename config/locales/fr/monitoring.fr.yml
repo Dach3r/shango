@@ -54,7 +54,6 @@ fr:
     chart:
       title: "Temps de réponse · dernières 24 h"
       label: "Temps de réponse moyen par heure de %{name}"
-      max: "max %{ms} ms"
     strip:
       title: "Dernières 24 h"
       label: "Vérifications par heure de %{name} sur les dernières 24 h"

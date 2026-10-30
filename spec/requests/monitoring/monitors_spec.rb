@@ -106,7 +106,7 @@ RSpec.describe "Monitoring monitors" do
       create(:check_result, uptime_monitor: monitor, status: "down", error: "connection_timeout", http_status: nil, response_ms: nil)
       get monitoring_monitor_path(monitor)
 
-      expect(response.body).to include(monitor.name, "Production", "<polyline", I18n.t("monitoring.show.uptime_month"), "120 ms")
+      expect(response.body).to include(monitor.name, "Production", "data-controller=\"chart\"", I18n.t("monitoring.show.uptime_month"), "120 ms")
       expect(response.body).to include(CGI.escapeHTML("#{I18n.t("monitoring.causes.unexpected_status")} (503 Service Unavailable)"), I18n.t("monitoring.causes.connection_timeout"))
       expect(response.body).to include(I18n.t("monitoring.intervals.minutes", value: 5), I18n.t("monitoring.units.seconds", value: 10))
     end

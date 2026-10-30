@@ -54,7 +54,6 @@ zh-CN:
     chart:
       title: "响应时间 · 最近 24 小时"
       label: "%{name} 每小时平均响应时间"
-      max: "最大 %{ms} ms"
     strip:
       title: "最近 24 小时"
       label: "%{name} 最近 24 小时每小时的检查"

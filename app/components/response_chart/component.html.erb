@@ -1,23 +1,5 @@
-<figure class="w-full min-w-0">
-  <svg viewBox="0 0 <%= WIDTH %> <%= HEIGHT %>" preserveAspectRatio="none" role="img" aria-label="<%= @label %>" class="h-40 w-full overflow-visible text-accent">
-    <line x1="0" y1="<%= HEIGHT - PADDING %>" x2="<%= WIDTH %>" y2="<%= HEIGHT - PADDING %>" class="stroke-line" stroke-width="1" vector-effect="non-scaling-stroke" />
-    <% segments.each do |points| %>
-      <% if points.one? %>
-        <circle cx="<%= points.first.split(",").first %>" cy="<%= points.first.split(",").last %>" r="2" class="fill-current" />
-      <% else %>
-        <polyline points="<%= points.join(" ") %>" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
-      <% end %>
-    <% end %>
-    <% marks.each do |cx, cy, hour, ms| %>
-      <g class="group">
-        <circle cx="<%= cx %>" cy="<%= cy %>" r="8" fill="transparent"><title><%= l(hour, format: :short) %> · <%= ms %> ms</title></circle>
-        <circle cx="<%= cx %>" cy="<%= cy %>" r="2.5" class="fill-current opacity-0 group-hover:opacity-100" />
-      </g>
-    <% end %>
-  </svg>
-  <figcaption class="mt-2 flex justify-between font-mono text-xs text-faint">
-    <span><%= l(@points.first.first, format: :short) %></span>
-    <span><%= t("monitoring.chart.max", ms: max) %></span>
-    <span><%= l(@points.last.first, format: :short) %></span>
-  </figcaption>
+<figure data-controller="chart" data-chart-labels-value="<%= labels.to_json %>" data-chart-datasets-value="<%= datasets.to_json %>" data-chart-unit-value="ms" class="w-full min-w-0">
+  <div class="h-48 w-full text-accent">
+    <canvas data-chart-target="canvas" role="img" aria-label="<%= @label %>"></canvas>
+  </div>
 </figure>

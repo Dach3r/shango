@@ -54,7 +54,6 @@ en:
     chart:
       title: "Response time · last 24 h"
       label: "Average response time per hour of %{name}"
-      max: "max %{ms} ms"
     strip:
       title: "Last 24 h"
       label: "Checks per hour of %{name} in the last 24 h"

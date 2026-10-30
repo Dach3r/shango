@@ -54,7 +54,6 @@ es:
     chart:
       title: "Tiempo de respuesta · últimas 24 h"
       label: "Tiempo de respuesta promedio por hora de %{name}"
-      max: "máx. %{ms} ms"
     strip:
       title: "Últimas 24 h"
       label: "Chequeos por hora de %{name} en las últimas 24 h"

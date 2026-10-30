@@ -54,7 +54,6 @@ de:
     chart:
       title: "Antwortzeit · letzte 24 h"
       label: "Durchschnittliche Antwortzeit pro Stunde von %{name}"
-      max: "max. %{ms} ms"
     strip:
       title: "Letzte 24 h"
       label: "Prüfungen pro Stunde von %{name} in den letzten 24 h"

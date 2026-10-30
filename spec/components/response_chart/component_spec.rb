@@ -7,26 +7,19 @@ RSpec.describe ResponseChart::Component, type: :component do
     values.each_with_index.map { |ms, index| [hour + index.hours, ms] }
   end
 
-  it "draws one line per run of hours with data, with a tooltip on every point", :aggregate_failures do
-    render_inline(described_class.new(points: points(100, 200, nil, 50, 80, nil, 30), label: "Response time"))
+  it "hands the hours and values to the chart controller, keeping gaps as null", :aggregate_failures do
+    render_inline(described_class.new(points: points(100, nil, 50), label: "Response time"))
 
-    expect(page).to have_css("svg[role=img][aria-label='Response time']")
-    expect(page).to have_css("polyline", count: 2)
-    expect(page).to have_css("circle", count: 11)
-    expect(page).to have_css("title", text: "200 ms")
-    expect(page).to have_css("figcaption", text: I18n.t("monitoring.chart.max", ms: 200))
-  end
-
-  it "draws a single point as a dot", :aggregate_failures do
-    render_inline(described_class.new(points: points(120), label: "Response time"))
-
-    expect(page).to have_no_css("polyline")
-    expect(page).to have_css("circle[cx='120.0']", count: 3)
+    figure = page.find("figure[data-controller=chart]")
+    expect(figure["data-chart-unit-value"]).to eq("ms")
+    expect(JSON.parse(figure["data-chart-labels-value"])).to eq((0..2).map { |i| I18n.l(hour + i.hours, format: :short) })
+    expect(JSON.parse(figure["data-chart-datasets-value"])).to eq([{ "label" => "Response time", "data" => [100, nil, 50] }])
+    expect(page).to have_css("canvas[data-chart-target=canvas][role=img][aria-label='Response time']")
   end
 
   it "renders nothing without data" do
     render_inline(described_class.new(points: points(nil, nil), label: "Response time"))
 
-    expect(page).to have_no_css("svg")
+    expect(page).to have_no_css("canvas")
   end
 end
