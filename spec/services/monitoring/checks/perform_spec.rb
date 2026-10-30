@@ -3,13 +3,15 @@ require "rails_helper"
 RSpec.describe Monitoring::Checks::Perform do
   let(:monitor) { create(:uptime_monitor) }
 
-  it "probes and applies the outcome", :aggregate_failures do
+  it "probes, applies the outcome and refreshes the monitor's pages", :aggregate_failures do
     allow(Monitoring::Checks::Run).to receive(:call).and_return(Monitoring::Checks::Outcome.up(response_ms: 50))
+    allow(Turbo::StreamsChannel).to receive(:broadcast_refresh_to)
     result = described_class.call(monitor_id: monitor.id, config_version: monitor.config_version)
 
     expect(result).to be_success
     expect(Monitoring::Checks::Run).to have_received(:call).with(monitor)
     expect(monitor.reload).to be_up
+    expect(Turbo::StreamsChannel).to have_received(:broadcast_refresh_to).with(monitor)
   end
 
   it "does not probe a monitor that is gone, paused or edited", :aggregate_failures do

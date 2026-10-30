@@ -59,7 +59,7 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 4. Routine upkeep
 
-- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors), monitoring retention (hourly at :40). They only run while a worker is up.
+- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors; development uses the `postgresql` Action Cable adapter so broadcasts from `bin/jobs` reach the browser), monitoring retention (hourly at :40). They only run while a worker is up.
 - Rotate encryption keys when someone with access leaves: [`api-client.md`](api-client.md) §6.
 - Keep dependencies current (Dependabot PRs; CI runs `bundler-audit` on every push).
 - Errors go to stdout with a request id (`log_tags`); ship them to your log platform. An error tracker (Sentry or similar) is not bundled; add one if you need alerting.
