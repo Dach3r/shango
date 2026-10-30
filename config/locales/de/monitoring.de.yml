@@ -140,10 +140,4 @@ de:
         destroyed: "Monitor gelöscht."
       runs:
         create:
-          queued: "Prüfung eingereiht. Das Ergebnis erscheint hier in wenigen Sekunden."
           paused: "Setze den Monitor fort, um ihn zu prüfen."
-      pauses:
-        create:
-          paused: "Monitor pausiert."
-        destroy:
-          resumed: "Monitor fortgesetzt. Er wird innerhalb einer Minute geprüft."

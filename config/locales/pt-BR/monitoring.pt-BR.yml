@@ -140,10 +140,4 @@ pt-BR:
         destroyed: "Monitor excluído."
       runs:
         create:
-          queued: "Verificação na fila. O resultado aparece aqui em alguns segundos."
           paused: "Retome o monitor para verificá-lo."
-      pauses:
-        create:
-          paused: "Monitor pausado."
-        destroy:
-          resumed: "Monitor retomado. Ele é verificado em menos de um minuto."

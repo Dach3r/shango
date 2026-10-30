@@ -9,7 +9,7 @@ module Monitoring
         return redirect_to(monitoring_monitor_path(@monitor), alert: t(".paused"), status: :see_other) if @monitor.paused?
 
         MonitorCheckJob.perform_later(@monitor.id, @monitor.config_version)
-        redirect_to monitoring_monitor_path(@monitor), notice: t(".queued"), status: :see_other
+        redirect_to monitoring_monitor_path(@monitor), status: :see_other
       end
     end
   end

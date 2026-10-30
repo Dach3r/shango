@@ -140,10 +140,4 @@ es:
         destroyed: "Monitor eliminado."
       runs:
         create:
-          queued: "Chequeo en cola. Su resultado aparece aquí en unos segundos."
           paused: "Reanuda el monitor para revisarlo."
-      pauses:
-        create:
-          paused: "Monitor pausado."
-        destroy:
-          resumed: "Monitor reanudado. Se revisa en menos de un minuto."

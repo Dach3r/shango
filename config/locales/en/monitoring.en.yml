@@ -140,10 +140,4 @@ en:
         destroyed: "Monitor deleted."
       runs:
         create:
-          queued: "Check queued. Its result appears here in a few seconds."
           paused: "Resume the monitor to check it."
-      pauses:
-        create:
-          paused: "Monitor paused."
-        destroy:
-          resumed: "Monitor resumed. It is checked within a minute."

@@ -140,10 +140,4 @@ ja:
         destroyed: "モニターを削除しました。"
       runs:
         create:
-          queued: "チェックをキューに入れました。数秒で結果が表示されます。"
           paused: "チェックするにはモニターを再開してください。"
-      pauses:
-        create:
-          paused: "モニターを一時停止しました。"
-        destroy:
-          resumed: "モニターを再開しました。1 分以内にチェックされます。"

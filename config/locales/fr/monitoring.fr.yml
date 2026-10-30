@@ -140,10 +140,4 @@ fr:
         destroyed: "Moniteur supprimé."
       runs:
         create:
-          queued: "Vérification en file. Son résultat apparaît ici dans quelques secondes."
           paused: "Reprenez le moniteur pour le vérifier."
-      pauses:
-        create:
-          paused: "Moniteur en pause."
-        destroy:
-          resumed: "Moniteur repris. Il est vérifié dans la minute."

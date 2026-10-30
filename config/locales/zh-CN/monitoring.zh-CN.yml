@@ -140,10 +140,4 @@ zh-CN:
         destroyed: "监控已删除。"
       runs:
         create:
-          queued: "检查已排队，几秒后结果会显示在这里。"
           paused: "请先恢复监控再检查。"
-      pauses:
-        create:
-          paused: "监控已暂停。"
-        destroy:
-          resumed: "监控已恢复，一分钟内会进行检查。"

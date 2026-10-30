@@ -12,7 +12,7 @@ RSpec.describe "Monitoring monitor runs" do
   it "queues a check now", :aggregate_failures do
     expect { post monitoring_monitor_run_path(monitor) }.to have_enqueued_job(MonitorCheckJob).with(monitor.id, monitor.config_version)
     expect(response).to redirect_to(monitoring_monitor_path(monitor))
-    expect(flash[:notice]).to eq(I18n.t("monitoring.monitors.runs.create.queued"))
+    expect(flash[:notice]).to be_nil
   end
 
   it "does not check a paused monitor", :aggregate_failures do
