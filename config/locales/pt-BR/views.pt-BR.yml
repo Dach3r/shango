@@ -245,6 +245,9 @@ pt-BR:
         delete_account:
           heading: Cancelar conta
           description: Exclua sua conta permanentemente.
+        time_zone:
+          label: "Fuso horário"
+          hint: "O fuso horário usado para mostrar datas e horas."
         email: E-mail
         new_password: Nova senha
         email_placeholder: voce@exemplo.com

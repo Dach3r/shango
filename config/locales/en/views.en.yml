@@ -245,6 +245,9 @@ en:
         delete_account:
           heading: Cancel account
           description: Permanently delete your account.
+        time_zone:
+          label: "Time zone"
+          hint: "The time zone used to show dates and times."
         email: Email
         new_password: New password
         email_placeholder: you@example.com

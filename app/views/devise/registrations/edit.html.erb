@@ -24,6 +24,9 @@
            ],
            [
              { attribute: :email, type: :email, label: "devise.registrations.edit.email", placeholder: "devise.registrations.edit.email_placeholder", autocomplete: "email", required: true }
+           ],
+           [
+             { attribute: :time_zone, as: :time_zone }
            ]
          ]
        else
@@ -44,7 +47,15 @@
         <% rows.each do |row| %>
           <div class="grid gap-4 px-5 py-5 sm:px-7 <%= "md:grid-cols-2" if row.size > 1 %> md:gap-8">
             <% row.each do |field| %>
+              <% if field[:as] == :time_zone %>
+                <div class="min-w-0">
+                  <label for="user_time_zone" class="text-sm font-semibold text-ink"><%= t("devise.registrations.edit.time_zone.label") %></label>
+                  <p class="mt-1 mb-3 text-xs leading-relaxed text-muted"><%= t("devise.registrations.edit.time_zone.hint") %></p>
+                  <%= render Select::Component.new(name: "user[time_zone]", id: "user_time_zone", label: t("devise.registrations.edit.time_zone.label"), options: ActiveSupport::TimeZone.all.map { |zone| [zone.to_s, zone.name] }, value: f.object.time_zone, large: true, input_data: { action: "change->dirty-form#refresh" }) %>
+                </div>
+              <% else %>
               <%= render Input::Component.new(form: f, **field.except(:label, :placeholder), label: t(field[:label]), placeholder: t(field[:placeholder])) %>
+              <% end %>
             <% end %>
           </div>
         <% end %>

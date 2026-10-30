@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_29_162034) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_30_130536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -458,6 +458,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_162034) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "current_membership_id"
+    t.string "time_zone", default: "UTC", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["current_membership_id"], name: "index_users_on_current_membership_id"
     t.index ["email"], name: "index_users_on_email", unique: true

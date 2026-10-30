@@ -245,6 +245,9 @@ de:
         delete_account:
           heading: Konto kündigen
           description: Dein Konto dauerhaft löschen.
+        time_zone:
+          label: "Zeitzone"
+          hint: "Die Zeitzone, in der Datum und Uhrzeit angezeigt werden."
         email: E-Mail
         new_password: Neues Passwort
         email_placeholder: du@example.com

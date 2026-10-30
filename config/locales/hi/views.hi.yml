@@ -245,6 +245,9 @@ hi:
         delete_account:
           heading: "खाता रद्द करें"
           description: "अपना खाता हमेशा के लिए हटाएँ।"
+        time_zone:
+          label: "समय क्षेत्र"
+          hint: "तारीख़ और समय दिखाने के लिए उपयोग किया जाने वाला समय क्षेत्र।"
         email: "ईमेल"
         new_password: "नया पासवर्ड"
         email_placeholder: "you@example.com"

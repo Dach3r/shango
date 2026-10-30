@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :projects, -> { merge(Membership.active) }, through: :memberships
 
   validates :first_name, :last_name, presence: true
+  validates :time_zone, inclusion: { in: ->(_) { ActiveSupport::TimeZone.all.map(&:name) } }
   validates :password_confirmation, presence: true, if: -> { persisted? && password.present? }
 
   # Confirmation needs working email; without SMTP (or when the operator opts out) accounts are active right away.

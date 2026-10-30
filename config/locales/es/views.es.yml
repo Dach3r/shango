@@ -245,6 +245,9 @@ es:
         delete_account:
           heading: Cancelar mi cuenta
           description: Elimina tu cuenta de forma permanente.
+        time_zone:
+          label: "Zona horaria"
+          hint: "La zona horaria con la que se muestran fechas y horas."
         email: Correo electrónico
         new_password: Nueva contraseña
         email_placeholder: tu@ejemplo.com

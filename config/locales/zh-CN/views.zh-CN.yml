@@ -245,6 +245,9 @@ zh-CN:
         delete_account:
           heading: 注销账户
           description: 永久删除你的账户。
+        time_zone:
+          label: "时区"
+          hint: "用于显示日期和时间的时区。"
         email: 邮箱
         new_password: 新密码
         email_placeholder: you@example.com

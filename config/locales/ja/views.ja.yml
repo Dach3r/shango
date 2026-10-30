@@ -245,6 +245,9 @@ ja:
         delete_account:
           heading: アカウントの解約
           description: アカウントを完全に削除します。
+        time_zone:
+          label: "タイムゾーン"
+          hint: "日付と時刻の表示に使うタイムゾーン。"
         email: メールアドレス
         new_password: 新しいパスワード
         email_placeholder: you@example.com

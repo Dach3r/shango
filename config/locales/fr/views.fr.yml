@@ -245,6 +245,9 @@ fr:
         delete_account:
           heading: "Supprimer le compte"
           description: "Supprimez définitivement votre compte."
+        time_zone:
+          label: "Fuseau horaire"
+          hint: "Le fuseau horaire utilisé pour afficher les dates et heures."
         email: "E-mail"
         new_password: "Nouveau mot de passe"
         email_placeholder: "vous@example.com"

@@ -6,6 +6,17 @@ RSpec.describe User do
   it { is_expected.to validate_presence_of(:first_name) }
   it { is_expected.to validate_presence_of(:last_name) }
 
+  describe "time zone" do
+    it "defaults to UTC" do
+      expect(described_class.new.time_zone).to eq("UTC")
+    end
+
+    it "accepts only known zones", :aggregate_failures do
+      expect(build(:user, time_zone: "Santiago")).to be_valid
+      expect(build(:user, time_zone: "Mars/Olympus")).not_to be_valid
+    end
+  end
+
   describe "password confirmation" do
     let(:persisted_user) { create(:user) }
 

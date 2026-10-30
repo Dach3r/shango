@@ -245,6 +245,9 @@ ru:
         delete_account:
           heading: Удалить аккаунт
           description: Безвозвратно удалить ваш аккаунт.
+        time_zone:
+          label: "Часовой пояс"
+          hint: "Часовой пояс для отображения даты и времени."
         email: Электронная почта
         new_password: Новый пароль
         email_placeholder: you@example.com
