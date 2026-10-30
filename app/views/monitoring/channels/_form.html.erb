@@ -1,29 +1,28 @@
-<%# Form of a notification channel of one kind. Render with `channel:`. %>
+<%# Form of a notification channel of one kind. Render with `channel:`. Fields are the sign-in inputs (Input::Component) and a large select. %>
 <%= form_with model: channel, scope: :notification_channel, url: (channel.persisted? ? monitoring_channel_path(channel) : monitoring_channels_path), id: "channel_form" do |form| %>
   <%= hidden_field_tag "notification_channel[kind]", channel.kind unless channel.persisted? %>
   <%= render "monitoring/errors", record: channel %>
 
   <%= render layout: "monitoring/section", locals: { title: t("monitoring.channels.kinds.#{channel.kind}"), icon: channel_icon(channel), hint: t("monitoring.channels.hints.#{channel.kind}") } do %>
+    <%= render Input::Component.new(form:, attribute: :name, label: NotificationChannel.human_attribute_name(:name), icon: "tag", placeholder: t("monitoring.channels.form.name_placeholder"), required: true, maxlength: 100, autocomplete: "off",
+                                    aria: { invalid: channel.errors.include?(:name) }) %>
     <div>
-      <%= form.label :name, NotificationChannel.human_attribute_name(:name), class: label_classes %>
-      <%= form.text_field :name, required: true, maxlength: 100, autocomplete: "off", placeholder: t("monitoring.channels.form.name_placeholder"), aria: { invalid: channel.errors.include?(:name) }, class: field_classes %>
-    </div>
-    <div>
-      <%= form.label :target, t("monitoring.channels.form.targets.#{channel.kind}"), class: label_classes %>
       <% if channel.email? %>
-        <%= form.text_area :target, rows: 3, required: true, spellcheck: false, placeholder: "ops@example.com, oncall@example.com", aria: { invalid: channel.errors.include?(:target) }, class: field_classes("font-mono") %>
+        <%= render Input::Component.new(form:, attribute: :target, type: :text_area, label: t("monitoring.channels.form.targets.email"), placeholder: "ops@example.com, oncall@example.com", rows: 3, required: true, spellcheck: false,
+                                        class: "font-mono", aria: { invalid: channel.errors.include?(:target) }) %>
       <% else %>
-        <%= form.url_field :target, value: (channel.persisted? && !channel.target_changed? ? "" : channel.target), required: channel.new_record?, autocomplete: "off", spellcheck: false,
-                                    placeholder: (channel.persisted? ? channel.masked_target : t("monitoring.channels.form.url_placeholders.#{channel.kind}")), aria: { invalid: channel.errors.include?(:target) }, class: field_classes("font-mono") %>
+        <%= render Input::Component.new(form:, attribute: :target, type: :url, label: t("monitoring.channels.form.targets.#{channel.kind}"), icon: "link", value: (channel.persisted? && !channel.target_changed? ? "" : channel.target),
+                                        placeholder: (channel.persisted? ? channel.masked_target : t("monitoring.channels.form.url_placeholders.#{channel.kind}")), required: channel.new_record?, autocomplete: "off", spellcheck: false,
+                                        class: "font-mono", aria: { invalid: channel.errors.include?(:target) }) %>
       <% end %>
-      <% if channel.persisted? && !channel.email? %><p class="mt-1.5 text-xs text-muted"><%= t("monitoring.channels.form.keep_url") %></p><% end %>
+      <% if channel.persisted? && !channel.email? %><p class="mt-2 text-sm text-muted"><%= t("monitoring.channels.form.keep_url") %></p><% end %>
     </div>
   <% end %>
 
   <%= render layout: "monitoring/section", locals: { title: t("monitoring.channels.form.delivery"), icon: "send" } do %>
-    <div class="max-w-xs">
-      <%= form.label :locale, NotificationChannel.human_attribute_name(:locale), class: label_classes %>
-      <%= form.select :locale, LocaleSwitcher::Component::NAMES.map { |code, name| [name, code] }, {}, class: field_classes %>
+    <div>
+      <%= label_tag "notification_channel_locale", NotificationChannel.human_attribute_name(:locale), class: Input::Component::LABEL %>
+      <%= render Select::Component.new(name: "notification_channel[locale]", id: "notification_channel_locale", options: LocaleSwitcher::Component::NAMES.map { |code, name| [name, code] }, value: channel.locale, searchable: false, large: true) %>
     </div>
     <%= render Checkbox::Component.new(form:, attribute: :enabled, label: NotificationChannel.human_attribute_name(:enabled)) %>
   <% end %>

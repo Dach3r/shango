@@ -2,6 +2,7 @@ class Select::Component < ApplicationComponent
   include ControlsHelper
 
   SEARCH_THRESHOLD = 7
+  LARGE_TRIGGER = "#{Input::Component::FIELD} #{CONTROL_SIZE} flex! cursor-pointer items-center justify-between gap-3 text-left".freeze
   OPTION = "flex w-full cursor-pointer items-center gap-2 text-left text-sm text-body transition hover:bg-field hover:text-ink aria-selected:text-ink data-[active]:bg-field data-[active]:text-ink focus-visible:outline-none"
 
   # options: [[label, value], ...]. Search shows by default once there are more than SEARCH_THRESHOLD options.
@@ -9,7 +10,8 @@ class Select::Component < ApplicationComponent
   # dock_top is the offset class of the panel below the top edge (the height of the bar that stays visible above it); dock_width is its width class.
   # keep_open lists the values whose option leaves the menu open (their block content, rendered under the list, is what the person fills next).
   # input_data goes on the hidden input (it dispatches `change`); class sizes the control like any field (`w-28`, `font-mono`).
-  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, dock: false, dock_top: "top-[2.375rem]", dock_width: "w-56", keep_open: [], input_data: {}, **html)
+  # large: true draws the trigger like Input::Component, for the forms built with it.
+  def initialize(name:, options:, value: nil, id: nil, label: nil, searchable: nil, disabled: false, dock: false, dock_top: "top-[2.375rem]", dock_width: "w-56", keep_open: [], input_data: {}, large: false, **html)
     @name = name
     @options = options
     @value = value.to_s
@@ -22,6 +24,7 @@ class Select::Component < ApplicationComponent
     @dock_width = dock_width
     @keep_open = keep_open.map(&:to_s)
     @input_data = input_data
+    @large = large
     @class = html[:class]
   end
 
@@ -48,7 +51,10 @@ class Select::Component < ApplicationComponent
   end
 
   def trigger_classes
-    field_classes(["flex! cursor-pointer items-center justify-between gap-2 text-left", @class.to_s.split.reject { |c| c.match?(/\A(w-|flex-|min-w-|max-w-|shrink-)/) }].flatten.join(" "))
+    own = @class.to_s.split.reject { |c| c.match?(/\A(w-|flex-|min-w-|max-w-|shrink-)/) }
+    return class_names(LARGE_TRIGGER, own) if @large
+
+    field_classes(["flex! cursor-pointer items-center justify-between gap-2 text-left", own].flatten.join(" "))
   end
 
   def menu_classes
@@ -62,6 +68,8 @@ class Select::Component < ApplicationComponent
   end
 
   def option_classes
-    class_names(OPTION, (@dock ? "border-b border-line px-5 py-3.5" : "px-2.5 py-1.5"))
+    return class_names(OPTION, "border-b border-line px-5 py-3.5") if @dock
+
+    class_names(OPTION, (@large ? "px-3 py-2.5" : "px-2.5 py-1.5"))
   end
 end

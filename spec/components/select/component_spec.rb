@@ -12,6 +12,14 @@ RSpec.describe Select::Component, type: :component do
     expect(page).to have_no_css("input[type=text]", visible: :all)
   end
 
+  it "draws a large trigger like the input component", :aggregate_failures do
+    render_inline(described_class.new(name: "n", options:, large: true, class: "w-40 font-mono"))
+
+    expect(page).to have_css("button[data-select-target=trigger].h-14.px-4.font-mono")
+    expect(page).to have_no_css("button[data-select-target=trigger].w-40")
+    expect(page).to have_css("button[role=option].py-2\\.5", visible: :all)
+  end
+
   it "keeps the caller's action on the hidden input next to its own re-render", :aggregate_failures do
     render_inline(described_class.new(name: "n", options:, input_data: { action: "change->x#y" }))
 

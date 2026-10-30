@@ -147,7 +147,7 @@ RSpec.describe "Monitoring monitors" do
       membership.update!(current_environment: environment)
       get new_monitoring_monitor_path(kind: "http")
 
-      expect(response.body).to include(I18n.t("monitoring.new.title"), %(<option selected="selected" value="#{environment.id}">), 'data-controller="variable-autocomplete"')
+      expect(response.body).to include(I18n.t("monitoring.new.title"), %(name="uptime_monitor[environment_id]" value="#{environment.id}"), 'data-controller="variable-autocomplete"')
     end
 
     it "saves the monitor and checks it right away", :aggregate_failures do
@@ -338,7 +338,7 @@ RSpec.describe "Monitoring monitors" do
       create(:collection, project:, name: "Empty")
       get new_monitoring_monitor_path(kind: "http")
 
-      expect(response.body).to include(I18n.t("monitoring.form.modes.request"), %(<optgroup label="Shop">), "POST Health", I18n.t("monitoring.form.request_hint"))
+      expect(response.body).to include(I18n.t("monitoring.form.modes.request"), "Shop / POST Health", I18n.t("monitoring.form.request_hint"))
       expect(response.body).not_to include("Elsewhere", %(<optgroup label="Empty">))
     end
 
