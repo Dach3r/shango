@@ -386,6 +386,30 @@ RSpec.describe "Monitoring monitors" do
       expect(project.uptime_monitors.sole).to have_attributes(mode: "url", api_request: nil)
     end
 
+    it "starts from a request with its name and request mode ready", :aggregate_failures do
+      get new_monitoring_monitor_path(kind: "http", api_request_id: api_request.id)
+
+      expect(response.body).to include(%(value="Health"), %(name="uptime_monitor[api_request_id]" value="#{api_request.id}"), %(name="uptime_monitor[settings][mode]" value="request"))
+    end
+
+    it "ignores a request of another project or a kind that is not HTTP", :aggregate_failures do
+      other = create(:api_request)
+      get new_monitoring_monitor_path(kind: "http", api_request_id: other.id)
+      expect(response.body).not_to include(%(value="#{other.name}"))
+
+      get new_monitoring_monitor_path(kind: "tcp", api_request_id: api_request.id)
+      expect(response.body).not_to include(%(value="Health"))
+    end
+
+    it "links a request monitor back to its request, and a URL monitor has no link", :aggregate_failures do
+      monitor = create(:uptime_monitor, :request, project:)
+      get monitoring_monitor_path(monitor)
+      expect(response.body).to include(I18n.t("monitoring.actions.open_request"), workbench_request_path(monitor.api_request))
+
+      get monitoring_monitor_path(create(:uptime_monitor, project:))
+      expect(response.body).not_to include(I18n.t("monitoring.actions.open_request"))
+    end
+
     it "says when its request is gone" do
       monitor = create(:uptime_monitor, :request, project:)
       monitor.update_columns(api_request_id: nil)

@@ -277,6 +277,7 @@ ja:
       cancel_hint: リクエストをキャンセル
       save: 保存
       copy_curl: cURL をコピー
+      monitor: "このリクエストを監視"
       more_actions: その他の操作
       copied: コピーしました
       duplicate: 複製

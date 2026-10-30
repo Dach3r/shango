@@ -280,6 +280,7 @@ ru:
       cancel_hint: Отменить запрос
       save: Сохранить
       copy_curl: Копировать cURL
+      monitor: "Мониторить этот запрос"
       more_actions: Ещё действия
       copied: Скопировано
       duplicate: Дублировать

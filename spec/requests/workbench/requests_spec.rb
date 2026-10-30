@@ -26,6 +26,14 @@ RSpec.describe "Workbench requests" do
       expect(response.body).to include("api_request[binary_upload]")
     end
 
+    it "offers to monitor a saved request but not a draft", :aggregate_failures do
+      get workbench_request_path(api_request)
+      expect(response.body).to include(I18n.t("workbench.requests.monitor"), CGI.escapeHTML(new_monitoring_monitor_path(kind: "http", api_request_id: api_request.id)))
+
+      get workbench_request_path(draft.id)
+      expect(response.body).not_to include(I18n.t("workbench.requests.monitor"))
+    end
+
     it "renders the editor", :aggregate_failures do
       get workbench_request_path(api_request)
 

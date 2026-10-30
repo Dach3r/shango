@@ -278,6 +278,7 @@ pt-BR:
       cancel_hint: Cancelar a requisição
       save: Salvar
       copy_curl: Copiar cURL
+      monitor: "Monitorar esta requisição"
       more_actions: Mais ações
       copied: Copiado
       duplicate: Duplicar

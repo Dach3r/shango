@@ -66,6 +66,7 @@ es:
       checked: "Último chequeo"
     ago: "hace %{time}"
     actions:
+      open_request: "Abrir request"
       run: "Ejecutar ahora"
       pause: "Pausar"
       resume: "Reanudar"

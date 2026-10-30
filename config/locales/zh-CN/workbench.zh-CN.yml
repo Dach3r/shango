@@ -277,6 +277,7 @@ zh-CN:
       cancel_hint: 取消请求
       save: 保存
       copy_curl: 复制 cURL
+      monitor: "监控此请求"
       more_actions: 更多操作
       copied: 已复制
       duplicate: 复制

@@ -278,6 +278,7 @@ en:
       cancel_hint: Cancel the request
       save: Save
       copy_curl: Copy cURL
+      monitor: "Monitor this request"
       more_actions: More actions
       copied: Copied
       duplicate: Duplicate

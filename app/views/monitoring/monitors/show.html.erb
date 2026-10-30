@@ -6,6 +6,9 @@
 
 <%= render layout: "monitoring/shell", locals: { current: :monitors, refresh: true } do %>
   <%= render layout: "monitoring/page_bar", locals: { back: monitoring_root_path, title:, detail: monitor_target(@monitor) } do %>
+    <% if @monitor.api_request && @monitor.mode == "request" %>
+      <%= link_to workbench_request_path(@monitor.api_request), **monitor_action(:open_request, compact: false) do %><%= lucide_icon "send", class: "size-3.5" %><%= t("monitoring.actions.open_request") %><% end %>
+    <% end %>
     <% if policy(@monitor).update? %>
       <%= render "monitoring/monitors/actions", monitor: @monitor, compact: false %>
     <% end %>

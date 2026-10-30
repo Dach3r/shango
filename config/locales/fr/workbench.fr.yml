@@ -278,6 +278,7 @@ fr:
       cancel_hint: "Annuler la requête"
       save: "Enregistrer"
       copy_curl: "Copier cURL"
+      monitor: "Surveiller cette requête"
       more_actions: "Plus d'actions"
       copied: "Copié"
       duplicate: "Dupliquer"

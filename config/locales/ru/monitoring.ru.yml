@@ -66,6 +66,7 @@ ru:
       checked: "Последняя проверка"
     ago: "%{time} назад"
     actions:
+      open_request: "Открыть запрос"
       run: "Проверить"
       pause: "Пауза"
       resume: "Возобновить"

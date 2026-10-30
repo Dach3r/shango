@@ -66,6 +66,7 @@ en:
       checked: "Last check"
     ago: "%{time} ago"
     actions:
+      open_request: "Open request"
       run: "Run now"
       pause: "Pause"
       resume: "Resume"

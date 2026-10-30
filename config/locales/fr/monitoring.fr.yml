@@ -66,6 +66,7 @@ fr:
       checked: "Dernière vérif."
     ago: "il y a %{time}"
     actions:
+      open_request: "Ouvrir la requête"
       run: "Lancer"
       pause: "Pause"
       resume: "Reprendre"

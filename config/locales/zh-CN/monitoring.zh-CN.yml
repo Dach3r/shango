@@ -66,6 +66,7 @@ zh-CN:
       checked: "最近检查"
     ago: "%{time}前"
     actions:
+      open_request: "打开请求"
       run: "立即检查"
       pause: "暂停"
       resume: "恢复"

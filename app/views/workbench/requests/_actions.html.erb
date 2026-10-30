@@ -17,6 +17,11 @@
       <button type="button" data-action="request-form#copyCurl" data-copied-label="<%= t("workbench.requests.copied") %>" class="flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
         <%= lucide_icon "terminal", class: "size-4 shrink-0" %><span data-label class="truncate"><%= t("workbench.requests.copy_curl") %></span>
       </button>
+      <% if !api_request.draft? && policy(current_project.uptime_monitors.new).create? %>
+        <%= link_to new_monitoring_monitor_path(kind: "http", api_request_id: api_request.id), class: "flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+          <%= lucide_icon "activity", class: "size-4 shrink-0" %><%= t("workbench.requests.monitor") %>
+        <% end %>
+      <% end %>
       <% if policy(api_request).duplicate? %>
         <%= button_to workbench_request_duplication_path(api_request), method: :post, class: "flex min-h-9 w-full cursor-pointer items-center gap-2.5 px-2.5 py-1.5 text-left text-sm text-body transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50", form_class: "contents" do %>
           <%= lucide_icon "copy", class: "size-4 shrink-0" %><%= t("workbench.requests.duplicate") %>

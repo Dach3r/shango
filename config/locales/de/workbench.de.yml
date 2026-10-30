@@ -278,6 +278,7 @@ de:
       cancel_hint: Anfrage abbrechen
       save: Speichern
       copy_curl: cURL kopieren
+      monitor: "Diese Anfrage überwachen"
       more_actions: Weitere Aktionen
       copied: Kopiert
       duplicate: Duplizieren

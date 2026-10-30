@@ -66,6 +66,7 @@ de:
       checked: "Letzte Prüfung"
     ago: "vor %{time}"
     actions:
+      open_request: "Anfrage öffnen"
       run: "Jetzt prüfen"
       pause: "Pausieren"
       resume: "Fortsetzen"

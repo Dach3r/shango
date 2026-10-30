@@ -23,6 +23,7 @@ module Monitoring
 
     def new
       @monitor = current_project.uptime_monitors.new(kind: params[:kind].presence_in(Monitoring::Checks::Run.kinds), environment: current_environment, creator: current_user)
+      prefill_from_request
       authorize @monitor
     end
 
@@ -56,6 +57,16 @@ module Monitoring
     end
 
     private
+
+    # A monitor started from a saved request (`?kind=http&api_request_id=...`) checks that request.
+    def prefill_from_request
+      return unless @monitor.http? && params[:api_request_id].present?
+
+      api_request = current_project.api_requests.find_by(id: params[:api_request_id])
+      return unless api_request
+
+      @monitor.assign_attributes(api_request:, name: api_request.name.to_s.first(100), mode: "request")
+    end
 
     def monitor_params
       attributes = params.expect(uptime_monitor: [:name, :environment_id, :api_request_id, :interval, :timeout, :confirmations,
