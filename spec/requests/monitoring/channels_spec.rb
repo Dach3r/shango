@@ -107,6 +107,7 @@ RSpec.describe "Monitoring channels" do
 
       get new_monitoring_channel_path(kind: "slack", monitor_id: monitor.id)
       expect(response.body).to include('name="monitor_id"', new_monitoring_channel_path(monitor_id: monitor.id))
+      expect(response.body).to match(%r{href="#{monitoring_monitor_path(monitor)}">#{I18n.t("monitoring.form.cancel")}</a>})
 
       post monitoring_channels_path, params: { monitor_id: monitor.id, notification_channel: { kind: "slack", name: "Slack", target: "https://hooks.slack.com/services/T0/B0/xyz" } }
       expect(response).to redirect_to(monitoring_monitor_path(monitor))

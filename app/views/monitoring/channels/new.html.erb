@@ -7,7 +7,7 @@
 
 <%= render layout: "monitoring/shell", locals: { current: :channels } do %>
   <%= render layout: "monitoring/page_bar", locals: { back:, title: t("monitoring.channels.new.title"), detail: } do %>
-    <% if @channel.kind %><%= render "monitoring/channels/submit", channel: @channel %><% end %>
+    <% if @channel.kind %><%= render "monitoring/channels/submit", channel: @channel, origin: @origin %><% end %>
   <% end %>
   <div class="min-h-0 flex-1 overflow-y-auto">
     <% if @channel.kind %>
