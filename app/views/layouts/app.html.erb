@@ -1,7 +1,7 @@
 <% turbo_refreshes_with method: content_for(:refresh_method).presence || :morph, scroll: :preserve %>
 <% content_for :content do %>
   <div class="app-shell flex min-h-screen flex-col select-none" data-controller="right-sidebar">
-    <div class="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[1fr_auto]">
+    <div class="flex min-h-0 flex-1 flex-col">
       <div class="flex min-w-0 flex-col">
         <main class="<%= content_for?(:main_class) ? yield(:main_class) : "flex-1 px-4 py-8 sm:px-8" %>">
           <% if content_for?(:heading) && !content_for?(:main_class) %>
@@ -11,7 +11,9 @@
         </main>
       </div>
 
-      <aside hidden data-right-sidebar-target="panel" aria-label="<%= t("layouts.app.right_sidebar") %>" class="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-line bg-page lg:sticky lg:top-0 lg:z-auto lg:h-[calc(100vh-2.5rem)] lg:w-[var(--right-sidebar-width,28rem)] lg:max-w-none">
+      <div hidden data-right-sidebar-target="overlay" data-action="click->right-sidebar#close" class="fixed inset-x-0 top-0 bottom-10 z-30 bg-night-1000/60 backdrop-blur-sm"></div>
+
+      <aside hidden data-right-sidebar-target="panel" aria-label="<%= t("layouts.app.right_sidebar") %>" class="fixed top-0 right-0 bottom-10 z-30 flex w-full max-w-md flex-col border-l border-line bg-page lg:w-[var(--right-sidebar-width,28rem)] lg:max-w-none">
         <header data-right-sidebar-target="header" class="flex h-10 shrink-0 [&[hidden]]:hidden items-center justify-between gap-2 border-b border-line px-4">
           <h2 class="truncate text-sm font-semibold text-ink" data-right-sidebar-target="title"></h2>
           <button type="button" data-action="right-sidebar#close" aria-label="<%= t("layouts.app.close_right_sidebar") %>"
