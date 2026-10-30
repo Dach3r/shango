@@ -1,11 +1,8 @@
-<%# One section of a Monitoring form: its icon, title and optional `hint:` on the left, the block on the right. Render with `render layout: "monitoring/section", locals: { title:, icon:, hint: }` (`hint:` optional). %>
-<section class="grid gap-x-12 gap-y-5 border-b border-line px-5 py-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:px-8">
-  <div class="flex min-w-0 gap-4 lg:flex-col lg:gap-3">
-    <span class="flex size-10 shrink-0 items-center justify-center border border-line text-muted"><%= lucide_icon icon, class: "size-4" %></span>
-    <div class="min-w-0">
-      <h2 class="text-base font-semibold text-ink"><%= title %></h2>
-      <% if local_assigns[:hint].present? %><p class="mt-1.5 text-sm leading-relaxed text-muted"><%= hint %></p><% end %>
-    </div>
+<%# One section of a Monitoring form: a heading band with its icon and title, then the optional `hint:` and the block. Render with `render layout: "monitoring/section", locals: { title:, icon:, hint: }` (`hint:` optional). %>
+<section class="border-b border-line last:border-b-0">
+  <h2 class="flex h-10 items-center gap-2 border-b border-line bg-card px-5 font-mono text-xs uppercase tracking-wide text-faint lg:px-8"><%= lucide_icon icon, class: "size-3.5" %><%= title %></h2>
+  <div class="flex max-w-3xl min-w-0 flex-col gap-5 px-5 py-6 lg:px-8">
+    <% if local_assigns[:hint].present? %><p class="text-sm leading-relaxed text-muted"><%= hint %></p><% end %>
+    <%= yield %>
   </div>
-  <div class="flex min-w-0 flex-col gap-5"><%= yield %></div>
 </section>

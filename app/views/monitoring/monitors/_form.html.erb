@@ -1,4 +1,4 @@
-<%# Form of a monitor of any kind; only the fields of its kind are shown. Render with `monitor:`. Fields are the sign-in inputs (Input::Component) and large selects; from xl the alerts sit in a full-height panel on the right. %>
+<%# Form of a monitor of any kind; only the fields of its kind are shown. Render with `monitor:`. Fields are the sign-in inputs (Input::Component) and large selects; each section is a heading band over its fields; from xl the alerts sit in a full-height panel on the right. %>
 <% row = "grid gap-5 sm:grid-cols-2" %>
 <% label = Input::Component::LABEL %>
 <% hint = "-mt-2 text-sm text-muted" %>
@@ -72,7 +72,7 @@
 
       <% conditions_hint = t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "domain" => "monitoring.form.domain_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %>
       <%= render layout: "monitoring/section", locals: { title: t("monitoring.form.conditions"), icon: "list-checks", hint: conditions_hint } do %>
-        <div class="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
+        <div class="grid gap-5 sm:grid-cols-2">
           <% if monitor.http? %>
             <%= render Input::Component.new(form: settings, attribute: :expected_statuses, label: UptimeMonitor.human_attribute_name(:expected_statuses), placeholder: "200-399", autocomplete: "off", spellcheck: false, class: "font-mono",
                                             aria: { invalid: monitor.errors.include?(:expected_statuses) }) %>
@@ -109,22 +109,15 @@
   </div>
 
   <% channels = current_project.notification_channels.ordered %>
-  <aside id="alerts" class="grid gap-x-12 gap-y-5 border-b border-line px-5 py-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:px-8 xl:flex xl:w-96 xl:shrink-0 xl:flex-col xl:overflow-y-auto xl:border-b-0 xl:border-l xl:px-6">
-    <div class="flex min-w-0 gap-4 lg:flex-col lg:gap-3">
-      <span class="flex size-10 shrink-0 items-center justify-center border border-line text-muted"><%= lucide_icon "bell", class: "size-4" %></span>
-      <div class="min-w-0">
-        <h2 class="text-base font-semibold text-ink"><%= t("monitoring.form.alerts") %></h2>
-        <% if channels.any? %><p class="mt-1.5 text-sm leading-relaxed text-muted"><%= t("monitoring.form.alerts_hint") %></p><% end %>
-      </div>
-    </div>
-    <div class="flex min-w-0 flex-col gap-5">
+  <aside id="alerts" class="border-t border-line xl:flex xl:w-96 xl:shrink-0 xl:flex-col xl:overflow-y-auto xl:border-t-0 xl:border-l">
+    <h2 class="flex h-10 shrink-0 items-center gap-2 border-b border-line bg-card px-5 font-mono text-xs uppercase tracking-wide text-faint lg:px-8 xl:px-5"><%= lucide_icon "bell", class: "size-3.5" %><%= t("monitoring.form.alerts") %></h2>
+    <div class="flex max-w-3xl min-w-0 flex-col gap-5 px-5 py-6 lg:px-8 xl:px-5">
       <%= hidden_field_tag "uptime_monitor[notification_channel_ids][]", "", id: nil %>
       <% if channels.empty? %>
-        <div class="flex flex-col items-start gap-3 border border-dashed border-line px-5 py-5">
-          <p class="text-sm text-muted"><%= t("monitoring.form.no_channels") %></p>
-          <%= link_to new_monitoring_channel_path, class: button_classes(:secondary) do %><%= lucide_icon "plus", class: "size-4" %><%= t("monitoring.channels.index.new") %><% end %>
-        </div>
+        <p class="text-sm leading-relaxed text-muted"><%= t("monitoring.form.no_channels") %></p>
+        <%= link_to new_monitoring_channel_path, class: button_classes(:secondary, "self-start") do %><%= lucide_icon "plus", class: "size-4" %><%= t("monitoring.channels.index.new") %><% end %>
       <% else %>
+        <p class="text-sm leading-relaxed text-muted"><%= t("monitoring.form.alerts_hint") %></p>
         <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
           <% selected = monitor.notification_channel_ids %>
           <% channels.each do |channel| %>
