@@ -1,0 +1,14 @@
+<%# Bar of a screen below a list: back to it, the title with an optional `detail:` line, and the actions from the block on the right. Render with `render layout: "monitoring/page_bar", locals: { back:, title:, detail: }`. %>
+<div class="flex min-h-14 shrink-0 flex-wrap items-stretch justify-between gap-x-4 border-b border-line">
+  <div class="flex min-w-0 flex-1 items-stretch">
+    <%= link_to back, aria: { label: t("monitoring.show.back") }, title: t("monitoring.show.back"),
+          class: "flex w-14 shrink-0 items-center justify-center border-r border-line text-muted transition hover:bg-card hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" do %>
+      <%= lucide_icon "arrow-left", class: "size-4" %>
+    <% end %>
+    <div class="flex min-w-0 flex-col justify-center px-5 py-2">
+      <h1 class="flex min-w-0 items-center gap-3 text-sm font-semibold text-ink"><%= title %></h1>
+      <% if local_assigns[:detail].present? %><p class="truncate font-mono text-xs text-faint"><%= detail %></p><% end %>
+    </div>
+  </div>
+  <div class="flex shrink-0 items-center gap-2 px-5 py-2"><%= yield %></div>
+</div>

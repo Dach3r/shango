@@ -91,7 +91,6 @@ hi:
         webhook: "Shango इस URL पर हस्ताक्षरित JSON POST करता है (हेडर X-Shango-Signature)।"
       index:
         title: "अलर्ट चैनल"
-        description: "मॉनिटर डाउन होने और ठीक होने पर अपने अलर्ट कहाँ भेजते हैं।"
         new: "नया चैनल"
         secret_title: "%{name} का साइनिंग सीक्रेट"
         secret_hint: "इसे अभी कॉपी करें: यह दोबारा नहीं दिखेगा। हर अनुरोध के X-Shango-Signature हेडर की जाँच के लिए इसका उपयोग करें।"
@@ -130,6 +129,7 @@ hi:
           slack: "https://hooks.slack.com/services/T000/B000/XXXX"
           discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "मौजूदा URL रखने के लिए इसे खाली छोड़ें।"
+        delivery: "भेजना"
         save: "चैनल सहेजें"
         create: "चैनल बनाएँ"
       create:

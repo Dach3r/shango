@@ -30,7 +30,6 @@ zh-CN:
   monitoring:
     title: "监控"
     index:
-      description: "Shango 会定期检查它们，并在某个宕机时创建事件。"
       new: "新建监控"
       in_use: "监控"
       uptime: "24 小时可用率"
@@ -42,7 +41,6 @@ zh-CN:
         pending: "待检查"
         paused: "已暂停"
       search: "按名称、URL 或主机搜索"
-      about: "关于"
       empty:
         title: "还没有监控"
         filtered: "没有符合此筛选的监控。"

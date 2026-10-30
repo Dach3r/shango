@@ -1,0 +1,6 @@
+<%# Frame of every Monitoring screen: the sidebar and the screen from the block, full height. Render with `render layout: "monitoring/shell", locals: { current: }` (see the sidebar) and `refresh: true` to reload it every minute. %>
+<% content_for :main_class, "flex min-h-0 flex-1" %>
+<%= tag.div class: "flex min-w-0 flex-1 flex-col lg:h-[calc(100vh-2.5rem)] lg:flex-row", data: { controller: ("refresh" if local_assigns[:refresh]) } do %>
+  <%= render "monitoring/sidebar", current: %>
+  <div class="flex min-h-0 min-w-0 flex-1 flex-col"><%= yield %></div>
+<% end %>

@@ -91,7 +91,6 @@ ja:
         webhook: "Shango はこの URL に署名付き JSON を POST します(ヘッダー X-Shango-Signature)。"
       index:
         title: "アラートチャンネル"
-        description: "モニターがダウン時と復旧時にアラートを送る先です。"
         new: "新しいチャンネル"
         secret_title: "%{name} の署名シークレット"
         secret_hint: "今すぐコピーしてください。再表示されません。各リクエストの X-Shango-Signature ヘッダーの検証に使います。"
@@ -129,6 +128,7 @@ ja:
           slack: "https://hooks.slack.com/services/T000/B000/XXXX"
           discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "空欄のままにすると現在の URL を維持します。"
+        delivery: "配信"
         save: "チャンネルを保存"
         create: "チャンネルを作成"
       create:

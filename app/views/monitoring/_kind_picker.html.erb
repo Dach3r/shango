@@ -1,0 +1,21 @@
+<%# The first step of a new monitor or channel: one row per kind. Render with `kinds:`, an array of hashes with `icon:`, `title:`, `hint:` and `path:` (nil when the kind is unavailable). %>
+<ul>
+  <% kinds.each do |kind| %>
+    <li class="border-b border-line">
+      <% body = capture do %>
+        <span class="flex size-9 shrink-0 items-center justify-center border border-line text-muted"><%= lucide_icon kind[:icon], class: "size-4" %></span>
+        <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span class="text-sm font-semibold text-ink"><%= kind[:title] %></span>
+          <span class="text-xs text-muted"><%= kind[:hint] %></span>
+        </span>
+      <% end %>
+      <% if kind[:path] %>
+        <%= link_to kind[:path], class: "group flex items-center gap-4 px-5 py-4 transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50 lg:px-6" do %>
+          <%= body %><%= lucide_icon "chevron-right", class: "size-4 shrink-0 text-faint transition group-hover:text-ink" %>
+        <% end %>
+      <% else %>
+        <div class="flex items-center gap-4 px-5 py-4 opacity-60 lg:px-6"><%= body %></div>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

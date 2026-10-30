@@ -30,7 +30,6 @@ fr:
   monitoring:
     title: "Surveillance"
     index:
-      description: "Shango les vérifie régulièrement et ouvre un incident quand l’un d’eux tombe."
       new: "Nouveau moniteur"
       in_use: "Moniteurs"
       uptime: "Disponibilité 24 h"
@@ -42,7 +41,6 @@ fr:
         pending: "En attente"
         paused: "En pause"
       search: "Rechercher par nom, URL ou hôte"
-      about: "À propos"
       empty:
         title: "Aucun moniteur pour l’instant"
         filtered: "Aucun moniteur ne correspond à ce filtre."

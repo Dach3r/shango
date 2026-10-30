@@ -30,7 +30,6 @@ en:
   monitoring:
     title: "Monitoring"
     index:
-      description: "Shango checks these on a schedule and opens an incident when one goes down."
       new: "New monitor"
       in_use: "Monitors"
       uptime: "Uptime 24 h"
@@ -42,7 +41,6 @@ en:
         pending: "Pending"
         paused: "Paused"
       search: "Search by name, URL or host"
-      about: "About"
       empty:
         title: "No monitors yet"
         filtered: "No monitor matches this filter."

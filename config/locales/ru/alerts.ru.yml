@@ -91,7 +91,6 @@ ru:
         webhook: "Shango отправляет на этот URL POST с подписанным JSON (заголовок X-Shango-Signature)."
       index:
         title: "Каналы оповещений"
-        description: "Куда мониторы отправляют оповещения, когда падают и когда восстанавливаются."
         new: "Новый канал"
         secret_title: "Секрет подписи для %{name}"
         secret_hint: "Скопируйте его сейчас: он больше не будет показан. Используйте его для проверки заголовка X-Shango-Signature каждого запроса."
@@ -132,6 +131,7 @@ ru:
           slack: "https://hooks.slack.com/services/T000/B000/XXXX"
           discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "Оставьте пустым, чтобы сохранить текущий URL."
+        delivery: "Доставка"
         save: "Сохранить канал"
         create: "Создать канал"
       create:

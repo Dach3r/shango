@@ -30,7 +30,6 @@ de:
   monitoring:
     title: "Monitoring"
     index:
-      description: "Shango prüft diese regelmäßig und öffnet einen Vorfall, wenn einer ausfällt."
       new: "Neuer Monitor"
       in_use: "Monitore"
       uptime: "Verfügbarkeit 24 h"
@@ -42,7 +41,6 @@ de:
         pending: "Ausstehend"
         paused: "Pausiert"
       search: "Nach Name, URL oder Host suchen"
-      about: "Info"
       empty:
         title: "Noch keine Monitore"
         filtered: "Kein Monitor passt zu diesem Filter."

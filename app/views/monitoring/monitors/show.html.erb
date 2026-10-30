@@ -1,120 +1,116 @@
 <% content_for :title, "#{@monitor.name} · #{t("monitoring.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% report = @report %>
-<% heading = "border-b border-line px-5 pt-4 pb-2 font-mono text-xs uppercase tracking-wide text-faint" %>
+<% heading = "flex h-10 shrink-0 items-center gap-2 border-b border-line px-5 font-mono text-xs uppercase tracking-wide text-faint" %>
 <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
+<% title = capture do %><span class="truncate"><%= @monitor.name %></span><%= render MonitorStatus::Component.for(@monitor) %><% end %>
 
-<div class="mx-auto flex max-w-6xl flex-col gap-6" data-controller="refresh">
-  <%= link_to monitoring_root_path, class: "inline-flex w-fit items-center gap-1.5 text-sm text-muted transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
-    <%= lucide_icon "arrow-left", class: "size-4" %><%= t("monitoring.show.back") %>
-  <% end %>
-
-  <header class="flex flex-wrap items-start justify-between gap-4">
-    <div class="min-w-0">
-      <div class="flex flex-wrap items-center gap-3">
-        <h1 class="truncate text-lg font-semibold tracking-tight text-ink"><%= @monitor.name %></h1>
-        <%= render MonitorStatus::Component.for(@monitor) %>
-      </div>
-      <p class="mt-1 font-mono text-sm break-all text-muted"><%= monitor_target(@monitor) %></p>
-    </div>
+<%= render layout: "monitoring/shell", locals: { current: :monitors, refresh: true } do %>
+  <%= render layout: "monitoring/page_bar", locals: { back: monitoring_root_path, title:, detail: monitor_target(@monitor) } do %>
     <% if policy(@monitor).update? %>
       <%= render "monitoring/monitors/actions", monitor: @monitor, compact: false %>
     <% end %>
-  </header>
-
-  <% if @monitor.push? %>
-    <%= render "monitoring/monitors/push_url", monitor: @monitor, token: @push_token %>
   <% end %>
 
-  <dl class="grid grid-cols-2 border border-line bg-card sm:grid-cols-4">
-    <% { day: "uptime_day", week: "uptime_week", month: "uptime_month" }.each do |span, key| %>
-      <div class="flex flex-col gap-1.5 border-r border-b border-line px-5 py-4 sm:border-b-0">
-        <dt class="<%= label %>"><%= t("monitoring.show.#{key}") %></dt>
-        <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_uptime(report.uptime[span]) %></dd>
-      </div>
+  <div class="min-h-0 flex-1 overflow-y-auto">
+    <% if @monitor.push? %>
+      <%= render "monitoring/monitors/push_url", monitor: @monitor, token: @push_token %>
     <% end %>
-    <div class="flex flex-col gap-1.5 border-b border-line px-5 py-4 sm:border-b-0">
-      <dt class="<%= label %>"><%= t("monitoring.show.average") %></dt>
-      <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_ms(report.average_ms) %></dd>
-    </div>
-  </dl>
 
-  <section class="border border-line bg-card">
-    <h2 class="<%= heading %>"><%= t("monitoring.chart.title") %></h2>
-    <div class="px-5 py-4">
-      <% if report.points.any?(&:last) %>
-        <%= render ResponseChart::Component.new(points: report.points, label: t("monitoring.chart.label", name: @monitor.name)) %>
-      <% else %>
-        <p class="py-6 text-center text-sm text-muted"><%= t("monitoring.card.no_data") %></p>
+    <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4">
+      <% { day: "uptime_day", week: "uptime_week", month: "uptime_month" }.each do |span, key| %>
+        <div class="flex flex-col gap-2 border-r border-b border-line px-5 py-4 sm:border-b-0">
+          <dt class="<%= label %>"><%= t("monitoring.show.#{key}") %></dt>
+          <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_uptime(report.uptime[span]) %></dd>
+        </div>
       <% end %>
-    </div>
-  </section>
+      <div class="flex flex-col gap-2 px-5 py-4">
+        <dt class="<%= label %>"><%= t("monitoring.show.average") %></dt>
+        <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_ms(report.average_ms) %></dd>
+      </div>
+    </dl>
 
-  <div class="grid gap-6 lg:grid-cols-2">
-    <section class="border border-line bg-card">
-      <h2 class="<%= heading %>"><%= t("monitoring.show.incidents") %></h2>
-      <% if report.incidents.empty? %>
-        <p class="px-5 py-4 text-sm text-muted"><%= t("monitoring.show.no_incidents") %></p>
-      <% else %>
-        <ul class="text-sm">
-          <% report.incidents.each do |incident| %>
-            <li class="flex flex-col gap-1 border-b border-line px-5 py-3 last:border-b-0">
-              <div class="flex items-center justify-between gap-3">
-                <span class="min-w-0 text-ink"><%= monitor_cause(incident.cause, incident.detail) %></span>
-                <%= render MonitorStatus::Component.new(status: incident.open? ? :down : :up) %>
-              </div>
-              <span class="font-mono text-xs text-muted">
-                <%= l(incident.started_at, format: :short) %> → <%= incident.open? ? t("monitoring.show.ongoing") : l(incident.resolved_at, format: :short) %>
-                · <%= distance_of_time_in_words(incident.started_at, incident.resolved_at || Time.current) %>
-                <% if incident.paused? %>· <%= t("monitoring.show.closed_by_pause") %><% end %>
-              </span>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-    </section>
-
-    <section class="border border-line bg-card">
-      <h2 class="<%= heading %>"><%= t("monitoring.show.settings") %></h2>
-      <dl class="text-sm">
-        <% monitor_settings(@monitor).each do |field, value| %>
-          <div class="flex items-baseline justify-between gap-4 border-b border-line px-5 py-2.5 last:border-b-0">
-            <dt class="text-muted"><%= field %></dt>
-            <dd class="font-mono text-ink"><%= value %></dd>
-          </div>
-        <% end %>
-      </dl>
-    </section>
-  </div>
-
-  <section class="border border-line bg-card">
-    <h2 class="<%= heading %>"><%= t("monitoring.show.checks") %></h2>
-    <% if report.checks.empty? %>
-      <p class="px-5 py-4 text-sm text-muted"><%= t("monitoring.show.no_checks") %></p>
-    <% else %>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="border-b border-line font-mono text-xs uppercase tracking-wide text-faint">
-              <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.time") %></th>
-              <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.status") %></th>
-              <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.http_status") %></th>
-              <th scope="col" class="px-5 py-2 text-right font-normal"><%= t("monitoring.show.columns.response") %></th>
-              <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.cause") %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% report.checks.each do |check| %>
-              <tr class="border-b border-line last:border-b-0">
-                <td class="px-5 py-2 font-mono text-xs whitespace-nowrap text-muted"><%= l(check.checked_at, format: :short) %></td>
-                <td class="px-5 py-2"><%= render MonitorStatus::Component.new(status: check.status) %></td>
-                <td class="px-5 py-2 font-mono text-ink"><%= check.http_status || "—" %></td>
-                <td class="px-5 py-2 text-right font-mono whitespace-nowrap text-ink"><%= monitor_ms(check.response_ms) %></td>
-                <td class="px-5 py-2 text-muted"><%= check.error ? monitor_cause(check.error, check.detail) : "" %></td>
-              </tr>
+    <div class="flex flex-col lg:flex-row">
+      <div class="min-w-0 flex-1">
+        <section class="border-b border-line">
+          <h2 class="<%= heading %>"><%= lucide_icon "chart-line", class: "size-3.5" %><%= t("monitoring.chart.title") %></h2>
+          <div class="px-5 py-5">
+            <% if report.points.any?(&:last) %>
+              <%= render ResponseChart::Component.new(points: report.points, label: t("monitoring.chart.label", name: @monitor.name)) %>
+            <% else %>
+              <p class="py-6 text-center text-sm text-muted"><%= t("monitoring.card.no_data") %></p>
             <% end %>
-          </tbody>
-        </table>
+          </div>
+        </section>
+
+        <section class="border-b border-line lg:border-b-0">
+          <h2 class="<%= heading %>"><%= lucide_icon "list", class: "size-3.5" %><%= t("monitoring.show.checks") %></h2>
+          <% if report.checks.empty? %>
+            <p class="px-5 py-4 text-sm text-muted"><%= t("monitoring.show.no_checks") %></p>
+          <% else %>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead>
+                  <tr class="border-b border-line font-mono text-[0.6875rem] uppercase tracking-wide text-faint">
+                    <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.time") %></th>
+                    <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.status") %></th>
+                    <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.http_status") %></th>
+                    <th scope="col" class="px-5 py-2 text-right font-normal"><%= t("monitoring.show.columns.response") %></th>
+                    <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.cause") %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% report.checks.each do |check| %>
+                    <tr class="border-b border-line transition last:border-b-0 hover:bg-card">
+                      <td class="px-5 py-2 font-mono text-xs whitespace-nowrap text-muted"><%= l(check.checked_at, format: :short) %></td>
+                      <td class="px-5 py-2"><%= render MonitorStatus::Component.new(status: check.status) %></td>
+                      <td class="px-5 py-2 font-mono text-ink"><%= check.http_status || "—" %></td>
+                      <td class="px-5 py-2 text-right font-mono whitespace-nowrap text-ink"><%= monitor_ms(check.response_ms) %></td>
+                      <td class="px-5 py-2 text-muted"><%= check.error ? monitor_cause(check.error, check.detail) : "" %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% end %>
+        </section>
       </div>
-    <% end %>
-  </section>
-</div>
+
+      <aside class="flex w-full shrink-0 flex-col lg:w-96 lg:border-l lg:border-line">
+        <section class="border-b border-line">
+          <h2 class="<%= heading %>"><%= lucide_icon "siren", class: "size-3.5" %><%= t("monitoring.show.incidents") %></h2>
+          <% if report.incidents.empty? %>
+            <p class="px-5 py-4 text-sm text-muted"><%= t("monitoring.show.no_incidents") %></p>
+          <% else %>
+            <ul class="text-sm">
+              <% report.incidents.each do |incident| %>
+                <li class="flex flex-col gap-1 border-b border-line px-5 py-3 last:border-b-0">
+                  <div class="flex items-center justify-between gap-3">
+                    <span class="min-w-0 text-ink"><%= monitor_cause(incident.cause, incident.detail) %></span>
+                    <%= render MonitorStatus::Component.new(status: incident.open? ? :down : :up) %>
+                  </div>
+                  <span class="font-mono text-xs text-muted">
+                    <%= l(incident.started_at, format: :short) %> → <%= incident.open? ? t("monitoring.show.ongoing") : l(incident.resolved_at, format: :short) %>
+                    · <%= distance_of_time_in_words(incident.started_at, incident.resolved_at || Time.current) %>
+                    <% if incident.paused? %>· <%= t("monitoring.show.closed_by_pause") %><% end %>
+                  </span>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </section>
+
+        <section class="border-b border-line">
+          <h2 class="<%= heading %>"><%= lucide_icon "settings-2", class: "size-3.5" %><%= t("monitoring.show.settings") %></h2>
+          <dl class="text-sm">
+            <% monitor_settings(@monitor).each do |field, value| %>
+              <div class="flex items-baseline justify-between gap-4 border-b border-line px-5 py-2.5 last:border-b-0">
+                <dt class="text-muted"><%= field %></dt>
+                <dd class="min-w-0 truncate text-right font-mono text-ink" title="<%= value %>"><%= value %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </section>
+      </aside>
+    </div>
+  </div>
+<% end %>

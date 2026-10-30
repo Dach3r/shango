@@ -30,7 +30,6 @@ es:
   monitoring:
     title: "Monitoreo"
     index:
-      description: "Shango los revisa periódicamente y abre un incidente cuando uno se cae."
       new: "Nuevo monitor"
       in_use: "Monitores"
       uptime: "Uptime 24 h"
@@ -42,7 +41,6 @@ es:
         pending: "Pendientes"
         paused: "Pausados"
       search: "Buscar por nombre, URL o host"
-      about: "Acerca de"
       empty:
         title: "Aún no hay monitores"
         filtered: "Ningún monitor coincide con este filtro."

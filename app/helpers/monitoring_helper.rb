@@ -74,11 +74,11 @@ module MonitoringHelper
 
   ICON_ACTION = "flex size-8 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50".freeze
 
-  # Options of one monitor action button: a labelled button, or a square icon named by its tooltip when compact.
-  def monitor_action(name, compact:, danger: false)
+  # Options of one action button of a monitor or channel: a labelled button, or a square icon named by its tooltip when
+  # compact. The label defaults to the monitor action `name`.
+  def monitor_action(name, compact:, danger: false, label: t("monitoring.actions.#{name}"))
     return { class: button_classes(danger ? :danger : :secondary) } unless compact
 
-    label = t("monitoring.actions.#{name}")
     { class: class_names(ICON_ACTION, "hover:text-danger" => danger), title: label, aria: { label: } }
   end
 

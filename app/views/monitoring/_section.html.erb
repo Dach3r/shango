@@ -1,0 +1,8 @@
+<%# One section of a Monitoring form or page: its title and optional `hint:` on the left, the block on the right. Render with `render layout: "monitoring/section", locals: { title:, icon:, hint: }` (`icon:` and `hint:` optional). %>
+<section class="grid gap-x-10 gap-y-4 border-b border-line px-5 py-6 lg:grid-cols-[16rem_minmax(0,42rem)] lg:px-6">
+  <div class="min-w-0">
+    <h2 class="flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-faint"><% if local_assigns[:icon] %><%= lucide_icon icon, class: "size-3.5" %><% end %><%= title %></h2>
+    <% if local_assigns[:hint].present? %><p class="mt-2 text-xs leading-relaxed text-muted"><%= hint %></p><% end %>
+  </div>
+  <div class="flex min-w-0 flex-col gap-4"><%= yield %></div>
+</section>

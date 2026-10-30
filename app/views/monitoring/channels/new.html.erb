@@ -1,28 +1,17 @@
 <% content_for :title, "#{t("monitoring.channels.new.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<div class="mx-auto flex max-w-3xl flex-col gap-6">
-  <header>
-    <h1 class="text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.channels.new.title") %></h1>
-    <p class="mt-1 text-sm text-muted"><%= t("monitoring.channels.new.description") %></p>
-  </header>
-  <% if @channel.kind %>
-    <%= render "monitoring/channels/form", channel: @channel %>
-  <% else %>
-    <ul class="grid gap-3 sm:grid-cols-2">
-      <% NotificationChannel.kinds.each_key do |kind| %>
-        <li>
-          <% if kind == "email" && !Shango::Mailing.enabled? %>
-            <div class="flex h-full flex-col gap-1 border border-line bg-card p-4 opacity-60">
-              <p class="flex items-center gap-2 text-sm font-medium text-ink"><%= lucide_icon channel_icon(kind), class: "size-4 text-muted" %><%= t("monitoring.channels.kinds.#{kind}") %></p>
-              <p class="text-xs text-muted"><%= t("monitoring.channels.new.mail_disabled") %></p>
-            </div>
-          <% else %>
-            <%= link_to new_monitoring_channel_path(kind:), class: "flex h-full flex-col gap-1 border border-line bg-card p-4 transition hover:border-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
-              <span class="flex items-center gap-2 text-sm font-medium text-ink"><%= lucide_icon channel_icon(kind), class: "size-4 text-muted" %><%= t("monitoring.channels.kinds.#{kind}") %></span>
-              <span class="text-xs text-muted"><%= t("monitoring.channels.hints.#{kind}") %></span>
-            <% end %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+
+<%= render layout: "monitoring/shell", locals: { current: :channels } do %>
+  <%= render layout: "monitoring/page_bar", locals: { back: (@channel.kind ? new_monitoring_channel_path : monitoring_channels_path), title: t("monitoring.channels.new.title"), detail: (@channel.kind ? t("monitoring.channels.kinds.#{@channel.kind}") : t("monitoring.channels.new.description")) } do %>
+    <% if @channel.kind %><%= render "monitoring/channels/submit", channel: @channel %><% end %>
   <% end %>
-</div>
+  <div class="min-h-0 flex-1 overflow-y-auto">
+    <% if @channel.kind %>
+      <%= render "monitoring/channels/form", channel: @channel %>
+    <% else %>
+      <%= render "monitoring/kind_picker", kinds: NotificationChannel.kinds.keys.map { |kind|
+            available = kind != "email" || Shango::Mailing.enabled?
+            { icon: channel_icon(kind), title: t("monitoring.channels.kinds.#{kind}"), hint: t(available ? "monitoring.channels.hints.#{kind}" : "monitoring.channels.new.mail_disabled"), path: (new_monitoring_channel_path(kind:) if available) }
+          } %>
+    <% end %>
+  </div>
+<% end %>

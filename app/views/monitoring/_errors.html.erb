@@ -1,0 +1,8 @@
+<%# What is wrong with a submitted form, as a strip across the top. Render with `record:`. %>
+<% if record.errors.any? %>
+  <div role="alert" class="border-b border-danger/40 bg-danger/10 px-5 py-4 text-sm text-danger lg:px-6">
+    <ul class="list-inside list-disc">
+      <% record.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
+    </ul>
+  </div>
+<% end %>

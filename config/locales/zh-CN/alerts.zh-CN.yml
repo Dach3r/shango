@@ -91,7 +91,6 @@ zh-CN:
         webhook: "Shango 会向此 URL 发送签名的 JSON POST 请求(请求头 X-Shango-Signature)。"
       index:
         title: "告警渠道"
-        description: "监控宕机和恢复时发送告警的位置。"
         new: "新建渠道"
         secret_title: "%{name} 的签名密钥"
         secret_hint: "请立即复制:它不会再次显示。用它来校验每个请求的 X-Shango-Signature 请求头。"
@@ -129,6 +128,7 @@ zh-CN:
           slack: "https://hooks.slack.com/services/T000/B000/XXXX"
           discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "留空则保留当前 URL。"
+        delivery: "发送"
         save: "保存渠道"
         create: "创建渠道"
       create:

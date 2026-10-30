@@ -1,0 +1,3 @@
+<%# Cancel and save of the monitor form, for the page bar (the button submits the form by its id). Render with `monitor:`. %>
+<%= link_to t("monitoring.form.cancel"), (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_root_path), class: button_classes(:secondary) %>
+<%= button_tag type: :submit, form: "monitor_form", class: button_classes(:primary) do %><%= lucide_icon "check", class: "size-4" %><%= t(monitor.persisted? ? "monitoring.form.save" : "monitoring.form.create") %><% end %>

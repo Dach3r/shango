@@ -1,7 +1,10 @@
 <% content_for :title, "#{t("monitoring.channels.edit.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<div class="mx-auto flex max-w-3xl flex-col gap-6">
-  <header>
-    <h1 class="text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.channels.edit.title") %></h1>
-  </header>
-  <%= render "monitoring/channels/form", channel: @channel %>
-</div>
+
+<%= render layout: "monitoring/shell", locals: { current: :channels } do %>
+  <%= render layout: "monitoring/page_bar", locals: { back: monitoring_channels_path, title: t("monitoring.channels.edit.title"), detail: @channel.name_was } do %>
+    <%= render "monitoring/channels/submit", channel: @channel %>
+  <% end %>
+  <div class="min-h-0 flex-1 overflow-y-auto">
+    <%= render "monitoring/channels/form", channel: @channel %>
+  </div>
+<% end %>

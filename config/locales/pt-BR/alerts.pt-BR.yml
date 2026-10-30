@@ -91,7 +91,6 @@ pt-BR:
         webhook: "O Shango envia um POST com JSON assinado para esta URL (cabeçalho X-Shango-Signature)."
       index:
         title: "Canais de alerta"
-        description: "Para onde os monitores enviam alertas quando caem e quando se recuperam."
         new: "Novo canal"
         secret_title: "Segredo de assinatura de %{name}"
         secret_hint: "Copie agora: ele não será mostrado de novo. Use-o para verificar o cabeçalho X-Shango-Signature de cada requisição."
@@ -130,6 +129,7 @@ pt-BR:
           slack: "https://hooks.slack.com/services/T000/B000/XXXX"
           discord: "https://discord.com/api/webhooks/000/XXXX"
         keep_url: "Deixe em branco para manter a URL atual."
+        delivery: "Envio"
         save: "Salvar canal"
         create: "Criar canal"
       create:

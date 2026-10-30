@@ -1,17 +1,10 @@
 <%# Form of a monitor of any kind; only the fields of its kind are shown. Render with `monitor:`. %>
 <% row = "grid gap-4 sm:grid-cols-2" %>
-<%= form_with model: monitor, scope: :uptime_monitor, url: (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_monitors_path), class: "flex flex-col gap-6" do |form| %>
-  <% if monitor.errors.any? %>
-    <div role="alert" class="border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
-      <ul class="list-inside list-disc">
-        <% monitor.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: monitor, scope: :uptime_monitor, url: (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_monitors_path), id: "monitor_form" do |form| %>
+  <%= render "monitoring/errors", record: monitor %>
 
   <%= hidden_field_tag "uptime_monitor[kind]", monitor.kind, id: nil unless monitor.persisted? %>
-  <section class="flex flex-col gap-4 border border-line bg-card p-5">
-    <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-faint"><%= lucide_icon MonitoringHelper::KIND_ICONS.fetch(monitor.kind), class: "size-4" %><%= t("monitoring.kinds.#{monitor.kind}") %></p>
+  <%= render layout: "monitoring/section", locals: { title: t("monitoring.kinds.#{monitor.kind}"), icon: MonitoringHelper::KIND_ICONS.fetch(monitor.kind), hint: t("monitoring.kind_hints.#{monitor.kind}") } do %>
     <div>
       <%= form.label :name, UptimeMonitor.human_attribute_name(:name), class: label_classes %>
       <%= form.text_field :name, required: true, maxlength: 100, autocomplete: "off", placeholder: t("monitoring.form.name_placeholder"), aria: { invalid: monitor.errors.include?(:name) }, class: field_classes %>
@@ -74,10 +67,10 @@
         <%= form.select :interval, monitor_interval_options(monitor), {}, class: field_classes %>
       </div>
     </div>
-  </section>
+  <% end %>
 
-  <section class="flex flex-col gap-4 border border-line bg-card p-5">
-    <h2 class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("monitoring.form.conditions") %></h2>
+  <% conditions_hint = t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "domain" => "monitoring.form.domain_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %>
+  <%= render layout: "monitoring/section", locals: { title: t("monitoring.form.conditions"), icon: "list-checks", hint: conditions_hint } do %>
     <div class="<%= row %>">
       <% if monitor.http? %>
       <div>
@@ -115,12 +108,10 @@
         <%= form.select :confirmations, UptimeMonitor::CONFIRMATIONS.to_a, {}, class: field_classes %>
       </div>
     </div>
-    <p class="text-xs text-muted"><%= t({ "http" => "monitoring.form.conditions_hint", "tcp" => "monitoring.form.tcp_hint", "ssl" => "monitoring.form.ssl_hint", "domain" => "monitoring.form.domain_hint", "push" => "monitoring.form.push_conditions_hint" }.fetch(monitor.kind)) %></p>
-  </section>
+  <% end %>
 
-  <section class="flex flex-col gap-4 border border-line bg-card p-5">
-    <h2 class="font-mono text-xs uppercase tracking-wide text-faint"><%= t("monitoring.form.alerts") %></h2>
-    <% channels = current_project.notification_channels.ordered %>
+  <% channels = current_project.notification_channels.ordered %>
+  <%= render layout: "monitoring/section", locals: { title: t("monitoring.form.alerts"), icon: "bell", hint: (t("monitoring.form.alerts_hint") if channels.any?) } do %>
     <%= hidden_field_tag "uptime_monitor[notification_channel_ids][]", "", id: nil %>
     <% if channels.empty? %>
       <p class="text-sm text-muted"><%= t("monitoring.form.no_channels") %> <%= link_to t("monitoring.form.create_channel"), new_monitoring_channel_path, class: "text-ink underline underline-offset-2" %></p>
@@ -140,12 +131,6 @@
           </li>
         <% end %>
       </ul>
-      <p class="text-xs text-muted"><%= t("monitoring.form.alerts_hint") %></p>
     <% end %>
-  </section>
-
-  <div class="flex flex-wrap justify-end gap-2">
-    <%= link_to t("monitoring.form.cancel"), (monitor.persisted? ? monitoring_monitor_path(monitor) : monitoring_root_path), class: button_classes(:secondary) %>
-    <%= form.button type: :submit, class: button_classes(:primary) do %><%= lucide_icon "check", class: "size-4" %><%= t(monitor.persisted? ? "monitoring.form.save" : "monitoring.form.create") %><% end %>
-  </div>
+  <% end %>
 <% end %>

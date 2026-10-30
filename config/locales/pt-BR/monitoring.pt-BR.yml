@@ -30,7 +30,6 @@ pt-BR:
   monitoring:
     title: "Monitoramento"
     index:
-      description: "O Shango verifica estes periodicamente e abre um incidente quando um cai."
       new: "Novo monitor"
       in_use: "Monitores"
       uptime: "Uptime 24 h"
@@ -42,7 +41,6 @@ pt-BR:
         pending: "Pendentes"
         paused: "Pausados"
       search: "Buscar por nome, URL ou host"
-      about: "Sobre"
       empty:
         title: "Nenhum monitor ainda"
         filtered: "Nenhum monitor corresponde a este filtro."

@@ -1,8 +1,10 @@
 <% content_for :title, "#{t("monitoring.edit.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<div class="mx-auto flex max-w-3xl flex-col gap-6">
-  <header>
-    <h1 class="truncate text-lg font-semibold tracking-tight text-ink"><%= t("monitoring.edit.title") %></h1>
-    <p class="mt-1 truncate text-sm text-muted"><%= @monitor.name %></p>
-  </header>
-  <%= render "monitoring/monitors/form", monitor: @monitor %>
-</div>
+
+<%= render layout: "monitoring/shell", locals: { current: :monitors } do %>
+  <%= render layout: "monitoring/page_bar", locals: { back: monitoring_monitor_path(@monitor), title: t("monitoring.edit.title"), detail: @monitor.name_was } do %>
+    <%= render "monitoring/monitors/submit", monitor: @monitor %>
+  <% end %>
+  <div class="min-h-0 flex-1 overflow-y-auto">
+    <%= render "monitoring/monitors/form", monitor: @monitor %>
+  </div>
+<% end %>

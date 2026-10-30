@@ -30,7 +30,6 @@ ja:
   monitoring:
     title: "モニタリング"
     index:
-      description: "Shango が定期的にチェックし、ダウンしたらインシデントを開きます。"
       new: "新しいモニター"
       in_use: "モニター"
       uptime: "稼働率 24 時間"
@@ -42,7 +41,6 @@ ja:
         pending: "保留中"
         paused: "一時停止"
       search: "名前、URL、ホストで検索"
-      about: "概要"
       empty:
         title: "まだモニターがありません"
         filtered: "この条件に一致するモニターはありません。"

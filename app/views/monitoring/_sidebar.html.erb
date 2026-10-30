@@ -1,0 +1,37 @@
+<%# Navigation of the Monitoring module: the monitors with one entry per status, and the alert channels, each with its count. Render with `current:`: :channels, :monitors, or the status filter on display ("up", "down", "pending", "paused") as a string. %>
+<% summary = monitoring_sidebar[:summary] %>
+<% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
+<% item = "flex shrink-0 items-center justify-between gap-4 border-r border-line py-3 pr-5 text-sm text-muted transition hover:bg-card hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50 aria-[current=page]:bg-card aria-[current=page]:text-ink lg:border-r-0 lg:border-b lg:border-l-2 lg:border-l-transparent lg:aria-[current=page]:border-l-solid" %>
+<% count = "font-mono text-xs text-faint" %>
+<aside class="flex shrink-0 flex-col border-b border-line lg:w-64 lg:overflow-y-auto lg:border-r lg:border-b-0">
+  <dl class="grid grid-cols-2 border-b border-line">
+    <div class="flex min-w-0 flex-col gap-2 border-r border-line px-5 py-4">
+      <dt class="<%= label %>"><%= t("monitoring.index.in_use") %></dt>
+      <dd class="text-2xl leading-none font-medium text-ink"><%= summary[:total] %> <span class="text-sm text-muted">/ <%= summary[:limit] %></span></dd>
+    </div>
+    <div class="flex min-w-0 flex-col gap-2 px-5 py-4">
+      <dt class="<%= label %>"><%= t("monitoring.index.uptime") %></dt>
+      <dd class="text-2xl leading-none font-medium text-ink"><%= monitor_uptime(summary[:uptime]) %></dd>
+    </div>
+  </dl>
+
+  <nav aria-label="<%= t("monitoring.tabs.label") %>" class="flex overflow-x-auto lg:flex-col lg:overflow-visible">
+    <%= link_to monitoring_root_path, aria: { current: (current == :monitors ? "page" : nil) }, class: class_names(item, "pl-5 font-medium") do %>
+      <span class="flex items-center gap-2.5"><%= lucide_icon "activity", class: "size-4" %><%= t("monitoring.tabs.monitors") %></span>
+      <span class="<%= count %>"><%= summary[:total] %></span>
+    <% end %>
+    <% Monitoring::MonitorsController::FILTERS.each do |status| %>
+      <%= link_to monitoring_root_path(status:), aria: { current: (current == status ? "page" : nil) }, class: class_names(item, "pl-5 lg:pl-11") do %>
+        <span class="flex items-center gap-2.5">
+          <span aria-hidden="true" class="<%= class_names("size-1.5 shrink-0 rounded-full bg-current", MonitorStatus::Component::TONES.fetch(status.to_sym)) %>"></span>
+          <%= t("monitoring.index.filters.#{status}") %>
+        </span>
+        <span class="<%= count %>"><%= summary[status.to_sym] %></span>
+      <% end %>
+    <% end %>
+    <%= link_to monitoring_channels_path, aria: { current: (current == :channels ? "page" : nil) }, class: class_names(item, "pl-5 font-medium") do %>
+      <span class="flex items-center gap-2.5"><%= lucide_icon "bell", class: "size-4" %><%= t("monitoring.tabs.channels") %></span>
+      <span class="<%= count %>"><%= monitoring_sidebar[:channels] %></span>
+    <% end %>
+  </nav>
+</aside>
