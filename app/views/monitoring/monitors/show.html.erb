@@ -11,12 +11,13 @@
     <% end %>
   <% end %>
 
-  <div class="min-h-0 flex-1 overflow-y-auto">
+  <%= turbo_stream_from @monitor %>
+  <div class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
     <% if @monitor.push? %>
       <%= render "monitoring/monitors/push_url", monitor: @monitor, token: @push_token %>
     <% end %>
 
-    <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4 lg:grid-cols-[repeat(3,minmax(0,1fr))_24rem]">
+    <dl class="grid shrink-0 grid-cols-2 border-b border-line sm:grid-cols-4 lg:grid-cols-[repeat(3,minmax(0,1fr))_24rem]">
       <% { day: "uptime_day", week: "uptime_week", month: "uptime_month" }.each do |span, key| %>
         <div class="<%= class_names("flex flex-col gap-2 border-r border-b border-line px-5 py-4 sm:border-b-0", "lg:border-r-0" => span == :month) %>">
           <dt class="<%= label %>"><%= t("monitoring.show.#{key}") %></dt>
@@ -29,9 +30,9 @@
       </div>
     </dl>
 
-    <div class="flex flex-col lg:flex-row">
-      <div class="min-w-0 flex-1">
-        <section class="border-b border-line">
+    <div class="flex flex-col lg:min-h-0 lg:flex-1 lg:flex-row">
+      <div class="flex min-w-0 flex-1 flex-col">
+        <section class="shrink-0 border-b border-line">
           <h2 class="<%= heading %>"><%= lucide_icon "chart-line", class: "size-3.5" %><%= t("monitoring.chart.title") %></h2>
           <div class="px-5 py-5">
             <% if report.points.any?(&:last) %>
@@ -42,14 +43,14 @@
           </div>
         </section>
 
-        <section class="border-b border-line lg:border-b-0">
+        <section class="flex flex-col border-b border-line lg:min-h-0 lg:flex-1 lg:border-b-0">
           <h2 class="<%= heading %>"><%= lucide_icon "list", class: "size-3.5" %><%= t("monitoring.show.checks") %></h2>
           <% if report.checks.empty? %>
             <p class="px-5 py-4 text-sm text-muted"><%= t("monitoring.show.no_checks") %></p>
           <% else %>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
               <table class="w-full text-left text-sm">
-                <thead>
+                <thead class="sticky top-0 bg-page">
                   <tr class="border-b border-line font-mono text-[0.6875rem] uppercase tracking-wide text-faint">
                     <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.time") %></th>
                     <th scope="col" class="px-5 py-2 font-normal"><%= t("monitoring.show.columns.status") %></th>
@@ -75,7 +76,7 @@
         </section>
       </div>
 
-      <aside class="flex w-full shrink-0 flex-col lg:w-96 lg:border-l lg:border-line">
+      <aside class="flex w-full shrink-0 flex-col lg:w-96 lg:overflow-y-auto lg:border-l lg:border-line">
         <section class="border-b border-line">
           <h2 class="<%= heading %>"><%= lucide_icon "siren", class: "size-3.5" %><%= t("monitoring.show.incidents") %></h2>
           <% if report.incidents.empty? %>
