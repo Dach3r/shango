@@ -1,6 +1,6 @@
 <% content_for :title, "#{@monitor.name} · #{t("monitoring.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 <% report = @report %>
-<% heading = "flex h-10 shrink-0 items-center gap-2 border-b border-line px-5 font-mono text-xs uppercase tracking-wide text-faint" %>
+<% heading = "flex h-10 shrink-0 items-center gap-2 border-b border-line bg-card px-5 font-mono text-xs uppercase tracking-wide text-faint" %>
 <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
 <% title = capture do %><span class="truncate"><%= @monitor.name %></span><%= render MonitorStatus::Component.for(@monitor) %><% end %>
 
