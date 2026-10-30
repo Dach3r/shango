@@ -114,6 +114,7 @@ zh-CN:
         title: "新建告警渠道"
         description: "选择告警发送到哪里。"
         mail_disabled: "需要 SMTP,但此安装尚未配置。"
+        for_monitor_html: "用于 %{monitor}"
       edit:
         title: "编辑告警渠道"
       form:
@@ -133,6 +134,7 @@ zh-CN:
         create: "创建渠道"
       create:
         created: "渠道已创建。发送一次测试来检查它。"
+        connected: "渠道已创建并已连接到 %{monitor}。发送一次测试来检查它。"
       update:
         updated: "渠道已保存。"
       destroy:

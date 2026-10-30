@@ -115,6 +115,7 @@ en:
         title: "New alert channel"
         description: "Choose where the alerts go."
         mail_disabled: "Needs SMTP, which this installation has not configured."
+        for_monitor_html: "For %{monitor}"
       edit:
         title: "Edit alert channel"
       form:
@@ -134,6 +135,7 @@ en:
         create: "Create channel"
       create:
         created: "Channel created. Send a test to check it."
+        connected: "Channel created and connected to %{monitor}. Send a test to check it."
       update:
         updated: "Channel saved."
       destroy:

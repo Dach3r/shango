@@ -100,6 +100,40 @@ RSpec.describe "Monitoring channels" do
       expect(response.body).not_to include(I18n.t("monitoring.channels.index.secret_hint"))
     end
 
+    it "creates a channel for a monitor and connects it", :aggregate_failures do
+      monitor = create(:uptime_monitor, project:, name: "API health")
+      get new_monitoring_channel_path(monitor_id: monitor.id)
+      expect(response.body).to include("API health</a>", monitoring_monitor_path(monitor), edit_monitoring_monitor_path(monitor), CGI.escapeHTML(new_monitoring_channel_path(kind: "slack", monitor_id: monitor.id)))
+
+      get new_monitoring_channel_path(kind: "slack", monitor_id: monitor.id)
+      expect(response.body).to include('name="monitor_id"', new_monitoring_channel_path(monitor_id: monitor.id))
+
+      post monitoring_channels_path, params: { monitor_id: monitor.id, notification_channel: { kind: "slack", name: "Slack", target: "https://hooks.slack.com/services/T0/B0/xyz" } }
+      expect(response).to redirect_to(monitoring_monitor_path(monitor))
+      expect(flash[:notice]).to eq(I18n.t("monitoring.channels.create.connected", monitor: "API health"))
+      expect(monitor.reload.notification_channels).to eq(project.notification_channels.to_a)
+    end
+
+    it "shows the secret of a webhook made for a monitor before going back to it", :aggregate_failures do
+      monitor = create(:uptime_monitor, project:)
+      post monitoring_channels_path, params: { monitor_id: monitor.id, notification_channel: { kind: "webhook", name: "Hooks", target: "https://hooks.example.com/in" } }
+
+      expect(response).to redirect_to(monitoring_channels_path)
+      expect(monitor.reload.notification_channels.sole.name).to eq("Hooks")
+    end
+
+    it "ignores a monitor the user may not edit or of another project", :aggregate_failures do
+      create(:membership, :owner, project:)
+      membership.update!(role: "member")
+      theirs = create(:uptime_monitor, project:)
+      post monitoring_channels_path, params: { monitor_id: theirs.id, notification_channel: { kind: "slack", name: "Slack", target: "https://hooks.slack.com/services/T0/B0/xyz" } }
+      post monitoring_channels_path, params: { monitor_id: create(:uptime_monitor).id, notification_channel: { kind: "slack", name: "Other", target: "https://hooks.slack.com/services/T0/B0/abc" } }
+
+      expect(response).to redirect_to(monitoring_channels_path)
+      expect(theirs.notification_channels).to be_empty
+      expect(project.notification_channels.count).to eq(2)
+    end
+
     it "refuses email without mail and shows what is wrong", :aggregate_failures do
       post monitoring_channels_path, params: { notification_channel: { kind: "email", name: "Mail", target: "ops@example.com" } }
 

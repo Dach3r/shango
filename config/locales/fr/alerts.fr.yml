@@ -115,6 +115,7 @@ fr:
         title: "Nouveau canal d’alerte"
         description: "Choisissez où vont les alertes."
         mail_disabled: "Nécessite SMTP, non configuré sur cette installation."
+        for_monitor_html: "Pour %{monitor}"
       edit:
         title: "Modifier le canal d’alerte"
       form:
@@ -134,6 +135,7 @@ fr:
         create: "Créer le canal"
       create:
         created: "Canal créé. Envoyez un test pour le vérifier."
+        connected: "Canal créé et connecté à %{monitor}. Envoyez un test pour le vérifier."
       update:
         updated: "Canal enregistré."
       destroy:

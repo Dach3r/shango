@@ -1,6 +1,7 @@
-<%# Form of a notification channel of one kind. Render with `channel:`. Fields are the sign-in inputs (Input::Component) and a large select. %>
+<%# Form of a notification channel of one kind. Render with `channel:` and, for a new one made from a monitor, `origin:`. Fields are the sign-in inputs (Input::Component) and a large select. %>
 <%= form_with model: channel, scope: :notification_channel, url: (channel.persisted? ? monitoring_channel_path(channel) : monitoring_channels_path), id: "channel_form" do |form| %>
   <%= hidden_field_tag "notification_channel[kind]", channel.kind unless channel.persisted? %>
+  <%= hidden_field_tag "monitor_id", local_assigns[:origin].id if local_assigns[:origin] %>
   <%= render "monitoring/errors", record: channel %>
 
   <%= render layout: "monitoring/section", locals: { title: t("monitoring.channels.kinds.#{channel.kind}"), icon: channel_icon(channel), hint: t("monitoring.channels.hints.#{channel.kind}") } do %>

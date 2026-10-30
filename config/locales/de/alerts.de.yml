@@ -115,6 +115,7 @@ de:
         title: "Neuer Alarmkanal"
         description: "Wählen Sie, wohin die Alarme gehen."
         mail_disabled: "Benötigt SMTP, das in dieser Installation nicht eingerichtet ist."
+        for_monitor_html: "Für %{monitor}"
       edit:
         title: "Alarmkanal bearbeiten"
       form:
@@ -134,6 +135,7 @@ de:
         create: "Kanal anlegen"
       create:
         created: "Kanal angelegt. Senden Sie einen Test, um ihn zu prüfen."
+        connected: "Kanal angelegt und mit %{monitor} verbunden. Senden Sie einen Test, um ihn zu prüfen."
       update:
         updated: "Kanal gespeichert."
       destroy:

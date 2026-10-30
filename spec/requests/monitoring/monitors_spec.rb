@@ -134,11 +134,18 @@ RSpec.describe "Monitoring monitors" do
       expect(response.body).to include(I18n.t("monitoring.show.no_incidents"))
     end
 
+    it "links to create the first channel of the project for a monitor", :aggregate_failures do
+      monitor = create(:uptime_monitor, project:)
+      get monitoring_monitor_path(monitor)
+
+      expect(response.body).to include(I18n.t("monitoring.show.connect_channel"), new_monitoring_channel_path(monitor_id: monitor.id))
+    end
+
     it "links to connect an alert channel only when there is none and the monitor can be edited", :aggregate_failures do
       monitor = create(:uptime_monitor, project:)
       linked = create(:uptime_monitor, project:, notification_channels: [create(:notification_channel, project:, name: "Ops hooks")])
       get monitoring_monitor_path(monitor)
-      expect(response.body).to include(I18n.t("monitoring.show.connect_channel"), edit_monitoring_monitor_path(monitor, anchor: "alerts"))
+      expect(response.body).to include(I18n.t("monitoring.show.connect_channel"), edit_monitoring_monitor_path(monitor))
 
       get monitoring_monitor_path(linked)
       expect(response.body).to include("Ops hooks")
@@ -301,6 +308,9 @@ RSpec.describe "Monitoring monitors" do
     it "offers the project's channels in the form, or the way to create one", :aggregate_failures do
       get new_monitoring_monitor_path(kind: "http")
       expect(response.body).to include(I18n.t("monitoring.form.no_channels"), new_monitoring_channel_path)
+      monitor = create(:uptime_monitor, project:)
+      get edit_monitoring_monitor_path(monitor)
+      expect(response.body).to include(new_monitoring_channel_path(monitor_id: monitor.id))
 
       mine
       get new_monitoring_monitor_path(kind: "tcp")

@@ -109,13 +109,13 @@
   </div>
 
   <% channels = current_project.notification_channels.ordered %>
-  <aside id="alerts" class="border-t border-line xl:flex xl:w-96 xl:shrink-0 xl:flex-col xl:overflow-y-auto xl:border-t-0 xl:border-l">
+  <aside class="border-t border-line xl:flex xl:w-96 xl:shrink-0 xl:flex-col xl:overflow-y-auto xl:border-t-0 xl:border-l">
     <h2 class="flex h-10 shrink-0 items-center gap-2 border-b border-line bg-card px-5 font-mono text-xs uppercase tracking-wide text-faint lg:px-8 xl:px-5"><%= lucide_icon "bell", class: "size-3.5" %><%= t("monitoring.form.alerts") %></h2>
     <div class="flex max-w-3xl min-w-0 flex-col gap-5 px-5 py-6 lg:px-8 xl:px-5">
       <%= hidden_field_tag "uptime_monitor[notification_channel_ids][]", "", id: nil %>
       <% if channels.empty? %>
         <p class="text-sm leading-relaxed text-muted"><%= t("monitoring.form.no_channels") %></p>
-        <%= link_to new_monitoring_channel_path, class: button_classes(:secondary, "self-start") do %><%= lucide_icon "plus", class: "size-4" %><%= t("monitoring.channels.index.new") %><% end %>
+        <%= link_to new_monitoring_channel_path(monitor_id: monitor.id), class: button_classes(:secondary, "self-start") do %><%= lucide_icon "plus", class: "size-4" %><%= t("monitoring.channels.index.new") %><% end %>
       <% else %>
         <p class="text-sm leading-relaxed text-muted"><%= t("monitoring.form.alerts_hint") %></p>
         <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">

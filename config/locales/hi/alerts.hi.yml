@@ -115,6 +115,7 @@ hi:
         title: "नया अलर्ट चैनल"
         description: "चुनें कि अलर्ट कहाँ जाएँ।"
         mail_disabled: "SMTP की आवश्यकता है, जो इस इंस्टॉलेशन में कॉन्फ़िगर नहीं है।"
+        for_monitor_html: "%{monitor} के लिए"
       edit:
         title: "अलर्ट चैनल संपादित करें"
       form:
@@ -134,6 +135,7 @@ hi:
         create: "चैनल बनाएँ"
       create:
         created: "चैनल बन गया। जाँचने के लिए परीक्षण भेजें।"
+        connected: "चैनल बन गया और %{monitor} से जुड़ गया। जाँचने के लिए परीक्षण भेजें।"
       update:
         updated: "चैनल सहेजा गया।"
       destroy:

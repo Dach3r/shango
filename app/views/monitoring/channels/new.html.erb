@@ -1,16 +1,21 @@
 <% content_for :title, "#{t("monitoring.channels.new.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
 
+<% origin_id = @origin&.id %>
+<% back = if @channel.kind then new_monitoring_channel_path(monitor_id: origin_id) elsif @origin then edit_monitoring_monitor_path(@origin) else monitoring_channels_path end %>
+<% detail = @channel.kind ? t("monitoring.channels.kinds.#{@channel.kind}") : t("monitoring.channels.new.description") %>
+<% detail = safe_join([detail, " · ", t("monitoring.channels.new.for_monitor_html", monitor: link_to(@origin.name, monitoring_monitor_path(@origin), class: "underline decoration-line underline-offset-2 transition hover:text-ink"))]) if @origin %>
+
 <%= render layout: "monitoring/shell", locals: { current: :channels } do %>
-  <%= render layout: "monitoring/page_bar", locals: { back: (@channel.kind ? new_monitoring_channel_path : monitoring_channels_path), title: t("monitoring.channels.new.title"), detail: (@channel.kind ? t("monitoring.channels.kinds.#{@channel.kind}") : t("monitoring.channels.new.description")) } do %>
+  <%= render layout: "monitoring/page_bar", locals: { back:, title: t("monitoring.channels.new.title"), detail: } do %>
     <% if @channel.kind %><%= render "monitoring/channels/submit", channel: @channel %><% end %>
   <% end %>
   <div class="min-h-0 flex-1 overflow-y-auto">
     <% if @channel.kind %>
-      <%= render "monitoring/channels/form", channel: @channel %>
+      <%= render "monitoring/channels/form", channel: @channel, origin: @origin %>
     <% else %>
       <%= render "monitoring/kind_picker", kinds: NotificationChannel.kinds.keys.map { |kind|
             available = kind != "email" || Shango::Mailing.enabled?
-            { icon: channel_icon(kind), title: t("monitoring.channels.kinds.#{kind}"), hint: t(available ? "monitoring.channels.hints.#{kind}" : "monitoring.channels.new.mail_disabled"), path: (new_monitoring_channel_path(kind:) if available) }
+            { icon: channel_icon(kind), title: t("monitoring.channels.kinds.#{kind}"), hint: t(available ? "monitoring.channels.hints.#{kind}" : "monitoring.channels.new.mail_disabled"), path: (new_monitoring_channel_path(kind:, monitor_id: origin_id) if available) }
           } %>
     <% end %>
   </div>

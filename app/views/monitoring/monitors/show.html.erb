@@ -107,7 +107,7 @@
               <div class="flex items-baseline justify-between gap-4 border-b border-line px-5 py-2.5 last:border-b-0">
                 <dt class="text-muted"><%= field %></dt>
                 <% if field == UptimeMonitor.human_attribute_name(:notification_channels) && @monitor.notification_channels.empty? && policy(@monitor).update? %>
-                  <dd><%= link_to t("monitoring.show.connect_channel"), edit_monitoring_monitor_path(@monitor, anchor: "alerts"), class: "text-accent transition hover:text-accent-hover" %></dd>
+                  <dd><%= link_to t("monitoring.show.connect_channel"), (current_project.notification_channels.exists? ? edit_monitoring_monitor_path(@monitor) : new_monitoring_channel_path(monitor_id: @monitor.id)), class: "text-accent transition hover:text-accent-hover" %></dd>
                 <% else %>
                   <dd class="min-w-0 truncate text-right font-mono text-ink" title="<%= value %>"><%= value %></dd>
                 <% end %>

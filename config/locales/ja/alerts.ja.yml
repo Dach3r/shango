@@ -114,6 +114,7 @@ ja:
         title: "新しいアラートチャンネル"
         description: "アラートの送信先を選んでください。"
         mail_disabled: "SMTP が必要ですが、このインストールでは設定されていません。"
+        for_monitor_html: "%{monitor} 用"
       edit:
         title: "アラートチャンネルを編集"
       form:
@@ -133,6 +134,7 @@ ja:
         create: "チャンネルを作成"
       create:
         created: "チャンネルを作成しました。テストを送信して確認してください。"
+        connected: "チャンネルを作成し、%{monitor} に接続しました。テストを送信して確認してください。"
       update:
         updated: "チャンネルを保存しました。"
       destroy:

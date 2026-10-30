@@ -3,6 +3,7 @@ module Monitoring
     REVEAL = :monitoring_revealed_channel
 
     before_action :find_channel, only: %i[edit update destroy]
+    before_action :find_origin, only: %i[new create]
 
     def index
       authorize current_project, :use?
@@ -28,7 +29,10 @@ module Monitoring
       return render(:new, status: :unprocessable_content) unless Monitoring::Channels::Save.call(channel: @channel, attributes: channel_params, actor: current_user).success?
 
       session[REVEAL] = @channel.id if @channel.webhook?
-      redirect_to monitoring_channels_path, notice: t(".created"), status: :see_other
+      return redirect_to(monitoring_channels_path, notice: t(".created"), status: :see_other) unless @origin
+
+      Monitoring::Monitors::Update.call(monitor: @origin, attributes: {}, channels: @origin.notification_channels.to_a << @channel, actor: current_user)
+      redirect_to (@channel.webhook? ? monitoring_channels_path : monitoring_monitor_path(@origin)), notice: t(".connected", monitor: @origin.name), status: :see_other
     end
 
     def update
@@ -45,6 +49,12 @@ module Monitoring
     end
 
     private
+
+    # The monitor a new channel is created for (from its settings), connected to it once created; only one the user may edit.
+    def find_origin
+      monitor = current_project.uptime_monitors.find_by(id: params[:monitor_id]) if params[:monitor_id].present?
+      @origin = monitor if monitor && policy(monitor).update?
+    end
 
     def kinds
       NotificationChannel.kinds.keys.select { |kind| kind != "email" || Shango::Mailing.enabled? }
