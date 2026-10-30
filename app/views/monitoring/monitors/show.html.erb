@@ -16,7 +16,7 @@
       <%= render "monitoring/monitors/push_url", monitor: @monitor, token: @push_token %>
     <% end %>
 
-    <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4">
+    <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4 lg:grid-cols-[repeat(3,minmax(0,1fr))_24rem]">
       <% { day: "uptime_day", week: "uptime_week", month: "uptime_month" }.each do |span, key| %>
         <div class="flex flex-col gap-2 border-r border-b border-line px-5 py-4 sm:border-b-0">
           <dt class="<%= label %>"><%= t("monitoring.show.#{key}") %></dt>
