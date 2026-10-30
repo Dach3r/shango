@@ -174,7 +174,7 @@ RSpec.describe "Projects" do
       create(:environment, project:, name: "OnlyInFirst")
       other = create(:membership, user:)
       patch current_project_path, params: { project_id: other.project_id }
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).not_to include("OnlyInFirst")
     end

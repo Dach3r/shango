@@ -15,10 +15,10 @@ RSpec.describe EnvironmentSwitcher::Component, type: :component do
     end
   end
 
-  it "opens the environments manager in the right sidebar", :aggregate_failures do
+  it "opens the environments manager and cookies in the modal", :aggregate_failures do
     render_inline(described_class.new(environments: [], current_environment: nil))
 
-    expect(page).to have_css("a[data-turbo-frame='right_sidebar'][data-action='dropdown#close right-sidebar#open']", visible: :all)
+    expect(page).to have_css("a[data-turbo-frame='modal'][data-action='dropdown#close']", count: 2, visible: :all)
   end
 
   context "with a current environment" do

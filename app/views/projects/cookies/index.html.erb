@@ -1,9 +1,6 @@
-<% content_for :title, "#{t("projects.cookies.index.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<% content_for :heading, t("projects.cookies.index.title") %>
-
-<%= render layout: "projects/environments/panel" do %>
-  <section class="mx-auto max-w-3xl space-y-4">
-    <p class="text-xs leading-relaxed text-muted"><%= t("projects.cookies.index.intro") %></p>
+<%= turbo_frame_tag "modal" do %>
+  <%= render Modal::Component.new(icon: "cookie", title: t("projects.cookies.index.title"), description: t("projects.cookies.index.intro"), size: :lg) do %>
+  <section class="space-y-4">
     <p class="text-xs font-medium text-body"><%= t("projects.cookies.index.scope", name: current_environment&.name || t("projects.cookies.index.scope_none")) %></p>
 
     <% if @cookies.empty? %>
@@ -36,4 +33,5 @@
 
     <%= link_to new_cookie_path, class: "flex w-full items-center justify-center gap-2 border border-dashed border-line px-3 py-3 text-sm font-medium text-muted transition hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.cookies.index.new") %><% end %>
   </section>
+  <% end %>
 <% end %>

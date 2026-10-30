@@ -184,7 +184,7 @@ RSpec.describe "Authorization" do
 
   describe "environments" do
     it "keeps members from changing or deleting an environment they did not create", :aggregate_failures do
-      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "modal" }
       expect_forbidden
 
       patch environment_path(environment), params: { environment: { name: "Hacked" } }
@@ -247,7 +247,7 @@ RSpec.describe "Authorization" do
 
     it "lists environments without actions the member cannot use", :aggregate_failures do
       own = create(:environment, project:, creator: member)
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include(edit_environment_path(own))
       expect(response.body).not_to include(edit_environment_path(environment))

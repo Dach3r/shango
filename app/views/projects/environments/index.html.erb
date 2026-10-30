@@ -1,11 +1,6 @@
-<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<% content_for :heading, t(".title") %>
-
-
-<%= render layout: "projects/environments/panel" do %>
-  <section class="mx-auto max-w-3xl space-y-4">
-    <p class="text-xs leading-relaxed text-muted"><%= t("projects.environments.index.intro") %></p>
-
+<%= turbo_frame_tag "modal" do %>
+  <%= render Modal::Component.new(icon: "layers", title: t("projects.environments.index.title"), description: t("projects.environments.index.intro"), size: :lg) do %>
+  <section class="space-y-4">
     <% if @environments.empty? %>
       <div class="border border-dashed border-line p-8 text-center">
         <%= lucide_icon "layers", class: "mx-auto size-8 text-faint" %>
@@ -46,4 +41,5 @@
 
     <%= link_to new_environment_path, class: "flex w-full items-center justify-center gap-2 border border-dashed border-line px-3 py-3 text-sm font-medium text-muted transition hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %><%= lucide_icon "plus", class: "size-4" %><%= t("projects.environments.index.new") %><% end %>
   </section>
+  <% end %>
 <% end %>

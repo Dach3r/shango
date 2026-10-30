@@ -13,7 +13,7 @@ RSpec.describe "Cookies" do
       create(:cookie, project:, name: "plain")
       create(:cookie, project:, name: "other_env", environment:)
       create(:cookie, name: "foreign")
-      get cookies_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get cookies_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include("_session", "plain", I18n.t("projects.cookies.index.session"), I18n.t("projects.cookies.index.secure"), I18n.t("projects.cookies.index.http_only"))
       expect(response.body).not_to include("topsecret", "other_env", "foreign")
@@ -23,7 +23,7 @@ RSpec.describe "Cookies" do
       membership.update!(current_environment: environment)
       create(:cookie, project:, name: "scoped", environment:)
       create(:cookie, project:, name: "bare")
-      get cookies_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get cookies_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include("scoped", environment.name)
       expect(response.body).not_to include("bare")
@@ -31,7 +31,7 @@ RSpec.describe "Cookies" do
 
     it "hides expired cookies and shows an empty state", :aggregate_failures do
       create(:cookie, project:, name: "stale", expires_at: 1.day.ago)
-      get cookies_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get cookies_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include(I18n.t("projects.cookies.index.empty_title"))
       expect(response.body).not_to include("stale")
@@ -46,7 +46,7 @@ RSpec.describe "Cookies" do
 
   describe "GET /cookies/new" do
     it "renders the form in the side panel" do
-      get new_cookie_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get new_cookie_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include(I18n.t("projects.cookies.form.new_title"), "cookie[name]")
     end
@@ -70,7 +70,7 @@ RSpec.describe "Cookies" do
     end
 
     it "renders the form again when the cookie is invalid", :aggregate_failures do
-      expect { post cookies_path, params: { cookie: { name: "", domain: "x.test" } }, headers: { "Turbo-Frame" => "right_sidebar" } }.not_to change(Cookie, :count)
+      expect { post cookies_path, params: { cookie: { name: "", domain: "x.test" } }, headers: { "Turbo-Frame" => "modal" } }.not_to change(Cookie, :count)
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.body).to include("cookie[name]")
     end
@@ -79,13 +79,13 @@ RSpec.describe "Cookies" do
   describe "GET /cookies/:id/edit" do
     it "shows the value of the cookie in plain text", :aggregate_failures do
       cookie = create(:cookie, project:, name: "_session", value: "topsecret")
-      get edit_cookie_path(cookie), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_cookie_path(cookie), headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include("_session", "topsecret")
     end
 
     it "does not open cookies of other projects" do
-      get edit_cookie_path(create(:cookie)), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_cookie_path(create(:cookie)), headers: { "Turbo-Frame" => "modal" }
 
       expect(response).to have_http_status(:not_found)
     end
@@ -104,7 +104,7 @@ RSpec.describe "Cookies" do
     it "renders the form again when the cookie is invalid", :aggregate_failures do
       cookie = create(:cookie, project:)
 
-      patch cookie_path(cookie), params: { cookie: { path: "no_slash" } }, headers: { "Turbo-Frame" => "right_sidebar" }
+      patch cookie_path(cookie), params: { cookie: { path: "no_slash" } }, headers: { "Turbo-Frame" => "modal" }
 
       expect(response).to have_http_status(:unprocessable_entity)
       expect(cookie.reload.path).to eq("/")
@@ -159,7 +159,7 @@ RSpec.describe "Cookies" do
     let(:base) { { name: "sid", value: "abc", domain: "api.example.com", path: "/" } }
 
     def invalid_post(overrides)
-      expect { post cookies_path, params: { cookie: base.merge(overrides) }, headers: { "Turbo-Frame" => "right_sidebar" } }.not_to change(Cookie, :count)
+      expect { post cookies_path, params: { cookie: base.merge(overrides) }, headers: { "Turbo-Frame" => "modal" } }.not_to change(Cookie, :count)
       expect(response).to have_http_status(:unprocessable_content)
     end
 
@@ -210,7 +210,7 @@ RSpec.describe "Cookies" do
 
     it "keeps a past expiry but hides the cookie from the list", :aggregate_failures do
       post cookies_path, params: { cookie: base.merge(name: "stale_cookie", expires_at: "2001-01-01T00:00") }
-      get cookies_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get cookies_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(Cookie.last.expires_at).to be < Time.current
       expect(response.body).not_to include("stale_cookie")

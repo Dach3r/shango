@@ -11,7 +11,7 @@ RSpec.describe "Environments" do
   describe "GET /environments" do
     it "lists the project's environments" do
       create(:variable, environment:, key: "HOST")
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include(environment.name)
     end
@@ -19,7 +19,7 @@ RSpec.describe "Environments" do
     it "preloads the variables of every environment", :aggregate_failures do
       create(:variable, environment:, key: "HOST")
       create(:variable, environment: create(:environment, project:, name: "Staging"), key: "TOKEN")
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Staging")
@@ -28,14 +28,14 @@ RSpec.describe "Environments" do
     it "marks the active environment and offers to activate the others", :aggregate_failures do
       other = create(:environment, project:)
       membership.update!(current_environment: environment)
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).to include(I18n.t("projects.environments.index.in_use"))
       expect(response.body.scan(%(">#{I18n.t("projects.environments.index.activate")}<)).size).to eq(1)
       expect(response.body).to include(other.name)
     end
 
-    it "redirects to the workbench outside the side panel", :aggregate_failures do
+    it "redirects to the workbench outside the modal frame", :aggregate_failures do
       get environments_path
       expect(response).to redirect_to(workbench_root_path)
 
@@ -47,28 +47,28 @@ RSpec.describe "Environments" do
     end
   end
 
-  describe "GET /environments from the side panel" do
-    it "wraps the content in the right sidebar frame and skips the app layout", :aggregate_failures do
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+  describe "GET /environments from the modal" do
+    it "wraps the content in the modal frame and skips the app layout", :aggregate_failures do
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
 
-      expect(response.body).to include('<turbo-frame class="flex flex-1 flex-col" id="right_sidebar">')
+      expect(response.body).to include('<turbo-frame id="modal">')
       expect(response.body).not_to include("data-controller=\"right-sidebar\"")
     end
   end
 
-  describe "form from the side panel" do
-    it "shows a back header with the title", :aggregate_failures do
-      get new_environment_path, headers: { "Turbo-Frame" => "right_sidebar" }
-      expect(response.body).to include("<h3", I18n.t("projects.environments.new.title"))
+  describe "form from the modal" do
+    it "shows the title", :aggregate_failures do
+      get new_environment_path, headers: { "Turbo-Frame" => "modal" }
+      expect(response.body).to include("<h2", I18n.t("projects.environments.new.title"))
 
-      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "modal" }
       expect(response.body).to include(environment.name)
     end
   end
 
   describe "GET /environments/new" do
     it "renders the form" do
-      get new_environment_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get new_environment_path, headers: { "Turbo-Frame" => "modal" }
 
       expect(response).to have_http_status(:ok)
     end
@@ -92,13 +92,13 @@ RSpec.describe "Environments" do
 
   describe "GET /environments/:id/edit" do
     it "renders the form" do
-      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "modal" }
 
       expect(response).to have_http_status(:ok)
     end
 
     it "does not find environments of other projects" do
-      get edit_environment_path(foreign_environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_environment_path(foreign_environment), headers: { "Turbo-Frame" => "modal" }
 
       expect(response).to have_http_status(:not_found)
     end
@@ -182,7 +182,7 @@ RSpec.describe "Environments" do
 
     it "requires authentication", :aggregate_failures do
       sign_out user
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
       expect(response).to redirect_to(new_user_session_path)
 
       patch current_environment_path, params: { environment_id: environment.id }
@@ -239,14 +239,14 @@ RSpec.describe "Environments" do
       variable = Variable.find_by!(key: "TOKEN")
 
       expect(variable.value_before_type_cast).not_to include("s3cr3t-value")
-      get edit_environment_path(variable.environment), headers: { "Turbo-Frame" => "right_sidebar" }
-      get environments_path, headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_environment_path(variable.environment), headers: { "Turbo-Frame" => "modal" }
+      get environments_path, headers: { "Turbo-Frame" => "modal" }
       expect(response.body).not_to include("s3cr3t-value")
     end
 
     it "does not render a secret value in the edit form" do
       create(:variable, :secret, environment:, key: "TOKEN", value: "s3cr3t-value")
-      get edit_environment_path(environment), headers: { "Turbo-Frame" => "right_sidebar" }
+      get edit_environment_path(environment), headers: { "Turbo-Frame" => "modal" }
 
       expect(response.body).not_to include("s3cr3t-value")
     end

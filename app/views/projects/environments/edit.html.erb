@@ -1,6 +1,1 @@
-<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
-<% content_for :heading, t(".title") %>
-
-<%= render layout: "projects/environments/panel" do %>
-  <%= render "projects/environments/form" %>
-<% end %>
+<%= turbo_frame_tag "modal" do %><%= render "projects/environments/form" %><% end %>
