@@ -1,4 +1,4 @@
-<%# Navigation of the Monitoring module: the monitors with one entry per status, and the alert channels, each with its count. Render with `current:`: :channels, :monitors, or the status filter on display ("up", "down", "pending", "paused") as a string. %>
+<%# Navigation of the Monitoring module: the monitors with one entry per status, and the alert channels, each with its count. Render with `current:`: :channels, :incidents, :monitors, or the status filter on display ("up", "down", "pending", "paused") as a string. %>
 <% summary = monitoring_sidebar[:summary] %>
 <% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
 <% item = "flex shrink-0 items-center justify-between gap-4 border-r border-line py-3 pr-5 text-sm text-muted transition hover:bg-card hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50 aria-[current=page]:bg-card aria-[current=page]:text-ink lg:border-r-0 lg:border-b lg:border-l-2 lg:border-l-transparent lg:aria-[current=page]:border-l-solid" %>
@@ -28,6 +28,10 @@
         </span>
         <span class="<%= count %>"><%= summary[status.to_sym] %></span>
       <% end %>
+    <% end %>
+    <%= link_to monitoring_incidents_path, aria: { current: (current == :incidents ? "page" : nil) }, class: class_names(item, "pl-5 font-medium") do %>
+      <span class="flex items-center gap-2.5"><%= lucide_icon "siren", class: "size-4" %><%= t("monitoring.tabs.incidents") %></span>
+      <span class="<%= class_names(count, "!text-danger" => monitoring_sidebar[:incidents].positive?) %>"><%= monitoring_sidebar[:incidents] %></span>
     <% end %>
     <%= link_to monitoring_channels_path, aria: { current: (current == :channels ? "page" : nil) }, class: class_names(item, "pl-5 font-medium") do %>
       <span class="flex items-center gap-2.5"><%= lucide_icon "bell", class: "size-4" %><%= t("monitoring.tabs.channels") %></span>

@@ -2,7 +2,7 @@ module ProjectContext
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_membership, :current_project, :current_environment, :available_projects, :project_environments
+    helper_method :current_membership, :current_project, :current_environment, :available_projects, :project_environments, :open_incident_count
   end
 
   private
@@ -29,6 +29,11 @@ module ProjectContext
     return @current_environment if defined?(@current_environment)
 
     @current_environment = project_environments.find { |environment| environment.id == current_membership.current_environment_id }
+  end
+
+  # Incidents still open in the current project, whatever the environment: what the status bar and the navigation flag.
+  def open_incident_count
+    @open_incident_count ||= current_project ? current_project.incidents.open.count : 0
   end
 
   # Projects the user can switch to, by name.

@@ -10,6 +10,7 @@ ru:
         new_monitor: "Новый монитор"
         network: "Сетевые инструменты"
         incidents: "Открытые инциденты"
+        all_incidents: "Все инциденты"
         no_incidents: "Открытых инцидентов нет."
         since: "уже %{time}"
         activity: "Активность"

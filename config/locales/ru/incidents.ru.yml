@@ -1,0 +1,17 @@
+ru:
+  monitoring:
+    tabs:
+      incidents: "Инциденты"
+    incidents:
+      filters:
+        label: "Фильтр инцидентов"
+        all: "Все"
+        open: "Открытые"
+        resolved: "Решённые"
+      empty:
+        all: "Инцидентов пока нет."
+        open: "Открытых инцидентов нет."
+        resolved: "Решённых инцидентов нет."
+  components:
+    status_bar:
+      incidents: "Инциденты: %{total}"

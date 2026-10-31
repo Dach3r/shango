@@ -10,6 +10,7 @@ pt-BR:
         new_monitor: "Novo monitor"
         network: "Ferramentas de rede"
         incidents: "Incidentes abertos"
+        all_incidents: "Todos os incidentes"
         no_incidents: "Nenhum incidente aberto."
         since: "há %{time}"
         activity: "Atividade"

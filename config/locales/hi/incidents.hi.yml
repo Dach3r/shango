@@ -1,0 +1,17 @@
+hi:
+  monitoring:
+    tabs:
+      incidents: "घटनाएँ"
+    incidents:
+      filters:
+        label: "घटनाएँ फ़िल्टर करें"
+        all: "सभी"
+        open: "खुली"
+        resolved: "सुलझी"
+      empty:
+        all: "अभी तक कोई घटना नहीं।"
+        open: "कोई खुली घटना नहीं।"
+        resolved: "कोई सुलझी घटना नहीं।"
+  components:
+    status_bar:
+      incidents: "घटनाएँ: %{total}"

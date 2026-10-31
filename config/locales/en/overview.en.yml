@@ -10,6 +10,7 @@ en:
         new_monitor: "New monitor"
         network: "Network tools"
         incidents: "Open incidents"
+        all_incidents: "All incidents"
         no_incidents: "No open incidents."
         since: "for %{time}"
         activity: "Activity"

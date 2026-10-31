@@ -1,0 +1,17 @@
+zh-CN:
+  monitoring:
+    tabs:
+      incidents: "事件"
+    incidents:
+      filters:
+        label: "筛选事件"
+        all: "全部"
+        open: "未解决"
+        resolved: "已解决"
+      empty:
+        all: "还没有事件。"
+        open: "没有未解决的事件。"
+        resolved: "没有已解决的事件。"
+  components:
+    status_bar:
+      incidents: "事件：%{total}"

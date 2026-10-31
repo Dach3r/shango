@@ -27,7 +27,7 @@
       </aside>
     </div>
 
-    <%= render StatusBar::Component.new(user: current_user, project: current_project, projects: available_projects, environments: project_environments, current_environment:) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
+    <%= render StatusBar::Component.new(user: current_user, project: current_project, projects: available_projects, environments: project_environments, current_environment:, open_incidents: open_incident_count) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
   </div>
   <%= turbo_frame_tag "modal" %>
 <% end %>

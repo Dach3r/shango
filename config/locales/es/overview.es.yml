@@ -10,6 +10,7 @@ es:
         new_monitor: "Nuevo monitor"
         network: "Herramientas de red"
         incidents: "Incidentes abiertos"
+        all_incidents: "Todos los incidentes"
         no_incidents: "No hay incidentes abiertos."
         since: "desde hace %{time}"
         activity: "Actividad"

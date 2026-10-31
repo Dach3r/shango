@@ -1,0 +1,17 @@
+pt-BR:
+  monitoring:
+    tabs:
+      incidents: "Incidentes"
+    incidents:
+      filters:
+        label: "Filtrar incidentes"
+        all: "Todos"
+        open: "Abertos"
+        resolved: "Resolvidos"
+      empty:
+        all: "Ainda não há incidentes."
+        open: "Nenhum incidente aberto."
+        resolved: "Nenhum incidente resolvido."
+  components:
+    status_bar:
+      incidents: "Incidentes: %{total}"

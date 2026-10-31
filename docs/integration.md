@@ -23,4 +23,8 @@ Configure once, use everywhere. Every module reads the same project, the same se
 
 ## 4. Environment scope
 
-The environment a member selects in the status bar narrows what monitors and incidents list: `UptimeMonitor.in_environment(environment)` keeps that environment's monitors plus those that belong to none (push monitors, for instance). `EnvironmentScope` (`scope_environment`) reads it from the member and `?environment=all` widens it; `projects/_environment_scope` always says which one is on and links to the other. The Overview uses it today.
+The environment a member selects in the status bar narrows what monitors and incidents list: `UptimeMonitor.in_environment(environment)` keeps that environment's monitors plus those that belong to none (push monitors, for instance). `EnvironmentScope` (`scope_environment`) reads it from the member and `?environment=all` widens it; `projects/_environment_scope` always says which one is on and links to the other. The Overview, the monitor list and the incident list use it; the counts in the Monitoring sidebar stay project-wide, so they match the monitor limit.
+
+## 5. Incidents
+
+`/monitoring/incidents` (`Monitoring::IncidentsController`) lists every incident of the project, newest first, 25 per page, filtered by `?state=open|resolved` and narrowed by the environment scope. Open incidents are flagged everywhere: a red count in the status bar (`StatusBar::Component`, linking to the open ones), on *Monitoring* in `ToolsNav` and in the Monitoring sidebar. The count comes from `ProjectContext#open_incident_count`, one indexed query per page.

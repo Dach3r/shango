@@ -1,0 +1,17 @@
+en:
+  monitoring:
+    tabs:
+      incidents: "Incidents"
+    incidents:
+      filters:
+        label: "Filter incidents"
+        all: "All"
+        open: "Open"
+        resolved: "Resolved"
+      empty:
+        all: "No incidents yet."
+        open: "No open incidents."
+        resolved: "No resolved incidents."
+  components:
+    status_bar:
+      incidents: "Incidents: %{total}"

@@ -22,6 +22,18 @@ RSpec.describe StatusBar::Component, type: :component do
     expect(page).to have_css("button[aria-haspopup][title=Alpha]")
   end
 
+  it "flags open incidents with a link to them", :aggregate_failures do
+    render_inline(described_class.new(user:, project:, projects: [project], open_incidents: 3))
+
+    expect(page).to have_link(href: "/monitoring/incidents?state=open", title: I18n.t("components.status_bar.incidents", total: 3))
+  end
+
+  it "flags nothing without open incidents" do
+    render_inline(described_class.new(user:, project:, projects: [project]))
+
+    expect(page).to have_no_link(href: "/monitoring/incidents?state=open")
+  end
+
   it "renders the given content" do
     render_inline(described_class.new(user:, project:, projects: [project])) { "Breadcrumb" }
 

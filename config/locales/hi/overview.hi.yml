@@ -10,6 +10,7 @@ hi:
         new_monitor: "नया मॉनिटर"
         network: "नेटवर्क टूल"
         incidents: "खुली घटनाएँ"
+        all_incidents: "सभी घटनाएँ"
         no_incidents: "कोई खुली घटना नहीं।"
         since: "%{time} से"
         activity: "गतिविधि"

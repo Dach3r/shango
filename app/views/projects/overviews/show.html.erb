@@ -40,7 +40,7 @@
 
       <div class="grid lg:grid-cols-2">
         <section class="border-b border-line lg:border-r">
-          <h2 class="<%= heading %>"><%= lucide_icon "siren", class: "size-3.5" %><%= t(".incidents") %></h2>
+          <h2 class="<%= heading %>"><%= lucide_icon "siren", class: "size-3.5" %><%= t(".incidents") %><%= link_to t(".all_incidents"), monitoring_incidents_path(environment: params[:environment].presence), class: "ml-auto transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %></h2>
           <% if overview[:incidents].empty? %>
             <p class="<%= muted %>"><%= t(".no_incidents") %></p>
           <% else %>

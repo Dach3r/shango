@@ -3,6 +3,8 @@ module Monitoring
     FILTERS = %w[up down pending paused].freeze
     PUSH_TOKEN = :monitoring_push_token
 
+    include EnvironmentScope
+
     before_action :find_monitor, only: %i[show edit update destroy]
 
     def index
@@ -11,7 +13,7 @@ module Monitoring
       @query = params[:q].to_s.strip.first(100)
       all = current_project.uptime_monitors.order(:name).includes(api_request: :collection).strict_loading
       @overview = Monitoring::Monitors::Overview.call(monitors: all.to_a).data
-      @monitors = filtered(all)
+      @monitors = filtered(all.in_environment(scope_environment))
     end
 
     def show

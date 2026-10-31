@@ -89,6 +89,14 @@ RSpec.describe "Project overview" do
       expect(response.body).to include("In production", "In staging", I18n.t("projects.environment_scope.all"), I18n.t("projects.environment_scope.only", environment: "Production"))
     end
 
+    it "links to every incident, keeping the choice of environment", :aggregate_failures do
+      get overview_path
+      expect(response.body).to include(%(href="#{monitoring_incidents_path}"))
+
+      get overview_path(environment: "all")
+      expect(response.body).to include(CGI.escapeHTML(monitoring_incidents_path(environment: "all")))
+    end
+
     it "keeps the other parameters of the page in the links", :aggregate_failures do
       get overview_path(foo: "1")
 

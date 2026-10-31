@@ -1,0 +1,53 @@
+<% content_for :title, "#{t("monitoring.tabs.incidents")} · #{t("monitoring.title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% tab = "flex h-full items-center border-r border-line px-5 text-sm text-muted transition hover:bg-card hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50 aria-[current=page]:bg-card aria-[current=page]:text-ink" %>
+<% scope = { environment: params[:environment].presence } %>
+
+<%= render layout: "monitoring/shell", locals: { current: :incidents } do %>
+  <h1 class="sr-only"><%= t("monitoring.tabs.incidents") %></h1>
+  <nav aria-label="<%= t("monitoring.incidents.filters.label") %>" class="flex h-14 shrink-0 items-stretch border-b border-line">
+    <% [nil, *Monitoring::IncidentsController::STATES].each do |state| %>
+      <%= link_to t("monitoring.incidents.filters.#{state || "all"}"), monitoring_incidents_path(state:, **scope), aria: { current: (@state == state ? "page" : nil) }, class: tab %>
+    <% end %>
+  </nav>
+  <%= render "projects/environment_scope" %>
+
+  <% if @incidents.empty? %>
+    <div class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center">
+      <%= lucide_icon "siren", class: "size-8 text-faint" %>
+      <p class="text-sm font-medium text-ink"><%= t("monitoring.incidents.empty.#{@state || "all"}") %></p>
+    </div>
+  <% else %>
+    <div class="min-h-0 flex-1 overflow-y-auto">
+      <ul class="divide-y divide-line border-b border-line">
+        <% @incidents.each do |incident| %>
+          <li>
+            <%= link_to monitoring_monitor_path(incident.uptime_monitor), class: "flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-5 py-3 transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" do %>
+              <span class="flex min-w-0 flex-col gap-1">
+                <span class="truncate text-sm font-medium text-ink"><%= incident.uptime_monitor.name %></span>
+                <span class="truncate text-xs text-muted"><%= monitor_cause(incident.cause, incident.detail) %></span>
+              </span>
+              <span class="flex shrink-0 flex-col items-end gap-1">
+                <%= render MonitorStatus::Component.new(status: incident.open? ? :down : :up) %>
+                <span class="text-xs text-muted">
+                  <%= l(incident.started_at, format: :short) %> · <%= distance_of_time_in_words(incident.started_at, incident.resolved_at || Time.current) %>
+                  <% if incident.paused? %>· <%= t("monitoring.show.closed_by_pause") %><% end %>
+                </span>
+              </span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
+      <nav aria-label="<%= t("projects.audit_events.index.pagination") %>" class="flex items-center justify-between gap-3 px-5 py-4">
+        <% if @page > 1 %>
+          <%= link_to t("projects.audit_events.index.newer"), monitoring_incidents_path(state: @state, page: (@page == 2 ? nil : @page - 1), **scope), class: button_classes(:secondary, "h-9 px-3 text-xs") %>
+        <% else %>
+          <span></span>
+        <% end %>
+        <% if @more %>
+          <%= link_to t("projects.audit_events.index.older"), monitoring_incidents_path(state: @state, page: @page + 1, **scope), class: button_classes(:secondary, "h-9 px-3 text-xs") %>
+        <% end %>
+      </nav>
+    </div>
+  <% end %>
+<% end %>

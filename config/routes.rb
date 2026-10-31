@@ -94,6 +94,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :incidents, only: :index
+
     match "push(/:token)", to: "pushes#create", via: %i[get post], as: :push, constraints: { token: /[A-Za-z0-9_-]+/ }
 
     resources :channels, except: :show do

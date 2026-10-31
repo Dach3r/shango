@@ -18,7 +18,8 @@ module Monitoring
     def monitoring_sidebar
       @monitoring_sidebar ||= {
         summary: @overview&.dig(:summary) || Monitoring::Monitors::Overview.call(monitors: current_project.uptime_monitors.strict_loading.to_a).data[:summary],
-        channels: current_project.notification_channels.count
+        channels: current_project.notification_channels.count,
+        incidents: open_incident_count
       }
     end
   end

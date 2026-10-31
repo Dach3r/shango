@@ -10,6 +10,7 @@ zh-CN:
         new_monitor: "新建监控"
         network: "网络工具"
         incidents: "未解决的事件"
+        all_incidents: "所有事件"
         no_incidents: "没有未解决的事件。"
         since: "已持续 %{time}"
         activity: "动态"

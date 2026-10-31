@@ -354,6 +354,30 @@ RSpec.describe "Monitoring monitors" do
     end
   end
 
+  describe "environment scope" do
+    let(:production) { create(:environment, project:, name: "Production") }
+
+    before do
+      create(:uptime_monitor, project:, name: "Prod API", environment: production)
+      create(:uptime_monitor, project:, name: "Staging API", environment: create(:environment, project:))
+      create(:uptime_monitor, :push, project:, name: "Heartbeat")
+      membership.update!(current_environment: production)
+    end
+
+    it "lists the monitors of the selected environment and those without one", :aggregate_failures do
+      get monitoring_root_path
+
+      expect(response.body).to include("Prod API", "Heartbeat", I18n.t("projects.environment_scope.narrowed", environment: "Production"))
+      expect(response.body).not_to include("Staging API")
+    end
+
+    it "lists every monitor when asked, keeping the filter of the page", :aggregate_failures do
+      get monitoring_root_path(environment: "all", status: "pending")
+
+      expect(response.body).to include("Prod API", "Staging API", CGI.escapeHTML("#{monitoring_root_path}?status=pending"))
+    end
+  end
+
   describe "monitors started from Network" do
     it "prefills the host and port of a TCP or SSL monitor", :aggregate_failures do
       get new_monitoring_monitor_path(kind: "tcp", target: "db.example.com", port_number: "5432")

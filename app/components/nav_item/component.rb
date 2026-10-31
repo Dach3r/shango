@@ -9,11 +9,12 @@ class NavItem::Component < ApplicationComponent
   LINK = "text-body hover:bg-field hover:text-ink"
   DISABLED = "cursor-not-allowed text-faint"
 
-  def initialize(label:, icon:, href: nil, active: false, orientation: :vertical)
+  def initialize(label:, icon:, href: nil, active: false, orientation: :vertical, badge: nil)
     @label = label
     @icon = icon
     @href = href
     @active = active
+    @badge = badge
     @orientation = ORIENTATIONS.fetch(orientation)
   end
 

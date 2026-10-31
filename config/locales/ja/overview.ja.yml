@@ -10,6 +10,7 @@ ja:
         new_monitor: "新しいモニター"
         network: "ネットワークツール"
         incidents: "未解決のインシデント"
+        all_incidents: "すべてのインシデント"
         no_incidents: "未解決のインシデントはありません。"
         since: "%{time}前から"
         activity: "アクティビティ"

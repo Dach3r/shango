@@ -1,0 +1,17 @@
+de:
+  monitoring:
+    tabs:
+      incidents: "Vorfälle"
+    incidents:
+      filters:
+        label: "Vorfälle filtern"
+        all: "Alle"
+        open: "Offen"
+        resolved: "Gelöst"
+      empty:
+        all: "Noch keine Vorfälle."
+        open: "Keine offenen Vorfälle."
+        resolved: "Keine gelösten Vorfälle."
+  components:
+    status_bar:
+      incidents: "Vorfälle: %{total}"

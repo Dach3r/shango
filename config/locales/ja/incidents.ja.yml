@@ -1,0 +1,17 @@
+ja:
+  monitoring:
+    tabs:
+      incidents: "インシデント"
+    incidents:
+      filters:
+        label: "インシデントを絞り込む"
+        all: "すべて"
+        open: "未解決"
+        resolved: "解決済み"
+      empty:
+        all: "インシデントはまだありません。"
+        open: "未解決のインシデントはありません。"
+        resolved: "解決済みのインシデントはありません。"
+  components:
+    status_bar:
+      incidents: "インシデント: %{total}"

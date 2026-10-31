@@ -2,6 +2,9 @@
   <%= link_to @href, class: classes, title: @label, data: { turbo_frame: "_top" }, aria: { current: ("page" if @active) } do %>
     <%= lucide_icon @icon, class: "size-4 shrink-0" %>
     <span class="<%= label_classes %>"><%= @label %></span>
+    <% if @badge.to_i.positive? %>
+      <span class="ml-auto min-w-5 border border-danger/40 px-1.5 text-center font-mono text-[0.625rem] text-danger"><%= @badge %></span>
+    <% end %>
   <% end %>
 <% else %>
   <span class="<%= classes %>" title="<%= @label %> · <%= t("components.nav_item.soon") %>" aria-disabled="true">
