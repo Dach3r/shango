@@ -33,7 +33,7 @@ module ProjectContext
 
   # Incidents still open in the current project, whatever the environment: what the status bar and the navigation flag.
   def open_incident_count
-    @open_incident_count ||= current_project ? current_project.incidents.open.count : 0
+    @open_incident_count ||= current_project.incidents.open.count
   end
 
   # Projects the user can switch to, by name.
