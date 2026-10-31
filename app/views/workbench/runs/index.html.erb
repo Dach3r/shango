@@ -9,7 +9,7 @@
     </div>
 
     <% if @runs.empty? %>
-      <p class="px-5 py-6 text-sm text-muted"><%= t("workbench.runs.index.empty") %></p>
+      <%= render EmptyState::Component.new(icon: "play", title: t("workbench.runs.index.empty")) %>
     <% else %>
       <ul class="divide-y divide-line">
         <% @runs.each do |run| %>

@@ -2,11 +2,7 @@
   <%= render Modal::Component.new(icon: "layers", title: t("projects.environments.index.title"), description: t("projects.environments.index.intro"), size: :lg) do %>
   <section class="space-y-4">
     <% if @environments.empty? %>
-      <div class="border border-dashed border-line p-8 text-center">
-        <%= lucide_icon "layers", class: "mx-auto size-8 text-faint" %>
-        <p class="mt-3 text-sm font-medium text-ink"><%= t("projects.environments.index.empty_title") %></p>
-        <p class="mt-1 text-sm text-muted"><%= t("projects.environments.index.empty_hint") %></p>
-      </div>
+      <%= render EmptyState::Component.new(icon: "layers", title: t("projects.environments.index.empty_title"), description: t("projects.environments.index.empty_hint")) %>
     <% else %>
       <ul class="space-y-3">
         <% @environments.each do |environment| %>

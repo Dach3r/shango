@@ -1,0 +1,12 @@
+<%= tag.div class: classes, **@options.except(:class) do %>
+  <div class="flex max-w-md flex-col items-center text-center">
+    <span class="flex size-16 items-center justify-center border border-line bg-field text-accent"><%= lucide_icon @icon, class: "size-8" %></span>
+    <h2 class="mt-6 text-2xl font-semibold tracking-tight text-ink"><%= @title %></h2>
+    <% if @description %>
+      <p class="mt-2 text-sm text-muted"><%= @description %></p>
+    <% end %>
+    <% if content? %>
+      <div class="mt-6 flex flex-wrap justify-center gap-2"><%= content %></div>
+    <% end %>
+  </div>
+<% end %>

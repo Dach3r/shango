@@ -4,11 +4,7 @@
     <p class="text-xs font-medium text-body"><%= t("projects.cookies.index.scope", name: current_environment&.name || t("projects.cookies.index.scope_none")) %></p>
 
     <% if @cookies.empty? %>
-      <div class="border border-dashed border-line p-8 text-center">
-        <%= lucide_icon "cookie", class: "mx-auto size-8 text-faint" %>
-        <p class="mt-3 text-sm font-medium text-ink"><%= t("projects.cookies.index.empty_title") %></p>
-        <p class="mt-1 text-sm text-muted"><%= t("projects.cookies.index.empty_hint") %></p>
-      </div>
+      <%= render EmptyState::Component.new(icon: "cookie", title: t("projects.cookies.index.empty_title"), description: t("projects.cookies.index.empty_hint")) %>
     <% else %>
       <ul class="space-y-3">
         <% @cookies.each do |cookie| %>

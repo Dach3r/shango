@@ -15,18 +15,13 @@
 
   <div class="min-h-0 flex-1 overflow-y-auto">
     <% if overview[:empty] %>
-      <div class="flex flex-col items-center justify-center gap-3 px-6 py-16 text-center">
-        <%= lucide_icon "layout-dashboard", class: "size-8 text-faint" %>
-        <p class="text-sm font-medium text-ink"><%= t(".empty.title") %></p>
-        <p class="max-w-sm text-sm text-muted"><%= t(".empty.hint") %></p>
-        <div class="mt-3 flex flex-wrap justify-center gap-2">
-          <%= button_to workbench_drafts_path, method: :post, class: button_classes(:primary), form_class: "contents" do %><%= lucide_icon "send", class: "size-4" %><%= t(".new_request") %><% end %>
-          <% if policy(current_project.uptime_monitors.new).create? %>
-            <%= link_to new_monitoring_monitor_path, class: button_classes(:secondary) do %><%= lucide_icon "activity", class: "size-4" %><%= t(".new_monitor") %><% end %>
-          <% end %>
-          <%= link_to network_root_path, class: button_classes(:secondary) do %><%= lucide_icon "radar", class: "size-4" %><%= t(".network") %><% end %>
-        </div>
-      </div>
+      <%= render EmptyState::Component.new(icon: "layout-dashboard", title: t(".empty.title"), description: t(".empty.hint")) do %>
+        <%= button_to workbench_drafts_path, method: :post, class: button_classes(:primary), form_class: "contents" do %><%= lucide_icon "send", class: "size-4" %><%= t(".new_request") %><% end %>
+        <% if policy(current_project.uptime_monitors.new).create? %>
+          <%= link_to new_monitoring_monitor_path, class: button_classes(:secondary) do %><%= lucide_icon "activity", class: "size-4" %><%= t(".new_monitor") %><% end %>
+        <% end %>
+        <%= link_to network_root_path, class: button_classes(:secondary) do %><%= lucide_icon "radar", class: "size-4" %><%= t(".network") %><% end %>
+      <% end %>
     <% else %>
       <% summary = overview[:summary] %>
       <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4">

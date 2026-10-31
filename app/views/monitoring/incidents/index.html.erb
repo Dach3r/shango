@@ -12,10 +12,7 @@
   <%= render "projects/environment_scope" %>
 
   <% if @incidents.empty? %>
-    <div class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center">
-      <%= lucide_icon "siren", class: "size-8 text-faint" %>
-      <p class="text-sm font-medium text-ink"><%= t("monitoring.incidents.empty.#{@state || "all"}") %></p>
-    </div>
+    <%= render EmptyState::Component.new(icon: "siren", title: t("monitoring.incidents.empty.#{@state || "all"}")) %>
   <% else %>
     <div class="min-h-0 flex-1 overflow-y-auto">
       <ul class="divide-y divide-line border-b border-line">

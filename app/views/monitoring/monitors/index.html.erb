@@ -19,13 +19,7 @@
   <%= render "projects/environment_scope" %>
 
   <% if @monitors.empty? %>
-    <div class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center">
-      <%= lucide_icon "activity", class: "size-8 text-faint" %>
-      <p class="text-sm font-medium text-ink"><%= t(summary[:total].zero? ? "monitoring.index.empty.title" : "monitoring.index.empty.filtered") %></p>
-      <% if summary[:total].zero? %>
-        <p class="max-w-sm text-sm text-muted"><%= t("monitoring.index.empty.hint") %></p>
-      <% end %>
-    </div>
+    <%= render EmptyState::Component.new(icon: "activity", title: t(summary[:total].zero? ? "monitoring.index.empty.title" : "monitoring.index.empty.filtered"), description: (t("monitoring.index.empty.hint") if summary[:total].zero?)) %>
   <% else %>
     <div class="min-h-0 flex-1 overflow-y-auto">
       <div aria-hidden="true" class="sticky top-0 z-20 hidden h-9 items-center gap-x-6 border-b border-line bg-page px-5 lg:grid lg:grid-cols-[minmax(14rem,1.25fr)_minmax(9rem,1fr)_5rem_6rem_7.5rem_8rem]">

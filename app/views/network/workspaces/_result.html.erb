@@ -4,9 +4,5 @@
   <%= render "network/checks/monitor", check: %>
   <%= render partials.fetch(kind), result:, check: %>
 <% else %>
-  <div class="flex min-h-full flex-col items-center justify-center gap-3 py-12 text-center">
-    <%= lucide_icon Network::Tools.find(kind).icon, class: "size-8 text-faint" %>
-    <p class="text-sm font-medium text-ink"><%= t("network.empty.#{kind}.title") %></p>
-    <p class="max-w-xs text-sm text-muted"><%= t("network.empty.#{kind}.hint") %></p>
-  </div>
+  <%= render EmptyState::Component.new(icon: Network::Tools.find(kind).icon, title: t("network.empty.#{kind}.title"), description: t("network.empty.#{kind}.hint")) %>
 <% end %>

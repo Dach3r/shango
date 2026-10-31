@@ -2,7 +2,7 @@
 
 <%= render layout: "settings/shell", locals: { icon: "history", heading: t("projects.audit_events.index.heading"), description: t("projects.audit_events.index.description", project: current_project.name) } do %>
   <% if @events.empty? %>
-    <p class="px-5 py-8 text-center text-sm text-muted sm:px-7"><%= t("projects.audit_events.index.empty") %></p>
+    <%= render EmptyState::Component.new(icon: "history", title: t("projects.audit_events.index.empty")) %>
   <% else %>
     <ul class="divide-y divide-line border-b border-line">
       <% @events.each do |event| %>

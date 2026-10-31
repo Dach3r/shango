@@ -26,11 +26,7 @@
     <% end %>
 
     <% if @channels.empty? %>
-      <div class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-16 text-center">
-        <%= lucide_icon "bell", class: "size-8 text-faint" %>
-        <p class="text-sm font-medium text-ink"><%= t("monitoring.channels.index.empty") %></p>
-        <p class="max-w-sm text-sm text-muted"><%= t("monitoring.channels.index.empty_hint") %></p>
-      </div>
+      <%= render EmptyState::Component.new(icon: "bell", title: t("monitoring.channels.index.empty"), description: t("monitoring.channels.index.empty_hint")) %>
     <% else %>
       <ul>
         <% @channels.each do |channel| %>

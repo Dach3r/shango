@@ -1,11 +1,7 @@
 <%# Response panel. `execution` may be nil (nothing sent yet). Rendered inside the "response_panel" frame. %>
 <% if execution.nil? %>
   <div class="flex h-full min-h-0 flex-col">
-  <div class="flex min-h-0 flex-1 flex-col items-center justify-center gap-2 p-6 text-center">
-    <%= lucide_icon "send", class: "size-8 text-faint" %>
-    <p class="text-sm font-medium text-ink"><%= t("workbench.executions.empty_title") %></p>
-    <p class="text-xs text-muted"><%= t("workbench.executions.empty_hint") %></p>
-  </div>
+  <%= render EmptyState::Component.new(icon: "send", title: t("workbench.executions.empty_title"), description: t("workbench.executions.empty_hint"), class: "min-h-0") %>
   <% saved = api_request.request_executions.recent.limit(RequestExecution::KEEP_PER_REQUEST).select(:id, :status, :status_text, :error_kind, :duration_ms, :created_at, :http_method) %>
   <% if saved.any? %>
     <div class="border-t border-line p-2">
