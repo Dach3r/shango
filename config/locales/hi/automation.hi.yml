@@ -1,0 +1,169 @@
+---
+hi:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: एक्सट्रैक्टर के वेरिएबल नामों में केवल अक्षर, अंक, बिंदु, हाइफ़न और अंडरस्कोर हो सकते हैं, और वे अंक से शुरू नहीं हो सकते।
+  components:
+    request_tree:
+      run: चलाएँ
+      run_history: चलाने का इतिहास
+    rule_table:
+      enabled: सक्रिय
+      source: जाँच
+      target: पथ या नाम
+      operator: ऑपरेटर
+      expected: अपेक्षित मान
+      variable: वेरिएबल का नाम
+      secret: गोपनीय
+      remove: हटाएँ
+  workbench:
+    tabs:
+      tests: टेस्ट
+    automation:
+      script_error: स्क्रिप्ट त्रुटि
+      script_where: "%{level} की %{phase}"
+      phases:
+        pre: रिक्वेस्ट से पहले की स्क्रिप्ट
+        post: रिस्पॉन्स के बाद की स्क्रिप्ट
+      script_levels:
+        collection: कलेक्शन %{name}
+        folder: फ़ोल्डर %{name}
+        request: रिक्वेस्ट %{name}
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: स्क्रिप्ट
+        pre:
+          title: रिक्वेस्ट से पहले की स्क्रिप्ट
+          hint: रिक्वेस्ट बनने से पहले चलती है। वेरिएबल pm.environment.set() से या रिक्वेस्ट pm.request से बदलें।
+        post:
+          title: रिस्पॉन्स के बाद की स्क्रिप्ट
+          hint: रिस्पॉन्स आने के बाद चलती है। pm.test() और pm.expect() से टेस्ट लिखें और pm.environment.set() से मान सहेजें।
+        reference: pm API (Postman की API का एक उपसमुच्चय) के साथ JavaScript। न नेटवर्क, न फ़ाइलें; हर स्क्रिप्ट कुछ सेकंड बाद रुक जाती है।
+      console:
+        title: कंसोल
+        empty: स्क्रिप्ट ने कंसोल में कुछ नहीं लिखा।
+      inherited:
+        title: नीचे की हर रिक्वेस्ट के टेस्ट
+        hint: यहाँ के असर्शन और एक्सट्रैक्टर इसी क्रम में, रिक्वेस्ट के अपने असर्शन और एक्सट्रैक्टर से पहले, उसमें मौजूद हर रिक्वेस्ट के लिए चलते हैं।
+      assertions:
+        title: असर्शन
+        hint: हर सक्रिय असर्शन की हर रिस्पॉन्स पर जाँच होती है। अपेक्षित मान में {{variables}} काम करते हैं।
+        add: असर्शन जोड़ें
+      extractors:
+        title: एक्सट्रैक्टर
+        hint: रिस्पॉन्स से मान को एनवायरनमेंट वेरिएबल में कॉपी करते हैं, ताकि अगली रिक्वेस्ट उसे इस्तेमाल कर सके।
+        add: एक्सट्रैक्टर जोड़ें
+      extractor_title: "%{from} से %{variable} सेट करें"
+      extractor_unsaved: निकाले गए मान एनवायरनमेंट में सहेजे नहीं गए
+      actual: 'मिला: %{value}'
+      targets:
+        json: JSONPath, जैसे $.data.id
+        header: हेडर का नाम
+      sources:
+        status: स्टेटस कोड
+        header: हेडर
+        json: JSON
+        body: बॉडी
+        time: समय (ms)
+        size: आकार (बाइट)
+      operators:
+        equals: के बराबर है
+        not_equals: के बराबर नहीं है
+        lt: से छोटा है
+        gt: से बड़ा है
+        in_range: की सीमा में है
+        exists: मौजूद है
+        not_exists: मौजूद नहीं है
+        contains: शामिल है
+        not_contains: शामिल नहीं है
+        matches: से मेल खाता है
+        type: का प्रकार है
+        length: की लंबाई है
+        is_empty: खाली है
+      errors:
+        unsupported: यह जाँच समर्थित नहीं है।
+        invalid_expected: इस जाँच के लिए अपेक्षित मान मान्य नहीं है।
+        invalid_json: रिस्पॉन्स बॉडी मान्य JSON नहीं है।
+        invalid_path: JSONPath मान्य नहीं है।
+        invalid_pattern: यह पैटर्न मान्य रेगुलर एक्सप्रेशन नहीं है।
+        pattern_timeout: पैटर्न चलने में बहुत समय लगा।
+        not_found: उस पथ पर कुछ नहीं मिला।
+        not_a_number: यह मान संख्या नहीं है।
+        no_length: इस मान की कोई लंबाई नहीं है।
+        no_environment: निकाले गए मान सहेजने के लिए एक एनवायरनमेंट चुनें।
+        not_permitted: आप इस एनवायरनमेंट को संपादित नहीं कर सकते, इसलिए मान सहेजे नहीं गए।
+    imports:
+      warnings:
+        scripts_unsupported: "“%{name}” ऐसी स्क्रिप्ट सुविधाएँ इस्तेमाल करती है जो Shango में नहीं हैं (%{apis})। स्क्रिप्ट जैसी थी वैसी इम्पोर्ट हुई; वे कॉल विफल होंगे।"
+    executions:
+      errors:
+        script_error: रिक्वेस्ट भेजने से पहले एक स्क्रिप्ट विफल हो गई।
+      tabs:
+        console: कंसोल
+        tests: टेस्ट
+      tests:
+        summary: "%{passed} सफल, %{failed} विफल"
+        statuses:
+          passed: सफल
+          failed: विफल
+          warning: चेतावनी
+    runs:
+      counts: "%{total} में से %{passed} सफल, %{failed} विफल"
+      no_environment: कोई एनवायरनमेंट नहीं
+      statuses:
+        queued: कतार में
+        running: चल रहा है
+        completed: पूरा हुआ
+        completed_with_failures: विफलताओं के साथ पूरा हुआ
+        failed: पूरा नहीं हो सका
+        cancelled: रद्द किया गया
+      item_statuses:
+        pending: प्रतीक्षा में
+        running: चल रहा है
+        passed: सफल
+        failed: विफल
+        skipped: छोड़ा गया
+      item_errors:
+        request_deleted: रिक्वेस्ट चलने से पहले हटा दी गई थी।
+        cancelled: रन रद्द कर दिया गया।
+      errors:
+        access_revoked: अब आपके पास इस प्रोजेक्ट तक पहुँच नहीं है।
+        unexpected: एक अप्रत्याशित त्रुटि के कारण रन रुक गया। सर्वर लॉग देखें।
+      form:
+        title: रिक्वेस्ट चलाएँ
+        description:
+          one: "%{target}: 1 रिक्वेस्ट एक के बाद एक चलेगी।"
+          other: "%{target}: %{count} रिक्वेस्ट एक के बाद एक चलेंगी।"
+        submit: रन शुरू करें
+        environment: एनवायरनमेंट
+        no_environment: कोई एनवायरनमेंट नहीं
+        delay: रिक्वेस्ट के बीच देरी (ms)
+        delay_hint: अधिकतम %{max} ms।
+        stop_on_failure: पहली विफलता पर रुकें
+        stop_on_failure_hint: विफल रिक्वेस्ट के बाद की रिक्वेस्ट छोड़ दी जाती हैं।
+        persist_variables: निकाले गए मान एनवायरनमेंट में सहेजें
+        persist_variables_hint: बंद होने पर वे केवल इसी रन तक रहते हैं, एनवायरनमेंट जैसा है वैसा रहता है।
+        errors:
+          already_running: आपका एक रन पहले से चल रहा है। उसके पूरा होने की प्रतीक्षा करें या उसे रद्द करें।
+          empty: यहाँ चलाने के लिए कोई रिक्वेस्ट नहीं है।
+          too_many: एक रन अधिकतम %{max} रिक्वेस्ट भेज सकता है।
+      index:
+        title: "%{name} के रन"
+        new: नया रन
+        empty: इस कलेक्शन को अभी तक नहीं चलाया गया है।
+      show:
+        title: "%{name} का रन"
+        history: इस कलेक्शन के सभी रन
+        cancel: रन रद्द करें
+        run_again: फिर से चलाएँ
+        passed: सफल
+        failed: विफल
+        total: रिक्वेस्ट
+        duration: अवधि
+        progress: रन की प्रगति
+        by: "%{name} द्वारा"
+        no_tests: इस रिक्वेस्ट में कोई असर्शन नहीं है।

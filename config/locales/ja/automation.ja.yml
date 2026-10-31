@@ -1,0 +1,168 @@
+---
+ja:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: エクストラクタの変数名には、英字、数字、ドット、ハイフン、アンダースコアのみ使用でき、数字で始めることはできません。
+  components:
+    request_tree:
+      run: 実行
+      run_history: 実行履歴
+    rule_table:
+      enabled: 有効
+      source: チェック
+      target: パスまたは名前
+      operator: 演算子
+      expected: 期待値
+      variable: 変数名
+      secret: シークレット
+      remove: 削除
+  workbench:
+    tabs:
+      tests: テスト
+    automation:
+      script_error: スクリプトエラー
+      script_where: "%{level}の%{phase}"
+      phases:
+        pre: リクエスト前スクリプト
+        post: レスポンス後スクリプト
+      script_levels:
+        collection: コレクション %{name}
+        folder: フォルダ %{name}
+        request: リクエスト %{name}
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: スクリプト
+        pre:
+          title: リクエスト前スクリプト
+          hint: リクエストの組み立て前に実行されます。変数は pm.environment.set()、リクエストは pm.request で変更できます。
+        post:
+          title: レスポンス後スクリプト
+          hint: レスポンスの到着後に実行されます。pm.test() と pm.expect() でテストを書き、pm.environment.set() で値を保存できます。
+        reference: pm API(Postman の API のサブセット)を使う JavaScript です。ネットワークやファイルは使えず、各スクリプトは数秒で停止します。
+      console:
+        title: コンソール
+        empty: スクリプトはコンソールに何も出力しませんでした。
+      inherited:
+        title: 配下のすべてのリクエストのテスト
+        hint: ここのアサーションとエクストラクタは、配下の各リクエストで、リクエスト自身のものより先にこの順で実行されます。
+      assertions:
+        title: アサーション
+        hint: 有効なアサーションはすべてのレスポンスに対して確認されます。期待値では {{variables}} を使えます。
+        add: アサーションを追加
+      extractors:
+        title: エクストラクタ
+        hint: レスポンスの値を環境変数にコピーし、次のリクエストで使えるようにします。
+        add: エクストラクタを追加
+      extractor_title: "%{from} から %{variable} を設定"
+      extractor_unsaved: 抽出した値は環境に保存されませんでした
+      actual: '取得値: %{value}'
+      targets:
+        json: 'JSONPath(例: $.data.id)'
+        header: ヘッダー名
+      sources:
+        status: ステータスコード
+        header: ヘッダー
+        json: JSON
+        body: ボディ
+        time: 時間 (ms)
+        size: サイズ (バイト)
+      operators:
+        equals: と等しい
+        not_equals: と等しくない
+        lt: より小さい
+        gt: より大きい
+        in_range: の範囲内
+        exists: が存在する
+        not_exists: が存在しない
+        contains: を含む
+        not_contains: を含まない
+        matches: に一致する
+        type: の型は
+        length: の長さは
+        is_empty: が空
+      errors:
+        unsupported: このチェックはサポートされていません。
+        invalid_expected: この期待値はこのチェックでは無効です。
+        invalid_json: レスポンスボディが有効な JSON ではありません。
+        invalid_path: JSONPath が無効です。
+        invalid_pattern: パターンが有効な正規表現ではありません。
+        pattern_timeout: パターンの実行に時間がかかりすぎました。
+        not_found: そのパスには何も見つかりませんでした。
+        not_a_number: 値が数値ではありません。
+        no_length: 値に長さがありません。
+        no_environment: 抽出した値を保存する環境を選択してください。
+        not_permitted: この環境は編集できないため、値は保存されませんでした。
+    imports:
+      warnings:
+        scripts_unsupported: "「%{name}」は Shango にないスクリプト機能(%{apis})を使っています。スクリプトはそのままインポートされましたが、これらの呼び出しは失敗します。"
+    executions:
+      errors:
+        script_error: リクエスト送信前にスクリプトが失敗しました。
+      tabs:
+        console: コンソール
+        tests: テスト
+      tests:
+        summary: "%{passed} 件成功、%{failed} 件失敗"
+        statuses:
+          passed: 成功
+          failed: 失敗
+          warning: 警告
+    runs:
+      counts: "%{total} 件中 %{passed} 件成功、%{failed} 件失敗"
+      no_environment: 環境なし
+      statuses:
+        queued: 待機中
+        running: 実行中
+        completed: 完了
+        completed_with_failures: 失敗ありで完了
+        failed: 完了できませんでした
+        cancelled: キャンセル済み
+      item_statuses:
+        pending: 待機
+        running: 実行中
+        passed: 成功
+        failed: 失敗
+        skipped: スキップ
+      item_errors:
+        request_deleted: 実行前にリクエストが削除されました。
+        cancelled: 実行はキャンセルされました。
+      errors:
+        access_revoked: このプロジェクトへのアクセス権がなくなりました。
+        unexpected: 予期しないエラーのため実行が停止しました。サーバーログを確認してください。
+      form:
+        title: リクエストを実行
+        description:
+          other: "%{target}: %{count} 件のリクエストを順番に実行します。"
+        submit: 実行を開始
+        environment: 環境
+        no_environment: 環境なし
+        delay: リクエスト間の待機時間 (ms)
+        delay_hint: 最大 %{max} ms。
+        stop_on_failure: 最初の失敗で停止
+        stop_on_failure_hint: 失敗したリクエストより後のリクエストはスキップされます。
+        persist_variables: 抽出した値を環境に保存
+        persist_variables_hint: オフの場合、値はこの実行の間だけ保持され、環境は変更されません。
+        errors:
+          already_running: すでに実行中のものがあります。完了を待つか、キャンセルしてください。
+          empty: ここには実行するリクエストがありません。
+          too_many: 1 回の実行で送信できるリクエストは最大 %{max} 件です。
+      index:
+        title: "%{name} の実行"
+        new: 新しい実行
+        empty: このコレクションはまだ実行されていません。
+      show:
+        title: "%{name} の実行"
+        history: このコレクションのすべての実行
+        cancel: 実行をキャンセル
+        run_again: もう一度実行
+        passed: 成功
+        failed: 失敗
+        total: リクエスト
+        duration: 所要時間
+        progress: 実行の進行状況
+        by: '実行者: %{name}'
+        no_tests: このリクエストにはアサーションがありません。

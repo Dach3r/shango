@@ -1,0 +1,170 @@
+---
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: Os nomes das variáveis dos extratores só podem usar letras, números, pontos, hífens e sublinhados, e não podem começar com um dígito.
+  components:
+    request_tree:
+      run: Executar
+      run_history: Histórico de execuções
+    rule_table:
+      enabled: Ativa
+      source: Verificação
+      target: Caminho ou nome
+      operator: Operador
+      expected: Valor esperado
+      variable: Nome da variável
+      secret: Secreta
+      remove: Remover
+  workbench:
+    tabs:
+      tests: Testes
+    automation:
+      script_error: Erro de script
+      script_where: "%{phase} de %{level}"
+      phases:
+        pre: Script antes da requisição
+        post: Script depois da resposta
+      script_levels:
+        collection: coleção %{name}
+        folder: pasta %{name}
+        request: requisição %{name}
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: Scripts
+        pre:
+          title: Script antes da requisição
+          hint: Executa antes de a requisição ser montada. Altere variáveis com pm.environment.set() ou a requisição com pm.request.
+        post:
+          title: Script depois da resposta
+          hint: Executa depois que a resposta chega. Escreva testes com pm.test() e pm.expect() e salve valores com pm.environment.set().
+        reference: JavaScript com a API pm (um subconjunto da do Postman). Sem rede nem arquivos; cada script para após alguns segundos.
+      console:
+        title: Console
+        empty: Os scripts não escreveram nada no console.
+      inherited:
+        title: Testes para cada requisição abaixo
+        hint: As asserções e os extratores daqui rodam, nesta ordem, antes dos da própria requisição, para cada requisição dentro dela.
+      assertions:
+        title: Asserções
+        hint: Cada asserção ativa é verificada em cada resposta. {{variables}} funcionam no valor esperado.
+        add: Adicionar asserção
+      extractors:
+        title: Extratores
+        hint: Copiam um valor da resposta para uma variável do ambiente, para que a próxima requisição o use.
+        add: Adicionar extrator
+      extractor_title: Definir %{variable} a partir de %{from}
+      extractor_unsaved: Os valores extraídos não foram salvos no ambiente
+      actual: 'Obtido: %{value}'
+      targets:
+        json: 'JSONPath, ex.: $.data.id'
+        header: Nome do header
+      sources:
+        status: Código de status
+        header: Header
+        json: JSON
+        body: Corpo
+        time: Tempo (ms)
+        size: Tamanho (bytes)
+      operators:
+        equals: é igual a
+        not_equals: não é igual a
+        lt: é menor que
+        gt: é maior que
+        in_range: está dentro de
+        exists: existe
+        not_exists: não existe
+        contains: contém
+        not_contains: não contém
+        matches: corresponde a
+        type: tem o tipo
+        length: tem o comprimento
+        is_empty: está vazio
+      errors:
+        unsupported: Esta verificação não é suportada.
+        invalid_expected: O valor esperado não é válido para esta verificação.
+        invalid_json: O corpo da resposta não é um JSON válido.
+        invalid_path: O JSONPath não é válido.
+        invalid_pattern: O padrão não é uma expressão regular válida.
+        pattern_timeout: O padrão demorou demais para executar.
+        not_found: Nada encontrado nesse caminho.
+        not_a_number: O valor não é um número.
+        no_length: O valor não tem comprimento.
+        no_environment: Selecione um ambiente para salvar os valores extraídos.
+        not_permitted: Você não pode editar este ambiente, então os valores não foram salvos.
+    imports:
+      warnings:
+        scripts_unsupported: "“%{name}” usa recursos de script que o Shango não tem (%{apis}). O script foi importado como está; essas chamadas vão falhar."
+    executions:
+      errors:
+        script_error: Um script falhou antes de a requisição ser enviada.
+      tabs:
+        console: Console
+        tests: Testes
+      tests:
+        summary: "%{passed} passaram, %{failed} falharam"
+        statuses:
+          passed: Passou
+          failed: Falhou
+          warning: Aviso
+    runs:
+      counts: "%{passed} passaram, %{failed} falharam de %{total}"
+      no_environment: Sem ambiente
+      statuses:
+        queued: Na fila
+        running: Em andamento
+        completed: Concluída
+        completed_with_failures: Concluída com falhas
+        failed: Não conseguiu terminar
+        cancelled: Cancelada
+      item_statuses:
+        pending: Aguardando
+        running: Em andamento
+        passed: Passou
+        failed: Falhou
+        skipped: Ignorada
+      item_errors:
+        request_deleted: A requisição foi excluída antes de ser executada.
+        cancelled: A execução foi cancelada.
+      errors:
+        access_revoked: Você não tem mais acesso a este projeto.
+        unexpected: A execução parou por um erro inesperado. Verifique o log do servidor.
+      form:
+        title: Executar requisições
+        description:
+          one: "%{target}: 1 requisição será executada, uma após a outra."
+          many: "%{target}: %{count} requisições serão executadas, uma após a outra."
+          other: "%{target}: %{count} requisições serão executadas, uma após a outra."
+        submit: Iniciar execução
+        environment: Ambiente
+        no_environment: Sem ambiente
+        delay: Intervalo entre requisições (ms)
+        delay_hint: Até %{max} ms.
+        stop_on_failure: Parar na primeira falha
+        stop_on_failure_hint: As requisições depois de uma que falhou são ignoradas.
+        persist_variables: Salvar os valores extraídos no ambiente
+        persist_variables_hint: Desativado, eles valem só para esta execução e o ambiente permanece como está.
+        errors:
+          already_running: Você já tem uma execução em andamento. Espere ela terminar ou cancele-a.
+          empty: Não há requisições para executar aqui.
+          too_many: Uma execução pode enviar no máximo %{max} requisições.
+      index:
+        title: Execuções de %{name}
+        new: Nova execução
+        empty: Esta coleção ainda não foi executada.
+      show:
+        title: Execução de %{name}
+        history: Todas as execuções desta coleção
+        cancel: Cancelar execução
+        run_again: Executar novamente
+        passed: Passou
+        failed: Falhou
+        total: Requisições
+        duration: Duração
+        progress: Progresso da execução
+        by: por %{name}
+        no_tests: Esta requisição não tem asserções.

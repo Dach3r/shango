@@ -1,0 +1,170 @@
+---
+fr:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: Les noms de variable des extracteurs ne peuvent contenir que des lettres, des chiffres, des points, des tirets et des tirets bas, et ne peuvent pas commencer par un chiffre.
+  components:
+    request_tree:
+      run: Exécuter
+      run_history: Historique des exécutions
+    rule_table:
+      enabled: Activée
+      source: Vérification
+      target: Chemin ou nom
+      operator: Opérateur
+      expected: Valeur attendue
+      variable: Nom de la variable
+      secret: Secrète
+      remove: Retirer
+  workbench:
+    tabs:
+      tests: Tests
+    automation:
+      script_error: Erreur de script
+      script_where: "%{phase} de %{level}"
+      phases:
+        pre: Script avant la requête
+        post: Script après la réponse
+      script_levels:
+        collection: la collection %{name}
+        folder: le dossier %{name}
+        request: la requête %{name}
+      script_error_in: "%{where} : %{message}"
+      scripts:
+        tab: Scripts
+        pre:
+          title: Script avant la requête
+          hint: S'exécute avant la construction de la requête. Modifiez des variables avec pm.environment.set(), ou la requête avec pm.request.
+        post:
+          title: Script après la réponse
+          hint: S'exécute à l'arrivée de la réponse. Écrivez des tests avec pm.test() et pm.expect(), et enregistrez des valeurs avec pm.environment.set().
+        reference: JavaScript avec l'API pm (un sous-ensemble de celle de Postman). Ni réseau ni fichiers ; chaque script s'arrête après quelques secondes.
+      console:
+        title: Console
+        empty: Les scripts n'ont rien écrit dans la console.
+      inherited:
+        title: Tests pour chaque requête ci-dessous
+        hint: Les assertions et extracteurs d'ici s'exécutent, dans cet ordre, avant ceux de la requête elle-même, pour chaque requête qu'il contient.
+      assertions:
+        title: Assertions
+        hint: Chaque assertion activée est vérifiée sur chaque réponse. Les {{variables}} fonctionnent dans la valeur attendue.
+        add: Ajouter une assertion
+      extractors:
+        title: Extracteurs
+        hint: Copient une valeur de la réponse dans une variable d'environnement, pour que la requête suivante puisse l'utiliser.
+        add: Ajouter un extracteur
+      extractor_title: Définir %{variable} depuis %{from}
+      extractor_unsaved: Les valeurs extraites n'ont pas été enregistrées dans l'environnement
+      actual: 'Obtenu : %{value}'
+      targets:
+        json: JSONPath, p. ex. $.data.id
+        header: Nom de l'en-tête
+      sources:
+        status: Code de statut
+        header: En-tête
+        json: JSON
+        body: Corps
+        time: Durée (ms)
+        size: Taille (octets)
+      operators:
+        equals: est égal à
+        not_equals: n'est pas égal à
+        lt: est inférieur à
+        gt: est supérieur à
+        in_range: est compris dans
+        exists: existe
+        not_exists: n'existe pas
+        contains: contient
+        not_contains: ne contient pas
+        matches: correspond à
+        type: est de type
+        length: a la longueur
+        is_empty: est vide
+      errors:
+        unsupported: Cette vérification n'est pas prise en charge.
+        invalid_expected: La valeur attendue n'est pas valide pour cette vérification.
+        invalid_json: Le corps de la réponse n'est pas du JSON valide.
+        invalid_path: Le JSONPath n'est pas valide.
+        invalid_pattern: Le motif n'est pas une expression régulière valide.
+        pattern_timeout: Le motif a mis trop de temps à s'exécuter.
+        not_found: Rien trouvé à ce chemin.
+        not_a_number: La valeur n'est pas un nombre.
+        no_length: La valeur n'a pas de longueur.
+        no_environment: Sélectionnez un environnement pour enregistrer les valeurs extraites.
+        not_permitted: Vous ne pouvez pas modifier cet environnement ; les valeurs n'ont donc pas été enregistrées.
+    imports:
+      warnings:
+        scripts_unsupported: "« %{name} » utilise des fonctions de script que Shango n'a pas (%{apis}). Le script a été importé tel quel ; ces appels échoueront."
+    executions:
+      errors:
+        script_error: Un script a échoué avant l'envoi de la requête.
+      tabs:
+        console: Console
+        tests: Tests
+      tests:
+        summary: "%{passed} réussis, %{failed} échoués"
+        statuses:
+          passed: Réussi
+          failed: Échoué
+          warning: Avertissement
+    runs:
+      counts: "%{passed} réussis, %{failed} échoués sur %{total}"
+      no_environment: Aucun environnement
+      statuses:
+        queued: En file d'attente
+        running: En cours
+        completed: Terminée
+        completed_with_failures: Terminée avec des échecs
+        failed: N'a pas pu se terminer
+        cancelled: Annulée
+      item_statuses:
+        pending: En attente
+        running: En cours
+        passed: Réussi
+        failed: Échoué
+        skipped: Ignorée
+      item_errors:
+        request_deleted: La requête a été supprimée avant son exécution.
+        cancelled: L'exécution a été annulée.
+      errors:
+        access_revoked: Vous n'avez plus accès à ce projet.
+        unexpected: L'exécution s'est arrêtée à cause d'une erreur inattendue. Consultez le journal du serveur.
+      form:
+        title: Exécuter des requêtes
+        description:
+          one: "%{target} : 1 requête sera exécutée, l'une après l'autre."
+          many: "%{target} : %{count} requêtes seront exécutées, l'une après l'autre."
+          other: "%{target} : %{count} requêtes seront exécutées, l'une après l'autre."
+        submit: Lancer l'exécution
+        environment: Environnement
+        no_environment: Aucun environnement
+        delay: Délai entre les requêtes (ms)
+        delay_hint: Jusqu'à %{max} ms.
+        stop_on_failure: S'arrêter au premier échec
+        stop_on_failure_hint: Les requêtes qui suivent une requête échouée sont ignorées.
+        persist_variables: Enregistrer les valeurs extraites dans l'environnement
+        persist_variables_hint: Désactivé, elles ne durent que pour cette exécution et l'environnement reste inchangé.
+        errors:
+          already_running: Vous avez déjà une exécution en cours. Attendez qu'elle se termine ou annulez-la.
+          empty: Il n'y a aucune requête à exécuter ici.
+          too_many: Une exécution peut envoyer au plus %{max} requêtes.
+      index:
+        title: Exécutions de %{name}
+        new: Nouvelle exécution
+        empty: Cette collection n'a pas encore été exécutée.
+      show:
+        title: Exécution de %{name}
+        history: Toutes les exécutions de cette collection
+        cancel: Annuler l'exécution
+        run_again: Exécuter à nouveau
+        passed: Réussi
+        failed: Échoué
+        total: Requêtes
+        duration: Durée
+        progress: Progression de l'exécution
+        by: par %{name}
+        no_tests: Cette requête n'a aucune assertion.

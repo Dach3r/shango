@@ -1,0 +1,169 @@
+---
+de:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: Namen von Extraktor-Variablen dürfen nur Buchstaben, Ziffern, Punkte, Bindestriche und Unterstriche enthalten und nicht mit einer Ziffer beginnen.
+  components:
+    request_tree:
+      run: Ausführen
+      run_history: Ausführungsverlauf
+    rule_table:
+      enabled: Aktiv
+      source: Prüfung
+      target: Pfad oder Name
+      operator: Operator
+      expected: Erwarteter Wert
+      variable: Variablenname
+      secret: Geheim
+      remove: Entfernen
+  workbench:
+    tabs:
+      tests: Tests
+    automation:
+      script_error: Skriptfehler
+      script_where: "%{phase} von %{level}"
+      phases:
+        pre: Skript vor der Anfrage
+        post: Skript nach der Antwort
+      script_levels:
+        collection: Sammlung %{name}
+        folder: Ordner %{name}
+        request: Anfrage %{name}
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: Skripte
+        pre:
+          title: Skript vor der Anfrage
+          hint: Läuft, bevor die Anfrage erstellt wird. Ändere Variablen mit pm.environment.set() oder die Anfrage mit pm.request.
+        post:
+          title: Skript nach der Antwort
+          hint: Läuft, nachdem die Antwort eingetroffen ist. Schreibe Tests mit pm.test() und pm.expect() und speichere Werte mit pm.environment.set().
+        reference: JavaScript mit der pm-API (eine Teilmenge der von Postman). Kein Netzwerk, keine Dateien; jedes Skript wird nach wenigen Sekunden beendet.
+      console:
+        title: Konsole
+        empty: Die Skripte haben nichts in die Konsole geschrieben.
+      inherited:
+        title: Tests für jede Anfrage darunter
+        hint: Assertions und Extraktoren hier laufen in dieser Reihenfolge vor denen der Anfrage selbst, für jede Anfrage darin.
+      assertions:
+        title: Assertions
+        hint: Jede aktive Assertion wird gegen jede Antwort geprüft. Im erwarteten Wert funktionieren {{variables}}.
+        add: Assertion hinzufügen
+      extractors:
+        title: Extraktoren
+        hint: Kopiert einen Wert aus der Antwort in eine Umgebungsvariable, damit die nächste Anfrage ihn verwenden kann.
+        add: Extraktor hinzufügen
+      extractor_title: "%{variable} aus %{from} setzen"
+      extractor_unsaved: Extrahierte Werte wurden nicht in der Umgebung gespeichert
+      actual: 'Erhalten: %{value}'
+      targets:
+        json: JSONPath, z. B. $.data.id
+        header: Header-Name
+      sources:
+        status: Statuscode
+        header: Header
+        json: JSON
+        body: Body
+        time: Zeit (ms)
+        size: Größe (Bytes)
+      operators:
+        equals: ist gleich
+        not_equals: ist nicht gleich
+        lt: ist kleiner als
+        gt: ist größer als
+        in_range: liegt innerhalb von
+        exists: existiert
+        not_exists: existiert nicht
+        contains: enthält
+        not_contains: enthält nicht
+        matches: entspricht
+        type: hat den Typ
+        length: hat die Länge
+        is_empty: ist leer
+      errors:
+        unsupported: Diese Prüfung wird nicht unterstützt.
+        invalid_expected: Der erwartete Wert ist für diese Prüfung ungültig.
+        invalid_json: Der Antwort-Body ist kein gültiges JSON.
+        invalid_path: Der JSONPath ist ungültig.
+        invalid_pattern: Das Muster ist kein gültiger regulärer Ausdruck.
+        pattern_timeout: Das Muster hat zu lange gebraucht.
+        not_found: An diesem Pfad wurde nichts gefunden.
+        not_a_number: Der Wert ist keine Zahl.
+        no_length: Der Wert hat keine Länge.
+        no_environment: Wähle eine Umgebung, um extrahierte Werte zu speichern.
+        not_permitted: Du kannst diese Umgebung nicht bearbeiten, daher wurden die Werte nicht gespeichert.
+    imports:
+      warnings:
+        scripts_unsupported: "„%{name}“ verwendet Skriptfunktionen, die Shango nicht hat (%{apis}). Das Skript wurde unverändert importiert; diese Aufrufe schlagen fehl."
+    executions:
+      errors:
+        script_error: Ein Skript ist fehlgeschlagen, bevor die Anfrage gesendet wurde.
+      tabs:
+        console: Konsole
+        tests: Tests
+      tests:
+        summary: "%{passed} bestanden, %{failed} fehlgeschlagen"
+        statuses:
+          passed: Bestanden
+          failed: Fehlgeschlagen
+          warning: Warnung
+    runs:
+      counts: "%{passed} bestanden, %{failed} fehlgeschlagen von %{total}"
+      no_environment: Keine Umgebung
+      statuses:
+        queued: In der Warteschlange
+        running: Läuft
+        completed: Abgeschlossen
+        completed_with_failures: Mit Fehlern abgeschlossen
+        failed: Konnte nicht beendet werden
+        cancelled: Abgebrochen
+      item_statuses:
+        pending: Wartet
+        running: Läuft
+        passed: Bestanden
+        failed: Fehlgeschlagen
+        skipped: Übersprungen
+      item_errors:
+        request_deleted: Die Anfrage wurde gelöscht, bevor sie lief.
+        cancelled: Die Ausführung wurde abgebrochen.
+      errors:
+        access_revoked: Du hast keinen Zugriff mehr auf dieses Projekt.
+        unexpected: Die Ausführung wurde wegen eines unerwarteten Fehlers angehalten. Prüfe das Server-Log.
+      form:
+        title: Anfragen ausführen
+        description:
+          one: "%{target}: 1 Anfrage wird nacheinander ausgeführt."
+          other: "%{target}: %{count} Anfragen werden nacheinander ausgeführt."
+        submit: Ausführung starten
+        environment: Umgebung
+        no_environment: Keine Umgebung
+        delay: Pause zwischen Anfragen (ms)
+        delay_hint: Bis zu %{max} ms.
+        stop_on_failure: Beim ersten Fehler anhalten
+        stop_on_failure_hint: Die Anfragen nach einer fehlgeschlagenen werden übersprungen.
+        persist_variables: Extrahierte Werte in der Umgebung speichern
+        persist_variables_hint: 'Aus: Sie gelten nur für diese Ausführung, die Umgebung bleibt unverändert.'
+        errors:
+          already_running: Du hast bereits eine laufende Ausführung. Warte, bis sie fertig ist, oder brich sie ab.
+          empty: Hier gibt es keine Anfragen zum Ausführen.
+          too_many: Eine Ausführung kann höchstens %{max} Anfragen senden.
+      index:
+        title: Ausführungen von %{name}
+        new: Neue Ausführung
+        empty: Diese Sammlung wurde noch nicht ausgeführt.
+      show:
+        title: Ausführung von %{name}
+        history: Alle Ausführungen dieser Sammlung
+        cancel: Ausführung abbrechen
+        run_again: Erneut ausführen
+        passed: Bestanden
+        failed: Fehlgeschlagen
+        total: Anfragen
+        duration: Dauer
+        progress: Fortschritt der Ausführung
+        by: von %{name}
+        no_tests: Diese Anfrage hat keine Assertions.

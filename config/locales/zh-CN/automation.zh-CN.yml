@@ -1,0 +1,168 @@
+---
+zh-CN:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: 提取器的变量名只能包含字母、数字、点、连字符和下划线，且不能以数字开头。
+  components:
+    request_tree:
+      run: 运行
+      run_history: 运行历史
+    rule_table:
+      enabled: 启用
+      source: 检查
+      target: 路径或名称
+      operator: 运算符
+      expected: 期望值
+      variable: 变量名
+      secret: 机密
+      remove: 移除
+  workbench:
+    tabs:
+      tests: 测试
+    automation:
+      script_error: 脚本错误
+      script_where: "%{level}的%{phase}"
+      phases:
+        pre: 请求前脚本
+        post: 响应后脚本
+      script_levels:
+        collection: 集合 %{name}
+        folder: 文件夹 %{name}
+        request: 请求 %{name}
+      script_error_in: "%{where}：%{message}"
+      scripts:
+        tab: 脚本
+        pre:
+          title: 请求前脚本
+          hint: 在构建请求之前运行。用 pm.environment.set() 修改变量，或用 pm.request 修改请求。
+        post:
+          title: 响应后脚本
+          hint: 在收到响应之后运行。用 pm.test() 和 pm.expect() 编写测试，用 pm.environment.set() 保存值。
+        reference: 使用 pm API（Postman API 的子集）的 JavaScript。无网络、无文件；每个脚本几秒后停止。
+      console:
+        title: 控制台
+        empty: 脚本没有向控制台输出任何内容。
+      inherited:
+        title: 下方每个请求的测试
+        hint: 此处的断言和提取器会按此顺序先于请求自身的断言和提取器运行，作用于其中的每个请求。
+      assertions:
+        title: 断言
+        hint: 每条启用的断言都会对每个响应进行检查。期望值中可使用 {{variables}}。
+        add: 添加断言
+      extractors:
+        title: 提取器
+        hint: 将响应中的值复制到环境变量，供下一个请求使用。
+        add: 添加提取器
+      extractor_title: 从 %{from} 设置 %{variable}
+      extractor_unsaved: 提取的值未保存到环境
+      actual: 实际得到：%{value}
+      targets:
+        json: JSONPath，例如 $.data.id
+        header: 请求头名称
+      sources:
+        status: 状态码
+        header: 请求头
+        json: JSON
+        body: 响应体
+        time: 时间 (ms)
+        size: 大小（字节）
+      operators:
+        equals: 等于
+        not_equals: 不等于
+        lt: 小于
+        gt: 大于
+        in_range: 在范围内
+        exists: 存在
+        not_exists: 不存在
+        contains: 包含
+        not_contains: 不包含
+        matches: 匹配
+        type: 类型为
+        length: 长度为
+        is_empty: 为空
+      errors:
+        unsupported: 不支持此检查。
+        invalid_expected: 期望值对此检查无效。
+        invalid_json: 响应体不是有效的 JSON。
+        invalid_path: JSONPath 无效。
+        invalid_pattern: 该模式不是有效的正则表达式。
+        pattern_timeout: 该模式运行时间过长。
+        not_found: 该路径下没有找到任何内容。
+        not_a_number: 该值不是数字。
+        no_length: 该值没有长度。
+        no_environment: 请选择一个环境以保存提取的值。
+        not_permitted: 你无法编辑此环境，因此这些值未保存。
+    imports:
+      warnings:
+        scripts_unsupported: "“%{name}”使用了 Shango 没有的脚本功能（%{apis}）。脚本已按原样导入；这些调用会失败。"
+    executions:
+      errors:
+        script_error: 脚本在请求发送前失败。
+      tabs:
+        console: 控制台
+        tests: 测试
+      tests:
+        summary: "%{passed} 个通过，%{failed} 个失败"
+        statuses:
+          passed: 通过
+          failed: 失败
+          warning: 警告
+    runs:
+      counts: 共 %{total} 个，%{passed} 个通过，%{failed} 个失败
+      no_environment: 无环境
+      statuses:
+        queued: 排队中
+        running: 运行中
+        completed: 已完成
+        completed_with_failures: 已完成但有失败
+        failed: 未能完成
+        cancelled: 已取消
+      item_statuses:
+        pending: 等待中
+        running: 运行中
+        passed: 通过
+        failed: 失败
+        skipped: 已跳过
+      item_errors:
+        request_deleted: 请求在运行前已被删除。
+        cancelled: 运行已被取消。
+      errors:
+        access_revoked: 你已无权访问此项目。
+        unexpected: 运行因意外错误而停止。请查看服务器日志。
+      form:
+        title: 运行请求
+        description:
+          other: "%{target}：将依次运行 %{count} 个请求。"
+        submit: 开始运行
+        environment: 环境
+        no_environment: 无环境
+        delay: 请求之间的延迟 (ms)
+        delay_hint: 最多 %{max} ms。
+        stop_on_failure: 遇到第一个失败时停止
+        stop_on_failure_hint: 失败请求之后的请求将被跳过。
+        persist_variables: 将提取的值保存到环境
+        persist_variables_hint: 关闭时，值只在本次运行中保留，环境保持不变。
+        errors:
+          already_running: 你已有一个正在进行的运行。请等待其完成或取消它。
+          empty: 这里没有可运行的请求。
+          too_many: 一次运行最多可发送 %{max} 个请求。
+      index:
+        title: "%{name} 的运行记录"
+        new: 新建运行
+        empty: 此集合尚未运行过。
+      show:
+        title: "%{name} 的运行"
+        history: 此集合的所有运行
+        cancel: 取消运行
+        run_again: 再次运行
+        passed: 通过
+        failed: 失败
+        total: 请求
+        duration: 时长
+        progress: 运行进度
+        by: 由 %{name} 运行
+        no_tests: 此请求没有断言。

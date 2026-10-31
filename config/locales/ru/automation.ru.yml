@@ -1,0 +1,171 @@
+---
+ru:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: Имена переменных экстракторов могут содержать только буквы, цифры, точки, дефисы и подчёркивания и не могут начинаться с цифры.
+  components:
+    request_tree:
+      run: Запустить
+      run_history: История запусков
+    rule_table:
+      enabled: Включено
+      source: Проверка
+      target: Путь или имя
+      operator: Оператор
+      expected: Ожидаемое значение
+      variable: Имя переменной
+      secret: Секрет
+      remove: Удалить
+  workbench:
+    tabs:
+      tests: Тесты
+    automation:
+      script_error: Ошибка скрипта
+      script_where: "%{phase} — %{level}"
+      phases:
+        pre: Скрипт перед запросом
+        post: Скрипт после ответа
+      script_levels:
+        collection: коллекция %{name}
+        folder: папка %{name}
+        request: запрос %{name}
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: Скрипты
+        pre:
+          title: Скрипт перед запросом
+          hint: Выполняется до сборки запроса. Меняйте переменные через pm.environment.set(), а запрос — через pm.request.
+        post:
+          title: Скрипт после ответа
+          hint: Выполняется после получения ответа. Пишите тесты с pm.test() и pm.expect() и сохраняйте значения через pm.environment.set().
+        reference: JavaScript с API pm (подмножество API Postman). Без сети и файлов; каждый скрипт останавливается через несколько секунд.
+      console:
+        title: Консоль
+        empty: Скрипты ничего не вывели в консоль.
+      inherited:
+        title: Тесты для каждого запроса ниже
+        hint: Проверки и экстракторы здесь выполняются в этом порядке перед проверками самого запроса — для каждого запроса внутри.
+      assertions:
+        title: Проверки
+        hint: Каждая включённая проверка применяется к каждому ответу. В ожидаемом значении работают {{variables}}.
+        add: Добавить проверку
+      extractors:
+        title: Экстракторы
+        hint: Копируют значение из ответа в переменную окружения, чтобы его мог использовать следующий запрос.
+        add: Добавить экстрактор
+      extractor_title: Записать %{variable} из %{from}
+      extractor_unsaved: Извлечённые значения не сохранены в окружении
+      actual: 'Получено: %{value}'
+      targets:
+        json: JSONPath, например $.data.id
+        header: Имя заголовка
+      sources:
+        status: Код статуса
+        header: Заголовок
+        json: JSON
+        body: Тело
+        time: Время (мс)
+        size: Размер (байты)
+      operators:
+        equals: равно
+        not_equals: не равно
+        lt: меньше чем
+        gt: больше чем
+        in_range: находится в диапазоне
+        exists: существует
+        not_exists: не существует
+        contains: содержит
+        not_contains: не содержит
+        matches: соответствует
+        type: имеет тип
+        length: имеет длину
+        is_empty: пусто
+      errors:
+        unsupported: Эта проверка не поддерживается.
+        invalid_expected: Ожидаемое значение недопустимо для этой проверки.
+        invalid_json: Тело ответа — не корректный JSON.
+        invalid_path: JSONPath недопустим.
+        invalid_pattern: Шаблон не является корректным регулярным выражением.
+        pattern_timeout: Шаблон выполнялся слишком долго.
+        not_found: По этому пути ничего не найдено.
+        not_a_number: Значение не является числом.
+        no_length: У значения нет длины.
+        no_environment: Выберите окружение, чтобы сохранить извлечённые значения.
+        not_permitted: Вы не можете изменять это окружение, поэтому значения не сохранены.
+    imports:
+      warnings:
+        scripts_unsupported: "«%{name}» использует возможности скриптов, которых нет в Shango (%{apis}). Скрипт импортирован как есть; эти вызовы не сработают."
+    executions:
+      errors:
+        script_error: Скрипт завершился с ошибкой до отправки запроса.
+      tabs:
+        console: Консоль
+        tests: Тесты
+      tests:
+        summary: "%{passed} успешно, %{failed} с ошибкой"
+        statuses:
+          passed: Успешно
+          failed: Ошибка
+          warning: Предупреждение
+    runs:
+      counts: "%{passed} успешно, %{failed} с ошибкой из %{total}"
+      no_environment: Без окружения
+      statuses:
+        queued: В очереди
+        running: Выполняется
+        completed: Завершён
+        completed_with_failures: Завершён с ошибками
+        failed: Не удалось завершить
+        cancelled: Отменён
+      item_statuses:
+        pending: Ожидает
+        running: Выполняется
+        passed: Успешно
+        failed: Ошибка
+        skipped: Пропущен
+      item_errors:
+        request_deleted: Запрос был удалён до выполнения.
+        cancelled: Запуск был отменён.
+      errors:
+        access_revoked: У вас больше нет доступа к этому проекту.
+        unexpected: Запуск остановлен из-за непредвиденной ошибки. Проверьте журнал сервера.
+      form:
+        title: Запуск запросов
+        description:
+          one: "%{target}: будет выполнен %{count} запрос, один за другим."
+          few: "%{target}: будет выполнено %{count} запроса, один за другим."
+          many: "%{target}: будет выполнено %{count} запросов, один за другим."
+          other: "%{target}: будет выполнено %{count} запроса, один за другим."
+        submit: Начать запуск
+        environment: Окружение
+        no_environment: Без окружения
+        delay: Пауза между запросами (мс)
+        delay_hint: До %{max} мс.
+        stop_on_failure: Остановиться на первой ошибке
+        stop_on_failure_hint: Запросы после неудачного пропускаются.
+        persist_variables: Сохранять извлечённые значения в окружении
+        persist_variables_hint: 'Выключено: значения живут только в этом запуске, окружение не меняется.'
+        errors:
+          already_running: У вас уже есть запуск в процессе. Дождитесь его завершения или отмените его.
+          empty: Здесь нет запросов для запуска.
+          too_many: Один запуск может отправить не более %{max} запросов.
+      index:
+        title: Запуски %{name}
+        new: Новый запуск
+        empty: Эта коллекция ещё не запускалась.
+      show:
+        title: Запуск %{name}
+        history: Все запуски этой коллекции
+        cancel: Отменить запуск
+        run_again: Запустить снова
+        passed: Успешно
+        failed: Ошибка
+        total: Запросы
+        duration: Длительность
+        progress: Ход запуска
+        by: запустил(а) %{name}
+        no_tests: У этого запроса нет проверок.
