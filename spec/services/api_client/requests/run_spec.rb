@@ -24,6 +24,17 @@ RSpec.describe ApiClient::Requests::Run do
     )
   end
 
+  it "keeps the outcome of the assertions and extractors", :aggregate_failures do
+    api_request.update!(assertions: [{ source: "status", operator: "equals", expected: "201" }], extractors: [{ source: "json", target: "$.id", variable: "id" }])
+    create(:membership, :owner, user:, project:)
+    stub_request(:get, api_request.url).to_return(status: 200, body: { id: 9 }.to_json, headers: { "Content-Type" => "application/json" })
+
+    expect(execution.test_results.pluck("kind", "status")).to eq([%w[assertion failed], %w[extractor passed]])
+    expect(execution).to have_attributes(failed_tests: 1, passed_tests: 1)
+    expect(RequestExecution.pending(execution.id).test_results.size).to eq(2)
+    expect(environment.variables.find_by(key: "id").value).to eq("9")
+  end
+
   it "forgets the pending edits once it saves them" do
     stub_request(:get, "https://api.example.com/other").to_return(status: 200)
     create(:request_draft, :for_request, user:, api_request:, project: api_request.project)

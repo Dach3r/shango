@@ -16,6 +16,26 @@ RSpec.describe "Workbench request executions" do
       expect(response.body).to include("response_panel", I18n.t("workbench.executions.save"))
     end
 
+    it "lists the outcome of assertions in a tests tab and saves extracted variables", :aggregate_failures do
+      environment = create(:environment, project:)
+      membership.update!(current_environment: environment)
+      api_request.update!(assertions: [{ source: "status", operator: "equals", expected: "404" }], extractors: [{ source: "json", target: "$.id", variable: "item_id" }])
+      stub_request(:get, url).to_return(status: 200, body: '{"id":5}', headers: { "Content-Type" => "application/json" })
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).to include('data-name="tests"', "Status code equals 404", I18n.t("workbench.executions.tests.summary", passed: 1, failed: 1))
+      expect(environment.variables.find_by(key: "item_id")&.value).to eq("5")
+    end
+
+    it "shows no tests tab for a request without assertions" do
+      stub_request(:get, url).to_return(status: 200)
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).not_to include('data-name="tests"')
+    end
+
     it "offers the timing breakdown", :aggregate_failures do
       stub_request(:get, url).to_return(status: 200, body: "ok")
 

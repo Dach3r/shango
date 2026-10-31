@@ -28,13 +28,15 @@ module ApiClient
         reply = Executor.call(built:, cancelled: @cancelled, cookie_jar: cookie_jar)
         masker = Masker.new(built.secrets)
         body, omitted = displayable_body(reply, masker)
+        results = Verify.call(api_request: @api_request, reply:, environment: @environment, user: @user, masker:).record
 
         record(
           http_method: built.http_method, url: masker.string(built.url), status: reply.status, status_text: reply.status_text, duration_ms: reply.duration_ms,
           size_bytes: reply.size_bytes, request_headers: masker.request_headers(reply.sent_headers), request_body: masker.string(built.body.preview),
           response_headers: masker.response_headers(reply.headers), response_body: body, content_type: reply.content_type, body_truncated: reply.truncated,
           body_omitted: omitted, redirects: reply.redirects.map { |hop| hop.transform_values { |value| value.is_a?(String) ? masker.string(value) : value } },
-          unresolved_variables: built.unresolved, timings: reply.timings, set_cookies: reply.set_cookies.map { |line| masker.string(line) }, error_kind: reply.error_kind, error_message: masker.string(reply.error_message)
+          unresolved_variables: built.unresolved, timings: reply.timings, set_cookies: reply.set_cookies.map { |line| masker.string(line) }, error_kind: reply.error_kind, error_message: masker.string(reply.error_message),
+          test_results: results
         )
       end
 

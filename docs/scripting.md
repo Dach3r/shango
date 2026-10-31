@@ -73,12 +73,14 @@ Assertions and extractors of the three levels are concatenated in that order (th
 
 | Table / column | Notes |
 |---|---|
-| `api_requests`, `folders`, `collections`: `pre_request_script` (text), `post_response_script` (text), `assertions` (jsonb `[]`), `extractors` (jsonb `[]`) | Scripts capped at 64 KB, rows at 50 per level. One migration per table. |
-| `request_executions`: `test_results` (jsonb `[]`), `script_logs` (jsonb `[]`), `script_error` (text) | Travel with the latest execution and history, masked. |
+| `api_requests`, `folders`, `collections`: `assertions` (jsonb `[]`), `extractors` (jsonb `[]`) (`api_requests` in phase 1, the others in phase 2); `pre_request_script`, `post_response_script` (text, phase 4) | Scripts capped at 64 KB, rows at 50 per level. One migration per change. |
+| `request_executions`: `test_results` (jsonb `[]`; phase 1), `script_logs` (jsonb `[]`) and `script_error` (text) (phase 4) | Travel with the latest execution and history, masked. |
 | `collection_runs` | `project`, `collection`, `folder` (optional), `user`, `environment` (optional), `status` (AASM: `queued → running → completed \| failed \| cancelled`), `total`, `passed`, `failed`, `options` (jsonb), `started_at`, `finished_at`. |
 | `collection_run_items` | `collection_run`, `api_request` (nullable, the request may be deleted later), `request_name`, `position`, `status`, `http_status`, `duration_ms`, `test_results` (jsonb), `script_logs` (jsonb), `error_kind`, `error_message`. No bodies. |
 
-Assertion row: `{ "id", "source", "target", "operator", "expected", "enabled" }`.
+Assertion row: `{ "id", "source", "target", "operator", "expected", "enabled" }`. The model (`TestAutomation`) drops rows with an unknown source or operator and rows missing what the choice needs (a target for `header`/`json`, a value for operators that compare), keeps at most 50 per level and clips `target` to 500 and `expected` to 1 000 characters.
+
+Outcome (one per row, kept in `test_results`): `{ "kind" (assertion|extractor|script), "status" (passed|failed|warning), "source", "target", "operator", "expected", "actual", "error", "variable" }`. Outcomes carry keys, never sentences; the viewer's language builds the text (`AutomationHelper`). `actual` is masked and cut to 200 characters. A transport error has no response, so it yields no outcomes.
 
 | `source` | `target` | Operators |
 |---|---|---|
@@ -89,7 +91,7 @@ Assertion row: `{ "id", "source", "target", "operator", "expected", "enabled" }`
 | `time` | – | `lt` |
 | `size` | – | `lt` |
 
-Extractor row: `{ "id", "source": "json|header|status|body", "target", "variable", "secret", "enabled" }`. A missing value leaves the variable untouched and records a warning test (`extractor_missed`), not a failure.
+Extractor row: `{ "id", "source": "json|header|status|body", "target", "variable", "secret", "enabled" }`. A missing value leaves the variable untouched and records a `warning` outcome (`not_found`), not a failure. A variable name the environment would reject (`Variable::KEY_FORMAT`) is a validation error on save.
 
 `expected` supports `{{variables}}`, resolved with the same resolver as the request.
 
@@ -127,10 +129,12 @@ Extractor row: `{ "id", "source": "json|header|status|body", "target", "variable
 
 ## 12. Delivery phases
 
+Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`); the other locales are translated in phase 6.
+
 | # | Phase | Status |
 |---|---|---|
 | 0 | Engine spike and this document | done |
-| 1 | Assertions and extractors (migrations, evaluator, `Dispatch` integration, editor tabs, results tab) | pending |
+| 1 | Assertions and extractors (migrations, evaluator, `Dispatch` integration, editor tabs, results tab) | done |
 | 2 | Inheritance: scripts, assertions and extractors on folders and collections, with UI | pending |
 | 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | pending |
 | 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | pending |

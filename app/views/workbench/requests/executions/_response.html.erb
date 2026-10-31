@@ -22,6 +22,7 @@
   <% tabs = [
     { name: "body", label: t("workbench.executions.tabs.body") },
     { name: "headers", label: t("workbench.executions.tabs.headers"), count: execution.response_headers.size },
+    ({ name: "tests", label: t("workbench.executions.tabs.tests"), count: execution.test_results.size, dot: execution.failed_tests.positive? } if execution.test_results.any?),
     ({ name: "cookies", label: t("workbench.executions.tabs.cookies"), count: cookies.size } if cookies.any?),
     ({ name: "timing", label: t("workbench.executions.tabs.timing") } if timing.present?),
     { name: "request", label: t("workbench.executions.tabs.request"), dot: execution.unresolved_variables.any? },
@@ -83,6 +84,12 @@
       <div data-tabs-target="panel" data-name="headers" hidden>
         <%= render "workbench/requests/executions/headers", headers: execution.response_headers, bleed: true, empty: t("workbench.executions.no_headers") %>
       </div>
+
+      <% if execution.test_results.any? %>
+        <div data-tabs-target="panel" data-name="tests" hidden>
+          <%= render "workbench/requests/executions/tests", execution: %>
+        </div>
+      <% end %>
 
       <% if cookies.any? %>
         <div data-tabs-target="panel" data-name="cookies" hidden>

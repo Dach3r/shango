@@ -1,0 +1,16 @@
+<%# Assertions and extractors of a request (see ApiClient::Assertions). %>
+<section class="border-b border-line">
+  <div class="px-4 pt-4 pb-3">
+    <h3 class="text-sm font-medium text-ink"><%= t("workbench.automation.assertions.title") %></h3>
+    <p class="mt-0.5 text-xs text-muted"><%= t("workbench.automation.assertions.hint") %></p>
+  </div>
+  <%= render RuleTable::Component.new(kind: :assertion, name: "api_request[assertions]", rows: api_request.assertions, add_label: t("workbench.automation.assertions.add")) %>
+</section>
+
+<section>
+  <div class="px-4 pt-4 pb-3">
+    <h3 class="text-sm font-medium text-ink"><%= t("workbench.automation.extractors.title") %></h3>
+    <p class="mt-0.5 text-xs text-muted"><%= t("workbench.automation.extractors.hint") %></p>
+  </div>
+  <%= render RuleTable::Component.new(kind: :extractor, name: "api_request[extractors]", rows: api_request.extractors, add_label: t("workbench.automation.extractors.add")) %>
+</section>

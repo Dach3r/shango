@@ -1,6 +1,7 @@
 class ApiRequest < ApplicationRecord
   include Positionable
   include AuthConfigurable
+  include TestAutomation
 
   METHODS = %w[GET POST PUT PATCH DELETE HEAD OPTIONS].freeze
   BODY_TYPES = %w[none json text xml form_urlencoded multipart graphql binary].freeze

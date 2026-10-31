@@ -49,6 +49,14 @@ class RequestExecution < ApplicationRecord
     error_kind.present?
   end
 
+  def failed_tests
+    test_results.count { |outcome| outcome["status"] == "failed" }
+  end
+
+  def passed_tests
+    test_results.count { |outcome| outcome["status"] == "passed" }
+  end
+
   def status_class
     return :error if error?
 

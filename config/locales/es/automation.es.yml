@@ -1,0 +1,78 @@
+es:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: "Los nombres de variable de los extractores solo pueden usar letras, números, puntos, guiones y guiones bajos, y no pueden empezar con un dígito."
+  components:
+    rule_table:
+      enabled: Activa
+      source: Comprobar
+      target: Ruta o nombre
+      operator: Operador
+      expected: Valor esperado
+      variable: Nombre de variable
+      secret: Secreta
+      remove: Quitar
+  workbench:
+    tabs:
+      tests: Pruebas
+    automation:
+      assertions:
+        title: Aserciones
+        hint: "Cada aserción activa se comprueba contra cada respuesta. Puedes usar {{variables}} en el valor esperado."
+        add: Añadir aserción
+      extractors:
+        title: Extractores
+        hint: "Copian un valor de la respuesta a una variable del ambiente, para que la siguiente petición lo use."
+        add: Añadir extractor
+      extractor_title: "Guardar %{variable} desde %{from}"
+      extractor_unsaved: "Los valores extraídos no se guardaron en el ambiente"
+      actual: "Se obtuvo: %{value}"
+      targets:
+        json: "JSONPath, p. ej. $.data.id"
+        header: "Nombre del header"
+      sources:
+        status: Código de estado
+        header: Header
+        json: JSON
+        body: Cuerpo
+        time: Tiempo (ms)
+        size: Tamaño (bytes)
+      operators:
+        equals: es igual a
+        not_equals: no es igual a
+        lt: es menor que
+        gt: es mayor que
+        in_range: está dentro de
+        exists: existe
+        not_exists: no existe
+        contains: contiene
+        not_contains: no contiene
+        matches: coincide con
+        type: es de tipo
+        length: tiene longitud
+        is_empty: está vacío
+      errors:
+        unsupported: Esta comprobación no está soportada.
+        invalid_expected: El valor esperado no es válido para esta comprobación.
+        invalid_json: El cuerpo de la respuesta no es JSON válido.
+        invalid_path: El JSONPath no es válido.
+        invalid_pattern: El patrón no es una expresión regular válida.
+        pattern_timeout: El patrón tardó demasiado en ejecutarse.
+        not_found: No se encontró nada en esa ruta.
+        not_a_number: El valor no es un número.
+        no_length: El valor no tiene longitud.
+        no_environment: Selecciona un ambiente para guardar los valores extraídos.
+        not_permitted: No puedes editar este ambiente, por eso los valores no se guardaron.
+    executions:
+      tabs:
+        tests: Pruebas
+      tests:
+        summary: "%{passed} correctas, %{failed} fallidas"
+        statuses:
+          passed: Correcta
+          failed: Fallida
+          warning: Aviso

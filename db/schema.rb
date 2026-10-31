@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_30_190122) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_055641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -63,6 +63,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_190122) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "assertions", default: [], null: false
+    t.jsonb "extractors", default: [], null: false
     t.index ["collection_id"], name: "index_api_requests_on_collection_id"
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
     t.index ["project_id", "collection_id", "folder_id", "position"], name: "index_api_requests_on_tree_order"
@@ -379,6 +381,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_190122) do
     t.datetime "created_at", null: false
     t.jsonb "timings", default: {}, null: false
     t.jsonb "set_cookies", default: [], null: false
+    t.jsonb "test_results", default: [], null: false
     t.index ["api_request_id", "created_at"], name: "index_request_executions_on_api_request_id_and_created_at"
     t.index ["api_request_id"], name: "index_request_executions_on_api_request_id"
     t.index ["environment_id"], name: "index_request_executions_on_environment_id"

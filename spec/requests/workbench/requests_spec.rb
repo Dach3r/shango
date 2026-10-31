@@ -181,6 +181,25 @@ RSpec.describe "Workbench requests" do
       expect(api_request.reload.name).to eq("List users")
     end
 
+    it "saves assertions and extractors, dropping rows the evaluator would not understand", :aggregate_failures do
+      patch workbench_request_path(api_request), params: { api_request: {
+        assertions: { "0" => { source: "status", operator: "equals", expected: "200" }, "1" => { source: "nope", operator: "equals", expected: "x" } },
+        extractors: { "0" => { source: "json", target: "$.token", variable: "token", secret: "1" } }
+      } }
+
+      expect(response).to redirect_to(workbench_request_path(api_request))
+      expect(api_request.reload.assertions.pluck("source")).to eq(["status"])
+      expect(api_request.extractors).to contain_exactly(include("variable" => "token", "secret" => true))
+    end
+
+    it "shows the tests tab with the saved rows", :aggregate_failures do
+      api_request.update!(assertions: [{ source: "json", target: "$.id", operator: "exists" }])
+
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include('data-name="tests"', "api_request[assertions][0][target]", I18n.t("workbench.automation.extractors.title"))
+    end
+
     it "saves the cookie jar switch" do
       patch workbench_request_path(api_request), params: { api_request: { settings: { use_cookie_jar: "0" } } }
 

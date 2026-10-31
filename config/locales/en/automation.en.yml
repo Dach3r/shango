@@ -1,0 +1,78 @@
+en:
+  activerecord:
+    errors:
+      models:
+        api_request:
+          attributes:
+            base:
+              invalid_extractor_variable: "Extractor variable names can only use letters, numbers, dots, dashes and underscores, and cannot start with a digit."
+  components:
+    rule_table:
+      enabled: Enabled
+      source: Check
+      target: Path or name
+      operator: Operator
+      expected: Expected value
+      variable: Variable name
+      secret: Secret
+      remove: Remove
+  workbench:
+    tabs:
+      tests: Tests
+    automation:
+      assertions:
+        title: Assertions
+        hint: "Every enabled assertion is checked against each response. {{variables}} work in the expected value."
+        add: Add assertion
+      extractors:
+        title: Extractors
+        hint: "Copy a value from the response into an environment variable, so the next request can use it."
+        add: Add extractor
+      extractor_title: "Set %{variable} from %{from}"
+      extractor_unsaved: "Extracted values were not saved to the environment"
+      actual: "Got: %{value}"
+      targets:
+        json: "JSONPath, e.g. $.data.id"
+        header: "Header name"
+      sources:
+        status: Status code
+        header: Header
+        json: JSON
+        body: Body
+        time: Time (ms)
+        size: Size (bytes)
+      operators:
+        equals: equals
+        not_equals: does not equal
+        lt: is less than
+        gt: is greater than
+        in_range: is within
+        exists: exists
+        not_exists: does not exist
+        contains: contains
+        not_contains: does not contain
+        matches: matches
+        type: has type
+        length: has length
+        is_empty: is empty
+      errors:
+        unsupported: This check is not supported.
+        invalid_expected: The expected value is not valid for this check.
+        invalid_json: The response body is not valid JSON.
+        invalid_path: The JSONPath is not valid.
+        invalid_pattern: The pattern is not a valid regular expression.
+        pattern_timeout: The pattern took too long to run.
+        not_found: Nothing found at that path.
+        not_a_number: The value is not a number.
+        no_length: The value has no length.
+        no_environment: Select an environment to save extracted values.
+        not_permitted: You cannot edit this environment, so the values were not saved.
+    executions:
+      tabs:
+        tests: Tests
+      tests:
+        summary: "%{passed} passed, %{failed} failed"
+        statuses:
+          passed: Passed
+          failed: Failed
+          warning: Warning

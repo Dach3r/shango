@@ -1,0 +1,29 @@
+<div data-rule-table-target="row" class="group relative flex flex-wrap items-center gap-2 px-3 py-2 pr-12">
+  <%= hidden_field_tag field_name("id"), row["id"], id: nil %>
+  <%= render Checkbox::Component.new(name: field_name("enabled"), checked: enabled?, data: { action: "change->rule-table#changed" }, aria: { label: t("components.rule_table.enabled") }) %>
+
+  <%= select_tag field_name("source"), options_for_select(source_options, source), id: nil, data: { field: "source", action: "change->rule-table#sourceChanged" },
+                 "aria-label": t("components.rule_table.source"), class: cell("w-28 shrink-0") %>
+
+  <%= text_field_tag field_name("target"), row["target"], id: nil, placeholder: target_placeholder, autocomplete: "off", spellcheck: false, hidden: !targeted?, disabled: !targeted?,
+                     data: { field: "target", role: "target", placeholder_json: t("workbench.automation.targets.json"), placeholder_header: t("workbench.automation.targets.header"), action: "input->rule-table#changed" }, "aria-label": t("components.rule_table.target"), class: cell("min-w-0 flex-1 font-mono") %>
+
+  <% if assertion? %>
+    <%= select_tag field_name("operator"), options_for_select(operator_options, operator), id: nil, data: { field: "operator", action: "change->rule-table#operatorChanged" },
+                   "aria-label": t("components.rule_table.operator"), class: cell("w-36 shrink-0") %>
+    <%= text_field_tag field_name("expected"), row["expected"], id: nil, placeholder: t("components.rule_table.expected"), autocomplete: "off", spellcheck: false, hidden: !expected?, disabled: !expected?,
+                       data: { field: "expected", role: "expected", action: "input->rule-table#changed" }, "aria-label": t("components.rule_table.expected"), class: cell("min-w-0 flex-1 font-mono") %>
+  <% else %>
+    <span class="text-xs text-muted" aria-hidden="true">→</span>
+    <%= text_field_tag field_name("variable"), row["variable"], id: nil, placeholder: t("components.rule_table.variable"), autocomplete: "off", spellcheck: false,
+                       data: { field: "variable", action: "input->rule-table#changed" }, "aria-label": t("components.rule_table.variable"), class: cell("min-w-0 flex-1 font-mono") %>
+    <%= render Checkbox::Component.new(name: field_name("secret"), checked: secret?, label: t("components.rule_table.secret"), label_class: "shrink-0 !gap-1.5 text-xs text-muted", data: { action: "change->rule-table#changed" }) %>
+  <% end %>
+
+  <div class="absolute inset-y-0 right-1 flex items-center">
+    <button type="button" data-action="rule-table#remove" aria-label="<%= t("components.rule_table.remove") %>"
+            class="flex size-8 shrink-0 cursor-pointer items-center justify-center text-faint transition hover:bg-field hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+      <%= lucide_icon "trash-2", class: "size-4" %>
+    </button>
+  </div>
+</div>
