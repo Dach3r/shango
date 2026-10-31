@@ -15,6 +15,7 @@ Consult when you need context:
 - `docs/network-tools.md` — Network Tools (DNS checker, port check, TCP ping): design, limits, security, how it was built. Read before touching that feature; never add nmap (license, see that doc §2).
 - `docs/integration.md` — how the modules tie together (cross-links, Overview, environment scope, incidents, palette). Read before adding a link between modules or touching the Overview.
 - `docs/monitoring.md` — Monitoring (uptime monitors like StatusCake: HTTP, TCP, SSL, domain expiry, push; incidents; email, webhook, Slack and Discord alerts): design, scheduler, limits, security, build plan. Read before touching that feature.
+- `docs/scripting.md` — API Client scripting: assertions and extractors, JavaScript scripts (`pm.*`, QuickJS sandbox) and the collection runner: design, limits, security, delivery phases. Read before touching that feature.
 
 Add new docs under `docs/` and reference them here.
 
