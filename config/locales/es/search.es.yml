@@ -1,0 +1,17 @@
+es:
+  layouts:
+    app:
+      palette:
+        title: "Buscar"
+        placeholder: "Buscar páginas, requests y monitores"
+  components:
+    status_bar:
+      search: "Buscar (Ctrl/⌘ K)"
+  projects:
+    searches:
+      show:
+        empty: "Nada coincide."
+        groups:
+          pages: "Páginas"
+          requests: "Requests"
+          monitors: "Monitores"

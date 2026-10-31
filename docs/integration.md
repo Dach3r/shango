@@ -28,3 +28,7 @@ The environment a member selects in the status bar narrows what monitors and inc
 ## 5. Incidents
 
 `/monitoring/incidents` (`Monitoring::IncidentsController`) lists every incident of the project, newest first, 25 per page, filtered by `?state=open|resolved` and narrowed by the environment scope. Open incidents are flagged everywhere: a red count in the status bar (`StatusBar::Component`, linking to the open ones), on *Monitoring* in `ToolsNav` and in the Monitoring sidebar. The count comes from `ProjectContext#open_incident_count`, one indexed query per page.
+
+## 6. Command palette
+
+Cmd/Ctrl+K (or the search button in the status bar) opens a dialog that searches the project. `palette_controller.js` asks `Projects::SearchesController#show` (`/search?q=`) with a debounce and the answer is rendered into the `palette_results` Turbo Frame; arrows move the selection and Enter follows the link. `Projects::Searches::Run` returns the pages and Network tools whose name matches (all of them without text), and, with text, up to 8 saved requests (name or URL) and 8 monitors (name, URL or host) of the current project, matching case-insensitively with `LIKE` wildcards escaped. The dialog lives in `layouts/_palette`, inside the app shell, so it exists on every authenticated page. It reads only what any member of the project may see.

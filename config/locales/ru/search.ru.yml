@@ -1,0 +1,17 @@
+ru:
+  layouts:
+    app:
+      palette:
+        title: "Поиск"
+        placeholder: "Поиск страниц, запросов и мониторов"
+  components:
+    status_bar:
+      search: "Поиск (Ctrl/⌘ K)"
+  projects:
+    searches:
+      show:
+        empty: "Ничего не найдено."
+        groups:
+          pages: "Страницы"
+          requests: "Запросы"
+          monitors: "Мониторы"

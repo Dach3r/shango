@@ -1,0 +1,17 @@
+pt-BR:
+  layouts:
+    app:
+      palette:
+        title: "Buscar"
+        placeholder: "Buscar páginas, requisições e monitores"
+  components:
+    status_bar:
+      search: "Buscar (Ctrl/⌘ K)"
+  projects:
+    searches:
+      show:
+        empty: "Nada encontrado."
+        groups:
+          pages: "Páginas"
+          requests: "Requisições"
+          monitors: "Monitores"

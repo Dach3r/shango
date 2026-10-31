@@ -1,0 +1,24 @@
+<%# The results of the command palette, one group each. Links leave the frame, so they open as a normal visit. %>
+<%= turbo_frame_tag "palette_results" do %>
+  <% if @entries.empty? %>
+    <p class="px-5 py-6 text-center text-sm text-muted"><%= t(".empty") %></p>
+  <% else %>
+    <% @entries.each do |group, entries| %>
+      <section aria-label="<%= t(".groups.#{group}") %>">
+        <h3 class="px-5 pt-3 pb-1 font-mono text-[0.6875rem] uppercase tracking-wide text-faint"><%= t(".groups.#{group}") %></h3>
+        <ul role="listbox">
+          <% entries.each do |entry| %>
+            <li role="presentation">
+              <%= link_to entry.path, role: "option", aria: { selected: false }, data: { palette_target: "item", turbo_frame: "_top", action: "mouseenter->palette#hover" },
+                    class: "flex items-center gap-3 px-5 py-2 text-sm text-body transition focus-visible:outline-none aria-selected:bg-field aria-selected:text-ink aria-selected:shadow-[inset_2px_0_0_var(--accent)]" do %>
+                <%= lucide_icon entry.icon, class: "size-4 shrink-0 text-faint" %>
+                <span class="min-w-0 flex-1 truncate"><%= entry.title %></span>
+                <% if entry.detail %><span class="shrink-0 truncate font-mono text-xs text-faint"><%= entry.detail %></span><% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+  <% end %>
+<% end %>

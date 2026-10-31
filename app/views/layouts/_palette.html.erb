@@ -1,0 +1,13 @@
+<%# Command palette (Cmd/Ctrl+K): a search over pages, requests and monitors. Lives inside the `palette` controller scope of the app shell; results come from `search_path` into a Turbo Frame. %>
+<dialog data-palette-target="dialog" data-action="click->palette#backdrop" aria-label="<%= t("layouts.app.palette.title") %>"
+        class="m-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl flex-col overflow-hidden border border-line bg-card p-0 text-body backdrop:bg-night-1000/60 backdrop:backdrop-blur-sm open:flex focus:outline-none">
+  <div class="flex h-12 shrink-0 items-center gap-3 border-b border-line px-4">
+    <%= lucide_icon "search", class: "size-4 shrink-0 text-faint" %>
+    <input type="search" data-palette-target="input" data-action="input->palette#search keydown->palette#navigate" placeholder="<%= t("layouts.app.palette.placeholder") %>" aria-label="<%= t("layouts.app.palette.placeholder") %>"
+           autocomplete="off" spellcheck="false" maxlength="100" class="h-full min-w-0 flex-1 bg-transparent text-sm text-ink placeholder:text-faint focus:outline-none">
+    <kbd class="shrink-0 border border-line px-1.5 font-mono text-[0.625rem] uppercase text-faint">esc</kbd>
+  </div>
+  <div class="max-h-[60vh] min-h-0 flex-1 overflow-y-auto pb-2">
+    <%= turbo_frame_tag "palette_results", data: { palette_target: "frame", action: "turbo:frame-load->palette#loaded" } %>
+  </div>
+</dialog>

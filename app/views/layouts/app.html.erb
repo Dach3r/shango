@@ -1,6 +1,6 @@
 <% turbo_refreshes_with method: content_for(:refresh_method).presence || :morph, scroll: :preserve %>
 <% content_for :content do %>
-  <div class="app-shell flex min-h-screen flex-col select-none" data-controller="right-sidebar">
+  <div class="app-shell flex min-h-screen flex-col select-none" data-controller="right-sidebar palette" data-palette-url-value="<%= search_path %>">
     <div class="flex min-h-0 flex-1 flex-col">
       <div class="flex min-w-0 flex-col">
         <main class="<%= content_for?(:main_class) ? yield(:main_class) : "flex-1 px-4 py-8 sm:px-8" %>">
@@ -27,6 +27,7 @@
       </aside>
     </div>
 
+    <%= render "layouts/palette" %>
     <%= render StatusBar::Component.new(user: current_user, project: current_project, projects: available_projects, environments: project_environments, current_environment:, open_incidents: open_incident_count) do %><%= yield :breadcrumb if content_for?(:breadcrumb) %><% end %>
   </div>
   <%= turbo_frame_tag "modal" %>

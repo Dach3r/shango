@@ -1,0 +1,17 @@
+hi:
+  layouts:
+    app:
+      palette:
+        title: "खोज"
+        placeholder: "पेज, अनुरोध और मॉनिटर खोजें"
+  components:
+    status_bar:
+      search: "खोजें (Ctrl/⌘ K)"
+  projects:
+    searches:
+      show:
+        empty: "कुछ नहीं मिला।"
+        groups:
+          pages: "पेज"
+          requests: "अनुरोध"
+          monitors: "मॉनिटर"

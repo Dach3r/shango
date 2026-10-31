@@ -1,0 +1,17 @@
+ja:
+  layouts:
+    app:
+      palette:
+        title: "検索"
+        placeholder: "ページ、リクエスト、モニターを検索"
+  components:
+    status_bar:
+      search: "検索 (Ctrl/⌘ K)"
+  projects:
+    searches:
+      show:
+        empty: "一致するものがありません。"
+        groups:
+          pages: "ページ"
+          requests: "リクエスト"
+          monitors: "モニター"

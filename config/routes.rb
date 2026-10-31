@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   resources :projects, only: %i[new create]
   resource :overview, only: :show, module: :projects
+  resource :search, only: :show, module: :projects
   resource :current_project, only: :update
   resource :preferences, only: :update
   resource :invitation_acceptance, only: %i[show create]

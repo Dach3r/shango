@@ -4,6 +4,10 @@
   <% end %>
 
   <div class="-mr-3 ml-auto flex h-full items-center sm:-mr-4">
+    <button type="button" data-action="palette#open" title="<%= t("components.status_bar.search") %>" aria-label="<%= t("components.status_bar.search") %>"
+            class="flex h-full w-10 cursor-pointer items-center justify-center text-muted transition hover:bg-field hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50">
+      <%= lucide_icon "search", class: "size-4" %>
+    </button>
     <% if @open_incidents.positive? %>
       <%= link_to monitoring_incidents_path(state: "open"), title: t("components.status_bar.incidents", total: @open_incidents), aria: { label: t("components.status_bar.incidents", total: @open_incidents) },
             class: "flex h-full items-center gap-2 px-3 font-mono text-xs text-danger transition hover:bg-field focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" do %>
