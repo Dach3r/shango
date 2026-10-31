@@ -138,6 +138,8 @@ Requests are organized in collections with nested folders, for example *Example 
 
 The API Client must become a reusable foundation for documentation, testing, and monitoring.
 
+It already tests what it sends: assertions and extractors on a request, folder or collection, JavaScript pre-request and post-response scripts with a Postman-style `pm` API, and a collection runner that reports passes and failures. See [`scripting.md`](scripting.md).
+
 ### API Documentation
 
 Generate API documentation from existing requests, using **OpenAPI** as the interoperable format. Users can generate draft docs, add descriptions, document parameters and responses, add examples, define schemas, view interactive docs, and import/export specs. A request does not contain everything needed for a complete contract, so documentation must be enrichable manually.

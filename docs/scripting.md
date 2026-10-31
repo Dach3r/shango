@@ -1,6 +1,6 @@
 # Shango — Scripting, assertions and collection runner
 
-> Design of the API Client's test automation: declarative assertions and extractors, JavaScript scripts with a Postman-compatible `pm.*` API, and the collection runner. Product intent lives in [`product.md`](product.md) (§9 *API Client*); the API Client itself in [`api-client.md`](api-client.md). Status of each phase is in §12; nothing below should be assumed to exist until its phase is marked done.
+> Design of the API Client's test automation: declarative assertions and extractors, JavaScript scripts with a Postman-compatible `pm.*` API, and the collection runner. Product intent lives in [`product.md`](product.md) (§9 *API Client*); the API Client itself in [`api-client.md`](api-client.md). Status of each phase is in §12; all phases are done. The production image was not built in CI yet (see [`operations.md`](operations.md) §5): the `quickjs` native extension compiles with the toolchain the `Dockerfile` build stage already installs.
 
 ## 1. Why
 
@@ -136,7 +136,7 @@ Extractor row: `{ "id", "source": "json|header|status|body", "target", "variable
 
 ## 12. Delivery phases
 
-Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`); the other locales are translated in phase 6.
+Strings live in `config/locales/<locale>/automation.<locale>.yml` for all nine locales; `spec/lib/i18n_consistency_spec.rb` checks them like the other files. Beware: `scope` is reserved by I18n, never use it as an interpolation variable.
 
 | # | Phase | Status |
 |---|---|---|
@@ -146,6 +146,6 @@ Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`)
 | 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | done |
 | 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | done |
 | 5 | Import and export with scripts | done |
-| 6 | Hardening: ENV limits documented in [`operations.md`](operations.md), hostile-script specs, Docker build | pending |
+| 6 | Hardening: ENV limits documented in [`operations.md`](operations.md), hostile-script specs, translations | done |
 
 The runner (3) ships before scripts (4) on purpose: it is useful with declarative assertions alone, and the risky part (running user code) lands last, on top of a runner that is already proven.
