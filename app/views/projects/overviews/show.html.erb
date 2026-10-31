@@ -7,7 +7,7 @@
 
 <div class="flex min-w-0 flex-1 flex-col lg:h-[calc(100vh-2.5rem)]">
   <header class="flex min-h-14 shrink-0 items-center gap-3 border-b border-line px-5">
-    <%= lucide_icon "layout-dashboard", class: "size-4 text-faint" %>
+    <%= lucide_icon "layout-grid", class: "size-4 text-faint" %>
     <h1 class="min-w-0 truncate text-sm font-semibold text-ink"><%= current_project.name %></h1>
     <span class="<%= label %>"><%= t(".title") %></span>
   </header>
@@ -15,7 +15,7 @@
 
   <div class="min-h-0 flex-1 overflow-y-auto">
     <% if overview[:empty] %>
-      <%= render EmptyState::Component.new(icon: "layout-dashboard", title: t(".empty.title"), description: t(".empty.hint")) do %>
+      <%= render EmptyState::Component.new(icon: "layout-grid", title: t(".empty.title"), description: t(".empty.hint")) do %>
         <%= button_to workbench_drafts_path, method: :post, class: button_classes(:primary), form_class: "contents" do %><%= lucide_icon "send", class: "size-4" %><%= t(".new_request") %><% end %>
         <% if policy(current_project.uptime_monitors.new).create? %>
           <%= link_to new_monitoring_monitor_path, class: button_classes(:secondary) do %><%= lucide_icon "activity", class: "size-4" %><%= t(".new_monitor") %><% end %>
@@ -97,7 +97,7 @@
         </section>
 
         <section class="border-b border-line">
-          <h2 class="<%= heading %>"><%= lucide_icon "layout-dashboard", class: "size-3.5" %><%= t(".workspace") %></h2>
+          <h2 class="<%= heading %>"><%= lucide_icon "layout-grid", class: "size-3.5" %><%= t(".workspace") %></h2>
           <dl class="grid grid-cols-3 border-b border-line">
             <% { requests: workbench_root_path, monitors: monitoring_root_path, environments: nil }.each do |key, path| %>
               <div class="flex flex-col gap-2 border-r border-line px-5 py-4 last:border-r-0">

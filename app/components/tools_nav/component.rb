@@ -1,7 +1,7 @@
 class ToolsNav::Component < ApplicationComponent
   # Project tools from the product navigation; only entries with a path are live.
   ITEMS = [
-    { key: :overview, icon: "layout-dashboard", path: :overview_path },
+    { key: :overview, icon: "layout-grid", path: :overview_path },
     { key: :api_client, icon: "send", path: :workbench_root_path },
     { key: :documentation, icon: "book-open" },
     { key: :monitoring, icon: "activity", path: :monitoring_root_path, badge: :open_incidents },

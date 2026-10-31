@@ -9,7 +9,7 @@ module Projects
       Entry = Data.define(:group, :icon, :title, :detail, :path)
 
       PAGES = [
-        { label: "components.tools_nav.overview", icon: "layout-dashboard", path: :overview_path },
+        { label: "components.tools_nav.overview", icon: "layout-grid", path: :overview_path },
         { label: "components.tools_nav.api_client", icon: "send", path: :workbench_root_path },
         { label: "components.tools_nav.monitoring", icon: "activity", path: :monitoring_root_path },
         { label: "monitoring.tabs.incidents", icon: "siren", path: :monitoring_incidents_path },
