@@ -366,7 +366,7 @@ RSpec.describe "Monitoring monitors" do
     it "prefills only the host of a domain monitor and ignores HTTP and push", :aggregate_failures do
       get new_monitoring_monitor_path(kind: "domain", target: "example.com", port_number: "25")
       expect(response.body).to include(%(value="example.com"))
-      expect(response.body).not_to include(%(value="25"))
+      expect(response.body).not_to include("uptime_monitor[settings][port]")
 
       get new_monitoring_monitor_path(kind: "http", target: "example.com")
       expect(response.body).not_to include(%(value="example.com"))
