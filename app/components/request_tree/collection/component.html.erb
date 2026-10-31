@@ -26,6 +26,8 @@
         <%= link_to new_workbench_collection_folder_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_folder") %><% end %>
         <%= link_to new_workbench_collection_curl_import_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "terminal", class: "size-4" %><%= t("components.request_tree.import_curl") %><% end %>
       <% end %>
+      <%= link_to new_workbench_collection_run_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "play", class: "size-4" %><%= t("components.request_tree.run") %><% end %>
+      <%= link_to workbench_collection_runs_path(collection), class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "history", class: "size-4" %><%= t("components.request_tree.run_history") %><% end %>
       <%= link_to new_workbench_collection_export_path(collection), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "download", class: "size-4" %><%= t("components.request_tree.export") %><% end %>
       <% if @manage %>
         <button type="button" data-action="context-menu#rename" class="<%= RequestTree::Menu::Component::ITEM %>"><%= lucide_icon "pencil", class: "size-4" %><%= t("components.request_tree.rename") %></button>

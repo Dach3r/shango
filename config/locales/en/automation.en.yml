@@ -7,6 +7,9 @@ en:
             base:
               invalid_extractor_variable: "Extractor variable names can only use letters, numbers, dots, dashes and underscores, and cannot start with a digit."
   components:
+    request_tree:
+      run: Run
+      run_history: Run history
     rule_table:
       enabled: Enabled
       source: Check
@@ -79,3 +82,59 @@ en:
           passed: Passed
           failed: Failed
           warning: Warning
+    runs:
+      counts: "%{passed} passed, %{failed} failed of %{total}"
+      no_environment: No environment
+      statuses:
+        queued: Queued
+        running: Running
+        completed: Completed
+        completed_with_failures: Completed with failures
+        failed: Could not finish
+        cancelled: Cancelled
+      item_statuses:
+        pending: Waiting
+        running: Running
+        passed: Passed
+        failed: Failed
+        skipped: Skipped
+      item_errors:
+        request_deleted: The request was deleted before it ran.
+        cancelled: The run was cancelled.
+      errors:
+        access_revoked: You no longer have access to this project.
+        unexpected: The run stopped because of an unexpected error. Check the server log.
+      form:
+        title: Run requests
+        description:
+          one: "%{scope}: 1 request will run, one after another."
+          other: "%{scope}: %{count} requests will run, one after another."
+        submit: Start run
+        environment: Environment
+        no_environment: No environment
+        delay: Delay between requests (ms)
+        delay_hint: "Up to %{max} ms."
+        stop_on_failure: Stop at the first failure
+        stop_on_failure_hint: The requests after a failed one are skipped.
+        persist_variables: Save extracted values to the environment
+        persist_variables_hint: Off keeps them only for this run, so the environment stays as it is.
+        errors:
+          already_running: You already have a run in progress. Wait for it to finish or cancel it.
+          empty: There are no requests to run here.
+          too_many: "A run can send at most %{max} requests."
+      index:
+        title: "Runs of %{name}"
+        new: New run
+        empty: This collection has not been run yet.
+      show:
+        title: "Run of %{name}"
+        history: All runs of this collection
+        cancel: Cancel run
+        run_again: Run again
+        passed: Passed
+        failed: Failed
+        total: Requests
+        duration: Duration
+        progress: Run progress
+        by: "by %{name}"
+        no_tests: This request has no assertions.

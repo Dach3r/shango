@@ -34,12 +34,14 @@ Optional, with defaults:
 | `SHANGO_REQUIRE_EMAIL_CONFIRMATION` | `true` when SMTP is set | `false` keeps email on without forcing confirmation. Ignored without SMTP. |
 | `SHANGO_MAX_SIGN_IN_ATTEMPTS` | 10 | Failed sign-ins before a 30-minute lock. |
 | `SHANGO_SESSION_TIMEOUT_HOURS` | 12 | Idle time before sign-in is required again. |
-| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `DRAFTS`, `OAUTH`, `IMPORTS`, `EXPORTS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`, `PUSH` (pings per push-monitor token, 12/60), `PUSH_IP` (pings per IP, 120/60). |
+| `SHANGO_RATE_LIMIT_<NAME>` | see architecture §7 | `<count>/<seconds>` for `EXECUTIONS`, `DRAFTS`, `OAUTH`, `IMPORTS`, `EXPORTS`, `RUNS`, `SIGN_IN`, `SIGN_UP`, `PASSWORD_RESET`, `NETWORK`, `INVITATIONS`, `INVITATION_ACCEPTANCE`, `PUSH` (pings per push-monitor token, 12/60), `PUSH_IP` (pings per IP, 120/60). |
 | `SHANGO_CSP_REPORT_ONLY` | `false` | Report Content Security Policy violations without blocking. |
 | `SHANGO_STORAGE` | `local` | `s3` for S3-compatible storage (`SHANGO_S3_BUCKET`, `SHANGO_S3_REGION`, optional `SHANGO_S3_ACCESS_KEY_ID`/`SHANGO_S3_SECRET_ACCESS_KEY`/`SHANGO_S3_ENDPOINT`). |
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |
 | `SHANGO_HISTORY_RETENTION_DAYS` | 90 | Saved responses older than this are deleted daily (`0` keeps them). |
 | `SHANGO_DRAFT_RETENTION_DAYS` | 30 | Request drafts (unsaved editor state) untouched for this long are deleted daily (`0` keeps them). |
+| `SHANGO_RUN_MAX_REQUESTS` | 200 | Most requests one collection run may send (1 to 1000). |
+| `SHANGO_RUN_RETENTION_DAYS` | 30 | Finished collection runs older than this are deleted daily by `PruneCollectionRunsJob` (`0` keeps them); at most the last 20 finished runs per collection are kept. Runs are performed by `RunCollectionJob` on the `executions` queue (one run per member at a time), so a Solid Queue worker must be running. |
 | `SHANGO_EXPORT_RETENTION_MINUTES` | 60 | Finished collection exports (the file, encrypted in `collection_exports`) are deleted this many minutes after they finish (1 to 1440); `PruneCollectionExportsJob` sweeps hourly. Exports are built by `ExportCollectionJob` on the `exports` queue, so a Solid Queue worker must be running. |
 | `SHANGO_NETWORK_HISTORY_RETENTION_DAYS` | 90 | Saved Network Tools runs older than this are deleted daily (`0` keeps them). |
 | `SHANGO_MONITOR_RESULTS_RETENTION_DAYS` | 30 | Monitor check results and alert deliveries older than this are deleted hourly by `PruneMonitoringJob` (`0` keeps them). Hourly rollups (charts, averages) are kept 400 days and incidents (uptime) forever. |
@@ -59,7 +61,7 @@ All state is in PostgreSQL plus uploaded files:
 
 ## 4. Routine upkeep
 
-- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors; development uses the `postgresql` Action Cable adapter so broadcasts from `bin/jobs` reach the browser), monitoring retention (hourly at :40). They only run while a worker is up.
+- Recurring jobs (Solid Queue, `config/recurring.yml`): finished-job cleanup (hourly), orphaned upload purge (daily 3:00), saved-response retention (daily 3:30), Network Tools history retention (daily 3:45), monitor dispatch (every minute; also in development, so `bin/dev` runs monitors; development uses the `postgresql` Action Cable adapter so broadcasts from `bin/jobs` reach the browser), monitoring retention (hourly at :40), collection run retention (daily 4:15). They only run while a worker is up.
 - Rotate encryption keys when someone with access leaves: [`api-client.md`](api-client.md) §6.
 - Keep dependencies current (Dependabot PRs; CI runs `bundler-audit` on every push).
 - Errors go to stdout with a request id (`log_tags`); ship them to your log platform. An error tracker (Sentry or similar) is not bundled; add one if you need alerting.

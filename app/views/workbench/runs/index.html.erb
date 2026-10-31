@@ -1,0 +1,29 @@
+<% content_for :title, "#{t("workbench.runs.index.title", name: @collection.name)} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t("workbench.title") %>
+
+<%= render layout: "workbench/workspace" do %>
+  <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+    <div class="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-line px-5">
+      <h1 class="truncate text-sm font-medium text-ink"><%= t("workbench.runs.index.title", name: @collection.name) %></h1>
+      <%= link_to new_workbench_collection_run_path(@collection), data: { turbo_frame: "modal" }, class: button_classes(:primary) do %><%= lucide_icon "play", class: "size-4" %><%= t("workbench.runs.index.new") %><% end %>
+    </div>
+
+    <% if @runs.empty? %>
+      <p class="px-5 py-6 text-sm text-muted"><%= t("workbench.runs.index.empty") %></p>
+    <% else %>
+      <ul class="divide-y divide-line">
+        <% @runs.each do |run| %>
+          <li>
+            <%= link_to workbench_run_path(run), class: "flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 text-sm transition hover:bg-field/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+              <span class="<%= class_names("inline-flex items-center px-2 py-0.5 text-xs font-semibold", run_tone(run)) %>"><%= run_label(run) %></span>
+              <span class="min-w-0 flex-1 truncate text-ink"><%= run.scope_name %></span>
+              <span class="text-xs text-muted tabular-nums"><%= t("workbench.runs.counts", passed: run.passed_count, failed: run.failed_count, total: run.total_count) %></span>
+              <span class="text-xs text-muted"><%= run.environment&.name || t("workbench.runs.no_environment") %></span>
+              <time class="text-xs text-muted tabular-nums" datetime="<%= run.created_at.iso8601 %>"><%= l(run.created_at, format: :short) %></time>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>

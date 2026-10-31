@@ -15,6 +15,7 @@ class Project < ApplicationRecord
   has_many :incidents, dependent: :delete_all
   has_many :notification_channels, dependent: :delete_all
   has_many :collection_exports, dependent: :delete_all
+  has_many :collection_runs, dependent: :delete_all
   has_many :invitations, dependent: :destroy
   has_many :audit_events, dependent: :destroy
 

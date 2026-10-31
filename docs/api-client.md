@@ -18,7 +18,7 @@
 - Code editor (CodeMirror 6) with `{{variable}}` autocomplete and highlighting by state: set (green), empty value (amber), undefined (red, wavy underline) and dynamic `$` helpers (accent). The popup shows each variable's value under its name; hovering a `{{variable}}` shows a card with its value (or "Undefined") and its source (Environment or Dynamic). Secret values are masked server-side and never sent.
 - Plain inputs in the request editor (params, headers, form data, authorization fields) and the folder form also detect `{{` and offer the same variables in a dropdown (`variable_autocomplete` controller, enabled through `variable_autocomplete_data`); arrow keys move, Enter/Tab accept, Esc closes. The references are highlighted by state like in the code editor (a mirror layer over the field), and a password field shows its text while it holds a `{{reference}}`.
 
-**Not included (yet)**: pre/post-request scripts, collection runner, WebSocket/gRPC, import of scripts and of Bruno `.bru` folders or Apidog native files, export of environments on their own or of several collections at once, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
+**Not included (yet)**: pre/post-request scripts, WebSocket/gRPC, import of scripts and of Bruno `.bru` folders or Apidog native files, export of environments on their own or of several collections at once, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
 
 ## 2. Domain model
 
@@ -196,3 +196,7 @@ Options: *include environments* (all of the project's, ignored by OpenAPI) and *
 
 - Team model: collections and environments are visible to every member of the project; owners manage everything and members only what they created (`docs/architecture.md` §7). Finer roles (admin, read-only viewer) or sharing with specific members are not built; product decision pending.
 - Import of Bruno `.bru` folders and Apidog native files: not supported (cURL, Postman, Insomnia and OpenAPI are).
+
+## 11. Collection runner
+
+*Run* in a collection or folder menu sends its requests one after another, checking each against its assertions, and keeps a report (`CollectionRun`, `CollectionRunItem`; runs are performed by `RunCollectionJob`, so a Solid Queue worker must be running). It never writes to request history or to the latest responses. Variables found by extractors reach the next requests without touching the environment unless the run is told to save them. Design, limits and report formats: [`scripting.md`](scripting.md) §8.

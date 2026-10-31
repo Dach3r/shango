@@ -1,0 +1,30 @@
+<%= render Modal::Component.new(icon: "play", title: t(".title"), description: t(".description", scope: (@folder || @collection).name, count: @count), size: :md, form: "run_form", submit: t(".submit"), submit_icon: "play") do %>
+  <%= form_with url: workbench_collection_runs_path(@collection), method: :post, id: "run_form", data: { turbo_frame: "_top" }, class: "space-y-5" do %>
+    <% if @error.present? %>
+      <div role="alert" class="border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= t(".errors.#{@error}", max: @max) %></div>
+    <% end %>
+    <%= hidden_field_tag :folder_id, @folder.id, id: nil if @folder %>
+
+    <div>
+      <%= label_tag :environment_id, t(".environment"), class: label_classes %>
+      <%= select_tag :environment_id, options_from_collection_for_select(@environments, :id, :name, @selected_environment&.id), include_blank: t(".no_environment"), class: field_classes %>
+    </div>
+
+    <div>
+      <%= label_tag :delay_ms, t(".delay"), class: label_classes %>
+      <%= number_field_tag :delay_ms, params[:delay_ms].presence || 0, min: 0, max: CollectionRun::MAX_DELAY_MS, step: 100, class: field_classes("w-32") %>
+      <p class="mt-1 text-xs text-muted"><%= t(".delay_hint", max: CollectionRun::MAX_DELAY_MS) %></p>
+    </div>
+
+    <fieldset class="space-y-3">
+      <% { stop_on_failure: "stop_on_failure", persist_variables: "persist_variables" }.each do |name, key| %>
+        <%= render Checkbox::Component.new(name: name, checked: ActiveModel::Type::Boolean.new.cast(params[name]) == true, label_class: "!items-start", label: tag.span(class: "block min-w-0") {
+          safe_join([
+            tag.span(t(".#{key}"), class: "block text-sm text-ink"),
+            tag.span(t(".#{key}_hint"), class: "mt-0.5 block text-xs text-muted")
+          ])
+        }) %>
+      <% end %>
+    </fieldset>
+  <% end %>
+<% end %>

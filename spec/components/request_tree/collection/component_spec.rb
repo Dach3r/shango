@@ -11,6 +11,15 @@ RSpec.describe RequestTree::Collection::Component, type: :component do
     expect(page).to have_link(I18n.t("components.request_tree.new_folder"), visible: :all)
   end
 
+  it "offers to run the collection and to see its runs, even to a member who cannot manage it", :aggregate_failures do
+    collection = create(:collection)
+    branch = ApiClient::Tree::Load::Branch.new(collection:, folders: {}, requests: {})
+    render_inline(described_class.new(branch:, manage: false))
+
+    expect(page).to have_css("a[href='/workbench/collections/#{collection.id}/runs/new']", text: I18n.t("components.request_tree.run"), visible: :all)
+    expect(page).to have_css("a[href='/workbench/collections/#{collection.id}/runs']", text: I18n.t("components.request_tree.run_history"), visible: :all)
+  end
+
   it "renders open unless its id is in closed_ids", :aggregate_failures do
     collection = create(:collection)
     branch = ApiClient::Tree::Load::Branch.new(collection:, folders: {}, requests: {})

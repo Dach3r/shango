@@ -1,0 +1,73 @@
+<% content_for :title, "#{t("workbench.runs.show.title", name: @run.scope_name)} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :heading, t("workbench.title") %>
+<% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
+
+<%= render layout: "workbench/workspace" do %>
+  <%= turbo_stream_from @run %>
+  <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+    <div class="flex min-h-14 shrink-0 flex-wrap items-center gap-3 border-b border-line px-5 py-2">
+      <%= link_to workbench_collection_runs_path(@run.collection), class: "text-muted transition hover:text-ink", title: t("workbench.runs.show.history") do %><%= lucide_icon "arrow-left", class: "size-4" %><span class="sr-only"><%= t("workbench.runs.show.history") %></span><% end %>
+      <h1 class="min-w-0 flex-1 truncate text-sm font-medium text-ink"><%= t("workbench.runs.show.title", name: @run.scope_name) %></h1>
+      <span class="<%= class_names("inline-flex items-center px-2 py-0.5 text-xs font-semibold", run_tone(@run)) %>"><%= run_label(@run) %></span>
+      <% if policy(@run).cancel? %>
+        <%= button_to workbench_run_cancellation_path(@run), class: button_classes(:danger), form_class: "contents" do %><%= lucide_icon "circle-x", class: "size-4" %><%= t("workbench.runs.show.cancel") %><% end %>
+      <% end %>
+      <%= link_to new_workbench_collection_run_path(@run.collection, folder_id: @run.folder_id, environment_id: @run.environment_id, delay_ms: @run.option(:delay_ms), stop_on_failure: @run.option(:stop_on_failure), persist_variables: @run.option(:persist_variables)),
+                  data: { turbo_frame: "modal" }, class: button_classes(:secondary) do %><%= lucide_icon "rotate-cw", class: "size-4" %><%= t("workbench.runs.show.run_again") %><% end %>
+      <% if @run.finished? %>
+        <%= link_to workbench_run_path(@run, format: :json), data: { turbo: false }, class: button_classes(:ghost) do %><%= lucide_icon "download", class: "size-4" %>JSON<% end %>
+        <%= link_to workbench_run_path(@run, format: :xml), data: { turbo: false }, class: button_classes(:ghost) do %><%= lucide_icon "download", class: "size-4" %>JUnit<% end %>
+      <% end %>
+    </div>
+
+    <dl class="grid shrink-0 grid-cols-2 border-b border-line sm:grid-cols-4">
+      <% [[:passed, @run.passed_count, "text-emerald-700 dark:text-emerald-400"], [:failed, @run.failed_count, ("text-danger" if @run.failed_count.positive?)], [:total, @run.total_count, "text-ink"], [:duration, run_duration(@run), "text-ink"]].each do |key, value, tone| %>
+        <div class="flex flex-col gap-2 border-r border-b border-line px-5 py-4 sm:border-b-0">
+          <dt class="<%= label %>"><%= t("workbench.runs.show.#{key}") %></dt>
+          <dd class="<%= class_names("text-2xl leading-none font-medium tabular-nums", tone || "text-ink") %>"><%= value %></dd>
+        </div>
+      <% end %>
+    </dl>
+
+    <div class="shrink-0 border-b border-line px-5 py-3">
+      <div class="h-1.5 bg-line" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<%= run_progress(@run) %>" aria-label="<%= t("workbench.runs.show.progress") %>">
+        <div class="<%= class_names("h-full transition-[width] duration-300", @run.failed_count.positive? ? "bg-danger" : "bg-accent") %>" style="width: <%= run_progress(@run) %>%"></div>
+      </div>
+      <p class="mt-2 text-xs text-muted">
+        <%= [@run.environment&.name || t("workbench.runs.no_environment"), t("workbench.runs.show.by", name: @run.user.full_name), l(@run.created_at, format: :short)].join(" · ") %>
+      </p>
+      <% if @run.failed? %>
+        <p role="alert" class="mt-2 border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger"><%= t("workbench.runs.errors.#{@run.error}", default: t("workbench.runs.errors.unexpected")) %></p>
+      <% end %>
+    </div>
+
+    <ul class="divide-y divide-line">
+      <% @run.items.each do |item| %>
+        <li>
+          <details class="group">
+            <summary class="flex cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-5 py-2.5 text-sm transition hover:bg-field/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50">
+              <%= lucide_icon item_icon(item), class: "size-4 shrink-0 #{item_tone(item)}", "aria-hidden": true %>
+              <span class="sr-only"><%= t("workbench.runs.item_statuses.#{item.status}") %></span>
+              <%= render MethodBadge::Component.new(method: item.http_method, short: true) %>
+              <span class="min-w-0 flex-1 truncate text-ink"><%= item.request_name %></span>
+              <% if item.http_status %><span class="font-mono text-xs text-muted tabular-nums"><%= item.http_status %></span><% end %>
+              <% if item.duration_ms %><span class="font-mono text-xs text-muted tabular-nums"><%= item.duration_ms %> ms</span><% end %>
+              <% if item.test_results.any? %><span class="text-xs text-muted tabular-nums"><%= t("workbench.executions.tests.summary", passed: item.passed_tests, failed: item.failed_tests) %></span><% end %>
+            </summary>
+            <div class="border-t border-line bg-field/30 pb-2">
+              <% if item.url.present? %><p class="px-5 py-2 font-mono text-xs break-all text-muted"><%= item.url %></p><% end %>
+              <% if item.error? %>
+                <p role="alert" class="mx-5 mb-2 border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger"><%= item.error_message.presence || t("workbench.runs.item_errors.#{item.error_kind}", default: item.error_kind) %></p>
+              <% end %>
+              <% if item.test_results.any? %>
+                <%= render "workbench/requests/executions/results", results: item.test_results %>
+              <% elsif !item.error? %>
+                <p class="px-5 py-2 text-xs text-muted"><%= t("workbench.runs.show.no_tests") %></p>
+              <% end %>
+            </div>
+          </details>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

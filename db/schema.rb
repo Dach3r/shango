@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_31_061337) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_061621) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -134,6 +134,53 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_061337) do
     t.index ["user_id"], name: "index_collection_exports_on_user_id"
     t.check_constraint "export_format::text = ANY (ARRAY['postman'::character varying, 'insomnia'::character varying, 'openapi'::character varying, 'shango'::character varying]::text[])", name: "collection_exports_export_format_check"
     t.check_constraint "status::text = ANY (ARRAY['queued'::character varying, 'running'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "collection_exports_status_check"
+  end
+
+  create_table "collection_run_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "collection_run_id", null: false
+    t.uuid "api_request_id"
+    t.string "request_name", null: false
+    t.string "http_method", default: "GET", null: false
+    t.integer "position", default: 0, null: false
+    t.string "status", default: "pending", null: false
+    t.text "url"
+    t.integer "http_status"
+    t.integer "duration_ms"
+    t.jsonb "test_results", default: [], null: false
+    t.string "error_kind"
+    t.text "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_request_id"], name: "index_collection_run_items_on_api_request_id"
+    t.index ["collection_run_id", "position"], name: "index_collection_run_items_on_collection_run_id_and_position"
+    t.index ["collection_run_id"], name: "index_collection_run_items_on_collection_run_id"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'running'::character varying, 'passed'::character varying, 'failed'::character varying, 'skipped'::character varying]::text[])", name: "collection_run_items_status_check"
+  end
+
+  create_table "collection_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "collection_id", null: false
+    t.uuid "folder_id"
+    t.uuid "user_id", null: false
+    t.uuid "environment_id"
+    t.string "status", default: "queued", null: false
+    t.integer "total_count", default: 0, null: false
+    t.integer "passed_count", default: 0, null: false
+    t.integer "failed_count", default: 0, null: false
+    t.jsonb "options", default: {}, null: false
+    t.string "error"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id", "created_at"], name: "index_collection_runs_on_collection_id_and_created_at"
+    t.index ["collection_id"], name: "index_collection_runs_on_collection_id"
+    t.index ["environment_id"], name: "index_collection_runs_on_environment_id"
+    t.index ["folder_id"], name: "index_collection_runs_on_folder_id"
+    t.index ["project_id"], name: "index_collection_runs_on_project_id"
+    t.index ["user_id", "status"], name: "index_collection_runs_on_user_id_and_status"
+    t.index ["user_id"], name: "index_collection_runs_on_user_id"
+    t.check_constraint "status::text = ANY (ARRAY['queued'::character varying, 'running'::character varying, 'completed'::character varying, 'failed'::character varying, 'cancelled'::character varying]::text[])", name: "collection_runs_status_check"
   end
 
   create_table "collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -499,6 +546,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_061337) do
   add_foreign_key "collection_exports", "collections", on_delete: :cascade
   add_foreign_key "collection_exports", "projects", on_delete: :cascade
   add_foreign_key "collection_exports", "users", on_delete: :cascade
+  add_foreign_key "collection_run_items", "api_requests", on_delete: :nullify
+  add_foreign_key "collection_run_items", "collection_runs", on_delete: :cascade
+  add_foreign_key "collection_runs", "collections", on_delete: :cascade
+  add_foreign_key "collection_runs", "environments", on_delete: :nullify
+  add_foreign_key "collection_runs", "folders", on_delete: :nullify
+  add_foreign_key "collection_runs", "projects", on_delete: :cascade
+  add_foreign_key "collection_runs", "users", on_delete: :cascade
   add_foreign_key "collections", "projects"
   add_foreign_key "collections", "users", column: "creator_id", on_delete: :nullify
   add_foreign_key "cookies", "environments"

@@ -19,11 +19,14 @@ module ApiClient
 
     class InvalidRequest < StandardError; end
 
-    def initialize(api_request:, environment: nil, dry_run: false, user: nil)
+    # `variables` (and the `secrets` among their values) sit on top of the environment's: a collection run keeps what its extractors
+    # found there instead of writing it to the environment.
+    def initialize(api_request:, environment: nil, dry_run: false, user: nil, variables: {}, secrets: [])
       @api_request = api_request
       @environment = environment
       @dry_run = dry_run
-      @resolver = VariableResolver.new(environment&.variable_values || {}, extra: response_lookup(user))
+      @extra_secrets = secrets
+      @resolver = VariableResolver.new((environment&.variable_values || {}).merge(variables), extra: response_lookup(user))
     end
 
     private
@@ -169,7 +172,7 @@ module ApiClient
     end
 
     def secrets(strategy)
-      (@environment&.secret_values || []) + strategy.secrets
+      (@environment&.secret_values || []) + @extra_secrets + strategy.secrets
     end
   end
 end

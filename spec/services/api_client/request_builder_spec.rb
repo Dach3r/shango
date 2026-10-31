@@ -9,6 +9,22 @@ RSpec.describe ApiClient::RequestBuilder do
   let(:api_request) { create(:api_request, { collection:, auth_type: "none", url: "https://api.example.com/items" }.merge(attributes)) }
   let(:built) { result.record }
 
+  describe "variables of a run" do
+    subject(:result) { described_class.call(api_request:, environment:, dry_run: true, variables: { "token" => "abc", "host" => "run.example.com" }, secrets: ["abc"]) }
+
+    let(:environment) { create(:environment, project: collection.project).tap { |env| create(:variable, environment: env, key: "host", value: "env.example.com") } }
+    let(:attributes) { { url: "https://{{host}}/items", headers: [{ "key" => "X-Token", "value" => "{{token}}" }] } }
+
+    it "sit on top of the environment's", :aggregate_failures do
+      expect(built.url).to eq("https://run.example.com/items")
+      expect(built.headers["X-Token"]).to eq("abc")
+    end
+
+    it "add their secrets to what is masked" do
+      expect(built.secrets).to include("abc")
+    end
+  end
+
   describe "response references" do
     subject(:result) { described_class.call(api_request:, environment:, dry_run: true, user:) }
 

@@ -75,8 +75,8 @@ Assertions and extractors of the three levels are concatenated in that order (th
 |---|---|
 | `api_requests`, `folders`, `collections`: `assertions` (jsonb `[]`), `extractors` (jsonb `[]`) (`api_requests` in phase 1, the others in phase 2); `pre_request_script`, `post_response_script` (text, phase 4) | Scripts capped at 64 KB, rows at 50 per level. One migration per change. |
 | `request_executions`: `test_results` (jsonb `[]`; phase 1), `script_logs` (jsonb `[]`) and `script_error` (text) (phase 4) | Travel with the latest execution and history, masked. |
-| `collection_runs` | `project`, `collection`, `folder` (optional), `user`, `environment` (optional), `status` (AASM: `queued → running → completed \| failed \| cancelled`), `total`, `passed`, `failed`, `options` (jsonb), `started_at`, `finished_at`. |
-| `collection_run_items` | `collection_run`, `api_request` (nullable, the request may be deleted later), `request_name`, `position`, `status`, `http_status`, `duration_ms`, `test_results` (jsonb), `script_logs` (jsonb), `error_kind`, `error_message`. No bodies. |
+| `collection_runs` | `project`, `collection`, `folder` (optional), `user`, `environment` (optional), `status` (AASM: `queued → running → completed \| failed \| cancelled`), `total_count`, `passed_count`, `failed_count`, `options` (jsonb), `error`, `started_at`, `finished_at`. |
+| `collection_run_items` | `collection_run`, `api_request` (nullable, the request may be deleted later), `request_name`, `http_method`, `position`, `status` (AASM: `pending → running → passed \| failed \| skipped`), `url` (masked), `http_status`, `duration_ms`, `test_results` (jsonb), `error_kind`, `error_message`. No bodies. |
 
 Assertion row: `{ "id", "source", "target", "operator", "expected", "enabled" }`. The model (`TestAutomation`) drops rows with an unknown source or operator and rows missing what the choice needs (a target for `header`/`json`, a value for operators that compare), keeps at most 50 per level and clips `target` to 500 and `expected` to 1 000 characters.
 
@@ -97,16 +97,19 @@ Extractor row: `{ "id", "source": "json|header|status|body", "target", "variable
 
 ## 8. Collection runner
 
-`CollectionRun` + `CollectionRunItem`, performed by `RunCollectionJob` (queue `executions`).
+`CollectionRun` + `CollectionRunItem`, performed by `RunCollectionJob` (queue `executions`, one run per member at a time) through `ApiClient::Runs::Perform`.
 
-- Scope: a whole collection or one folder (subfolders included), in tree order (`Tree::Load`).
-- Options: environment, *stop on first failure*, delay between requests (0–10 000 ms), *persist variables*.
-- One request at a time (a chain depends on order); each goes through the regular `Requests::Dispatch` with a run-scoped variable layer and the scripts/assertions above. It never writes to history or to `latest_executions` (a run is not an edit session).
-- A request **fails** if it has a transport error, a pre-request error, or any failed test/assertion. A request with no tests passes if it got a response.
-- Cancelling is checked between requests and between response chunks (the `Executor` already polls a `cancelled` callable).
-- Limits: `SHANGO_RUN_MAX_REQUESTS` (default 200 requests per run), one active run per user and project, runs older than the retention are deleted (`SHANGO_RUN_RETENTION_DAYS`, default 30; at most the last 20 per collection are kept).
-- UI: *Run* on a collection or folder → options screen → live page (`turbo_stream_from`, a Turbo refresh after each item, same mechanism as Monitoring) with counts, one row per request, tests and logs on expand; JSON and JUnit XML reports (`/workbench/runs/:id.json|.xml`).
-- Authorization: `CollectionRunPolicy`: show for the project, create needs `execute?` over the scope, cancel by the starter or an owner.
+- **Scope**: a whole collection or one folder (subfolders included), in the order the sidebar shows (`Runs::Scope`: for each container its subfolders recursively first, then its own requests). Entry points: *Run* and *Run history* in the collection menu, *Run* in the folder menu (any member of the project, even one who cannot manage the collection: running is read-level like sending a request).
+- **Options** (the *Run requests* dialog, `GET /workbench/collections/:id/runs/new`): environment, *stop at the first failure*, delay between requests (0 to 10 000 ms), *save extracted values to the environment* (off by default).
+- **Planning** (`Runs::Create`): one `pending` item per request with a snapshot of its name and method, so a request deleted later does not erase the report. Refuses an empty scope, more than `SHANGO_RUN_MAX_REQUESTS` requests (default 200) and a second run while the member has one queued or running (a run untouched for an hour no longer counts, so a crashed worker cannot block anyone forever). `POST /workbench/collections/:id/runs` is rate limited (`runs`, 10 per 10 minutes).
+- **Execution**: one request at a time (a chain depends on order). Each goes through the regular `Requests::Dispatch` with `stash: false` (a run is not an editing session: it never writes to history or to `latest_executions`), the run's environment and a **run-scoped variable layer** (`variables:` and `secrets:`, on top of the environment's: what extractors find reaches the next requests, and secret values are masked in later items). With *save extracted values* on, `persist: true` also writes them to the environment (`VariableWriteback`, only when the member who started the run may edit it).
+- **Items** are AASM-driven: `pending → running → passed | failed | skipped`. A request **fails** when it could not be sent (timeout, DNS, invalid URL, …) or any assertion failed; extractor warnings never fail it. A request without assertions passes when it got a response. A request whose record was deleted is skipped (`request_deleted`).
+- **Run states** (AASM): `queued → running → completed | failed | cancelled`. `completed` means the run reached the end (check `failed_count` for failures); `failed` means it could not finish (`access_revoked` when the member left the project, `unexpected` for anything else, logged); `cancelled` is a cancel.
+- **Cancelling** (`POST /workbench/runs/:id/cancellation`, the starter or an owner): `Runs::Cancel` cancels the run and skips its pending and running items at once; the job looks the status up before every request and passes it to the executor so the request in flight is aborted.
+- **Live page** (`GET /workbench/runs/:id`): `turbo_stream_from` the run; `Runs::Perform` broadcasts a Turbo refresh after every request and on state changes (the same mechanism as Monitoring), with counts, a progress bar, one expandable row per request (status, method, HTTP status, time, the outcomes of its assertions and extractors, the masked URL) and *Run again* with the same options. `GET /workbench/collections/:id/runs` lists the last runs of a collection.
+- **Reports** (`Runs::Report`, in the language of whoever downloads them): `GET /workbench/runs/:id.json` and `.xml` (JUnit: one suite per request, one case per assertion that ran, one for a request that could not be sent, a single passing case for a request without tests, `skipped` for requests that did not run; extractor warnings are not cases).
+- **Retention**: `PruneCollectionRunsJob` (daily) deletes finished runs older than `SHANGO_RUN_RETENTION_DAYS` (default 30, `0` keeps them) and keeps at most the last 20 finished runs per collection.
+- **Authorization**: `CollectionRunPolicy`: `show?` and `create?` for the project, `cancel?` for the starter or an owner while the run is active.
 
 ## 9. Import and export
 
@@ -136,7 +139,7 @@ Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`)
 | 0 | Engine spike and this document | done |
 | 1 | Assertions and extractors (migrations, evaluator, `Dispatch` integration, editor tabs, results tab) | done |
 | 2 | Inheritance: assertions and extractors on folders and collections, with UI (scripts follow in phase 4) | done |
-| 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | pending |
+| 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | done |
 | 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | pending |
 | 5 | Import and export with scripts | pending |
 | 6 | Hardening: ENV limits documented in [`operations.md`](operations.md), hostile-script specs, Docker build | pending |

@@ -43,6 +43,11 @@ Rails.application.routes.draw do
       resources :requests, only: %i[new create]
       resource :curl_import, only: %i[new create]
       resources :exports, only: %i[new create]
+      resources :runs, only: %i[index new create]
+    end
+
+    resources :runs, only: :show do
+      resource :cancellation, only: :create, module: :runs
     end
 
     resources :exports, only: :show do

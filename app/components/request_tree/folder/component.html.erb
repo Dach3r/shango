@@ -16,16 +16,19 @@
     </ul>
   </details>
 
-  <% if @manage %>
-    <div class="absolute right-1 top-1">
-      <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: @folder.name)) do %>
+  <div class="absolute right-1 top-1">
+    <%= render RequestTree::Menu::Component.new(label: t("components.request_tree.actions", name: @folder.name)) do %>
+      <% if @manage %>
         <%= link_to new_workbench_collection_request_path(@folder.collection_id, folder_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "send", class: "size-4" %><%= t("components.request_tree.new_request") %><% end %>
         <%= link_to new_workbench_collection_folder_path(@folder.collection_id, parent_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "folder-plus", class: "size-4" %><%= t("components.request_tree.new_subfolder") %><% end %>
+      <% end %>
+      <%= link_to new_workbench_collection_run_path(@folder.collection_id, folder_id: @folder.id), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "play", class: "size-4" %><%= t("components.request_tree.run") %><% end %>
+      <% if @manage %>
         <button type="button" data-action="context-menu#rename" class="<%= RequestTree::Menu::Component::ITEM %>"><%= lucide_icon "pencil", class: "size-4" %><%= t("components.request_tree.rename") %></button>
         <%= link_to edit_workbench_folder_path(@folder), data: { turbo_frame: "modal" }, class: RequestTree::Menu::Component::ITEM do %><%= lucide_icon "settings-2", class: "size-4" %><%= t("components.request_tree.edit") %><% end %>
         <%= button_to workbench_folder_path(@folder), method: :delete, form_class: "contents", form: { data: { turbo_confirm: t("components.request_tree.confirm_delete_folder", name: @folder.name) } },
                       class: "#{RequestTree::Menu::Component::ITEM} !text-danger" do %><%= lucide_icon "trash-2", class: "size-4" %><%= t("components.request_tree.delete") %><% end %>
       <% end %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 <% end %>

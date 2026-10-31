@@ -8,6 +8,7 @@ class Collection < ApplicationRecord
 
   has_many :folders, dependent: :destroy
   has_many :api_requests, dependent: :destroy
+  has_many :collection_runs, dependent: :delete_all
 
   validates :name, presence: true
 

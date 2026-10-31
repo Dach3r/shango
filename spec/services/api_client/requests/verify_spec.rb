@@ -42,6 +42,23 @@ RSpec.describe ApiClient::Requests::Verify do
     expect(result.record.first["status"]).to eq("passed")
   end
 
+  it "hands the extracted values back instead of saving them when told not to", :aggregate_failures do
+    api_request.update!(extractors: [{ source: "json", target: "$.token", variable: "token", secret: true }])
+
+    verified = described_class.call(api_request:, reply:, environment:, user: owner, masker:, persist: false)
+
+    expect(verified.data).to include(values: { "token" => "abc" }, secrets: ["token"])
+    expect(verified.record.pluck("status")).to eq(["passed"])
+    expect(environment.variables).to be_empty
+  end
+
+  it "has no values to hand back when the request failed" do
+    reply.error_kind = "timeout"
+    api_request.update!(assertions: [{ source: "status", operator: "equals", expected: "200" }])
+
+    expect(described_class.call(api_request:, reply:, environment:, user: owner, masker:).data).to eq(values: {}, secrets: [])
+  end
+
   it "warns when the values cannot be saved", :aggregate_failures do
     api_request.update!(extractors: [{ source: "json", target: "$.token", variable: "token" }])
     member = create(:user)

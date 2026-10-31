@@ -2,17 +2,4 @@
 <p class="border-b border-line px-4 py-3 text-xs text-muted">
   <%= t("workbench.executions.tests.summary", passed: execution.passed_tests, failed: execution.failed_tests) %>
 </p>
-<ul class="divide-y divide-line">
-  <% execution.test_results.each do |outcome| %>
-    <li class="flex items-start gap-3 px-4 py-2.5 text-xs">
-      <%= lucide_icon outcome_icon(outcome), class: "mt-0.5 size-4 shrink-0 #{outcome_tone(outcome)}", "aria-hidden": true %>
-      <div class="min-w-0">
-        <p class="font-mono break-all text-ink"><%= outcome_title(outcome) %></p>
-        <% if (detail = outcome_detail(outcome)) %>
-          <p class="mt-0.5 break-all text-muted"><%= detail %></p>
-        <% end %>
-      </div>
-      <span class="sr-only"><%= t("workbench.executions.tests.statuses.#{outcome["status"]}") %></span>
-    </li>
-  <% end %>
-</ul>
+<%= render "workbench/requests/executions/results", results: execution.test_results %>

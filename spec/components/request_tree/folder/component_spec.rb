@@ -30,4 +30,17 @@ RSpec.describe RequestTree::Folder::Component, type: :component do
     expect(page).to have_no_css("[draggable], [data-drop-mode], [data-controller=inline-rename], [data-controller=context-menu]", visible: :all)
     expect(page).to have_no_link(I18n.t("components.request_tree.edit"), visible: :all)
   end
+
+  it "offers to run the folder to any member, even one who cannot manage it", :aggregate_failures do
+    folder = create(:folder)
+    branch = ApiClient::Tree::Load::Branch.new(collection: folder.collection, folders: {}, requests: {})
+    run_path = "/workbench/collections/#{folder.collection_id}/runs/new?folder_id=#{folder.id}"
+
+    render_inline(described_class.new(folder:, branch:, manage: false))
+    expect(page).to have_css("a[href='#{run_path}']", text: I18n.t("components.request_tree.run"), visible: :all)
+    expect(page).to have_no_link(I18n.t("components.request_tree.new_request"), visible: :all)
+
+    render_inline(described_class.new(folder:, branch:, manage: true))
+    expect(page).to have_css("a[href='#{run_path}']", visible: :all)
+  end
 end

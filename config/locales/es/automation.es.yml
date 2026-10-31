@@ -7,6 +7,9 @@ es:
             base:
               invalid_extractor_variable: "Los nombres de variable de los extractores solo pueden usar letras, números, puntos, guiones y guiones bajos, y no pueden empezar con un dígito."
   components:
+    request_tree:
+      run: Ejecutar
+      run_history: Historial de ejecuciones
     rule_table:
       enabled: Activa
       source: Comprobar
@@ -79,3 +82,59 @@ es:
           passed: Correcta
           failed: Fallida
           warning: Aviso
+    runs:
+      counts: "%{passed} correctas, %{failed} fallidas de %{total}"
+      no_environment: Sin ambiente
+      statuses:
+        queued: En cola
+        running: En curso
+        completed: Completada
+        completed_with_failures: Completada con fallos
+        failed: No pudo terminar
+        cancelled: Cancelada
+      item_statuses:
+        pending: En espera
+        running: En curso
+        passed: Correcta
+        failed: Fallida
+        skipped: Omitida
+      item_errors:
+        request_deleted: La petición se eliminó antes de ejecutarse.
+        cancelled: La ejecución se canceló.
+      errors:
+        access_revoked: Ya no tienes acceso a este proyecto.
+        unexpected: La ejecución se detuvo por un error inesperado. Revisa el log del servidor.
+      form:
+        title: Ejecutar peticiones
+        description:
+          one: "%{scope}: se ejecutará 1 petición, una tras otra."
+          other: "%{scope}: se ejecutarán %{count} peticiones, una tras otra."
+        submit: Iniciar ejecución
+        environment: Ambiente
+        no_environment: Sin ambiente
+        delay: Espera entre peticiones (ms)
+        delay_hint: "Hasta %{max} ms."
+        stop_on_failure: Detener en el primer fallo
+        stop_on_failure_hint: Las peticiones posteriores a una fallida se omiten.
+        persist_variables: Guardar los valores extraídos en el ambiente
+        persist_variables_hint: Desactivado, solo viven durante esta ejecución y el ambiente queda como está.
+        errors:
+          already_running: Ya tienes una ejecución en curso. Espera a que termine o cancélala.
+          empty: No hay peticiones que ejecutar aquí.
+          too_many: "Una ejecución puede enviar como máximo %{max} peticiones."
+      index:
+        title: "Ejecuciones de %{name}"
+        new: Nueva ejecución
+        empty: Esta colección aún no se ha ejecutado.
+      show:
+        title: "Ejecución de %{name}"
+        history: Todas las ejecuciones de esta colección
+        cancel: Cancelar ejecución
+        run_again: Ejecutar de nuevo
+        passed: Correctas
+        failed: Fallidas
+        total: Peticiones
+        duration: Duración
+        progress: Progreso de la ejecución
+        by: "por %{name}"
+        no_tests: Esta petición no tiene aserciones.

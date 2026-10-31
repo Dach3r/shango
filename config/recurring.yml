@@ -28,6 +28,9 @@ production:
   prune_collection_exports:
     class: PruneCollectionExportsJob
     schedule: every hour at minute 20
+  prune_collection_runs:
+    class: PruneCollectionRunsJob
+    schedule: every day at 4:15am
   monitoring_dispatch:
     class: MonitoringDispatchJob
     schedule: every minute
