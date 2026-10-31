@@ -95,6 +95,9 @@ es:
         no_length: El valor no tiene longitud.
         no_environment: Selecciona un ambiente para guardar los valores extraídos.
         not_permitted: No puedes editar este ambiente, por eso los valores no se guardaron.
+    imports:
+      warnings:
+        scripts_unsupported: "“%{name}” usa funciones de script que Shango no tiene (%{apis}). El script se importó tal cual; esas llamadas fallarán."
     executions:
       errors:
         script_error: "Un script falló antes de enviar la petición."

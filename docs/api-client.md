@@ -18,7 +18,7 @@
 - Code editor (CodeMirror 6) with `{{variable}}` autocomplete and highlighting by state: set (green), empty value (amber), undefined (red, wavy underline) and dynamic `$` helpers (accent). The popup shows each variable's value under its name; hovering a `{{variable}}` shows a card with its value (or "Undefined") and its source (Environment or Dynamic). Secret values are masked server-side and never sent.
 - Plain inputs in the request editor (params, headers, form data, authorization fields) and the folder form also detect `{{` and offer the same variables in a dropdown (`variable_autocomplete` controller, enabled through `variable_autocomplete_data`); arrow keys move, Enter/Tab accept, Esc closes. The references are highlighted by state like in the code editor (a mirror layer over the field), and a password field shows its text while it holds a `{{reference}}`.
 
-**Not included (yet)**: WebSocket/gRPC, import of scripts and of Bruno `.bru` folders or Apidog native files, export of environments on their own or of several collections at once, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
+**Not included (yet)**: WebSocket/gRPC, import of Bruno `.bru` folders or Apidog native files, export of environments on their own or of several collections at once, OAuth 1.0, Hawk, NTLM, Akamai EdgeGrid, ASAP (auth phase 3, built on demand), sharing/roles (open product question).
 
 ## 2. Domain model
 
@@ -174,7 +174,8 @@ Mapping rules:
 - Auth maps to the strategy registry (basic, bearer, API key, digest, AWS SigV4, OAuth 2.0 with client credentials/password/authorization code, Postman JWT is not mapped); anything else becomes *inherit* with a warning. Collection-level auth is pushed down to top-level folders and requests, since collections carry no authorization.
 - Variables: Insomnia `{{ _.name }}` becomes `{{name}}`, Postman `{{$randomUUID}}` becomes `{{$guid}}`; unsupported dynamic helpers are kept as typed and reported. Postman collection variables become an environment named `<collection> variables`; Insomnia sub-environments are merged over the base environment and nested data is flattened to `a.b` keys; Bruno and Postman secret flags are kept. Variables whose name is not a valid key are skipped with a warning.
 - OpenAPI: tags become folders, the first server (or `host` + `basePath`) becomes the `baseUrl` environment variable and URLs use `{{baseUrl}}`; path parameters become `{{param}}`; optional query and header parameters are imported disabled; request bodies are generated from examples or schemas (local `$ref`s only, depth-limited).
-- Not imported (reported as warnings): scripts, tests, file contents of file bodies, unsupported auth types, external `$ref`s.
+- Scripts and tests: Postman `prerequest` and `test` events and Bruno `script:pre-request`, `script:post-response` and `tests` become the pre-request and post-response scripts of the collection, folder or request (see [`scripting.md`](scripting.md) §9); the calls Shango's `pm` lacks are reported as a warning that names them.
+- Not imported (reported as warnings): file contents of file bodies, unsupported auth types, external `$ref`s.
 - Limits: 5 MB, 250 000 JSON nodes. Secrets travel through the encrypted models and `content`/`file` params are filtered from logs. Nothing is fetched from the network.
 
 Fixtures for each format live in `spec/fixtures/files/imports/`. The Shango format (`{ "shango": { "version": 1 }, "collection": {…}, "environments": […] }`, produced by §9.1) is detected by its `shango` key and restores everything, including the collection's own authorization.
@@ -188,7 +189,7 @@ Fixtures for each format live in `spec/fixtures/files/imports/`. The Shango form
 | Postman v2.1 | `<name>.postman_collection.json` | With environments: a ZIP (`Exports::Zip`, stored entries, no dependency) with the collection and one `*.postman_environment.json` per environment |
 | Insomnia v4 | `<name>.insomnia.json` | Workspace, request groups, requests; environments are sub-environments of a base one (disabled variables are left out); `{{x}}` becomes `{{ _.x }}` |
 | OpenAPI 3.0 | `<name>.openapi.json` | A contract draft: operations by method and path (the first request wins), folders as tags, parameters and body examples, security schemes (basic, digest, bearer, API key; inherited auth is resolved). Never carries credentials or environments; the server URL is read from the base URL variable |
-| Shango | `<name>.shango.json` | Lossless: settings, descriptions, nested folders and auth at every level |
+| Shango | `<name>.shango.json` | Lossless: settings, descriptions, nested folders, auth, scripts, assertions and extractors at every level |
 
 Options: *include environments* (all of the project's, ignored by OpenAPI) and *include credentials and secrets* (both off by default). Without credentials, secret auth fields and secret variable values are exported empty (the field stays) and OAuth tokens are left out (`Exports::Credentials`); with them the file holds them in clear text, which the form warns about. Not exported: JWT bearer auth in Postman and Insomnia (no equivalent), binary body files and uploaded files (only their names), response history, drafts, scripts. The generated file is kept only until it expires (see above).
 

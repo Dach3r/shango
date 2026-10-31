@@ -570,7 +570,6 @@ de:
       warnings:
         auth_unsupported: "Der Autorisierungstyp „%{type}“ wird nicht unterstützt; die Anfrage erbt stattdessen."
         variable_unsupported: "Die dynamische Variable {{%{name}}} wird nicht unterstützt und wurde unverändert beibehalten."
-        scripts: "„%{name}“ enthält Skripte, die nicht unterstützt und übersprungen wurden."
         file_body: "„%{name}“ hat einen Datei-Body; der Dateiinhalt wurde nicht importiert."
         external_ref: "Die externe Referenz „%{ref}“ wurde nicht aufgelöst."
         unknown_item: "Ein Eintrag vom Typ „%{type}“ wurde übersprungen."

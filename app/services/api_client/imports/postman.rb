@@ -21,6 +21,7 @@ module ApiClient
         auth = auth_from(@data["auth"])
         collection = Support.folder(name:, **walk(@data["item"], auth)).slice(:name, :folders, :requests)
         collection[:description] = text(@data.dig("info", "description"))
+        collection.merge!(scripts_from(@data, name))
         variables = Array(@data["variable"]).filter_map { |entry| Support.variable(entry["key"], entry["value"]) if entry["key"].present? }
         environments = variables.any? ? [Support.environment(name: "#{collection[:name]} variables", variables:)] : []
         { collections: [collection], environments: }
@@ -42,8 +43,7 @@ module ApiClient
           if item.key?("item")
             own = auth_from(item["auth"])
             folder = Support.folder(name: item["name"], **own_auth(own || inherited), **walk(item["item"], nil).slice(:folders, :requests))
-            warn_scripts(item)
-            folders << folder
+            folders << folder.merge(scripts_from(item, item["name"]))
           else
             requests << request_from(item, inherited)
           end
@@ -57,7 +57,6 @@ module ApiClient
 
       def request_from(item, inherited)
         raw = item["request"].is_a?(Hash) ? item["request"] : { "url" => item["request"].to_s }
-        warn_scripts(item)
         query = url_query(raw["url"])
         attributes = Support.request(
           name: item["name"], http_method: raw["method"] || "GET", url: url_raw(raw["url"]), query_params: query,
@@ -65,7 +64,7 @@ module ApiClient
         )
         auth = auth_from(raw["auth"]) || inherited
         attributes.merge!(auth) if auth
-        VariableConverter.request(attributes, @warnings)
+        VariableConverter.request(attributes, @warnings).merge(scripts_from(item, item["name"]))
       end
 
       def url_raw(url)
@@ -165,10 +164,17 @@ module ApiClient
         }, @warnings)
       end
 
-      def warn_scripts(item)
-        return unless Array(item["event"]).any? { |event| Array(event.dig("script", "exec")).join.present? }
+      # `prerequest` events become the pre-request script and `test` events the post-response script. Calls Shango's `pm` lacks are reported.
+      def scripts_from(item, name)
+        events = Array(item["event"]).select { |event| event.is_a?(Hash) }
+        scripts = { pre_request_script: script_for(events, "prerequest"), post_response_script: script_for(events, "test") }.compact
+        apis = Support.unsupported_apis(scripts.values.join("\n"))
+        add_warning(:scripts_unsupported, name: name.to_s, apis: apis.join(", ")) if apis.any?
+        scripts
+      end
 
-        add_warning(:scripts, name: item["name"])
+      def script_for(events, listen)
+        events.select { |event| event["listen"] == listen }.map { |event| Array(event.dig("script", "exec")).join("\n") }.join("\n").strip.presence
       end
 
       def add_warning(key, **options)

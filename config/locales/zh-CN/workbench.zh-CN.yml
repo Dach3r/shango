@@ -563,7 +563,6 @@ zh-CN:
       warnings:
         auth_unsupported: "不支持授权类型“%{type}”；该请求改为继承上级授权。"
         variable_unsupported: "不支持动态变量 {{%{name}}}，已按输入内容原样保留。"
-        scripts: "“%{name}”包含脚本，暂不支持，已跳过。"
         file_body: "“%{name}”使用文件 Body；未导入文件内容。"
         external_ref: "未能解析外部引用“%{ref}”。"
         unknown_item: "已跳过类型为“%{type}”的条目。"

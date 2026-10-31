@@ -48,13 +48,12 @@ module ApiClient
 
       def request_from(item, inherited)
         raw = item["request"].is_a?(Hash) ? item["request"] : {}
-        warn_scripts(item, raw)
         attributes = Support.request(
           name: item["name"], http_method: raw["method"] || "GET", url: raw["url"], headers: rows(raw["headers"]),
           query_params: rows(Array(raw["params"]).select { |param| param["type"] == "query" }), **body_attributes(raw["body"], item["name"])
         )
         attributes.merge!(auth_from(raw["auth"]) || inherited || {})
-        VariableConverter.request(attributes, @warnings)
+        VariableConverter.request(attributes, @warnings).merge(scripts_from(item, raw))
       end
 
       def rows(entries)
@@ -118,9 +117,15 @@ module ApiClient
         }, @warnings)
       end
 
-      def warn_scripts(item, request)
-        scripts = [request.dig("script", "req"), request.dig("script", "res"), request["tests"]]
-        add_warning(:scripts, name: item["name"]) if scripts.any?(&:present?)
+      # `script:pre-request` is the pre-request script; `script:post-response` and `tests` make the post-response one. Calls with a Postman
+      # twin are translated; the others are kept as written and reported.
+      def scripts_from(item, request)
+        pre = BrunoScript.call(source: request.dig("script", "req"))
+        post = [request.dig("script", "res"), request["tests"]].map { |source| BrunoScript.call(source:) }.compact_blank.join("\n").presence
+        scripts = { pre_request_script: pre.presence, post_response_script: post }.compact
+        apis = Support.unsupported_apis(scripts.values.join("\n"))
+        add_warning(:scripts_unsupported, name: item["name"].to_s, apis: apis.join(", ")) if apis.any?
+        scripts
       end
 
       def add_warning(key, **options)

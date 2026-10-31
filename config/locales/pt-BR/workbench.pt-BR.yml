@@ -570,7 +570,6 @@ pt-BR:
       warnings:
         auth_unsupported: "O tipo de autorização “%{type}” não é compatível; a requisição herda do pai."
         variable_unsupported: "A variável dinâmica {{%{name}}} não é compatível e foi mantida como digitada."
-        scripts: "“%{name}” tem scripts, que não são compatíveis e foram ignorados."
         file_body: "“%{name}” tem um body de arquivo; o conteúdo do arquivo não foi importado."
         external_ref: "A referência externa “%{ref}” não foi resolvida."
         unknown_item: "Um item do tipo “%{type}” foi ignorado."

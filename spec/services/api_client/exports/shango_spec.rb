@@ -13,6 +13,16 @@ RSpec.describe ApiClient::Exports::Shango do
     expect(document[:collection][:requests].first).to include(name: "List", http_method: "GET", body_type: "json", settings: include("follow_redirects" => false))
   end
 
+  it "carries the scripts, assertions and extractors of the collection, folders and requests", :aggregate_failures do
+    export_collection.update!(pre_request_script: "// c", assertions: [{ source: "status", operator: "lt", expected: "500" }])
+    export_collection.folders.find_by(name: "Users").update!(post_response_script: "// f", extractors: [{ source: "status", variable: "code" }])
+    export_collection.api_requests.find_by(name: "List").update!(pre_request_script: "// r", post_response_script: "// p")
+
+    expect(document[:collection]).to include(pre_request_script: "// c", assertions: [include("operator" => "lt")], extractors: [])
+    expect(document[:collection][:folders].first).to include(post_response_script: "// f", extractors: [include("variable" => "code")])
+    expect(document[:collection][:requests].first).to include(pre_request_script: "// r", post_response_script: "// p", assertions: [], extractors: [])
+  end
+
   it "omits the environments key when there are none" do
     expect(described_class.call(collection: export_collection, environments: [], credentials:).data[:document]).not_to have_key(:environments)
   end

@@ -74,21 +74,20 @@ module ApiClient
         raise Failed, errors(created) if created.failure?
 
         @counts[:collections] += 1
-        keep_auth(created.record, tree)
+        keep_settings(created.record, tree)
         create_children(created.record, tree, nil)
       end
 
-      # Collections::Create takes no auth; formats that carry the collection's own (Shango) set it afterwards.
-      def keep_auth(collection, tree)
-        return unless tree[:auth_type]
-
-        Auth::Assign.call(record: collection, auth_type: tree[:auth_type], auth_config: tree[:auth_config].to_h)
-        collection.save!
+      # Collections::Create takes neither auth nor scripts; formats that carry the collection's own set them afterwards.
+      def keep_settings(collection, tree)
+        Auth::Assign.call(record: collection, auth_type: tree[:auth_type], auth_config: tree[:auth_config].to_h) if tree[:auth_type]
+        collection.assign_attributes(tree.slice(*Support::AUTOMATION_KEYS))
+        collection.save! if collection.changed?
       end
 
       def create_children(collection, tree, parent)
         tree[:folders].each do |folder|
-          created = Folders::Create.call(collection:, attributes: folder.slice(:name, :auth_type, :auth_config).merge(parent_id: parent&.id))
+          created = Folders::Create.call(collection:, attributes: folder.slice(:name, :auth_type, :auth_config, *Support::AUTOMATION_KEYS).merge(parent_id: parent&.id))
           raise Failed, errors(created) if created.failure?
 
           @counts[:folders] += 1

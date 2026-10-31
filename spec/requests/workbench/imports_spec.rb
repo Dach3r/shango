@@ -22,7 +22,7 @@ RSpec.describe "Workbench imports" do
 
       expect(response).to redirect_to(workbench_root_path)
       expect(flash[:notice]).to include("1 collection", "1 folder", "15 requests", "1 environment")
-      expect(flash[:notice]).to include("5 items need attention")
+      expect(flash[:notice]).to include("3 items need attention")
     end
 
     it "imports pasted content", :aggregate_failures do

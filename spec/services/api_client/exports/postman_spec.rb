@@ -25,6 +25,29 @@ RSpec.describe ApiClient::Exports::Postman do
     expect(items.map { |item| item[:name] }).to eq(%w[Users Open List] + ["List again"])
   end
 
+  describe "scripts" do
+    it "exports the pre-request and post-response scripts at every level, with generated tests for assertions and extractors", :aggregate_failures do
+      export_collection.update!(pre_request_script: "// collection pre", post_response_script: "// collection post")
+      export_collection.folders.find_by(name: "Users").update!(pre_request_script: "// folder pre")
+      export_collection.api_requests.find_by(name: "List").update!(
+        pre_request_script: "pm.environment.set('a', '1');\npm.environment.set('b', '2');", post_response_script: "pm.test('mine', () => {});",
+        assertions: [{ source: "status", operator: "equals", expected: "200" }], extractors: [{ source: "json", target: "$.token", variable: "token" }]
+      )
+
+      expect(data[:collection][:event]).to eq([{ listen: "prerequest", script: { type: "text/javascript", exec: ["// collection pre"] } }, { listen: "test", script: { type: "text/javascript", exec: ["// collection post"] } }])
+      expect(users[:event]).to eq([{ listen: "prerequest", script: { type: "text/javascript", exec: ["// folder pre"] } }])
+      events = find("List")[:event]
+      expect(events.first).to eq(listen: "prerequest", script: { type: "text/javascript", exec: ["pm.environment.set('a', '1');", "pm.environment.set('b', '2');"] })
+      test_script = events.last[:script][:exec].join("\n")
+      expect(test_script).to include('pm.test("Status code equals 200"', 'pm.environment.set("token"', "pm.test('mine'")
+    end
+
+    it "has no events for what has no scripts", :aggregate_failures do
+      expect(data[:collection]).not_to have_key(:event)
+      expect(find("List again")).not_to have_key(:event)
+    end
+  end
+
   it "maps URL, rows, description and raw bodies", :aggregate_failures do
     request = find("List")[:request]
 

@@ -3,6 +3,14 @@ module ApiClient
     # Helpers shared by the format importers: they all build the same request hash `Curl::Parser` produces.
     module Support
       MAX_NODES = 250_000
+      AUTOMATION_KEYS = %i[pre_request_script post_response_script assertions extractors].freeze
+      # What imported scripts may call that Shango's `pm` does not have, so the importer can tell the user what will fail.
+      UNSUPPORTED_APIS = {
+        "pm.sendRequest" => /\bpm\.sendRequest\b/, "pm.cookies" => /\bpm\.cookies\b/, "pm.globals" => /\bpm\.globals\b/, "pm.iterationData" => /\bpm\.iterationData\b/,
+        "pm.execution" => /\bpm\.execution\b/, "pm.visualizer" => /\bpm\.visualizer\b/, "postman.*" => /\bpostman\.[a-zA-Z]/, "CryptoJS" => /\bCryptoJS\b/,
+        "require()" => /\brequire\s*\(/, "lodash" => /(?<![\w.])_\.[a-zA-Z]/, "moment" => /\bmoment\s*\(/, "xml2Json" => /\bxml2Json\b/, "tv4" => /\btv4\b/,
+        "atob/btoa" => /\b(atob|btoa)\s*\(/, "bru.*" => /\bbru\.[a-zA-Z]/, "req.*" => /(?<![\w.])req\.[a-zA-Z]/, "res.*" => /(?<![\w.])res\.[a-zA-Z]/
+      }.freeze
 
       module_function
 
@@ -24,6 +32,11 @@ module ApiClient
 
       def folder(name:, folders: [], requests: [], auth_type: AuthConfigurable::INHERIT, auth_config: {})
         { name: name.to_s.strip.presence || "Untitled folder", folders:, requests:, auth_type:, auth_config: }
+      end
+
+      # The names of the APIs a script uses that Shango's `pm` does not offer.
+      def unsupported_apis(source)
+        UNSUPPORTED_APIS.select { |_name, pattern| source.to_s.match?(pattern) }.keys
       end
 
       def environment(name:, variables: [])

@@ -563,7 +563,6 @@ ja:
       warnings:
         auth_unsupported: "認可タイプ「%{type}」には対応していないため、リクエストは代わりに継承になります。"
         variable_unsupported: "動的変数 {{%{name}}} には対応していないため、入力されたまま残しました。"
-        scripts: "「%{name}」にはスクリプトがありますが、対応していないためスキップしました。"
         file_body: "「%{name}」にはファイルボディがあります。ファイルの内容はインポートされませんでした。"
         external_ref: "外部参照「%{ref}」は解決されませんでした。"
         unknown_item: "タイプ「%{type}」の項目をスキップしました。"

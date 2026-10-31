@@ -570,7 +570,6 @@ fr:
       warnings:
         auth_unsupported: "Le type d'autorisation « %{type} » n'est pas pris en charge ; la requête hérite à la place."
         variable_unsupported: "La variable dynamique {{%{name}}} n'est pas prise en charge et a été conservée telle quelle."
-        scripts: "« %{name} » contient des scripts, non pris en charge et ignorés."
         file_body: "« %{name} » a un corps de type fichier ; le contenu du fichier n'a pas été importé."
         external_ref: "La référence externe « %{ref} » n'a pas été résolue."
         unknown_item: "Un élément de type « %{type} » a été ignoré."

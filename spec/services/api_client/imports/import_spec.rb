@@ -50,7 +50,6 @@ RSpec.describe ApiClient::Imports::Import do
 
     it "fails cleanly on valid JSON with the wrong shape", :aggregate_failures do
       wrong = [
-        { info: { name: "C" }, item: [{ name: "r", event: ["x"], request: { url: "x" } }] },
         { info: { name: "C" }, auth: { type: "basic", basic: { a: 1 } }, item: [] },
         { openapi: "3.0.0", info: "x", paths: { "/a" => { get: {} } } },
         { name: "b", root: "x", items: [] }
@@ -122,6 +121,48 @@ RSpec.describe ApiClient::Imports::Import do
       other = create(:project)
       result
       expect(other.collections.count + other.environments.count).to eq(0)
+    end
+  end
+
+  describe "importing scripts and assertions" do
+    let(:automation) { { "pre_request_script" => "// pre", "post_response_script" => "// post", "assertions" => [{ "source" => "status", "operator" => "equals", "expected" => "200" }], "extractors" => [{ "source" => "status", "variable" => "code" }] } }
+    let(:document) do
+      {
+        shango: { version: 1 },
+        collection: { name: "Scripted", auth_type: "none", **automation, folders: [{ name: "F", **automation, folders: [], requests: [] }], requests: [{ name: "R", url: "https://a.test", body_type: "none", **automation }] }
+      }
+    end
+
+    it "gives them to the collection, the folders and the requests", :aggregate_failures do
+      expect(run(document.to_json)).to be_success
+
+      collection = project.collections.find_by(name: "Scripted")
+      [collection, collection.folders.first, collection.api_requests.first].each do |record|
+        expect(record).to have_attributes(pre_request_script: "// pre", post_response_script: "// post")
+        expect(record.assertions).to contain_exactly(include("source" => "status", "operator" => "equals"))
+        expect(record.extractors).to contain_exactly(include("variable" => "code"))
+      end
+    end
+
+    it "keeps the scripts of a Postman collection at every level", :aggregate_failures do
+      event = ->(listen, code) { [{ "listen" => listen, "script" => { "exec" => [code] } }] }
+      data = {
+        info: { name: "Postman scripted" }, event: event.("prerequest", "// collection"),
+        item: [{ name: "Folder", event: event.("test", "// folder"), item: [{ name: "Req", event: event.("test", "pm.test('x', () => {});"), request: { url: "http://x" } }] }]
+      }
+      result = run(data.to_json)
+
+      collection = project.collections.find_by(name: "Postman scripted")
+      expect(result).to be_success
+      expect(collection.pre_request_script).to eq("// collection")
+      expect(collection.folders.first.post_response_script).to eq("// folder")
+      expect(collection.api_requests.first.post_response_script).to eq("pm.test('x', () => {});")
+    end
+
+    it "leaves a collection without any alone" do
+      run({ shango: { version: 1 }, collection: { name: "Plain", auth_type: "none", folders: [], requests: [] } }.to_json)
+
+      expect(project.collections.find_by(name: "Plain")).to have_attributes(pre_request_script: nil, assertions: [])
     end
   end
 

@@ -60,12 +60,50 @@ RSpec.describe ApiClient::Imports::Postman do
       expect(requests["Hawk"]).to include(auth_type: "inherit")
     end
 
-    it "warns about scripts, file bodies and unsupported auth", :aggregate_failures do
+    it "warns about file bodies and unsupported auth", :aggregate_failures do
       expect(tree[:warnings]).to include(
-        I18n.t("workbench.imports.warnings.scripts", name: "List pets"), I18n.t("workbench.imports.warnings.scripts", name: "Pets"),
         I18n.t("workbench.imports.warnings.file_body", name: "Upload"), I18n.t("workbench.imports.warnings.file_body", name: "Binary"),
         I18n.t("workbench.imports.warnings.auth_unsupported", type: "hawk")
       )
+    end
+
+    it "keeps the scripts of the requests and folders, with no warning when Shango can run them", :aggregate_failures do
+      collection = tree[:collections].first
+      pets = collection[:folders].find { |folder| folder[:name] == "Pets" }
+
+      expect(pets).to include(pre_request_script: "console.log(1)")
+      expect(pets[:requests].find { |request| request[:name] == "List pets" }).to include(post_response_script: "pm.test('ok')")
+      expect(tree[:warnings].grep(/script/)).to be_empty
+    end
+  end
+
+  describe "scripts" do
+    def build(data)
+      described_class.call(data: { "info" => { "name" => "N" } }.merge(data))
+    end
+
+    it "joins the lines of an event and the events of one kind, and keeps collection level scripts", :aggregate_failures do
+      event = [
+        { "listen" => "prerequest", "script" => { "exec" => %w[a b] } }, { "listen" => "prerequest", "script" => { "exec" => "c" } },
+        { "listen" => "test", "script" => { "exec" => ["t"] } }, { "listen" => "other", "script" => { "exec" => ["x"] } }, "junk"
+      ]
+      collection = build("event" => event, "item" => []).record[:collections].first
+
+      expect(collection).to include(pre_request_script: "a\nb\nc", post_response_script: "t")
+    end
+
+    it "has no script keys when there are none or they are blank", :aggregate_failures do
+      collection = build("event" => [{ "listen" => "test", "script" => { "exec" => ["  "] } }], "item" => []).record[:collections].first
+
+      expect(collection.keys).not_to include(:pre_request_script, :post_response_script)
+    end
+
+    it "reports the calls Shango's pm does not have, naming them", :aggregate_failures do
+      item = { "name" => "Login", "event" => [{ "listen" => "test", "script" => { "exec" => ["pm.sendRequest('x', () => {});", "const h = CryptoJS.MD5('a');", "_.get(a, 'b');", "postman.setNextRequest(null);"] } }], "request" => { "url" => "http://x" } }
+      request = build("item" => [item]).record[:collections].first[:requests].first
+
+      expect(request[:post_response_script]).to include("pm.sendRequest")
+      expect(build("item" => [item]).record[:warnings]).to include(I18n.t("workbench.imports.warnings.scripts_unsupported", name: "Login", apis: "pm.sendRequest, postman.*, CryptoJS, lodash"))
     end
 
     it "skips non-object items and collections without variables", :aggregate_failures do

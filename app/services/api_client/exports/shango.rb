@@ -23,7 +23,7 @@ module ApiClient
 
       def node(record, folder)
         {
-          name: record.name, auth_type: record.auth_type, auth_config: @credentials.auth_config(record),
+          name: record.name, auth_type: record.auth_type, auth_config: @credentials.auth_config(record), **automation(record),
           folders: @tree.folders_in(folder).map { |child| node(child, child) },
           requests: @tree.requests_in(folder).map { |api_request| request_document(api_request) }
         }
@@ -31,7 +31,11 @@ module ApiClient
 
       def request_document(api_request)
         api_request.slice(:name, :http_method, :url, :description, :body_type, :body, :graphql_variables, :query_params, :headers, :body_form, :auth_type, :settings)
-                   .merge(auth_config: @credentials.auth_config(api_request))
+                   .merge(auth_config: @credentials.auth_config(api_request), **automation(api_request))
+      end
+
+      def automation(record)
+        { pre_request_script: record.pre_request_script, post_response_script: record.post_response_script, assertions: record.assertions, extractors: record.extractors }
       end
 
       def environment_document(environment)

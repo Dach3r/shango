@@ -54,13 +54,47 @@ RSpec.describe ApiClient::Imports::Bruno do
     ] }])
   end
 
-  it "warns about scripts, file bodies, unknown items and unsupported auth", :aggregate_failures do
+  it "warns about file bodies, unknown items and unsupported auth", :aggregate_failures do
     expect(tree[:warnings]).to include(
-      I18n.t("workbench.imports.warnings.scripts", name: "List"), I18n.t("workbench.imports.warnings.scripts", name: "Text"),
       I18n.t("workbench.imports.warnings.file_body", name: "Multi"), I18n.t("workbench.imports.warnings.file_body", name: "File"),
       I18n.t("workbench.imports.warnings.unknown_item", type: "websocket-request"), I18n.t("workbench.imports.warnings.auth_unsupported", type: "wsse"),
       I18n.t("workbench.imports.warnings.auth_unsupported", type: "implicit")
     )
+  end
+
+  describe "scripts" do
+    def request_for(raw)
+      data = { "name" => "N", "items" => [{ "type" => "http-request", "name" => "r", "request" => { "url" => "http://x" }.merge(raw) }] }
+      described_class.call(data:).record
+    end
+
+    it "translates the calls that have a Postman twin", :aggregate_failures do
+      result = request_for("script" => { "req" => "bru.setVar('a', 1); const e = bru.getEnvVar('host'); bru.setEnvVar('b', 2); bru.getVar('a');", "res" => "console.log(res.status, res.getStatus());" }, "tests" => <<~JS)
+        test("ok", function () { expect(res.status).to.equal(200); expect(res.body.id).to.exist; expect(res.getBody()).to.be.an("object"); expect(res.getHeader("x")).to.exist; expect(res.responseTime).to.be.below(1000); });
+      JS
+      request = result[:collections].first[:requests].first
+
+      expect(request[:pre_request_script]).to eq("pm.variables.set('a', 1); const e = pm.environment.get('host'); pm.environment.set('b', 2); pm.variables.get('a');")
+      expect(request[:post_response_script]).to include("console.log(pm.response.code, pm.response.code);", 'pm.test("ok", function () { pm.expect(pm.response.code).to.equal(200); pm.expect(pm.response.json().id).to.exist;', 'pm.response.headers.get("x")', "pm.response.responseTime")
+      expect(result[:warnings].grep(/uses script features/)).to be_empty
+    end
+
+    it "keeps what it cannot translate and says so", :aggregate_failures do
+      result = request_for("script" => { "req" => "req.setHeader('a', 'b'); bru.runRequest('x');" })
+
+      expect(result[:collections].first[:requests].first[:pre_request_script]).to eq("req.setHeader('a', 'b'); bru.runRequest('x');")
+      expect(result[:warnings]).to include(I18n.t("workbench.imports.warnings.scripts_unsupported", name: "r", apis: "bru.*, req.*"))
+    end
+
+    it "leaves out blank scripts" do
+      expect(request_for("script" => { "req" => " ", "res" => "" }, "tests" => nil)[:collections].first[:requests].first.keys).not_to include(:pre_request_script, :post_response_script)
+    end
+
+    it "does not touch names that only look like the calls", :aggregate_failures do
+      script = "obj.res.status; latest(1); my.expect(2); res.statusText; bru_x();"
+
+      expect(ApiClient::Imports::BrunoScript.call(source: script)).to eq(script)
+    end
   end
 
   it "handles API keys in the header and a collection without auth or environments", :aggregate_failures do

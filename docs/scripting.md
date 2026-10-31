@@ -115,9 +115,11 @@ Extractor row: `{ "id", "source": "json|header|status|body", "target", "variable
 
 ## 9. Import and export
 
-- **Postman**: `event` entries (`prerequest`, `test`) on collection, folder and request become the scripts. Scripts that call APIs outside §4 import anyway and the `:scripts` warning names them (scanned by text), so the user knows what will fail.
-- **Bruno**: `script:pre-request`, `script:post-response` and `tests` blocks. `bru.*` and `req.*`/`res.*` are translated only for the trivial calls (`bru.setEnvVar`, `bru.getEnvVar`, `res.status`, `res.body`, `test(...)`/`expect(...)`); the rest imports as text with the warning.
-- **Postman and Shango export** carry the scripts and assertions (assertions become a generated `pm.test` block in Postman). Insomnia and OpenAPI export omit them with a warning.
+- **Postman import**: `event` entries (`prerequest`, `test`) on the collection, its folders and its requests become their pre-request and post-response scripts (several events of a kind are joined). Calls Shango's `pm` does not have (`pm.sendRequest`, `pm.cookies`, `pm.globals`, `postman.*`, `CryptoJS`, `require()`, lodash `_`, `moment`, `xml2Json`, `tv4`, `atob`/`btoa`, …) do not stop the import: the script is kept as written and one warning per collection, folder or request names the calls (`Imports::Support.unsupported_apis`).
+- **Bruno import**: `script:pre-request` is the pre-request script; `script:post-response` and `tests` make the post-response one. `Imports::BrunoScript` translates the calls that have a Postman twin (`bru.setVar/getVar/setEnvVar/getEnvVar`, `res.status`, `res.body`, `res.getStatus()`, `res.getBody()`, `res.getHeader()`, `res.responseTime`, `req.getUrl()`, `test(`, `expect(`); anything else (`req.setHeader`, `bru.runRequest`, …) is kept as written and reported like above.
+- **Shango export and import** are lossless: scripts, assertions and extractors travel at every level.
+- **Postman export** carries the scripts as `event` entries; the assertions and extractors become a generated block at the start of the `test` script (`Exports::AssertionScript`): one `pm.test` per assertion and a `pm.environment.set` per extractor. A JSONPath is translated only when it is a plain property path (`$.a.b[0]`, `$['a b']`); any other row is left in the script as a `// Not exported:` comment. A spec runs the generated script in Shango's own sandbox and checks it passes and fails the same rows as the evaluator does.
+- **Insomnia and OpenAPI exports** have no equivalent and omit scripts, assertions and extractors.
 
 ## 10. Security checklist
 
@@ -143,7 +145,7 @@ Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`)
 | 2 | Inheritance: assertions and extractors on folders and collections, with UI (scripts follow in phase 4) | done |
 | 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | done |
 | 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | done |
-| 5 | Import and export with scripts | pending |
+| 5 | Import and export with scripts | done |
 | 6 | Hardening: ENV limits documented in [`operations.md`](operations.md), hostile-script specs, Docker build | pending |
 
 The runner (3) ships before scripts (4) on purpose: it is useful with declarative assertions alone, and the risky part (running user code) lands last, on top of a runner that is already proven.

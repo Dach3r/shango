@@ -570,7 +570,6 @@ en:
       warnings:
         auth_unsupported: "Authorization type “%{type}” is not supported; the request inherits instead."
         variable_unsupported: "Dynamic variable {{%{name}}} is not supported and was kept as typed."
-        scripts: "“%{name}” has scripts, which are not supported and were skipped."
         file_body: "“%{name}” has a file body; the file content was not imported."
         external_ref: "External reference “%{ref}” was not resolved."
         unknown_item: "An item of type “%{type}” was skipped."

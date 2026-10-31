@@ -21,7 +21,7 @@ module ApiClient
       end
 
       def collection_document
-        { info: { name: @collection.name, description: @collection.description.to_s, schema: SCHEMA }, auth: auth_for(@collection), item: items(nil) }.compact
+        { info: { name: @collection.name, description: @collection.description.to_s, schema: SCHEMA }, auth: auth_for(@collection), event: events(@collection), item: items(nil) }.compact
       end
 
       def environment_document(environment)
@@ -32,12 +32,21 @@ module ApiClient
       end
 
       def items(folder)
-        folders = @tree.folders_in(folder).map { |child| { name: child.name, auth: auth_for(child), item: items(child) }.compact }
+        folders = @tree.folders_in(folder).map { |child| { name: child.name, auth: auth_for(child), event: events(child), item: items(child) }.compact }
         folders + @tree.requests_in(folder).map { |api_request| request_item(api_request) }
       end
 
       def request_item(api_request)
-        { name: api_request.name, request: { method: api_request.http_method, header: rows(api_request.headers), url: url_for(api_request), body: body_for(api_request), auth: auth_for(api_request), description: api_request.description.presence }.compact }
+        { name: api_request.name, event: events(api_request), request: { method: api_request.http_method, header: rows(api_request.headers), url: url_for(api_request), body: body_for(api_request), auth: auth_for(api_request), description: api_request.description.presence }.compact }.compact
+      end
+
+      # The pre-request script, and one `test` script made of the generated assertions and extractors plus the post-response script.
+      def events(record)
+        tests = [AssertionScript.call(assertions: record.assertions, extractors: record.extractors).record, record.post_response_script].compact_blank.join("\n").presence
+        events = { "prerequest" => record.pre_request_script.presence, "test" => tests }.compact.map do |listen, source|
+          { listen:, script: { type: "text/javascript", exec: source.lines.map(&:chomp) } }
+        end
+        events.presence
       end
 
       def url_for(api_request)
