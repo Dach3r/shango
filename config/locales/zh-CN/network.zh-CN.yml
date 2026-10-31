@@ -406,6 +406,7 @@ zh-CN:
     limits:
       about: "简介"
     results:
+      monitor: "监控此项"
       propagation: "传播进度"
       target: "目标"
       min: "最小"

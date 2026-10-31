@@ -66,6 +66,7 @@ fr:
       checked: "Dernière vérif."
     ago: "il y a %{time}"
     actions:
+      check_in_network: "Vérifier dans Network"
       open_request: "Ouvrir la requête"
       run: "Lancer"
       pause: "Pause"

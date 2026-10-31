@@ -406,6 +406,7 @@ pt-BR:
     limits:
       about: "Sobre"
     results:
+      monitor: "Monitorar isto"
       propagation: "Propagação"
       target: "Destino"
       min: "Mín"

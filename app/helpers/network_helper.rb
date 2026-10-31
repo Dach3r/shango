@@ -1,6 +1,31 @@
 module NetworkHelper
   BAR_FORM_CLASSES = "flex h-14 items-stretch [&>*:not(label)]:relative [&>*:not(label)~*:not(label)]:-ml-px [&>*:not(label):focus-within]:z-10 [&>input]:border-t-0 [&_[data-select-target=trigger]]:h-full [&_[data-select-target=trigger]]:border-t-0 [&>label:first-child+*]:border-l-0 [&_[data-select-target=trigger]:focus]:border-line! [&_[data-select-target=trigger]:focus]:ring-0! [&>:is(button,a)]:border-b [&>:is(button,a)]:border-r [&>:is(button,a)]:border-line".freeze
 
+  MONITOR_KINDS = { "ping" => "tcp", "ports" => "tcp", "tls" => "ssl", "dns" => "domain", "lookup" => "domain" }.freeze
+
+  # The monitor form that watches what a saved run checked, or nil when its tool has no monitor of that kind.
+  def network_monitor_path(check)
+    kind = MONITOR_KINDS[check.kind]
+    host = (check.input["host"] || check.input["domain"]).to_s
+    return if kind.nil? || host.blank? || (kind == "domain" && Monitoring::Probes::Ssl.ip?(host))
+
+    new_monitoring_monitor_path(kind:, target: host, port_number: (network_monitor_port(check) if kind != "domain"))
+  end
+
+  def network_monitor_port(check)
+    input = check.input
+    case check.kind
+    when "ping" then input["port"].presence || Network::Pings::Run::DEFAULT_PORT
+    when "ports" then input["ports"].to_s[/\A\d+\z/] || Network::Pings::Run::DEFAULT_PORT
+    else input["port"].presence || Network::TlsChecks::Run::DEFAULT_PORTS.fetch(input.fetch("protocol", "tls"), 443)
+    end
+  end
+
+  # The prefilled inputs of a tool opened from a monitor (`?host=&port=`), or the inputs of the saved run on display.
+  def network_input(check)
+    check&.input || @prefill || {}
+  end
+
   # Form bar of a tool. Always submittable: on a saved run, submitting records a new run.
   def network_bar(scope:, url:, &)
     form_with(scope:, url:, class: BAR_FORM_CLASSES, &)

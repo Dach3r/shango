@@ -66,6 +66,7 @@ ja:
       checked: "最終チェック"
     ago: "%{time}前"
     actions:
+      check_in_network: "Network で確認"
       open_request: "リクエストを開く"
       run: "今すぐ実行"
       pause: "一時停止"

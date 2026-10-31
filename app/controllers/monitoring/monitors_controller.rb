@@ -24,6 +24,7 @@ module Monitoring
     def new
       @monitor = current_project.uptime_monitors.new(kind: params[:kind].presence_in(Monitoring::Checks::Run.kinds), environment: current_environment, creator: current_user)
       prefill_from_request
+      prefill_from_host
       authorize @monitor
     end
 
@@ -66,6 +67,15 @@ module Monitoring
       return unless api_request
 
       @monitor.assign_attributes(api_request:, name: api_request.name.to_s.first(100), mode: "request")
+    end
+
+    # A TCP, SSL or domain monitor started from a Network run (`?kind=tcp&target=...&port_number=...`).
+    def prefill_from_host
+      return if @monitor.kind.nil? || @monitor.http? || @monitor.push? || params[:target].blank?
+
+      @monitor.host = params[:target].to_s.first(UptimeMonitor::MAX_HOST_LENGTH)
+      @monitor.name = @monitor.host.first(100)
+      @monitor.port = params[:port_number].to_i if params[:port_number].to_s.match?(/\A\d{1,5}\z/) && !@monitor.domain?
     end
 
     def monitor_params

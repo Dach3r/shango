@@ -406,6 +406,7 @@ hi:
     limits:
       about: "परिचय"
     results:
+      monitor: "इसकी निगरानी करें"
       propagation: "प्रसार"
       target: "लक्ष्य"
       min: "न्यूनतम"

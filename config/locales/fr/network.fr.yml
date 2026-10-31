@@ -406,6 +406,7 @@ fr:
     limits:
       about: "À propos"
     results:
+      monitor: "Surveiller ceci"
       propagation: "Propagation"
       target: "Cible"
       min: "Min"

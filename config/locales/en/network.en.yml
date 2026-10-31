@@ -406,6 +406,7 @@ en:
     limits:
       about: "About"
     results:
+      monitor: "Monitor this"
       propagation: "Propagation"
       target: "Target"
       min: "Min"

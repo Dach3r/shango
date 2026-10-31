@@ -354,6 +354,40 @@ RSpec.describe "Monitoring monitors" do
     end
   end
 
+  describe "monitors started from Network" do
+    it "prefills the host and port of a TCP or SSL monitor", :aggregate_failures do
+      get new_monitoring_monitor_path(kind: "tcp", target: "db.example.com", port_number: "5432")
+      expect(response.body).to include(%(value="db.example.com"), %(value="5432"))
+
+      get new_monitoring_monitor_path(kind: "ssl", target: "example.com", port_number: "nope")
+      expect(response.body).to include(%(value="example.com"), %(value="443"))
+    end
+
+    it "prefills only the host of a domain monitor and ignores HTTP and push", :aggregate_failures do
+      get new_monitoring_monitor_path(kind: "domain", target: "example.com", port_number: "25")
+      expect(response.body).to include(%(value="example.com"))
+      expect(response.body).not_to include(%(value="25"))
+
+      get new_monitoring_monitor_path(kind: "http", target: "example.com")
+      expect(response.body).not_to include(%(value="example.com"))
+      get new_monitoring_monitor_path(kind: "push", target: "example.com")
+      expect(response.body).not_to include(%(value="example.com"))
+    end
+
+    it "links each kind of monitor to its Network tool", :aggregate_failures do
+      tcp = create(:uptime_monitor, :tcp, project:)
+      get monitoring_monitor_path(tcp)
+      expect(response.body).to include(I18n.t("monitoring.actions.check_in_network"), CGI.escapeHTML(network_workspace_path("ping", target: tcp.host, port_number: tcp.port)))
+
+      domain = create(:uptime_monitor, :domain, project:)
+      get monitoring_monitor_path(domain)
+      expect(response.body).to include(CGI.escapeHTML(network_workspace_path("lookup", target: domain.host)))
+
+      get monitoring_monitor_path(create(:uptime_monitor, project:))
+      expect(response.body).not_to include(I18n.t("monitoring.actions.check_in_network"))
+    end
+  end
+
   describe "saved request monitors" do
     let(:collection) { create(:collection, project:, name: "Shop") }
     let!(:api_request) { create(:api_request, collection:, name: "Health", http_method: "POST") }

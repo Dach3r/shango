@@ -406,6 +406,7 @@ de:
     limits:
       about: "Info"
     results:
+      monitor: "Dies überwachen"
       propagation: "Verbreitung"
       target: "Ziel"
       min: "Min"

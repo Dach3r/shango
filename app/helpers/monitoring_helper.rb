@@ -44,6 +44,14 @@ module MonitoringHelper
     end
   end
 
+  NETWORK_TOOLS = { "tcp" => "ping", "ssl" => "tls", "domain" => "lookup" }.freeze
+
+  # The Network tool that checks the same thing by hand, prefilled with the monitor's host and port; nil for the other kinds.
+  def monitor_network_path(monitor)
+    tool = NETWORK_TOOLS[monitor.kind]
+    network_workspace_path(tool, target: monitor.host, port_number: (monitor.port unless monitor.domain?)) if tool
+  end
+
   def monitor_request_name(request)
     request ? "#{request.http_method} #{request.collection.name} / #{request.name}" : t("monitoring.causes.request_missing")
   end

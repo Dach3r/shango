@@ -1,6 +1,7 @@
 <%# The stored result of a saved run, or an empty state. Render with `kind:`, `check:` and `result:`. %>
 <% partials = { "dns" => "network/dns_checks/result", "ports" => "network/port_checks/result", "ping" => "network/pings/result", "subnet" => "network/subnets/result", "tls" => "network/tls_checks/result", "email" => "network/email_checks/result", "lookup" => "network/lookups/result" } %>
 <% if check %>
+  <%= render "network/checks/monitor", check: %>
   <%= render partials.fetch(kind), result:, check: %>
 <% else %>
   <div class="flex min-h-full flex-col items-center justify-center gap-3 py-12 text-center">

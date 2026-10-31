@@ -30,6 +30,13 @@ RSpec.describe "Network workspace" do
       expect(response.body).to include(I18n.t("network.ping.submit"))
     end
 
+    it "opens a tool with the host and port of a monitor", :aggregate_failures do
+      sign_in_with_project
+      get network_workspace_path("ping", target: "db.example.com", port_number: "5432")
+
+      expect(response.body).to include(%(value="db.example.com"), %(value="5432"))
+    end
+
     it "switches the domain placeholder to an IP address when PTR is chosen", :aggregate_failures do
       sign_in_with_project
       get network_root_path

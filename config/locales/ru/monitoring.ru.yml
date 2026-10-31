@@ -66,6 +66,7 @@ ru:
       checked: "Последняя проверка"
     ago: "%{time} назад"
     actions:
+      check_in_network: "Проверить в Network"
       open_request: "Открыть запрос"
       run: "Проверить"
       pause: "Пауза"

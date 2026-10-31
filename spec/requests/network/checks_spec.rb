@@ -96,6 +96,35 @@ RSpec.describe "Network checks" do
       expect(response.body).to include("ping_result", "443", I18n.t("network.ping.submit"))
     end
 
+    it "links a saved run to the monitor of its kind", :aggregate_failures do
+      monitor = ->(**params) { CGI.escapeHTML(new_monitoring_monitor_path(**params)) }
+
+      get network_check_path(check)
+      expect(response.body).to include(I18n.t("network.results.monitor"), monitor.call(kind: "domain", target: "shango.dev"))
+
+      get network_check_path(create(:network_check, :tls, project:, user:, input: { "host" => "example.com", "port" => "", "protocol" => "smtp" }))
+      expect(response.body).to include(monitor.call(kind: "ssl", target: "example.com", port_number: 587))
+
+      get network_check_path(create(:network_check, :tls, project:, user:, input: { "host" => "example.com", "port" => "8443", "protocol" => "tls" }))
+      expect(response.body).to include(monitor.call(kind: "ssl", target: "example.com", port_number: "8443"))
+
+      get network_check_path(create(:network_check, :ports, project:, user:, input: { "host" => "example.com", "ports" => "8080" }))
+      expect(response.body).to include(monitor.call(kind: "tcp", target: "example.com", port_number: "8080"))
+
+      get network_check_path(create(:network_check, :ports, project:, user:))
+      expect(response.body).to include(monitor.call(kind: "tcp", target: "example.com", port_number: 443))
+
+      get network_check_path(create(:network_check, :ping, project:, user:))
+      expect(response.body).to include("kind=tcp")
+    end
+
+    it "offers no monitor for an address lookup, a reverse DNS check or tools without one", :aggregate_failures do
+      [create(:network_check, project:, user:, target: "8.8.8.8", input: { "domain" => "8.8.8.8", "type" => "PTR" }), create(:network_check, :subnet, project:, user:), create(:network_check, :email, project:, user:)].each do |run|
+        get network_check_path(run)
+        expect(response.body).not_to include(I18n.t("network.results.monitor"))
+      end
+    end
+
     it "does not show runs of other projects" do
       get network_check_path(create(:network_check))
 

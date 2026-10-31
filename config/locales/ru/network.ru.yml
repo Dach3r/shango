@@ -406,6 +406,7 @@ ru:
     limits:
       about: "Описание"
     results:
+      monitor: "Мониторить это"
       propagation: "Распространение"
       target: "Цель"
       min: "Мин"

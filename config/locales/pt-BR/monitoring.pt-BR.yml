@@ -66,6 +66,7 @@ pt-BR:
       checked: "Última verificação"
     ago: "há %{time}"
     actions:
+      check_in_network: "Verificar no Network"
       open_request: "Abrir requisição"
       run: "Executar agora"
       pause: "Pausar"

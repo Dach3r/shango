@@ -66,6 +66,7 @@ hi:
       checked: "अंतिम जाँच"
     ago: "%{time} पहले"
     actions:
+      check_in_network: "Network में जाँचें"
       open_request: "अनुरोध खोलें"
       run: "अभी चलाएँ"
       pause: "रोकें"

@@ -9,6 +9,9 @@
     <% if @monitor.api_request && @monitor.mode == "request" %>
       <%= link_to workbench_request_path(@monitor.api_request), **monitor_action(:open_request, compact: false) do %><%= lucide_icon "send", class: "size-3.5" %><%= t("monitoring.actions.open_request") %><% end %>
     <% end %>
+    <% if monitor_network_path(@monitor) %>
+      <%= link_to monitor_network_path(@monitor), **monitor_action(:check_in_network, compact: false) do %><%= lucide_icon "radar", class: "size-3.5" %><%= t("monitoring.actions.check_in_network") %><% end %>
+    <% end %>
     <% if policy(@monitor).update? %>
       <%= render "monitoring/monitors/actions", monitor: @monitor, compact: false %>
     <% end %>

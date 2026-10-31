@@ -1,0 +1,9 @@
+<%# Link from a saved run to the monitor that would keep watching it. Render with `check:` (a NetworkCheck). %>
+<% path = network_monitor_path(check) %>
+<% if path && policy(current_project.uptime_monitors.new).create? %>
+  <p class="mb-3 flex justify-end">
+    <%= link_to path, class: "inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-faint transition hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" do %>
+      <%= lucide_icon "activity", class: "size-3.5" %><%= t("network.results.monitor") %>
+    <% end %>
+  </p>
+<% end %>

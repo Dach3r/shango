@@ -406,6 +406,7 @@ ja:
     limits:
       about: "概要"
     results:
+      monitor: "これを監視"
       propagation: "浸透状況"
       target: "対象"
       min: "最小"
