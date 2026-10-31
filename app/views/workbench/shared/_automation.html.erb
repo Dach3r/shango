@@ -1,0 +1,13 @@
+<%# Assertions and extractors of a collection or folder: they run for every request below it (see ApiClient::Requests::Automation). %>
+<fieldset class="space-y-3 border border-line">
+  <legend class="ml-3 px-1 text-sm font-semibold text-ink"><%= t("workbench.automation.inherited.title") %></legend>
+  <p class="px-3 text-xs text-muted"><%= t("workbench.automation.inherited.hint") %></p>
+  <div>
+    <h3 class="px-3 text-xs font-medium text-muted uppercase tracking-wide"><%= t("workbench.automation.assertions.title") %></h3>
+    <%= render RuleTable::Component.new(kind: :assertion, name: "#{scope}[assertions]", rows: record.assertions, add_label: t("workbench.automation.assertions.add")) %>
+  </div>
+  <div>
+    <h3 class="px-3 text-xs font-medium text-muted uppercase tracking-wide"><%= t("workbench.automation.extractors.title") %></h3>
+    <%= render RuleTable::Component.new(kind: :extractor, name: "#{scope}[extractors]", rows: record.extractors, add_label: t("workbench.automation.extractors.add")) %>
+  </div>
+</fieldset>

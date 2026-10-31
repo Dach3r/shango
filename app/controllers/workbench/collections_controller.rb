@@ -1,6 +1,7 @@
 module Workbench
   class CollectionsController < BaseController
     include DraftPlacement
+    include AutomationParameters
 
     before_action :set_collection, only: %i[edit update destroy]
 
@@ -53,7 +54,7 @@ module Workbench
     end
 
     def collection_attributes
-      params.expect(collection: %i[name description])
+      params.expect(collection: [:name, :description, automation_permits])
     end
   end
 end

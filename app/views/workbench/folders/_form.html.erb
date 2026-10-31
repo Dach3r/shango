@@ -21,6 +21,8 @@
       <%= form.text_field :name, autofocus: true, autocomplete: "off", placeholder: t(".name_placeholder"), class: field_classes %>
     </div>
 
+    <%= render "workbench/shared/automation", scope: "folder", record: @folder if @folder.persisted? && !placing %>
+
     <% unless placing %>
       <fieldset class="space-y-3">
         <legend class="text-sm font-semibold text-ink"><%= t(".auth") %></legend>

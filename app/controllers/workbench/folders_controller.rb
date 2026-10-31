@@ -1,6 +1,7 @@
 module Workbench
   class FoldersController < BaseController
     include DraftPlacement
+    include AutomationParameters
 
     before_action :set_collection, only: %i[new create]
     before_action :set_folder, only: %i[edit update destroy]
@@ -54,7 +55,7 @@ module Workbench
     end
 
     def folder_attributes
-      params.expect(folder: [:name, :parent_id, :auth_type, { auth_config: {} }])
+      params.expect(folder: [:name, :parent_id, :auth_type, { auth_config: {} }, automation_permits])
     end
   end
 end

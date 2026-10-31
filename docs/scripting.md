@@ -61,7 +61,7 @@ Not in v1: `pm.sendRequest`, `pm.cookies`, `CryptoJS`, `lodash`, `moment`, `post
 2. The request is built (variables resolved), sent, and the response parsed.
 3. Post-response: collection → folders (outermost first) → request, then **assertions**, then **extractors** (collection → request), so a script can already see what extractors would set only by reading the response itself.
 
-Assertions and extractors of the three levels are concatenated in that order (they are additive, not overriding).
+Assertions and extractors of the three levels are concatenated in that order (they are additive, not overriding; `Requests::Automation` builds the list). Folders and collections edit theirs in the *Tests for every request below* section of their edit dialog (not shown when creating or while placing a draft).
 
 ## 6. Variables and writeback
 
@@ -135,7 +135,7 @@ Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`)
 |---|---|---|
 | 0 | Engine spike and this document | done |
 | 1 | Assertions and extractors (migrations, evaluator, `Dispatch` integration, editor tabs, results tab) | done |
-| 2 | Inheritance: scripts, assertions and extractors on folders and collections, with UI | pending |
+| 2 | Inheritance: assertions and extractors on folders and collections, with UI (scripts follow in phase 4) | done |
 | 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | pending |
 | 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | pending |
 | 5 | Import and export with scripts | pending |

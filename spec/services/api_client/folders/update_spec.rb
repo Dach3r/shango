@@ -10,6 +10,12 @@ RSpec.describe ApiClient::Folders::Update do
     expect(folder.reload).to have_attributes(name: "New", auth_type: "bearer")
   end
 
+  it "updates the assertions and extractors" do
+    described_class.call(folder:, attributes: { assertions: [{ source: "status", operator: "equals", expected: "200" }], extractors: [{ source: "status", variable: "code" }] })
+
+    expect(folder.reload).to have_attributes(assertions: [include("source" => "status")], extractors: [include("variable" => "code")])
+  end
+
   it "fails when the folder is invalid" do
     expect(described_class.call(folder:, attributes: { name: "" })).to be_failure
   end

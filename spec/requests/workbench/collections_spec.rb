@@ -81,6 +81,23 @@ RSpec.describe "Workbench collections" do
   end
 
   describe "PATCH /workbench/collections/:id" do
+    it "saves the assertions and extractors every request in it inherits", :aggregate_failures do
+      patch workbench_collection_path(collection), params: { collection: { name: "Same", assertions: { "0" => { source: "status", operator: "lt", expected: "500" } },
+                                                                           extractors: { "0" => { source: "json", target: "$.t", variable: "t" } } } }
+
+      expect(response).to redirect_to(workbench_root_path)
+      expect(collection.reload.assertions).to contain_exactly(include("source" => "status", "operator" => "lt", "expected" => "500"))
+      expect(collection.extractors).to contain_exactly(include("variable" => "t"))
+    end
+
+    it "offers the tests section when editing, not when creating", :aggregate_failures do
+      get edit_workbench_collection_path(collection), headers: turbo_headers
+      expect(response.body).to include(I18n.t("workbench.automation.inherited.title"))
+
+      get new_workbench_collection_path, headers: turbo_headers
+      expect(response.body).not_to include(I18n.t("workbench.automation.inherited.title"))
+    end
+
     it "updates the collection", :aggregate_failures do
       patch workbench_collection_path(collection), params: { collection: { name: "Renamed" } }
 

@@ -17,5 +17,6 @@
 
     <%= render Input::Component.new(form: form, attribute: :name, label: t(".name"), icon: "library", placeholder: t(".name_placeholder"), autofocus: true, autocomplete: "off") %>
     <%= render Input::Component.new(form: form, attribute: :description, label: t(".description"), type: :text_area, rows: 2) %>
+    <%= render "workbench/shared/automation", scope: "collection", record: collection if collection.persisted? %>
   <% end %>
 <% end %>

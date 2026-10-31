@@ -17,14 +17,15 @@ module ApiClient
       private
 
       def perform
-        return Result.success([]) if @reply.error? || (@api_request.assertions.empty? && @api_request.extractors.empty?)
+        rules = Automation.call(api_request: @api_request).record
+        return Result.success([]) if @reply.error? || (rules[:assertions].empty? && rules[:extractors].empty?)
 
         response = Assertions::Evaluator::Response.new(
           status: @reply.status, headers: @reply.headers, body: @reply.body, duration_ms: @reply.duration_ms, size_bytes: @reply.size_bytes
         )
         resolver = VariableResolver.new(@environment&.variable_values || {})
-        outcomes = Assertions::Evaluator.call(rows: @api_request.assertions, response:, resolver:, masker: @masker)
-        extraction = Assertions::Extractor.call(rows: @api_request.extractors, response:)
+        outcomes = Assertions::Evaluator.call(rows: rules[:assertions], response:, resolver:, masker: @masker)
+        extraction = Assertions::Extractor.call(rows: rules[:extractors], response:)
         Result.success(outcomes + extraction.data[:outcomes] + writeback(extraction))
       end
 

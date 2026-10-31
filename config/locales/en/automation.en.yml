@@ -20,6 +20,9 @@ en:
     tabs:
       tests: Tests
     automation:
+      inherited:
+        title: Tests for every request below
+        hint: "Assertions and extractors here run, in this order, before those of the request itself, for every request in it."
       assertions:
         title: Assertions
         hint: "Every enabled assertion is checked against each response. {{variables}} work in the expected value."

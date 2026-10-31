@@ -69,6 +69,22 @@ RSpec.describe "Workbench folders" do
   end
 
   describe "PATCH /workbench/folders/:id" do
+    it "saves the assertions and extractors every request in it inherits", :aggregate_failures do
+      patch workbench_folder_path(folder), params: { folder: { name: "Same", assertions: { "0" => { source: "header", target: "x-a", operator: "exists" } },
+                                                               extractors: { "0" => { source: "status", variable: "code" } } } }
+
+      expect(folder.reload.assertions).to contain_exactly(include("source" => "header", "target" => "x-a"))
+      expect(folder.extractors).to contain_exactly(include("variable" => "code"))
+    end
+
+    it "offers the tests section when editing, not when creating", :aggregate_failures do
+      get edit_workbench_folder_path(folder), headers: turbo_headers
+      expect(response.body).to include(I18n.t("workbench.automation.inherited.title"))
+
+      get new_workbench_collection_folder_path(collection), headers: turbo_headers
+      expect(response.body).not_to include(I18n.t("workbench.automation.inherited.title"))
+    end
+
     it "updates the folder", :aggregate_failures do
       patch workbench_folder_path(folder), params: { folder: { name: "Renamed" } }
 

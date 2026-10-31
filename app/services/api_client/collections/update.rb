@@ -12,7 +12,7 @@ module ApiClient
       private
 
       def perform
-        @collection.assign_attributes(@attributes.slice(:name, :description))
+        @collection.assign_attributes(@attributes.slice(:name, :description, :assertions, :extractors))
         return Result.failure(@collection) unless @collection.save
 
         AuditEvents::Record.call(project: @collection.project, kind: :collection_updated, actor: @actor, name: @collection.name) if @collection.saved_changes?

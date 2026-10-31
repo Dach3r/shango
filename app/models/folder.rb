@@ -1,6 +1,7 @@
 class Folder < ApplicationRecord
   include Positionable
   include AuthConfigurable
+  include TestAutomation
 
   belongs_to :collection
   belongs_to :parent, class_name: "Folder", optional: true, inverse_of: :children

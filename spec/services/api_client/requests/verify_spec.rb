@@ -25,6 +25,16 @@ RSpec.describe ApiClient::Requests::Verify do
     expect(environment.variables.find_by(key: "token").value).to eq("abc")
   end
 
+  it "applies the rules of the collection and its folders as well", :aggregate_failures do
+    folder = create(:folder, collection: api_request.collection)
+    api_request.update!(folder:)
+    api_request.collection.update!(assertions: [{ source: "status", operator: "equals", expected: "200" }])
+    folder.update!(extractors: [{ source: "json", target: "$.token", variable: "token" }])
+
+    expect(result.record.pluck("kind")).to eq(%w[assertion extractor])
+    expect(environment.variables.find_by(key: "token").value).to eq("abc")
+  end
+
   it "resolves variables of the environment in the expected value" do
     create(:variable, environment:, key: "code", value: "200")
     api_request.update!(assertions: [{ source: "status", operator: "equals", expected: "{{code}}" }])

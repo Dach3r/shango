@@ -10,6 +10,12 @@ RSpec.describe ApiClient::Collections::Update do
     expect(collection.reload).to have_attributes(name: "New", description: "Text", auth_type: "none")
   end
 
+  it "updates the assertions and extractors" do
+    described_class.call(collection:, attributes: { assertions: [{ source: "status", operator: "lt", expected: "500" }], extractors: [{ source: "status", variable: "code" }] })
+
+    expect(collection.reload).to have_attributes(assertions: [include("operator" => "lt")], extractors: [include("variable" => "code")])
+  end
+
   it "records who changed it, and nothing when nothing changed", :aggregate_failures do
     actor = create(:user)
     described_class.call(collection:, attributes: { name: "New" }, actor:)

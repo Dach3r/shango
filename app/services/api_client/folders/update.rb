@@ -11,7 +11,7 @@ module ApiClient
       private
 
       def perform
-        @folder.assign_attributes(@attributes.slice(:name))
+        @folder.assign_attributes(@attributes.slice(:name, :assertions, :extractors))
         Auth::Assign.call(record: @folder, auth_type: @attributes[:auth_type], auth_config: @attributes[:auth_config].to_h)
         @folder.save ? Result.success(@folder) : Result.failure(@folder)
       end

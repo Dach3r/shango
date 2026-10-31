@@ -2,10 +2,9 @@ module Workbench
   # Strong parameters for the request editor form.
   module RequestParameters
     extend ActiveSupport::Concern
+    include AutomationParameters
 
     ROW_FIELDS = %i[key value enabled description type attachment_id upload_token].freeze
-    ASSERTION_FIELDS = %i[id enabled source target operator expected].freeze
-    EXTRACTOR_FIELDS = %i[id enabled source target variable secret].freeze
     SCALAR_FIELDS = %i[name http_method url description folder_id body_type body graphql_variables auth_type].freeze
 
     private
@@ -14,8 +13,7 @@ module Workbench
       params.fetch(:api_request, {}).permit(
         *SCALAR_FIELDS,
         auth_config: {}, settings: %i[timeout follow_redirects max_redirects verify_ssl use_cookie_jar],
-        query_params: [ROW_FIELDS], headers: [ROW_FIELDS], body_form: [ROW_FIELDS],
-        assertions: [ASSERTION_FIELDS], extractors: [EXTRACTOR_FIELDS]
+        query_params: [ROW_FIELDS], headers: [ROW_FIELDS], body_form: [ROW_FIELDS], **automation_permits
       )
     end
 

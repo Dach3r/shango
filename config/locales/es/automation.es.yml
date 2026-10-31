@@ -20,6 +20,9 @@ es:
     tabs:
       tests: Pruebas
     automation:
+      inherited:
+        title: Pruebas para cada petición de abajo
+        hint: "Las aserciones y los extractores de aquí se ejecutan, en este orden, antes de los de la propia petición, para cada petición que contiene."
       assertions:
         title: Aserciones
         hint: "Cada aserción activa se comprueba contra cada respuesta. Puedes usar {{variables}} en el valor esperado."
