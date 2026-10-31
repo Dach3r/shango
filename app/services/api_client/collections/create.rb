@@ -13,7 +13,10 @@ module ApiClient
 
       def perform
         collection = @project.collections.new(@attributes.slice(:name, :description).merge(creator: @creator))
-        collection.save ? Result.success(collection) : Result.failure(collection)
+        return Result.failure(collection) unless collection.save
+
+        AuditEvents::Record.call(project: @project, kind: :collection_created, actor: @creator, name: collection.name)
+        Result.success(collection)
       end
     end
   end

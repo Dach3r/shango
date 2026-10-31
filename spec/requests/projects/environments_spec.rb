@@ -110,6 +110,7 @@ RSpec.describe "Environments" do
 
       expect(response).to redirect_to(environments_path)
       expect(environment.reload.name).to eq("Renamed")
+      expect(AuditEvent.sole).to have_attributes(kind: "environment_updated", actor: user)
     end
 
     it "re-renders when invalid", :aggregate_failures do
@@ -123,6 +124,7 @@ RSpec.describe "Environments" do
     it "destroys the environment", :aggregate_failures do
       environment
       expect { delete environment_path(environment) }.to change(Environment, :count).by(-1)
+      expect(AuditEvent.sole).to have_attributes(kind: "environment_deleted", actor: user)
       expect(response).to redirect_to(environments_path)
     end
   end

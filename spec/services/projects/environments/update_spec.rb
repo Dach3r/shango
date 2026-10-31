@@ -10,7 +10,16 @@ RSpec.describe Projects::Environments::Update do
     expect(environment.reload.name).to eq("Staging")
   end
 
-  it "fails with invalid attributes" do
+  it "records who changed it, and nothing when nothing changed", :aggregate_failures do
+    actor = create(:user)
+    described_class.call(environment:, attributes: { name: "Staging" }, actor:)
+    described_class.call(environment:, attributes: { name: "Staging" }, actor:)
+
+    expect(AuditEvent.sole).to have_attributes(kind: "environment_updated", actor:, metadata: include("name" => "Staging"))
+  end
+
+  it "fails with invalid attributes", :aggregate_failures do
     expect(described_class.call(environment:, attributes: { name: "" })).to be_failure
+    expect(AuditEvent.count).to eq(0)
   end
 end

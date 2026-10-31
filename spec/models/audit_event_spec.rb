@@ -7,7 +7,16 @@ RSpec.describe AuditEvent do
 
   it "knows the kinds of event" do
     expect(described_class.kinds.keys).to eq(%w[member_invited invitation_accepted invitation_revoked role_changed member_revoked member_left ownership_transferred monitor_created monitor_updated
-                                                monitor_deleted monitor_paused monitor_resumed channel_created channel_updated channel_deleted])
+                                                monitor_deleted monitor_paused monitor_resumed channel_created channel_updated channel_deleted environment_created environment_updated
+                                                environment_deleted collection_created collection_updated collection_deleted])
+  end
+
+  it "leaves the team's own changes out of the workspace history", :aggregate_failures do
+    team = create(:audit_event, kind: "member_left")
+    work = create(:audit_event, kind: "environment_created")
+
+    expect(described_class.workspace).to contain_exactly(work)
+    expect(described_class.workspace).not_to include(team)
   end
 
   it "rejects unknown kinds", :aggregate_failures do

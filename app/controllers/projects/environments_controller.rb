@@ -26,14 +26,14 @@ module Projects
     end
 
     def update
-      result = Environments::Update.call(environment: @environment, attributes: environment_attributes)
+      result = Environments::Update.call(environment: @environment, attributes: environment_attributes, actor: current_user)
       return redirect_to(environments_path, notice: t(".updated"), status: :see_other) if result.success?
 
       render :edit, status: :unprocessable_entity
     end
 
     def destroy
-      Environments::Destroy.call(environment: @environment)
+      Environments::Destroy.call(environment: @environment, actor: current_user)
       redirect_to environments_path, notice: t(".destroyed"), status: :see_other
     end
 

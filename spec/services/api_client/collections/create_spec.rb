@@ -9,6 +9,7 @@ RSpec.describe ApiClient::Collections::Create do
 
     expect(result).to be_success
     expect(result.record).to have_attributes(project:, creator: user, name: "Billing", description: "Docs", position: 1)
+    expect(AuditEvent.sole).to have_attributes(kind: "collection_created", actor: user, project:, metadata: include("name" => "Billing"))
   end
 
   it "fails when the collection is invalid" do

@@ -85,6 +85,12 @@ de:
           channel_created: "%{actor} hat den Alarmkanal %{name} angelegt."
           channel_updated: "%{actor} hat den Alarmkanal %{name} geändert."
           channel_deleted: "%{actor} hat den Alarmkanal %{name} gelöscht."
+          environment_created: "%{actor} hat die Umgebung %{name} erstellt."
+          environment_updated: "%{actor} hat die Umgebung %{name} geändert."
+          environment_deleted: "%{actor} hat die Umgebung %{name} gelöscht."
+          collection_created: "%{actor} hat die Sammlung %{name} erstellt."
+          collection_updated: "%{actor} hat die Sammlung %{name} geändert."
+          collection_deleted: "%{actor} hat die Sammlung %{name} gelöscht."
     leaves:
       create:
         left: Du hast %{project} verlassen.

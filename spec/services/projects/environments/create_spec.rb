@@ -10,6 +10,7 @@ RSpec.describe Projects::Environments::Create do
     expect(result).to be_success
     expect(result.record).to have_attributes(name: "Prod", project:, creator: user)
     expect(result.record.variables.map(&:key)).to eq(["A"])
+    expect(AuditEvent.sole).to have_attributes(kind: "environment_created", actor: user, project:, metadata: include("name" => "Prod"))
   end
 
   it "fails with invalid attributes", :aggregate_failures do
@@ -17,5 +18,6 @@ RSpec.describe Projects::Environments::Create do
 
     expect(result).to be_failure
     expect(result.record.errors).to include(:name)
+    expect(AuditEvent.count).to eq(0)
   end
 end

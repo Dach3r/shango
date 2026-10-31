@@ -86,6 +86,7 @@ RSpec.describe "Workbench collections" do
 
       expect(response).to redirect_to(workbench_root_path)
       expect(collection.reload.name).to eq("Renamed")
+      expect(AuditEvent.sole).to have_attributes(kind: "collection_updated", actor: user)
     end
 
     it "re-renders the modal when invalid" do
@@ -100,6 +101,7 @@ RSpec.describe "Workbench collections" do
       collection
       expect { delete workbench_collection_path(collection) }.to change(Collection, :count).by(-1)
       expect(response).to redirect_to(workbench_root_path)
+      expect(AuditEvent.sole).to have_attributes(kind: "collection_deleted", actor: user)
     end
   end
 

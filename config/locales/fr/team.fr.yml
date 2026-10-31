@@ -85,6 +85,12 @@ fr:
           channel_created: "%{actor} a créé le canal d’alerte %{name}."
           channel_updated: "%{actor} a modifié le canal d’alerte %{name}."
           channel_deleted: "%{actor} a supprimé le canal d’alerte %{name}."
+          environment_created: "%{actor} a créé l'environnement %{name}."
+          environment_updated: "%{actor} a modifié l'environnement %{name}."
+          environment_deleted: "%{actor} a supprimé l'environnement %{name}."
+          collection_created: "%{actor} a créé la collection %{name}."
+          collection_updated: "%{actor} a modifié la collection %{name}."
+          collection_deleted: "%{actor} a supprimé la collection %{name}."
     leaves:
       create:
         left: Vous avez quitté %{project}.

@@ -3,14 +3,18 @@ module Projects
     class Destroy
       include Serviceable
 
-      def initialize(environment:)
+      def initialize(environment:, actor: nil)
         @environment = environment
+        @actor = actor
       end
 
       private
 
       def perform
-        @environment.destroy ? Result.success(@environment) : Result.failure(@environment)
+        return Result.failure(@environment) unless @environment.destroy
+
+        AuditEvents::Record.call(project: @environment.project, kind: :environment_deleted, actor: @actor, name: @environment.name)
+        Result.success(@environment)
       end
     end
   end

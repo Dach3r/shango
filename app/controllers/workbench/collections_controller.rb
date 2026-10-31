@@ -24,14 +24,14 @@ module Workbench
     end
 
     def update
-      result = ApiClient::Collections::Update.call(collection: @collection, attributes: collection_attributes)
+      result = ApiClient::Collections::Update.call(collection: @collection, attributes: collection_attributes, actor: current_user)
       return redirect_to(workbench_root_path, notice: t(".updated"), status: :see_other) if result.success?
 
       render_form_errors
     end
 
     def destroy
-      ApiClient::Collections::Destroy.call(collection: @collection)
+      ApiClient::Collections::Destroy.call(collection: @collection, actor: current_user)
       redirect_to workbench_root_path, notice: t(".destroyed"), status: :see_other
     end
 

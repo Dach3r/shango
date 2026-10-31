@@ -85,6 +85,12 @@ hi:
           channel_created: "%{actor} ने अलर्ट चैनल %{name} बनाया।"
           channel_updated: "%{actor} ने अलर्ट चैनल %{name} बदला।"
           channel_deleted: "%{actor} ने अलर्ट चैनल %{name} हटाया।"
+          environment_created: "%{actor} ने एनवायरनमेंट %{name} बनाया।"
+          environment_updated: "%{actor} ने एनवायरनमेंट %{name} बदला।"
+          environment_deleted: "%{actor} ने एनवायरनमेंट %{name} हटाया।"
+          collection_created: "%{actor} ने कलेक्शन %{name} बनाया।"
+          collection_updated: "%{actor} ने कलेक्शन %{name} बदला।"
+          collection_deleted: "%{actor} ने कलेक्शन %{name} हटाया।"
     leaves:
       create:
         left: आपने %{project} छोड़ दिया।

@@ -85,6 +85,12 @@ ja:
           channel_created: "%{actor} がアラートチャンネル %{name} を作成しました。"
           channel_updated: "%{actor} がアラートチャンネル %{name} を変更しました。"
           channel_deleted: "%{actor} がアラートチャンネル %{name} を削除しました。"
+          environment_created: "%{actor} が環境 %{name} を作成しました。"
+          environment_updated: "%{actor} が環境 %{name} を変更しました。"
+          environment_deleted: "%{actor} が環境 %{name} を削除しました。"
+          collection_created: "%{actor} がコレクション %{name} を作成しました。"
+          collection_updated: "%{actor} がコレクション %{name} を変更しました。"
+          collection_deleted: "%{actor} がコレクション %{name} を削除しました。"
     leaves:
       create:
         left: "%{project} を退出しました。"

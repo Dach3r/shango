@@ -3,14 +3,18 @@ module ApiClient
     class Destroy
       include Serviceable
 
-      def initialize(collection:)
+      def initialize(collection:, actor: nil)
         @collection = collection
+        @actor = actor
       end
 
       private
 
       def perform
-        @collection.destroy ? Result.success(@collection) : Result.failure(@collection)
+        return Result.failure(@collection) unless @collection.destroy
+
+        AuditEvents::Record.call(project: @collection.project, kind: :collection_deleted, actor: @actor, name: @collection.name)
+        Result.success(@collection)
       end
     end
   end

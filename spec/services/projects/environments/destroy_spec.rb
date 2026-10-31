@@ -10,9 +10,17 @@ RSpec.describe Projects::Environments::Destroy do
     expect(Environment.exists?(environment.id)).to be(false)
   end
 
-  it "fails when destroy is rejected" do
+  it "records who deleted it" do
+    actor = create(:user)
+    described_class.call(environment:, actor:)
+
+    expect(AuditEvent.sole).to have_attributes(kind: "environment_deleted", actor:, metadata: include("name" => environment.name))
+  end
+
+  it "fails when destroy is rejected", :aggregate_failures do
     allow(environment).to receive(:destroy).and_return(false)
 
     expect(described_class.call(environment:)).to be_failure
+    expect(AuditEvent.count).to eq(0)
   end
 end

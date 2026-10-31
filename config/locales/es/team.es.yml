@@ -85,6 +85,12 @@ es:
           channel_created: "%{actor} creó el canal de alerta %{name}."
           channel_updated: "%{actor} cambió el canal de alerta %{name}."
           channel_deleted: "%{actor} eliminó el canal de alerta %{name}."
+          environment_created: "%{actor} creó el entorno %{name}."
+          environment_updated: "%{actor} cambió el entorno %{name}."
+          environment_deleted: "%{actor} eliminó el entorno %{name}."
+          collection_created: "%{actor} creó la colección %{name}."
+          collection_updated: "%{actor} cambió la colección %{name}."
+          collection_deleted: "%{actor} eliminó la colección %{name}."
     leaves:
       create:
         left: Saliste de %{project}.

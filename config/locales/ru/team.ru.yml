@@ -87,6 +87,12 @@ ru:
           channel_created: "%{actor} создал(а) канал оповещений %{name}."
           channel_updated: "%{actor} изменил(а) канал оповещений %{name}."
           channel_deleted: "%{actor} удалил(а) канал оповещений %{name}."
+          environment_created: "%{actor} создал(а) окружение %{name}."
+          environment_updated: "%{actor} изменил(а) окружение %{name}."
+          environment_deleted: "%{actor} удалил(а) окружение %{name}."
+          collection_created: "%{actor} создал(а) коллекцию %{name}."
+          collection_updated: "%{actor} изменил(а) коллекцию %{name}."
+          collection_deleted: "%{actor} удалил(а) коллекцию %{name}."
     leaves:
       create:
         left: Вы покинули проект %{project}.

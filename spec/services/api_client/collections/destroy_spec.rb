@@ -10,9 +10,17 @@ RSpec.describe ApiClient::Collections::Destroy do
     expect(Collection.exists?(collection.id)).to be(false)
   end
 
-  it "fails when destroy is halted" do
+  it "records who deleted it" do
+    actor = create(:user)
+    described_class.call(collection:, actor:)
+
+    expect(AuditEvent.sole).to have_attributes(kind: "collection_deleted", actor:, metadata: include("name" => collection.name))
+  end
+
+  it "fails when destroy is halted", :aggregate_failures do
     allow(collection).to receive(:destroy).and_return(false)
 
     expect(described_class.call(collection:)).to be_failure
+    expect(AuditEvent.count).to eq(0)
   end
 end

@@ -13,7 +13,10 @@ module Projects
 
       def perform
         environment = @project.environments.new(Normalize.call(attributes: @attributes).merge(creator: @creator))
-        environment.save ? Result.success(environment) : Result.failure(environment)
+        return Result.failure(environment) unless environment.save
+
+        AuditEvents::Record.call(project: @project, kind: :environment_created, actor: @creator, name: environment.name)
+        Result.success(environment)
       end
     end
   end

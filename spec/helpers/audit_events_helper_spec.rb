@@ -28,4 +28,9 @@ RSpec.describe AuditEventsHelper do
     expect(helper.audit_event_summary(create(:audit_event, project:, actor:, kind: "monitor_paused", metadata: { "name" => "API" }))).to eq("Grace Hopper paused the monitor API.")
     expect(helper.audit_event_summary(create(:audit_event, project:, actor:, kind: "channel_deleted", metadata: { "name" => "Ops" }))).to eq("Grace Hopper deleted the alert channel Ops.")
   end
+
+  it "names environments and collections from the metadata", :aggregate_failures do
+    expect(helper.audit_event_summary(create(:audit_event, project:, actor:, kind: "environment_created", metadata: { "name" => "Staging" }))).to eq("Grace Hopper created the environment Staging.")
+    expect(helper.audit_event_summary(create(:audit_event, project:, actor:, kind: "collection_deleted", metadata: { "name" => "Shop" }))).to eq("Grace Hopper deleted the collection Shop.")
+  end
 end

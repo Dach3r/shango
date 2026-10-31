@@ -85,6 +85,12 @@ en:
           channel_created: "%{actor} created the alert channel %{name}."
           channel_updated: "%{actor} changed the alert channel %{name}."
           channel_deleted: "%{actor} deleted the alert channel %{name}."
+          environment_created: "%{actor} created the environment %{name}."
+          environment_updated: "%{actor} changed the environment %{name}."
+          environment_deleted: "%{actor} deleted the environment %{name}."
+          collection_created: "%{actor} created the collection %{name}."
+          collection_updated: "%{actor} changed the collection %{name}."
+          collection_deleted: "%{actor} deleted the collection %{name}."
     leaves:
       create:
         left: You left %{project}.

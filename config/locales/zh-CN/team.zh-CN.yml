@@ -85,6 +85,12 @@ zh-CN:
           channel_created: "%{actor} 创建了告警渠道 %{name}。"
           channel_updated: "%{actor} 更改了告警渠道 %{name}。"
           channel_deleted: "%{actor} 删除了告警渠道 %{name}。"
+          environment_created: "%{actor} 创建了环境 %{name}。"
+          environment_updated: "%{actor} 更改了环境 %{name}。"
+          environment_deleted: "%{actor} 删除了环境 %{name}。"
+          collection_created: "%{actor} 创建了集合 %{name}。"
+          collection_updated: "%{actor} 更改了集合 %{name}。"
+          collection_deleted: "%{actor} 删除了集合 %{name}。"
     leaves:
       create:
         left: 你已退出 %{project}。
