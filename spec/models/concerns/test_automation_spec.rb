@@ -76,6 +76,14 @@ RSpec.describe TestAutomation do
       expect(api_request.post_response_script).to be_nil
     end
 
+    it "keeps a post-response script without its trailing space, and a blank pre-request one as nothing", :aggregate_failures do
+      api_request.pre_request_script = ""
+      api_request.post_response_script = "pm.test('b', () => {}); \n"
+
+      expect(api_request.pre_request_script).to be_nil
+      expect(api_request.post_response_script).to eq("pm.test('b', () => {});")
+    end
+
     it "is invalid with a script over the limit", :aggregate_failures do
       api_request.pre_request_script = "x" * (described_class::MAX_SCRIPT + 1)
 
