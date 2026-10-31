@@ -21,8 +21,11 @@ module ApiClient
 
     # `variables` (and the `secrets` among their values) sit on top of the environment's: a collection run keeps what its extractors
     # found there instead of writing it to the environment.
-    def initialize(api_request:, environment: nil, dry_run: false, user: nil, variables: {}, secrets: [])
+    # `overrides` (`url`, `http_method`, `headers`, `body`) replace those parts of the request for this build only: that is how a
+    # pre-request script changes what gets sent without touching the saved request.
+    def initialize(api_request:, environment: nil, dry_run: false, user: nil, variables: {}, secrets: [], overrides: {})
       @api_request = api_request
+      @overrides = overrides
       @environment = environment
       @dry_run = dry_run
       @extra_secrets = secrets
@@ -48,11 +51,11 @@ module ApiClient
       headers = resolved_headers
       defaults_added = add_default_headers(headers)
       body = build_body(headers)
-      auth_request = Auth::Request.new(http_method: @api_request.http_method, url:, headers:, body: body_string(body))
+      auth_request = Auth::Request.new(http_method:, url:, headers:, body: body_string(body))
       strategy = apply_auth(auth_request)
 
       Result.success(Built.new(
-        http_method: @api_request.http_method, url: auth_request.url, headers: auth_request.headers, body:,
+        http_method:, url: auth_request.url, headers: auth_request.headers, body:,
         timeout: @api_request.setting(:timeout), follow_redirects: @api_request.setting(:follow_redirects),
         max_redirects: @api_request.setting(:max_redirects), verify_ssl: @api_request.setting(:verify_ssl), auth: strategy,
         unresolved: @resolver.unresolved.to_a.sort, secrets: secrets(strategy), defaults_added:
@@ -61,8 +64,20 @@ module ApiClient
       Result.failure(error: error.message, unresolved: @resolver.unresolved.to_a.sort, auth: error.is_a?(Auth::ConfigurationError))
     end
 
+    def http_method
+      @overrides.fetch(:http_method) { @api_request.http_method }
+    end
+
+    def header_rows
+      @overrides.fetch(:headers) { @api_request.headers }
+    end
+
+    def body_source
+      @overrides.fetch(:body) { @api_request.body }
+    end
+
     def resolved_url
-      raw = @resolver.resolve(@api_request.url.to_s.strip)
+      raw = @resolver.resolve(@overrides.fetch(:url) { @api_request.url }.to_s.strip)
       raise InvalidRequest, I18n.t("workbench.errors.blank_url") if raw.blank?
       raise InvalidRequest, I18n.t("workbench.errors.unresolved_url", names: @resolver.unresolved.to_a.sort.join(", ")) if @resolver.unresolved.any?
 
@@ -76,7 +91,7 @@ module ApiClient
     end
 
     def resolved_headers
-      @api_request.headers.select { |row| row["enabled"] && row["key"].present? }.each_with_object({}) do |row, headers|
+      header_rows.select { |row| row["enabled"] && row["key"].present? }.each_with_object({}) do |row, headers|
         name = @resolver.resolve(row["key"]).strip
         value = @resolver.resolve(row["value"])
         headers[name] = headers.key?(name) ? "#{headers[name]}, #{value}" : value
@@ -94,10 +109,10 @@ module ApiClient
 
     def build_body(headers)
       type = @api_request.body_type
-      return empty_body if type == "none" || BODYLESS_METHODS.include?(@api_request.http_method)
+      return empty_body if type == "none" || BODYLESS_METHODS.include?(http_method)
 
       case type
-      when "json", "text", "xml" then raw_body(type, headers, @resolver.resolve(@api_request.body.to_s))
+      when "json", "text", "xml" then raw_body(type, headers, @resolver.resolve(body_source.to_s))
       when "graphql" then raw_body("json", headers, graphql_payload)
       when "form_urlencoded" then raw_body("form_urlencoded", headers, URI.encode_www_form(resolved_rows(@api_request.body_form)))
       when "multipart" then multipart_body(headers)
@@ -118,7 +133,7 @@ module ApiClient
     def graphql_payload
       raw_variables = @resolver.resolve(@api_request.graphql_variables.to_s).strip
       variables = raw_variables.empty? ? {} : JSON.parse(raw_variables)
-      JSON.generate(query: @resolver.resolve(@api_request.body.to_s), variables:)
+      JSON.generate(query: @resolver.resolve(body_source.to_s), variables:)
     rescue JSON::ParserError
       raise InvalidRequest, I18n.t("workbench.errors.invalid_graphql_variables")
     end

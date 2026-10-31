@@ -27,18 +27,32 @@ module ApiClient
       private
 
       def perform
-        built = RequestBuilder.call(api_request: @api_request, environment: @environment, user: @user, variables: @variables, secrets: @secrets)
-        execution = built.success? ? execute(built.record) : invalid(built)
-        Result.success(@stash ? execution.stash : execution, variables: @extracted[:values], secrets: @extracted[:secrets])
+        rules = Automation.call(api_request: @api_request).record
+        pre = run_pre(rules)
+        return Result.success(finish(invalid_script(pre)), variables: {}, secrets: []) if pre&.error
+
+        values = variable_values.merge(pre ? pre.var_writes.compact.merge(pre.env_writes.compact) : {})
+        built = RequestBuilder.call(
+          api_request: @api_request, environment: @environment, user: @user, variables: overlay_of(values), secrets: @secrets + script_secrets(pre),
+          overrides: overrides(pre)
+        )
+        execution = built.success? ? execute(built.record, rules:, pre:, values:) : invalid(built)
+        Result.success(finish(execution), variables: @extracted[:values], secrets: @extracted[:secrets])
       end
 
-      def execute(built)
+      def finish(execution)
+        @stash ? execution.stash : execution
+      end
+
+      def execute(built, rules:, pre:, values:)
         reply = Executor.call(built:, cancelled: @cancelled, cookie_jar: cookie_jar)
         masker = Masker.new(built.secrets)
         body, omitted = displayable_body(reply, masker)
-        verified = Verify.call(api_request: @api_request, reply:, environment: @environment, user: @user, masker:, persist: @persist)
+        verified = Verify.call(
+          api_request: @api_request, reply:, environment: @environment, user: @user, masker:, persist: @persist, rules:, pre:, values:,
+          request: request_snapshot(pre, built)
+        )
         @extracted = { values: verified.data[:values], secrets: verified.data[:secrets].filter_map { |name| verified.data[:values][name] } }
-        results = verified.record
 
         record(
           http_method: built.http_method, url: masker.string(built.url), status: reply.status, status_text: reply.status_text, duration_ms: reply.duration_ms,
@@ -46,7 +60,61 @@ module ApiClient
           response_headers: masker.response_headers(reply.headers), response_body: body, content_type: reply.content_type, body_truncated: reply.truncated,
           body_omitted: omitted, redirects: reply.redirects.map { |hop| hop.transform_values { |value| value.is_a?(String) ? masker.string(value) : value } },
           unresolved_variables: built.unresolved, timings: reply.timings, set_cookies: reply.set_cookies.map { |line| masker.string(line) }, error_kind: reply.error_kind, error_message: masker.string(reply.error_message),
-          test_results: results
+          test_results: verified.record, script_logs: verified.data[:logs]
+        )
+      end
+
+      # Pre-request scripts see the request as saved (variables unresolved) and may change its URL, method, headers and body.
+      def run_pre(rules)
+        return if rules[:pre_scripts].empty?
+
+        Scripting::Run.call(phase: :pre, scripts: rules[:pre_scripts], environment: variable_values, variables: {}, request: snapshot).record
+      end
+
+      def snapshot
+        { url: @api_request.url.to_s, http_method: @api_request.http_method, headers: @api_request.headers, body: @api_request.body.to_s }
+      end
+
+      def request_snapshot(pre, built)
+        pre ? pre.request : snapshot.merge(url: built.url)
+      end
+
+      def overrides(pre)
+        return {} unless pre
+
+        request = pre.request
+        {
+          url: request[:url], headers: ApiRequest.clean_rows(request[:headers]), body: request[:body],
+          http_method: (request[:http_method] if ApiRequest::METHODS.include?(request[:http_method]))
+        }.compact
+      end
+
+      def variable_values
+        environment_values.merge(@variables)
+      end
+
+      def environment_values
+        @environment&.variable_values || {}
+      end
+
+      # Only what is not already an environment value needs to ride on top of it.
+      def overlay_of(values)
+        values.select { |key, value| environment_values[key] != value }
+      end
+
+      def script_secrets(pre)
+        return [] unless pre && @environment
+
+        secret_keys = @environment.variables.select(&:secret).map(&:key)
+        pre.env_writes.compact.values_at(*secret_keys).compact
+      end
+
+      def invalid_script(pre)
+        masker = Masker.new((@environment&.secret_values || []) + @secrets)
+        record(
+          http_method: @api_request.http_method, url: @api_request.url.to_s, error_kind: "script_error", error_message: masker.string(pre.error),
+          test_results: pre.tests.map { |test| { "kind" => "script", "status" => test["passed"] ? "passed" : "failed", "name" => masker.string(test["name"]), "error" => test["message"] && masker.string(test["message"]) } },
+          script_logs: pre.logs.map { |line| line.merge("text" => masker.string(line["text"])) }
         )
       end
 

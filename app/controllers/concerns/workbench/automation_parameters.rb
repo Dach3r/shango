@@ -8,6 +8,8 @@ module Workbench
 
     private
 
+    SCRIPT_FIELDS = %i[pre_request_script post_response_script].freeze
+
     def automation_permits
       { assertions: [ASSERTION_FIELDS], extractors: [EXTRACTOR_FIELDS] }
     end

@@ -66,4 +66,20 @@ RSpec.describe TestAutomation do
       expect(api_request.errors.full_messages.join).to include(I18n.t("activerecord.errors.models.api_request.attributes.base.invalid_extractor_variable"))
     end
   end
+
+  describe "scripts" do
+    it "keeps a script without its trailing space, and a blank one as nothing", :aggregate_failures do
+      api_request.pre_request_script = "pm.test('a', () => {});  \n\n"
+      api_request.post_response_script = "   \n"
+
+      expect(api_request.pre_request_script).to eq("pm.test('a', () => {});")
+      expect(api_request.post_response_script).to be_nil
+    end
+
+    it "is invalid with a script over the limit", :aggregate_failures do
+      api_request.pre_request_script = "x" * (described_class::MAX_SCRIPT + 1)
+
+      expect(api_request).to have_error(:pre_request_script, :too_long)
+    end
+  end
 end

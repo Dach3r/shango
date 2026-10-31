@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_31_061621) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_063635) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -65,6 +65,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_061621) do
     t.datetime "updated_at", null: false
     t.jsonb "assertions", default: [], null: false
     t.jsonb "extractors", default: [], null: false
+    t.text "pre_request_script"
+    t.text "post_response_script"
     t.index ["collection_id"], name: "index_api_requests_on_collection_id"
     t.index ["folder_id"], name: "index_api_requests_on_folder_id"
     t.index ["project_id", "collection_id", "folder_id", "position"], name: "index_api_requests_on_tree_order"
@@ -195,6 +197,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_061621) do
     t.uuid "creator_id"
     t.jsonb "assertions", default: [], null: false
     t.jsonb "extractors", default: [], null: false
+    t.text "pre_request_script"
+    t.text "post_response_script"
     t.index ["creator_id"], name: "index_collections_on_creator_id"
     t.index ["project_id"], name: "index_collections_on_project_id"
   end
@@ -240,6 +244,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_061621) do
     t.datetime "updated_at", null: false
     t.jsonb "assertions", default: [], null: false
     t.jsonb "extractors", default: [], null: false
+    t.text "pre_request_script"
+    t.text "post_response_script"
     t.index ["collection_id"], name: "index_folders_on_collection_id"
     t.index ["parent_id"], name: "index_folders_on_parent_id"
   end
@@ -433,6 +439,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_061621) do
     t.jsonb "timings", default: {}, null: false
     t.jsonb "set_cookies", default: [], null: false
     t.jsonb "test_results", default: [], null: false
+    t.jsonb "script_logs", default: [], null: false
     t.index ["api_request_id", "created_at"], name: "index_request_executions_on_api_request_id_and_created_at"
     t.index ["api_request_id"], name: "index_request_executions_on_api_request_id"
     t.index ["environment_id"], name: "index_request_executions_on_environment_id"

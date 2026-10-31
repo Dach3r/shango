@@ -16,6 +16,12 @@ RSpec.describe ApiClient::Collections::Update do
     expect(collection.reload).to have_attributes(assertions: [include("operator" => "lt")], extractors: [include("variable" => "code")])
   end
 
+  it "updates the scripts" do
+    described_class.call(collection:, attributes: { pre_request_script: "// a", post_response_script: "// b" })
+
+    expect(collection.reload).to have_attributes(pre_request_script: "// a", post_response_script: "// b")
+  end
+
   it "records who changed it, and nothing when nothing changed", :aggregate_failures do
     actor = create(:user)
     described_class.call(collection:, attributes: { name: "New" }, actor:)

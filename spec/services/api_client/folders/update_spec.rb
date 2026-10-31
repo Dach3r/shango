@@ -16,6 +16,12 @@ RSpec.describe ApiClient::Folders::Update do
     expect(folder.reload).to have_attributes(assertions: [include("source" => "status")], extractors: [include("variable" => "code")])
   end
 
+  it "updates the scripts" do
+    described_class.call(folder:, attributes: { pre_request_script: "// a", post_response_script: "// b" })
+
+    expect(folder.reload).to have_attributes(pre_request_script: "// a", post_response_script: "// b")
+  end
+
   it "fails when the folder is invalid" do
     expect(described_class.call(folder:, attributes: { name: "" })).to be_failure
   end

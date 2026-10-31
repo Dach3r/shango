@@ -90,6 +90,12 @@ RSpec.describe "Workbench collections" do
       expect(collection.extractors).to contain_exactly(include("variable" => "t"))
     end
 
+    it "saves the scripts every request in it inherits", :aggregate_failures do
+      patch workbench_collection_path(collection), params: { collection: { name: "Same", pre_request_script: "// pre", post_response_script: "// post" } }
+
+      expect(collection.reload).to have_attributes(pre_request_script: "// pre", post_response_script: "// post")
+    end
+
     it "offers the tests section when editing, not when creating", :aggregate_failures do
       get edit_workbench_collection_path(collection), headers: turbo_headers
       expect(response.body).to include(I18n.t("workbench.automation.inherited.title"))

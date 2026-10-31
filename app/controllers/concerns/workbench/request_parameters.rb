@@ -5,7 +5,7 @@ module Workbench
     include AutomationParameters
 
     ROW_FIELDS = %i[key value enabled description type attachment_id upload_token].freeze
-    SCALAR_FIELDS = %i[name http_method url description folder_id body_type body graphql_variables auth_type].freeze
+    SCALAR_FIELDS = %i[name http_method url description folder_id body_type body graphql_variables auth_type pre_request_script post_response_script].freeze
 
     private
 

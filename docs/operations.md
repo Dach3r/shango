@@ -40,6 +40,7 @@ Optional, with defaults:
 | `SHANGO_MAX_UPLOAD_MB`, `SHANGO_MAX_UPLOADS_TOTAL_MB`, `SHANGO_MAX_UPLOADS` | 10, 25, 10 | Upload limits per submission. |
 | `SHANGO_HISTORY_RETENTION_DAYS` | 90 | Saved responses older than this are deleted daily (`0` keeps them). |
 | `SHANGO_DRAFT_RETENTION_DAYS` | 30 | Request drafts (unsaved editor state) untouched for this long are deleted daily (`0` keeps them). |
+| `SHANGO_SCRIPT_TIMEOUT_MS`, `SHANGO_SCRIPT_MEMORY_MB` | 2000, 32 | Time (100 to 10000) and memory (4 to 128 MB) one request script may use before the engine stops it. Scripts run in a QuickJS sandbox with no file or network access (see [`scripting.md`](scripting.md) §3). |
 | `SHANGO_RUN_MAX_REQUESTS` | 200 | Most requests one collection run may send (1 to 1000). |
 | `SHANGO_RUN_RETENTION_DAYS` | 30 | Finished collection runs older than this are deleted daily by `PruneCollectionRunsJob` (`0` keeps them); at most the last 20 finished runs per collection are kept. Runs are performed by `RunCollectionJob` on the `executions` queue (one run per member at a time), so a Solid Queue worker must be running. |
 | `SHANGO_EXPORT_RETENTION_MINUTES` | 60 | Finished collection exports (the file, encrypted in `collection_exports`) are deleted this many minutes after they finish (1 to 1440); `PruneCollectionExportsJob` sweeps hourly. Exports are built by `ExportCollectionJob` on the `exports` queue, so a Solid Queue worker must be running. |

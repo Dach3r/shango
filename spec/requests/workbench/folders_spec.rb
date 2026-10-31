@@ -77,6 +77,12 @@ RSpec.describe "Workbench folders" do
       expect(folder.extractors).to contain_exactly(include("variable" => "code"))
     end
 
+    it "saves the scripts every request in it inherits", :aggregate_failures do
+      patch workbench_folder_path(folder), params: { folder: { name: "Same", pre_request_script: "// pre", post_response_script: "// post" } }
+
+      expect(folder.reload).to have_attributes(pre_request_script: "// pre", post_response_script: "// post")
+    end
+
     it "offers the tests section when editing, not when creating", :aggregate_failures do
       get edit_workbench_folder_path(folder), headers: turbo_headers
       expect(response.body).to include(I18n.t("workbench.automation.inherited.title"))

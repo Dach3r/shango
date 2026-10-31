@@ -23,6 +23,7 @@
     { name: "body", label: t("workbench.executions.tabs.body") },
     { name: "headers", label: t("workbench.executions.tabs.headers"), count: execution.response_headers.size },
     ({ name: "tests", label: t("workbench.executions.tabs.tests"), count: execution.test_results.size, dot: execution.failed_tests.positive? } if execution.test_results.any?),
+    ({ name: "console", label: t("workbench.executions.tabs.console"), count: execution.script_logs.size } if execution.script_logs.any?),
     ({ name: "cookies", label: t("workbench.executions.tabs.cookies"), count: cookies.size } if cookies.any?),
     ({ name: "timing", label: t("workbench.executions.tabs.timing") } if timing.present?),
     { name: "request", label: t("workbench.executions.tabs.request"), dot: execution.unresolved_variables.any? },
@@ -88,6 +89,12 @@
       <% if execution.test_results.any? %>
         <div data-tabs-target="panel" data-name="tests" hidden>
           <%= render "workbench/requests/executions/tests", execution: %>
+        </div>
+      <% end %>
+
+      <% if execution.script_logs.any? %>
+        <div data-tabs-target="panel" data-name="console" hidden>
+          <%= render "workbench/requests/executions/console", lines: execution.script_logs %>
         </div>
       <% end %>
 

@@ -28,6 +28,18 @@ RSpec.describe ApiClient::Requests::Automation do
     draft = ApiRequest.new(project: collection.project, name: "Draft")
 
     expect(described_class.call(api_request: loose).record[:assertions].size).to eq(1)
-    expect(described_class.call(api_request: draft).record).to eq({ assertions: [], extractors: [] })
+    expect(described_class.call(api_request: draft).record).to eq({ assertions: [], extractors: [], pre_scripts: [], post_scripts: [] })
+  end
+
+  it "lists the scripts of the collection, the folders and the request in order, leaving out blank ones", :aggregate_failures do
+    collection.update!(pre_request_script: "// collection", post_response_script: "// post collection")
+    outer.update!(pre_request_script: "// outer")
+    inner.update!(post_response_script: "// post inner")
+    api_request.update!(pre_request_script: "// request")
+
+    rules = described_class.call(api_request:).record
+
+    expect(rules[:pre_scripts].map { |script| [script.level, script.name, script.source] }).to eq([[:collection, collection.name, "// collection"], [:folder, outer.name, "// outer"], [:request, api_request.name, "// request"]])
+    expect(rules[:post_scripts].map { |script| [script.level, script.source] }).to eq([[:collection, "// post collection"], [:folder, "// post inner"]])
   end
 end

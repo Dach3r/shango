@@ -56,7 +56,7 @@ RSpec.describe ApiClient::Requests::Verify do
     reply.error_kind = "timeout"
     api_request.update!(assertions: [{ source: "status", operator: "equals", expected: "200" }])
 
-    expect(described_class.call(api_request:, reply:, environment:, user: owner, masker:).data).to eq(values: {}, secrets: [])
+    expect(described_class.call(api_request:, reply:, environment:, user: owner, masker:).data).to include(values: {}, secrets: [], logs: [])
   end
 
   it "warns when the values cannot be saved", :aggregate_failures do

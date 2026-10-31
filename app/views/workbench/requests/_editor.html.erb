@@ -5,6 +5,7 @@
   { name: "headers", label: t("workbench.tabs.headers"), count: api_request.headers.count { |row| row["enabled"] } },
   { name: "body", label: t("workbench.tabs.body"), dot: api_request.body_type != "none" },
   { name: "tests", label: t("workbench.tabs.tests"), count: api_request.assertions.count { |row| row["enabled"] } + api_request.extractors.count { |row| row["enabled"] } },
+  { name: "scripts", label: t("workbench.automation.scripts.tab"), dot: api_request.pre_request_script.present? || api_request.post_response_script.present? },
   { name: "settings", label: t("workbench.tabs.settings") }
 ] %>
 
@@ -84,6 +85,10 @@
 
       <div data-tabs-target="panel" data-name="tests" hidden>
         <%= render "workbench/requests/tests", api_request: api_request %>
+      </div>
+
+      <div data-tabs-target="panel" data-name="scripts" hidden>
+        <%= render "workbench/shared/scripts", scope: "api_request", record: api_request %>
       </div>
 
       <div data-tabs-target="panel" data-name="settings" hidden>

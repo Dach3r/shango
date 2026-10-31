@@ -25,6 +25,30 @@ RSpec.describe ApiClient::RequestBuilder do
     end
   end
 
+  describe "overrides" do
+    subject(:result) do
+      described_class.call(api_request:, environment:, dry_run: true, overrides: { url: "https://other.example.com/{{part}}", http_method: "POST", headers: [{ "key" => "X-Over", "value" => "1", "enabled" => true }], body: '{"a":"{{part}}"}' })
+    end
+
+    let(:environment) { create(:environment, project: collection.project).tap { |env| create(:variable, environment: env, key: "part", value: "p") } }
+    let(:attributes) { { http_method: "GET", headers: [{ "key" => "X-Saved", "value" => "1" }], body_type: "json", body: "{}" } }
+
+    it "replace those parts of the request for this build only", :aggregate_failures do
+      expect(built).to have_attributes(http_method: "POST", url: "https://other.example.com/p")
+      expect(built.headers).to include("X-Over" => "1")
+      expect(built.headers).not_to include("X-Saved")
+      expect(built.body.raw).to eq('{"a":"p"}')
+      expect(api_request.reload).to have_attributes(url: "https://api.example.com/items", http_method: "GET", body: "{}")
+    end
+
+    it "also drive a graphql query" do
+      api_request.update!(http_method: "POST", body_type: "graphql", body: "{ saved }")
+      builder = described_class.call(api_request:, environment:, dry_run: true, overrides: { body: "{ over }" })
+
+      expect(JSON.parse(builder.record.body.raw)["query"]).to eq("{ over }")
+    end
+  end
+
   describe "response references" do
     subject(:result) { described_class.call(api_request:, environment:, dry_run: true, user:) }
 

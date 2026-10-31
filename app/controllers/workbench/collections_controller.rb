@@ -54,7 +54,7 @@ module Workbench
     end
 
     def collection_attributes
-      params.expect(collection: [:name, :description, automation_permits])
+      params.expect(collection: [:name, :description, :pre_request_script, :post_response_script, automation_permits])
     end
   end
 end

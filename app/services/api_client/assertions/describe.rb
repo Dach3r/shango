@@ -9,11 +9,12 @@ module ApiClient
         case outcome["kind"]
         when "assertion" then assertion(outcome)
         when "extractor" then extractor(outcome)
-        else outcome["name"].to_s
+        else outcome["name"].presence || I18n.t("workbench.automation.script_error")
         end
       end
 
       def detail(outcome)
+        return outcome["error"].presence if outcome["kind"] == "script"
         return I18n.t("workbench.automation.errors.#{outcome["error"]}", default: outcome["error"].to_s) if outcome["error"].present?
         return if outcome["actual"].blank? || outcome["status"] == "passed"
 

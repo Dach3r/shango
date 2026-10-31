@@ -32,34 +32,36 @@ Spike done on macOS (Ruby 4.0.4) with both candidates:
 
 ## 3. Sandbox rules
 
-- **No ambient access.** The context has no `require`, filesystem, network, `eval`-to-host or timers. Every effect goes through a host function defined by `Scripting::Sandbox` from a closed list.
-- **Limits per script** (ENV, with ceilings): `SHANGO_SCRIPT_TIMEOUT_MS` (default 2 000, max 10 000), `SHANGO_SCRIPT_MEMORY_MB` (default 32, max 128), console output capped at 64 KB, at most 100 tests and 200 log lines per run, test names cut to 200 characters.
-- **Fresh context per script.** Nothing persists between scripts or runs except variables explicitly written.
-- **Failures never crash a request.** A script error is recorded (`script_error`) and the request still goes out, unless it happened in a *pre-request* script, which aborts the run of that request with the message (the request never started). A timeout or out-of-memory is an ordinary script error.
-- **Secrets.** A script can read secret variables, exactly as a request can already send them to a URL the member controls, so this is no new class of exposure. Everything a script produces (console, test names, failure messages) goes through `Masker` before it is stored or rendered.
-- **Authorization.** Editing scripts, assertions and extractors needs `update?` on the request, folder or collection (creator or owner). Running only needs `execute?`.
+`ApiClient::Scripting::Sandbox` runs one script in a **fresh QuickJS context with no way out**. `pm.js` (next to it) defines the whole `pm` API; what the script may see goes in as **one JSON document** and what it changed comes back as **another**, so the only thing that crosses the boundary is data.
+
+- **No ambient access.** No host functions, no `require`, filesystem, network, `fetch`, timers or modules. A spec asserts `require`, `process`, `fetch`, `XMLHttpRequest`, `std`, `os`, `setTimeout`, `WebSocket` and `importScripts` are all `undefined`.
+- **Limits per script** (ENV, with ceilings): `SHANGO_SCRIPT_TIMEOUT_MS` (default 2 000, 100 to 10 000), `SHANGO_SCRIPT_MEMORY_MB` (default 32, 4 to 128), source at most 64 KB, response body given to the script cut at 1 MB, console lines at most 200 of 2 000 characters (64 KB in all), at most 100 tests (names cut to 200 characters, messages to 500), at most 50 variable writes of 64 KB each, result at most 2 MB. Engine errors (timeout, out of memory, stack overflow, syntax) are ordinary script errors.
+- **Fresh context per script.** Nothing persists between scripts or runs except variables explicitly written; one script cannot see another's globals.
+- **Failures never crash the host.** An exception anywhere (engine, bad JSON, invalid UTF-8, overridden builtins) is a script error. A script error in a *pre-request* script aborts that request before it is sent (`error_kind: script_error`, the request never goes out); in a *post-response* script it becomes a failed outcome and the response is still returned.
+- **Secrets.** A script can read secret variables, exactly as a request can already send them to a URL the member controls, so this is no new class of exposure. Everything a script produces (console, test names, failure messages, the error of a failed pre-request script) goes through `Masker` before it is stored or rendered, and values a script writes to a variable that is secret in the environment are masked too (the variable keeps its secret flag).
+- **Authorization.** Editing scripts needs `update?` on the request, folder or collection (creator or owner). Running only needs `execute?`.
+- **Dependency.** `quickjs` (MIT; QuickJS is MIT too), a native extension: the production image needs a C toolchain at build time (the standard Rails `Dockerfile` has it).
 
 ## 4. The `pm` API (v1)
 
 Subset of Postman's API, so imported scripts mostly work:
 
-- `pm.environment.get(key)` / `set(key, value)` / `unset(key)`: reads and writes the selected environment (see §6 for persistence).
-- `pm.variables.get/set/unset`: run-scoped variables, never persisted.
-- `pm.request`: `url` (string), `method`, `headers` (`add`, `upsert`, `remove`, `get`), `body` (string). Mutable in *pre-request* scripts only.
-- `pm.response`: `code`, `status`, `headers.get(name)`, `responseTime`, `text()`, `json()`. Only in *post-response* scripts.
-- `pm.test(name, fn)`: records a pass, or a failure with the thrown message.
-- `pm.expect(value)`: a small chai subset: `to.equal`, `eql`, `deep.equal`, `include`, `contain`, `have.property`, `be.a/an`, `be.above`, `be.below`, `be.oneOf`, `exist`, `be.true/false/null/undefined/empty`, `match`, `have.lengthOf`, negated with `.not`.
-- `console.log/info/warn/error`.
+- `pm.environment.get(key)` / `set(key, value)` / `unset(key)` / `has(key)` / `toObject()`: the selected environment (§6 for persistence). Values are strings (other values are stringified, objects as JSON). `unset` removes a value a script set earlier, but cannot delete a variable of the environment.
+- `pm.variables` (and `pm.collectionVariables`): same methods plus `replaceIn("{{x}}")`, run-scoped, never persisted.
+- `pm.request`: `url`, `method`, `body` (strings) and `headers` (`get`, `has`, `toObject`, and in *pre-request* scripts `add`, `upsert`, `remove`). A pre-request script sees the request **as saved, `{{variables}}` unresolved**, and what it changes is what gets sent (the saved request is never touched); in post-response scripts it is a read-only copy. Only `GET POST PUT PATCH DELETE HEAD OPTIONS` are accepted as a method.
+- `pm.response` (post-response only): `code`, `status`, `responseTime`, `headers.get/has`, `text()`, `json()`, and `pm.response.to.have.status(n)` / `.header(name)`.
+- `pm.test(name, fn)`: a pass, or a failure with the thrown message. `pm.expect(value)`: chai-style `to`/`be`/`have`/`not`/`deep` chains with `equal`, `eql`, `include`, `property`, `a`/`an`, `above`, `below`, `least`, `most`, `within`, `oneOf`, `match`, `lengthOf`/`length`, and `ok`, `true`, `false`, `null`, `undefined`, `exist`, `empty`.
+- `pm.info.eventName`, `console.log/info/debug/warn/error`.
 
-Not in v1: `pm.sendRequest`, `pm.cookies`, `CryptoJS`, `lodash`, `moment`, `postman.setNextRequest`. They may arrive later as Ruby host functions, never by loading arbitrary JS libraries.
+Not in v1: `pm.sendRequest`, `pm.cookies`, `pm.globals`, `CryptoJS`, `lodash`, `moment`, `atob`/`btoa`, `postman.setNextRequest`. They may arrive later as Ruby host functions, never by loading arbitrary JS libraries.
 
 ## 5. Where scripts live and in which order
 
 `pre_request_script`, `post_response_script`, `assertions` and `extractors` exist on `Collection`, `Folder` and `ApiRequest`. Order, as in Postman:
 
-1. Pre-request: collection → folders (outermost first) → request.
-2. The request is built (variables resolved), sent, and the response parsed.
-3. Post-response: collection → folders (outermost first) → request, then **assertions**, then **extractors** (collection → request), so a script can already see what extractors would set only by reading the response itself.
+1. Pre-request scripts: collection → folders (outermost first) → request. They see the saved request and may change variables and the request.
+2. The request is built (variables resolved, script changes applied), sent, and the response read.
+3. Post-response: scripts of collection → folders (outermost first) → request, then the **assertions**, then the **extractors**; what scripts and extractors wrote is stored in the environment once, at the end.
 
 Assertions and extractors of the three levels are concatenated in that order (they are additive, not overriding; `Requests::Automation` builds the list). Folders and collections edit theirs in the *Tests for every request below* section of their edit dialog (not shown when creating or while placing a draft).
 
@@ -140,7 +142,7 @@ Strings are written in `en` and `es` first (`config/locales/*/automation.*.yml`)
 | 1 | Assertions and extractors (migrations, evaluator, `Dispatch` integration, editor tabs, results tab) | done |
 | 2 | Inheritance: assertions and extractors on folders and collections, with UI (scripts follow in phase 4) | done |
 | 3 | Runner: models, job, UI, cancel, JSON/JUnit reports, retention | done |
-| 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | pending |
+| 4 | Scripts: sandbox, `pm` API, `Dispatch` integration, editors | done |
 | 5 | Import and export with scripts | pending |
 | 6 | Hardening: ENV limits documented in [`operations.md`](operations.md), hostile-script specs, Docker build | pending |
 

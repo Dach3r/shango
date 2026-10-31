@@ -28,6 +28,24 @@ RSpec.describe "Workbench request executions" do
       expect(environment.variables.find_by(key: "item_id")&.value).to eq("5")
     end
 
+    it "shows the tests and the console of the scripts", :aggregate_failures do
+      api_request.update!(post_response_script: "console.log('hello from script'); pm.test('is two hundred', () => pm.response.to.have.status(200));")
+      stub_request(:get, url).to_return(status: 200)
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).to include('data-name="tests"', "is two hundred", 'data-name="console"', "hello from script")
+    end
+
+    it "explains a script that failed before sending", :aggregate_failures do
+      api_request.update!(pre_request_script: "throw new Error('no way');")
+
+      post workbench_request_executions_path(api_request), headers: turbo_headers
+
+      expect(response.body).to include(I18n.t("workbench.executions.errors.script_error"), "no way")
+      expect(WebMock).not_to have_requested(:get, url)
+    end
+
     it "shows no tests tab for a request without assertions" do
       stub_request(:get, url).to_return(status: 200)
 

@@ -23,6 +23,28 @@ en:
     tabs:
       tests: Tests
     automation:
+      script_error: Script error
+      script_where: "%{phase} of %{level}"
+      phases:
+        pre: Pre-request script
+        post: Post-response script
+      script_levels:
+        collection: "collection %{name}"
+        folder: "folder %{name}"
+        request: "request %{name}"
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: Scripts
+        pre:
+          title: Pre-request script
+          hint: "Runs before the request is built. Change variables with pm.environment.set(), or the request with pm.request."
+        post:
+          title: Post-response script
+          hint: "Runs after the response arrives. Write tests with pm.test() and pm.expect(), and save values with pm.environment.set()."
+        reference: "JavaScript with the pm API (a subset of Postman's). No network or files; each script stops after a few seconds."
+      console:
+        title: Console
+        empty: The scripts wrote nothing to the console.
       inherited:
         title: Tests for every request below
         hint: "Assertions and extractors here run, in this order, before those of the request itself, for every request in it."
@@ -74,7 +96,10 @@ en:
         no_environment: Select an environment to save extracted values.
         not_permitted: You cannot edit this environment, so the values were not saved.
     executions:
+      errors:
+        script_error: "A script failed before the request was sent."
       tabs:
+        console: Console
         tests: Tests
       tests:
         summary: "%{passed} passed, %{failed} failed"

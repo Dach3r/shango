@@ -1,0 +1,14 @@
+<%# Pre-request and post-response scripts of a request, folder or collection (see ApiClient::Scripting). %>
+<% height = local_assigns.fetch(:height, "h-56") %>
+<div class="space-y-4 p-4">
+  <p class="text-xs text-muted"><%= t("workbench.automation.scripts.reference") %></p>
+  <% { pre_request_script: "pre", post_response_script: "post" }.each do |attribute, key| %>
+    <div>
+      <label class="<%= label_classes %>"><%= t("workbench.automation.scripts.#{key}.title") %></label>
+      <p class="mb-1 text-xs text-muted"><%= t("workbench.automation.scripts.#{key}.hint") %></p>
+      <div class="<%= height %> border border-line bg-field p-1">
+        <%= render CodeEditor::Component.new(name: "#{scope}[#{attribute}]", value: record.public_send(attribute), language: "javascript", class: "h-full") %>
+      </div>
+    </div>
+  <% end %>
+</div>

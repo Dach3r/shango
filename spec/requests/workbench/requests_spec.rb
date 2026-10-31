@@ -192,6 +192,20 @@ RSpec.describe "Workbench requests" do
       expect(api_request.extractors).to contain_exactly(include("variable" => "token", "secret" => true))
     end
 
+    it "saves the scripts", :aggregate_failures do
+      patch workbench_request_path(api_request), params: { api_request: { pre_request_script: "pm.environment.set('a', '1');", post_response_script: "pm.test('t', () => {});" } }
+
+      expect(api_request.reload).to have_attributes(pre_request_script: "pm.environment.set('a', '1');", post_response_script: "pm.test('t', () => {});")
+    end
+
+    it "shows the scripts tab with the saved scripts", :aggregate_failures do
+      api_request.update!(pre_request_script: "// pre script here")
+
+      get workbench_request_path(api_request)
+
+      expect(response.body).to include('data-name="scripts"', "api_request[pre_request_script]", "api_request[post_response_script]", "pre script here")
+    end
+
     it "shows the tests tab with the saved rows", :aggregate_failures do
       api_request.update!(assertions: [{ source: "json", target: "$.id", operator: "exists" }])
 

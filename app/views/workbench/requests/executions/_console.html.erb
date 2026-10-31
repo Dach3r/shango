@@ -1,0 +1,6 @@
+<%# Lines the scripts of a request wrote with console.log() and friends (already masked). %>
+<ol class="font-mono text-xs">
+  <% lines.each do |line| %>
+    <li class="<%= class_names("border-b border-line px-4 py-1.5 break-all whitespace-pre-wrap", "text-ink" => %w[log info].include?(line["level"]), "bg-amber-500/10 text-amber-700 dark:text-amber-400" => line["level"] == "warn", "bg-danger/10 text-danger" => line["level"] == "error") %>"><%= line["text"] %></li>
+  <% end %>
+</ol>

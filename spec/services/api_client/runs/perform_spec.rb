@@ -126,6 +126,38 @@ RSpec.describe ApiClient::Runs::Perform do
     end
   end
 
+  it "carries what scripts write to the requests after them, without touching the environment", :aggregate_failures do
+    request("first", post_response_script: "pm.variables.set('run_var', 'from-script'); pm.environment.set('env_var', 'e');")
+    request("second", url: "https://api.example.com/second/{{run_var}}/{{env_var}}")
+    ok("first")
+    stub_request(:get, "https://api.example.com/second/from-script/e").to_return(status: 200)
+
+    result
+
+    expect(run.reload.items.map(&:status)).to eq(%w[passed passed])
+    expect(environment.variables.reload).to be_empty
+  end
+
+  it "counts a failing script test as a failed request", :aggregate_failures do
+    request("a", post_response_script: "pm.test('nope', () => pm.expect(1).to.equal(2));")
+    ok("a")
+
+    result
+
+    expect(run.reload.items.first).to be_failed
+    expect(run.items.first.test_results.first).to include("kind" => "script", "status" => "failed")
+  end
+
+  it "fails a request whose pre-request script throws, without sending it", :aggregate_failures do
+    request("a", pre_request_script: "throw new Error('stop');")
+    stub = ok("a")
+
+    result
+
+    expect(run.reload.items.first).to have_attributes(status: "failed", error_kind: "script_error")
+    expect(stub).not_to have_been_requested
+  end
+
   it "does not touch the history or the latest responses of the requests", :aggregate_failures do
     request("a")
     ok("a")

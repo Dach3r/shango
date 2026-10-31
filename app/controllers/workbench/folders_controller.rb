@@ -55,7 +55,7 @@ module Workbench
     end
 
     def folder_attributes
-      params.expect(folder: [:name, :parent_id, :auth_type, { auth_config: {} }, automation_permits])
+      params.expect(folder: [:name, :parent_id, :auth_type, :pre_request_script, :post_response_script, { auth_config: {} }, automation_permits])
     end
   end
 end

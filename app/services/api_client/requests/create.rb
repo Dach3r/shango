@@ -3,7 +3,7 @@ module ApiClient
     class Create
       include Serviceable
 
-      ATTRIBUTES = %i[name http_method url description folder_id body_type body graphql_variables query_params headers body_form settings assertions extractors].freeze
+      ATTRIBUTES = %i[name http_method url description folder_id body_type body graphql_variables query_params headers body_form settings assertions extractors pre_request_script post_response_script].freeze
 
       def initialize(collection:, attributes:, uploads: {}, binary_upload: nil)
         @collection = collection

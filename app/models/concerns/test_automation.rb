@@ -7,9 +7,12 @@ module TestAutomation
   MAX_TARGET = 500
   MAX_EXPECTED = 1_000
 
+  MAX_SCRIPT = 64.kilobytes
+
   included do
     before_validation :normalize_automation
     validate :extractor_variables_are_valid
+    validates :pre_request_script, :post_response_script, length: { maximum: MAX_SCRIPT, tokenizer: ->(script) { script.to_s.bytes } }, allow_nil: true
   end
 
   def assertions=(rows)
@@ -18,6 +21,15 @@ module TestAutomation
 
   def extractors=(rows)
     super(TestAutomation.clean_extractors(rows))
+  end
+
+  # A script that is only blank space is no script.
+  def pre_request_script=(source)
+    super(source.presence&.to_s&.rstrip)
+  end
+
+  def post_response_script=(source)
+    super(source.presence&.to_s&.rstrip)
   end
 
   private

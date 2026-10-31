@@ -23,6 +23,28 @@ es:
     tabs:
       tests: Pruebas
     automation:
+      script_error: Error de script
+      script_where: "%{phase} de %{level}"
+      phases:
+        pre: Script previo a la petición
+        post: Script posterior a la respuesta
+      script_levels:
+        collection: "la colección %{name}"
+        folder: "la carpeta %{name}"
+        request: "la petición %{name}"
+      script_error_in: "%{where}: %{message}"
+      scripts:
+        tab: Scripts
+        pre:
+          title: Script previo a la petición
+          hint: "Se ejecuta antes de construir la petición. Cambia variables con pm.environment.set() o la petición con pm.request."
+        post:
+          title: Script posterior a la respuesta
+          hint: "Se ejecuta cuando llega la respuesta. Escribe pruebas con pm.test() y pm.expect(), y guarda valores con pm.environment.set()."
+        reference: "JavaScript con la API pm (un subconjunto de la de Postman). Sin red ni archivos; cada script se detiene tras unos segundos."
+      console:
+        title: Consola
+        empty: Los scripts no escribieron nada en la consola.
       inherited:
         title: Pruebas para cada petición de abajo
         hint: "Las aserciones y los extractores de aquí se ejecutan, en este orden, antes de los de la propia petición, para cada petición que contiene."
@@ -74,7 +96,10 @@ es:
         no_environment: Selecciona un ambiente para guardar los valores extraídos.
         not_permitted: No puedes editar este ambiente, por eso los valores no se guardaron.
     executions:
+      errors:
+        script_error: "Un script falló antes de enviar la petición."
       tabs:
+        console: Consola
         tests: Pruebas
       tests:
         summary: "%{passed} correctas, %{failed} fallidas"

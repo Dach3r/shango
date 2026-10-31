@@ -10,4 +10,5 @@
     <h3 class="px-3 text-xs font-medium text-muted uppercase tracking-wide"><%= t("workbench.automation.extractors.title") %></h3>
     <%= render RuleTable::Component.new(kind: :extractor, name: "#{scope}[extractors]", rows: record.extractors, add_label: t("workbench.automation.extractors.add")) %>
   </div>
+  <%= render "workbench/shared/scripts", scope: scope, record: record, height: "h-40" %>
 </fieldset>

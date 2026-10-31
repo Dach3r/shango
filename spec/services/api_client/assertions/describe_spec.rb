@@ -12,8 +12,15 @@ RSpec.describe ApiClient::Assertions::Describe do
     expect(described_class.title({ "kind" => "extractor", "variable" => nil })).to eq(I18n.t("workbench.automation.extractor_unsaved"))
   end
 
-  it "uses the name of any other kind" do
+  it "uses the name of a script test, or says it is a script error", :aggregate_failures do
     expect(described_class.title({ "kind" => "script", "name" => "Status is 200" })).to eq("Status is 200")
+    expect(described_class.title({ "kind" => "script", "name" => nil })).to eq(I18n.t("workbench.automation.script_error"))
+  end
+
+  it "shows what a script reported as it is, never as a translation key or a template", :aggregate_failures do
+    expect(described_class.detail({ "kind" => "script", "error" => "expected 3 to equal 4" })).to eq("expected 3 to equal 4")
+    expect(described_class.detail({ "kind" => "script", "error" => "not_found %{x}" })).to eq("not_found %{x}")
+    expect(described_class.detail({ "kind" => "script", "error" => nil })).to be_nil
   end
 
   it "explains an error, or shows what a failed check got", :aggregate_failures do
