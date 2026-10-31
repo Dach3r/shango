@@ -7,6 +7,7 @@ hi:
   components:
     status_bar:
       search: "खोजें (Ctrl/⌘ K)"
+      search_placeholder: "खोजें…"
   projects:
     searches:
       show:

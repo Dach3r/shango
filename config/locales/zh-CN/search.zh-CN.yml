@@ -7,6 +7,7 @@ zh-CN:
   components:
     status_bar:
       search: "搜索 (Ctrl/⌘ K)"
+      search_placeholder: "搜索…"
   projects:
     searches:
       show:

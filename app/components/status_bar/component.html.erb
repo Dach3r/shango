@@ -8,7 +8,7 @@
     <button type="button" data-action="palette#open" data-controller="shortcut-hint" title="<%= t("components.status_bar.search") %>" aria-label="<%= t("components.status_bar.search") %>"
             class="mx-2 flex h-7 w-8 cursor-pointer items-center justify-center gap-2 border border-line bg-field text-xs text-faint transition hover:border-accent/60 hover:text-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 sm:mx-3 sm:w-56 sm:justify-start sm:px-2.5">
       <%= lucide_icon "search", class: "size-3.5 shrink-0" %>
-      <span class="hidden min-w-0 flex-1 truncate text-left sm:inline"><%= t("components.status_bar.search") %></span>
+      <span class="hidden min-w-0 flex-1 truncate text-left sm:inline"><%= t("components.status_bar.search_placeholder") %></span>
       <kbd data-shortcut-hint-target="key" hidden class="hidden shrink-0 border border-line px-1.5 font-mono text-[0.625rem] text-muted sm:inline-block"></kbd>
     </button>
     <% if @open_incidents.positive? %>

@@ -7,6 +7,7 @@ en:
   components:
     status_bar:
       search: "Search (Ctrl/⌘ K)"
+      search_placeholder: "Search…"
   projects:
     searches:
       show:

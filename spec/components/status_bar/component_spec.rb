@@ -25,8 +25,8 @@ RSpec.describe StatusBar::Component, type: :component do
   it "shows a search field that opens the command palette, with a slot for the shortcut of the system", :aggregate_failures do
     render_inline(described_class.new(user:, project:, projects: [project]))
 
-    expect(page).to have_css("button[data-action='palette#open'][data-controller=shortcut-hint]", text: I18n.t("components.status_bar.search"))
-    expect(page).to have_css("button[data-controller=shortcut-hint] kbd[data-shortcut-hint-target=key][hidden]", visible: :all)
+    expect(page).to have_css("button[data-action='palette#open'][data-controller=shortcut-hint]", text: I18n.t("components.status_bar.search_placeholder"))
+    expect(page).to have_css("button[data-controller=shortcut-hint][title='#{I18n.t("components.status_bar.search")}'] kbd[data-shortcut-hint-target=key][hidden]", visible: :all)
   end
 
   it "flags open incidents with a link to them", :aggregate_failures do
