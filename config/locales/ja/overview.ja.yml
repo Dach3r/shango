@@ -1,0 +1,32 @@
+ja:
+  projects:
+    overviews:
+      show:
+        title: "概要"
+        empty:
+          title: "まだ何もありません"
+          hint: "リクエストを送信するか、環境を追加するか、モニターを設定すると、このページにプロジェクトの状態が表示されます。"
+        new_request: "新しいリクエスト"
+        new_monitor: "新しいモニター"
+        network: "ネットワークツール"
+        incidents: "未解決のインシデント"
+        no_incidents: "未解決のインシデントはありません。"
+        since: "%{time}前から"
+        activity: "アクティビティ"
+        no_activity: "まだ変更はありません。"
+        runs: "最近の実行"
+        no_runs: "まだリクエストを送信しておらず、ネットワークチェックも実行していません。"
+        workspace: "ワークスペース"
+        ago: "%{time}前"
+        counts:
+          requests: "リクエスト"
+          monitors: "モニター"
+          environments: "環境"
+    environment_scope:
+      narrowed: "%{environment} のモニターと環境のないモニターを表示しています。"
+      show_all: "すべての環境を表示"
+      all: "すべての環境を表示しています。"
+      only: "%{environment} のみ"
+  components:
+    tools_nav:
+      overview: "概要"

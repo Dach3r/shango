@@ -1,0 +1,32 @@
+en:
+  projects:
+    overviews:
+      show:
+        title: "Overview"
+        empty:
+          title: "Nothing here yet"
+          hint: "Send a request, add an environment or set up a monitor, and this page will show how the project is doing."
+        new_request: "New request"
+        new_monitor: "New monitor"
+        network: "Network tools"
+        incidents: "Open incidents"
+        no_incidents: "No open incidents."
+        since: "for %{time}"
+        activity: "Activity"
+        no_activity: "Nothing has changed yet."
+        runs: "Your recent runs"
+        no_runs: "You have not sent a request or run a network check yet."
+        workspace: "Workspace"
+        ago: "%{time} ago"
+        counts:
+          requests: "Requests"
+          monitors: "Monitors"
+          environments: "Environments"
+    environment_scope:
+      narrowed: "Showing the monitors of %{environment} and those without an environment."
+      show_all: "Show all environments"
+      all: "Showing every environment."
+      only: "Only %{environment}"
+  components:
+    tools_nav:
+      overview: "Overview"

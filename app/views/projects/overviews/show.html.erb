@@ -1,0 +1,127 @@
+<% content_for :title, "#{t(".title")} · #{ApplicationHelper::CONFIG[:name]}" %>
+<% content_for :main_class, "flex min-h-0 flex-1 flex-col" %>
+<% overview = @overview %>
+<% heading = "flex h-10 shrink-0 items-center gap-2 border-b border-line bg-card px-5 font-mono text-xs uppercase tracking-wide text-faint" %>
+<% label = "font-mono text-xs uppercase tracking-wide text-faint" %>
+<% muted = "px-5 py-4 text-sm text-muted" %>
+
+<div class="flex min-w-0 flex-1 flex-col lg:h-[calc(100vh-2.5rem)]">
+  <header class="flex min-h-14 shrink-0 items-center gap-3 border-b border-line px-5">
+    <%= lucide_icon "layout-dashboard", class: "size-4 text-faint" %>
+    <h1 class="min-w-0 truncate text-sm font-semibold text-ink"><%= current_project.name %></h1>
+    <span class="<%= label %>"><%= t(".title") %></span>
+  </header>
+  <%= render "projects/environment_scope" %>
+
+  <div class="min-h-0 flex-1 overflow-y-auto">
+    <% if overview[:empty] %>
+      <div class="flex flex-col items-center justify-center gap-3 px-6 py-16 text-center">
+        <%= lucide_icon "layout-dashboard", class: "size-8 text-faint" %>
+        <p class="text-sm font-medium text-ink"><%= t(".empty.title") %></p>
+        <p class="max-w-sm text-sm text-muted"><%= t(".empty.hint") %></p>
+        <div class="mt-3 flex flex-wrap justify-center gap-2">
+          <%= button_to workbench_drafts_path, method: :post, class: button_classes(:primary), form_class: "contents" do %><%= lucide_icon "send", class: "size-4" %><%= t(".new_request") %><% end %>
+          <% if policy(current_project.uptime_monitors.new).create? %>
+            <%= link_to new_monitoring_monitor_path, class: button_classes(:secondary) do %><%= lucide_icon "activity", class: "size-4" %><%= t(".new_monitor") %><% end %>
+          <% end %>
+          <%= link_to network_root_path, class: button_classes(:secondary) do %><%= lucide_icon "radar", class: "size-4" %><%= t(".network") %><% end %>
+        </div>
+      </div>
+    <% else %>
+      <% summary = overview[:summary] %>
+      <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4">
+        <% %w[up down pending paused].each do |status| %>
+          <%= link_to monitoring_root_path(status:), class: class_names("flex flex-col gap-2 border-line px-5 py-4 transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50", "border-r" => status != "paused") do %>
+            <dt><%= render MonitorStatus::Component.new(status:) %></dt>
+            <dd class="text-2xl leading-none font-medium text-ink"><%= summary[status.to_sym] %></dd>
+          <% end %>
+        <% end %>
+      </dl>
+
+      <div class="grid lg:grid-cols-2">
+        <section class="border-b border-line lg:border-r">
+          <h2 class="<%= heading %>"><%= lucide_icon "siren", class: "size-3.5" %><%= t(".incidents") %></h2>
+          <% if overview[:incidents].empty? %>
+            <p class="<%= muted %>"><%= t(".no_incidents") %></p>
+          <% else %>
+            <ul class="divide-y divide-line">
+              <% overview[:incidents].each do |incident| %>
+                <li>
+                  <%= link_to monitoring_monitor_path(incident.uptime_monitor), class: "flex flex-col gap-1 px-5 py-3 transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" do %>
+                    <span class="flex items-center justify-between gap-3">
+                      <span class="truncate text-sm font-medium text-ink"><%= incident.uptime_monitor.name %></span>
+                      <%= render MonitorStatus::Component.new(status: :down) %>
+                    </span>
+                    <span class="truncate text-xs text-muted"><%= monitor_cause(incident.cause, incident.detail) %> · <%= t(".since", time: time_ago_in_words(incident.started_at)) %></span>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </section>
+
+        <section class="border-b border-line">
+          <h2 class="<%= heading %>"><%= lucide_icon "history", class: "size-3.5" %><%= t(".activity") %></h2>
+          <% if overview[:activity].empty? %>
+            <p class="<%= muted %>"><%= t(".no_activity") %></p>
+          <% else %>
+            <ul class="divide-y divide-line">
+              <% overview[:activity].each do |event| %>
+                <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-3">
+                  <p class="min-w-0 text-sm text-ink"><%= audit_event_summary(event) %></p>
+                  <time datetime="<%= event.created_at.iso8601 %>" class="shrink-0 text-xs text-muted"><%= t(".ago", time: time_ago_in_words(event.created_at)) %></time>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </section>
+
+        <section class="border-b border-line lg:border-r">
+          <h2 class="<%= heading %>"><%= lucide_icon "send", class: "size-3.5" %><%= t(".runs") %></h2>
+          <% if overview[:runs].empty? %>
+            <p class="<%= muted %>"><%= t(".no_runs") %></p>
+          <% else %>
+            <ul class="divide-y divide-line">
+              <% overview[:runs].each do |run| %>
+                <li>
+                  <% if run.is_a?(NetworkCheck) %>
+                    <%= link_to network_check_path(run), class: "flex items-baseline justify-between gap-3 px-5 py-3 transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" do %>
+                      <span class="min-w-0 truncate text-sm text-ink"><span class="font-mono text-xs text-faint"><%= t("network.tabs.#{run.kind}") %></span> <%= run.digest.label %></span>
+                      <span class="shrink-0 text-xs text-muted"><%= t(".ago", time: time_ago_in_words(run.created_at)) %></span>
+                    <% end %>
+                  <% else %>
+                    <%= link_to workbench_request_path(run.api_request), class: "flex items-baseline justify-between gap-3 px-5 py-3 transition hover:bg-card focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/50" do %>
+                      <span class="flex min-w-0 items-baseline gap-2 text-sm text-ink"><%= render MethodBadge::Component.new(method: run.http_method) %><span class="truncate"><%= run.api_request.name %></span><span class="font-mono text-xs text-faint"><%= run.status || "—" %></span></span>
+                      <span class="shrink-0 text-xs text-muted"><%= t(".ago", time: time_ago_in_words(run.created_at)) %></span>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </section>
+
+        <section class="border-b border-line">
+          <h2 class="<%= heading %>"><%= lucide_icon "layout-dashboard", class: "size-3.5" %><%= t(".workspace") %></h2>
+          <dl class="grid grid-cols-3 border-b border-line">
+            <% { requests: workbench_root_path, monitors: monitoring_root_path, environments: nil }.each do |key, path| %>
+              <div class="flex flex-col gap-2 border-r border-line px-5 py-4 last:border-r-0">
+                <dt class="<%= label %>"><%= t(".counts.#{key}") %></dt>
+                <dd class="text-2xl leading-none font-medium text-ink">
+                  <% if path %><%= link_to overview[:counts][key], path, class: "hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %><% else %><%= link_to overview[:counts][key], environments_path, data: { turbo_frame: "modal" }, class: "hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50" %><% end %>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+          <div class="flex flex-wrap gap-2 px-5 py-4">
+            <%= button_to workbench_drafts_path, method: :post, class: button_classes(:secondary, "h-9 px-3 text-xs"), form_class: "contents" do %><%= lucide_icon "send", class: "size-3.5" %><%= t(".new_request") %><% end %>
+            <% if policy(current_project.uptime_monitors.new).create? %>
+              <%= link_to new_monitoring_monitor_path, class: button_classes(:secondary, "h-9 px-3 text-xs") do %><%= lucide_icon "activity", class: "size-3.5" %><%= t(".new_monitor") %><% end %>
+            <% end %>
+            <%= link_to network_root_path, class: button_classes(:secondary, "h-9 px-3 text-xs") do %><%= lucide_icon "radar", class: "size-3.5" %><%= t(".network") %><% end %>
+          </div>
+        </section>
+      </div>
+    <% end %>
+  </div>
+</div>

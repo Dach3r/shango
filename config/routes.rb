@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, path_names: { edit: "settings" }, controllers: { registrations: "users/registrations" }, failure_app: "LocalizedFailureApp"
 
   authenticated :user do
-    root to: redirect("/workbench")
+    root to: redirect("/overview")
   end
 
   devise_scope :user do
@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   end
 
   resources :projects, only: %i[new create]
+  resource :overview, only: :show, module: :projects
   resource :current_project, only: :update
   resource :preferences, only: :update
   resource :invitation_acceptance, only: %i[show create]

@@ -1,0 +1,32 @@
+es:
+  projects:
+    overviews:
+      show:
+        title: "Resumen"
+        empty:
+          title: "Aún no hay nada aquí"
+          hint: "Envía una request, agrega un entorno o configura un monitor y esta página mostrará cómo va el proyecto."
+        new_request: "Nueva request"
+        new_monitor: "Nuevo monitor"
+        network: "Herramientas de red"
+        incidents: "Incidentes abiertos"
+        no_incidents: "No hay incidentes abiertos."
+        since: "desde hace %{time}"
+        activity: "Actividad"
+        no_activity: "Aún no ha cambiado nada."
+        runs: "Tus ejecuciones recientes"
+        no_runs: "Aún no has enviado una request ni ejecutado un chequeo de red."
+        workspace: "Espacio de trabajo"
+        ago: "hace %{time}"
+        counts:
+          requests: "Requests"
+          monitors: "Monitores"
+          environments: "Entornos"
+    environment_scope:
+      narrowed: "Mostrando los monitores de %{environment} y los que no tienen entorno."
+      show_all: "Mostrar todos los entornos"
+      all: "Mostrando todos los entornos."
+      only: "Solo %{environment}"
+  components:
+    tools_nav:
+      overview: "Resumen"

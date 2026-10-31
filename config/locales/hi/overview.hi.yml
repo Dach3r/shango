@@ -1,0 +1,32 @@
+hi:
+  projects:
+    overviews:
+      show:
+        title: "अवलोकन"
+        empty:
+          title: "यहाँ अभी कुछ नहीं है"
+          hint: "एक अनुरोध भेजें, एनवायरनमेंट जोड़ें या मॉनिटर बनाएँ, फिर यह पेज प्रोजेक्ट की स्थिति दिखाएगा।"
+        new_request: "नया अनुरोध"
+        new_monitor: "नया मॉनिटर"
+        network: "नेटवर्क टूल"
+        incidents: "खुली घटनाएँ"
+        no_incidents: "कोई खुली घटना नहीं।"
+        since: "%{time} से"
+        activity: "गतिविधि"
+        no_activity: "अभी तक कुछ नहीं बदला।"
+        runs: "आपके हाल के रन"
+        no_runs: "आपने अभी तक कोई अनुरोध नहीं भेजा या नेटवर्क जाँच नहीं चलाई।"
+        workspace: "वर्कस्पेस"
+        ago: "%{time} पहले"
+        counts:
+          requests: "अनुरोध"
+          monitors: "मॉनिटर"
+          environments: "एनवायरनमेंट"
+    environment_scope:
+      narrowed: "%{environment} के और बिना एनवायरनमेंट वाले मॉनिटर दिख रहे हैं।"
+      show_all: "सभी एनवायरनमेंट दिखाएँ"
+      all: "सभी एनवायरनमेंट दिख रहे हैं।"
+      only: "केवल %{environment}"
+  components:
+    tools_nav:
+      overview: "अवलोकन"

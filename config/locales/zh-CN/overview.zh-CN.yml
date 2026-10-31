@@ -1,0 +1,32 @@
+zh-CN:
+  projects:
+    overviews:
+      show:
+        title: "概览"
+        empty:
+          title: "这里还没有内容"
+          hint: "发送请求、添加环境或设置监控后，此页面会显示项目的运行状况。"
+        new_request: "新建请求"
+        new_monitor: "新建监控"
+        network: "网络工具"
+        incidents: "未解决的事件"
+        no_incidents: "没有未解决的事件。"
+        since: "已持续 %{time}"
+        activity: "动态"
+        no_activity: "还没有任何变更。"
+        runs: "你最近的运行"
+        no_runs: "你还没有发送请求或运行网络检查。"
+        workspace: "工作区"
+        ago: "%{time}前"
+        counts:
+          requests: "请求"
+          monitors: "监控"
+          environments: "环境"
+    environment_scope:
+      narrowed: "正在显示 %{environment} 的监控以及没有环境的监控。"
+      show_all: "显示所有环境"
+      all: "正在显示所有环境。"
+      only: "仅 %{environment}"
+  components:
+    tools_nav:
+      overview: "概览"

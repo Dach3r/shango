@@ -1,0 +1,32 @@
+fr:
+  projects:
+    overviews:
+      show:
+        title: "Vue d'ensemble"
+        empty:
+          title: "Rien ici pour l'instant"
+          hint: "Envoyez une requête, ajoutez un environnement ou configurez un moniteur, et cette page montrera l'état du projet."
+        new_request: "Nouvelle requête"
+        new_monitor: "Nouveau moniteur"
+        network: "Outils réseau"
+        incidents: "Incidents ouverts"
+        no_incidents: "Aucun incident ouvert."
+        since: "depuis %{time}"
+        activity: "Activité"
+        no_activity: "Rien n'a encore changé."
+        runs: "Vos exécutions récentes"
+        no_runs: "Vous n'avez pas encore envoyé de requête ni lancé de vérification réseau."
+        workspace: "Espace de travail"
+        ago: "il y a %{time}"
+        counts:
+          requests: "Requêtes"
+          monitors: "Moniteurs"
+          environments: "Environnements"
+    environment_scope:
+      narrowed: "Moniteurs de %{environment} et ceux sans environnement."
+      show_all: "Afficher tous les environnements"
+      all: "Tous les environnements sont affichés."
+      only: "Seulement %{environment}"
+  components:
+    tools_nav:
+      overview: "Vue d'ensemble"

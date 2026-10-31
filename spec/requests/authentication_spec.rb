@@ -61,11 +61,11 @@ RSpec.describe "Authentication" do
   end
 
   describe "members" do
-    it "redirects the root to the workbench" do
+    it "redirects the root to the overview" do
       sign_in create(:user)
       get root_path
 
-      expect(response).to redirect_to(workbench_root_path)
+      expect(response).to redirect_to(overview_path)
     end
   end
 

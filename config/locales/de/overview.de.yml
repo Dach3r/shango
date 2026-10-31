@@ -1,0 +1,32 @@
+de:
+  projects:
+    overviews:
+      show:
+        title: "Übersicht"
+        empty:
+          title: "Noch nichts hier"
+          hint: "Sende eine Anfrage, füge eine Umgebung hinzu oder richte einen Monitor ein, dann zeigt diese Seite den Zustand des Projekts."
+        new_request: "Neue Anfrage"
+        new_monitor: "Neuer Monitor"
+        network: "Netzwerk-Tools"
+        incidents: "Offene Vorfälle"
+        no_incidents: "Keine offenen Vorfälle."
+        since: "seit %{time}"
+        activity: "Aktivität"
+        no_activity: "Noch nichts geändert."
+        runs: "Deine letzten Ausführungen"
+        no_runs: "Du hast noch keine Anfrage gesendet und keine Netzwerkprüfung ausgeführt."
+        workspace: "Arbeitsbereich"
+        ago: "vor %{time}"
+        counts:
+          requests: "Anfragen"
+          monitors: "Monitore"
+          environments: "Umgebungen"
+    environment_scope:
+      narrowed: "Zeigt die Monitore von %{environment} und die ohne Umgebung."
+      show_all: "Alle Umgebungen anzeigen"
+      all: "Zeigt alle Umgebungen."
+      only: "Nur %{environment}"
+  components:
+    tools_nav:
+      overview: "Übersicht"

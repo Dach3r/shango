@@ -63,6 +63,9 @@ class UptimeMonitor < ApplicationRecord
     end
   end
 
+  # The monitors of one environment plus those that belong to none (push monitors, for instance); every monitor without one.
+  scope :in_environment, ->(environment) { environment ? where(environment_id: [environment.id, nil]) : all }
+
   store_accessor :settings, :mode, :url, :http_method, :expected_statuses, :max_response_ms, :host, :port, :days_before, :grace
 
   after_initialize :fill_defaults, if: :new_record?
