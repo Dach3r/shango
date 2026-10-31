@@ -1,4 +1,4 @@
-<%= render Modal::Component.new(icon: "play", title: t(".title"), description: t(".description", scope: (@folder || @collection).name, count: @count), size: :md, form: "run_form", submit: t(".submit"), submit_icon: "play") do %>
+<%= render Modal::Component.new(icon: "play", title: t(".title"), description: t(".description", target: (@folder || @collection).name, count: @count), size: :md, form: "run_form", submit: t(".submit"), submit_icon: "play") do %>
   <%= form_with url: workbench_collection_runs_path(@collection), method: :post, id: "run_form", data: { turbo_frame: "_top" }, class: "space-y-5" do %>
     <% if @error.present? %>
       <div role="alert" class="border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"><%= t(".errors.#{@error}", max: @max) %></div>

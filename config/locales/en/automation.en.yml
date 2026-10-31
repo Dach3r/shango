@@ -135,8 +135,8 @@ en:
       form:
         title: Run requests
         description:
-          one: "%{scope}: 1 request will run, one after another."
-          other: "%{scope}: %{count} requests will run, one after another."
+          one: "%{target}: 1 request will run, one after another."
+          other: "%{target}: %{count} requests will run, one after another."
         submit: Start run
         environment: Environment
         no_environment: No environment

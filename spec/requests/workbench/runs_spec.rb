@@ -14,6 +14,8 @@ RSpec.describe "Workbench runs" do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(I18n.t("workbench.runs.form.title"), "stop_on_failure", "persist_variables", "delay_ms")
+      expect(response.body).to include(I18n.t("workbench.runs.form.description", target: collection.name, count: 1))
+      expect(response.body).not_to include("Translation missing", "translation missing")
     end
 
     it "names the folder when it is for one", :aggregate_failures do

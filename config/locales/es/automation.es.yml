@@ -135,8 +135,8 @@ es:
       form:
         title: Ejecutar peticiones
         description:
-          one: "%{scope}: se ejecutará 1 petición, una tras otra."
-          other: "%{scope}: se ejecutarán %{count} peticiones, una tras otra."
+          one: "%{target}: se ejecutará 1 petición, una tras otra."
+          other: "%{target}: se ejecutarán %{count} peticiones, una tras otra."
         submit: Iniciar ejecución
         environment: Ambiente
         no_environment: Sin ambiente
