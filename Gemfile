@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "aasm", "~> 6.0"
-gem "aws-sdk-s3", "~> 1.0", require: false
+gem "aws-sdk-s3", "~> 1.237", require: false
 gem "aws-sigv4", "~> 1.12"
 gem "bootsnap", require: false
 gem "devise"
